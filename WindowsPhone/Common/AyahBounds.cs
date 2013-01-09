@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SQLite;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,9 @@ using System.Threading.Tasks;
 
 namespace QuranPhone.Common
 {
-    public class AyahBounds{
+    [Table("glyphs")]
+    public class AyahBounds
+    {
         public AyahBounds(int line,int position,int minX,int minY,int maxX,int maxY) 
         {        
             Line = line; 
@@ -29,12 +32,23 @@ namespace QuranPhone.Common
 			    MaxY = other.MaxY;
 	    }
 
+        [Column("min_x")]
         public int MinX { get; set; }
+        [Column("min_y")]
         public int MinY { get; set; }
+        [Column("max_x")]
         public int MaxX { get; set; }
+        [Column("max_y")]
         public int MaxY { get; set; }
+        [Column("line_number")]
         public int Line { get; set; }
+        [Column("position")]
         public int Position { get; set; }
-        
+        [Column("page_number")]
+        public int PageNumber { get; set; }
+        [Column("sura_number")]
+        public int SurahNumber { get; set; }
+        [Column("ayah_number")]
+        public int AyahNumber { get; set; }
     }
 }
