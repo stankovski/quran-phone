@@ -16,9 +16,9 @@ namespace QuranPhone.Data
 
         public AyahInfoDatabaseHandler(string databaseName)
         {
-            string b = QuranFileUtils.GetQuranDatabaseDirectory();
+            string b = QuranFileUtils.GetQuranDatabaseDirectory(false);
             if (b == null) return;
-            string path = b + Path.PathSeparator + databaseName;
+            string path = b + QuranFileUtils.PATH_SEPARATOR + databaseName;
             database = new SQLiteDatabase(path);
         }
 
