@@ -9,6 +9,7 @@ using System.Globalization;
 using System.Windows.Media.Imaging;
 using System.Diagnostics;
 using System.Net;
+using System.Threading;
 
 namespace QuranPhone.Utils
 {
@@ -18,17 +19,117 @@ namespace QuranPhone.Utils
         private const string TAG = "QuranFileUtils";
         public static bool failedToWrite = false;
         public static string IMG_HOST = "http://android.quran.com/data/";
-        private static string QURAN_BASE = "isostore:/quran_android" + Path.PathSeparator;
+        private static string QURAN_BASE = "quran_android" + PATH_SEPARATOR;
+        private static string QURAN_BASE_URI = "isostore:/" + QURAN_BASE;
         private static string DATABASE_DIRECTORY = "databases";
         private static int BUFF_SIZE = 1024;
         public const string PACKAGE_NAME = "com.quran.labs.androidquran";
+        public const string PATH_SEPARATOR = "/";
 
+        /// <summary>
+        /// Deletes folder even if it contains read only files
+        /// </summary>
+        /// <param name="path"></param>
+        public static void DeleteFolder(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentNullException("path");
+
+            IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication();
+            foreach (var dir in isf.GetDirectoryNames(path + "/*"))
+            {
+                DeleteFolder(path + "/" + dir);
+            }
+            foreach (var file in isf.GetFileNames(path + "/*.*"))
+            {
+                isf.DeleteFile(path + "/" + file);
+            }
+            isf.DeleteDirectory(path);
+        }
+
+        /// <summary>
+        /// Creates directory and writes no-media file in it
+        /// </summary>
+        /// <returns></returns>
+        public static bool MakeDirectory(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentNullException("path");
+
+            IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication();
+            if (isf.DirectoryExists(path))
+            {
+                return true;
+            }
+            else
+            {
+                try
+                {
+                    isf.CreateDirectory(path);
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Creates Quran root directory and writes no-media file in it
+        /// </summary>
+        /// <returns></returns>
+        public static bool MakeQuranDirectory()
+        {
+            string path = GetQuranDirectory(false);
+            if (path == null)
+                return false;
+
+            if (MakeDirectory(path))
+                return WriteNoMediaFile();
+            else
+                return false;
+        }
+
+        public static bool WriteNoMediaFile()
+        {
+            IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication();
+            if (isf.FileExists(GetQuranDirectory(false) + "/.nomedia"))
+                return true;
+
+            try
+            {
+                using (var stream = isf.CreateFile(GetQuranDirectory(false) + "/.nomedia"))
+                {
+                    stream.WriteByte(1);
+                }
+                return true;
+            }
+            catch (IOException e)
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Creates Quran DB directory and writes no-media file in it
+        /// </summary>
+        /// <returns></returns>
+        public static bool MakeQuranDatabaseDirectory()
+        {
+            string path = GetQuranDatabaseDirectory(false);
+            if (path == null)
+                return false;
+
+            return MakeDirectory(path);
+        }
+        
         public static bool HaveAllImages()
         {
             IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication();
-            if (isf.DirectoryExists(GetQuranDirectory()))
+            if (isf.DirectoryExists(GetQuranDirectory(false)))
             {
-                var files = isf.GetFileNames(GetQuranDirectory());
+                var files = isf.GetFileNames(GetQuranDirectory(false));
                 if (files.Length >= 604)
                 {
                     // ideally, we should loop for each page and ensure
@@ -44,90 +145,23 @@ namespace QuranPhone.Utils
             return false;
         }
 
+        /// <summary>
+        /// Returns page name in the following format pageNNN.png
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
         public static string GetPageFileName(int p)
         {
-            return "page" + p.ToString("000", new CultureInfo("us-US")) + ".png";
+            return "page" + p.ToString("000", new CultureInfo("en-US")) + ".png";
         }
 
         public static Uri GetImageFromSD(string filename)
         {
-            string location = GetQuranDirectory();
+            string location = GetQuranDirectory(true);
             if (location == null)
                 return null;
 
-            return new Uri(location + Path.PathSeparator + filename);
-        }
-
-        public static bool WriteNoMediaFile()
-        {
-            IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication();
-            if (isf.FileExists(GetQuranDirectory() + "/.nomedia"))
-                return true;
-
-            try
-            {
-                using (var stream = isf.CreateFile(GetQuranDirectory() + "/.nomedia"))
-                {
-                    stream.WriteByte(1);
-                }
-                return true;
-            }
-            catch (IOException e)
-            {
-                return false;
-            }
-        }
-
-        public static bool MakeQuranDirectory()
-        {
-            string path = GetQuranDirectory();
-            if (path == null)
-                return false;
-
-            IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication();
-
-            if (isf.DirectoryExists(path))
-            {
-                return WriteNoMediaFile();
-            }
-            else
-            {
-                try
-                {
-                    isf.CreateDirectory(path);
-                    return WriteNoMediaFile();
-                }
-                catch
-                {
-                    return false;
-                }
-            }
-        }
-
-        public static bool MakeQuranDatabaseDirectory()
-        {
-            string path = GetQuranDatabaseDirectory();
-            if (path == null)
-                return false;
-
-            IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication();
-
-            if (isf.DirectoryExists(path))
-            {
-                return WriteNoMediaFile();
-            }
-            else
-            {
-                try
-                {
-                    isf.CreateDirectory(path);
-                    return WriteNoMediaFile();
-                }
-                catch
-                {
-                    return false;
-                }
-            }
+            return new Uri(location + PATH_SEPARATOR + filename);
         }
 
         private static bool increaseIsolatedStorageSpace(long quotaSizeDemand)
@@ -154,61 +188,67 @@ namespace QuranPhone.Utils
 
         public static Uri GetImageFromWeb(string filename)
         {
-            QuranScreenInfo instance = QuranScreenInfo.GetInstance();
-            if (instance == null) return null;
-
-            string urlString = IMG_HOST + "width"
-                    + instance.GetWidthParam() + "/"
-                    + filename;
-            Debug.WriteLine("want to download: " + urlString);
-
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(urlString);
-            HttpWebResponse response = null;
-            request.Method = HttpMethod.Get;
-            request.GetResponseAsync().ContinueWith(result => { response = result.Result; }).Wait();
-            using (var sr = response.GetResponseStream())
+            var isf = IsolatedStorageFile.GetUserStoreForApplication();
+            MakeQuranDirectory();
+            string path = GetQuranDirectory(false) + PATH_SEPARATOR + filename;
+            if (isf.FileExists(path))
             {
-                string path = GetQuranDirectory();
-                if (path != null)
-                {
-                    path += Path.PathSeparator + filename;
-
-                    try
-                    {
-                        bool checkQuotaIncrease = QuranFileUtils.increaseIsolatedStorageSpace(response.ContentLength);
-
-                        var isf = IsolatedStorageFile.GetUserStoreForApplication();
-                        var isfStream = new IsolatedStorageFileStream(filename, FileMode.Create, isf);
-                        long VideoFileLength = (long)response.ContentLength;
-                        byte[] byteImage = new byte[VideoFileLength];
-                        sr.Read(byteImage, 0, byteImage.Length);
-                        isfStream.Write(byteImage, 0, byteImage.Length);
-                        return GetImageFromSD(filename);
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.WriteLine("failed to store file {0}: {1}", path, e.Message);
-                        return new Uri(urlString);
-                    }
-                }
+                return GetImageFromSD(filename);
             }
-            return new Uri(urlString);
+            else
+            {
+                QuranScreenInfo instance = QuranScreenInfo.GetInstance();
+                if (instance == null) return null;
+
+                string urlString = IMG_HOST + "width"
+                        + instance.GetWidthParam() + "/"
+                        + filename;
+                Debug.WriteLine("want to download: " + urlString);
+
+                getData(urlString, data =>
+                {
+                    using (data)
+                    {
+                        try
+                        {
+                            bool checkQuotaIncrease = QuranFileUtils.increaseIsolatedStorageSpace(data.Length);
+
+                            using (var isfStream = new IsolatedStorageFileStream(path, FileMode.Create, isf))
+                            {
+                                data.CopyTo(isfStream);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.WriteLine("failed to store file {0}: {1}", path, e.Message);
+                        }
+                    }
+                });
+
+                return new Uri(urlString);
+            }
         }
 
-        public static string GetQuranBaseDirectory()
+        private static void getData(string url, Action<Stream> callback)
         {
-            return QURAN_BASE;
+            WebClient webClient = new WebClient();
+            webClient.OpenReadCompleted += (s, e) =>
+            {
+                callback(e.Error == null ? e.Result : null);
+            };
+
+            webClient.OpenReadAsync(new Uri(url));
         }
 
-        public static string GetQuranDatabaseDirectory()
+        public static string GetQuranDatabaseDirectory(bool asUri)
         {
-            string baseDir = GetQuranBaseDirectory();
+            string baseDir = (asUri ? QURAN_BASE_URI : QURAN_BASE);
             return (baseDir == null) ? null : baseDir + DATABASE_DIRECTORY;
         }
 
-        public static string GetQuranDirectory()
+        public static string GetQuranDirectory(bool asUri)
         {
-            string baseDir = GetQuranBaseDirectory();
+            string baseDir = (asUri ? QURAN_BASE_URI : QURAN_BASE);
             QuranScreenInfo qsi = QuranScreenInfo.GetInstance();
             if (qsi == null)
                 return null;
@@ -252,13 +292,13 @@ namespace QuranPhone.Utils
 
         public static bool HaveAyaPositionFile()
         {
-            string baseDir = QuranFileUtils.GetQuranDatabaseDirectory();
+            string baseDir = QuranFileUtils.GetQuranDatabaseDirectory(false);
             if (baseDir == null)
                 QuranFileUtils.MakeQuranDatabaseDirectory();
             string filename = QuranFileUtils.GetAyaPositionFileName();
             if (filename != null)
             {
-                string ayaPositionDb = baseDir + Path.PathSeparator + filename;
+                string ayaPositionDb = baseDir + PATH_SEPARATOR + filename;
                 IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication();
                 if (!isf.FileExists(ayaPositionDb))
                 {
@@ -272,10 +312,10 @@ namespace QuranPhone.Utils
 
         public static bool HasTranslation(string fileName)
         {
-            string path = GetQuranDatabaseDirectory();
+            string path = GetQuranDatabaseDirectory(false);
             if (path != null)
             {
-                path += Path.PathSeparator + fileName;
+                path += PATH_SEPARATOR + fileName;
                 IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication();
                 return isf.FileExists(path);
             }
@@ -284,10 +324,10 @@ namespace QuranPhone.Utils
 
         public static bool RemoveTranslation(string fileName)
         {
-            string path = GetQuranDatabaseDirectory();
+            string path = GetQuranDatabaseDirectory(false);
             if (path != null)
             {
-                path += Path.PathSeparator + fileName;
+                path += PATH_SEPARATOR + fileName;
                 IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication();
                 if (isf.FileExists(path))
                     isf.DeleteFile(path);

@@ -17,10 +17,10 @@ class SQLiteDatabase
         return dbConnection != null;
     }
 
-    public IList<T> query<T>()
+    public IEnumerable<T> query<T>()
     {
         var command = new SQLiteCommand(dbConnection);
-        return command.ExecuteQuery<T>();
+        return command.ExecuteDeferredQuery<T>();
     }
 
     internal void close()
