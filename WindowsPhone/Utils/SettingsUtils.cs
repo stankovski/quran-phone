@@ -21,31 +21,22 @@ namespace QuranPhone.Utils
         /// <returns></returns>
         public static T Get<T>(string key)
         {
-            string value = null;
-            if (IsolatedStorageSettings.ApplicationSettings.ContainsKey(key))
-                value = IsolatedStorageSettings.ApplicationSettings[key];
+            object value = null;
+            foreach (var k in IsolatedStorageSettings.ApplicationSettings.Keys)
+            {
+                if (k.ToString() == key)
+                {
+                    value = IsolatedStorageSettings.ApplicationSettings[key];
+                    break;
+                }
+            }
 
             if (value == null)
                 return getDefaultValue<T>(key);
 
             try
             {
-                if (typeof(T) == typeof(string))
-                {
-                    return (T)Convert.ChangeType(value, typeof(string));
-                }
-                else if (typeof(T).IsEnum)
-                {
-                    return (T)Enum.Parse(typeof(T), value);
-                }
-                else if (!typeof(T).IsPrimitive)
-                {
-                    throw new NotSupportedException();
-                }
-                else
-                {
-                    return (T)Convert.ChangeType(value, typeof(T));
-                }
+                return (T)value;
             }
             catch
             {
@@ -90,22 +81,19 @@ namespace QuranPhone.Utils
             if (value == null)
                 return;
 
-            if (typeof(T) == typeof(string))
+            bool keyExists = false;
+            foreach (var k in IsolatedStorageSettings.ApplicationSettings.Keys)
             {
-                IsolatedStorageSettings.ApplicationSettings[key] = value.ToString();
+                if (k.ToString() == key)
+                {
+                    keyExists = true;
+                    break;
+                }
             }
-            else if (typeof(T).IsEnum)
-            {
-                IsolatedStorageSettings.ApplicationSettings[key] = value.ToString();
-            }
-            else if (!typeof(T).IsPrimitive)
-            {
-                throw new NotSupportedException();
-            }
+            if (!keyExists)
+                IsolatedStorageSettings.ApplicationSettings.Add(key, value);
             else
-            {
-                IsolatedStorageSettings.ApplicationSettings[key] = value.ToString();
-            }
+                IsolatedStorageSettings.ApplicationSettings[key] = value;
         }
 
         public static void Save()

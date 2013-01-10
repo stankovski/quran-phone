@@ -61,29 +61,74 @@ namespace QuranPhone.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to add.
+        ///   Looks up a localized string similar to Juz\&apos; %1$d.
         /// </summary>
-        public static string AppBarButtonText {
+        public static string juz2_description {
             get {
-                return ResourceManager.GetString("AppBarButtonText", resourceCulture);
+                return ResourceManager.GetString("juz2_description", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Menu Item.
+        ///   Looks up a localized string similar to Madani.
         /// </summary>
-        public static string AppBarMenuItemText {
+        public static string madani {
             get {
-                return ResourceManager.GetString("AppBarMenuItemText", resourceCulture);
+                return ResourceManager.GetString("madani", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MY APPLICATION.
+        ///   Looks up a localized string similar to Мakki.
         /// </summary>
-        public static string ApplicationTitle {
+        public static string makki {
             get {
-                return ResourceManager.GetString("ApplicationTitle", resourceCulture);
+                return ResourceManager.GetString("makki", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to page %1$d, Juz\&apos; %2$d.
+        /// </summary>
+        public static string page_description {
+            get {
+                return ResourceManager.GetString("page_description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ayah.
+        /// </summary>
+        public static string quran_ayah {
+            get {
+                return ResourceManager.GetString("quran_ayah", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Juz\&apos;.
+        /// </summary>
+        public static string quran_juz2 {
+            get {
+                return ResourceManager.GetString("quran_juz2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sura.
+        /// </summary>
+        public static string quran_sura {
+            get {
+                return ResourceManager.GetString("quran_sura", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surat.
+        /// </summary>
+        public static string quran_sura_title {
+            get {
+                return ResourceManager.GetString("quran_sura_title", resourceCulture);
             }
         }
         
@@ -106,11 +151,36 @@ namespace QuranPhone.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sample Runtime Property Value.
+        ///   Looks up a localized string similar to Sura %1$s, Ayah %2$d.
         /// </summary>
-        public static string SampleProperty {
+        public static string sura_ayah_notification_str {
             get {
-                return ResourceManager.GetString("SampleProperty", resourceCulture);
+                return ResourceManager.GetString("sura_ayah_notification_str", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;string-array name=&quot;sura_names&quot;&gt;
+        ///        &lt;item&gt;Al-Fatiha&lt;/item&gt;
+        ///        &lt;item&gt;Al-Baqara&lt;/item&gt;
+        ///        &lt;item&gt;Aal-E-Imran&lt;/item&gt;
+        ///        &lt;item&gt;An-Nisa&lt;/item&gt;
+        ///        &lt;item&gt;Al-Maeda&lt;/item&gt;
+        ///        &lt;item&gt;Al-Anaam&lt;/item&gt;
+        ///        &lt;item&gt;Al-Araf&lt;/item&gt;
+        ///        &lt;item&gt;Al-Anfal&lt;/item&gt;
+        ///        &lt;item&gt;At-Tawba&lt;/item&gt;
+        ///        &lt;item&gt;Yunus&lt;/item&gt;
+        ///        &lt;item&gt;Hud&lt;/item&gt;
+        ///        &lt;item&gt;Yusuf&lt;/item&gt;
+        ///        &lt;item&gt;Ar-Rad&lt;/item&gt;
+        ///        &lt;item&gt;Ibrahim&lt;/item&gt;
+        ///        &lt;item&gt;Al-Hijr&lt;/item&gt;
+        ///        &lt;item&gt;An-Nahl&lt;/it [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string sura_names {
+            get {
+                return ResourceManager.GetString("sura_names", resourceCulture);
             }
         }
     }
