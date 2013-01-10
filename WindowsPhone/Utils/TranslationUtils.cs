@@ -10,7 +10,7 @@ namespace QuranPhone.Utils
 {
     public class TranslationUtils
     {
-        public static String getDefaultTranslation(IList<TranslationItem> items)
+        public static String GetDefaultTranslation(IList<TranslationItem> items)
         {
             if (items == null || items.Count == 0) { return null; }
 

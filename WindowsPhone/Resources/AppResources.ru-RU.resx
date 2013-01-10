@@ -118,37 +118,37 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="juz2_description" xml:space="preserve">
-    <value>Juz\' %1$d</value>
+    <value>Джуз %1$d</value>
   </data>
   <data name="madani" xml:space="preserve">
-    <value>Madani</value>
+    <value>Медина</value>
   </data>
   <data name="makki" xml:space="preserve">
-    <value>Мakki</value>
+    <value>Мекка</value>
   </data>
   <data name="page_description" xml:space="preserve">
-    <value>page %1$d, Juz\' %2$d</value>
+    <value>стр. %1$d, джуз %2$d</value>
   </data>
   <data name="quran_ayah" xml:space="preserve">
-    <value>Ayah</value>
+    <value>Аят</value>
   </data>
   <data name="quran_juz2" xml:space="preserve">
-    <value>Juz\'</value>
+    <value>Джуз</value>
   </data>
   <data name="quran_sura" xml:space="preserve">
-    <value>Sura</value>
+    <value>Сура</value>
   </data>
   <data name="quran_sura_title" xml:space="preserve">
-    <value>Surat</value>
+    <value>Сура</value>
   </data>
   <data name="ResourceFlowDirection" xml:space="preserve">
     <value>LeftToRight</value>
   </data>
   <data name="ResourceLanguage" xml:space="preserve">
-    <value>en-US</value>
+    <value>ru-RU</value>
   </data>
   <data name="sura_ayah_notification_str" xml:space="preserve">
-    <value>Sura %1$s, Ayah %2$d</value>
+    <value>Сура %1$s, Аят %2$d</value>
   </data>
   <data name="sura_names" xml:space="preserve">
     <value>&lt;string-array name="sura_names"&gt;
