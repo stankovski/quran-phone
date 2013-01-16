@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SQLite;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,12 +7,16 @@ using System.Threading.Tasks;
 
 namespace QuranPhone.Common
 {
+    [Table("verses")]
     public class QuranAyah
     {
         private static long serialVersionUID = 1L;
 
+        [Column("sura")]
         public int Sura { get; set; }
+        [Column("ayah")]
         public int Ayah { get; set; }
+        [Column("text")]
         public string Text { get; set; }
         public string Translation { get; set; }
 

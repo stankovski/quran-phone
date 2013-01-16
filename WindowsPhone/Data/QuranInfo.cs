@@ -14,27 +14,27 @@ namespace QuranPhone.Data
     public class QuranInfo
     {
 
-        public static string getAyahTitle()
+        public static string GetAyahTitle()
         {
             return AppResources.quran_ayah;
         }
 
-        public static string getSuraTitle()
+        public static string GetSuraTitle()
         {
             return AppResources.quran_sura_title;
         }
 
-        public static string getJuzTitle()
+        public static string GetJuzTitle()
         {
             return AppResources.quran_juz2;
         }
 
-        public static string getSuraName(int sura,
+        public static string GetSuraName(int sura,
                                          bool wantTitle)
         {
             if (sura < Constants.SURA_FIRST || sura > Constants.SURA_LAST) { return ""; }
             string title = "";
-            if (wantTitle) { title = getSuraTitle() + " "; }
+            if (wantTitle) { title = GetSuraTitle() + " "; }
 
             using (StringReader stringReader = new StringReader(AppResources.sura_names))
             using (XmlReader reader = XmlReader.Create(stringReader)) {
@@ -43,7 +43,7 @@ namespace QuranPhone.Data
             }
         }
 
-        public static int getSuraNumberFromPage(int page)
+        public static int GetSuraNumberFromPage(int page)
         {
             int sura = -1;
             for (int i = 0; i < Constants.SURAS_COUNT; i++)
@@ -63,32 +63,32 @@ namespace QuranPhone.Data
             return sura;
         }
 
-        public static string getSuraNameFromPage(int page, bool wantTitle)
+        public static string GetSuraNameFromPage(int page, bool wantTitle)
         {
-            int sura = getSuraNumberFromPage(page);
-            return (sura > 0) ? getSuraName(sura, wantTitle) : "";
+            int sura = GetSuraNumberFromPage(page);
+            return (sura > 0) ? GetSuraName(sura, wantTitle) : "";
         }
 
-        public static string getPageSubtitle(int page)
+        public static string GetPageSubtitle(int page)
         {
             string description = AppResources.page_description;
-            return string.Format(description, page, QuranInfo.getJuzFromPage(page));
+            return string.Format(description, page, QuranInfo.GetJuzFromPage(page));
         }
 
-        public static string getJuzString(int page)
+        public static string GetJuzString(int page)
         {
             string description = AppResources.juz2_description;
-            return string.Format(description, QuranInfo.getJuzFromPage(page));
+            return string.Format(description, QuranInfo.GetJuzFromPage(page));
         }
 
-        public static string getSuraAyahString(int sura, int ayah)
+        public static string GetSuraAyahString(int sura, int ayah)
         {
-            string suraName = getSuraName(sura, false);
+            string suraName = GetSuraName(sura, false);
             string format = AppResources.sura_ayah_notification_str;
             return string.Format(format, suraName, ayah);
         }
 
-        public static string getNotificationTitle(QuranAyah minVerse,
+        public static string GetNotificationTitle(QuranAyah minVerse,
                                                   QuranAyah maxVerse)
         {
             int minSura = minVerse.Sura;
@@ -97,11 +97,11 @@ namespace QuranPhone.Data
             if (maxAyah == 0)
             {
                 maxSura--;
-                maxAyah = QuranInfo.getNumAyahs(maxSura);
+                maxAyah = QuranInfo.GetNumAyahs(maxSura);
             }
 
             string notificationTitle =
-                    QuranInfo.getSuraName(minSura, true);
+                    QuranInfo.GetSuraName(minSura, true);
             if (minSura == maxSura)
             {
                 if (minVerse.Ayah == maxAyah)
@@ -117,14 +117,14 @@ namespace QuranPhone.Data
             else
             {
                 notificationTitle += " (" + minVerse.Ayah +
-                        ") - " + QuranInfo.getSuraName(maxSura, true) +
+                        ") - " + QuranInfo.GetSuraName(maxSura, true) +
                         " (" + maxAyah + ")";
             }
 
             return notificationTitle;
         }
 
-        public static string getSuraListMetaString(int sura)
+        public static string GetSuraListMetaString(int sura)
         {
             string info = "";
             info += QuranInfo.SURA_IS_MAKKI[sura - 1] ? AppResources.makki : AppResources.madani;
@@ -134,6 +134,8 @@ namespace QuranPhone.Data
             info += ayahs.ToString(" 0");
             return info;
         }
+
+        #region Data
 
         public static int[] SURA_PAGE_START = {
 		1, 2, 50, 77, 106, 128, 151, 177, 187, 208, 221, 235, 249, 255, 262,
@@ -506,7 +508,9 @@ namespace QuranPhone.Data
 	      new int[] {87, 1}, new int[] {90, 1}, new int[] {94, 1}, new int[] {100, 9}, 
 	    };
 
-        public static int[] getPageBounds(int page)
+        #endregion
+
+        public static int[] GetPageBounds(int page)
         {
             if (page > Constants.PAGES_LAST)
                 page = Constants.PAGES_LAST;
@@ -547,35 +551,35 @@ namespace QuranPhone.Data
             return bounds;
         }
 
-        public static string getSuraNameFromPage(int page)
+        public static string GetSuraNameFromPage(int page)
         {
             for (int i = 0; i < Constants.SURAS_COUNT; i++)
             {
                 if (SURA_PAGE_START[i] == page)
                 {
-                    return getSuraName(i + 1, false);
+                    return GetSuraName(i + 1, false);
                 }
                 else if (SURA_PAGE_START[i] > page)
                 {
-                    return getSuraName(i, false);
+                    return GetSuraName(i, false);
                 }
             }
             return "";
         }
 
-        public static int getJuzFromPage(int page)
+        public static int GetJuzFromPage(int page)
         {
             int juz = ((page - 2) / 20) + 1;
             return juz > 30 ? 30 : juz < 1 ? 1 : juz;
         }
 
-        public static int getRub3FromPage(int page)
+        public static int GetRub3FromPage(int page)
         {
             if ((page > Constants.PAGES_LAST) || (page < 1)) return -1;
             return PAGE_RUB3_START[page - 1];
         }
 
-        public static int getPageFromSuraAyah(int sura, int ayah)
+        public static int GetPageFromSuraAyah(int sura, int ayah)
         {
             // basic bounds checking
             if (ayah == 0) ayah = 1;
@@ -606,7 +610,7 @@ namespace QuranPhone.Data
             return index;
         }
 
-        public static int getAyahId(int sura, int ayah)
+        public static int GetAyahId(int sura, int ayah)
         {
             int ayahId = 0;
             for (int i = 0; i < sura - 1; i++)
@@ -617,14 +621,14 @@ namespace QuranPhone.Data
             return ayahId;
         }
 
-        public static int getAyahId(int page)
+        public static int GetAyahId(int page)
         {
             int sura = PAGE_SURA_START[page - 1];
             int ayah = PAGE_AYAH_START[page - 1];
-            return getAyahId(sura, ayah);
+            return GetAyahId(sura, ayah);
         }
 
-        public static int[] getSuraAyahFromAyahId(int ayahId)
+        public static int[] GetSuraAyahFromAyahId(int ayahId)
         {
             int lastCount = 0;
             int ayahCount = 0;
@@ -640,21 +644,21 @@ namespace QuranPhone.Data
             return values;
         }
 
-        public static int getNumAyahs(int sura)
+        public static int GetNumAyahs(int sura)
         {
             if ((sura < 1) || (sura > Constants.SURAS_COUNT)) return -1;
             return SURA_NUM_AYAHS[sura - 1];
         }
 
-        public static string getAyahString(int sura, int ayah)
+        public static string GetAyahString(int sura, int ayah)
         {
-            return getSuraName(sura, true) + " - "
-                    + getAyahTitle() + " " + ayah;
+            return GetSuraName(sura, true) + " - "
+                    + GetAyahTitle() + " " + ayah;
         }
 
-        public static string getSuraNameString(int page)
+        public static string GetSuraNameString(int page)
         {
-            return getSuraTitle() + " " + getSuraNameFromPage(page);
+            return GetSuraTitle() + " " + GetSuraNameFromPage(page);
         }
     }
 }

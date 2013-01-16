@@ -14,11 +14,11 @@ namespace UnitTests
         [TestMethod]
         public void TestGetSurahName()
         {
-            Assert.AreEqual("Surat Al-Baqara", QuranInfo.getSuraName(2, true));
-            Assert.AreEqual("Surat Al-Fatiha", QuranInfo.getSuraName(1, true));
-            Assert.AreEqual("Surat An-Nas", QuranInfo.getSuraName(114, true));
-            Assert.AreEqual("", QuranInfo.getSuraName(0, true));
-            Assert.AreEqual("", QuranInfo.getSuraName(200, true));
+            Assert.AreEqual("Surat Al-Baqara", QuranInfo.GetSuraName(2, true));
+            Assert.AreEqual("Surat Al-Fatiha", QuranInfo.GetSuraName(1, true));
+            Assert.AreEqual("Surat An-Nas", QuranInfo.GetSuraName(114, true));
+            Assert.AreEqual("", QuranInfo.GetSuraName(0, true));
+            Assert.AreEqual("", QuranInfo.GetSuraName(200, true));
         }
     }
 }
