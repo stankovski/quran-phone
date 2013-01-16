@@ -125,7 +125,7 @@ namespace QuranPhone.Utils
 
             return MakeDirectory(path);
         }
-        
+
         public static bool HaveAllImages()
         {
             IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication();
@@ -231,6 +231,40 @@ namespace QuranPhone.Utils
             }
         }
 
+        public static void DownloadFileFromWeb(string uri, string localPath)
+        {
+            var isf = IsolatedStorageFile.GetUserStoreForApplication();
+
+            getData(uri, data =>
+            {
+                using (data)
+                {
+                    try
+                    {
+                        for (int i = 0; i < localPath.Length - 1; i++)
+                        {
+                            if (localPath[i] == '/') 
+                            {
+                                var folder = localPath.Substring(0, i);
+                                if (!string.IsNullOrEmpty(folder))
+                                    MakeDirectory(folder);
+                            }
+                        }
+                        bool checkQuotaIncrease = QuranFileUtils.increaseIsolatedStorageSpace(data.Length);
+
+                        using (var isfStream = new IsolatedStorageFileStream(localPath, FileMode.Create, isf))
+                        {
+                            data.CopyTo(isfStream);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine("failed to store file {0}: {1}", localPath, e.Message);
+                    }
+                }
+            });
+        }
+
         private static void getData(string url, Action<Stream> callback)
         {
             WebClient webClient = new WebClient();
@@ -245,7 +279,7 @@ namespace QuranPhone.Utils
         public static string GetQuranDatabaseDirectory(bool asUri)
         {
             string baseDir = (asUri ? QURAN_BASE_URI : QURAN_BASE);
-            return (baseDir == null) ? null : baseDir + DATABASE_DIRECTORY;
+            return (baseDir == null) ? null : baseDir + PATH_SEPARATOR + DATABASE_DIRECTORY;
         }
 
         public static string GetQuranDirectory(bool asUri)
@@ -342,10 +376,9 @@ namespace QuranPhone.Utils
         //   return hasTranslation(QuranDataProvider.QURAN_ARABIC_DATABASE);
         //}
 
-        public static string getArabicSearchDatabaseUrl()
+        public static string GetArabicSearchDatabaseUrl()
         {
-            return IMG_HOST + DATABASE_DIRECTORY + "/" +
-                    QuranDataProvider.QURAN_ARABIC_DATABASE;
-        }   
+            return IMG_HOST + DATABASE_DIRECTORY + "/" + QURAN_ARABIC_DATABASE;
+        }
     }
 }

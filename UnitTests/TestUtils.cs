@@ -13,43 +13,43 @@ namespace UnitTests
     [TestClass]
     public class TestUtils
     {
-        [TestMethod]
-        public void TestMakeQuranDir()
-        {
-            // Setup
-            IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication();
-            if (isf.DirectoryExists(QuranFileUtils.GetQuranDirectory(false)))
-                QuranFileUtils.DeleteFolder((QuranFileUtils.GetQuranDirectory(false)));
-            Assert.IsFalse(isf.DirectoryExists(QuranFileUtils.GetQuranDirectory(false)));
+        //[TestMethod]
+        //public void TestMakeQuranDir()
+        //{
+        //    // Setup
+        //    IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication();
+        //    if (isf.DirectoryExists(QuranFileUtils.GetQuranDirectory(false)))
+        //        QuranFileUtils.DeleteFolder((QuranFileUtils.GetQuranDirectory(false)));
+        //    Assert.IsFalse(isf.DirectoryExists(QuranFileUtils.GetQuranDirectory(false)));
 
-            // Act
-            Assert.IsTrue(QuranFileUtils.MakeQuranDirectory());
+        //    // Act
+        //    Assert.IsTrue(QuranFileUtils.MakeQuranDirectory());
 
-            // Verify
-            Assert.IsTrue(isf.DirectoryExists(QuranFileUtils.GetQuranDirectory(false)));
+        //    // Verify
+        //    Assert.IsTrue(isf.DirectoryExists(QuranFileUtils.GetQuranDirectory(false)));
 
-            // Cleanup
-            QuranFileUtils.DeleteFolder((QuranFileUtils.GetQuranDirectory(false)));
-        }
+        //    // Cleanup
+        //    QuranFileUtils.DeleteFolder((QuranFileUtils.GetQuranDirectory(false)));
+        //}
 
-        [TestMethod]
-        public void TestMakeQuranDbDir()
-        {
-            // Setup
-            IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication();
-            if (isf.DirectoryExists(QuranFileUtils.GetQuranDatabaseDirectory(false)))
-                QuranFileUtils.DeleteFolder((QuranFileUtils.GetQuranDatabaseDirectory(false)));
-            Assert.IsFalse(isf.DirectoryExists(QuranFileUtils.GetQuranDatabaseDirectory(false)));
+        //[TestMethod]
+        //public void TestMakeQuranDbDir()
+        //{
+        //    // Setup
+        //    IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication();
+        //    if (isf.DirectoryExists(QuranFileUtils.GetQuranDatabaseDirectory(false)))
+        //        QuranFileUtils.DeleteFolder((QuranFileUtils.GetQuranDatabaseDirectory(false)));
+        //    Assert.IsFalse(isf.DirectoryExists(QuranFileUtils.GetQuranDatabaseDirectory(false)));
 
-            // Act
-            Assert.IsTrue(QuranFileUtils.MakeQuranDatabaseDirectory());
+        //    // Act
+        //    Assert.IsTrue(QuranFileUtils.MakeQuranDatabaseDirectory());
 
-            // Verify
-            Assert.IsTrue(isf.DirectoryExists(QuranFileUtils.GetQuranDatabaseDirectory(false)));
+        //    // Verify
+        //    Assert.IsTrue(isf.DirectoryExists(QuranFileUtils.GetQuranDatabaseDirectory(false)));
 
-            // Cleanup
-            QuranFileUtils.DeleteFolder((QuranFileUtils.GetQuranDatabaseDirectory(false)));
-        }
+        //    // Cleanup
+        //    QuranFileUtils.DeleteFolder((QuranFileUtils.GetQuranDatabaseDirectory(false)));
+        //}
 
         [TestMethod]
         public void TestGetPageFileName()
