@@ -99,6 +99,10 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Common\DatabaseProperties.cs" />
+    <Compile Include="Data\BookmarksDBAdapter.cs" />
+    <Compile Include="Data\DatabaseHandler.cs" />
+    <Compile Include="Data\QuranDataProvider.cs" />
     <Compile Include="Resources\AppResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -113,7 +117,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Data\AyahInfoDatabaseHandler.cs" />
-    <Compile Include="Data\AyahLimits.cs" />
+    <Compile Include="Common\AyahLimits.cs" />
     <Compile Include="Data\Constants.cs" />
     <Compile Include="Data\Mappings.cs" />
     <Compile Include="Data\QuranInfo.cs" />
@@ -131,6 +135,7 @@
     <Compile Include="Utils\QuranScreenInfo.cs" />
     <Compile Include="Utils\QuranUtils.cs" />
     <Compile Include="Utils\SettingsUtils.cs" />
+    <Compile Include="Utils\TranslationListTask.cs" />
     <Compile Include="Utils\TranslationUtils.cs" />
     <Compile Include="ViewModels\ItemViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />

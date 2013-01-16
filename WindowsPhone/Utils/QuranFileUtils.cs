@@ -10,21 +10,23 @@ using System.Windows.Media.Imaging;
 using System.Diagnostics;
 using System.Net;
 using System.Threading;
+using QuranPhone.Data;
 
 namespace QuranPhone.Utils
 {
     public class QuranFileUtils
     {
 
-        private const string TAG = "QuranFileUtils";
+        private static string TAG = "QuranFileUtils";
         public static bool failedToWrite = false;
         public static string IMG_HOST = "http://android.quran.com/data/";
         private static string QURAN_BASE = "quran_android" + PATH_SEPARATOR;
         private static string QURAN_BASE_URI = "isostore:/" + QURAN_BASE;
         private static string DATABASE_DIRECTORY = "databases";
         private static int BUFF_SIZE = 1024;
-        public const string PACKAGE_NAME = "com.quran.labs.androidquran";
-        public const string PATH_SEPARATOR = "/";
+        public static string PACKAGE_NAME = "com.quran.labs.androidquran";
+        public static string QURAN_ARABIC_DATABASE = "quran.ar.db";
+        public static string PATH_SEPARATOR = "/";
 
         /// <summary>
         /// Deletes folder even if it contains read only files
@@ -340,9 +342,10 @@ namespace QuranPhone.Utils
         //   return hasTranslation(QuranDataProvider.QURAN_ARABIC_DATABASE);
         //}
 
-        //public static string getArabicSearchDatabaseUrl(){
-        //   return IMG_HOST + DATABASE_DIRECTORY + "/" +
-        //           QuranDataProvider.QURAN_ARABIC_DATABASE;
-        //}   
+        public static string getArabicSearchDatabaseUrl()
+        {
+            return IMG_HOST + DATABASE_DIRECTORY + "/" +
+                    QuranDataProvider.QURAN_ARABIC_DATABASE;
+        }   
     }
 }
