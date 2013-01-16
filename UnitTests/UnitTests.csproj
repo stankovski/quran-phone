@@ -103,6 +103,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AppResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="TestDatabaseHandler.cs" />
     <Compile Include="TestQuranInfo.cs" />
     <Compile Include="TestSettings.cs" />
     <Compile Include="TestUtils.cs" />
