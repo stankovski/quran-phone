@@ -18,6 +18,7 @@ namespace QuranPhone.Common
         public int Ayah { get; set; }
         [Column("text")]
         public string Text { get; set; }
+        [Ignore]
         public string Translation { get; set; }
 
         public QuranAyah() { }

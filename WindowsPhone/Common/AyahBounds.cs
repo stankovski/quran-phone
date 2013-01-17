@@ -10,6 +10,8 @@ namespace QuranPhone.Common
     [Table("glyphs")]
     public class AyahBounds
     {
+        public AyahBounds() { }
+
         public AyahBounds(int line,int position,int minX,int minY,int maxX,int maxY) 
         {        
             Line = line; 
