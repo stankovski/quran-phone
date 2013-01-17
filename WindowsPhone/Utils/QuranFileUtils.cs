@@ -276,18 +276,48 @@ namespace QuranPhone.Utils
             webClient.OpenReadAsync(new Uri(url));
         }
 
-        public static string GetQuranDatabaseDirectory(bool asUri)
+        public static string GetQuranDatabaseDirectory(bool asUri, bool createIfDoesntExist = false)
         {
             string baseDir = (asUri ? QURAN_BASE_URI : QURAN_BASE);
+
+            if (createIfDoesntExist)
+            {
+                var tempPath = QURAN_BASE + PATH_SEPARATOR + DATABASE_DIRECTORY;
+                for (int i = 0; i < tempPath.Length - 1; i++)
+                {
+                    if (tempPath[i] == '/')
+                    {
+                        var folder = tempPath.Substring(0, i);
+                        if (!string.IsNullOrEmpty(folder))
+                            MakeDirectory(folder);
+                    }
+                }
+            }
+
             return (baseDir == null) ? null : baseDir + PATH_SEPARATOR + DATABASE_DIRECTORY;
         }
 
-        public static string GetQuranDirectory(bool asUri)
+        public static string GetQuranDirectory(bool asUri, bool createIfDoesntExist = false)
         {
             string baseDir = (asUri ? QURAN_BASE_URI : QURAN_BASE);
             QuranScreenInfo qsi = QuranScreenInfo.GetInstance();
             if (qsi == null)
                 return null;
+
+            if (createIfDoesntExist)
+            {
+                var tempPath = QURAN_BASE + "width" + qsi.GetWidthParam();
+                for (int i = 0; i < tempPath.Length - 1; i++)
+                {
+                    if (tempPath[i] == '/')
+                    {
+                        var folder = tempPath.Substring(0, i);
+                        if (!string.IsNullOrEmpty(folder))
+                            MakeDirectory(folder);
+                    }
+                }
+            }
+
             return (baseDir == null) ? null : baseDir + "width" + qsi.GetWidthParam();
         }
 

@@ -10,33 +10,24 @@ using System.Windows;
 
 namespace QuranPhone.Data
 {
-    public class AyahInfoDatabaseHandler
+    public class AyahInfoDatabaseHandler : BaseDatabaseHandler
     {
-        private SQLiteDatabase database = null;
-
         public AyahInfoDatabaseHandler(string databaseName)
         {
-            string b = QuranFileUtils.GetQuranDatabaseDirectory(false);
+            string b = QuranFileUtils.GetQuranDatabaseDirectory(false, true);
             if (b == null) return;
             string path = b + QuranFileUtils.PATH_SEPARATOR + databaseName;
-            database = new SQLiteDatabase(path);
+            mDatabase = new SQLiteDatabase(path);
         }
 
-        public bool validDatabase()
+        public IList<AyahBounds> GetVerseBounds(int sura, int ayah)
         {
-            return (database == null) ? false : database.isOpen();
+            return mDatabase.Query<AyahBounds>().Where(a => a.SurahNumber == sura && a.AyahNumber == ayah).ToList();
         }
 
-        public IList<AyahBounds> getVerseBounds(int sura, int ayah)
+        public Rect? GetPageBounds(int page)
         {
-            if (!validDatabase()) return null;
-            return database.query<AyahBounds>().Where(a=>a.SurahNumber == sura && a.AyahNumber == ayah).ToList();
-        }
-
-        public Rect? getPageBounds(int page)
-        {
-            if (!validDatabase()) return null;
-            AyahLimits limits = database.query<AyahLimits>().Where(a => a.PageNumber == page).FirstOrDefault();
+            AyahLimits limits = mDatabase.Query<AyahLimits>().Where(a => a.PageNumber == page).FirstOrDefault();
             if (limits == null) return null;
             Rect r = new Rect(limits.MinX, limits.MinY, limits.MaxX, limits.MaxY);
             return r;
@@ -163,11 +154,5 @@ namespace QuranPhone.Data
         //    }
         //    return null;
         //}
-
-        public void closeDatabase()
-        {
-            if (database != null)
-                database.close();
-        }
     }
 }

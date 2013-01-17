@@ -8,17 +8,15 @@ using System.Threading.Tasks;
 
 namespace QuranPhone.Data
 {
-    public class DatabaseHandler
+    public class DatabaseHandler : BaseDatabaseHandler
     {
-
-        private SQLiteDatabase mDatabase = null;
         private string mDatabasePath = null;
 
         private int schemaVersion = 1;
 
         public DatabaseHandler(string databaseName)
         {
-            string basePath = QuranFileUtils.GetQuranDatabaseDirectory(false);
+            string basePath = QuranFileUtils.GetQuranDatabaseDirectory(false, true);
             if (basePath == null) return;
             string path = basePath + QuranFileUtils.PATH_SEPARATOR + databaseName;
             mDatabase = new SQLiteDatabase(path);
@@ -28,7 +26,7 @@ namespace QuranPhone.Data
 
         public bool ValidDatabase()
         {
-            return (mDatabase == null) ? false : mDatabase.isOpen();
+            return (mDatabase == null) ? false : mDatabase.IsOpen();
         }
 
         public bool ReopenDatabase()
@@ -53,7 +51,7 @@ namespace QuranPhone.Data
 
             try
             {
-                var result = mDatabase.query<DatabaseProperties>().Where(p => p.Property == "schema_version").FirstOrDefault();
+                var result = mDatabase.Query<DatabaseProperties>().Where(p => p.Property == "schema_version").FirstOrDefault();
                 if (result != null)
                     version = int.Parse(result.Value);
                 return version;
@@ -71,7 +69,7 @@ namespace QuranPhone.Data
 
             try
             {
-                var result = mDatabase.query<DatabaseProperties>().Where(p => p.Property == "text_version").FirstOrDefault();
+                var result = mDatabase.Query<DatabaseProperties>().Where(p => p.Property == "text_version").FirstOrDefault();
                 if (result != null)
                     version = int.Parse(result.Value);
                 return version;
@@ -95,7 +93,7 @@ namespace QuranPhone.Data
                 if (!ReopenDatabase()) { return null; }
             }
 
-            IEnumerable<QuranAyah> result = mDatabase.query<QuranAyah>();
+            IEnumerable<QuranAyah> result = mDatabase.Query<QuranAyah>();
 
             if (minSura == maxSura)
             {
@@ -117,39 +115,14 @@ namespace QuranPhone.Data
             return GetVerses(sura, ayah, ayah);
         }
 
-        public string Search(string query, bool withSnippets)
+        public List<QuranAyah> Search(string query)
         {
             if (!ValidDatabase())
             {
                 if (!ReopenDatabase()) { return null; }
             }
 
-            string opr = " like '%";
-            string endOperator = "%'";
-            string whatTextToSelect = "text";
-            string table = "verses";
-
-            bool useFullTextIndex = (schemaVersion > 1);
-            if (useFullTextIndex)
-            {
-                opr = " MATCH '";
-                endOperator = "*'";
-            }
-
-            if (useFullTextIndex && withSnippets)
-                whatTextToSelect = "snippet(" + table + ")";
-
-            return "select " + "sura" + ", " + "ayah" +
-                    ", " + whatTextToSelect + " from " + table + " where " + "text" + opr + query + endOperator + " limit 50";
-        }
-
-        public void CloseDatabase()
-        {
-            if (mDatabase != null)
-            {
-                mDatabase.close();
-                mDatabase = null;
-            }
-        }
+            return mDatabase.Query<QuranAyah>().Where(a => a.Text.Contains(query)).Take(50).ToList();            
+        }        
     }
 }

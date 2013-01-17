@@ -27,8 +27,10 @@ namespace UnitTests
                 return;
             }
 
-            DatabaseHandler dbh = new DatabaseHandler(QuranFileUtils.QURAN_ARABIC_DATABASE);
-            Assert.AreEqual("", dbh.Search("baqara", false));
+            using (var dbh = new DatabaseHandler(QuranFileUtils.QURAN_ARABIC_DATABASE))
+            {
+                Assert.AreEqual(0, dbh.Search("test").Count);
+            }
         }
     }
 }
