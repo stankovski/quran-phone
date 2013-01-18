@@ -1,9 +1,7 @@
 ﻿<vm:MainViewModel
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:vm="clr-namespace:QuranPhone.ViewModels"
-    SampleProperty="Sample Text Property Value">
-
+    xmlns:vm="clr-namespace:QuranPhone.ViewModels">
     <vm:MainViewModel.Items>
         <vm:ItemViewModel ID="0" LineOne="design one" LineTwo="Maecenas praesent accumsan bibendum" LineThree="Maecenas praesent accumsan bibendum dictumst eleifend facilisi faucibus habitant inceptos interdum lobortis nascetur"/>
         <vm:ItemViewModel ID="1" LineOne="design two" LineTwo="Dictumst eleifend facilisi faucibus" LineThree="Pharetra placerat pulvinar sagittis senectus sociosqu suscipit torquent ultrices vehicula volutpat maecenas praesent"/>
