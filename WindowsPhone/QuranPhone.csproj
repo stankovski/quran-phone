@@ -21,7 +21,7 @@
     <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
     <XapFilename>WindowsPhone_$(Configuration)_$(Platform).xap</XapFilename>
     <SilverlightManifestTemplate>Properties\AppManifest.xml</SilverlightManifestTemplate>
-    <SilverlightAppEntry>WindowsPhone.App</SilverlightAppEntry>
+    <SilverlightAppEntry>QuranPhone.App</SilverlightAppEntry>
     <ValidateXaml>true</ValidateXaml>
     <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
@@ -171,8 +171,38 @@
   <ItemGroup>
     <Content Include="Assets\AlignmentGrid.png" />
     <Content Include="Assets\ApplicationIcon.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\Images\bookmark_ayah.png" />
+    <Content Include="Assets\Images\bookmark_currentpage.png" />
+    <Content Include="Assets\Images\bookmark_page.png" />
+    <Content Include="Assets\Images\favorite.png" />
+    <Content Include="Assets\Images\hizb_full.png" />
+    <Content Include="Assets\Images\hizb_half.png" />
+    <Content Include="Assets\Images\hizb_quarter.png" />
+    <Content Include="Assets\Images\hizb_threequarters.png" />
+    <Content Include="Assets\Images\icon.png" />
+    <Content Include="Assets\Images\ic_ab_search.png" />
+    <Content Include="Assets\Images\ic_ab_settings.png" />
+    <Content Include="Assets\Images\ic_accept.png" />
+    <Content Include="Assets\Images\ic_cancel.png" />
+    <Content Include="Assets\Images\ic_delete.png" />
+    <Content Include="Assets\Images\ic_download.png" />
+    <Content Include="Assets\Images\ic_edit.png" />
+    <Content Include="Assets\Images\ic_goto_quran.png" />
+    <Content Include="Assets\Images\ic_new.png" />
+    <Content Include="Assets\Images\ic_next.png" />
+    <Content Include="Assets\Images\ic_pause.png" />
+    <Content Include="Assets\Images\ic_play.png" />
+    <Content Include="Assets\Images\ic_previous.png" />
+    <Content Include="Assets\Images\ic_repeat.png" />
+    <Content Include="Assets\Images\ic_select_all.png" />
+    <Content Include="Assets\Images\ic_sort.png" />
+    <Content Include="Assets\Images\ic_stop.png" />
+    <Content Include="Assets\Images\ic_tag.png" />
+    <Content Include="Assets\Images\ic_translation.png" />
+    <Content Include="Assets\Images\not_favorite.png" />
+    <Content Include="Assets\Images\sura_icon.png" />
     <Content Include="Assets\Tiles\FlipCycleTileLarge.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -188,6 +218,9 @@
     <Content Include="Assets\Tiles\IconicTileSmall.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="SplashScreenImage.screen-720p.jpg" />
+    <Content Include="SplashScreenImage.screen-WVGA.jpg" />
+    <Content Include="SplashScreenImage.screen-WXGA.jpg" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\AppResources.resx">
