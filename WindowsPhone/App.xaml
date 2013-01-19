@@ -8,6 +8,26 @@
     <!--Application Resources-->
     <Application.Resources>
         <local:LocalizedStrings xmlns:local="clr-namespace:QuranPhone" x:Key="LocalizedStrings"/>
+        <Style TargetType="TextBlock" x:Key="Blue">
+            <Setter Property="Foreground" Value="#30B6E7"/>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="ItemViewStyleHeader">
+            <Setter Property="FontSize" Value="30"/>
+            <Setter Property="Margin" Value="10,5,0,5"/>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="ItemViewStyleJuz" BasedOn="{StaticResource Blue}">
+            <Setter Property="FontSize" Value="20"/>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="ItemViewStyleSura">
+            <Setter Property="FontSize" Value="30"/>
+            <Setter Property="Margin" Value="10,5,0,5"/>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="ItemViewStyleSuraPageNumber">
+            <Setter Property="FontSize" Value="20"/>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="ItemViewStyleJuzPageNumber" BasedOn="{StaticResource Blue}">
+            <Setter Property="FontSize" Value="20"/>
+        </Style>
     </Application.Resources>
 
     <Application.ApplicationLifetimeObjects>

@@ -20,7 +20,6 @@ namespace QuranPhone.Data
     public class BookmarksDBAdapter : BaseDatabaseHandler
     {
         public static string DB_NAME = "bookmarks.db";
-        private static int DB_VERSION = 2;
         public static int SORT_DATE_ADDED = 0;
         public static int SORT_LOCATION = 1;
         public static int SORT_ALPHABETICAL = 2;
@@ -201,12 +200,12 @@ namespace QuranPhone.Data
 
         public int GetBookmarkTagId(int bookmarkId, int tagId)
         {
-            var result = mDatabase.Query<BookmarkTags>().Where(bt => bt.BookmarkId == bookmarkId && bt.TagId == tagId).Select(bt => bt.Id).FirstOrDefault();
+            var result = mDatabase.Query<BookmarkTags>().Where(bt => bt.BookmarkId == bookmarkId && bt.TagId == tagId).Select(bt => bt.Id);
 
-            if (result == null)
+            if (result.Count() == 0)
                 return -1;
             else
-                return result;
+                return result.First();
         }
 
         public void TagBookmarks(int[] bookmarkIds, List<Tags> tags)

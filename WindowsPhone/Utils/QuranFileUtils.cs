@@ -16,14 +16,11 @@ namespace QuranPhone.Utils
 {
     public class QuranFileUtils
     {
-
-        private static string TAG = "QuranFileUtils";
         public static bool failedToWrite = false;
         public static string IMG_HOST = "http://android.quran.com/data/";
         private static string QURAN_BASE = "quran_android" + PATH_SEPARATOR;
         private static string QURAN_BASE_URI = "isostore:/" + QURAN_BASE;
         private static string DATABASE_DIRECTORY = "databases";
-        private static int BUFF_SIZE = 1024;
         public static string PACKAGE_NAME = "com.quran.labs.androidquran";
         public static string QURAN_ARABIC_DATABASE = "quran.ar.db";
         public static string PATH_SEPARATOR = "/";
@@ -107,7 +104,7 @@ namespace QuranPhone.Utils
                 }
                 return true;
             }
-            catch (IOException e)
+            catch (IOException)
             {
                 return false;
             }

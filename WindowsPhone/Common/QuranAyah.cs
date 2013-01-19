@@ -10,8 +10,6 @@ namespace QuranPhone.Common
     [Table("verses")]
     public class QuranAyah
     {
-        private static long serialVersionUID = 1L;
-
         [Column("sura")]
         public int Sura { get; set; }
         [Column("ayah")]
