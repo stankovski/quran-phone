@@ -43,6 +43,21 @@ namespace QuranPhone.Data
             }
         }
 
+        public static string[] GetSuraQuarters()
+        {
+            List<string> results = new List<string>();
+            using (StringReader stringReader = new StringReader(AppResources.quarters))
+            using (XmlReader reader = XmlReader.Create(stringReader))
+            {
+                var doc = XDocument.Load(reader);
+                foreach (var node in doc.Descendants("item"))
+                {
+                    results.Add(node.Value);
+                }
+            }
+            return results.ToArray();
+        }
+
         public static int GetSuraNumberFromPage(int page)
         {
             int sura = -1;
@@ -131,7 +146,11 @@ namespace QuranPhone.Data
             info += " - ";
 
             int ayahs = QuranInfo.SURA_NUM_AYAHS[sura - 1];
-            info += ayahs.ToString(" 0");
+            info += ayahs.ToString(" 0 ");
+            if (ayahs == 1)
+                info += AppResources.verse;
+            else
+                info += AppResources.verses;  
             return info;
         }
 

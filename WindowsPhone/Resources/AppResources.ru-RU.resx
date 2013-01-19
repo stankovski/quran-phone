@@ -268,4 +268,13 @@
         &lt;item&gt;An-Nas&lt;/item&gt;
     &lt;/string-array&gt;</value>
   </data>
+  <data name="app_name" xml:space="preserve">
+    <value>КОРАН</value>
+  </data>
+  <data name="verse" xml:space="preserve">
+    <value>стих</value>
+  </data>
+  <data name="verses" xml:space="preserve">
+    <value>стиха</value>
+  </data>
 </root>

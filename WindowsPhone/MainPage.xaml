@@ -7,6 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    xmlns:myui="clr-namespace:QuranPhone.UI"
     d:DataContext="{d:DesignData SampleData/MainViewModelSampleData.xaml}"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
@@ -14,31 +15,16 @@
     SupportedOrientations="Portrait"  Orientation="Portrait"
     shell:SystemTray.IsVisible="True">
 
+    
+    <phone:PhoneApplicationPage.Resources>
+        <myui:StyleConverter x:Key="StyleConverter"/>
+    </phone:PhoneApplicationPage.Resources>
     <!--Data context is set to sample data above and LayoutRoot contains the root grid where all other page content is placed-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-
-        <!-- LOCALIZATION NOTE:
-            To localize the displayed strings copy their values to appropriately named
-            keys in the app's neutral language resource file (AppResources.resx) then
-            replace the hard-coded text value between the attributes' quotation marks
-            with the binding clause whose path points to that string name.
-
-            For example:
-
-                Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}"
-
-            This binding points to the template's string resource named "ApplicationTitle".
-
-            Adding supported languages in the Project Properties tab will create a
-            new resx file per language that can carry the translated values of your
-            UI strings. The binding in these examples will cause the value of the
-            attributes to be drawn from the .resx file that matches the
-            CurrentUICulture of the app at run time.
-         -->
 
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel Grid.Row="0" Margin="12,0,0,0">
@@ -49,7 +35,7 @@
                     <ColumnDefinition Width="100"/>
                 </Grid.ColumnDefinitions>
                 <Image Grid.Column="0" Source="/Assets/Images/icon.png" Height="50" />
-                <TextBlock Grid.Column="1" Text="QURAN" FontSize="24" Style="{StaticResource PhoneTextNormalStyle}" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="1" Text="{Binding Path=LocalizedResources.app_name, Source={StaticResource LocalizedStrings}}" FontSize="24" Style="{StaticResource PhoneTextNormalStyle}" VerticalAlignment="Center"/>
                 <Image Grid.Column="2" Source="/Assets/Images/ic_goto_quran.png" Height="40" />
             </Grid>            
         </StackPanel>
@@ -58,13 +44,26 @@
             <phone:PivotItem Header="surah">
                 <!--ContentPanel contains LongListSelector and LongListSelector ItemTemplate. Place additional content here-->
                 <Grid x:Name="ContentPanel">
-                    <phone:LongListSelector x:Name="MainLongListSelector" Margin="0,0,-12,0" ItemsSource="{Binding Items}" SelectionChanged="MainLongListSelector_SelectionChanged">
+                    <phone:LongListSelector Margin="0,0,-12,0" ItemsSource="{Binding Surahs}" SelectionChanged="List_SelectionChanged">
                         <phone:LongListSelector.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Margin="0,0,0,17">
-                                    <TextBlock Text="{Binding LineOne}" TextWrapping="Wrap" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
-                                    <TextBlock Text="{Binding LineTwo}" TextWrapping="Wrap" Margin="12,-6,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
-                                </StackPanel>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="70"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="50"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding Id}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                                Style="{Binding Style, Mode=OneWay, Converter={StaticResource StyleConverter}}"/>
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Text="{Binding Title}" TextWrapping="Wrap" 
+                                                    Style="{Binding Style, Mode=OneWay, Converter={StaticResource StyleConverter}}"/>
+                                        <TextBlock Text="{Binding Details}" TextWrapping="Wrap" Margin="12,-6,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                    </StackPanel>
+                                    <TextBlock Grid.Column="2" Text="{Binding PageNumber}" TextWrapping="Wrap" 
+                                                HorizontalAlignment="Right" VerticalAlignment="Center"
+                                                Style="{Binding Style, Mode=OneWay, Converter={StaticResource StyleConverter}, ConverterParameter=PageNumber}"/>
+                                </Grid>
                             </DataTemplate>
                         </phone:LongListSelector.ItemTemplate>
                     </phone:LongListSelector>
@@ -73,13 +72,29 @@
             <phone:PivotItem Header="juz'">
                 <!--ContentPanel contains LongListSelector and LongListSelector ItemTemplate. Place additional content here-->
                 <Grid>
-                    <phone:LongListSelector Margin="0,0,-12,0" ItemsSource="{Binding Items}" SelectionChanged="MainLongListSelector_SelectionChanged">
+                    <phone:LongListSelector Margin="0,0,-12,0" ItemsSource="{Binding Juz}" SelectionChanged="List_SelectionChanged">
                         <phone:LongListSelector.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Margin="0,0,0,17">
-                                    <TextBlock Text="{Binding LineOne}" TextWrapping="Wrap" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
-                                    <TextBlock Text="{Binding LineTwo}" TextWrapping="Wrap" Margin="12,-6,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
-                                </StackPanel>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="70"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="50"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid>
+                                        <Image Source="{Binding Image}" Width="40"/>
+                                        <TextBlock Text="{Binding Id}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                                Style="{Binding Style, Mode=OneWay, Converter={StaticResource StyleConverter}, ConverterParameter=PageNumber}"/>
+                                    </Grid>                                    
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Text="{Binding Title}" TextWrapping="Wrap" 
+                                                    Style="{Binding Style, Mode=OneWay, Converter={StaticResource StyleConverter}}"/>
+                                        <TextBlock Text="{Binding Details}" TextWrapping="Wrap" Margin="12,-6,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                    </StackPanel>
+                                    <TextBlock Grid.Column="2" Text="{Binding PageNumber}" TextWrapping="Wrap" 
+                                                HorizontalAlignment="Right" VerticalAlignment="Center"
+                                                Style="{Binding Style, Mode=OneWay, Converter={StaticResource StyleConverter}, ConverterParameter=PageNumber}"/>
+                                </Grid>
                             </DataTemplate>
                         </phone:LongListSelector.ItemTemplate>
                     </phone:LongListSelector>
@@ -88,12 +103,12 @@
             <phone:PivotItem Header="bookmarks">
                 <!--ContentPanel contains LongListSelector and LongListSelector ItemTemplate. Place additional content here-->
                 <Grid>
-                    <phone:LongListSelector Margin="0,0,-12,0" ItemsSource="{Binding Items}" SelectionChanged="MainLongListSelector_SelectionChanged">
+                    <phone:LongListSelector Margin="0,0,-12,0" ItemsSource="{Binding Items}" SelectionChanged="List_SelectionChanged">
                         <phone:LongListSelector.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Margin="0,0,0,17">
-                                    <TextBlock Text="{Binding LineOne}" TextWrapping="Wrap" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
-                                    <TextBlock Text="{Binding LineTwo}" TextWrapping="Wrap" Margin="12,-6,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                    <TextBlock Text="{Binding Title}" TextWrapping="Wrap" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+                                    <TextBlock Text="{Binding Details}" TextWrapping="Wrap" Margin="12,-6,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
                                 </StackPanel>
                             </DataTemplate>
                         </phone:LongListSelector.ItemTemplate>
@@ -103,12 +118,12 @@
             <phone:PivotItem Header="tags">
                 <!--ContentPanel contains LongListSelector and LongListSelector ItemTemplate. Place additional content here-->
                 <Grid>
-                    <phone:LongListSelector Margin="0,0,-12,0" ItemsSource="{Binding Items}" SelectionChanged="MainLongListSelector_SelectionChanged">
+                    <phone:LongListSelector Margin="0,0,-12,0" ItemsSource="{Binding Items}" SelectionChanged="List_SelectionChanged">
                         <phone:LongListSelector.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Margin="0,0,0,17">
-                                    <TextBlock Text="{Binding LineOne}" TextWrapping="Wrap" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
-                                    <TextBlock Text="{Binding LineTwo}" TextWrapping="Wrap" Margin="12,-6,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                    <TextBlock Text="{Binding Title}" TextWrapping="Wrap" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+                                    <TextBlock Text="{Binding Details}" TextWrapping="Wrap" Margin="12,-6,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
                                 </StackPanel>
                             </DataTemplate>
                         </phone:LongListSelector.ItemTemplate>

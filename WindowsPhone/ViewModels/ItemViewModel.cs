@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QuranPhone.UI;
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Net;
@@ -7,102 +8,126 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Navigation;
 
 namespace QuranPhone.ViewModels
 {
-    public class ItemViewModel : INotifyPropertyChanged
+    public enum ItemViewModelType
     {
-        private string _id;
-        /// <summary>
-        /// Sample ViewModel property; this property is used to identify the object.
-        /// </summary>
-        /// <returns></returns>
-        public string ID
+        Unknown,
+        Sura,
+        Juz,
+        Bookmark,
+        Tag
+    }
+    
+    public class ItemViewModel : ViewModelBase
+    {
+        private string id;
+        public string Id
         {
-            get
-            {
-                return _id;
-            }
+            get { return id; }
             set
             {
-                if (value != _id)
-                {
-                    _id = value;
-                    NotifyPropertyChanged("ID");
-                }
+                if (value == id)
+                    return;
+
+                id = value;
+
+                base.OnPropertyChanged(() => Id);
             }
         }
 
-        private string _lineOne;
-        /// <summary>
-        /// Sample ViewModel property; this property is used in the view to display its value using a Binding.
-        /// </summary>
-        /// <returns></returns>
-        public string LineOne
+
+        private string title;
+        public string Title
         {
-            get
-            {
-                return _lineOne;
-            }
+            get { return title; }
             set
             {
-                if (value != _lineOne)
-                {
-                    _lineOne = value;
-                    NotifyPropertyChanged("LineOne");
-                }
+                if (value == title)
+                    return;
+
+                title = value;
+
+                base.OnPropertyChanged(() => Title);
             }
         }
 
-        private string _lineTwo;
-        /// <summary>
-        /// Sample ViewModel property; this property is used in the view to display its value using a Binding.
-        /// </summary>
-        /// <returns></returns>
-        public string LineTwo
+        private string details;
+        public string Details
         {
-            get
-            {
-                return _lineTwo;
-            }
+            get { return details; }
             set
             {
-                if (value != _lineTwo)
-                {
-                    _lineTwo = value;
-                    NotifyPropertyChanged("LineTwo");
-                }
+                if (value == details)
+                    return;
+
+                details = value;
+
+                base.OnPropertyChanged(() => Details);
             }
         }
 
-        private string _lineThree;
-        /// <summary>
-        /// Sample ViewModel property; this property is used in the view to display its value using a Binding.
-        /// </summary>
-        /// <returns></returns>
-        public string LineThree
+        private int pageNumber;
+        public int PageNumber
         {
-            get
-            {
-                return _lineThree;
-            }
+            get { return pageNumber; }
             set
             {
-                if (value != _lineThree)
-                {
-                    _lineThree = value;
-                    NotifyPropertyChanged("LineThree");
-                }
+                if (value == pageNumber)
+                    return;
+
+                pageNumber = value;
+
+                base.OnPropertyChanged(() => PageNumber);
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged(String propertyName)
+        private Uri image;
+        public Uri Image
         {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (null != handler)
+            get { return image; }
+            set
             {
-                handler(this, new PropertyChangedEventArgs(propertyName));
+                if (value == image)
+                    return;
+
+                image = value;
+
+                base.OnPropertyChanged(() => Image);
+            }
+        }
+
+        private ItemViewModelType itemType;
+        public ItemViewModelType ItemType
+        {
+            get { return itemType; }
+            set
+            {
+                if (value == itemType)
+                    return;
+
+                itemType = value;
+                Style = value.ToString();
+
+                base.OnPropertyChanged(() => ItemType);
+            }
+        }
+
+        private string style;
+        public string Style
+        {
+            get { return style; }
+            set
+            {
+                value = string.Format("ItemViewStyle{0}", value);
+                if (value == style)
+                    return;
+
+                style = value;
+
+                base.OnPropertyChanged(() => Style);
             }
         }
     }
