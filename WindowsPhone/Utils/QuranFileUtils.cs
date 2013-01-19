@@ -202,29 +202,30 @@ namespace QuranPhone.Utils
                 string urlString = IMG_HOST + "width"
                         + instance.GetWidthParam() + "/"
                         + filename;
-                Debug.WriteLine("want to download: " + urlString);
+                return new Uri(urlString, UriKind.Absolute);
+                //Debug.WriteLine("want to download: " + urlString);
 
-                getData(urlString, data =>
-                {
-                    using (data)
-                    {
-                        try
-                        {
-                            bool checkQuotaIncrease = QuranFileUtils.increaseIsolatedStorageSpace(data.Length);
+                //getData(urlString, data =>
+                //{
+                //    using (data)
+                //    {
+                //        try
+                //        {
+                //            bool checkQuotaIncrease = QuranFileUtils.increaseIsolatedStorageSpace(data.Length);
 
-                            using (var isfStream = new IsolatedStorageFileStream(path, FileMode.Create, isf))
-                            {
-                                data.CopyTo(isfStream);
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            Debug.WriteLine("failed to store file {0}: {1}", path, e.Message);
-                        }
-                    }
-                });
+                //            using (var isfStream = new IsolatedStorageFileStream(path, FileMode.Create, isf))
+                //            {
+                //                data.CopyTo(isfStream);
+                //            }
+                //        }
+                //        catch (Exception e)
+                //        {
+                //            Debug.WriteLine("failed to store file {0}: {1}", path, e.Message);
+                //        }
+                //    }
+                //});
 
-                return new Uri(urlString);
+                //return new Uri(urlString);
             }
         }
 

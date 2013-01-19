@@ -8,6 +8,7 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using QuranPhone.Resources;
+using QuranPhone.ViewModels;
 
 namespace QuranPhone
 {
@@ -27,11 +28,13 @@ namespace QuranPhone
         {
             if (DataContext == null)
             {
-                string selectedIndex = "";
-                if (NavigationContext.QueryString.TryGetValue("selectedItem", out selectedIndex))
+                string selectedPage = "";
+                if (NavigationContext.QueryString.TryGetValue("selectedItem", out selectedPage))
                 {
-                    int index = int.Parse(selectedIndex);
-                    DataContext = App.ViewModel.Surahs[index];
+                    int index = int.Parse(selectedPage);
+                    var viewModel = new DetailsViewModel();
+                    DataContext = viewModel;
+                    viewModel.LoadData();
                 }
             }
         }
