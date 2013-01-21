@@ -4,6 +4,7 @@ using System.ComponentModel;
 using QuranPhone.Resources;
 using QuranPhone.Data;
 using System.Windows.Controls;
+using QuranPhone.Utils;
 
 namespace QuranPhone.ViewModels
 {
@@ -11,6 +12,28 @@ namespace QuranPhone.ViewModels
     {
         public PageViewModel()
         {
+            QuranScreenInfo screen = QuranScreenInfo.GetInstance();
+        }
+
+        public PageViewModel(int page)
+            : this()
+        {
+            PageNumber = page;
+        }
+
+        private int pageNumber;
+        public int PageNumber
+        {
+            get { return pageNumber; }
+            set
+            {
+                if (value == pageNumber)
+                    return;
+
+                pageNumber = value;
+
+                base.OnPropertyChanged(() => PageNumber);
+            }
         }
 
         private Uri imageSource;

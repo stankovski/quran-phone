@@ -160,10 +160,10 @@ namespace QuranPhone.Utils
             if (location == null)
                 return null;
 
-            return new Uri(location + PATH_SEPARATOR + filename);
+            return new Uri(Path.Combine(location, filename));
         }
 
-        private static bool increaseIsolatedStorageSpace(long quotaSizeDemand)
+        public static bool IncreaseIsolatedStorageSpace(long quotaSizeDemand)
         {
             bool canSizeIncrease = false;
             IsolatedStorageFile isolatedStorageFile = IsolatedStorageFile.GetUserStoreForApplication();
@@ -248,7 +248,7 @@ namespace QuranPhone.Utils
                                     MakeDirectory(folder);
                             }
                         }
-                        bool checkQuotaIncrease = QuranFileUtils.increaseIsolatedStorageSpace(data.Length);
+                        bool checkQuotaIncrease = QuranFileUtils.IncreaseIsolatedStorageSpace(data.Length);
 
                         using (var isfStream = new IsolatedStorageFileStream(localPath, FileMode.Create, isf))
                         {

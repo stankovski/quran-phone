@@ -6,19 +6,29 @@
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DataContext="{d:DesignData SampleData/MainViewModelSampleData.xaml}"
+    d:DataContext="{d:DesignData SampleData/DetailsViewModelSampleData.xaml}"
     mc:Ignorable="d"
     xmlns:myui="clr-namespace:QuranPhone.UI"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
-    SupportedOrientations="Portrait"  Orientation="Portrait" 
+    SupportedOrientations="PortraitOrLandscape" Orientation="Portrait" 
     shell:SystemTray.IsVisible="False">
 
-    <phone:Pivot ItemsSource="{Binding Pages}">
+    <phone:Pivot ItemsSource="{Binding Pages}" Name="MainPivot"
+                 Background="#FFFDFCF3" FlowDirection="RightToLeft"
+                 LoadingPivotItem="Pivot_LoadingItem" SelectedIndex="{Binding CurrentPage}">
+        <phone:Pivot.HeaderTemplate>
+            <DataTemplate>
+            </DataTemplate>
+        </phone:Pivot.HeaderTemplate>
         <phone:Pivot.ItemTemplate>
             <DataTemplate>
-                <myui:CachedImage ImageSource="{Binding ImageSource}"/>
+                <ScrollViewer Margin="-10,-40,-10,0" HorizontalAlignment="Stretch">
+                    <Grid>
+                        <myui:CachedImage ImageSource="{Binding ImageSource}"/>
+                    </Grid>
+                </ScrollViewer>
             </DataTemplate>
         </phone:Pivot.ItemTemplate>
     </phone:Pivot>
