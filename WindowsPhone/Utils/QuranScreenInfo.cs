@@ -14,12 +14,12 @@ namespace QuranPhone.Utils
 
         private static QuranScreenInfo instance = null;
 
-        private double width;
-        private double height;
-        private double max_width;
+        private int width;
+        private int height;
+        private int max_width;
         private PageOrientation orientation;
 
-        private QuranScreenInfo(double width, double height)
+        private QuranScreenInfo(int width, int height)
         {
             this.orientation = PageOrientation.Portrait;
             this.width = width;
@@ -31,14 +31,40 @@ namespace QuranPhone.Utils
         {
             if (instance == null)
             {
-                instance = new QuranScreenInfo(Application.Current.Host.Content.ActualWidth,
-                Application.Current.Host.Content.ActualHeight);
+                instance = new QuranScreenInfo((int)Application.Current.Host.Content.ActualWidth,
+                (int)Application.Current.Host.Content.ActualHeight);
             }
             return instance;
         }
 
-        public double Width { get { return this.width; }}
-        public double Height { get { return this.height; } }
+        public int Width { get { return this.width; }}
+        public int Height { get { return this.height; } }
+        public int ImageWidth { 
+            get 
+            {
+                if (this.max_width <= 320) return 320;
+                else if (this.max_width <= 480) return 480;
+                else if (this.max_width <= 800) return 800;
+                else return 1024; 
+            } 
+        }
+        public int ImageHeight
+        {
+            get
+            {
+                switch (ImageWidth)
+                {
+                    case 320:
+                        return 517;
+                    case 480:
+                        return 776;
+                    case 800:
+                        return 1294;
+                    default:
+                        return 1656;
+                }
+            }
+        }
 
         public string GetWidthParam()
         {

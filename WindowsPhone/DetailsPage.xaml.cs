@@ -9,16 +9,18 @@ using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using QuranPhone.Resources;
 using QuranPhone.ViewModels;
+using QuranPhone.Utils;
 
 namespace QuranPhone
 {
     public partial class DetailsPage : PhoneApplicationPage
     {
+        //QuranScreenInfo screenInfo;
         // Constructor
         public DetailsPage()
         {
             InitializeComponent();
-
+            //screenInfo = QuranScreenInfo.GetInstance();
             // Sample code to localize the ApplicationBar
             //BuildLocalizedApplicationBar();
         }
@@ -38,6 +40,20 @@ namespace QuranPhone
                 }
             }
         }
+
+        private void Pivot_LoadingItem(object sender, PivotItemEventArgs e)
+        {
+            var pageModel = ((PageViewModel)e.Item.DataContext);
+            pageModel.ImageSource = QuranFileUtils.GetImageFromWeb(QuranFileUtils.GetPageFileName(pageModel.PageNumber));
+        }
+
+        //private void Page_OrientationChanged(object sender, OrientationChangedEventArgs e)
+        //{
+        //    if ((e.Orientation & PageOrientation.Landscape) == (PageOrientation.Landscape))
+        //    {
+        //        MainPivot.Height = screenInfo.ImageHeight;
+        //    }
+        //}
 
         // Sample code for building a localized ApplicationBar
         //private void BuildLocalizedApplicationBar()

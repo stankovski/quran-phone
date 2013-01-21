@@ -10,13 +10,21 @@ using Microsoft.Phone.Shell;
 using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Windows.Media.Imaging;
+using QuranPhone.Utils;
+using ImageTools;
+using System.IO.IsolatedStorage;
+using System.IO;
+using System.Diagnostics;
 
 namespace QuranPhone.UI
 {
     public partial class CachedImage : UserControl, INotifyPropertyChanged
     {
+        private BitmapImage imageSource;
+
         public CachedImage()
         {
+            imageSource = new BitmapImage();
             InitializeComponent();
         }
 
@@ -36,9 +44,44 @@ namespace QuranPhone.UI
 
         private void UpdateSource(Uri source)
         {
-            BitmapImage imageSource = new BitmapImage();
-            imageSource.UriSource = source;
+            imageSource.ImageOpened += imageSource_ImageOpened;
+            if (source.Scheme == "isostore")
+            {
+                var isf = IsolatedStorageFile.GetUserStoreForApplication();
+                using (var stream = isf.OpenFile(source.LocalPath, FileMode.Open))
+                {
+                    imageSource.SetSource(stream);
+                }
+            }
+            else
+            {
+                imageSource.UriSource = source;
+            }
             image.Source = imageSource;
+        }
+
+        void imageSource_ImageOpened(object sender, RoutedEventArgs e)
+        {
+            UriBuilder uriBuilder = new UriBuilder(ImageSource);
+            var path = Path.Combine(QuranFileUtils.GetQuranDirectory(false), Path.GetFileName(uriBuilder.Path));
+                        
+            try
+            {
+                var isf = IsolatedStorageFile.GetUserStoreForApplication();
+                if (!isf.FileExists(path))
+                {
+                    WriteableBitmap writableBitmap = new WriteableBitmap(imageSource);
+                    var encoder = new ImageTools.IO.Png.PngEncoder();
+                    using (var isfStream = new IsolatedStorageFileStream(path, FileMode.Create, isf))
+                    {
+                        encoder.Encode(writableBitmap.ToImage(), isfStream);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("failed to store file {0}: {1}", path, ex.Message);
+            }
         }
 
         #region INotifyPropertyChanged Members

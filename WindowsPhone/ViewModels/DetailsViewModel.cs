@@ -5,16 +5,39 @@ using QuranPhone.Resources;
 using QuranPhone.Data;
 using System.Windows.Controls;
 using QuranPhone.Utils;
+using QuranPhone.UI;
 
 namespace QuranPhone.ViewModels
 {
+    public class ObservablePages : ObservableDictionary<int, PageViewModel>
+    {
+    }
+
     public class DetailsViewModel : ViewModelBase
     {
+        private const int PAGES_TO_PRELOAD = 3;
+
         public DetailsViewModel()
         {
-            this.Pages = new ObservableCollection<PageViewModel>();
+            this.Pages = new ObservablePages();
+            CurrentPage = 1;
         }
-        public ObservableCollection<PageViewModel> Pages { get; private set; }
+        public ObservablePages Pages { get; private set; }
+
+        private int currentPage;
+        public int CurrentPage
+        {
+            get { return currentPage; }
+            set
+            {
+                if (value == currentPage)
+                    return;
+
+                currentPage = value;
+                loadPages();
+                base.OnPropertyChanged(() => CurrentPage);
+            }
+        }
 
         public bool IsDataLoaded
         {
@@ -34,18 +57,18 @@ namespace QuranPhone.ViewModels
         }
 
         #region Private Methods
+        //Load only several pages
         private void loadPages()
         {
-            for (int i = 1; i < 10; i++)
+            var curPage = CurrentPage;
+
+            for (int i = curPage - PAGES_TO_PRELOAD; i <= curPage + PAGES_TO_PRELOAD; i++)
             {
-                Pages.Add(new PageViewModel
-                {
-                    ImageSource =
-                        QuranFileUtils.GetImageFromWeb(QuranFileUtils.GetPageFileName(i))
-                });
+                var page = (i <= 0 ? Constants.PAGES_LAST + i : i);
+                Pages[page] = new PageViewModel(page);
             }
         }
-                
+             
         #endregion
     }
 }
