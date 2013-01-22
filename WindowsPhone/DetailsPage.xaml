@@ -17,7 +17,7 @@
 
     <phone:Pivot ItemsSource="{Binding Pages}" Name="MainPivot"
                  Background="#FFFDFCF3" FlowDirection="RightToLeft"
-                 LoadingPivotItem="Pivot_LoadingItem" SelectedIndex="{Binding CurrentPage}">
+                 LoadingPivotItem="Pivot_LoadingItem" SelectedIndex="{Binding CurrentPage, Mode=TwoWay}">
         <phone:Pivot.HeaderTemplate>
             <DataTemplate>
             </DataTemplate>

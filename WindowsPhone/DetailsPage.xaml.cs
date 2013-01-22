@@ -35,15 +35,15 @@ namespace QuranPhone
                 {
                     int index = int.Parse(selectedPage);
                     var viewModel = new DetailsViewModel();
-                    DataContext = viewModel;
                     viewModel.LoadData();
+                    DataContext = viewModel;                    
                 }
             }
         }
 
         private void Pivot_LoadingItem(object sender, PivotItemEventArgs e)
         {
-            var pageModel = ((PageViewModel)e.Item.DataContext);
+            var pageModel = (PageViewModel)e.Item.DataContext;
             pageModel.ImageSource = QuranFileUtils.GetImageFromWeb(QuranFileUtils.GetPageFileName(pageModel.PageNumber));
         }
 

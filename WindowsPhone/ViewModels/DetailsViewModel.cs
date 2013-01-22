@@ -9,20 +9,17 @@ using QuranPhone.UI;
 
 namespace QuranPhone.ViewModels
 {
-    public class ObservablePages : ObservableDictionary<int, PageViewModel>
-    {
-    }
-
     public class DetailsViewModel : ViewModelBase
     {
         private const int PAGES_TO_PRELOAD = 3;
 
         public DetailsViewModel()
         {
-            this.Pages = new ObservablePages();
-            CurrentPage = 1;
+            this.Pages = new ObservableCollection<PageViewModel>();
+            CurrentPage = 0;
         }
-        public ObservablePages Pages { get; private set; }
+        public ObservableCollection<PageViewModel> Pages { get; private set; }
+        private int[] loadedPages = new int[Constants.PAGES_LAST];
 
         private int currentPage;
         public int CurrentPage
@@ -34,7 +31,6 @@ namespace QuranPhone.ViewModels
                     return;
 
                 currentPage = value;
-                loadPages();
                 base.OnPropertyChanged(() => CurrentPage);
             }
         }
@@ -50,8 +46,13 @@ namespace QuranPhone.ViewModels
         /// </summary>
         public void LoadData()
         {
-            // Sample data; replace with real data
-            loadPages();
+            if (Pages.Count == 0)
+            {
+                for (int i = 1; i <= Constants.PAGES_LAST; i++)
+                {
+                    Pages.Add(new PageViewModel(i));
+                }
+            }
 
             this.IsDataLoaded = true;
         }
@@ -60,12 +61,14 @@ namespace QuranPhone.ViewModels
         //Load only several pages
         private void loadPages()
         {
-            var curPage = CurrentPage;
+            var curPage = 1;
+            if (Pages.Count > 0 && Pages.Count <= CurrentPage)
+                curPage = Pages[CurrentPage].PageNumber;
 
             for (int i = curPage - PAGES_TO_PRELOAD; i <= curPage + PAGES_TO_PRELOAD; i++)
             {
                 var page = (i <= 0 ? Constants.PAGES_LAST + i : i);
-                Pages[page] = new PageViewModel(page);
+                Pages.Add(new PageViewModel(page));
             }
         }
              

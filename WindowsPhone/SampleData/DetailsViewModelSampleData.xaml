@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:vm="clr-namespace:QuranPhone.ViewModels">
     <vm:DetailsViewModel.Pages>
-        <vm:PageViewModel x:Key="53" ImageSource="http://android.quran.com/data/width_320/page055.png"/>
-        <vm:PageViewModel x:Key="55" ImageSource="http://android.quran.com/data/width_320/page052.png"/>
+        <vm:PageViewModel ImageSource="http://android.quran.com/data/width_320/page055.png"/>
+        <vm:PageViewModel ImageSource="http://android.quran.com/data/width_320/page052.png"/>
     </vm:DetailsViewModel.Pages>
 </vm:DetailsViewModel>
