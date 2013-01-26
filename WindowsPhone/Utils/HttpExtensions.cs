@@ -11,39 +11,35 @@ namespace QuranPhone.Utils
 {
     public static class HttpExtensions
     {
-        //public static Task<Stream> GetRequestStreamAsync(this HttpWebRequest request)
-        //{
-        //    var taskComplete = new TaskCompletionSource<Stream>();
-        //    request.BeginGetRequestStream(ar =>
-        //    {
-        //        Stream requestStream = request.EndGetRequestStream(ar);
-        //        taskComplete.TrySetResult(requestStream);
-        //    }, request);
-        //    return taskComplete.Task;
-        //}
-
-        public static HttpWebResponse GetResponseSync(this HttpWebRequest request)
+        public static Task<Stream> GetRequestStreamAsync(this HttpWebRequest request)
         {
-            ManualResetEvent allDone = new ManualResetEvent(false);
-            HttpWebResponse someResponse = null;
-            var result = request.BeginGetResponse(asyncResponse =>
+            var taskComplete = new TaskCompletionSource<Stream>();
+            request.BeginGetRequestStream(ar =>
+            {
+                Stream requestStream = request.EndGetRequestStream(ar);
+                taskComplete.TrySetResult(requestStream);
+            }, request);
+            return taskComplete.Task;
+        }
+
+        public static Task<HttpWebResponse> GetResponseAsync(this HttpWebRequest request)
+        {
+            var taskComplete = new TaskCompletionSource<HttpWebResponse>();
+            request.BeginGetResponse(asyncResponse =>
             {
                 try
                 {
                     HttpWebRequest responseRequest = (HttpWebRequest)asyncResponse.AsyncState;
-                    someResponse = (HttpWebResponse)responseRequest.EndGetResponse(asyncResponse);
+                    HttpWebResponse someResponse = (HttpWebResponse)responseRequest.EndGetResponse(asyncResponse);
+                    taskComplete.TrySetResult(someResponse);
                 }
                 catch (WebException webExc)
                 {
-                    someResponse = (HttpWebResponse)webExc.Response;
-                }
-                finally
-                {
-                    allDone.Set();
+                    HttpWebResponse failedResponse = (HttpWebResponse)webExc.Response;
+                    taskComplete.TrySetResult(failedResponse);
                 }
             }, request);
-            allDone.WaitOne();
-            return someResponse;
+            return taskComplete.Task;
         }
     }
 

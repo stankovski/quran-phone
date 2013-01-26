@@ -25,6 +25,8 @@ namespace QuranPhone.UI
         public CachedImage()
         {
             imageSource = new BitmapImage();
+            imageSource.ImageOpened += imageSource_ImageOpened;
+            imageSource.CreateOptions = BitmapCreateOptions.DelayCreation;
             InitializeComponent();
         }
 
@@ -44,34 +46,74 @@ namespace QuranPhone.UI
 
         private void UpdateSource(Uri source)
         {
-            imageSource.ImageOpened += imageSource_ImageOpened;
-            if (source.Scheme == "isostore")
+            progress.Visibility = System.Windows.Visibility.Visible;
+            if (source == null)
             {
-                var isf = IsolatedStorageFile.GetUserStoreForApplication();
-                using (var stream = isf.OpenFile(source.LocalPath, FileMode.Open))
-                {
-                    imageSource.SetSource(stream);
-                }
+                imageSource.UriSource = null;
+                image.Source = null;
+                progress.Visibility = System.Windows.Visibility.Collapsed;
             }
             else
             {
-                imageSource.UriSource = source;
+                if (source.Scheme == "isostore")
+                {
+                    try
+                    {
+                        using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
+                        using (var stream = isf.OpenFile(source.LocalPath, FileMode.Open))
+                        {
+                            imageSource.SetSource(stream);
+                            progress.Visibility = System.Windows.Visibility.Collapsed;
+                        }
+                    }
+                    catch
+                    {
+                        var backupSource = QuranFileUtils.GetImageFromWeb(Path.GetFileName(source.LocalPath), false);
+                        imageSource.UriSource = backupSource;
+                        ImageSource = backupSource;
+                    }
+                }
+                else
+                {
+                    imageSource.UriSource = source;
+                }
+                image.Source = imageSource;
             }
-            image.Source = imageSource;
+        }
+
+        public int PageNumber
+        {
+            get { return (int)GetValue(PageNumberProperty); }
+            set { SetValue(PageNumberProperty, value); }
+        }
+
+        public static readonly DependencyProperty PageNumberProperty = DependencyProperty.Register("PageNumber",
+            typeof(int), typeof(CachedImage), new PropertyMetadata(
+            new PropertyChangedCallback(changePageNumber)));
+
+        private static void changePageNumber(DependencyObject source, DependencyPropertyChangedEventArgs e)
+        {
+            (source as CachedImage).UpdatePageNumber((int)e.NewValue);
+        }
+
+        private void UpdatePageNumber(int source)
+        {
+            pageNumber.Text = "Page " + source;
         }
 
         void imageSource_ImageOpened(object sender, RoutedEventArgs e)
         {
+            progress.Visibility = System.Windows.Visibility.Collapsed;
             UriBuilder uriBuilder = new UriBuilder(ImageSource);
             var path = Path.Combine(QuranFileUtils.GetQuranDirectory(false), Path.GetFileName(uriBuilder.Path));
                         
             try
             {
-                var isf = IsolatedStorageFile.GetUserStoreForApplication();
-                if (!isf.FileExists(path))
+                if (!QuranFileUtils.FileExists(path))
                 {
                     WriteableBitmap writableBitmap = new WriteableBitmap(imageSource);
                     var encoder = new ImageTools.IO.Png.PngEncoder();
+                    using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
                     using (var isfStream = new IsolatedStorageFileStream(path, FileMode.Create, isf))
                     {
                         encoder.Encode(writableBitmap.ToImage(), isfStream);
@@ -134,5 +176,10 @@ namespace QuranPhone.UI
         }
 
         #endregion // INotifyPropertyChanged Members
+
+        private void UserControl_MouseEnter_1(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            memoryUsage.Text = PhoneUtils.CurrentMemoryUsage();
+        }
     }
 }

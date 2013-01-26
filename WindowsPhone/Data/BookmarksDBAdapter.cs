@@ -30,8 +30,7 @@ namespace QuranPhone.Data
             if (basePath == null) return;
             string path = basePath + QuranFileUtils.PATH_SEPARATOR + DB_NAME;
 
-            var isf = IsolatedStorageFile.GetUserStoreForApplication();
-            if (!isf.FileExists(path))
+            if (!QuranFileUtils.FileExists(path))
                 mDatabase = CreateDatabase(path);
             else
                 mDatabase = new SQLiteDatabase(path);
