@@ -38,3 +38,4 @@ dnGREP.ArchiveEngine/7z.dll
 *.ncrunchproject
 *.ncrunchsolution
 *.ipch
+WindowsPhone/PerfLogs/*
