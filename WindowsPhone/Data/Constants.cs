@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -45,6 +46,7 @@ namespace QuranPhone.Data
         public const String PREF_AYAH_BEFORE_TRANSLATION = "ayahBeforeTranslation";
         public const String PREF_PREFER_STREAMING = "preferStreaming";
         public const String PREF_DOWNLOAD_AMOUNT = "preferredDownloadAmount";
+        [DefaultValue(0)]
         public const String PREF_LAST_UPDATED_TRANSLATIONS = "lastTranslationsUpdate";
         public const String PREF_HAVE_UPDATED_TRANSLATIONS = "haveUpdatedTranslations";
         public const String PREF_USE_NEW_BACKGROUND = "useNewBackground";

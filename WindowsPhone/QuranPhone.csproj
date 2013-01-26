@@ -107,6 +107,13 @@
     <Compile Include="Data\BookmarksDBAdapter.cs" />
     <Compile Include="Data\DatabaseHandler.cs" />
     <Compile Include="Data\QuranDataProvider.cs" />
+    <Compile Include="Data\TranslationsDBAdapter.cs" />
+    <Compile Include="TranslationListPage.xaml.cs">
+      <DependentUpon>TranslationListPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TranslationPage.xaml.cs">
+      <DependentUpon>TranslationPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Resources\AppResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -141,6 +148,7 @@
     <Compile Include="UI\RelayCommand.cs" />
     <Compile Include="UI\UiExtensions.cs" />
     <Compile Include="Utils\HttpExtensions.cs" />
+    <Compile Include="Utils\PhoneUtils.cs" />
     <Compile Include="Utils\QuranFileUtils.cs" />
     <Compile Include="Utils\QuranScreenInfo.cs" />
     <Compile Include="Utils\QuranUtils.cs" />
@@ -152,6 +160,7 @@
     <Compile Include="ViewModels\ItemViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\PageViewModel.cs" />
+    <Compile Include="ViewModels\TranslationItemViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -171,6 +180,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </DesignData>
+    <Page Include="TranslationListPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TranslationPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SampleData\DetailsViewModelSampleData.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -181,6 +198,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="Properties\AppManifest.xml" />
     <None Include="Properties\WMAppManifest.xml">
       <SubType>Designer</SubType>
@@ -191,6 +209,7 @@
     <Content Include="Assets\ApplicationIcon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\Images\appbar.globe.png" />
     <Content Include="Assets\Images\bookmark_ayah.png" />
     <Content Include="Assets\Images\bookmark_currentpage.png" />
     <Content Include="Assets\Images\bookmark_page.png" />
@@ -236,6 +255,10 @@
     <Content Include="Assets\Tiles\IconicTileSmall.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Toolkit.Content\ApplicationBar.Cancel.png" />
+    <Content Include="Toolkit.Content\ApplicationBar.Check.png" />
+    <Content Include="Toolkit.Content\ApplicationBar.Delete.png" />
+    <Content Include="Toolkit.Content\ApplicationBar.Select.png" />
     <Page Include="SampleData\PageViewModelSampleData.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -265,6 +288,12 @@
       <HintPath>Dependencies\ImageTools.Utils.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Phone.Controls, Version=8.0.0.0, Culture=neutral, PublicKeyToken=24eec0d8c86cda1e, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Phone.Controls.Toolkit">
+      <HintPath>packages\WPtoolkit.4.2012.10.30\lib\wp8\Microsoft.Phone.Controls.Toolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>packages\Newtonsoft.Json.4.5.11\lib\sl4-windowsphone71\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="SharpZipLib.WindowsPhone7">
       <HintPath>Dependencies\SharpZipLib.WindowsPhone7.dll</HintPath>
     </Reference>

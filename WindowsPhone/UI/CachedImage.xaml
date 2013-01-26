@@ -7,9 +7,18 @@
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
-    d:DesignHeight="480" d:DesignWidth="480">
+    d:DesignHeight="480" d:DesignWidth="480" 
+             MouseEnter="UserControl_MouseEnter_1">
     
     <Grid x:Name="LayoutRoot">
         <Image Name="image"/>
+        <ProgressBar Name="progress" IsIndeterminate="True" VerticalAlignment="Top"
+                     Margin="20,5,20,0" FlowDirection="LeftToRight"/>
+        <TextBlock Name="memoryUsage" FontSize="20" Text="Page 0" 
+                   Foreground="#FF444444" VerticalAlignment="Top"
+                   HorizontalAlignment="Center" Margin="0,0,0,0"/>
+        <TextBlock Name="pageNumber" FontSize="15" Text="Page 0" 
+                   Foreground="#FF444444" VerticalAlignment="Bottom"
+                   HorizontalAlignment="Center" Margin="0,0,0,5"/>
     </Grid>
 </UserControl>

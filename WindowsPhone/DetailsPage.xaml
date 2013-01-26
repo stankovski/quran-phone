@@ -17,7 +17,7 @@
 
     <phone:Pivot ItemsSource="{Binding Pages}" Name="MainPivot"
                  Background="#FFFDFCF3" FlowDirection="RightToLeft"
-                 LoadingPivotItem="Pivot_LoadingItem" SelectedIndex="{Binding CurrentPage, Mode=TwoWay}">
+                 LoadingPivotItem="Pivot_LoadingItem" SelectedIndex="{Binding CurrentPageIndex, Mode=TwoWay}">
         <phone:Pivot.HeaderTemplate>
             <DataTemplate>
             </DataTemplate>
@@ -26,11 +26,21 @@
             <DataTemplate>
                 <ScrollViewer Margin="-10,-40,-10,0" HorizontalAlignment="Stretch">
                     <Grid>
-                        <myui:CachedImage ImageSource="{Binding ImageSource}"/>
+                        <myui:CachedImage ImageSource="{Binding ImageSource}" PageNumber="{Binding PageNumber}"/>
                     </Grid>
                 </ScrollViewer>
             </DataTemplate>
         </phone:Pivot.ItemTemplate>
     </phone:Pivot>
-
+    <phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar IsMenuEnabled="True" Opacity="0.9" 
+                              Mode="Minimized" BackgroundColor="#FFFDFCF3"
+                              ForegroundColor="{StaticResource PhoneChromeColor}">
+            <shell:ApplicationBarIconButton IconUri="/Assets/Images/appbar.globe.png" Text="Translate"/>
+            <shell:ApplicationBar.MenuItems>
+                <shell:ApplicationBarMenuItem Text="MenuItem 1"/>
+                <shell:ApplicationBarMenuItem Text="MenuItem 2"/>
+            </shell:ApplicationBar.MenuItems>
+        </shell:ApplicationBar>
+    </phone:PhoneApplicationPage.ApplicationBar>
 </phone:PhoneApplicationPage>
