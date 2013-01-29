@@ -8,6 +8,8 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using QuranPhone.ViewModels;
+using QuranPhone.Common;
+using QuranPhone.UI;
 
 namespace QuranPhone
 {
@@ -26,12 +28,17 @@ namespace QuranPhone
                 var viewModel = new TranslationsListViewModel();
                 DataContext = viewModel;
                 viewModel.LoadData();
+                viewModel.NavigateRequested += viewModel_NavigateRequested;
             }
         }
 
-        private void List_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        void viewModel_NavigateRequested(object sender, EventArgs e)
         {
+            var translation = sender as ObservableTranslationItem;
+            if (translation == null)
+                return;
 
+            NavigationService.Navigate(new Uri("/TranslationPage.xaml?selectedItem=" + translation.Id, UriKind.Relative));
         }
     }
 }

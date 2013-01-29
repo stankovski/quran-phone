@@ -1,13 +1,11 @@
 ﻿<vm:TranslationsListViewModel
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:c="clr-namespace:QuranPhone.Common"
+    xmlns:c="clr-namespace:QuranPhone.UI"
     xmlns:vm="clr-namespace:QuranPhone.ViewModels">
     <vm:TranslationsListViewModel.AvailableTranslations>
-        <c:ObservableTranslationItem Name="Russian Translation" Translator="Porohova" Progress="20" Downloading="True"/>
-        <c:ObservableTranslationItem  Name="Albanian Translation" Translator="Someone"/>
+        <c:ObservableTranslationItem Name="Russian Translation" Translator="Porohova" Progress="20" Downloading="True" Exists="False"/>
+        <c:ObservableTranslationItem  Name="Albanian Translation" Translator="Someone" Exists="False"/>
+        <c:ObservableTranslationItem Name="English Translation" Translator="Sahih International" Exists="True"/>
     </vm:TranslationsListViewModel.AvailableTranslations>
-    <vm:TranslationsListViewModel.DownloadedTranslations>
-        <c:ObservableTranslationItem Name="English Translation" Translator="Sahih International"/>
-    </vm:TranslationsListViewModel.DownloadedTranslations>
 </vm:TranslationsListViewModel>
