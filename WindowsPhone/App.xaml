@@ -48,6 +48,20 @@
         <Style TargetType="TextBlock" x:Key="ItemViewStyleJuzPageNumber">
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="Foreground" Value="{StaticResource BlueText}"/>
+        </Style>
+        <Style x:Key="ChromelessButtonStyle" TargetType="Button">
+        	<Setter Property="Background" Value="Transparent"/>
+        	<Setter Property="Template">
+        		<Setter.Value>
+        			<ControlTemplate TargetType="Button">
+        				<ContentControl x:Name="ContentContainer" ContentTemplate="{TemplateBinding ContentTemplate}" 
+						Content="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" 
+						HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" 
+						Padding="{TemplateBinding Padding}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+						Margin="{TemplateBinding Margin}"/>
+        			</ControlTemplate>
+        		</Setter.Value>
+        	</Setter>
         </Style>        
     </Application.Resources>
 

@@ -17,7 +17,6 @@ namespace QuranPhone.ViewModels
 
         public DownloadableViewModelBase()
         {
-            CanDownload = true;
             Downloading = false;
         }
 
@@ -109,19 +108,11 @@ namespace QuranPhone.ViewModels
             }
         }
 
-        private bool canDownload;
         public bool CanDownload
         {
-            get { return canDownload; }
-            set
-            {
-                if (value == canDownload)
-                    return;
-
-                canDownload = value;
-
-                base.OnPropertyChanged(() => CanDownload);
-            }
+            get {
+                return !Downloading;            
+            }            
         }
 
         RelayCommand downloadCommand;
@@ -148,7 +139,6 @@ namespace QuranPhone.ViewModels
             if (e.Request.TransferStatus != TransferStatus.Completed && e.Request.TransferStatus == TransferStatus.None)
             {
                 Downloading = true;
-                CanDownload = false;
             }
             else
                 Downloading = false;
@@ -157,7 +147,6 @@ namespace QuranPhone.ViewModels
                 if (DownloadComplete != null)
                     DownloadComplete(this, null);
                 QuranFileUtils.MoveFile(tempPath, this.LocalUrl);
-                CanDownload = false;
                 DownloadManager.Instance.FinalizeRequest(e.Request);
             }
         }
@@ -182,8 +171,13 @@ namespace QuranPhone.ViewModels
                     downloadRequest.TransferStatusChanged -= TransferStatusChanged;
                 }
                 downloadRequest = DownloadManager.Instance.Download(this.ServerUrl, this.tempPath);
-                downloadRequest.TransferProgressChanged += TransferProgressChanged;
-                downloadRequest.TransferStatusChanged += TransferStatusChanged;
+                if (downloadRequest != null)
+                {
+                    downloadRequest.TransferProgressChanged += TransferProgressChanged;
+                    downloadRequest.TransferStatusChanged += TransferStatusChanged;
+                    if (downloadRequest.TransferStatus == TransferStatus.Completed)
+                        TransferStatusChanged(this, new BackgroundTransferEventArgs(downloadRequest));
+                }
             }
         }
 
@@ -196,7 +190,6 @@ namespace QuranPhone.ViewModels
                 if (DownloadComplete != null)
                     DownloadComplete(this, null);
                 QuranFileUtils.MoveFile(tempPath, this.LocalUrl);
-                CanDownload = false; 
             }
         }
 

@@ -109,24 +109,25 @@ namespace QuranPhone.Utils
             var cachedItems = adapter.GetTranslations();
             List<TranslationItem> items = new List<TranslationItem>();
             List<TranslationItem> updates = new List<TranslationItem>();
-            HashSet<string> pendingFiles = new HashSet<string>();
-            // Storing all pending transfers
-            foreach (var request in DownloadManager.Instance.GetAllRequests())
-            {
-                if (request.TransferStatus == Microsoft.Phone.BackgroundTransfer.TransferStatus.Completed)
-                    continue;
+            //HashSet<string> pendingFiles = new HashSet<string>();
+            //HashSet<string> leftoverFiles = new HashSet<string>();
+            //// Storing all pending transfers
+            //foreach (var request in DownloadManager.Instance.GetAllRequests())
+            //{
+            //    if (request.TransferStatus == Microsoft.Phone.BackgroundTransfer.TransferStatus.Completed)
+            //        continue;
 
-                var fileName = Path.GetFileName(request.DownloadLocation).ToLowerInvariant();
-                if (!pendingFiles.Contains(fileName))
-                    pendingFiles.Add(fileName);
-            }
-            // Storing all leftover transfers
-            foreach (var tempFile in DownloadManager.Instance.GetAllStuckFiles())
-            {
-                var fileName = Path.GetFileName(tempFile).ToLowerInvariant();
-                if (!pendingFiles.Contains(fileName))
-                    pendingFiles.Add(fileName);
-            }
+            //    var fileName = Path.GetFileName(request.DownloadLocation).ToLowerInvariant();
+            //    if (!pendingFiles.Contains(fileName))
+            //        pendingFiles.Add(fileName);
+            //}
+            //// Storing all leftover transfers
+            //foreach (var tempFile in DownloadManager.Instance.GetAllStuckFiles())
+            //{
+            //    var fileName = Path.GetFileName(tempFile).ToLowerInvariant();
+            //    if (!pendingFiles.Contains(fileName))
+            //        pendingFiles.Add(fileName);
+            //}
             
             try
             {
@@ -152,12 +153,6 @@ namespace QuranPhone.Utils
 
                     string databaseDir = QuranFileUtils.GetQuranDatabaseDirectory(false);
                     item.Exists = QuranFileUtils.FileExists(Path.Combine(databaseDir, item.Filename));
-
-                    if (!item.Exists)
-                    {
-                        if (pendingFiles.Contains(item.Filename.ToLowerInvariant()))
-                            item.Exists = true;
-                    }
 
                     bool needsUpdate = false;
                     TranslationItem localItem = cachedItems.Where(ti => ti.Id == item.Id).FirstOrDefault();

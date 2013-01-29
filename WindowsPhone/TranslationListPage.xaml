@@ -38,16 +38,14 @@
                 <myui:CommonHeader Grid.Row="0" Margin="12,0,0,0"/>
                 <TextBlock Text="{Binding Path=LocalizedResources.translations, Source={StaticResource LocalizedStrings}}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
             </StackPanel>
-
             <ProgressBar Grid.Row="0" VerticalAlignment="Top" Visibility="{Binding IsDataLoaded, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}" IsIndeterminate="True"/>
 
             <!--ContentPanel - place additional content here-->
             <myui:ListHeader Grid.Row="1" Text="{Binding Path=LocalizedResources.downloaded_translations, Source={StaticResource LocalizedStrings}}"/>
-            <phone:LongListSelector Grid.Row="2" Margin="0,0,0,0" ItemsSource="{Binding DownloadedTranslations}" SelectionChanged="List_SelectionChanged" 
-                                    HideEmptyGroups="True" Visibility="{Binding AnyTranslationsDownloaded, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <phone:LongListSelector Grid.Row="2" Margin="0,0,0,0" ItemsSource="{Binding AvailableTranslations}" HideEmptyGroups="True">
                 <phone:LongListSelector.ItemTemplate>
                     <DataTemplate>
-                        <ListBoxItem HorizontalContentAlignment="Stretch">
+                        <ListBoxItem HorizontalContentAlignment="Stretch" Visibility="{Binding Exists, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="70"/>
@@ -55,11 +53,14 @@
                                     <ColumnDefinition Width="60"/>
                                 </Grid.ColumnDefinitions>
                                 <Image Grid.Column="0" Source="/Assets/Images/ic_translation.png"/>
-                                <StackPanel Grid.Column="1">
-                                    <TextBlock Text="{Binding Name}" Style="{StaticResource PhoneTextLargeStyle}" TextWrapping="Wrap"/>
-                                    <TextBlock Text="{Binding Translator}" TextWrapping="Wrap" Style="{StaticResource PhoneTextSubtleStyle}"/>
-                                </StackPanel>
-                                <Button Grid.Column="2" BorderThickness="0" Padding="0" Margin="0" Command="{Binding DeleteCommand}">
+                                <Button Grid.Column="1" Padding="0" Margin="0" Command="{Binding NavigateCommand}"
+                                        Style="{StaticResource ChromelessButtonStyle}" HorizontalContentAlignment="Left">
+									<StackPanel>
+										<TextBlock Text="{Binding Name}" Style="{StaticResource PhoneTextLargeStyle}" TextWrapping="Wrap"/>
+										<TextBlock Text="{Binding Translator}" TextWrapping="Wrap" Style="{StaticResource PhoneTextSubtleStyle}"/>
+									</StackPanel>
+                                </Button>
+                                <Button Grid.Column="2" BorderThickness="0" Padding="0" Margin="-10,0,0,0" Command="{Binding DeleteCommand}">
                                     <Image Grid.Column="2" Source="/Assets/Images/ic_delete.png"/>
                                 </Button>
                             </Grid>
@@ -68,10 +69,10 @@
                 </phone:LongListSelector.ItemTemplate>
             </phone:LongListSelector>
             <myui:ListHeader Grid.Row="3" Text="{Binding Path=LocalizedResources.available_translations, Source={StaticResource LocalizedStrings}}"/>
-            <phone:LongListSelector Grid.Row="4" Margin="0,0,0,0" ItemsSource="{Binding AvailableTranslations}" SelectionChanged="List_SelectionChanged">
+            <phone:LongListSelector Grid.Row="4" Margin="0,0,0,0" ItemsSource="{Binding AvailableTranslations}">
                 <phone:LongListSelector.ItemTemplate>
                     <DataTemplate>
-                        <ListBoxItem HorizontalContentAlignment="Stretch">
+                        <ListBoxItem HorizontalContentAlignment="Stretch" Visibility="{Binding Exists, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="70"/>

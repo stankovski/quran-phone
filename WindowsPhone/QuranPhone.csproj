@@ -152,6 +152,7 @@
       <DependentUpon>ListHeader.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\ObservableDictionary.cs" />
+    <Compile Include="UI\ObservableTranslationItem.cs" />
     <Compile Include="UI\RelayCommand.cs" />
     <Compile Include="UI\TiltEffect.cs" />
     <Compile Include="UI\UiExtensions.cs" />

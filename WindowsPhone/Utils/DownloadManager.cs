@@ -41,10 +41,20 @@ namespace QuranPhone.Utils
                 request.TransferPreferences = TransferPreferences.AllowCellularAndBattery;
             try
             {
+                int count = 0;
                 foreach (var r in BackgroundTransferService.Requests)
                 {
+                    count++;
+                    if (r.RequestUri == serverUri)
+                        return r;
                     if (r.TransferStatus == TransferStatus.Completed)
+                    {
                         BackgroundTransferService.Remove(r);
+                        count--;
+                    }
+                    // Max 5 downloads
+                    if (count >= 5)
+                        return null;
                 }
                 BackgroundTransferService.Add(request);
                 return request;
@@ -84,6 +94,17 @@ namespace QuranPhone.Utils
             {
                 if (request.TransferStatus == TransferStatus.Completed)
                     BackgroundTransferService.Remove(request);
+            }
+        }
+
+        internal void FinalizeRequests()
+        {
+            foreach (var request in BackgroundTransferService.Requests)
+            {
+                if (request.TransferStatus == TransferStatus.Completed)
+                {
+                    BackgroundTransferService.Remove(request);
+                }
             }
         }
     }

@@ -6,6 +6,7 @@ using QuranPhone.Data;
 using System.Windows.Controls;
 using QuranPhone.Common;
 using QuranPhone.Utils;
+using QuranPhone.UI;
 
 namespace QuranPhone.ViewModels
 {
@@ -15,13 +16,10 @@ namespace QuranPhone.ViewModels
         {
             this.IsDataLoaded = false;
             this.AvailableTranslations = new ObservableCollection<ObservableTranslationItem>();
-            this.DownloadedTranslations = new ObservableCollection<ObservableTranslationItem>();
-            this.DownloadedTranslations.CollectionChanged += DownloadedTranslations_CollectionChanged;
             this.AvailableTranslations.CollectionChanged += AvailableTranslations_CollectionChanged;
         }
 
         public ObservableCollection<ObservableTranslationItem> AvailableTranslations { get; private set; }
-        public ObservableCollection<ObservableTranslationItem> DownloadedTranslations { get; private set; }
 
         private bool isDataLoaded;
         public bool IsDataLoaded
@@ -63,42 +61,13 @@ namespace QuranPhone.ViewModels
             var list = await TranslationListTask.DownloadTranslations(true, "tag");
             foreach (var item in list)
             {
-                if (item.Exists)
-                    this.DownloadedTranslations.Add(new ObservableTranslationItem(item));
-                else
-                    this.AvailableTranslations.Add(new ObservableTranslationItem(item));
+                this.AvailableTranslations.Add(new ObservableTranslationItem(item));
             }
             
             this.IsDataLoaded = true;
         }
 
         #region Private Methods
-        private void DownloadedTranslations_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (DownloadedTranslations.Count > 0)
-                this.AnyTranslationsDownloaded = true;
-            else
-                this.AnyTranslationsDownloaded = false;
-
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add ||
-                e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
-            {
-                foreach (ObservableTranslationItem item in e.NewItems)
-                {
-                    item.DeleteComplete += TranslationDeleteComplete;
-                }
-            }
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove ||
-                e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace ||
-                e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Reset)
-            {
-                foreach (ObservableTranslationItem item in e.OldItems)
-                {
-                    item.DeleteComplete -= TranslationDeleteComplete;
-                }
-            }  
-        }
-
         void AvailableTranslations_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add ||
@@ -107,6 +76,8 @@ namespace QuranPhone.ViewModels
                 foreach (ObservableTranslationItem item in e.NewItems)
                 {
                     item.DownloadComplete += TranslationDownloadComplete;
+                    item.DeleteComplete += TranslationDeleteComplete;
+                    item.NavigateRequested += TranslationNavigateRequested;
                 }
             }
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove ||
@@ -116,37 +87,38 @@ namespace QuranPhone.ViewModels
                 foreach (ObservableTranslationItem item in e.OldItems)
                 {
                     item.DownloadComplete -= TranslationDownloadComplete;
+                    item.DeleteComplete -= TranslationDeleteComplete;
+                    item.NavigateRequested -= TranslationNavigateRequested;
                 }
             }            
         }
 
         private void TranslationDownloadComplete(object sender, EventArgs e)
         {
-            if (sender == null)
+            var translation = sender as ObservableTranslationItem;
+            if (translation == null)
                 return;
-
-            var index = AvailableTranslations.IndexOf(sender as ObservableTranslationItem);
-            if (index >= 0)
-            {
-                var item = AvailableTranslations[index];
-                DownloadedTranslations.Add(item);
-                AvailableTranslations.Remove(item);
-            }
+            translation.Exists = true;            
         }
 
         private void TranslationDeleteComplete(object sender, EventArgs e)
         {
-            if (sender == null)
+            var translation = sender as ObservableTranslationItem;
+            if (translation == null)
                 return;
+            translation.Exists = false;
+        }
 
-            var index = DownloadedTranslations.IndexOf(sender as ObservableTranslationItem);
-            if (index >= 0)
-            {
-                var item = DownloadedTranslations[index];
-                AvailableTranslations.Add(item);
-                DownloadedTranslations.Remove(item);
-            }
+        private void TranslationNavigateRequested(object sender, EventArgs e)
+        {
+            var translation = sender as ObservableTranslationItem;
+            if (translation == null)
+                return;
+            if (NavigateRequested != null)
+                NavigateRequested(sender, e);
         }
         #endregion
+
+        public event EventHandler NavigateRequested;
     }
 }
