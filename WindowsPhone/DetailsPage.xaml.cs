@@ -47,6 +47,12 @@ namespace QuranPhone
             pageModel.ImageSource = QuranFileUtils.GetImageFromWeb(QuranFileUtils.GetPageFileName(pageModel.PageNumber));
         }
 
+        private void Translation_Click(object sender, EventArgs e)
+        {
+            // Navigate to the translation page
+            NavigationService.Navigate(new Uri("/TranslationListPage.xaml", UriKind.Relative));
+        }
+
         //private void Page_OrientationChanged(object sender, OrientationChangedEventArgs e)
         //{
         //    if ((e.Orientation & PageOrientation.Landscape) == (PageOrientation.Landscape))

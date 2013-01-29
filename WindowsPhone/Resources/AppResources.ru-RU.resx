@@ -277,4 +277,25 @@
   <data name="verses" xml:space="preserve">
     <value>стиха</value>
   </data>
+  <data name="quran_bookmarks_lower" xml:space="preserve">
+    <value>закладки</value>
+  </data>
+  <data name="quran_juz2_lower" xml:space="preserve">
+    <value>джуз</value>
+  </data>
+  <data name="quran_sura_lower" xml:space="preserve">
+    <value>сура</value>
+  </data>
+  <data name="quran_tags_lower" xml:space="preserve">
+    <value>тэги</value>
+  </data>
+  <data name="translations" xml:space="preserve">
+    <value>переводы</value>
+  </data>
+  <data name="available_translations" xml:space="preserve">
+    <value>Доступные для загрузки</value>
+  </data>
+  <data name="downloaded_translations" xml:space="preserve">
+    <value>Загруженные переводы</value>
+  </data>
 </root>

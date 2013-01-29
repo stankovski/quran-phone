@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="QuranPhone.UI.CommonHeader"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    d:DesignHeight="480" d:DesignWidth="480">
+
+    <StackPanel>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+            <Image Grid.Column="0" Source="/Assets/Images/icon.png" Height="50" />
+            <TextBlock Grid.Column="1" Text="{Binding Path=LocalizedResources.app_name, Source={StaticResource LocalizedStrings}}" FontSize="24" Style="{StaticResource PhoneTextNormalStyle}" VerticalAlignment="Center"/>
+            <Image Grid.Column="2" Source="/Assets/Images/ic_goto_quran.png" Height="40" />
+        </Grid>
+    </StackPanel>
+</UserControl>

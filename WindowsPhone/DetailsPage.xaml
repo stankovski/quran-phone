@@ -36,7 +36,8 @@
         <shell:ApplicationBar IsMenuEnabled="True" Opacity="0.9" 
                               Mode="Minimized" BackgroundColor="#FFFDFCF3"
                               ForegroundColor="{StaticResource PhoneChromeColor}">
-            <shell:ApplicationBarIconButton IconUri="/Assets/Images/appbar.globe.png" Text="Translate"/>
+            <shell:ApplicationBarIconButton IconUri="/Assets/Images/appbar.globe.png" 
+                                            Text="Translate" Click="Translation_Click"/>
             <shell:ApplicationBar.MenuItems>
                 <shell:ApplicationBarMenuItem Text="MenuItem 1"/>
                 <shell:ApplicationBarMenuItem Text="MenuItem 2"/>

@@ -48,11 +48,36 @@ namespace QuranPhone.Utils
             }
         }
 
+        public static void DeleteFile(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentNullException("path");
+
+            using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                if (isf.FileExists(path))
+                    isf.DeleteFile(path);
+            }
+        }
+
         public static bool FileExists(string path) 
         {
             using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
             {
                 return isf.FileExists(path);
+            }
+        }
+
+        public static void MoveFile(string from, string to)
+        {
+            using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                if (isf.FileExists(to))
+                    isf.DeleteFile(to);
+                if (isf.FileExists(from))
+                {
+                    isf.MoveFile(from, to);
+                }
             }
         }
 
@@ -403,6 +428,6 @@ namespace QuranPhone.Utils
         public static string GetArabicSearchDatabaseUrl()
         {
             return IMG_HOST + DATABASE_DIRECTORY + "/" + QURAN_ARABIC_DATABASE;
-        }
+        }        
     }
 }
