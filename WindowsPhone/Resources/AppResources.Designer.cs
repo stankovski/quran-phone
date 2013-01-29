@@ -70,6 +70,24 @@ namespace QuranPhone.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Available translations.
+        /// </summary>
+        public static string available_translations {
+            get {
+                return ResourceManager.GetString("available_translations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Downloaded translations.
+        /// </summary>
+        public static string downloaded_translations {
+            get {
+                return ResourceManager.GetString("downloaded_translations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Juz&apos; %1$d.
         /// </summary>
         public static string juz2_description {
@@ -134,11 +152,29 @@ namespace QuranPhone.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to bookmarks.
+        /// </summary>
+        public static string quran_bookmarks_lower {
+            get {
+                return ResourceManager.GetString("quran_bookmarks_lower", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Juz&apos;.
         /// </summary>
         public static string quran_juz2 {
             get {
                 return ResourceManager.GetString("quran_juz2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to juz&apos;.
+        /// </summary>
+        public static string quran_juz2_lower {
+            get {
+                return ResourceManager.GetString("quran_juz2_lower", resourceCulture);
             }
         }
         
@@ -152,11 +188,29 @@ namespace QuranPhone.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to sura.
+        /// </summary>
+        public static string quran_sura_lower {
+            get {
+                return ResourceManager.GetString("quran_sura_lower", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Surat.
         /// </summary>
         public static string quran_sura_title {
             get {
                 return ResourceManager.GetString("quran_sura_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to tags.
+        /// </summary>
+        public static string quran_tags_lower {
+            get {
+                return ResourceManager.GetString("quran_tags_lower", resourceCulture);
             }
         }
         
@@ -209,6 +263,15 @@ namespace QuranPhone.Resources {
         public static string sura_names {
             get {
                 return ResourceManager.GetString("sura_names", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to translations.
+        /// </summary>
+        public static string translations {
+            get {
+                return ResourceManager.GetString("translations", resourceCulture);
             }
         }
         

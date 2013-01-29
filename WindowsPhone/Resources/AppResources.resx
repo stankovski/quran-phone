@@ -524,4 +524,25 @@
     &lt;/string-array&gt;
 &lt;/resources&gt;</value>
   </data>
+  <data name="quran_bookmarks_lower" xml:space="preserve">
+    <value>bookmarks</value>
+  </data>
+  <data name="quran_juz2_lower" xml:space="preserve">
+    <value>juz'</value>
+  </data>
+  <data name="quran_sura_lower" xml:space="preserve">
+    <value>sura</value>
+  </data>
+  <data name="quran_tags_lower" xml:space="preserve">
+    <value>tags</value>
+  </data>
+  <data name="translations" xml:space="preserve">
+    <value>translations</value>
+  </data>
+  <data name="available_translations" xml:space="preserve">
+    <value>Available translations</value>
+  </data>
+  <data name="downloaded_translations" xml:space="preserve">
+    <value>Downloaded translations</value>
+  </data>
 </root>

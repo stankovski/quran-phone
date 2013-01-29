@@ -16,8 +16,8 @@ namespace QuranPhone.Utils
 {
     public class TranslationListTask
     {
-        public static string WEB_SERVICE_URL = "http://android.quran.com/data/translations.php?v=2";
-        private static string CACHED_RESPONSE_FILE_NAME = "cached-translation-list";
+        public const string WEB_SERVICE_URL = "http://android.quran.com/data/translations.php?v=2";
+        private const string CACHED_RESPONSE_FILE_NAME = "cached-translation-list";
 
         private static void cacheResponse(string response)
         {
@@ -28,6 +28,7 @@ namespace QuranPhone.Utils
                     var filePath = getCachedResponseFilePath();
                     if (isf.FileExists(filePath))
                         isf.DeleteFile(filePath);
+                    QuranFileUtils.MakeDirectory(Path.GetDirectoryName(filePath));
                     using (var stream = isf.OpenFile(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                     using (var writer = new StreamWriter(stream))
                     {
@@ -108,7 +109,25 @@ namespace QuranPhone.Utils
             var cachedItems = adapter.GetTranslations();
             List<TranslationItem> items = new List<TranslationItem>();
             List<TranslationItem> updates = new List<TranslationItem>();
+            HashSet<string> pendingFiles = new HashSet<string>();
+            // Storing all pending transfers
+            foreach (var request in DownloadManager.Instance.GetAllRequests())
+            {
+                if (request.TransferStatus == Microsoft.Phone.BackgroundTransfer.TransferStatus.Completed)
+                    continue;
 
+                var fileName = Path.GetFileName(request.DownloadLocation).ToLowerInvariant();
+                if (!pendingFiles.Contains(fileName))
+                    pendingFiles.Add(fileName);
+            }
+            // Storing all leftover transfers
+            foreach (var tempFile in DownloadManager.Instance.GetAllStuckFiles())
+            {
+                var fileName = Path.GetFileName(tempFile).ToLowerInvariant();
+                if (!pendingFiles.Contains(fileName))
+                    pendingFiles.Add(fileName);
+            }
+            
             try
             {
                 var token = JObject.Parse(text);
@@ -117,8 +136,10 @@ namespace QuranPhone.Utils
                     TranslationItem item = new TranslationItem();
                     item.Id = t["id"].ToObject<int>();
                     item.Name = (string)t["displayName"];
-                    item.Translator = (string)t["translator"];
-                    item.LocalVersion = t["current_version"].ToObject<int>();
+                    item.Translator = (string)t["translator_foreign"];
+                    if (string.IsNullOrEmpty(item.Translator))
+                        item.Translator = (string)t["translator"];
+                    item.LatestVersion = t["current_version"].ToObject<int>();
                     item.Filename = (string)t["fileName"];
                     item.Url = (string)t["fileUrl"];
                 
@@ -132,43 +153,54 @@ namespace QuranPhone.Utils
                     string databaseDir = QuranFileUtils.GetQuranDatabaseDirectory(false);
                     item.Exists = QuranFileUtils.FileExists(Path.Combine(databaseDir, item.Filename));
 
-                //   bool needsUpdate = false;
-                //   TranslationItem item = new TranslationItem(
-                //           id, name, who, version, filename, url, exists);
-                //   if (exists){
-                //      TranslationItem localItem = cachedItems.get(id);
-                //      if (localItem != null){
-                //         item.localVersion = localItem.localVersion;
-                //      }
-                //      else if (version > -1) {
-                //         needsUpdate = true;
-                //         try {
-                //            DatabaseHandler mHandler = new DatabaseHandler(filename);
-                //            if (mHandler.validDatabase()){
-                //               item.localVersion = mHandler.getTextVersion();
-                //            }
-                //            mHandler.closeDatabase();
-                //         }
-                //         catch (Exception e){
-                //            Log.d(tag, "exception opening database: " + name, e);
-                //         }
-                //      }
-                //      else { needsUpdate = true; }
-                //   }
-                //   else if (cachedItems.get(id) != null){
-                //      needsUpdate = true;
-                //   }
+                    if (!item.Exists)
+                    {
+                        if (pendingFiles.Contains(item.Filename.ToLowerInvariant()))
+                            item.Exists = true;
+                    }
 
-                //   if (needsUpdate){
-                //      updates.add(item);
-                //   }
+                    bool needsUpdate = false;
+                    TranslationItem localItem = cachedItems.Where(ti => ti.Id == item.Id).FirstOrDefault();
+                    if (item.Exists)
+                    {
+                        if (localItem != null)
+                        {
+                            item.LocalVersion = localItem.LocalVersion;
+                        }
+                        else if (item.LatestVersion > -1)
+                        {
+                            needsUpdate = true;
+                            try
+                            {
+                                using (DatabaseHandler mHandler = new DatabaseHandler(item.Filename))
+                                {
+                                    if (mHandler.ValidDatabase())
+                                    {
+                                        item.LocalVersion = mHandler.GetTextVersion();
+                                    }
+                                }
+                            }
+                            catch
+                            {
+                                Debug.WriteLine("exception opening database: " + item.Filename);
+                            }
+                        }
+                        else 
+                        { 
+                            needsUpdate = true; 
+                        }
+                    }
+                    else if (localItem != null)
+                    {
+                        needsUpdate = true;
+                    }
 
-                //   if (item.exists){
-                //      Log.d(tag, "found: " + name + " with " +
-                //              item.localVersion + " vs server's " +
-                //              item.latestVersion);
-                //   }
-                //   items.add(item);
+                    if (needsUpdate)
+                    {
+                        updates.Add(item);
+                    }
+
+                    items.Add(item);
                 }
 
                 if (refreshed)
