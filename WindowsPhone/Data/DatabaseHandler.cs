@@ -80,13 +80,13 @@ namespace QuranPhone.Data
             }
         }
 
-        public List<QuranAyah> GetVerses(int sura, int minAyah, int maxAyah, string table)
+        public List<QuranAyah> GetVerses(int sura, int minAyah, int maxAyah, string table = "verses")
         {
             return GetVerses(sura, minAyah, sura, maxAyah, table);
         }
 
-        public List<QuranAyah> GetVerses(int minSura, int minAyah, int maxSura,
-                                int maxAyah, string table)
+        public virtual List<QuranAyah> GetVerses(int minSura, int minAyah, int maxSura,
+                                int maxAyah, string table = "verses")
         {
             if (!ValidDatabase())
             {
@@ -110,12 +110,23 @@ namespace QuranPhone.Data
             return result.ToList();
         }
 
+        public List<QuranAyah> GetVerses(int page, string table = "verses")
+        {
+            if (!ValidDatabase())
+            {
+                if (!ReopenDatabase()) { return null; }
+            }
+
+            int[] bound = QuranInfo.GetPageBounds(page);
+            return GetVerses(bound[0], bound[1], bound[2], bound[3], table);
+        }
+
         public List<QuranAyah> GetVerse(int sura, int ayah)
         {
             return GetVerses(sura, ayah, ayah);
         }
 
-        public List<QuranAyah> Search(string query)
+        public virtual List<QuranAyah> Search(string query)
         {
             if (!ValidDatabase())
             {
@@ -124,5 +135,73 @@ namespace QuranPhone.Data
 
             return mDatabase.Query<QuranAyah>().Where(a => a.Text.Contains(query)).Take(50).ToList();            
         }        
+    }
+
+    public class ArabicDatabaseHandler : DatabaseHandler
+    {
+        public ArabicDatabaseHandler()
+            : base("quran.ar.db")
+        { }
+
+        public override List<QuranAyah> GetVerses(int minSura, int minAyah, int maxSura,
+                                int maxAyah, string table = "verses")
+        {
+            if (!ValidDatabase())
+            {
+                if (!ReopenDatabase()) { return null; }
+            }
+
+            StringBuilder sql = new StringBuilder("select \"sura\", \"ayah\", \"text\" from \"arabic_text\" where ");
+
+            sql.Append("(");
+
+            if (minSura == maxSura)
+            {
+                sql.Append("sura")
+                        .Append("=").Append(minSura)
+                        .Append(" and ").Append("ayah")
+                        .Append(">=").Append(minAyah)
+                        .Append(" and ").Append("ayah")
+                        .Append("<=").Append(maxAyah);
+            }
+            else
+            {
+                // (sura = minSura and ayah >= minAyah)
+                sql.Append("(").Append("sura").Append("=")
+                        .Append(minSura).Append(" and ")
+                        .Append("ayah").Append(">=").Append(minAyah).Append(")");
+
+                sql.Append(" or ");
+
+                // (sura = maxSura and ayah <= maxAyah)
+                sql.Append("(").Append("sura").Append("=")
+                        .Append(maxSura).Append(" and ")
+                        .Append("ayah").Append("<=").Append(maxAyah).Append(")");
+
+                sql.Append(" or ");
+
+                // (sura > minSura and sura < maxSura)
+                sql.Append("(").Append("sura").Append(">")
+                        .Append(minSura).Append(" and ")
+                        .Append("sura").Append("<")
+                        .Append(maxSura).Append(")");
+            }
+
+            sql.Append(")");
+
+            return mDatabase.Query<QuranAyah>(sql.ToString()).ToList();
+        }
+
+        public override List<QuranAyah> Search(string query)
+        {
+            if (!ValidDatabase())
+            {
+                if (!ReopenDatabase()) { return null; }
+            }
+
+            StringBuilder sql = new StringBuilder("select \"sura\", \"ayah\", \"text\" from \"arabic_text\" where \"text\" like '%?%'");
+
+            return mDatabase.Query<QuranAyah>(sql.ToString(), query).Take(50).ToList();
+        }  
     }
 }

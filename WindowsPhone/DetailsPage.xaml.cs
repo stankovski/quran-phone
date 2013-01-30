@@ -10,6 +10,8 @@ using Microsoft.Phone.Shell;
 using QuranPhone.Resources;
 using QuranPhone.ViewModels;
 using QuranPhone.Utils;
+using QuranPhone.Data;
+using System.Globalization;
 
 namespace QuranPhone
 {
@@ -31,10 +33,14 @@ namespace QuranPhone
             if (DataContext == null)
             {
                 string selectedPage = "";
-                if (NavigationContext.QueryString.TryGetValue("selectedItem", out selectedPage))
+                if (NavigationContext.QueryString.ContainsKey("noBack"))
                 {
-                    int index = int.Parse(selectedPage);
-                    var viewModel = new DetailsViewModel();
+                    NavigationService.RemoveBackEntry();
+                }
+                if (NavigationContext.QueryString.TryGetValue("page", out selectedPage))
+                {
+                    int page = int.Parse(selectedPage);
+                    var viewModel = new DetailsViewModel(page);
                     viewModel.LoadData();
                     DataContext = viewModel;                    
                 }
@@ -50,31 +56,24 @@ namespace QuranPhone
         private void Translation_Click(object sender, EventArgs e)
         {
             // Navigate to the translation page
-            NavigationService.Navigate(new Uri("/TranslationListPage.xaml", UriKind.Relative));
+            int pageNumber = ((DetailsViewModel)DataContext).CurrentPageNumer;
+            var translation = SettingsUtils.Get<string>(Constants.PREF_ACTIVE_TRANSLATION);
+            if (!string.IsNullOrEmpty(translation))
+                NavigationService.Navigate(new Uri(string.Format(CultureInfo.InvariantCulture, "/TranslationPage.xaml?page={0}&translation={1}", pageNumber, translation), UriKind.Relative));
+            else
+                NavigationService.Navigate(new Uri(string.Format(CultureInfo.InvariantCulture, "/TranslationListPage.xaml?page={0}", pageNumber), UriKind.Relative));
         }
 
-        //private void Page_OrientationChanged(object sender, OrientationChangedEventArgs e)
-        //{
-        //    if ((e.Orientation & PageOrientation.Landscape) == (PageOrientation.Landscape))
-        //    {
-        //        MainPivot.Height = screenInfo.ImageHeight;
-        //    }
-        //}
+        private void ScreenTap(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            this.ApplicationBar.IsVisible = false;
+            menuToggleButton.Visibility = System.Windows.Visibility.Visible;
+        }
 
-        // Sample code for building a localized ApplicationBar
-        //private void BuildLocalizedApplicationBar()
-        //{
-        //    // Set the page's ApplicationBar to a new instance of ApplicationBar.
-        //    ApplicationBar = new ApplicationBar();
-
-        //    // Create a new button and set the text value to the localized string from AppResources.
-        //    ApplicationBarIconButton appBarButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.add.rest.png", UriKind.Relative));
-        //    appBarButton.Text = AppResources.AppBarButtonText;
-        //    ApplicationBar.Buttons.Add(appBarButton);
-
-        //    // Create a new menu item with the localized string from AppResources.
-        //    ApplicationBarMenuItem appBarMenuItem = new ApplicationBarMenuItem(AppResources.AppBarMenuItemText);
-        //    ApplicationBar.MenuItems.Add(appBarMenuItem);
-        //}
+        private void MenuToggle(object sender, RoutedEventArgs e)
+        {
+            this.ApplicationBar.IsVisible = true;
+            menuToggleButton.Visibility = System.Windows.Visibility.Collapsed;
+        }
     }
 }

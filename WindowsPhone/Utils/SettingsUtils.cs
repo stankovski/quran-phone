@@ -22,13 +22,9 @@ namespace QuranPhone.Utils
         public static T Get<T>(string key)
         {
             object value = null;
-            foreach (var k in IsolatedStorageSettings.ApplicationSettings.Keys)
+            if (IsolatedStorageSettings.ApplicationSettings.Contains(key))
             {
-                if (k.ToString() == key)
-                {
-                    value = IsolatedStorageSettings.ApplicationSettings[key];
-                    break;
-                }
+                value = IsolatedStorageSettings.ApplicationSettings[key];
             }
 
             if (value == null)
@@ -81,15 +77,8 @@ namespace QuranPhone.Utils
             if (value == null)
                 return;
 
-            bool keyExists = false;
-            foreach (var k in IsolatedStorageSettings.ApplicationSettings.Keys)
-            {
-                if (k.ToString() == key)
-                {
-                    keyExists = true;
-                    break;
-                }
-            }
+            bool keyExists = IsolatedStorageSettings.ApplicationSettings.Contains(key);
+
             if (!keyExists)
                 IsolatedStorageSettings.ApplicationSettings.Add(key, value);
             else

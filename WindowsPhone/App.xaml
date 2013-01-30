@@ -8,27 +8,42 @@
     <!--Application Resources-->
     <Application.Resources>
         <Brush x:Key="BlueText">#30B6E7</Brush>
+		<SolidColorBrush x:Key="DarkBlueText" Color="#FF49A4C5"/>
+		<LinearGradientBrush x:Key="LightBackground" EndPoint="0,0.5" StartPoint="1,0.5">
+        	<GradientStop Color="#FFE8E8D3" Offset="0"/>
+        	<GradientStop Color="#FFFFFFEF" Offset="0.996"/>
+        	<GradientStop Color="#FFFBFBD9" Offset="0.13"/>
+        </LinearGradientBrush>
+		<LinearGradientBrush x:Key="LightBackgroundInverse" StartPoint="0,0.5" EndPoint="1,0.5">
+        	<GradientStop Color="#FFE8E8D3" Offset="0"/>
+        	<GradientStop Color="#FFFFFFEF" Offset="0.996"/>
+        	<GradientStop Color="#FFFBFBD9" Offset="0.13"/>
+        </LinearGradientBrush>
         <local:LocalizedStrings xmlns:local="clr-namespace:QuranPhone" x:Key="LocalizedStrings"/>
 
-        <Style TargetType="TextBlock" x:Key="BlueHeader">
-            <Setter Property="FontSize" Value="30"/>
+        <Style TargetType="TextBlock" x:Key="BlueHeader" BasedOn="{StaticResource PhoneTextTitle2Style}">
             <Setter Property="Margin" Value="10,5,0,5"/>
             <Setter Property="Foreground" Value="{StaticResource BlueText}"/>
         </Style>
-        <Style TargetType="TextBlock" x:Key="WhiteHeader">
-            <Setter Property="FontSize" Value="30"/>
+        <Style TargetType="TextBlock" x:Key="WhiteHeader" BasedOn="{StaticResource PhoneTextTitle2Style}">
             <Setter Property="Margin" Value="10,5,0,5"/>
             <Setter Property="Foreground" Value="White"/>
         </Style>
-        <Style TargetType="TextBlock" x:Key="BlueSmallHeader">
-            <Setter Property="FontSize" Value="20"/>
+        <Style TargetType="TextBlock" x:Key="BlueSmallHeader" BasedOn="{StaticResource PhoneTextTitle3Style}">
             <Setter Property="Margin" Value="10,5,0,5"/>
             <Setter Property="Foreground" Value="{StaticResource BlueText}"/>
         </Style>
-        <Style TargetType="TextBlock" x:Key="WhiteSmallHeader">
-            <Setter Property="FontSize" Value="20"/>
+        <Style TargetType="TextBlock" x:Key="WhiteSmallHeader" BasedOn="{StaticResource PhoneTextTitle3Style}">
             <Setter Property="Margin" Value="10,5,0,5"/>
             <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="BlackSmallHeader" BasedOn="{StaticResource PhoneTextTitle3Style}">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Margin" Value="0"/>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="BlackSmallText" BasedOn="{StaticResource PhoneTextNormalStyle}">
+            <Setter Property="Foreground" Value="#FF232323"/>
+            <Setter Property="Margin" Value="0"/>
         </Style>
         <Style TargetType="TextBlock" x:Key="ItemViewStyleHeader" BasedOn="{StaticResource WhiteHeader}">
             <!--<Setter Property="FontSize" Value="30"/>

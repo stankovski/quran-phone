@@ -35,7 +35,7 @@
 
             <!--TitlePanel contains the name of the application and page title-->
             <StackPanel Grid.Row="0" Margin="12,17,0,28">
-                <myui:CommonHeader Grid.Row="0" Margin="12,0,0,0"/>
+                <myui:CommonHeader Grid.Row="0" Margin="12,0,0,0" Name="header"/>
                 <TextBlock Text="{Binding Path=LocalizedResources.translations, Source={StaticResource LocalizedStrings}}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
             </StackPanel>
             <ProgressBar Grid.Row="0" VerticalAlignment="Top" Visibility="{Binding IsDataLoaded, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}" IsIndeterminate="True"/>
@@ -56,7 +56,7 @@
                                 <Button Grid.Column="1" Padding="0" Margin="0" Command="{Binding NavigateCommand}"
                                         Style="{StaticResource ChromelessButtonStyle}" HorizontalContentAlignment="Left">
 									<StackPanel>
-										<TextBlock Text="{Binding Name}" Style="{StaticResource PhoneTextLargeStyle}" TextWrapping="Wrap"/>
+										<TextBlock Text="{Binding Name}" Style="{StaticResource PhoneTextLargeStyle}" TextWrapping="NoWrap"/>
 										<TextBlock Text="{Binding Translator}" TextWrapping="Wrap" Style="{StaticResource PhoneTextSubtleStyle}"/>
 									</StackPanel>
                                 </Button>
@@ -81,7 +81,7 @@
                                 </Grid.ColumnDefinitions>
                                 <Image Grid.Column="0" Source="/Assets/Images/ic_translation.png"/>
                                 <StackPanel Grid.Column="1">
-                                    <TextBlock Text="{Binding Name}" Style="{StaticResource PhoneTextLargeStyle}" TextWrapping="Wrap"/>
+                                    <TextBlock Text="{Binding Name}" Style="{StaticResource PhoneTextLargeStyle}" TextWrapping="NoWrap"/>
                                     <TextBlock Text="{Binding Translator}" TextWrapping="Wrap" Style="{StaticResource PhoneTextSubtleStyle}"/>
                                     <Grid Visibility="{Binding Downloading, Converter={StaticResource BooleanToVisibilityConverter}}">
                                         <Grid.ColumnDefinitions>
