@@ -21,9 +21,15 @@ namespace QuranPhone
 
             // Set the data context of the LongListSelector control to the sample data
             DataContext = App.ViewModel;
+            header.NavigationRequest += header_NavigationRequest;
 
             // Sample code to localize the ApplicationBar
             //BuildLocalizedApplicationBar();
+        }
+
+        void header_NavigationRequest(object sender, NavigationEventArgs e)
+        {
+            NavigationService.Navigate(e.Uri);
         }
 
         // Load data for the ViewModel Items
@@ -44,7 +50,7 @@ namespace QuranPhone
                 return;
 
             // Navigate to the new page
-            NavigationService.Navigate(new Uri("/DetailsPage.xaml?selectedItem=" + (list.SelectedItem as ItemViewModel).PageNumber, UriKind.Relative));
+            NavigationService.Navigate(new Uri("/DetailsPage.xaml?page=" + (list.SelectedItem as ItemViewModel).PageNumber, UriKind.Relative));
 
             // Reset selected item to null (no selection)
             list.SelectedItem = null;

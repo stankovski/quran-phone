@@ -12,30 +12,38 @@
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
-    SupportedOrientations="PortraitOrLandscape" Orientation="Portrait" 
+    SupportedOrientations="PortraitOrLandscape" Orientation="Landscape" 
     shell:SystemTray.IsVisible="False">
-
-    <phone:Pivot ItemsSource="{Binding Pages}" Name="MainPivot"
-                 Background="#FFFDFCF3" FlowDirection="RightToLeft"
+    <Grid>
+        <phone:Pivot ItemsSource="{Binding Pages}" Name="MainPivot"
+                 Background="{StaticResource LightBackground}" FlowDirection="RightToLeft"
                  LoadingPivotItem="Pivot_LoadingItem" SelectedIndex="{Binding CurrentPageIndex, Mode=TwoWay}">
-        <phone:Pivot.HeaderTemplate>
-            <DataTemplate>
-            </DataTemplate>
-        </phone:Pivot.HeaderTemplate>
-        <phone:Pivot.ItemTemplate>
-            <DataTemplate>
-                <ScrollViewer Margin="-10,-40,-10,0" HorizontalAlignment="Stretch">
-                    <Grid>
-                        <myui:CachedImage ImageSource="{Binding ImageSource}" PageNumber="{Binding PageNumber}"/>
-                    </Grid>
-                </ScrollViewer>
-            </DataTemplate>
-        </phone:Pivot.ItemTemplate>
-    </phone:Pivot>
+            <phone:Pivot.HeaderTemplate>
+                <DataTemplate>
+                </DataTemplate>
+            </phone:Pivot.HeaderTemplate>
+            <phone:Pivot.ItemTemplate>
+                <DataTemplate>
+                    <ScrollViewer Margin="-10,-40,-10,0" HorizontalAlignment="Stretch">
+                        <Grid>
+                            <myui:CachedImage ImageSource="{Binding ImageSource}" PageNumber="{Binding PageNumber}" MouseLeftButtonUp="ScreenTap"/>
+                        </Grid>
+                    </ScrollViewer>
+                </DataTemplate>
+            </phone:Pivot.ItemTemplate>
+        </phone:Pivot>
+        <Button VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0" Width="100" Style="{StaticResource ChromelessButtonStyle}" Click="MenuToggle" Name="menuToggleButton">
+            <StackPanel Orientation="Horizontal" Background="Transparent" Height="50" Width="70">
+                <Ellipse Fill="{StaticResource DarkBlueText}" Width="8" Height="8" Margin="5"/>
+                <Ellipse Fill="{StaticResource DarkBlueText}" Width="8" Height="8" Margin="5" />
+                <Ellipse Fill="{StaticResource DarkBlueText}" Width="8" Height="8" Margin="5"/>
+            </StackPanel>
+        </Button>
+    </Grid>
     <phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar IsMenuEnabled="True" Opacity="0.9" 
-                              Mode="Minimized" BackgroundColor="#FFFDFCF3"
-                              ForegroundColor="{StaticResource PhoneChromeColor}">
+        <shell:ApplicationBar Opacity="0.9" IsVisible="False"
+                              BackgroundColor="#FFFDFCF3"
+                              ForegroundColor="#FF49A4C5">
             <shell:ApplicationBarIconButton IconUri="/Assets/Images/appbar.globe.png" 
                                             Text="Translate" Click="Translation_Click"/>
             <shell:ApplicationBar.MenuItems>

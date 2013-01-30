@@ -10,6 +10,8 @@ using Microsoft.Phone.Shell;
 using QuranPhone.ViewModels;
 using QuranPhone.Common;
 using QuranPhone.UI;
+using QuranPhone.Utils;
+using QuranPhone.Data;
 
 namespace QuranPhone
 {
@@ -18,6 +20,12 @@ namespace QuranPhone
         public TranslationListPage()
         {
             InitializeComponent();
+            header.NavigationRequest += header_NavigationRequest;
+        }
+
+        void header_NavigationRequest(object sender, NavigationEventArgs e)
+        {
+            NavigationService.Navigate(e.Uri);
         }
 
         // When page is navigated to set data context to selected item in list
@@ -38,7 +46,8 @@ namespace QuranPhone
             if (translation == null)
                 return;
 
-            NavigationService.Navigate(new Uri("/TranslationPage.xaml?selectedItem=" + translation.Id, UriKind.Relative));
+            SettingsUtils.Set<string>(Constants.PREF_ACTIVE_TRANSLATION, translation.FileName);
+            NavigationService.Navigate(new Uri("/TranslationPage.xaml?page=1&translation=" + translation.FileName, UriKind.Relative));
         }
     }
 }

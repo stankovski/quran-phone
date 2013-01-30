@@ -38,6 +38,8 @@ namespace QuranPhone.Data
         public const String PREF_TRANSLATION_TEXT_SIZE = "translationTextSize";
         public const String PREF_ACTIVE_TRANSLATION = "activeTranslation";
         public const String PREF_RESHAPE_ARABIC = "reshapeArabic";
+        [DefaultValue(true)]
+        public const String PREF_SHOW_ARABIC_IN_TRANSLATION = "showArabicInTranslation";
         public const String PREF_NIGHT_MODE = "nightMode";
         public const String PREF_DEFAULT_QARI = "defaultQari";
         public const String PREF_SHOULD_FETCH_PAGES = "shouldFetchPages";

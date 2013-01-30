@@ -29,7 +29,7 @@
         </Grid.RowDefinitions>
 
         <!--TitlePanel contains the name of the application and page title-->
-        <myui:CommonHeader Grid.Row="0" Margin="12,0,0,0"/>
+        <myui:CommonHeader Grid.Row="0" Margin="12,0,0,0" Name="header"/>
 
         <phone:Pivot Grid.Row="1" Margin="12,0,12,0">
             <phone:PivotItem Header="{Binding Path=LocalizedResources.quran_sura_lower, Source={StaticResource LocalizedStrings}}">

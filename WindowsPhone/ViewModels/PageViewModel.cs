@@ -13,6 +13,7 @@ namespace QuranPhone.ViewModels
         public PageViewModel()
         {
             QuranScreenInfo screen = QuranScreenInfo.GetInstance();
+            Verses = new ObservableCollection<VerseViewModel>();
         }
 
         public PageViewModel(int page)
@@ -20,6 +21,8 @@ namespace QuranPhone.ViewModels
         {
             PageNumber = page;
         }
+
+        public ObservableCollection<VerseViewModel> Verses { get; private set; }
 
         private int pageNumber;
         public int PageNumber
@@ -49,6 +52,12 @@ namespace QuranPhone.ViewModels
 
                 base.OnPropertyChanged(() => ImageSource);
             }
+        }
+
+        protected override void OnDispose()
+        {
+            base.OnDispose();
+            this.ImageSource = null;
         }
     }
 }
