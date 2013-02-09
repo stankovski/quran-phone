@@ -333,6 +333,10 @@
     <Reference Include="SharpZipLib.WindowsPhone7">
       <HintPath>Dependencies\SharpZipLib.WindowsPhone7.dll</HintPath>
     </Reference>
+    <Reference Include="Telerik.Windows.Behaviors, Version=2012.3.1311.3040, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL" />
+    <Reference Include="Telerik.Windows.Controls.Input, Version=2012.3.1311.3040, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL" />
+    <Reference Include="Telerik.Windows.Controls.Primitives, Version=2012.3.1311.3040, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL" />
+    <Reference Include="Telerik.Windows.Core, Version=2012.3.1311.3040, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Documents\GitHub\sqlite-net-wp8\Sqlite.vcxproj">

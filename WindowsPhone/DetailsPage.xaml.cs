@@ -36,6 +36,8 @@ namespace QuranPhone
 
             App.DetailsViewModel.LoadData();
             DataContext = App.DetailsViewModel;
+            radSlideView.SelectedItem = App.DetailsViewModel.Pages[2];
+            radSlideView.SelectionChanged += PageFlipped;
         }
 
         //private void Pivot_LoadingItem(object sender, PivotItemEventArgs e)
@@ -82,6 +84,11 @@ namespace QuranPhone
             }
             App.DetailsViewModel.Pages.Clear();
             App.DetailsViewModel.CurrentPageIndex = -1;
+        }
+
+        private void PageFlipped(object sender, SelectionChangedEventArgs e)
+        {
+            App.DetailsViewModel.CurrentPageIndex = App.DetailsViewModel.Pages.IndexOf((PageViewModel)radSlideView.SelectedItem);
         }
     }
 }
