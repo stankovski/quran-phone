@@ -13,21 +13,72 @@ namespace QuranPhone
 {
     public partial class App : Application
     {
-        private static MainViewModel viewModel = null;
+        private static MainViewModel mainViewModel = null;
+        private static DetailsViewModel detailsViewModel = null;
+        private static TranslationViewModel translationViewModel = null;
+        private static TranslationsListViewModel translationsListViewModel = null;
 
         /// <summary>
         /// A static ViewModel used by the views to bind against.
         /// </summary>
         /// <returns>The MainViewModel object.</returns>
-        public static MainViewModel ViewModel
+        public static MainViewModel MainViewModel
         {
             get
             {
                 // Delay creation of the view model until necessary
-                if (viewModel == null)
-                    viewModel = new MainViewModel();
+                if (mainViewModel == null)
+                    mainViewModel = new MainViewModel();
 
-                return viewModel;
+                return mainViewModel;
+            }
+        }
+
+        /// <summary>
+        /// A static DetailsViewModel used by the views to bind against.
+        /// </summary>
+        /// <returns>The DetailsViewModel object.</returns>
+        public static DetailsViewModel DetailsViewModel
+        {
+            get
+            {
+                // Delay creation of the view model until necessary
+                if (detailsViewModel == null)
+                    detailsViewModel = new DetailsViewModel();
+
+                return detailsViewModel;
+            }
+        }
+
+        /// <summary>
+        /// A static TranslationViewModel used by the views to bind against.
+        /// </summary>
+        /// <returns>The TranslationViewModel object.</returns>
+        public static TranslationViewModel TranslationViewModel
+        {
+            get
+            {
+                // Delay creation of the view model until necessary
+                if (translationViewModel == null)
+                    translationViewModel = new TranslationViewModel();
+
+                return translationViewModel;
+            }
+        }
+
+        /// <summary>
+        /// A static TranslationsListViewModel used by the views to bind against.
+        /// </summary>
+        /// <returns>The TranslationsListViewModel object.</returns>
+        public static TranslationsListViewModel TranslationsListViewModel
+        {
+            get
+            {
+                // Delay creation of the view model until necessary
+                if (translationsListViewModel == null)
+                    translationsListViewModel = new TranslationsListViewModel();
+
+                return translationsListViewModel;
             }
         }
 
@@ -86,9 +137,9 @@ namespace QuranPhone
         private void Application_Activated(object sender, ActivatedEventArgs e)
         {
             // Ensure that application state is restored appropriately
-            if (!App.ViewModel.IsDataLoaded)
+            if (!App.MainViewModel.IsDataLoaded)
             {
-                App.ViewModel.LoadData();
+                App.MainViewModel.LoadData();
             }
         }
 

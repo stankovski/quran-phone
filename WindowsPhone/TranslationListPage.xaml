@@ -56,7 +56,7 @@
                                 <Button Grid.Column="1" Padding="0" Margin="0" Command="{Binding NavigateCommand}"
                                         Style="{StaticResource ChromelessButtonStyle}" HorizontalContentAlignment="Left">
 									<StackPanel>
-										<TextBlock Text="{Binding Name}" Style="{StaticResource PhoneTextLargeStyle}" TextWrapping="NoWrap"/>
+                                        <TextBlock Text="{Binding Name}" Style="{StaticResource PhoneTextLargeStyle}" TextWrapping="NoWrap"/>
 										<TextBlock Text="{Binding Translator}" TextWrapping="Wrap" Style="{StaticResource PhoneTextSubtleStyle}"/>
 									</StackPanel>
                                 </Button>

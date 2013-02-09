@@ -13,14 +13,7 @@ namespace QuranPhone.ViewModels
 {
     public class TranslationViewModel : DetailsViewModel
     {
-
-        public TranslationViewModel() : base()
-        { }
-
-        public TranslationViewModel(int pageNumber, string file) : base(pageNumber)
-        {
-            TranslationFile = file;
-        }
+        private Dictionary<string, DatabaseHandler> translationDatabases = new Dictionary<string, DatabaseHandler>();
 
         private string translationFile;
         public string TranslationFile
@@ -32,7 +25,8 @@ namespace QuranPhone.ViewModels
                     return;
 
                 translationFile = value;
-                UpdatePages();
+                if (!translationDatabases.ContainsKey(translationFile))
+                    translationDatabases[translationFile] = new DatabaseHandler(translationFile);
                 base.OnPropertyChanged(() => TranslationFile);
             }
         }
@@ -42,16 +36,7 @@ namespace QuranPhone.ViewModels
         /// </summary>
         public override void LoadData()
         {
-            if (Pages.Count == 0)
-            {
-                for (int i = CurrentPageNumer - PAGES_TO_PRELOAD; i <= CurrentPageNumer + PAGES_TO_PRELOAD; i++)
-                {
-                    var page = (i <= 0 ? Constants.PAGES_LAST + i : i);
-                    Pages.Add(new PageViewModel(page));
-                }
-            }
-
-            CurrentPageIndex = PAGES_TO_PRELOAD;
+            this.CurrentPageIndex = PAGES_TO_PRELOAD;
             this.IsDataLoaded = true;
         }
 
@@ -60,9 +45,15 @@ namespace QuranPhone.ViewModels
         protected override void UpdatePages()
         {
             if (Pages.Count == 0)
-                return;
+            {
+                for (int i = CurrentPageNumber - PAGES_TO_PRELOAD; i <= CurrentPageNumber + PAGES_TO_PRELOAD; i++)
+                {
+                    var page = (i <= 0 ? Constants.PAGES_LAST + i : i);
+                    Pages.Add(new PageViewModel(page));
+                }
+            }
 
-            CurrentPageNumer = Pages[CurrentPageIndex].PageNumber;
+            CurrentPageNumber = Pages[CurrentPageIndex].PageNumber;
 
             if (CurrentPageIndex == PAGES_TO_PRELOAD - 1)
             {
@@ -83,6 +74,16 @@ namespace QuranPhone.ViewModels
             populatePage(CurrentPageIndex - 1, false);
         }
 
+        protected override void OnDispose()
+        {
+            base.OnDispose();
+            foreach (var db in translationDatabases.Keys)
+            {
+                translationDatabases[db].Dispose();
+            }
+            translationDatabases.Clear();
+        }
+
         private void populatePage(int pageIndex, bool force)
         {
             var pageModel = Pages[pageIndex];
@@ -90,22 +91,22 @@ namespace QuranPhone.ViewModels
                 return;
 
             pageModel.Verses.Clear();
-            DatabaseHandler db = new DatabaseHandler(this.TranslationFile);
+            var db = translationDatabases[this.TranslationFile];
             List<QuranAyah> verses = db.GetVerses(pageModel.PageNumber);
             List<QuranAyah> versesArabic = null;
 
-            if (SettingsUtils.Get<bool>(Constants.PREF_SHOW_ARABIC_IN_TRANSLATION)) 
-            {
-                try
-                {
-                    DatabaseHandler dbArabic = new ArabicDatabaseHandler();
-                    versesArabic = dbArabic.GetVerses(pageModel.PageNumber);
-                }
-                catch
-                {
-                    //Not able to get Arabic text - skipping
-                }
-            }
+            //if (SettingsUtils.Get<bool>(Constants.PREF_SHOW_ARABIC_IN_TRANSLATION)) 
+            //{
+            //    try
+            //    {
+            //        DatabaseHandler dbArabic = new ArabicDatabaseHandler();
+            //        versesArabic = dbArabic.GetVerses(pageModel.PageNumber);
+            //    }
+            //    catch
+            //    {
+            //        //Not able to get Arabic text - skipping
+            //    }
+            //}
 
             int tempSurah = -1;
             for (int i =0; i < verses.Count; i++)

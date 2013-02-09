@@ -22,41 +22,32 @@ namespace QuranPhone
         public DetailsPage()
         {
             InitializeComponent();
-            //screenInfo = QuranScreenInfo.GetInstance();
-            // Sample code to localize the ApplicationBar
-            //BuildLocalizedApplicationBar();
         }
 
         // When page is navigated to set data context to selected item in list
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (DataContext == null)
+            string selectedPage = "";
+            if (NavigationContext.QueryString.TryGetValue("page", out selectedPage))
             {
-                string selectedPage = "";
-                if (NavigationContext.QueryString.ContainsKey("noBack"))
-                {
-                    NavigationService.RemoveBackEntry();
-                }
-                if (NavigationContext.QueryString.TryGetValue("page", out selectedPage))
-                {
-                    int page = int.Parse(selectedPage);
-                    var viewModel = new DetailsViewModel(page);
-                    viewModel.LoadData();
-                    DataContext = viewModel;                    
-                }
+                int page = int.Parse(selectedPage);
+                App.DetailsViewModel.CurrentPageNumber = page;
             }
+
+            App.DetailsViewModel.LoadData();
+            DataContext = App.DetailsViewModel;
         }
 
-        private void Pivot_LoadingItem(object sender, PivotItemEventArgs e)
-        {
-            var pageModel = (PageViewModel)e.Item.DataContext;
-            pageModel.ImageSource = QuranFileUtils.GetImageFromWeb(QuranFileUtils.GetPageFileName(pageModel.PageNumber));
-        }
+        //private void Pivot_LoadingItem(object sender, PivotItemEventArgs e)
+        //{
+        //    var pageModel = (PageViewModel)e.Item.DataContext;
+        //    pageModel.ImageSource = QuranFileUtils.GetImageFromWeb(QuranFileUtils.GetPageFileName(pageModel.PageNumber));
+        //}
 
         private void Translation_Click(object sender, EventArgs e)
         {
             // Navigate to the translation page
-            int pageNumber = ((DetailsViewModel)DataContext).CurrentPageNumer;
+            int pageNumber = ((DetailsViewModel)DataContext).CurrentPageNumber;
             var translation = SettingsUtils.Get<string>(Constants.PREF_ACTIVE_TRANSLATION);
             if (!string.IsNullOrEmpty(translation))
                 NavigationService.Navigate(new Uri(string.Format(CultureInfo.InvariantCulture, "/TranslationPage.xaml?page={0}&translation={1}", pageNumber, translation), UriKind.Relative));
@@ -74,6 +65,23 @@ namespace QuranPhone
         {
             this.ApplicationBar.IsVisible = true;
             menuToggleButton.Visibility = System.Windows.Visibility.Collapsed;
+        }
+
+        private void OnBackNavigation(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative));
+        }
+
+        protected override void OnNavigatedFrom(System.Windows.Navigation.NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+            this.DataContext = null;
+            foreach (var page in App.DetailsViewModel.Pages)
+            {
+                page.ImageSource = null;
+            }
+            App.DetailsViewModel.Pages.Clear();
+            App.DetailsViewModel.CurrentPageIndex = -1;
         }
     }
 }

@@ -33,11 +33,11 @@ namespace QuranPhone
         {
             if (DataContext == null)
             {
-                var viewModel = new TranslationsListViewModel();
-                DataContext = viewModel;
-                viewModel.LoadData();
-                viewModel.NavigateRequested += viewModel_NavigateRequested;
+                DataContext = App.TranslationsListViewModel;                
             }
+            if (!App.TranslationsListViewModel.IsDataLoaded)
+                App.TranslationsListViewModel.LoadData();
+            App.TranslationsListViewModel.NavigateRequested += viewModel_NavigateRequested;
         }
 
         void viewModel_NavigateRequested(object sender, EventArgs e)
@@ -48,6 +48,12 @@ namespace QuranPhone
 
             SettingsUtils.Set<string>(Constants.PREF_ACTIVE_TRANSLATION, translation.FileName);
             NavigationService.Navigate(new Uri("/TranslationPage.xaml?page=1&translation=" + translation.FileName, UriKind.Relative));
+        }
+
+        protected override void OnNavigatedFrom(System.Windows.Navigation.NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+            App.TranslationsListViewModel.NavigateRequested -= viewModel_NavigateRequested;
         }
     }
 }

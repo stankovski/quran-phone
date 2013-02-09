@@ -18,7 +18,7 @@ using System.Diagnostics;
 
 namespace QuranPhone.UI
 {
-    public partial class CachedImage : UserControl, INotifyPropertyChanged
+    public partial class CachedImage : UserControl, INotifyPropertyChanged, IDisposable
     {
         private BitmapImage imageSource;
 
@@ -107,23 +107,23 @@ namespace QuranPhone.UI
             UriBuilder uriBuilder = new UriBuilder(ImageSource);
             var path = Path.Combine(QuranFileUtils.GetQuranDirectory(false), Path.GetFileName(uriBuilder.Path));
                         
-            try
-            {
-                if (!QuranFileUtils.FileExists(path))
-                {
-                    WriteableBitmap writableBitmap = new WriteableBitmap(imageSource);
-                    var encoder = new ImageTools.IO.Png.PngEncoder();
-                    using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
-                    using (var isfStream = new IsolatedStorageFileStream(path, FileMode.Create, isf))
-                    {
-                        encoder.Encode(writableBitmap.ToImage(), isfStream);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("failed to store file {0}: {1}", path, ex.Message);
-            }
+            //try
+            //{
+            //    if (!QuranFileUtils.FileExists(path))
+            //    {
+            //        WriteableBitmap writableBitmap = new WriteableBitmap(imageSource);
+            //        var encoder = new ImageTools.IO.Png.PngEncoder();
+            //        using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
+            //        using (var isfStream = new IsolatedStorageFileStream(path, FileMode.Create, isf))
+            //        {
+            //            encoder.Encode(writableBitmap.ToImage(), isfStream);
+            //        }
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Debug.WriteLine("failed to store file {0}: {1}", path, ex.Message);
+            //}
         }
 
         #region INotifyPropertyChanged Members
@@ -180,6 +180,13 @@ namespace QuranPhone.UI
         private void UserControl_MouseEnter_1(object sender, System.Windows.Input.MouseEventArgs e)
         {
             memoryUsage.Text = PhoneUtils.CurrentMemoryUsage();
+        }
+
+        public void Dispose()
+        {
+            if (imageSource != null)
+                imageSource = null;
+            ImageSource = null;
         }
     }
 }
