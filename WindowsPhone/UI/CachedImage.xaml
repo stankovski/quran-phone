@@ -14,7 +14,7 @@
         <Image Name="image"/>
         <ProgressBar Name="progress" IsIndeterminate="True" VerticalAlignment="Top"
                      Margin="20,5,20,0" FlowDirection="LeftToRight"/>
-        <TextBlock Name="memoryUsage" FontSize="20" Text="Page 0" 
+        <TextBlock Name="memoryUsage" FontSize="20"
                    Foreground="#FF444444" VerticalAlignment="Top"
                    HorizontalAlignment="Center" Margin="0,0,0,0"/>
         <TextBlock Name="pageNumber" FontSize="15" Text="Page 0" 

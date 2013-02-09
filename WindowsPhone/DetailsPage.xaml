@@ -6,17 +6,31 @@
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:telerikPrimitives="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls.Primitives"
     d:DataContext="{d:DesignData SampleData/DetailsViewModelSampleData.xaml}"
     mc:Ignorable="d"
     xmlns:myui="clr-namespace:QuranPhone.UI"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
-    SupportedOrientations="PortraitOrLandscape" Orientation="Landscape" 
+    SupportedOrientations="PortraitOrLandscape" Orientation="Portrait" 
     BackKeyPress="OnBackNavigation"
     shell:SystemTray.IsVisible="False">
-    <Grid>
-        <phone:Pivot ItemsSource="{Binding Pages}" Name="MainPivot"
+    <Grid Background="{StaticResource LightBackground}">
+        <telerikPrimitives:RadSlideView x:Name="radSlideView" ItemsSource="{Binding Pages}" 
+                                        ItemRealizationMode="ViewportItem">
+            <telerikPrimitives:RadSlideView.ItemTemplate>
+                <DataTemplate>
+                    <ScrollViewer HorizontalAlignment="Stretch">
+                        <Grid>
+                            <myui:CachedImage ImageSource="{Binding ImageSource}" PageNumber="{Binding PageNumber}" MouseLeftButtonUp="ScreenTap"/>
+                        </Grid>
+                    </ScrollViewer>
+                </DataTemplate>
+            </telerikPrimitives:RadSlideView.ItemTemplate>
+        </telerikPrimitives:RadSlideView>
+
+        <!--<phone:Pivot ItemsSource="{Binding Pages}" Name="MainPivot"
                  Background="{StaticResource LightBackground}" FlowDirection="RightToLeft"
                  SelectedIndex="{Binding CurrentPageIndex, Mode=TwoWay}">
             <phone:Pivot.HeaderTemplate>
@@ -32,7 +46,7 @@
                     </ScrollViewer>
                 </DataTemplate>
             </phone:Pivot.ItemTemplate>
-        </phone:Pivot>
+        </phone:Pivot>-->
         <Button VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0" Width="100" Style="{StaticResource ChromelessButtonStyle}" Click="MenuToggle" Name="menuToggleButton">
             <StackPanel Orientation="Horizontal" Background="Transparent" Height="50" Width="70">
                 <Ellipse Fill="{StaticResource DarkBlueText}" Width="8" Height="8" Margin="5"/>
