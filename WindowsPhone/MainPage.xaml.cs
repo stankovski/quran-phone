@@ -20,7 +20,7 @@ namespace QuranPhone
             InitializeComponent();
 
             // Set the data context of the LongListSelector control to the sample data
-            DataContext = App.ViewModel;
+            DataContext = App.MainViewModel;
             header.NavigationRequest += header_NavigationRequest;
 
             // Sample code to localize the ApplicationBar
@@ -35,9 +35,13 @@ namespace QuranPhone
         // Load data for the ViewModel Items
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (!App.ViewModel.IsDataLoaded)
+            // Remove all back navigation options
+            while (NavigationService.BackStack.Count() > 0)
+                NavigationService.RemoveBackEntry();
+
+            if (!App.MainViewModel.IsDataLoaded)
             {
-                App.ViewModel.LoadData();
+                App.MainViewModel.LoadData();
             }
         }
 

@@ -13,20 +13,15 @@ namespace QuranPhone.ViewModels
     {
         protected const int PAGES_TO_PRELOAD = 2;
 
-        public DetailsViewModel() : this(1)
-        {       
-        }
-
-        public DetailsViewModel(int pageNumber)
+        public DetailsViewModel()
         {
             this.Pages = new ObservableCollection<PageViewModel>();
-            CurrentPageNumer = pageNumber;
         }
 
         public ObservableCollection<PageViewModel> Pages { get; private set; }
 
         private int currentPageNumber;
-        public int CurrentPageNumer
+        public int CurrentPageNumber
         {
             get { return currentPageNumber; }
             set
@@ -35,7 +30,7 @@ namespace QuranPhone.ViewModels
                     return;
 
                 currentPageNumber = value;
-                base.OnPropertyChanged(() => CurrentPageNumer);
+                base.OnPropertyChanged(() => CurrentPageNumber);
             }
         }
 
@@ -49,7 +44,8 @@ namespace QuranPhone.ViewModels
                     return;
 
                 currentPageIndex = value;
-                UpdatePages();
+                if (value >= 0) 
+                    UpdatePages();
                 base.OnPropertyChanged(() => CurrentPageIndex);
             }
         }
@@ -65,16 +61,7 @@ namespace QuranPhone.ViewModels
         /// </summary>
         public virtual void LoadData()
         {
-            if (Pages.Count == 0)
-            {
-                for (int i = CurrentPageNumer - PAGES_TO_PRELOAD; i <= CurrentPageNumer + PAGES_TO_PRELOAD; i++)
-                {
-                    var page = (i <= 0 ? Constants.PAGES_LAST + i : i);
-                    Pages.Add(new PageViewModel(page));
-                }
-            }
-
-            CurrentPageIndex = PAGES_TO_PRELOAD;
+            this.CurrentPageIndex = PAGES_TO_PRELOAD;
             this.IsDataLoaded = true;
         }
 
@@ -83,10 +70,16 @@ namespace QuranPhone.ViewModels
         protected virtual void UpdatePages()
         {
             if (Pages.Count == 0)
-                return;
+            {
+                for (int i = CurrentPageNumber - PAGES_TO_PRELOAD; i <= CurrentPageNumber + PAGES_TO_PRELOAD; i++)
+                {
+                    var page = (i <= 0 ? Constants.PAGES_LAST + i : i);
+                    Pages.Add(new PageViewModel(page));
+                }
+            }
 
-            CurrentPageNumer = Pages[CurrentPageIndex].PageNumber;
-            SettingsUtils.Set<int>(Constants.PREF_LAST_PAGE, CurrentPageNumer);
+            CurrentPageNumber = Pages[CurrentPageIndex].PageNumber;
+            SettingsUtils.Set<int>(Constants.PREF_LAST_PAGE, CurrentPageNumber);
 
             if (CurrentPageIndex == PAGES_TO_PRELOAD - 1)
             {
@@ -101,7 +94,7 @@ namespace QuranPhone.ViewModels
                 var newPage = (lastPage + 1 >= Constants.PAGES_LAST ? Constants.PAGES_LAST - lastPage - 1 : lastPage + 1);
                 Pages.Add(new PageViewModel(newPage));
             }
-
+            
             Pages[CurrentPageIndex].ImageSource = QuranFileUtils.GetImageFromWeb(QuranFileUtils.GetPageFileName(Pages[CurrentPageIndex].PageNumber));
             Pages[CurrentPageIndex + 1].ImageSource = QuranFileUtils.GetImageFromWeb(QuranFileUtils.GetPageFileName(Pages[CurrentPageIndex + 1].PageNumber));
             Pages[CurrentPageIndex - 1].ImageSource = QuranFileUtils.GetImageFromWeb(QuranFileUtils.GetPageFileName(Pages[CurrentPageIndex - 1].PageNumber));
@@ -117,6 +110,7 @@ namespace QuranPhone.ViewModels
             {
                 page.Dispose();
             }
+            Pages.Clear();
         }
              
         #endregion

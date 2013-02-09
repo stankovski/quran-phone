@@ -13,11 +13,12 @@
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="PortraitOrLandscape" Orientation="Landscape" 
+    BackKeyPress="OnBackNavigation"
     shell:SystemTray.IsVisible="False">
     <Grid>
         <phone:Pivot ItemsSource="{Binding Pages}" Name="MainPivot"
                  Background="{StaticResource LightBackground}" FlowDirection="RightToLeft"
-                 LoadingPivotItem="Pivot_LoadingItem" SelectedIndex="{Binding CurrentPageIndex, Mode=TwoWay}">
+                 SelectedIndex="{Binding CurrentPageIndex, Mode=TwoWay}">
             <phone:Pivot.HeaderTemplate>
                 <DataTemplate>
                 </DataTemplate>
