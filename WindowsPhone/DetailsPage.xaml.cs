@@ -28,14 +28,27 @@ namespace QuranPhone
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             string selectedPage = "";
+            string selectedTranslation = "";
             if (NavigationContext.QueryString.TryGetValue("page", out selectedPage))
             {
                 int page = int.Parse(selectedPage);
-                App.DetailsViewModel.CurrentPageNumber = page;
+                App.TranslationViewModel.CurrentPageNumber = page;
+
+                NavigationContext.QueryString.TryGetValue("translation", out selectedTranslation);
+                if (!string.IsNullOrEmpty(selectedTranslation))
+                {
+                    selectedTranslation = SettingsUtils.Get<string>(Constants.PREF_ACTIVE_TRANSLATION);
+                    App.TranslationViewModel.TranslationFile = selectedTranslation;
+                    App.TranslationViewModel.ShowTranslation = true;
+                }
+                else
+                {
+                    App.TranslationViewModel.ShowTranslation = false;
+                }
             }
 
-            App.DetailsViewModel.LoadData();
-            DataContext = App.DetailsViewModel;
+            App.TranslationViewModel.LoadData();
+            DataContext = App.TranslationViewModel;
         }
 
         //private void Pivot_LoadingItem(object sender, PivotItemEventArgs e)
@@ -47,12 +60,16 @@ namespace QuranPhone
         private void Translation_Click(object sender, EventArgs e)
         {
             // Navigate to the translation page
-            int pageNumber = ((DetailsViewModel)DataContext).CurrentPageNumber;
+            int pageNumber = ((TranslationViewModel)DataContext).CurrentPageNumber;
             var translation = SettingsUtils.Get<string>(Constants.PREF_ACTIVE_TRANSLATION);
             if (!string.IsNullOrEmpty(translation))
-                NavigationService.Navigate(new Uri(string.Format(CultureInfo.InvariantCulture, "/TranslationPage.xaml?page={0}&translation={1}", pageNumber, translation), UriKind.Relative));
+            {
+                App.TranslationViewModel.ShowTranslation = !App.TranslationViewModel.ShowTranslation;
+            }
             else
+            {
                 NavigationService.Navigate(new Uri(string.Format(CultureInfo.InvariantCulture, "/TranslationListPage.xaml?page={0}", pageNumber), UriKind.Relative));
+            }
         }
 
         private void ScreenTap(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -76,12 +93,12 @@ namespace QuranPhone
         {
             base.OnNavigatedFrom(e);
             this.DataContext = null;
-            foreach (var page in App.DetailsViewModel.Pages)
+            foreach (var page in App.TranslationViewModel.Pages)
             {
                 page.ImageSource = null;
             }
-            App.DetailsViewModel.Pages.Clear();
-            App.DetailsViewModel.CurrentPageIndex = -1;
+            App.TranslationViewModel.Pages.Clear();
+            App.TranslationViewModel.CurrentPageIndex = -1;
         }
     }
 }

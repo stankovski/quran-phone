@@ -31,13 +31,20 @@ namespace QuranPhone.ViewModels
             }
         }
 
-        /// <summary>
-        /// Creates and adds a few ItemViewModel objects into the Items collection.
-        /// </summary>
-        public override void LoadData()
+        private bool showTranslation;
+        public bool ShowTranslation
         {
-            this.CurrentPageIndex = PAGES_TO_PRELOAD;
-            this.IsDataLoaded = true;
+            get { return showTranslation; }
+            set
+            {
+                if (value == showTranslation)
+                    return;
+
+                showTranslation = value;
+                changePageShowTranslations();
+
+                base.OnPropertyChanged(() => ShowTranslation);
+            }
         }
 
         #region Private Methods
@@ -49,7 +56,7 @@ namespace QuranPhone.ViewModels
                 for (int i = CurrentPageNumber - PAGES_TO_PRELOAD; i <= CurrentPageNumber + PAGES_TO_PRELOAD; i++)
                 {
                     var page = (i <= 0 ? Constants.PAGES_LAST + i : i);
-                    Pages.Add(new PageViewModel(page));
+                    Pages.Add(new PageViewModel(page) { ShowTranslation = this.ShowTranslation });
                 }
             }
 
@@ -59,19 +66,31 @@ namespace QuranPhone.ViewModels
             {
                 var firstPage = Pages[0].PageNumber;
                 var newPage = (firstPage - 1 <= 0 ? Constants.PAGES_LAST + firstPage - 1 : firstPage - 1);
-                Pages.Insert(0, new PageViewModel(newPage));
+                Pages.Insert(0, new PageViewModel(newPage) { ShowTranslation = this.ShowTranslation });
                 CurrentPageIndex++;
             }
             else if (CurrentPageIndex == Pages.Count - PAGES_TO_PRELOAD)
             {
                 var lastPage = Pages[Pages.Count - 1].PageNumber;
                 var newPage = (lastPage + 1 >= Constants.PAGES_LAST ? Constants.PAGES_LAST - lastPage - 1 : lastPage + 1);
-                Pages.Add(new PageViewModel(newPage));
+                Pages.Add(new PageViewModel(newPage) { ShowTranslation = this.ShowTranslation });
             }
 
-            populatePage(CurrentPageIndex, false);
-            populatePage(CurrentPageIndex + 1, false);
-            populatePage(CurrentPageIndex - 1, false);
+            Pages[CurrentPageIndex].ImageSource = QuranFileUtils.GetImageFromWeb(QuranFileUtils.GetPageFileName(Pages[CurrentPageIndex].PageNumber));
+            Pages[CurrentPageIndex + 1].ImageSource = QuranFileUtils.GetImageFromWeb(QuranFileUtils.GetPageFileName(Pages[CurrentPageIndex + 1].PageNumber));
+            Pages[CurrentPageIndex - 1].ImageSource = QuranFileUtils.GetImageFromWeb(QuranFileUtils.GetPageFileName(Pages[CurrentPageIndex - 1].PageNumber));
+
+            Pages[CurrentPageIndex + PAGES_TO_PRELOAD].ImageSource = null;
+            Pages[CurrentPageIndex + PAGES_TO_PRELOAD].Verses.Clear();
+            Pages[CurrentPageIndex - PAGES_TO_PRELOAD].ImageSource = null;
+            Pages[CurrentPageIndex - PAGES_TO_PRELOAD].Verses.Clear();
+
+            if (!string.IsNullOrEmpty(this.TranslationFile) && this.translationDatabases.ContainsKey(this.TranslationFile))
+            {
+                populatePage(CurrentPageIndex, false);
+                populatePage(CurrentPageIndex + 1, false);
+                populatePage(CurrentPageIndex - 1, false);
+            }
         }
 
         protected override void OnDispose()
@@ -82,6 +101,14 @@ namespace QuranPhone.ViewModels
                 translationDatabases[db].Dispose();
             }
             translationDatabases.Clear();
+        }
+
+        private void changePageShowTranslations()
+        {
+            foreach (var page in Pages)
+            {
+                page.ShowTranslation = this.ShowTranslation;
+            }
         }
 
         private void populatePage(int pageIndex, bool force)

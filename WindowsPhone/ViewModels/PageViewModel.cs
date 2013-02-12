@@ -12,7 +12,6 @@ namespace QuranPhone.ViewModels
     {
         public PageViewModel()
         {
-            QuranScreenInfo screen = QuranScreenInfo.GetInstance();
             Verses = new ObservableCollection<VerseViewModel>();
         }
 
@@ -39,6 +38,21 @@ namespace QuranPhone.ViewModels
             }
         }
 
+        private bool showTranslation;
+        public bool ShowTranslation
+        {
+            get { return showTranslation; }
+            set
+            {
+                if (value == showTranslation)
+                    return;
+
+                showTranslation = value;
+
+                base.OnPropertyChanged(() => ShowTranslation);
+            }
+        }
+
         private Uri imageSource;
         public Uri ImageSource
         {
@@ -58,6 +72,7 @@ namespace QuranPhone.ViewModels
         {
             base.OnDispose();
             this.ImageSource = null;
+            this.Verses.Clear();
         }
     }
 }

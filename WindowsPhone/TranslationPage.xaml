@@ -28,29 +28,7 @@
         </phone:Pivot.HeaderTemplate>
         <phone:Pivot.ItemTemplate>
             <DataTemplate>
-                <phone:LongListSelector Margin="-12,-35,-12,0" ItemsSource="{Binding Verses}"
-                                        FlowDirection="LeftToRight">
-                    <phone:LongListSelector.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel>
-                                <Border BorderThickness="0,2" Margin="0, 10" BorderBrush="{StaticResource DarkBlueText}"
-                                        Visibility="{Binding IsTitle, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                    <TextBlock Foreground="{StaticResource DarkBlueText}" Style="{StaticResource BlueHeader}" Text="{Binding Text}" TextWrapping="Wrap"/>
-                                </Border>
-                                <StackPanel Orientation="Horizontal" Margin="10, 0" 
-                                            Visibility="{Binding IsTitle, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
-                                    <TextBlock Text="{Binding SurahNumber}" Style="{StaticResource BlackSmallHeader}" FontWeight="Bold"/>
-                                    <TextBlock Style="{StaticResource BlackSmallHeader}" FontWeight="Bold">:</TextBlock>
-                                    <TextBlock Text="{Binding VerseNumber}" Style="{StaticResource BlackSmallHeader}" FontWeight="Bold"/>
-                                </StackPanel>
-                                <TextBlock Text="{Binding QuranText}" Style="{StaticResource BlackSmallText}" Margin="10, 10, 10, 10" TextWrapping="Wrap" 
-                                           Visibility="{Binding QuranTextExists, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                <TextBlock Text="{Binding Text}" Style="{StaticResource BlackSmallText}" Margin="10, 10, 10, 35" TextWrapping="Wrap" 
-                                           Visibility="{Binding IsTitle, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}"/>                                
-                            </StackPanel>
-                        </DataTemplate>
-                    </phone:LongListSelector.ItemTemplate>
-                </phone:LongListSelector>
+                <myui:TranslationView DataContext="{Binding}" Margin="-12,-35,-12,0"/>
             </DataTemplate>
         </phone:Pivot.ItemTemplate>
     </phone:Pivot>

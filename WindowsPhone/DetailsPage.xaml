@@ -12,9 +12,12 @@
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
-    SupportedOrientations="PortraitOrLandscape" Orientation="Landscape" 
+    SupportedOrientations="PortraitOrLandscape" Orientation="Portrait" 
     BackKeyPress="OnBackNavigation"
     shell:SystemTray.IsVisible="False">
+    <phone:PhoneApplicationPage.Resources>
+        <myui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </phone:PhoneApplicationPage.Resources>
     <Grid>
         <phone:Pivot ItemsSource="{Binding Pages}" Name="MainPivot"
                  Background="{StaticResource LightBackground}" FlowDirection="RightToLeft"
@@ -27,7 +30,11 @@
                 <DataTemplate>
                     <ScrollViewer Margin="-10,-40,-10,0" HorizontalAlignment="Stretch">
                         <Grid>
-                            <myui:CachedImage ImageSource="{Binding ImageSource}" PageNumber="{Binding PageNumber}" MouseLeftButtonUp="ScreenTap"/>
+                            <myui:CachedImage ImageSource="{Binding ImageSource}" PageNumber="{Binding PageNumber}" 
+                                              MouseLeftButtonUp="ScreenTap" 
+                                              Visibility="{Binding ShowTranslation, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}"/>
+                            <myui:TranslationView DataContext="{Binding}"
+                                              Visibility="{Binding ShowTranslation, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                         </Grid>
                     </ScrollViewer>
                 </DataTemplate>
