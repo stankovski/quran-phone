@@ -1,9 +1,12 @@
 * --Navigation--
-* Memory leak (after a lot of navigation)
-* Fix jerks when navigating backwards
+* --Memory leak (after a lot of navigation)--
+* --Fix jerks when navigating backwards--
 * Settings page
 * Page transitions
 * Downloading of all pages as zip
 * App bar
-* Fix slow translation loading
-* Tombstoning and restoring
+* --Fix slow translation loading--
+* --Tombstoning and restoring--
+* Jump to page
+* Test in light theme
+* Test in diff resolution

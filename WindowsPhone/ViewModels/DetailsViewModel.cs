@@ -11,11 +11,11 @@ using QuranPhone.Utils;
 
 namespace QuranPhone.ViewModels
 {
-    public class TranslationViewModel : ViewModelBase
+    public class DetailsViewModel : ViewModelBase
     {
         public const int PAGES_TO_PRELOAD = 2;
 
-        public TranslationViewModel()
+        public DetailsViewModel()
         {
             Pages = new ObservableCollection<PageViewModel>();
         }
@@ -111,6 +111,7 @@ namespace QuranPhone.ViewModels
             }
 
             CurrentPageNumber = Pages[CurrentPageIndex].PageNumber;
+            SettingsUtils.Set<int>(Constants.PREF_LAST_PAGE, CurrentPageNumber);
 
             if (CurrentPageIndex == PAGES_TO_PRELOAD - 1)
             {

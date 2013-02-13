@@ -15,15 +15,19 @@ namespace QuranPhone.Utils
             if (items == null || items.Count == 0) { return null; }
 
             string db = SettingsUtils.Get<string>(Constants.PREF_ACTIVE_TRANSLATION);
+            string name;
 
             bool changed = false;
             if (db == null)
             {
                 changed = true;
                 db = items[0].Filename;
+                name = items[0].Name;
             }
             else
             {
+                db = db.Split('|')[0];
+                name = db.Split('|')[1];
                 bool found = false;
                 foreach (TranslationItem item in items)
                 {
@@ -38,12 +42,13 @@ namespace QuranPhone.Utils
                 {
                     changed = true;
                     db = items[0].Filename;
+                    name = items[0].Name;
                 }
             }
 
             if (changed && db != null)
             {
-                SettingsUtils.Set<string>(Constants.PREF_ACTIVE_TRANSLATION, db);
+                SettingsUtils.Set<string>(Constants.PREF_ACTIVE_TRANSLATION, string.Join("|", db, name));
             }
 
             return db;

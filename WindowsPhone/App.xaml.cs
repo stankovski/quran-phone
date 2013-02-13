@@ -14,7 +14,7 @@ namespace QuranPhone
     public partial class App : Application
     {
         private static MainViewModel mainViewModel = null;
-        private static TranslationViewModel translationViewModel = null;
+        private static DetailsViewModel _detailsViewModel = null;
         private static TranslationsListViewModel translationsListViewModel = null;
         private static SettingsViewModel settingsViewModel = null;
 
@@ -35,18 +35,18 @@ namespace QuranPhone
         }
 
         /// <summary>
-        /// A static TranslationViewModel used by the views to bind against.
+        /// A static DetailsViewModel used by the views to bind against.
         /// </summary>
-        /// <returns>The TranslationViewModel object.</returns>
-        public static TranslationViewModel TranslationViewModel
+        /// <returns>The DetailsViewModel object.</returns>
+        public static DetailsViewModel DetailsViewModel
         {
             get
             {
                 // Delay creation of the view model until necessary
-                if (translationViewModel == null)
-                    translationViewModel = new TranslationViewModel();
+                if (_detailsViewModel == null)
+                    _detailsViewModel = new DetailsViewModel();
 
-                return translationViewModel;
+                return _detailsViewModel;
             }
         }
 

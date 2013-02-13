@@ -1,8 +1,8 @@
-﻿<vm:TranslationViewModel
+﻿<vm:DetailsViewModel
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:vm="clr-namespace:QuranPhone.ViewModels">
-    <vm:TranslationViewModel.Pages>
+    <vm:DetailsViewModel.Pages>
         <vm:PageViewModel>
             <vm:PageViewModel.Verses>
                 <vm:VerseViewModel IsTitle="True" Text="Surat Aal Imran"/>
@@ -12,5 +12,5 @@
                                    QuranText="أَلَمْ تَرَ إِلَى الَّذِينَ أُوتُوا نَصِيبًا مِنَ الْكِتَابِ يُدْعَوْنَ إِلَىٰ كِتَابِ اللَّهِ لِيَحْكُمَ بَيْنَهُمْ ثُمَّ يَتَوَلَّىٰ فَرِيقٌ مِنْهُمْ وَهُمْ مُعْرِضُونَ"/>
             </vm:PageViewModel.Verses>
         </vm:PageViewModel>
-    </vm:TranslationViewModel.Pages>
-</vm:TranslationViewModel>
+    </vm:DetailsViewModel.Pages>
+</vm:DetailsViewModel>

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using QuranPhone.Data;
+using QuranPhone.Utils;
 
 namespace QuranPhone.ViewModels
 {
@@ -25,7 +22,11 @@ namespace QuranPhone.ViewModels
 
         public void LoadData()
         {
-            //
+            var translation = SettingsUtils.Get<string>(Constants.PREF_ACTIVE_TRANSLATION);
+            if (!string.IsNullOrEmpty(translation) && translation.Contains("|"))
+                ActiveTranslation = translation.Split('|')[1];
+            else
+                ActiveTranslation = "None";
         }
     }
 }

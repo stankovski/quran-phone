@@ -174,7 +174,7 @@
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\PageViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
-    <Compile Include="ViewModels\TranslationViewModel.cs" />
+    <Compile Include="ViewModels\DetailsViewModel.cs" />
     <Compile Include="ViewModels\TranslationsListViewModel.cs" />
     <Compile Include="ViewModels\VerseViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
@@ -197,6 +197,10 @@
       <SubType>Designer</SubType>
     </DesignData>
     <DesignData Include="SampleData\TranslationsListViewModelSampleData.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </DesignData>
+    <DesignData Include="SampleData\SettingsViewModelSampleData.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </DesignData>

@@ -41,7 +41,7 @@ namespace QuranPhone
             if (translation == null)
                 return;
 
-            SettingsUtils.Set(Constants.PREF_ACTIVE_TRANSLATION, translation.FileName);
+            SettingsUtils.Set(Constants.PREF_ACTIVE_TRANSLATION, string.Join("|", translation.FileName, translation.Name));
             SettingsUtils.Set(Constants.PREF_SHOW_TRANSLATION, true);
             NavigationService.GoBack();
         }

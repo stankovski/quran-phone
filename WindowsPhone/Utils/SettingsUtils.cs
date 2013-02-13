@@ -83,6 +83,7 @@ namespace QuranPhone.Utils
                 IsolatedStorageSettings.ApplicationSettings.Add(key, value);
             else
                 IsolatedStorageSettings.ApplicationSettings[key] = value;
+            Save();
         }
 
         public static void Save()
