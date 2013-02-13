@@ -14,7 +14,6 @@ namespace QuranPhone
     public partial class App : Application
     {
         private static MainViewModel mainViewModel = null;
-        private static DetailsViewModel detailsViewModel = null;
         private static TranslationViewModel translationViewModel = null;
         private static TranslationsListViewModel translationsListViewModel = null;
         private static SettingsViewModel settingsViewModel = null;
@@ -32,22 +31,6 @@ namespace QuranPhone
                     mainViewModel = new MainViewModel();
 
                 return mainViewModel;
-            }
-        }
-
-        /// <summary>
-        /// A static DetailsViewModel used by the views to bind against.
-        /// </summary>
-        /// <returns>The DetailsViewModel object.</returns>
-        public static DetailsViewModel DetailsViewModel
-        {
-            get
-            {
-                // Delay creation of the view model until necessary
-                if (detailsViewModel == null)
-                    detailsViewModel = new DetailsViewModel();
-
-                return detailsViewModel;
             }
         }
 
