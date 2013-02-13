@@ -35,7 +35,6 @@
 
             <!--TitlePanel contains the name of the application and page title-->
             <StackPanel Grid.Row="0" Margin="12,17,0,28">
-                <myui:CommonHeader Grid.Row="0" Margin="12,0,0,0" Name="header"/>
                 <TextBlock Text="{Binding Path=LocalizedResources.translations, Source={StaticResource LocalizedStrings}}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
             </StackPanel>
             <ProgressBar Grid.Row="0" VerticalAlignment="Top" Visibility="{Binding IsDataLoaded, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}" IsIndeterminate="True"/>

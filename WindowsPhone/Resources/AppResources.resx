@@ -545,4 +545,7 @@
   <data name="downloaded_translations" xml:space="preserve">
     <value>Downloaded translations</value>
   </data>
+  <data name="settings" xml:space="preserve">
+    <value>settings</value>
+  </data>
 </root>

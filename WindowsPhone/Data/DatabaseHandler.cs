@@ -39,11 +39,6 @@ namespace QuranPhone.Data
             catch (Exception) { return false; }
         }
 
-        public List<QuranAyah> GetVerses(int sura, int minAyah, int maxAyah)
-        {
-            return GetVerses(sura, minAyah, maxAyah);
-        }
-
         public int GetSchemaVersion()
         {
             int version = 1;

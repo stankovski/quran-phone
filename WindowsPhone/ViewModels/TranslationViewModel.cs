@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using QuranPhone.Resources;
-using QuranPhone.Data;
-using System.Windows.Controls;
+﻿using QuranPhone.Data;
 using QuranPhone.Utils;
-using QuranPhone.UI;
 using QuranPhone.Common;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace QuranPhone.ViewModels
 {
     public class TranslationViewModel : DetailsViewModel
     {
-        private Dictionary<string, DatabaseHandler> translationDatabases = new Dictionary<string, DatabaseHandler>();
+        private readonly Dictionary<string, DatabaseHandler> translationDatabases = new Dictionary<string, DatabaseHandler>();
 
         private string translationFile;
         public string TranslationFile
@@ -49,7 +44,7 @@ namespace QuranPhone.ViewModels
 
         #region Private Methods
         //Load only several pages
-        protected override void UpdatePages()
+        public override void UpdatePages()
         {
             if (Pages.Count == 0)
             {
@@ -111,7 +106,7 @@ namespace QuranPhone.ViewModels
             }
         }
 
-        private void populatePage(int pageIndex, bool force)
+        private async void populatePage(int pageIndex, bool force)
         {
             var pageModel = Pages[pageIndex];
             if (!force && pageModel.Verses.Count > 0)
@@ -119,7 +114,7 @@ namespace QuranPhone.ViewModels
 
             pageModel.Verses.Clear();
             var db = translationDatabases[this.TranslationFile];
-            List<QuranAyah> verses = db.GetVerses(pageModel.PageNumber);
+            List<QuranAyah> verses = await Task.Run(() => db.GetVerses(pageModel.PageNumber));
             List<QuranAyah> versesArabic = null;
 
             //if (SettingsUtils.Get<bool>(Constants.PREF_SHOW_ARABIC_IN_TRANSLATION)) 

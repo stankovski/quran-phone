@@ -11,7 +11,7 @@ namespace QuranPhone.ViewModels
 {
     public class DetailsViewModel : ViewModelBase
     {
-        protected const int PAGES_TO_PRELOAD = 2;
+        public const int PAGES_TO_PRELOAD = 2;
 
         public DetailsViewModel()
         {
@@ -67,7 +67,7 @@ namespace QuranPhone.ViewModels
 
         #region Private Methods
         //Load only several pages
-        protected virtual void UpdatePages()
+        public virtual void UpdatePages()
         {
             if (Pages.Count == 0)
             {

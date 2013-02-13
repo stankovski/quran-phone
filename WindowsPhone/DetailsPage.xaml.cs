@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
-using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
-using QuranPhone.Resources;
 using QuranPhone.ViewModels;
 using QuranPhone.Utils;
 using QuranPhone.Data;
 using System.Globalization;
+using Microsoft.Phone.Controls;
 
 namespace QuranPhone
 {
@@ -27,19 +22,17 @@ namespace QuranPhone
         // When page is navigated to set data context to selected item in list
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            string selectedPage = "";
-            string selectedTranslation = "";
+            string selectedPage;
             if (NavigationContext.QueryString.TryGetValue("page", out selectedPage))
             {
                 int page = int.Parse(selectedPage);
                 App.TranslationViewModel.CurrentPageNumber = page;
-
-                NavigationContext.QueryString.TryGetValue("translation", out selectedTranslation);
-                if (!string.IsNullOrEmpty(selectedTranslation))
+                //Try extract translation from query
+                var translation = SettingsUtils.Get<string>(Constants.PREF_ACTIVE_TRANSLATION);
+                if (!string.IsNullOrEmpty(translation))
                 {
-                    selectedTranslation = SettingsUtils.Get<string>(Constants.PREF_ACTIVE_TRANSLATION);
-                    App.TranslationViewModel.TranslationFile = selectedTranslation;
-                    App.TranslationViewModel.ShowTranslation = true;
+                    App.TranslationViewModel.TranslationFile = translation;
+                    App.TranslationViewModel.ShowTranslation = SettingsUtils.Get<bool>(Constants.PREF_SHOW_TRANSLATION);
                 }
                 else
                 {
@@ -49,56 +42,69 @@ namespace QuranPhone
 
             App.TranslationViewModel.LoadData();
             DataContext = App.TranslationViewModel;
+            radSlideView.SelectedItem = App.TranslationViewModel.Pages[DetailsViewModel.PAGES_TO_PRELOAD];
+            radSlideView.SelectionChanged += PageFlipped;
         }
 
-        //private void Pivot_LoadingItem(object sender, PivotItemEventArgs e)
-        //{
-        //    var pageModel = (PageViewModel)e.Item.DataContext;
-        //    pageModel.ImageSource = QuranFileUtils.GetImageFromWeb(QuranFileUtils.GetPageFileName(pageModel.PageNumber));
-        //}
+        private void PageFlipped(object sender, SelectionChangedEventArgs e)
+        {
+            App.TranslationViewModel.CurrentPageIndex = App.TranslationViewModel.Pages.IndexOf((PageViewModel)radSlideView.SelectedItem);
+        }        
+
+        #region Menu Events
 
         private void Translation_Click(object sender, EventArgs e)
         {
-            // Navigate to the translation page
             int pageNumber = ((TranslationViewModel)DataContext).CurrentPageNumber;
-            var translation = SettingsUtils.Get<string>(Constants.PREF_ACTIVE_TRANSLATION);
-            if (!string.IsNullOrEmpty(translation))
+            if (!string.IsNullOrEmpty(App.TranslationViewModel.TranslationFile))
             {
+                App.TranslationViewModel.UpdatePages();
                 App.TranslationViewModel.ShowTranslation = !App.TranslationViewModel.ShowTranslation;
             }
             else
             {
-                NavigationService.Navigate(new Uri(string.Format(CultureInfo.InvariantCulture, "/TranslationListPage.xaml?page={0}", pageNumber), UriKind.Relative));
+                NavigationService.Navigate(new Uri("/TranslationListPage.xaml", UriKind.Relative));
             }
+        }
+
+        private void Settings_Click(object sender, EventArgs e)
+        {
+            int pageNumber = ((TranslationViewModel)DataContext).CurrentPageNumber;
+            NavigationService.Navigate(new Uri("/SettingsPage.xaml", UriKind.Relative));
         }
 
         private void ScreenTap(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             this.ApplicationBar.IsVisible = false;
-            menuToggleButton.Visibility = System.Windows.Visibility.Visible;
+            menuToggleButton.Visibility = Visibility.Visible;
         }
 
         private void MenuToggle(object sender, RoutedEventArgs e)
         {
             this.ApplicationBar.IsVisible = true;
-            menuToggleButton.Visibility = System.Windows.Visibility.Collapsed;
+            menuToggleButton.Visibility = Visibility.Collapsed;
         }
 
-        private void OnBackNavigation(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative));
-        }
+        #endregion Menu Events
 
-        protected override void OnNavigatedFrom(System.Windows.Navigation.NavigationEventArgs e)
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             base.OnNavigatedFrom(e);
             this.DataContext = null;
-            foreach (var page in App.TranslationViewModel.Pages)
+            foreach (var page in App.DetailsViewModel.Pages)
             {
                 page.ImageSource = null;
             }
             App.TranslationViewModel.Pages.Clear();
             App.TranslationViewModel.CurrentPageIndex = -1;
+            radSlideView.SelectionChanged -= PageFlipped;            
         }
+
+#if DEBUG
+        ~DetailsPage()
+        {
+            Console.WriteLine("Destroying DetailsPage");
+        }
+#endif
     }
 }

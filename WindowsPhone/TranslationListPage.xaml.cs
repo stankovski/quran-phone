@@ -18,28 +18,14 @@ namespace QuranPhone
 {
     public partial class TranslationListPage : PhoneApplicationPage
     {
-        private int lastPage = 1;
-
         public TranslationListPage()
         {
             InitializeComponent();
-            header.NavigationRequest += header_NavigationRequest;
-        }
-
-        void header_NavigationRequest(object sender, NavigationEventArgs e)
-        {
-            NavigationService.Navigate(e.Uri);
         }
 
         // When page is navigated to set data context to selected item in list
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            string selectedPage = "";
-            if (NavigationContext.QueryString.TryGetValue("page", out selectedPage))
-            {
-                lastPage = int.Parse(selectedPage);                
-            }
-            
             if (DataContext == null)
             {
                 DataContext = App.TranslationsListViewModel;                
@@ -55,9 +41,9 @@ namespace QuranPhone
             if (translation == null)
                 return;
 
-            SettingsUtils.Set<string>(Constants.PREF_ACTIVE_TRANSLATION, translation.FileName);
-            NavigationService.Navigate(new Uri(string.Format(CultureInfo.InvariantCulture, "/DetailsPage.xaml?page={0}&translation={1}", 
-                lastPage, translation.FileName), UriKind.Relative));
+            SettingsUtils.Set(Constants.PREF_ACTIVE_TRANSLATION, translation.FileName);
+            SettingsUtils.Set(Constants.PREF_SHOW_TRANSLATION, true);
+            NavigationService.GoBack();
         }
 
         protected override void OnNavigatedFrom(System.Windows.Navigation.NavigationEventArgs e)

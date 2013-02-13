@@ -6,6 +6,7 @@
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:telerikPrimitives="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls.Primitives"
     d:DataContext="{d:DesignData SampleData/DetailsViewModelSampleData.xaml}"
     mc:Ignorable="d"
     xmlns:myui="clr-namespace:QuranPhone.UI"
@@ -13,13 +14,29 @@
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="PortraitOrLandscape" Orientation="Portrait" 
-    BackKeyPress="OnBackNavigation"
-    shell:SystemTray.IsVisible="False">
+    shell:SystemTray.IsVisible="False"
+    MouseLeftButtonUp="ScreenTap">
     <phone:PhoneApplicationPage.Resources>
         <myui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </phone:PhoneApplicationPage.Resources>
-    <Grid>
-        <phone:Pivot ItemsSource="{Binding Pages}" Name="MainPivot"
+    <Grid Background="{StaticResource LightBackground}">
+        <telerikPrimitives:RadSlideView x:Name="radSlideView" ItemsSource="{Binding Pages}" 
+                                        ItemRealizationMode="ViewportItem">
+            <telerikPrimitives:RadSlideView.ItemTemplate>
+                <DataTemplate>
+                    <ScrollViewer HorizontalAlignment="Stretch">
+                        <Grid>
+                            <myui:CachedImage ImageSource="{Binding ImageSource}" PageNumber="{Binding PageNumber}" 
+                                              Visibility="{Binding ShowTranslation, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}"/>
+                            <myui:TranslationView DataContext="{Binding}" 
+                                                  Visibility="{Binding ShowTranslation, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        </Grid>
+                    </ScrollViewer>
+                </DataTemplate>
+            </telerikPrimitives:RadSlideView.ItemTemplate>
+        </telerikPrimitives:RadSlideView>
+        
+        <!--<phone:Pivot ItemsSource="{Binding Pages}" Name="MainPivot"
                  Background="{StaticResource LightBackground}" FlowDirection="RightToLeft"
                  SelectedIndex="{Binding CurrentPageIndex, Mode=TwoWay}">
             <phone:Pivot.HeaderTemplate>
@@ -39,7 +56,7 @@
                     </ScrollViewer>
                 </DataTemplate>
             </phone:Pivot.ItemTemplate>
-        </phone:Pivot>
+        </phone:Pivot>-->
         <Button VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0" Width="100" Style="{StaticResource ChromelessButtonStyle}" Click="MenuToggle" Name="menuToggleButton">
             <StackPanel Orientation="Horizontal" Background="Transparent" Height="50" Width="70">
                 <Ellipse Fill="{StaticResource DarkBlueText}" Width="8" Height="8" Margin="5"/>
@@ -55,7 +72,7 @@
             <shell:ApplicationBarIconButton IconUri="/Assets/Images/appbar.globe.png" 
                                             Text="Translate" Click="Translation_Click"/>
             <shell:ApplicationBar.MenuItems>
-                <shell:ApplicationBarMenuItem Text="MenuItem 1"/>
+                <shell:ApplicationBarMenuItem Text="Settings" Click="Settings_Click"/>
                 <shell:ApplicationBarMenuItem Text="MenuItem 2"/>
             </shell:ApplicationBar.MenuItems>
         </shell:ApplicationBar>

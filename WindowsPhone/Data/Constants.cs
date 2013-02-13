@@ -37,6 +37,8 @@ namespace QuranPhone.Data
         public const String PREF_LANDSCAPE_ORIENTATION = "landscapeOrientation";
         public const String PREF_TRANSLATION_TEXT_SIZE = "translationTextSize";
         public const String PREF_ACTIVE_TRANSLATION = "activeTranslation";
+        [DefaultValue(false)]
+        public const String PREF_SHOW_TRANSLATION = "showTranslation";
         public const String PREF_RESHAPE_ARABIC = "reshapeArabic";
         [DefaultValue(true)]
         public const String PREF_SHOW_ARABIC_IN_TRANSLATION = "showArabicInTranslation";
