@@ -114,16 +114,16 @@ namespace QuranPhone.ViewModels
 
             if (CurrentPageIndex == PAGES_TO_PRELOAD - 1)
             {
-                var lastPage = Pages[Pages.Count - 1].PageNumber;
-                var newPage = (lastPage + 1 >= Constants.PAGES_LAST ? Constants.PAGES_LAST - lastPage - 1 : lastPage + 1);
-                Pages.Add(new PageViewModel(newPage) { ShowTranslation = this.ShowTranslation });
+                var firstPage = Pages[0].PageNumber;
+                var newPage = (firstPage + 1 >= Constants.PAGES_LAST ? Constants.PAGES_LAST - firstPage - 1 : firstPage + 1);
+                Pages.Insert(0, new PageViewModel(newPage) { ShowTranslation = this.ShowTranslation });
+                currentPageIndex++;
             }
             else if (CurrentPageIndex == Pages.Count - PAGES_TO_PRELOAD)
             {
-                var firstPage = Pages[0].PageNumber;
-                var newPage = (firstPage - 1 <= 0 ? Constants.PAGES_LAST + firstPage - 1 : firstPage - 1);
-                Pages.Insert(0, new PageViewModel(newPage) { ShowTranslation = this.ShowTranslation });
-                CurrentPageIndex++;
+                var lastPage = Pages[Pages.Count - 1].PageNumber;
+                var newPage = (lastPage - 1 <= 0 ? Constants.PAGES_LAST + lastPage - 1 : lastPage - 1);
+                Pages.Add(new PageViewModel(newPage) { ShowTranslation = this.ShowTranslation });
             }
 
             loadPage(CurrentPageIndex, false);
