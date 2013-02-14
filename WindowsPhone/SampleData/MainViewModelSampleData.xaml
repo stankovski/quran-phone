@@ -18,5 +18,7 @@
         <vm:ItemViewModel Id="1" Title="Bismillah" Details="Makki - 7 verses" PageNumber="1" ItemType="Sura" Image="/Assets/Images/hizb_full.png"/>
         <vm:ItemViewModel Title="Bismillah" Details="Makki - 7 verses" PageNumber="1" ItemType="Sura" Image="/Assets/Images/hizb_quarter.png"/>
     </vm:MainViewModel.Juz>
-
+    <vm:MainViewModel.QuranData>
+        <vm:DownloadableViewModelBase IsDownloading="True" Progress="50"/>
+    </vm:MainViewModel.QuranData>
 </vm:MainViewModel>

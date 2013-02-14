@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
+using System.IO;
 using QuranPhone.Resources;
 using QuranPhone.Data;
-using System.Windows.Controls;
+using QuranPhone.Utils;
 
 namespace QuranPhone.ViewModels
 {
@@ -15,18 +15,42 @@ namespace QuranPhone.ViewModels
             this.Juz = new ObservableCollection<ItemViewModel>();
             this.Bookmarks = new ObservableCollection<ItemViewModel>();
             this.Tags = new ObservableCollection<ItemViewModel>();
+            QuranData = new DownloadableViewModelBase();
+            // Is download needed
+            if (QuranFileUtils.NoMediaFileExists())
+            {
+                QuranData.ServerUrl = QuranFileUtils.GetZipFileUrl();
+                QuranData.FileName = Path.GetFileName(QuranData.ServerUrl);
+                QuranData.LocalUrl = Path.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false, true), QuranData.FileName);
+            }
         }
 
+        #region Properties
         public ObservableCollection<ItemViewModel> Surahs { get; private set; }
         public ObservableCollection<ItemViewModel> Juz { get; private set; }
         public ObservableCollection<ItemViewModel> Bookmarks { get; private set; }
         public ObservableCollection<ItemViewModel> Tags { get; private set; }
+        public bool IsDataLoaded { get; set; }
 
-        public bool IsDataLoaded
+        public DownloadableViewModelBase QuranData { get; private set; }
+
+        private bool isInstalling;
+        public bool IsInstalling
         {
-            get;
-            private set;
+            get { return isInstalling; }
+            set
+            {
+                if (value == isInstalling)
+                    return;
+
+                isInstalling = value;
+
+                base.OnPropertyChanged(() => IsInstalling);
+            }
         }
+        #endregion Properties
+
+        #region Public methods
 
         /// <summary>
         /// Creates and adds a few ItemViewModel objects into the Items collection.
@@ -39,8 +63,16 @@ namespace QuranPhone.ViewModels
 
             this.IsDataLoaded = true;
         }
+        
+        public void Download()
+        {
+            if (QuranData.DownloadCommand.CanExecute(null))
+                QuranData.DownloadCommand.Execute(null);
+        }
 
-        #region Private Methods
+        #endregion Public methods
+
+        #region Private methods
         private void loadSuraList()
         {
             int sura = 1;

@@ -16,9 +16,10 @@ namespace QuranPhone.ViewModels
         {
             this.IsDataLoaded = false;
             this.AvailableTranslations = new ObservableCollection<ObservableTranslationItem>();
-            this.AvailableTranslations.CollectionChanged += AvailableTranslations_CollectionChanged;
+            this.AvailableTranslations.CollectionChanged += AvailableTranslationsCollectionChanged;
         }
 
+        #region Properties
         public ObservableCollection<ObservableTranslationItem> AvailableTranslations { get; private set; }
 
         private bool isDataLoaded;
@@ -50,7 +51,9 @@ namespace QuranPhone.ViewModels
                 base.OnPropertyChanged(() => AnyTranslationsDownloaded);
             }
         }
-        
+        #endregion Properties
+
+        #region Public methods
         /// <summary>
         /// Creates and adds a few ItemViewModel objects into the Items collection.
         /// </summary>
@@ -66,9 +69,10 @@ namespace QuranPhone.ViewModels
             
             this.IsDataLoaded = true;
         }
+        #endregion Public methods
 
-        #region Private Methods
-        void AvailableTranslations_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        #region Event handlers
+        void AvailableTranslationsCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add ||
                 e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)

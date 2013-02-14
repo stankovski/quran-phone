@@ -13,6 +13,7 @@ namespace QuranPhone.ViewModels
             this.QuranTextExists = false;
         }
 
+        #region Properties
         private int surahNumber;
         public int SurahNumber
         {
@@ -105,5 +106,6 @@ namespace QuranPhone.ViewModels
                 base.OnPropertyChanged(() => QuranTextExists);
             }
         }
+        #endregion Properties
     }
 }

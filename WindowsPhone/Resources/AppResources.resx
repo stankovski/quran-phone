@@ -548,4 +548,13 @@
   <data name="settings" xml:space="preserve">
     <value>settings</value>
   </data>
+  <data name="loading_message" xml:space="preserve">
+    <value>Loading Quran data...</value>
+  </data>
+  <data name="downloadPrompt" xml:space="preserve">
+    <value>For optimal performance, some files must be downloaded.  If you choose not to do this now, each page will take significantly longer to load. Would you like to download the required files now?</value>
+  </data>
+  <data name="downloadPrompt_title" xml:space="preserve">
+    <value>Download Required Files?</value>
+  </data>
 </root>

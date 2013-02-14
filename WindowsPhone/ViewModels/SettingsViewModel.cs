@@ -5,6 +5,7 @@ namespace QuranPhone.ViewModels
 {
     public class SettingsViewModel : ViewModelBase
     {
+        #region Properties
         private string activeTranslation;
         public string ActiveTranslation
         {
@@ -19,6 +20,7 @@ namespace QuranPhone.ViewModels
                 base.OnPropertyChanged(() => ActiveTranslation);
             }
         }
+        #endregion Properties
 
         public void LoadData()
         {

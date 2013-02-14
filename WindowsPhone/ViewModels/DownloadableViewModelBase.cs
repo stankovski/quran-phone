@@ -13,13 +13,13 @@ namespace QuranPhone.ViewModels
     public class DownloadableViewModelBase : ViewModelBase
     {
         protected BackgroundTransferRequest downloadRequest;
-        private string tempPath;
 
         public DownloadableViewModelBase()
         {
-            Downloading = false;
+            IsDownloading = false;
         }
 
+        #region Properties
         private string localUrl;
         public string LocalUrl
         {
@@ -36,6 +36,21 @@ namespace QuranPhone.ViewModels
             }
         }
 
+        private string tempUrl;
+        public string TempUrl
+        {
+            get { return tempUrl; }
+            private set
+            {
+                if (value == tempUrl)
+                    return;
+
+                tempUrl = value;
+
+                base.OnPropertyChanged(() => TempUrl);
+            }
+        }
+
         private string filename;
         public string FileName
         {
@@ -46,7 +61,7 @@ namespace QuranPhone.ViewModels
                     return;
 
                 filename = value;
-                tempPath = string.Format("/shared/transfers/{0}", FileName);
+                TempUrl = string.Format("/shared/transfers/{0}", FileName);
                 FinishPreviousDownload();
 
                 base.OnPropertyChanged(() => FileName);
@@ -78,18 +93,18 @@ namespace QuranPhone.ViewModels
             }
         }
 
-        private bool downloading;
-        public bool Downloading
+        private bool isDownloading;
+        public bool IsDownloading
         {
-            get { return downloading; }
+            get { return isDownloading; }
             set
             {
-                if (value == downloading)
+                if (value == isDownloading)
                     return;
 
-                downloading = value;
+                isDownloading = value;
 
-                base.OnPropertyChanged(() => Downloading);
+                base.OnPropertyChanged(() => IsDownloading);
             }
         }
 
@@ -111,9 +126,35 @@ namespace QuranPhone.ViewModels
         public bool CanDownload
         {
             get {
-                return !Downloading;            
+                return !IsDownloading;            
             }            
         }
+
+        public bool IsInTempStorage
+        {
+            get
+            {
+                if (!IsDownloading && QuranFileUtils.FileExists(this.TempUrl))
+                    return true;
+                else
+                    return false;
+            }
+        }
+
+        public bool IsDownloaded
+        {
+            get
+            {
+                if (!IsDownloading && QuranFileUtils.FileExists(this.LocalUrl))
+                    return true;
+                else
+                    return false;
+            }
+        }
+
+        #endregion Properties
+
+        #region Event handlers and commands
 
         RelayCommand downloadCommand;
         /// <summary>
@@ -138,15 +179,15 @@ namespace QuranPhone.ViewModels
         {
             if (e.Request.TransferStatus != TransferStatus.Completed && e.Request.TransferStatus == TransferStatus.None)
             {
-                Downloading = true;
+                IsDownloading = true;
             }
             else
-                Downloading = false;
+                IsDownloading = false;
             if (e.Request.TransferStatus == TransferStatus.Completed)
             {
                 if (DownloadComplete != null)
                     DownloadComplete(this, null);
-                QuranFileUtils.MoveFile(tempPath, this.LocalUrl);
+                QuranFileUtils.MoveFile(TempUrl, this.LocalUrl);
                 DownloadManager.Instance.FinalizeRequest(e.Request);
             }
         }
@@ -156,21 +197,24 @@ namespace QuranPhone.ViewModels
             this.Progress = (int)(e.Request.BytesReceived * 100 / e.Request.TotalBytesToReceive);
         }
 
+        #endregion Event handlers and commands
+
+        #region Public methods
         public void Download()
         {
             if (QuranFileUtils.FileExists(this.LocalUrl))
                 return;
-            if (QuranFileUtils.FileExists(tempPath))
-                QuranFileUtils.DeleteFile(tempPath);
+            if (QuranFileUtils.FileExists(TempUrl))
+                QuranFileUtils.DeleteFile(TempUrl);
             else
             {
-                Downloading = true;
+                IsDownloading = true;
                 if (downloadRequest != null)
                 {
                     downloadRequest.TransferProgressChanged -= TransferProgressChanged;
                     downloadRequest.TransferStatusChanged -= TransferStatusChanged;
                 }
-                downloadRequest = DownloadManager.Instance.Download(this.ServerUrl, this.tempPath);
+                downloadRequest = DownloadManager.Instance.Download(this.ServerUrl, this.TempUrl);
                 if (downloadRequest != null)
                 {
                     downloadRequest.TransferProgressChanged += TransferProgressChanged;
@@ -183,15 +227,16 @@ namespace QuranPhone.ViewModels
 
         public void FinishPreviousDownload()
         {
-            if (!string.IsNullOrEmpty(tempPath) && !string.IsNullOrEmpty(this.LocalUrl) &&
-                QuranFileUtils.FileExists(tempPath))
+            if (!string.IsNullOrEmpty(this.TempUrl) && !string.IsNullOrEmpty(this.LocalUrl) &&
+                QuranFileUtils.FileExists(this.TempUrl))
             {
 
                 if (DownloadComplete != null)
                     DownloadComplete(this, null);
-                QuranFileUtils.MoveFile(tempPath, this.LocalUrl);
+                QuranFileUtils.MoveFile(this.TempUrl, this.LocalUrl);
             }
         }
+        #endregion Public methods
 
         public event EventHandler DownloadComplete;
     }

@@ -13,21 +13,19 @@ namespace QuranPhone.ViewModels
 {
     public class DetailsViewModel : ViewModelBase
     {
-        public const int PAGES_TO_PRELOAD = 2;
+        public const int PagesToPreload = 2;
+        private readonly Dictionary<string, DatabaseHandler> translationDatabases =
+            new Dictionary<string, DatabaseHandler>();
 
         public DetailsViewModel()
         {
             Pages = new ObservableCollection<PageViewModel>();
         }
 
-        private readonly Dictionary<string, DatabaseHandler> translationDatabases =
-            new Dictionary<string, DatabaseHandler>();
-
-        private int currentPageIndex;
-        private int currentPageNumber;
-        private bool showTranslation;
+        #region Properties
+        public ObservableCollection<PageViewModel> Pages { get; private set; }
+        
         private string translationFile;
-
         public string TranslationFile
         {
             get { return translationFile; }
@@ -43,6 +41,7 @@ namespace QuranPhone.ViewModels
             }
         }
 
+        private bool showTranslation;
         public bool ShowTranslation
         {
             get { return showTranslation; }
@@ -58,8 +57,7 @@ namespace QuranPhone.ViewModels
             }
         }
 
-        public ObservableCollection<PageViewModel> Pages { get; private set; }
-
+        private int currentPageNumber;
         public int CurrentPageNumber
         {
             get { return currentPageNumber; }
@@ -73,6 +71,7 @@ namespace QuranPhone.ViewModels
             }
         }
 
+        private int currentPageIndex;
         public int CurrentPageIndex
         {
             get { return currentPageIndex; }
@@ -90,12 +89,16 @@ namespace QuranPhone.ViewModels
 
         public bool IsDataLoaded { get; protected set; }
 
+        #endregion Properties
+
+        #region Public methods
+
         /// <summary>
         ///     Creates and adds a few ItemViewModel objects into the Items collection.
         /// </summary>
         public void LoadData()
         {
-            this.CurrentPageIndex = PAGES_TO_PRELOAD;
+            this.CurrentPageIndex = PagesToPreload;
             this.IsDataLoaded = true;
         }
 
@@ -103,7 +106,7 @@ namespace QuranPhone.ViewModels
         {
             if (Pages.Count == 0)
             {
-                for (int i = CurrentPageNumber + PAGES_TO_PRELOAD; i >= CurrentPageNumber - PAGES_TO_PRELOAD; i--)
+                for (int i = CurrentPageNumber + PagesToPreload; i >= CurrentPageNumber - PagesToPreload; i--)
                 {
                     var page = (i <= 0 ? Constants.PAGES_LAST + i : i);
                     Pages.Add(new PageViewModel(page) {ShowTranslation = this.ShowTranslation});
@@ -113,14 +116,14 @@ namespace QuranPhone.ViewModels
             CurrentPageNumber = Pages[CurrentPageIndex].PageNumber;
             SettingsUtils.Set<int>(Constants.PREF_LAST_PAGE, CurrentPageNumber);
 
-            if (CurrentPageIndex == PAGES_TO_PRELOAD - 1)
+            if (CurrentPageIndex == PagesToPreload - 1)
             {
                 var firstPage = Pages[0].PageNumber;
                 var newPage = (firstPage + 1 >= Constants.PAGES_LAST ? Constants.PAGES_LAST - firstPage - 1 : firstPage + 1);
                 Pages.Insert(0, new PageViewModel(newPage) { ShowTranslation = this.ShowTranslation });
                 currentPageIndex++;
             }
-            else if (CurrentPageIndex == Pages.Count - PAGES_TO_PRELOAD)
+            else if (CurrentPageIndex == Pages.Count - PagesToPreload)
             {
                 var lastPage = Pages[Pages.Count - 1].PageNumber;
                 var newPage = (lastPage - 1 <= 0 ? Constants.PAGES_LAST + lastPage - 1 : lastPage - 1);
@@ -131,12 +134,14 @@ namespace QuranPhone.ViewModels
             loadPage(CurrentPageIndex + 1, false);
             loadPage(CurrentPageIndex - 1, false);
 
-            cleanPage(CurrentPageIndex + PAGES_TO_PRELOAD);
-            cleanPage(CurrentPageIndex - PAGES_TO_PRELOAD);
+            cleanPage(CurrentPageIndex + PagesToPreload);
+            cleanPage(CurrentPageIndex - PagesToPreload);
         }
 
-        protected void OnDispose()
+        protected override void OnDispose()
         {
+            base.OnDispose();
+
             foreach (var page in Pages)
             {
                 cleanPage(Pages.IndexOf(page));
@@ -148,6 +153,9 @@ namespace QuranPhone.ViewModels
             translationDatabases.Clear();
         }
 
+        #endregion
+
+        #region Private helper methods
         private void changePageShowTranslations()
         {
             foreach (var page in Pages)
@@ -231,5 +239,6 @@ namespace QuranPhone.ViewModels
             //return Constants.PAGES_LAST - number + 1;
             return number;
         }
+        #endregion Private helper methods
     }
 }

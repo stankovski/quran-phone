@@ -52,6 +52,7 @@ namespace QuranPhone.UI
                 imageSource.UriSource = null;
                 image.Source = null;
                 progress.Visibility = System.Windows.Visibility.Collapsed;
+                progress.IsIndeterminate = false;
             }
             else
             {

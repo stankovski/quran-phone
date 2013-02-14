@@ -8,6 +8,7 @@ using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using QuranPhone.Resources;
 using QuranPhone.ViewModels;
+using QuranPhone.Utils;
 
 namespace QuranPhone
 {
@@ -104,6 +105,9 @@ namespace QuranPhone
 
             // Language display initialization
             InitializeLanguage();
+
+            // Initialize directory
+            QuranFileUtils.MakeQuranDirectory();
 
             // Show graphics profiling information while debugging.
             if (Debugger.IsAttached)

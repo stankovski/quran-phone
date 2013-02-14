@@ -21,6 +21,7 @@ namespace QuranPhone.ViewModels
             PageNumber = page;
         }
 
+        #region Properties
         public ObservableCollection<VerseViewModel> Verses { get; private set; }
 
         private int pageNumber;
@@ -67,6 +68,8 @@ namespace QuranPhone.ViewModels
                 base.OnPropertyChanged(() => ImageSource);
             }
         }
+
+        #endregion Properties
 
         protected override void OnDispose()
         {

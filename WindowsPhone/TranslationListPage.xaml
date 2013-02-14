@@ -19,6 +19,7 @@
     
     <phone:PhoneApplicationPage.Resources>
         <myui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <myui:BooleanInversionConverter x:Key="BooleanInversionConverter"/>
     </phone:PhoneApplicationPage.Resources>
     
 
@@ -37,7 +38,8 @@
             <StackPanel Grid.Row="0" Margin="12,17,0,28">
                 <TextBlock Text="{Binding Path=LocalizedResources.translations, Source={StaticResource LocalizedStrings}}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
             </StackPanel>
-            <ProgressBar Grid.Row="0" VerticalAlignment="Top" Visibility="{Binding IsDataLoaded, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}" IsIndeterminate="True"/>
+            <ProgressBar Grid.Row="0" VerticalAlignment="Top" Visibility="{Binding IsDataLoaded, Converter={StaticResource BooleanToVisibilityConverter}, 
+                ConverterParameter=Inverse}" IsIndeterminate="{Binding IsDataLoaded, Converter={StaticResource BooleanInversionConverter}}"/>
 
             <!--ContentPanel - place additional content here-->
             <myui:ListHeader Grid.Row="1" Text="{Binding Path=LocalizedResources.downloaded_translations, Source={StaticResource LocalizedStrings}}"/>
@@ -82,7 +84,7 @@
                                 <StackPanel Grid.Column="1">
                                     <TextBlock Text="{Binding Name}" Style="{StaticResource PhoneTextLargeStyle}" TextWrapping="NoWrap"/>
                                     <TextBlock Text="{Binding Translator}" TextWrapping="Wrap" Style="{StaticResource PhoneTextSubtleStyle}"/>
-                                    <Grid Visibility="{Binding Downloading, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    <Grid Visibility="{Binding IsDownloading, Converter={StaticResource BooleanToVisibilityConverter}}">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="50"/>

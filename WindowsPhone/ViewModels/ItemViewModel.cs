@@ -1,14 +1,4 @@
-﻿using QuranPhone.UI;
-using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Navigation;
+﻿using System;
 
 namespace QuranPhone.ViewModels
 {
@@ -23,6 +13,7 @@ namespace QuranPhone.ViewModels
     
     public class ItemViewModel : ViewModelBase
     {
+        #region Properties
         private string id;
         public string Id
         {
@@ -130,5 +121,6 @@ namespace QuranPhone.ViewModels
                 base.OnPropertyChanged(() => Style);
             }
         }
+        #endregion Properties
     }
 }

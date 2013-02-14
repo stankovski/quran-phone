@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using QuranPhone.Resources;
+using QuranPhone.Utils;
 using QuranPhone.ViewModels;
 
 namespace QuranPhone
@@ -22,9 +24,6 @@ namespace QuranPhone
             // Set the data context of the LongListSelector control to the sample data
             DataContext = App.MainViewModel;
             header.NavigationRequest += header_NavigationRequest;
-
-            // Sample code to localize the ApplicationBar
-            //BuildLocalizedApplicationBar();
         }
 
         void header_NavigationRequest(object sender, NavigationEventArgs e)
@@ -43,6 +42,50 @@ namespace QuranPhone
             {
                 App.MainViewModel.LoadData();
             }
+            // Show prompt to download content if nomedia file exists
+            if (QuranFileUtils.HaveAllImages())
+            {
+                try
+                {
+                    DownloadAndExtractQuranData();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("failed to download quran data: " + ex.Message);
+                }
+            }
+        }
+
+        private async void DownloadAndExtractQuranData()
+        {
+            App.MainViewModel.IsInstalling = true;
+
+            // If downloaded offline and stuck in temp storage
+            if (App.MainViewModel.QuranData.IsInTempStorage)
+            {
+                App.MainViewModel.QuranData.FinishPreviousDownload();
+                await Task.Run(() => QuranFileUtils.ExtractZipFile(App.MainViewModel.QuranData.LocalUrl,
+                                                                   QuranFileUtils.QURAN_BASE));
+            }
+                // If downloaded offline and stuck in temp storage
+            else if (App.MainViewModel.QuranData.IsDownloaded)
+            {
+                await Task.Run(() => QuranFileUtils.ExtractZipFile(App.MainViewModel.QuranData.LocalUrl,
+                                              QuranFileUtils.QURAN_BASE));
+            }
+            else
+            {
+                var response = MessageBox.Show(AppResources.downloadPrompt, AppResources.downloadPrompt_title,
+                                               MessageBoxButton.OKCancel);
+                if (response == MessageBoxResult.OK)
+                {
+                    App.MainViewModel.Download();
+                    await Task.Run(() => QuranFileUtils.ExtractZipFile(App.MainViewModel.QuranData.LocalUrl,
+                                                  QuranFileUtils.QURAN_BASE));
+                }
+            }
+
+            App.MainViewModel.IsInstalling = false;
         }
 
         // Handle selection changed on LongListSelector

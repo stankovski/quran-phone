@@ -88,11 +88,38 @@ namespace QuranPhone.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to For optimal performance, some files must be downloaded.  If you choose not to do this now, each page will take significantly longer to load. Would you like to download the required files now?.
+        /// </summary>
+        public static string downloadPrompt {
+            get {
+                return ResourceManager.GetString("downloadPrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download Required Files?.
+        /// </summary>
+        public static string downloadPrompt_title {
+            get {
+                return ResourceManager.GetString("downloadPrompt_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Juz&apos; %1$d.
         /// </summary>
         public static string juz2_description {
             get {
                 return ResourceManager.GetString("juz2_description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loading Quran data....
+        /// </summary>
+        public static string loading_message {
+            get {
+                return ResourceManager.GetString("loading_message", resourceCulture);
             }
         }
         

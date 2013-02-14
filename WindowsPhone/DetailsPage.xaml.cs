@@ -42,7 +42,7 @@ namespace QuranPhone
 
             App.DetailsViewModel.LoadData();
             DataContext = App.DetailsViewModel;
-            radSlideView.SelectedItem = App.DetailsViewModel.Pages[DetailsViewModel.PAGES_TO_PRELOAD];
+            radSlideView.SelectedItem = App.DetailsViewModel.Pages[DetailsViewModel.PagesToPreload];
             radSlideView.SelectionChanged += PageFlipped;
         }
 
@@ -60,6 +60,7 @@ namespace QuranPhone
             {
                 App.DetailsViewModel.UpdatePages();
                 App.DetailsViewModel.ShowTranslation = !App.DetailsViewModel.ShowTranslation;
+                SettingsUtils.Set(Constants.PREF_SHOW_TRANSLATION, App.DetailsViewModel.ShowTranslation);
             }
             else
             {

@@ -301,4 +301,15 @@
   <data name="settings" xml:space="preserve">
     <value>настройки</value>
   </data>
+  <data name="loading_message" xml:space="preserve">
+    <value>Загрузка данных...</value>
+  </data>
+  <data name="downloadPrompt" xml:space="preserve">
+    <value>Для оптимальной работы необходимо скачать некоторые
+ файлы. Если Вы выберите не делать этого сейчас, загрузка каждой страницы будет занимать значительно большее время. Вы хотите загрузить выбранные 
+файлы сейчас?</value>
+  </data>
+  <data name="downloadPrompt_title" xml:space="preserve">
+    <value>Загрузить необходимые файлы?</value>
+  </data>
 </root>

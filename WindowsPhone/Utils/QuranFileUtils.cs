@@ -10,6 +10,8 @@ using System.Windows.Media.Imaging;
 using System.Diagnostics;
 using System.Net;
 using System.Threading;
+using ICSharpCode.SharpZipLib.Zip;
+using Salient.SharpZipLib.Zip;
 using QuranPhone.Data;
 
 namespace QuranPhone.Utils
@@ -18,8 +20,8 @@ namespace QuranPhone.Utils
     {
         public static bool failedToWrite = false;
         public static string IMG_HOST = "http://android.quran.com/data/";
-        private static string QURAN_BASE = "quran_android" + PATH_SEPARATOR;
-        private static string QURAN_BASE_URI = "isostore:/" + QURAN_BASE;
+        public static string QURAN_BASE = "quran_android" + PATH_SEPARATOR;
+        public static string QURAN_BASE_URI = "isostore:/" + QURAN_BASE;
         private static string DATABASE_DIRECTORY = "databases";
         public static string PACKAGE_NAME = "com.quran.labs.androidquran";
         public static string QURAN_ARABIC_DATABASE = "quran.ar.db";
@@ -147,6 +149,16 @@ namespace QuranPhone.Utils
                     return false;
                 }
             }
+        }
+
+        public static bool NoMediaFileExists()
+        {
+            return FileExists(GetQuranDirectory(false) + "/.nomedia");
+        }
+
+        public static void DeleteNoMediaFile()
+        {
+            DeleteFile(GetQuranDirectory(false) + "/.nomedia");
         }
 
         /// <summary>
@@ -337,7 +349,7 @@ namespace QuranPhone.Utils
                 }
             }
 
-            return (baseDir == null) ? null : baseDir + "width" + qsi.GetWidthParam();
+            return (baseDir == null) ? null : Path.Combine(baseDir, "width" + qsi.GetWidthParam());
         }
 
         public static string GetZipFileUrl()
@@ -348,6 +360,20 @@ namespace QuranPhone.Utils
                 return null;
             url += "images" + qsi.GetWidthParam() + ".zip";
             return url;
+        }
+
+        public static bool ExtractZipFile(string source, string destination)
+        {
+            try
+            {
+                new IsolatedFastZip().ExtractZip(source, destination, "");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error unziping data:" + ex.Message);
+                return false;
+            }
         }
 
         public static string GetAyaPositionFileName()

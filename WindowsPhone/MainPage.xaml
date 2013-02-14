@@ -20,6 +20,7 @@
     
     <phone:PhoneApplicationPage.Resources>
         <myui:StyleConverter x:Key="StyleConverter"/>
+        <myui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </phone:PhoneApplicationPage.Resources>
     <!--Data context is set to sample data above and LayoutRoot contains the root grid where all other page content is placed-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
@@ -27,7 +28,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-
+        
         <!--TitlePanel contains the name of the application and page title-->
         <myui:CommonHeader Grid.Row="0" Margin="12,0,0,0" Name="header"/>
 
@@ -131,6 +132,23 @@
             </phone:PivotItem>
         </phone:Pivot>
 
+        <Grid Visibility="{Binding IsInstalling, Converter={StaticResource BooleanToVisibilityConverter}}" Grid.RowSpan="2">
+            <Border Grid.RowSpan="2" Background="{StaticResource PhoneBackgroundBrush}" Opacity="0.6"/>
+            <StackPanel DataContext="{Binding QuranData}" Orientation="Vertical" VerticalAlignment="Center">
+                <TextBlock HorizontalAlignment="Center" Text="{Binding Path=LocalizedResources.loading_message, Source={StaticResource LocalizedStrings}}"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="50"/>
+                    </Grid.ColumnDefinitions>
+                    <ProgressBar Grid.Column="0" Value="{Binding Progress}" SmallChange="1"/>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                        <TextBlock Text="{Binding Progress}"/>
+                        <TextBlock>%</TextBlock>
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+        </Grid>
         <!--Uncomment to see an alignment grid to help ensure your controls are
             aligned on common boundaries.  The image has a top margin of -32px to
             account for the System Tray. Set this to 0 (or remove the margin altogether)
