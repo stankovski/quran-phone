@@ -107,7 +107,7 @@ namespace QuranPhone.UI
             progress.Visibility = System.Windows.Visibility.Collapsed;
             UriBuilder uriBuilder = new UriBuilder(ImageSource);
             var path = Path.Combine(QuranFileUtils.GetQuranDirectory(false), Path.GetFileName(uriBuilder.Path));
-                        
+
             //try
             //{
             //    if (!QuranFileUtils.FileExists(path))

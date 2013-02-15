@@ -62,26 +62,31 @@ namespace QuranPhone
 
         private async void downloadAndExtractQuranData()
         {
-            App.MainViewModel.IsInstalling = true;
-
             // If downloaded offline and stuck in temp storage
             if (App.MainViewModel.QuranData.IsInTempStorage)
             {
+                App.MainViewModel.IsInstalling = true;
                 App.MainViewModel.QuranData.FinishPreviousDownload();
                 App.MainViewModel.ExtractZipAndFinalize();
             }
                 // If downloaded offline and stuck in temp storage
             else if (App.MainViewModel.QuranData.IsDownloaded)
             {
+                App.MainViewModel.IsInstalling = true;
                 App.MainViewModel.ExtractZipAndFinalize();
             }
             else
             {
-                var response = MessageBox.Show(AppResources.downloadPrompt, AppResources.downloadPrompt_title,
-                                               MessageBoxButton.OKCancel);
-                if (response == MessageBoxResult.OK)
+                if (!App.MainViewModel.HasAskedToDownload)
                 {
-                    App.MainViewModel.Download();
+                    App.MainViewModel.HasAskedToDownload = true;
+                    var response = MessageBox.Show(AppResources.downloadPrompt, AppResources.downloadPrompt_title,
+                                                   MessageBoxButton.OKCancel);
+                    if (response == MessageBoxResult.OK)
+                    {
+                        App.MainViewModel.IsInstalling = true;
+                        App.MainViewModel.Download();
+                    }
                 }
             }
         }

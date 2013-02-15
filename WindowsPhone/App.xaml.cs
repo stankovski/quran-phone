@@ -108,6 +108,7 @@ namespace QuranPhone
 
             // Initialize directory
             QuranFileUtils.MakeQuranDirectory();
+            QuranFileUtils.MakeQuranDatabaseDirectory();
 
             // Show graphics profiling information while debugging.
             if (Debugger.IsAttached)

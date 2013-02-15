@@ -17,12 +17,13 @@ namespace QuranPhone.ViewModels
             this.Bookmarks = new ObservableCollection<ItemViewModel>();
             this.LastPage = new ObservableCollection<ItemViewModel>();
             this.Tags = new ObservableCollection<ItemViewModel>();
-            QuranData = new DownloadableViewModelBase();
-            QuranData.ServerUrl = QuranFileUtils.GetZipFileUrl();
-            QuranData.FileName = Path.GetFileName(QuranData.ServerUrl);
-            QuranData.LocalUrl = QuranData.FileName;
-            QuranData.DownloadComplete += downloadComplete;
-            InstallationStep = Resources.AppResources.loading_message;
+            this.QuranData = new DownloadableViewModelBase();
+            this.HasAskedToDownload = false;
+            this.QuranData.ServerUrl = QuranFileUtils.GetZipFileUrl();
+            this.QuranData.FileName = Path.GetFileName(QuranData.ServerUrl);
+            this.QuranData.LocalUrl = QuranData.FileName;
+            this.QuranData.DownloadComplete += downloadComplete;
+            this.InstallationStep = Resources.AppResources.loading_message;
         }
 
         #region Properties
@@ -32,6 +33,7 @@ namespace QuranPhone.ViewModels
         public ObservableCollection<ItemViewModel> LastPage { get; private set; }
         public ObservableCollection<ItemViewModel> Tags { get; private set; }
         public bool IsDataLoaded { get; set; }
+        public bool HasAskedToDownload { get; set; }
 
         public DownloadableViewModelBase QuranData { get; private set; }
 

@@ -3,13 +3,15 @@
 * --Fix jerks when navigating backwards--
 * Settings page
 * Page transitions
-* Downloading of all pages as zip
+* --Downloading of all pages as zip--
 * App bar
 * --Fix slow translation loading--
 * --Tombstoning and restoring--
-* Jump to page
+* --Jump to page--
 * Test in light theme
 * Test in diff resolution
-* Bookmarks
+* --Bookmarks--
 * About page
 * Error management
+* Layout cycle detected. Layout could not complete
+* Bug with the same page showing when flipping pages
