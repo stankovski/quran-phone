@@ -1,7 +1,9 @@
 ﻿#region
 
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Threading.Tasks;
 using QuranPhone.Common;
 using QuranPhone.Data;
@@ -176,61 +178,94 @@ namespace QuranPhone.ViewModels
             var pageModel = Pages[pageIndex];
             // Set image
             pageModel.ImageSource = QuranFileUtils.GetImageFromWeb(QuranFileUtils.GetPageFileName(pageModel.PageNumber));
-            // Set translation
-            if (string.IsNullOrEmpty(this.TranslationFile) ||
-                !this.translationDatabases.ContainsKey(this.TranslationFile))
-                return;
 
-            if (!force && pageModel.Verses.Count > 0)
-                return;
-
-            pageModel.Verses.Clear();
-            var db = translationDatabases[this.TranslationFile];
-            List<QuranAyah> verses = await Task.Run(() => db.GetVerses(pageModel.PageNumber));
-            List<QuranAyah> versesArabic = null;
-
-            //if (SettingsUtils.Get<bool>(Constants.PREF_SHOW_ARABIC_IN_TRANSLATION)) 
-            //{
-            //    try
-            //    {
-            //        DatabaseHandler dbArabic = new ArabicDatabaseHandler();
-            //        versesArabic = dbArabic.GetVerses(pageModel.PageNumber);
-            //    }
-            //    catch
-            //    {
-            //        //Not able to get Arabic text - skipping
-            //    }
-            //}
-
-            int tempSurah = -1;
-            for (int i = 0; i < verses.Count; i++)
+            try
             {
-                var verse = verses[i];
-                if (verse.Sura != tempSurah)
+                // Set translation
+                if (string.IsNullOrEmpty(this.TranslationFile) ||
+                    !this.translationDatabases.ContainsKey(this.TranslationFile))
+                    return;
+
+                if (!force && pageModel.Verses.Count > 0)
+                    return;
+
+                pageModel.Verses.Clear();
+                var db = translationDatabases[this.TranslationFile];
+                List<QuranAyah> verses = await Task.Run(() => db.GetVerses(pageModel.PageNumber));
+                List<QuranAyah> versesArabic = null;
+
+                //if (SettingsUtils.Get<bool>(Constants.PREF_SHOW_ARABIC_IN_TRANSLATION)) 
+                //{
+                //    try
+                //    {
+                //        DatabaseHandler dbArabic = new ArabicDatabaseHandler();
+                //        versesArabic = dbArabic.GetVerses(pageModel.PageNumber);
+                //    }
+                //    catch
+                //    {
+                //        //Not able to get Arabic text - skipping
+                //    }
+                //}
+
+                int tempSurah = -1;
+                for (int i = 0; i < verses.Count; i++)
                 {
+                    var verse = verses[i];
+                    if (verse.Sura != tempSurah)
+                    {
+                        pageModel.Verses.Add(new VerseViewModel
+                            {
+                                IsTitle = true,
+                                Text = QuranInfo.GetSuraName(verse.Sura, true)
+                            });
+                        tempSurah = verse.Sura;
+                    }
+                    var vvm = new VerseViewModel
+                        {
+                            IsTitle = false,
+                            VerseNumber = verse.Ayah,
+                            SurahNumber = verse.Sura,
+                            Text = verse.Text
+                        };
+                    if (versesArabic != null && i < versesArabic.Count)
+                        vvm.QuranText = versesArabic[i].Text;
                     pageModel.Verses.Add(new VerseViewModel
                         {
-                            IsTitle = true,
-                            Text = QuranInfo.GetSuraName(verse.Sura, true)
+                            IsTitle = false,
+                            VerseNumber = verse.Ayah,
+                            SurahNumber = verse.Sura,
+                            Text = verse.Text
                         });
-                    tempSurah = verse.Sura;
                 }
-                var vvm = new VerseViewModel
+            }
+            catch (Exception e)
+            {
+                // Try delete bad translation file if error is "no such table: verses"
+                try
+                {
+                    translationDatabases[this.TranslationFile].CloseDatabase();
+                    if (e.Message.StartsWith("no such table:", StringComparison.InvariantCultureIgnoreCase))
                     {
-                        IsTitle = false,
-                        VerseNumber = verse.Ayah,
-                        SurahNumber = verse.Sura,
-                        Text = verse.Text
-                    };
-                if (versesArabic != null && i < versesArabic.Count)
-                    vvm.QuranText = versesArabic[i].Text;
+                        QuranFileUtils.DeleteFile(Path.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false, false),
+                                                               this.TranslationFile));
+                    }
+                }
+                catch
+                {
+                    // Do nothing
+                }
                 pageModel.Verses.Add(new VerseViewModel
-                    {
-                        IsTitle = false,
-                        VerseNumber = verse.Ayah,
-                        SurahNumber = verse.Sura,
-                        Text = verse.Text
-                    });
+                {
+                    IsTitle = true,
+                    Text = "Error loading translation..."
+                });
+                pageModel.Verses.Add(new VerseViewModel
+                {
+                    IsTitle = false,
+                    VerseNumber = 0,
+                    SurahNumber = 0,
+                    Text = e.Message
+                });
             }
         }
 

@@ -99,7 +99,7 @@ namespace QuranPhone.UI
 
         private void UpdatePageNumber(int source)
         {
-            pageNumber.Text = "Page " + source;
+            //pageNumber.Text = "Page " + source;
         }
 
         void imageSource_ImageOpened(object sender, RoutedEventArgs e)

@@ -10,3 +10,6 @@
 * Jump to page
 * Test in light theme
 * Test in diff resolution
+* Bookmarks
+* About page
+* Error management

@@ -109,25 +109,6 @@ namespace QuranPhone.Utils
             var cachedItems = adapter.GetTranslations();
             List<TranslationItem> items = new List<TranslationItem>();
             List<TranslationItem> updates = new List<TranslationItem>();
-            //HashSet<string> pendingFiles = new HashSet<string>();
-            //HashSet<string> leftoverFiles = new HashSet<string>();
-            //// Storing all pending transfers
-            //foreach (var request in DownloadManager.Instance.GetAllRequests())
-            //{
-            //    if (request.TransferStatus == Microsoft.Phone.BackgroundTransfer.TransferStatus.Completed)
-            //        continue;
-
-            //    var fileName = Path.GetFileName(request.DownloadLocation).ToLowerInvariant();
-            //    if (!pendingFiles.Contains(fileName))
-            //        pendingFiles.Add(fileName);
-            //}
-            //// Storing all leftover transfers
-            //foreach (var tempFile in DownloadManager.Instance.GetAllStuckFiles())
-            //{
-            //    var fileName = Path.GetFileName(tempFile).ToLowerInvariant();
-            //    if (!pendingFiles.Contains(fileName))
-            //        pendingFiles.Add(fileName);
-            //}
             
             try
             {

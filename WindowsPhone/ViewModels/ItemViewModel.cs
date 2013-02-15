@@ -8,6 +8,7 @@ namespace QuranPhone.ViewModels
         Sura,
         Juz,
         Bookmark,
+        Header,
         Tag
     }
     

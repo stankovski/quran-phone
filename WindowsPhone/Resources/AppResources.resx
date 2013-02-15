@@ -557,4 +557,28 @@
   <data name="downloadPrompt_title" xml:space="preserve">
     <value>Download Required Files?</value>
   </data>
+  <data name="extracting_message" xml:space="preserve">
+    <value>Extracting...</value>
+  </data>
+  <data name="quran_page" xml:space="preserve">
+    <value>page</value>
+  </data>
+  <data name="bookmarks" xml:space="preserve">
+    <value>Bookmarks</value>
+  </data>
+  <data name="bookmarks_ayah" xml:space="preserve">
+    <value>Ayah Bookmarks</value>
+  </data>
+  <data name="bookmarks_current_page" xml:space="preserve">
+    <value>Current Page</value>
+  </data>
+  <data name="bookmarks_page" xml:space="preserve">
+    <value>Page Bookmarks</value>
+  </data>
+  <data name="tags" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="delete_bookmark" xml:space="preserve">
+    <value>Delete Bookmark</value>
+  </data>
 </root>

@@ -11,14 +11,17 @@
     MouseEnter="UserControl_MouseEnter_1">
     
     <Grid x:Name="LayoutRoot">
-        <Image Name="image"/>
+        <StackPanel Orientation="Vertical">
+            <!--<Border BorderThickness="0,2" Margin="0, 10" BorderBrush="{StaticResource DarkBlueText}">
+                <TextBlock Name="pageNumber" VerticalAlignment="Bottom" Foreground="{StaticResource DarkBlueText}" 
+                           Style="{StaticResource BlueHeader}" TextWrapping="Wrap"/>
+            </Border>-->
+            <Image Name="image"/>
+        </StackPanel>
         <ProgressBar Name="progress" IsIndeterminate="True" VerticalAlignment="Top"
                      Margin="20,5,20,0" FlowDirection="LeftToRight"/>
         <TextBlock Name="memoryUsage" FontSize="20" 
                    Foreground="#FF444444" VerticalAlignment="Top"
                    HorizontalAlignment="Center" Margin="0,0,0,0"/>
-        <TextBlock Name="pageNumber" FontSize="15" Text="Page 0" 
-                   Foreground="#FF444444" VerticalAlignment="Bottom"
-                   HorizontalAlignment="Center" Margin="0,0,0,5"/>
     </Grid>
 </UserControl>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Threading.Tasks;
 using QuranPhone.Resources;
 using QuranPhone.Data;
 using QuranPhone.Utils;
@@ -14,21 +15,21 @@ namespace QuranPhone.ViewModels
             this.Surahs = new ObservableCollection<ItemViewModel>();
             this.Juz = new ObservableCollection<ItemViewModel>();
             this.Bookmarks = new ObservableCollection<ItemViewModel>();
+            this.LastPage = new ObservableCollection<ItemViewModel>();
             this.Tags = new ObservableCollection<ItemViewModel>();
             QuranData = new DownloadableViewModelBase();
-            // Is download needed
-            if (QuranFileUtils.NoMediaFileExists())
-            {
-                QuranData.ServerUrl = QuranFileUtils.GetZipFileUrl();
-                QuranData.FileName = Path.GetFileName(QuranData.ServerUrl);
-                QuranData.LocalUrl = Path.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false, true), QuranData.FileName);
-            }
+            QuranData.ServerUrl = QuranFileUtils.GetZipFileUrl();
+            QuranData.FileName = Path.GetFileName(QuranData.ServerUrl);
+            QuranData.LocalUrl = QuranData.FileName;
+            QuranData.DownloadComplete += downloadComplete;
+            InstallationStep = Resources.AppResources.loading_message;
         }
 
         #region Properties
         public ObservableCollection<ItemViewModel> Surahs { get; private set; }
         public ObservableCollection<ItemViewModel> Juz { get; private set; }
         public ObservableCollection<ItemViewModel> Bookmarks { get; private set; }
+        public ObservableCollection<ItemViewModel> LastPage { get; private set; }
         public ObservableCollection<ItemViewModel> Tags { get; private set; }
         public bool IsDataLoaded { get; set; }
 
@@ -48,6 +49,21 @@ namespace QuranPhone.ViewModels
                 base.OnPropertyChanged(() => IsInstalling);
             }
         }
+
+        private string installationStep;
+        public string InstallationStep
+        {
+            get { return installationStep; }
+            set
+            {
+                if (value == installationStep)
+                    return;
+
+                installationStep = value;
+
+                base.OnPropertyChanged(() => InstallationStep);
+            }
+        }
         #endregion Properties
 
         #region Public methods
@@ -60,19 +76,58 @@ namespace QuranPhone.ViewModels
             // Sample data; replace with real data
             loadSuraList();
             loadJuz2List();
+            loadBookmarlList();
 
             this.IsDataLoaded = true;
+        }
+
+        public void RefreshData()
+        {
+            this.Bookmarks.Clear();
+            this.LastPage.Clear();
+            loadBookmarlList();
         }
         
         public void Download()
         {
             if (QuranData.DownloadCommand.CanExecute(null))
+            {
                 QuranData.DownloadCommand.Execute(null);
+            }
+        }
+
+        public async void ExtractZipAndFinalize()
+        {
+            if (QuranFileUtils.FileExists(QuranData.LocalUrl))
+            {
+                InstallationStep = AppResources.extracting_message;
+                QuranData.Progress = 100;
+                await Task.Run(() => QuranFileUtils.ExtractZipFile(QuranData.LocalUrl, QuranFileUtils.QURAN_BASE));
+                QuranFileUtils.DeleteFile(QuranData.LocalUrl);
+            }
+            IsInstalling = false;
+        }
+
+        public void DeleteBookmark(ItemViewModel item)
+        {
+             if (item != null)
+             {
+                 Bookmarks.Remove(item);
+                 using (var bookmarksAdapter = new BookmarksDBAdapter())
+                 {
+                     bookmarksAdapter.RemoveBookmark(int.Parse(item.Id));
+                 }
+             }
         }
 
         #endregion Public methods
 
         #region Private methods
+        private void downloadComplete(object sender, EventArgs e)
+        {
+            ExtractZipAndFinalize();
+        }
+
         private void loadSuraList()
         {
             int sura = 1;
@@ -84,7 +139,7 @@ namespace QuranPhone.ViewModels
                 {
                     Id = QuranInfo.GetJuzTitle() + " " + juz,
                     PageNumber = QuranInfo.JUZ_PAGE_START[juz - 1],
-                    ItemType = ItemViewModelType.Juz
+                    ItemType = ItemViewModelType.Header
                 });
                 next = (juz == Constants.JUZ2_COUNT) ? Constants.PAGES_LAST + 1 : QuranInfo.JUZ_PAGE_START[juz];
 
@@ -125,7 +180,7 @@ namespace QuranPhone.ViewModels
                     {
                         Id = QuranInfo.GetJuzTitle() + " " + juz,
                         PageNumber = QuranInfo.JUZ_PAGE_START[juz - 1],
-                        ItemType = ItemViewModelType.Juz
+                        ItemType = ItemViewModelType.Header
                     });
                 }
                 string verseString = AppResources.quran_ayah + " " + pos[1];
@@ -140,6 +195,52 @@ namespace QuranPhone.ViewModels
 
                 if (i % 4 == 0)
                     Juz[Juz.Count - 1].Id = (1 + (i / 4)).ToString("0");
+            }
+        }
+
+        private void loadBookmarlList()
+        {
+            var lastPage = SettingsUtils.Get<int>(Constants.PREF_LAST_PAGE);
+            if (lastPage > 0)
+            {
+                var lastPageItem = new ItemViewModel();
+                lastPageItem.Title = QuranInfo.GetSuraNameFromPage(lastPage, true);
+                lastPageItem.Details = string.Format("{0} {1}, {2} {3}", AppResources.quran_page, lastPage,
+                                                 QuranInfo.GetJuzTitle(),
+                                                 QuranInfo.GetJuzFromPage(lastPage));
+                lastPageItem.PageNumber = lastPage;
+                lastPageItem.Image = new Uri("/Assets/Images/favorite.png", UriKind.Relative);
+                lastPageItem.ItemType = ItemViewModelType.Bookmark;
+                LastPage.Add(lastPageItem);
+            }
+
+            using (var bookmarksAdapter = new BookmarksDBAdapter())
+            {
+                try
+                {
+                    var bookmarks = bookmarksAdapter.GetBookmarks(false, BoomarkSortOrder.Location);
+                    if (bookmarks.Count > 0)
+                    {
+                        foreach (var bookmark in bookmarks)
+                        {
+                            Bookmarks.Add(new ItemViewModel
+                                {
+                                    Id = bookmark.Id.ToString(),
+                                    Title = QuranInfo.GetSuraNameFromPage(bookmark.Page, true),
+                                    Details = string.Format("{0} {1}, {2} {3}", AppResources.quran_page, bookmark.Page,
+                                                            QuranInfo.GetJuzTitle(),
+                                                            QuranInfo.GetJuzFromPage(bookmark.Page)),
+                                    PageNumber = bookmark.Page,
+                                    Image = new Uri("/Assets/Images/favorite.png", UriKind.Relative),
+                                    ItemType = ItemViewModelType.Bookmark
+                                });
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("failed to load bookmarks: " + ex.Message);
+                }
             }
         }
         #endregion

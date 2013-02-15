@@ -312,4 +312,28 @@
   <data name="downloadPrompt_title" xml:space="preserve">
     <value>Загрузить необходимые файлы?</value>
   </data>
+  <data name="extracting_message" xml:space="preserve">
+    <value>Разпаковка...</value>
+  </data>
+  <data name="quran_page" xml:space="preserve">
+    <value>страница</value>
+  </data>
+  <data name="bookmarks" xml:space="preserve">
+    <value>Закладки</value>
+  </data>
+  <data name="bookmarks_ayah" xml:space="preserve">
+    <value>Закладки аятов</value>
+  </data>
+  <data name="bookmarks_current_page" xml:space="preserve">
+    <value>Текущая страница</value>
+  </data>
+  <data name="bookmarks_page" xml:space="preserve">
+    <value>Закладки страниц</value>
+  </data>
+  <data name="tags" xml:space="preserve">
+    <value>Тэги</value>
+  </data>
+  <data name="delete_bookmark" xml:space="preserve">
+    <value>Удалить Закладку</value>
+  </data>
 </root>

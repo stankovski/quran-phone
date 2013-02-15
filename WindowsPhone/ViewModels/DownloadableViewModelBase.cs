@@ -185,10 +185,10 @@ namespace QuranPhone.ViewModels
                 IsDownloading = false;
             if (e.Request.TransferStatus == TransferStatus.Completed)
             {
-                if (DownloadComplete != null)
-                    DownloadComplete(this, null);
                 QuranFileUtils.MoveFile(TempUrl, this.LocalUrl);
                 DownloadManager.Instance.FinalizeRequest(e.Request);
+                if (DownloadComplete != null)
+                    DownloadComplete(this, null);
             }
         }
 

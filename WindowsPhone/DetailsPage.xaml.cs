@@ -68,6 +68,23 @@ namespace QuranPhone
             }
         }
 
+        private void Bookmark_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (var adapter = new BookmarksDBAdapter())
+                {
+                    adapter.AddBookmarkIfNotExists(null, null, App.DetailsViewModel.CurrentPageNumber);
+                    this.ApplicationBar.IsVisible = false;
+                    menuToggleButton.Visibility = Visibility.Visible;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error creating bookmark");
+            }
+        }
+
         private void Settings_Click(object sender, EventArgs e)
         {
             int pageNumber = ((DetailsViewModel)DataContext).CurrentPageNumber;

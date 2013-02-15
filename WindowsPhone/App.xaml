@@ -45,22 +45,39 @@
             <Setter Property="Foreground" Value="#FF232323"/>
             <Setter Property="Margin" Value="0"/>
         </Style>
-        <Style TargetType="TextBlock" x:Key="ItemViewStyleHeader" BasedOn="{StaticResource WhiteHeader}">
-            <!--<Setter Property="FontSize" Value="30"/>
-            <Setter Property="Margin" Value="10,5,0,5"/>-->
+        <Style TargetType="TextBlock" x:Key="ItemViewStyleHeader" BasedOn="{StaticResource BlueSmallHeader}">
         </Style>
         <Style TargetType="TextBlock" x:Key="ItemViewStyleJuz" BasedOn="{StaticResource BlueSmallHeader}">
-            <!--<Setter Property="FontSize" Value="20"/>
-            <Setter Property="Foreground" Value="{StaticResource BlueText}"/>-->
         </Style>
         <Style TargetType="TextBlock" x:Key="ItemViewStyleSura" BasedOn="{StaticResource WhiteHeader}">
-            <!--<Setter Property="FontSize" Value="30"/>
-            <Setter Property="Margin" Value="10,5,0,5"/>-->
+        </Style>
+        <Style TargetType="TextBlock" x:Key="ItemViewStyleBookmark" BasedOn="{StaticResource WhiteHeader}">
+        </Style>
+        <Style TargetType="TextBlock" x:Key="ItemViewStyleSuraNumber">
+            <Setter Property="FontSize" Value="30"/>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="ItemViewStyleBookmarkNumber">
+            <Setter Property="FontSize" Value="20"/>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="ItemViewStyleJuzNumber">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Foreground" Value="{StaticResource BlueText}"/>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="ItemViewStyleHeaderNumber">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Foreground" Value="{StaticResource BlueText}"/>
         </Style>
         <Style TargetType="TextBlock" x:Key="ItemViewStyleSuraPageNumber">
             <Setter Property="FontSize" Value="20"/>
         </Style>
+        <Style TargetType="TextBlock" x:Key="ItemViewStyleBookmarkPageNumber">
+            <Setter Property="FontSize" Value="20"/>
+        </Style>
         <Style TargetType="TextBlock" x:Key="ItemViewStyleJuzPageNumber">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Foreground" Value="{StaticResource BlueText}"/>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="ItemViewStyleHeaderPageNumber">
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="Foreground" Value="{StaticResource BlueText}"/>
         </Style>

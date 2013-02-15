@@ -79,6 +79,51 @@ namespace QuranPhone.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bookmarks.
+        /// </summary>
+        public static string bookmarks {
+            get {
+                return ResourceManager.GetString("bookmarks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ayah Bookmarks.
+        /// </summary>
+        public static string bookmarks_ayah {
+            get {
+                return ResourceManager.GetString("bookmarks_ayah", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current Page.
+        /// </summary>
+        public static string bookmarks_current_page {
+            get {
+                return ResourceManager.GetString("bookmarks_current_page", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Page Bookmarks.
+        /// </summary>
+        public static string bookmarks_page {
+            get {
+                return ResourceManager.GetString("bookmarks_page", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Bookmark.
+        /// </summary>
+        public static string delete_bookmark {
+            get {
+                return ResourceManager.GetString("delete_bookmark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Downloaded translations.
         /// </summary>
         public static string downloaded_translations {
@@ -102,6 +147,15 @@ namespace QuranPhone.Resources {
         public static string downloadPrompt_title {
             get {
                 return ResourceManager.GetString("downloadPrompt_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Extracting....
+        /// </summary>
+        public static string extracting_message {
+            get {
+                return ResourceManager.GetString("extracting_message", resourceCulture);
             }
         }
         
@@ -206,6 +260,15 @@ namespace QuranPhone.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to page.
+        /// </summary>
+        public static string quran_page {
+            get {
+                return ResourceManager.GetString("quran_page", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sura.
         /// </summary>
         public static string quran_sura {
@@ -299,6 +362,15 @@ namespace QuranPhone.Resources {
         public static string sura_names {
             get {
                 return ResourceManager.GetString("sura_names", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tags.
+        /// </summary>
+        public static string tags {
+            get {
+                return ResourceManager.GetString("tags", resourceCulture);
             }
         }
         

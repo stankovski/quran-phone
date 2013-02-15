@@ -180,7 +180,7 @@ namespace QuranPhone.Utils
             {
                 if (isf.DirectoryExists(GetQuranDirectory(false)))
                 {
-                    var files = isf.GetFileNames(GetQuranDirectory(false));
+                    var files = isf.GetFileNames(Path.Combine(GetQuranDirectory(false), "*.png"));
                     if (files.Length >= 604)
                     {
                         // ideally, we should loop for each page and ensure

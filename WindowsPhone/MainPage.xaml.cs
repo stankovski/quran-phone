@@ -42,12 +42,16 @@ namespace QuranPhone
             {
                 App.MainViewModel.LoadData();
             }
+            else
+            {
+                App.MainViewModel.RefreshData();
+            }
             // Show prompt to download content if nomedia file exists
-            if (QuranFileUtils.HaveAllImages())
+            if (!QuranFileUtils.HaveAllImages())
             {
                 try
                 {
-                    DownloadAndExtractQuranData();
+                    downloadAndExtractQuranData();
                 }
                 catch (Exception ex)
                 {
@@ -56,7 +60,7 @@ namespace QuranPhone
             }
         }
 
-        private async void DownloadAndExtractQuranData()
+        private async void downloadAndExtractQuranData()
         {
             App.MainViewModel.IsInstalling = true;
 
@@ -64,14 +68,12 @@ namespace QuranPhone
             if (App.MainViewModel.QuranData.IsInTempStorage)
             {
                 App.MainViewModel.QuranData.FinishPreviousDownload();
-                await Task.Run(() => QuranFileUtils.ExtractZipFile(App.MainViewModel.QuranData.LocalUrl,
-                                                                   QuranFileUtils.QURAN_BASE));
+                App.MainViewModel.ExtractZipAndFinalize();
             }
                 // If downloaded offline and stuck in temp storage
             else if (App.MainViewModel.QuranData.IsDownloaded)
             {
-                await Task.Run(() => QuranFileUtils.ExtractZipFile(App.MainViewModel.QuranData.LocalUrl,
-                                              QuranFileUtils.QURAN_BASE));
+                App.MainViewModel.ExtractZipAndFinalize();
             }
             else
             {
@@ -80,12 +82,8 @@ namespace QuranPhone
                 if (response == MessageBoxResult.OK)
                 {
                     App.MainViewModel.Download();
-                    await Task.Run(() => QuranFileUtils.ExtractZipFile(App.MainViewModel.QuranData.LocalUrl,
-                                                  QuranFileUtils.QURAN_BASE));
                 }
             }
-
-            App.MainViewModel.IsInstalling = false;
         }
 
         // Handle selection changed on LongListSelector
@@ -103,20 +101,14 @@ namespace QuranPhone
             list.SelectedItem = null;
         }
 
-        // Sample code for building a localized ApplicationBar
-        //private void BuildLocalizedApplicationBar()
-        //{
-        //    // Set the page's ApplicationBar to a new instance of ApplicationBar.
-        //    ApplicationBar = new ApplicationBar();
-
-        //    // Create a new button and set the text value to the localized string from AppResources.
-        //    ApplicationBarIconButton appBarButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.add.rest.png", UriKind.Relative));
-        //    appBarButton.Text = AppResources.AppBarButtonText;
-        //    ApplicationBar.Buttons.Add(appBarButton);
-
-        //    // Create a new menu item with the localized string from AppResources.
-        //    ApplicationBarMenuItem appBarMenuItem = new ApplicationBarMenuItem(AppResources.AppBarMenuItemText);
-        //    ApplicationBar.MenuItems.Add(appBarMenuItem);
-        //}
+        private void DeleteBookmark(object sender, RoutedEventArgs e)
+        {
+            var menuItem = sender as MenuItem;
+            if (menuItem != null)
+            {
+                if (menuItem.DataContext != null)
+                    App.MainViewModel.DeleteBookmark(menuItem.DataContext as ItemViewModel);
+            }
+        }
     }
 }

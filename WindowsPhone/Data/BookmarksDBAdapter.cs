@@ -272,7 +272,7 @@ namespace QuranPhone.Data
 
         public void ClearBookmarkTags(int bookmarkId)
         {
-            mDatabase.Execute("delete \"bookmark_tag\" where \"bookmark_id\" = ?", bookmarkId);
+            mDatabase.Execute("delete from \"bookmark_tag\" where \"bookmark_id\" = ?", bookmarkId);
         }
     }
 }

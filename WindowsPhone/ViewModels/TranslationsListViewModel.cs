@@ -54,13 +54,8 @@ namespace QuranPhone.ViewModels
         #endregion Properties
 
         #region Public methods
-        /// <summary>
-        /// Creates and adds a few ItemViewModel objects into the Items collection.
-        /// </summary>
         public async void LoadData()
         {
-            // Sample data; replace with real data
-
             var list = await TranslationListTask.DownloadTranslations(true, "tag");
             foreach (var item in list)
             {

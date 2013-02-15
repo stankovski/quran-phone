@@ -154,6 +154,9 @@
     </Compile>
     <Compile Include="UI\ObservableDictionary.cs" />
     <Compile Include="UI\ObservableTranslationItem.cs" />
+    <Compile Include="UI\PageLink.xaml.cs">
+      <DependentUpon>PageLink.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\RelayCommand.cs" />
     <Compile Include="UI\TiltEffect.cs" />
     <Compile Include="UI\TranslationView.xaml.cs">
@@ -205,6 +208,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </DesignData>
+    <DesignData Include="SampleData\PageLinkSampleData.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </DesignData>
     <Page Include="SampleData\TranslationViewSampleData.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -230,6 +237,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\ListHeader.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\PageLink.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
