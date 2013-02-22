@@ -22,7 +22,7 @@
     </phone:PhoneApplicationPage.Resources>
     <Grid Background="{StaticResource LightBackground}">
         <telerikPrimitives:RadSlideView x:Name="radSlideView" ItemsSource="{Binding Pages}" 
-                                        ItemRealizationMode="ViewportItem">
+                                        ItemRealizationMode="ViewportItem" Margin="0,0,0,20">
             <telerikPrimitives:RadSlideView.ItemTemplate>
                 <DataTemplate>
                     <ScrollViewer HorizontalAlignment="Stretch">

@@ -3,4 +3,5 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:vm="clr-namespace:QuranPhone.ViewModels">
     <vm:SettingsViewModel.ActiveTranslation>English</vm:SettingsViewModel.ActiveTranslation>
+    <vm:SettingsViewModel.TextSize>30</vm:SettingsViewModel.TextSize>
 </vm:SettingsViewModel>

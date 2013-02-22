@@ -19,6 +19,7 @@ namespace QuranPhone.ViewModels
             : this()
         {
             PageNumber = page;
+            TextSize = SettingsUtils.Get<int>(Constants.PREF_TRANSLATION_TEXT_SIZE);
         }
 
         #region Properties
@@ -51,6 +52,21 @@ namespace QuranPhone.ViewModels
                 showTranslation = value;
 
                 base.OnPropertyChanged(() => ShowTranslation);
+            }
+        }
+
+        private int textSize;
+        public int TextSize
+        {
+            get { return textSize; }
+            set
+            {
+                if (value == textSize)
+                    return;
+
+                textSize = value;
+
+                base.OnPropertyChanged(() => TextSize);
             }
         }
 

@@ -32,6 +32,9 @@
                         Background="{StaticResource PhoneInverseInactiveBrush}" 
                         Foreground="{StaticResource PhoneContrastForegroundBrush}" 
                         FontFamily="{StaticResource PhoneFontFamilyNormal}" Click="Translations_Click"/>
+                <TextBlock Text="{Binding Path=LocalizedResources.text_size, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                <Slider Minimum="15" Maximum="50" Margin="0, 0, 0, -30" SmallChange="1" Value="{Binding TextSize, Mode=TwoWay}"/>
+                <TextBlock Text="{Binding TextSize}" HorizontalAlignment="Center"/>
             </StackPanel>
         </Grid>
     </ScrollViewer>

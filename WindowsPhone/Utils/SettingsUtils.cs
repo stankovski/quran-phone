@@ -55,7 +55,7 @@ namespace QuranPhone.Utils
                     }
                 }
             }
-            FieldInfo info = constantKeys.Find(fi => fi.Name == key);
+            FieldInfo info = constantKeys.Find(fi => fi.FieldType == typeof(string) && fi.GetRawConstantValue() as string == key);
             if (info == null)
                 return default(T);
 

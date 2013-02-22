@@ -28,6 +28,12 @@ namespace QuranPhone
             DataContext = App.SettingsViewModel;
         }
 
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+            SettingsUtils.Set(Constants.PREF_TRANSLATION_TEXT_SIZE, App.SettingsViewModel.TextSize);
+        }
+
         private void Translations_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new Uri("/TranslationListPage.xaml", UriKind.Relative));

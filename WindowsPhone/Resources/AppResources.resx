@@ -581,4 +581,7 @@
   <data name="delete_bookmark" xml:space="preserve">
     <value>Delete Bookmark</value>
   </data>
+  <data name="text_size" xml:space="preserve">
+    <value>translation text size</value>
+  </data>
 </root>

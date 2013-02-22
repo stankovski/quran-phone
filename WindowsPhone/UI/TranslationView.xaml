@@ -21,7 +21,7 @@
         <TextBlock Name="memoryUsage" FontSize="20" 
                    Foreground="#FF444444" VerticalAlignment="Top"
                    HorizontalAlignment="Center" Margin="0,0,0,0"/>
-        <phone:LongListSelector ItemsSource="{Binding Verses}" FlowDirection="LeftToRight">
+        <phone:LongListSelector ItemsSource="{Binding Verses}" FlowDirection="LeftToRight" FontSize="{Binding TextSize}">
             <phone:LongListSelector.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>
@@ -31,13 +31,13 @@
                         </Border>
                         <StackPanel Orientation="Horizontal" Margin="10, 0" 
                                             Visibility="{Binding IsTitle, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
-                            <TextBlock Text="{Binding SurahNumber}" Style="{StaticResource BlackSmallHeader}" FontWeight="Bold"/>
-                            <TextBlock Style="{StaticResource BlackSmallHeader}" FontWeight="Bold">:</TextBlock>
-                            <TextBlock Text="{Binding VerseNumber}" Style="{StaticResource BlackSmallHeader}" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding SurahNumber}" Foreground="{StaticResource PhoneTextBoxForegroundBrush}" FontWeight="Bold"/>
+                            <TextBlock Foreground="{StaticResource PhoneTextBoxForegroundBrush}" FontWeight="Bold">:</TextBlock>
+                            <TextBlock Foreground="{StaticResource PhoneTextBoxForegroundBrush}" Text="{Binding VerseNumber}" FontWeight="Bold"/>
                         </StackPanel>
-                        <TextBlock Text="{Binding QuranText}" Style="{StaticResource BlackSmallText}" Margin="10, 10, 10, 10" TextWrapping="Wrap" 
+                        <TextBlock Text="{Binding QuranText}" Foreground="{StaticResource PhoneTextBoxForegroundBrush}" Margin="10, 10, 10, 10" TextWrapping="Wrap" 
                                            Visibility="{Binding QuranTextExists, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                        <TextBlock Text="{Binding Text}" Style="{StaticResource BlackSmallText}" Margin="10, 10, 10, 35" TextWrapping="Wrap" 
+                        <TextBlock Text="{Binding Text}" Foreground="{StaticResource PhoneTextBoxForegroundBrush}" Margin="10, 10, 10, 35" TextWrapping="Wrap" 
                                            Visibility="{Binding IsTitle, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}"/>
                     </StackPanel>
                 </DataTemplate>

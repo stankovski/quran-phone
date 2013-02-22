@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:vm="clr-namespace:QuranPhone.ViewModels">
     <vm:DetailsViewModel.Pages>
-        <vm:PageViewModel ImageSource="http://android.quran.com/data/width_320/page055.png">
+        <vm:PageViewModel TextSize="22" ImageSource="http://android.quran.com/data/width_320/page055.png">
             <vm:PageViewModel.Verses>
                 <vm:VerseViewModel IsTitle="True" Text="Surat Aal Imran"/>
                 <vm:VerseViewModel IsTitle="False" SurahNumber="3" VerseNumber="22" Text="They are the ones whose deeds have become worthless in this world and the Hereafter, and for them there will be no helpers."

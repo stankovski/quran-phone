@@ -336,4 +336,7 @@
   <data name="delete_bookmark" xml:space="preserve">
     <value>Удалить Закладку</value>
   </data>
+  <data name="text_size" xml:space="preserve">
+    <value>размер шрифта перевода</value>
+  </data>
 </root>

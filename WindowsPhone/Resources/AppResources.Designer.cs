@@ -375,6 +375,15 @@ namespace QuranPhone.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to translation text size.
+        /// </summary>
+        public static string text_size {
+            get {
+                return ResourceManager.GetString("text_size", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to translations.
         /// </summary>
         public static string translations {

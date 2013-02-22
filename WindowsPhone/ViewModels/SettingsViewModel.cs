@@ -20,6 +20,21 @@ namespace QuranPhone.ViewModels
                 base.OnPropertyChanged(() => ActiveTranslation);
             }
         }
+
+        private int textSize;
+        public int TextSize
+        {
+            get { return textSize; }
+            set
+            {
+                if (value == textSize)
+                    return;
+
+                textSize = value;
+
+                base.OnPropertyChanged(() => TextSize);
+            }
+        }
         #endregion Properties
 
         public void LoadData()
@@ -29,6 +44,8 @@ namespace QuranPhone.ViewModels
                 ActiveTranslation = translation.Split('|')[1];
             else
                 ActiveTranslation = "None";
+
+            TextSize = SettingsUtils.Get<int>(Constants.PREF_TRANSLATION_TEXT_SIZE);
         }
     }
 }
