@@ -88,65 +88,7 @@ namespace QuranPhone.Data
                 if (!ReopenDatabase()) { return null; }
             }
 
-            IEnumerable<QuranAyah> result = mDatabase.Query<QuranAyah>();
-
-            if (minSura == maxSura)
-            {
-                result = result.Where(a => a.Sura == minSura && a.Ayah >= minAyah && a.Ayah <= maxAyah);
-            }
-            else
-            {
-                result = result.Where(a =>
-                    (a.Sura == minSura && a.Ayah >= minAyah) ||
-                    (a.Sura == maxSura && a.Ayah <= maxAyah) ||
-                    (a.Sura > minSura && a.Sura < maxSura));
-            }
-
-            return result.ToList();
-        }
-
-        public List<QuranAyah> GetVerses(int page, string table = "verses")
-        {
-            if (!ValidDatabase())
-            {
-                if (!ReopenDatabase()) { return null; }
-            }
-
-            int[] bound = QuranInfo.GetPageBounds(page);
-            return GetVerses(bound[0], bound[1], bound[2], bound[3], table);
-        }
-
-        public List<QuranAyah> GetVerse(int sura, int ayah)
-        {
-            return GetVerses(sura, ayah, ayah);
-        }
-
-        public virtual List<QuranAyah> Search(string query)
-        {
-            if (!ValidDatabase())
-            {
-                if (!ReopenDatabase()) { return null; }
-            }
-
-            return mDatabase.Query<QuranAyah>().Where(a => a.Text.Contains(query)).Take(50).ToList();            
-        }        
-    }
-
-    public class ArabicDatabaseHandler : DatabaseHandler
-    {
-        public ArabicDatabaseHandler()
-            : base("quran.ar.db")
-        { }
-
-        public override List<QuranAyah> GetVerses(int minSura, int minAyah, int maxSura,
-                                int maxAyah, string table = "verses")
-        {
-            if (!ValidDatabase())
-            {
-                if (!ReopenDatabase()) { return null; }
-            }
-
-            StringBuilder sql = new StringBuilder("select \"sura\", \"ayah\", \"text\" from \"arabic_text\" where ");
+            StringBuilder sql = new StringBuilder("select \"sura\", \"ayah\", \"text\" from \"" + table + "\" where ");
 
             sql.Append("(");
 
@@ -187,16 +129,32 @@ namespace QuranPhone.Data
             return mDatabase.Query<QuranAyah>(sql.ToString()).ToList();
         }
 
-        public override List<QuranAyah> Search(string query)
+        public List<QuranAyah> GetVerses(int page, string table = "verses")
         {
             if (!ValidDatabase())
             {
                 if (!ReopenDatabase()) { return null; }
             }
 
-            StringBuilder sql = new StringBuilder("select \"sura\", \"ayah\", \"text\" from \"arabic_text\" where \"text\" like '%?%'");
+            int[] bound = QuranInfo.GetPageBounds(page);
+            return GetVerses(bound[0], bound[1], bound[2], bound[3], table);
+        }
 
-            return mDatabase.Query<QuranAyah>(sql.ToString(), query).Take(50).ToList();
-        }  
+        public List<QuranAyah> GetVerse(int sura, int ayah)
+        {
+            return GetVerses(sura, ayah, ayah);
+        }
+
+        public virtual List<QuranAyah> Search(string query, string table = "verses")
+        {
+            if (!ValidDatabase())
+            {
+                if (!ReopenDatabase()) { return null; }
+            }
+
+            var sql = new StringBuilder("select \"sura\", \"ayah\", \"text\" from \"" + table + "\" where \"text\" like '%?%'");
+
+            return mDatabase.Query<QuranAyah>(sql.ToString(), query).Take(50).ToList();          
+        }        
     }
 }

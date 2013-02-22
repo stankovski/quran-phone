@@ -260,53 +260,29 @@ namespace QuranPhone.Utils
             }
         }
 
-        public static void DownloadFileFromWeb(string uri, string localPath)
+        public static async Task<bool> DownloadFileFromWebAsync(string uri, string localPath)
         {
             using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
             {
-
-                getData(uri, data =>
+                try
                 {
-                    using (data)
+                    var request = (HttpWebRequest)WebRequest.Create(uri);
+                    request.Method = HttpMethod.Get;
+                    var response = await request.GetResponseAsync();
+                    using (var isfStream = new IsolatedStorageFileStream(localPath, FileMode.Create, isf))
+                    using (var sr = new StreamReader(response.GetResponseStream()))
                     {
-                        try
-                        {
-                            for (int i = 0; i < localPath.Length - 1; i++)
-                            {
-                                if (localPath[i] == '/')
-                                {
-                                    var folder = localPath.Substring(0, i);
-                                    if (!string.IsNullOrEmpty(folder))
-                                        MakeDirectory(folder);
-                                }
-                            }
-                            bool checkQuotaIncrease = QuranFileUtils.IncreaseIsolatedStorageSpace(data.Length);
-
-                            using (var isfStream = new IsolatedStorageFileStream(localPath, FileMode.Create, isf))
-                            {
-                                data.CopyTo(isfStream);
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            Debug.WriteLine("failed to store file {0}: {1}", localPath, e.Message);
-                        }
+                        response.GetResponseStream().CopyTo(isfStream);
                     }
-                });
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
             }
         }
-
-        private static void getData(string url, Action<Stream> callback)
-        {
-            WebClient webClient = new WebClient();
-            webClient.OpenReadCompleted += (s, e) =>
-            {
-                callback(e.Error == null ? e.Result : null);
-            };
-
-            webClient.OpenReadAsync(new Uri(url));
-        }
-
+        
         public static string GetQuranDatabaseDirectory(bool asUri, bool createIfDoesntExist = false)
         {
             string baseDir = (asUri ? QURAN_BASE_URI : QURAN_BASE);

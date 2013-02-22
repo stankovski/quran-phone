@@ -41,8 +41,9 @@ namespace QuranPhone
             }
 
             App.DetailsViewModel.LoadData();
-            DataContext = App.DetailsViewModel;
-            radSlideView.SelectedItem = App.DetailsViewModel.Pages[DetailsViewModel.PagesToPreload];
+            if (DataContext == null)
+                DataContext = App.DetailsViewModel;
+            radSlideView.SelectedItem = App.DetailsViewModel.Pages[App.DetailsViewModel.CurrentPageIndex];
             radSlideView.SelectionChanged += PageFlipped;
         }
 
@@ -58,7 +59,7 @@ namespace QuranPhone
             int pageNumber = ((DetailsViewModel)DataContext).CurrentPageNumber;
             if (!string.IsNullOrEmpty(App.DetailsViewModel.TranslationFile))
             {
-                App.DetailsViewModel.UpdatePages();
+                //App.DetailsViewModel.UpdatePages();
                 App.DetailsViewModel.ShowTranslation = !App.DetailsViewModel.ShowTranslation;
                 SettingsUtils.Set(Constants.PREF_SHOW_TRANSLATION, App.DetailsViewModel.ShowTranslation);
             }
@@ -108,12 +109,11 @@ namespace QuranPhone
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             base.OnNavigatedFrom(e);
-            this.DataContext = null;
+            NavigationContext.QueryString["page"] = SettingsUtils.Get<int>(Constants.PREF_LAST_PAGE).ToString(CultureInfo.InvariantCulture);
             foreach (var page in App.DetailsViewModel.Pages)
             {
                 page.ImageSource = null;
             }
-            App.DetailsViewModel.Pages.Clear();
             App.DetailsViewModel.CurrentPageIndex = -1;
             radSlideView.SelectionChanged -= PageFlipped;            
         }

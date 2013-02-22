@@ -61,6 +61,33 @@ namespace QuranPhone.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to about us.
+        /// </summary>
+        public static string about_us {
+            get {
+                return ResourceManager.GetString("about_us", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quran Phone is a free, open source Quran
+        ///application for Windows Phone based on Quran 
+        ///Android project.  The images used are from the
+        ///&amp;lt;a href=&quot;http://quran.com&quot;&gt;quran.com&amp;lt;/a&gt;
+        ///project, the audio comes from
+        ///&amp;lt;a href=&quot;http://everyayah.com&quot;&gt;everyayah.com&amp;lt;/a&gt;,
+        ///the data used in the translations and Arabic comes from
+        ///&amp;lt;a href=&quot;http://tanzil.net&quot;&gt;tanzil.net&amp;lt;/a&gt; and
+        ///&amp;lt;a href=&quot;http://quran.ksu.edu.sa&quot;&gt;quran.ksu.edu.sa&amp;lt;/a&gt;
+        ///&amp;lt;br/&gt;&amp;lt;br/&gt;&amp;lt;b&gt;Quran for Windows Phone Contributors:&amp;lt;/b&gt; [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string about_us_text {
+            get {
+                return ResourceManager.GetString("about_us_text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to QURAN.
         /// </summary>
         public static string app_name {

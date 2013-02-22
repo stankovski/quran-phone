@@ -16,7 +16,7 @@
                 <TextBlock Name="pageNumber" VerticalAlignment="Bottom" Foreground="{StaticResource DarkBlueText}" 
                            Style="{StaticResource BlueHeader}" TextWrapping="Wrap"/>
             </Border>-->
-            <Image Name="image"/>
+            <Image Name="image" Margin="0,0,0,20"/>
         </StackPanel>
         <ProgressBar Name="progress" IsIndeterminate="True" VerticalAlignment="Top"
                      Margin="20,5,20,0" FlowDirection="LeftToRight"/>

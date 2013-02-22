@@ -1,4 +1,8 @@
-﻿using QuranPhone.Data;
+﻿using System;
+using System.Windows.Input;
+using Microsoft.Phone.Tasks;
+using QuranPhone.Data;
+using QuranPhone.UI;
 using QuranPhone.Utils;
 
 namespace QuranPhone.ViewModels
@@ -35,6 +39,24 @@ namespace QuranPhone.ViewModels
                 base.OnPropertyChanged(() => TextSize);
             }
         }
+        RelayCommand navigateCommand;
+        /// <summary>
+        /// Returns a navigate command
+        /// </summary>
+        public ICommand NavigateCommand
+        {
+            get
+            {
+                if (navigateCommand == null)
+                {
+                    navigateCommand = new RelayCommand(
+                        param => this.Navigate(param)
+                    );
+                }
+                return navigateCommand;
+            }
+        }
+
         #endregion Properties
 
         public void LoadData()
@@ -47,5 +69,16 @@ namespace QuranPhone.ViewModels
 
             TextSize = SettingsUtils.Get<int>(Constants.PREF_TRANSLATION_TEXT_SIZE);
         }
+
+        private void Navigate(object param)
+        {
+            var link = param as string;
+            if (link != null)
+            {
+                var task = new WebBrowserTask() { Uri = new Uri(link) };
+                task.Show();
+            }
+        }
+
     }
 }

@@ -15,7 +15,6 @@ namespace QuranPhone.ViewModels
 {
     public class DetailsViewModel : ViewModelBase
     {
-        public const int PagesToPreload = 2;
         private readonly Dictionary<string, DatabaseHandler> translationDatabases =
             new Dictionary<string, DatabaseHandler>();
 
@@ -100,44 +99,31 @@ namespace QuranPhone.ViewModels
         /// </summary>
         public void LoadData()
         {
-            this.CurrentPageIndex = PagesToPreload;
-            this.IsDataLoaded = true;
-        }
-
-        public void UpdatePages()
-        {
             if (Pages.Count == 0)
             {
-                for (int i = CurrentPageNumber + PagesToPreload; i >= CurrentPageNumber - PagesToPreload; i--)
+                for (int page = Constants.PAGES_LAST; page >= Constants.PAGES_FIRST; page--)
                 {
-                    var page = (i <= 0 ? Constants.PAGES_LAST + i : i);
                     Pages.Add(new PageViewModel(page) {ShowTranslation = this.ShowTranslation});
                 }
             }
 
+            //Set text size
+            var textSize = SettingsUtils.Get<int>(Constants.PREF_TRANSLATION_TEXT_SIZE);
+            foreach (var pageViewModel in Pages)
+            {
+                pageViewModel.TextSize = textSize;
+            }
+
+            this.CurrentPageIndex = getIndexFromPageNumber(this.CurrentPageNumber);
+            this.IsDataLoaded = true;
+        }
+
+        public async void UpdatePages()
+        {
             CurrentPageNumber = Pages[CurrentPageIndex].PageNumber;
             SettingsUtils.Set<int>(Constants.PREF_LAST_PAGE, CurrentPageNumber);
 
-            if (CurrentPageIndex == PagesToPreload - 1)
-            {
-                var firstPage = Pages[0].PageNumber;
-                var newPage = (firstPage + 1 >= Constants.PAGES_LAST ? Constants.PAGES_LAST - firstPage - 1 : firstPage + 1);
-                Pages.Insert(0, new PageViewModel(newPage) { ShowTranslation = this.ShowTranslation });
-                currentPageIndex++;
-            }
-            else if (CurrentPageIndex == Pages.Count - PagesToPreload)
-            {
-                var lastPage = Pages[Pages.Count - 1].PageNumber;
-                var newPage = (lastPage - 1 <= 0 ? Constants.PAGES_LAST + lastPage - 1 : lastPage - 1);
-                Pages.Add(new PageViewModel(newPage) { ShowTranslation = this.ShowTranslation });
-            }
-
-            loadPage(CurrentPageIndex, false);
-            loadPage(CurrentPageIndex + 1, false);
-            loadPage(CurrentPageIndex - 1, false);
-
-            cleanPage(CurrentPageIndex + PagesToPreload);
-            cleanPage(CurrentPageIndex - PagesToPreload);
+            await loadPage(CurrentPageIndex, false);
         }
 
         protected override void OnDispose()
@@ -173,7 +159,7 @@ namespace QuranPhone.ViewModels
             pageModel.Verses.Clear();
         }
 
-        private async void loadPage(int pageIndex, bool force)
+        private async Task<bool> loadPage(int pageIndex, bool force)
         {
             var pageModel = Pages[pageIndex];
             // Set image
@@ -183,11 +169,13 @@ namespace QuranPhone.ViewModels
             {
                 // Set translation
                 if (string.IsNullOrEmpty(this.TranslationFile) ||
-                    !this.translationDatabases.ContainsKey(this.TranslationFile))
-                    return;
+                    !this.translationDatabases.ContainsKey(this.TranslationFile) ||
+                    !QuranFileUtils.FileExists(Path.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false),
+                                                            this.TranslationFile)))
+                    return false;
 
                 if (!force && pageModel.Verses.Count > 0)
-                    return;
+                    return false;
 
                 pageModel.Verses.Clear();
                 var db = translationDatabases[this.TranslationFile];
@@ -255,24 +243,24 @@ namespace QuranPhone.ViewModels
                     // Do nothing
                 }
                 pageModel.Verses.Add(new VerseViewModel
-                {
-                    IsTitle = true,
-                    Text = "Error loading translation..."
-                });
+                    {
+                        IsTitle = true,
+                        Text = "Error loading translation..."
+                    });
                 pageModel.Verses.Add(new VerseViewModel
-                {
-                    IsTitle = false,
-                    VerseNumber = 0,
-                    SurahNumber = 0,
-                    Text = e.Message
-                });
+                    {
+                        IsTitle = false,
+                        VerseNumber = 0,
+                        SurahNumber = 0,
+                        Text = e.Message
+                    });
             }
+            return true;
         }
 
-        private int inversePageNumber(int number)
+        private int getIndexFromPageNumber(int number)
         {
-            //return Constants.PAGES_LAST - number + 1;
-            return number;
+            return Constants.PAGES_LAST - number;
         }
         #endregion Private helper methods
     }

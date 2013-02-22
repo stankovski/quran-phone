@@ -12,14 +12,14 @@
 		<LinearGradientBrush x:Key="LightBackground" EndPoint="0,0.5" StartPoint="1,0.5">
         	<GradientStop Color="#FFE4E4E4" Offset="0"/>
         	<GradientStop Color="WhiteSmoke" Offset="1"/>
-        	<GradientStop Color="White" Offset="0.071"/>
-        	<GradientStop Color="White" Offset="0.929"/>
+        	<GradientStop Color="White" Offset="0.041"/>
+        	<GradientStop Color="White" Offset="0.939"/>
         </LinearGradientBrush>
 		<LinearGradientBrush x:Key="LightBackgroundInverse" StartPoint="1,0.5" EndPoint="0,0.5">
             <GradientStop Color="#FFE4E4E4" Offset="0"/>
             <GradientStop Color="WhiteSmoke" Offset="1"/>
-            <GradientStop Color="White" Offset="0.071"/>
-            <GradientStop Color="White" Offset="0.929"/>
+            <GradientStop Color="White" Offset="0.041"/>
+            <GradientStop Color="White" Offset="0.939"/>
         </LinearGradientBrush>
         <local:LocalizedStrings xmlns:local="clr-namespace:QuranPhone" x:Key="LocalizedStrings"/>
 

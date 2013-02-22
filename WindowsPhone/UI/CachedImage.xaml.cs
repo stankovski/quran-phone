@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
@@ -20,13 +21,13 @@ namespace QuranPhone.UI
 {
     public partial class CachedImage : UserControl, INotifyPropertyChanged, IDisposable
     {
-        private BitmapImage imageSource;
+        private BitmapImage imageSourceBitmap;
+        private Uri imageSourceUri; 
 
         public CachedImage()
         {
-            imageSource = new BitmapImage();
-            imageSource.ImageOpened += imageSource_ImageOpened;
-            imageSource.CreateOptions = BitmapCreateOptions.DelayCreation;
+            imageSourceBitmap = new BitmapImage();
+            imageSourceBitmap.CreateOptions = BitmapCreateOptions.DelayCreation;
             InitializeComponent();
         }
 
@@ -44,41 +45,76 @@ namespace QuranPhone.UI
             (source as CachedImage).UpdateSource(e.NewValue as Uri); 
         }
 
-        private void UpdateSource(Uri source)
+        private async void UpdateSource(Uri source)
         {
+            if (imageSourceUri == source)
+            {
+                return;
+            }
+            else
+            {
+                imageSourceUri = source;
+            }
+
             progress.Visibility = System.Windows.Visibility.Visible;
+            imageSourceBitmap.UriSource = null;
+            image.Source = null;
             if (source == null)
             {
-                imageSource.UriSource = null;
-                image.Source = null;
                 progress.Visibility = System.Windows.Visibility.Collapsed;
                 progress.IsIndeterminate = false;
             }
             else
             {
-                if (source.Scheme == "isostore")
+                var uriBuilder = new UriBuilder(source);
+                var localPath = Path.Combine(QuranFileUtils.GetQuranDirectory(false), Path.GetFileName(uriBuilder.Path));
+                bool downloadSuccessful = true;
+
+                if (source.Scheme == "http")
                 {
-                    try
-                    {
-                        using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
-                        using (var stream = isf.OpenFile(source.LocalPath, FileMode.Open))
-                        {
-                            imageSource.SetSource(stream);
-                            progress.Visibility = System.Windows.Visibility.Collapsed;
-                        }
-                    }
-                    catch
-                    {
-                        var backupSource = QuranFileUtils.GetImageFromWeb(Path.GetFileName(source.LocalPath), false);
-                        imageSource.UriSource = backupSource;
-                        ImageSource = backupSource;
-                    }
+                    if (!QuranFileUtils.FileExists(localPath))
+                        downloadSuccessful = await QuranFileUtils.DownloadFileFromWebAsync(source.ToString(), localPath);
                 }
                 else
                 {
-                    imageSource.UriSource = source;
+                    localPath = source.LocalPath;
                 }
-                image.Source = imageSource;
+
+                try
+                {
+                    if (downloadSuccessful)
+                        loadImageFromLocalPath(localPath);
+                    else
+                        loadImageFromRemotePath(source);
+                }
+                catch
+                {
+                    loadImageFromRemotePath(source);
+                }
+                finally
+                {
+                    progress.Visibility = System.Windows.Visibility.Collapsed;
+                    progress.IsIndeterminate = false;
+                }
+
+                image.Source = imageSourceBitmap;
+            }
+        }
+
+        private void loadImageFromRemotePath(Uri source)
+        {
+            var backupSource = QuranFileUtils.GetImageFromWeb(Path.GetFileName(source.LocalPath), false);
+            imageSourceBitmap.UriSource = backupSource;
+            ImageSource = backupSource;
+        }
+
+        private void loadImageFromLocalPath(string localPath)
+        {
+            using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
+            using (var stream = isf.OpenFile(localPath, FileMode.Open))
+            {
+                imageSourceBitmap.SetSource(stream);
+                progress.Visibility = System.Windows.Visibility.Collapsed;
             }
         }
 
@@ -102,31 +138,7 @@ namespace QuranPhone.UI
             //pageNumber.Text = "Page " + source;
         }
 
-        void imageSource_ImageOpened(object sender, RoutedEventArgs e)
-        {
-            progress.Visibility = System.Windows.Visibility.Collapsed;
-            UriBuilder uriBuilder = new UriBuilder(ImageSource);
-            var path = Path.Combine(QuranFileUtils.GetQuranDirectory(false), Path.GetFileName(uriBuilder.Path));
-
-            //try
-            //{
-            //    if (!QuranFileUtils.FileExists(path))
-            //    {
-            //        WriteableBitmap writableBitmap = new WriteableBitmap(imageSource);
-            //        var encoder = new ImageTools.IO.Png.PngEncoder();
-            //        using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
-            //        using (var isfStream = new IsolatedStorageFileStream(path, FileMode.Create, isf))
-            //        {
-            //            encoder.Encode(writableBitmap.ToImage(), isfStream);
-            //        }
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    Debug.WriteLine("failed to store file {0}: {1}", path, ex.Message);
-            //}
-        }
-
+        
         #region INotifyPropertyChanged Members
 
         /// <summary>
@@ -185,8 +197,10 @@ namespace QuranPhone.UI
 
         public void Dispose()
         {
-            if (imageSource != null)
-                imageSource = null;
+            imageSourceBitmap.UriSource = null;
+            if (image != null)
+                image.Source = null;
+            imageSourceBitmap = null;
             ImageSource = null;
         }
     }

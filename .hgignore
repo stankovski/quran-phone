@@ -39,3 +39,4 @@ dnGREP.ArchiveEngine/7z.dll
 *.ncrunchsolution
 *.ipch
 WindowsPhone/PerfLogs/*
+*.opensdf

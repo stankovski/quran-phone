@@ -1,0 +1,383 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="app_name" xml:space="preserve">
+    <value>КОРАН</value>
+  </data>
+  <data name="available_translations" xml:space="preserve">
+    <value>Доступные для загрузки</value>
+  </data>
+  <data name="bookmarks" xml:space="preserve">
+    <value>Закладки</value>
+  </data>
+  <data name="bookmarks_ayah" xml:space="preserve">
+    <value>Закладки аятов</value>
+  </data>
+  <data name="bookmarks_current_page" xml:space="preserve">
+    <value>Текущая страница</value>
+  </data>
+  <data name="bookmarks_page" xml:space="preserve">
+    <value>Закладки страниц</value>
+  </data>
+  <data name="delete_bookmark" xml:space="preserve">
+    <value>Удалить Закладку</value>
+  </data>
+  <data name="downloaded_translations" xml:space="preserve">
+    <value>Загруженные переводы</value>
+  </data>
+  <data name="downloadPrompt" xml:space="preserve">
+    <value>Для оптимальной работы необходимо скачать некоторые</value>
+  </data>
+  <data name="downloadPrompt_title" xml:space="preserve">
+    <value>Загрузить необходимые файлы?</value>
+  </data>
+  <data name="extracting_message" xml:space="preserve">
+    <value>Разпаковка...</value>
+  </data>
+  <data name="juz2_description" xml:space="preserve">
+    <value>Джуз %1$d</value>
+  </data>
+  <data name="loading_message" xml:space="preserve">
+    <value>Загрузка данных...</value>
+  </data>
+  <data name="madani" xml:space="preserve">
+    <value>Медина</value>
+  </data>
+  <data name="makki" xml:space="preserve">
+    <value>Мекка</value>
+  </data>
+  <data name="page_description" xml:space="preserve">
+    <value>стр. %1$d, джуз %2$d</value>
+  </data>
+  <data name="quran_ayah" xml:space="preserve">
+    <value>Аят</value>
+  </data>
+  <data name="quran_bookmarks_lower" xml:space="preserve">
+    <value>закладки</value>
+  </data>
+  <data name="quran_juz2" xml:space="preserve">
+    <value>Джуз</value>
+  </data>
+  <data name="quran_juz2_lower" xml:space="preserve">
+    <value>джуз</value>
+  </data>
+  <data name="quran_page" xml:space="preserve">
+    <value>страница</value>
+  </data>
+  <data name="quran_sura" xml:space="preserve">
+    <value>Сура</value>
+  </data>
+  <data name="quran_sura_lower" xml:space="preserve">
+    <value>сура</value>
+  </data>
+  <data name="quran_sura_title" xml:space="preserve">
+    <value>Сура</value>
+  </data>
+  <data name="quran_tags_lower" xml:space="preserve">
+    <value>тэги</value>
+  </data>
+  <data name="ResourceFlowDirection" xml:space="preserve">
+    <value>LeftToRight</value>
+  </data>
+  <data name="ResourceLanguage" xml:space="preserve">
+    <value>ru-RU</value>
+  </data>
+  <data name="settings" xml:space="preserve">
+    <value>настройки</value>
+  </data>
+  <data name="String" xml:space="preserve">
+    <value>файлы. Если Вы выберите не делать этого сейчас, загрузка каждой страницы будет занимать значительно большее время. Вы хотите загрузить выбранные</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value>файлы сейчас?</value>
+  </data>
+  <data name="sura_ayah_notification_str" xml:space="preserve">
+    <value>Сура %1$s, Аят %2$d</value>
+  </data>
+  <data name="sura_names" xml:space="preserve">
+    <value>&lt;string-array name="sura_names"&gt;
+        &lt;item&gt;Al-Fatiha&lt;/item&gt;
+        &lt;item&gt;Al-Baqara&lt;/item&gt;
+        &lt;item&gt;Aal-E-Imran&lt;/item&gt;
+        &lt;item&gt;An-Nisa&lt;/item&gt;
+        &lt;item&gt;Al-Maeda&lt;/item&gt;
+        &lt;item&gt;Al-Anaam&lt;/item&gt;
+        &lt;item&gt;Al-Araf&lt;/item&gt;
+        &lt;item&gt;Al-Anfal&lt;/item&gt;
+        &lt;item&gt;At-Tawba&lt;/item&gt;
+        &lt;item&gt;Yunus&lt;/item&gt;
+        &lt;item&gt;Hud&lt;/item&gt;
+        &lt;item&gt;Yusuf&lt;/item&gt;
+        &lt;item&gt;Ar-Rad&lt;/item&gt;
+        &lt;item&gt;Ibrahim&lt;/item&gt;
+        &lt;item&gt;Al-Hijr&lt;/item&gt;
+        &lt;item&gt;An-Nahl&lt;/item&gt;
+        &lt;item&gt;Al-Isra&lt;/item&gt;
+        &lt;item&gt;Al-Kahf&lt;/item&gt;
+        &lt;item&gt;Maryam&lt;/item&gt;
+        &lt;item&gt;Ta-Ha&lt;/item&gt;
+        &lt;item&gt;Al-Anbiya&lt;/item&gt;
+        &lt;item&gt;Al-Hajj&lt;/item&gt;
+        &lt;item&gt;Al-Mumenoon&lt;/item&gt;
+        &lt;item&gt;An-Noor&lt;/item&gt;
+        &lt;item&gt;Al-Furqan&lt;/item&gt;
+        &lt;item&gt;Ash-Shu'ara&lt;/item&gt;
+        &lt;item&gt;An-Naml&lt;/item&gt;
+        &lt;item&gt;Al-Qasas&lt;/item&gt;
+        &lt;item&gt;Al-Ankaboot&lt;/item&gt;
+        &lt;item&gt;Ar-Room&lt;/item&gt;
+        &lt;item&gt;Luqman&lt;/item&gt;
+        &lt;item&gt;As-Sajda&lt;/item&gt;
+        &lt;item&gt;Al-Ahzab&lt;/item&gt;
+        &lt;item&gt;Saba&lt;/item&gt;
+        &lt;item&gt;Fatir&lt;/item&gt;
+        &lt;item&gt;Ya-Seen&lt;/item&gt;
+        &lt;item&gt;As-Saaffat&lt;/item&gt;
+        &lt;item&gt;Sad&lt;/item&gt;
+        &lt;item&gt;Az-Zumar&lt;/item&gt;
+        &lt;item&gt;Ghafir&lt;/item&gt;
+        &lt;item&gt;Fussilat&lt;/item&gt;
+        &lt;item&gt;Ash-Shura&lt;/item&gt;
+        &lt;item&gt;Az-Zukhruf&lt;/item&gt;
+        &lt;item&gt;Ad-Dukhan&lt;/item&gt;
+        &lt;item&gt;Al-Jathiya&lt;/item&gt;
+        &lt;item&gt;Al-Ahqaf&lt;/item&gt;
+        &lt;item&gt;Muhammad&lt;/item&gt;
+        &lt;item&gt;Al-Fath&lt;/item&gt;
+        &lt;item&gt;Al-Hujraat&lt;/item&gt;
+        &lt;item&gt;Qaf&lt;/item&gt;
+        &lt;item&gt;Adh-Dhariyat&lt;/item&gt;
+        &lt;item&gt;At-Tur&lt;/item&gt;
+        &lt;item&gt;An-Najm&lt;/item&gt;
+        &lt;item&gt;Al-Qamar&lt;/item&gt;
+        &lt;item&gt;Ar-Rahman&lt;/item&gt;
+        &lt;item&gt;Al-Waqia&lt;/item&gt;
+        &lt;item&gt;Al-Hadid&lt;/item&gt;
+        &lt;item&gt;Al-Mujadala&lt;/item&gt;
+        &lt;item&gt;Al-Hashr&lt;/item&gt;
+        &lt;item&gt;Al-Mumtahana&lt;/item&gt;
+        &lt;item&gt;As-Saff&lt;/item&gt;
+        &lt;item&gt;Al-Jumua&lt;/item&gt;
+        &lt;item&gt;Al-Munafiqoon&lt;/item&gt;
+        &lt;item&gt;At-Taghabun&lt;/item&gt;
+        &lt;item&gt;At-Talaq&lt;/item&gt;
+        &lt;item&gt;At-Tahrim&lt;/item&gt;
+        &lt;item&gt;Al-Mulk&lt;/item&gt;
+        &lt;item&gt;Al-Qalam&lt;/item&gt;
+        &lt;item&gt;Al-Haaqqa&lt;/item&gt;
+        &lt;item&gt;Al-Maarij&lt;/item&gt;
+        &lt;item&gt;Nooh&lt;/item&gt;
+        &lt;item&gt;Al-Jinn&lt;/item&gt;
+        &lt;item&gt;Al-Muzzammil&lt;/item&gt;
+        &lt;item&gt;Al-Muddaththir&lt;/item&gt;
+        &lt;item&gt;Al-Qiyama&lt;/item&gt;
+        &lt;item&gt;Al-Insan&lt;/item&gt;
+        &lt;item&gt;Al-Mursalat&lt;/item&gt;
+        &lt;item&gt;An-Naba&lt;/item&gt;
+        &lt;item&gt;An-Naziat&lt;/item&gt;
+        &lt;item&gt;Abasa&lt;/item&gt;
+        &lt;item&gt;At-Takwir&lt;/item&gt;
+        &lt;item&gt;Al-Infitar&lt;/item&gt;
+        &lt;item&gt;Al-Mutaffifin&lt;/item&gt;
+        &lt;item&gt;Al-Inshiqaq&lt;/item&gt;
+        &lt;item&gt;Al-Burooj&lt;/item&gt;
+        &lt;item&gt;At-Tariq&lt;/item&gt;
+        &lt;item&gt;Al-Ala&lt;/item&gt;
+        &lt;item&gt;Al-Ghashiya&lt;/item&gt;
+        &lt;item&gt;Al-Fajr&lt;/item&gt;
+        &lt;item&gt;Al-Balad&lt;/item&gt;
+        &lt;item&gt;Ash-Shams&lt;/item&gt;
+        &lt;item&gt;Al-Lail&lt;/item&gt;
+        &lt;item&gt;Ad-Dhuha&lt;/item&gt;
+        &lt;item&gt;Al-Inshirah&lt;/item&gt;
+        &lt;item&gt;At-Tin&lt;/item&gt;
+        &lt;item&gt;Al-Alaq&lt;/item&gt;
+        &lt;item&gt;Al-Qadr&lt;/item&gt;
+        &lt;item&gt;Al-Bayyina&lt;/item&gt;
+        &lt;item&gt;Az-Zalzala&lt;/item&gt;
+        &lt;item&gt;Al-Adiyat&lt;/item&gt;
+        &lt;item&gt;Al-Qaria&lt;/item&gt;
+        &lt;item&gt;At-Takathur&lt;/item&gt;
+        &lt;item&gt;Al-Asr&lt;/item&gt;
+        &lt;item&gt;Al-Humaza&lt;/item&gt;
+        &lt;item&gt;Al-Fil&lt;/item&gt;
+        &lt;item&gt;Quraish&lt;/item&gt;
+        &lt;item&gt;Al-Maun&lt;/item&gt;
+        &lt;item&gt;Al-Kauther&lt;/item&gt;
+        &lt;item&gt;Al-Kafiroon&lt;/item&gt;
+        &lt;item&gt;An-Nasr&lt;/item&gt;
+        &lt;item&gt;Al-Masadd&lt;/item&gt;
+        &lt;item&gt;Al-Ikhlas&lt;/item&gt;
+        &lt;item&gt;Al-Falaq&lt;/item&gt;
+        &lt;item&gt;An-Nas&lt;/item&gt;
+    &lt;/string-array&gt;</value>
+  </data>
+  <data name="tags" xml:space="preserve">
+    <value>Тэги</value>
+  </data>
+  <data name="text_size" xml:space="preserve">
+    <value>размер шрифта перевода</value>
+  </data>
+  <data name="translations" xml:space="preserve">
+    <value>переводы</value>
+  </data>
+  <data name="verse" xml:space="preserve">
+    <value>стих</value>
+  </data>
+  <data name="verses" xml:space="preserve">
+    <value>стиха</value>
+  </data>
+  <data name="about_us" xml:space="preserve">
+    <value>о проекте</value>
+  </data>
+  <data name="about_us_text" xml:space="preserve">
+    <value>Quran Phone is a free, open source Quran
+application for Windows Phone based on Quran 
+Android project.  The images used are from the
+&amp;lt;a href="http://quran.com"&gt;quran.com&amp;lt;/a&gt;
+project, the audio comes from
+&amp;lt;a href="http://everyayah.com"&gt;everyayah.com&amp;lt;/a&gt;,
+the data used in the translations and Arabic comes from
+&amp;lt;a href="http://tanzil.net"&gt;tanzil.net&amp;lt;/a&gt; and
+&amp;lt;a href="http://quran.ksu.edu.sa"&gt;quran.ksu.edu.sa&amp;lt;/a&gt;
+&amp;lt;br/&gt;&amp;lt;br/&gt;&amp;lt;b&gt;Quran for Windows Phone Contributors:&amp;lt;/b&gt;
+&amp;lt;br/&gt;Denis Stankovski
+&amp;lt;br/&gt;&amp;lt;br/&gt;&amp;lt;b&gt;Quran for Android Contributors:&amp;lt;/b&gt;
+&amp;lt;br/&gt;Ahmed El-Helw (&amp;lt;a href="http://twitter.com/ahmedre"&gt;@ahmedre&amp;lt;/a&gt;)
+&amp;lt;br/&gt;Hussein Maher (&amp;lt;a href="http://twitter.com/husseinmaher"&gt;@husseinmaher&amp;lt;/a&gt;)
+&amp;lt;br/&gt;Ahmed Farra (&amp;lt;a href="https://github.com/afarra"&gt;github&amp;lt;/a&gt;)
+&amp;lt;br/&gt;Wael Nafee (&amp;lt;a href="http://twitter.com/wnafee"&gt;@wnafee&amp;lt;/a&gt;)
+&amp;lt;br/&gt;Ahmed Fouad (&amp;lt;a href="http://twitter.com/fo2ad"&gt;@fo2ad&amp;lt;/a&gt;)
+&amp;lt;br/&gt;Somaia Gabr (&amp;lt;a href="http://somaiagabr.com"&gt;web&amp;lt;/a&gt;)
+&amp;lt;br/&gt;Mahmoud Hossam (&amp;lt;a href="https://github.com/mahmoudhossam"&gt;github&amp;lt;/a&gt;)
+&amp;lt;br/&gt;Rehab Mohamed (&amp;lt;a href="http://twitter.com/hams_rrr"&gt;@hams_rrr&amp;lt;/a&gt;)
+&amp;lt;br/&gt;&amp;lt;br/&gt;&amp;lt;b&gt;Translators:&amp;lt;/b&gt;
+&amp;lt;br/&gt;Mehmed Mahmudoglu - Turkish
+&amp;lt;br/&gt;M. Jafar Nanakar - Farsi
+&amp;lt;br/&gt;Rinat (Ринат Валеев) - Russian
+&amp;lt;br/&gt;Denis Stankovski - Russian
+&amp;lt;br/&gt;khajavi (on github) - previous Farsi translation
+&amp;lt;br/&gt;&amp;lt;br/&gt;&amp;lt;b&gt;Open Source Projects:&amp;lt;/b&gt;
+&amp;lt;br/&gt;ActionBarSherlock (&amp;lt;a href="http://abs.io"&gt;abs.io&amp;lt;/a&gt;)
+&amp;lt;br/&gt;maven-android-plugin (&amp;lt;a href="http://code.google.com/p/maven-android-plugin"&gt;maven-android-plugin&amp;lt;/a&gt;)
+&amp;lt;br/&gt;&amp;lt;br/&gt;&amp;lt;b&gt;Special Thanks:&amp;lt;/b&gt;
+&amp;lt;br/&gt;Ahmed Essam (&amp;lt;a href="http://twitter.com/neo_4583"&gt;@neo_4583&amp;lt;/a&gt;)
+&amp;lt;br/&gt;Batoul Apps (&amp;lt;a href="http://twitter.com/batoulapps"&gt;@batoulapps&amp;lt;/a&gt;)</value>
+  </data>
+</root>

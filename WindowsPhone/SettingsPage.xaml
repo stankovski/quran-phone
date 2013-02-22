@@ -23,19 +23,64 @@
     <!--LayoutRoot is the root grid where all page content is placed-->
     <ScrollViewer x:Name="LayoutRoot" Background="Transparent">
         <Grid>
-            <StackPanel Grid.Row="0" Margin="12,17,0,28">
-                <TextBlock Text="{Binding Path=LocalizedResources.settings, Source={StaticResource LocalizedStrings}}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
-                <TextBlock Text="{Binding Path=LocalizedResources.translations, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
-                <Button Grid.Column="2" HorizontalContentAlignment="Left" 
+            <phone:Pivot>
+                <phone:PivotItem Header="{Binding Path=LocalizedResources.settings, Source={StaticResource LocalizedStrings}}">
+                    <StackPanel Grid.Row="0" Margin="12,17,0,28">
+                        <TextBlock Text="{Binding Path=LocalizedResources.translations, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                        <Button Grid.Column="2" HorizontalContentAlignment="Left" 
                         BorderThickness="0" Padding="10" Margin="0"
                         Content="{Binding ActiveTranslation}"
                         Background="{StaticResource PhoneInverseInactiveBrush}" 
                         Foreground="{StaticResource PhoneContrastForegroundBrush}" 
                         FontFamily="{StaticResource PhoneFontFamilyNormal}" Click="Translations_Click"/>
-                <TextBlock Text="{Binding Path=LocalizedResources.text_size, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
-                <Slider Minimum="15" Maximum="50" Margin="0, 0, 0, -30" SmallChange="1" Value="{Binding TextSize, Mode=TwoWay}"/>
-                <TextBlock Text="{Binding TextSize}" HorizontalAlignment="Center"/>
-            </StackPanel>
+                        <TextBlock Text="{Binding Path=LocalizedResources.text_size, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                        <Slider Minimum="15" Maximum="50" Margin="0, 0, 0, -30" SmallChange="1" Value="{Binding TextSize, Mode=TwoWay}"/>
+                        <TextBlock Text="{Binding TextSize}" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </phone:PivotItem>
+                <phone:PivotItem Header="{Binding Path=LocalizedResources.about_us, Source={StaticResource LocalizedStrings}}">
+                    <StackPanel Orientation="Vertical">
+                        <RichTextBox FontSize="22">
+                            <Paragraph>Quran Phone is a free, open source Quran application for Windows Phone based on Quran Android project. 
+                                The images used are from the
+                                <Hyperlink Command="{Binding NavigateCommand}" CommandParameter="http://quran.com">quran.com</Hyperlink> project, the audio comes from
+                                <Hyperlink Command="{Binding NavigateCommand}" CommandParameter="http://everyayah.com">everyayah.com</Hyperlink>, the data used in the 
+                                translations and Arabic comes from
+                                <Hyperlink Command="{Binding NavigateCommand}" CommandParameter="http://www.tanzil.net">tanzil.net</Hyperlink> and
+                                <Hyperlink Command="{Binding NavigateCommand}" CommandParameter="http://quran.ksu.edu.sa">quran.ksu.edu.sa</Hyperlink>
+                            </Paragraph>
+                            <Paragraph/>
+                            <Paragraph FontWeight="Bold">Quran for Windows Phone Contributors: </Paragraph>
+                            <Paragraph>Denis Stankovski</Paragraph>
+                            <Paragraph/>
+                            <Paragraph FontWeight="Bold">Quran for Android Contributors:</Paragraph>
+                            <Paragraph>Ahmed El-Helw (@ahmedre)</Paragraph>
+                            <Paragraph>Hussein Maher (@husseinmaher)</Paragraph>
+                            <Paragraph>Ahmed Farra (github)</Paragraph>
+                            <Paragraph>Wael Nafee (@wnafee)</Paragraph>
+                            <Paragraph>Ahmed Fouad (@fo2ad)</Paragraph>
+                            <Paragraph>Somaia Gabr (web)</Paragraph>
+                            <Paragraph>Mahmoud Hossam (github)</Paragraph>
+                            <Paragraph>Rehab Mohamed (@hams_rrr)</Paragraph>
+                            <Paragraph/>
+                            <Paragraph FontWeight="Bold">Translators:</Paragraph>
+                            <Paragraph>Mehmed Mahmudoglu - Turkish</Paragraph>
+                            <Paragraph>M. Jafar Nanakar - Farsi</Paragraph>
+                            <Paragraph>Rinat (Ринат Валеев) - Russian</Paragraph>
+                            <Paragraph>Denis Stankovski - Russian</Paragraph>
+                            <Paragraph>khajavi (on github) - previous Farsi translation</Paragraph>
+                            <Paragraph/>
+                            <Paragraph FontWeight="Bold">Open Source Projects:</Paragraph>
+                            <Paragraph>ActionBarSherlock (<Hyperlink  Command="{Binding NavigateCommand}" CommandParameter="http://abs.io">abs.io</Hyperlink>)</Paragraph>
+                            <Paragraph>maven-android-plugin (<Hyperlink  Command="{Binding NavigateCommand}" CommandParameter="http://code.google.com/p/maven-android-plugin">maven-android-plugin</Hyperlink>)</Paragraph>
+                            <Paragraph/>
+                            <Paragraph FontWeight="Bold">Special Thanks:</Paragraph>
+                            <Paragraph>Ahmed Essam (@neo_4583)</Paragraph>
+                            <Paragraph>Batoul Apps (@batoulapps)</Paragraph>
+                        </RichTextBox>
+                    </StackPanel>
+                </phone:PivotItem>
+            </phone:Pivot>
         </Grid>
     </ScrollViewer>
 

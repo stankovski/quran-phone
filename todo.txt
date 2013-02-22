@@ -15,9 +15,10 @@
 * About page
 * Error management
 * Layout cycle detected. Layout could not complete
-* Bug with the same page showing when flipping pages
+* --Bug with the same page showing when flipping pages--
 * Bug with double translation on 3rd page
 * Handle case when user deletes active translation 
 * Make jump to text button more responsive 
 * Check db access - when is where being executed 
 * Fix text overlay on bookmark icon
+* Flickering while switching pages

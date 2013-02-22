@@ -15,8 +15,7 @@
     <TargetFrameworkVersion>v8.0</TargetFrameworkVersion>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
     <SilverlightApplication>true</SilverlightApplication>
-    <SupportedCultures>
-    </SupportedCultures>
+    <SupportedCultures>ru%3bru-RU</SupportedCultures>
     <XapOutputs>true</XapOutputs>
     <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
     <XapFilename>WindowsPhone_$(Configuration)_$(Platform).xap</XapFilename>
@@ -122,11 +121,6 @@
     <Compile Include="Common\AyahBounds.cs" />
     <Compile Include="Common\QuranAyah.cs" />
     <Compile Include="Common\TranslationItem.cs" />
-    <Compile Include="Resources\AppResources.ru-RU.Designer.cs">
-      <DependentUpon>AppResources.ru-RU.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Data\AyahInfoDatabaseHandler.cs" />
     <Compile Include="Common\AyahLimits.cs" />
     <Compile Include="Data\Constants.cs" />
@@ -291,6 +285,7 @@
     <Content Include="Assets\Images\ic_tag.png" />
     <Content Include="Assets\Images\ic_translation.png" />
     <Content Include="Assets\Images\not_favorite.png" />
+    <Content Include="Assets\Images\page-small.png" />
     <Content Include="Assets\Images\sura_icon.png" />
     <Content Include="Assets\Tiles\FlipCycleTileLarge.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -323,11 +318,9 @@
     <EmbeddedResource Include="Resources\AppResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AppResources.ru-RU.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>AppResources.ru-RU.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AppResources.ru.resx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ImageTools">

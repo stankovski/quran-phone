@@ -584,4 +584,41 @@
   <data name="text_size" xml:space="preserve">
     <value>translation text size</value>
   </data>
+  <data name="about_us" xml:space="preserve">
+    <value>about us</value>
+  </data>
+  <data name="about_us_text" xml:space="preserve">
+    <value>Quran Phone is a free, open source Quran
+application for Windows Phone based on Quran 
+Android project.  The images used are from the
+&amp;lt;a href="http://quran.com"&gt;quran.com&amp;lt;/a&gt;
+project, the audio comes from
+&amp;lt;a href="http://everyayah.com"&gt;everyayah.com&amp;lt;/a&gt;,
+the data used in the translations and Arabic comes from
+&amp;lt;a href="http://tanzil.net"&gt;tanzil.net&amp;lt;/a&gt; and
+&amp;lt;a href="http://quran.ksu.edu.sa"&gt;quran.ksu.edu.sa&amp;lt;/a&gt;
+&amp;lt;br/&gt;&amp;lt;br/&gt;&amp;lt;b&gt;Quran for Windows Phone Contributors:&amp;lt;/b&gt;
+&amp;lt;br/&gt;Denis Stankovski
+&amp;lt;br/&gt;&amp;lt;br/&gt;&amp;lt;b&gt;Quran for Android Contributors:&amp;lt;/b&gt;
+&amp;lt;br/&gt;Ahmed El-Helw (&amp;lt;a href="http://twitter.com/ahmedre"&gt;@ahmedre&amp;lt;/a&gt;)
+&amp;lt;br/&gt;Hussein Maher (&amp;lt;a href="http://twitter.com/husseinmaher"&gt;@husseinmaher&amp;lt;/a&gt;)
+&amp;lt;br/&gt;Ahmed Farra (&amp;lt;a href="https://github.com/afarra"&gt;github&amp;lt;/a&gt;)
+&amp;lt;br/&gt;Wael Nafee (&amp;lt;a href="http://twitter.com/wnafee"&gt;@wnafee&amp;lt;/a&gt;)
+&amp;lt;br/&gt;Ahmed Fouad (&amp;lt;a href="http://twitter.com/fo2ad"&gt;@fo2ad&amp;lt;/a&gt;)
+&amp;lt;br/&gt;Somaia Gabr (&amp;lt;a href="http://somaiagabr.com"&gt;web&amp;lt;/a&gt;)
+&amp;lt;br/&gt;Mahmoud Hossam (&amp;lt;a href="https://github.com/mahmoudhossam"&gt;github&amp;lt;/a&gt;)
+&amp;lt;br/&gt;Rehab Mohamed (&amp;lt;a href="http://twitter.com/hams_rrr"&gt;@hams_rrr&amp;lt;/a&gt;)
+&amp;lt;br/&gt;&amp;lt;br/&gt;&amp;lt;b&gt;Translators:&amp;lt;/b&gt;
+&amp;lt;br/&gt;Mehmed Mahmudoglu - Turkish
+&amp;lt;br/&gt;M. Jafar Nanakar - Farsi
+&amp;lt;br/&gt;Rinat (Ринат Валеев) - Russian
+&amp;lt;br/&gt;Denis Stankovski - Russian
+&amp;lt;br/&gt;khajavi (on github) - previous Farsi translation
+&amp;lt;br/&gt;&amp;lt;br/&gt;&amp;lt;b&gt;Open Source Projects:&amp;lt;/b&gt;
+&amp;lt;br/&gt;ActionBarSherlock (&amp;lt;a href="http://abs.io"&gt;abs.io&amp;lt;/a&gt;)
+&amp;lt;br/&gt;maven-android-plugin (&amp;lt;a href="http://code.google.com/p/maven-android-plugin"&gt;maven-android-plugin&amp;lt;/a&gt;)
+&amp;lt;br/&gt;&amp;lt;br/&gt;&amp;lt;b&gt;Special Thanks:&amp;lt;/b&gt;
+&amp;lt;br/&gt;Ahmed Essam (&amp;lt;a href="http://twitter.com/neo_4583"&gt;@neo_4583&amp;lt;/a&gt;)
+&amp;lt;br/&gt;Batoul Apps (&amp;lt;a href="http://twitter.com/batoulapps"&gt;@batoulapps&amp;lt;/a&gt;)</value>
+  </data>
 </root>

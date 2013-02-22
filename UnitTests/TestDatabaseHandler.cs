@@ -14,7 +14,7 @@ namespace UnitTests
     public class TestDatabaseHandler
     {
         [TestMethod]
-        public void TestSql()
+        public async void TestSql()
         {
             string basePath = QuranFileUtils.GetQuranDatabaseDirectory(false);
             if (basePath == null) return;
@@ -23,7 +23,7 @@ namespace UnitTests
             var isf = IsolatedStorageFile.GetUserStoreForApplication();
             if (!isf.FileExists(path))
             {
-                QuranFileUtils.DownloadFileFromWeb(QuranFileUtils.GetArabicSearchDatabaseUrl(), path);
+                await QuranFileUtils.DownloadFileFromWebAsync(QuranFileUtils.GetArabicSearchDatabaseUrl(), path);
                 return;
             }
 
