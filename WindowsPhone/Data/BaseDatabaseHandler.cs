@@ -10,6 +10,14 @@ namespace QuranPhone.Data
     {
         protected SQLiteDatabase mDatabase = null;
 
+        public bool IsOpen()
+        {
+            if (mDatabase == null)
+                return false;
+
+            return mDatabase.IsOpen();
+        }
+
         public void CloseDatabase()
         {
             if (mDatabase != null)

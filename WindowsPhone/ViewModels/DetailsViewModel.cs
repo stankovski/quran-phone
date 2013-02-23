@@ -11,6 +11,9 @@ namespace QuranPhone.ViewModels
 {
     public class DetailsViewModel : ViewModelBase
     {
+        private readonly Dictionary<string, DatabaseHandler> translationDatabases =
+            new Dictionary<string, DatabaseHandler>();
+
         public DetailsViewModel()
         {
             Pages = new ObservableCollection<PageViewModel>();
@@ -29,6 +32,12 @@ namespace QuranPhone.ViewModels
                     return;
 
                 translationFile = value;
+                if (!translationDatabases.ContainsKey(translationFile) ||
+                    !translationDatabases[translationFile].IsOpen())
+                {
+                    translationDatabases[translationFile] = new DatabaseHandler(translationFile);
+                } 
+
                 resetAllVerses();
 
                 base.OnPropertyChanged(() => TranslationFile);
@@ -143,6 +152,17 @@ namespace QuranPhone.ViewModels
             {
                 cleanPage(Pages.IndexOf(page));
             }
+
+            CloseConnections();
+            translationDatabases.Clear();
+        }
+
+        public void CloseConnections()
+        {
+            foreach (var db in translationDatabases.Keys)
+            {
+                translationDatabases[db].CloseDatabase();
+            }
         }
 
         #endregion
@@ -190,10 +210,8 @@ namespace QuranPhone.ViewModels
 
                 pageModel.Verses.Clear();
                 List<QuranAyah> verses = null;
-                using (var db = new DatabaseHandler(this.TranslationFile))
-                {
-                    verses = await Task.Run(() => db.GetVerses(pageModel.PageNumber));
-                }
+                var db = new DatabaseHandler(this.TranslationFile);
+                verses = await Task.Run(() => db.GetVerses(pageModel.PageNumber));
 
                 List<QuranAyah> versesArabic = null;
                 if (this.ShowArabicInTranslation && QuranFileUtils.FileExists(Path.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false),
@@ -201,10 +219,8 @@ namespace QuranPhone.ViewModels
                 {
                     try
                     {
-                        using (var dbArabic = new DatabaseHandler(QuranFileUtils.QURAN_ARABIC_DATABASE))
-                        {
-                            versesArabic = await Task.Run(() => dbArabic.GetVerses(pageModel.PageNumber, "arabic_text"));
-                        }
+                        var dbArabic = new DatabaseHandler(QuranFileUtils.QURAN_ARABIC_DATABASE);
+                        versesArabic = await Task.Run(() => dbArabic.GetVerses(pageModel.PageNumber, "arabic_text"));
                     }
                     catch
                     {
@@ -243,6 +259,7 @@ namespace QuranPhone.ViewModels
                 // Try delete bad translation file if error is "no such table: verses"
                 try
                 {
+                    translationDatabases[this.TranslationFile].CloseDatabase();
                     if (e.Message.StartsWith("no such table:", StringComparison.InvariantCultureIgnoreCase))
                     {
                         QuranFileUtils.DeleteFile(Path.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false, false),

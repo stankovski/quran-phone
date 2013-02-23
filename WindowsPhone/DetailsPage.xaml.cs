@@ -117,6 +117,7 @@ namespace QuranPhone
             {
                 page.ImageSource = null;
             }
+            App.DetailsViewModel.CloseConnections();
             App.DetailsViewModel.CurrentPageIndex = -1;
             radSlideView.SelectionChanged -= PageFlipped;            
         }
