@@ -44,7 +44,8 @@ namespace QuranPhone.ViewModels
                     return;
 
                 showTranslation = value;
-                
+
+                changePageShowTranslations();
                 base.OnPropertyChanged(() => ShowTranslation);
             }
         }

@@ -2,7 +2,7 @@
 * --Memory leak (after a lot of navigation)--
 * --Fix jerks when navigating backwards--
 * --Settings page--
-* About page
+* --About page--
 * Page transitions
 * --Downloading of all pages as zip--
 * App bar
@@ -12,12 +12,11 @@
 * Test in light theme
 * Test in diff resolution
 * --Bookmarks--
-* About page
 * Error management
 * Layout cycle detected. Layout could not complete
 * --Bug with the same page showing when flipping pages--
-* Bug with double translation on 3rd page
-* Handle case when user deletes active translation 
+* --Bug with double translation on 3rd page--
+* --Handle case when user deletes active translation--
 * --Make jump to text button more responsive --
 * --Check db access - when is where being executed --
 * --Fix text overlay on bookmark icon--

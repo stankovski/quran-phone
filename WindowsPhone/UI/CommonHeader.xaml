@@ -18,8 +18,11 @@
             </Grid.ColumnDefinitions>
             <Image Grid.Column="0" Source="/Assets/Images/icon.png" Height="50" />
             <TextBlock Grid.Column="1" Text="{Binding Path=LocalizedResources.app_name, Source={StaticResource LocalizedStrings}}" FontSize="24" Style="{StaticResource PhoneTextNormalStyle}" VerticalAlignment="Center"/>
-            <Button Grid.Column="2" Style="{StaticResource ChromelessButtonStyle}" Click="OpenLastPage">
-                <Image Source="/Assets/Images/ic_goto_quran.png" Height="60" />
+            <Button Grid.Column="2" Style="{StaticResource ChromelessButtonStyle}" Click="OpenLastPage" Padding="-10">
+                <Grid>
+                    <!--<Ellipse StrokeThickness="2" Fill="#4CFFFFFF"/>-->
+                    <Image Source="/Assets/Images/favorite.png" Height="70" />
+                </Grid>
             </Button>
         </Grid>
     </StackPanel>
