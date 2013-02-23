@@ -33,10 +33,13 @@ namespace QuranPhone
                 {
                     App.DetailsViewModel.TranslationFile = translation.Split('|')[0];
                     App.DetailsViewModel.ShowTranslation = SettingsUtils.Get<bool>(Constants.PREF_SHOW_TRANSLATION);
+                    App.DetailsViewModel.ShowArabicInTranslation = SettingsUtils.Get<bool>(Constants.PREF_SHOW_ARABIC_IN_TRANSLATION);
                 }
                 else
                 {
+                    App.DetailsViewModel.TranslationFile = null;
                     App.DetailsViewModel.ShowTranslation = false;
+                    App.DetailsViewModel.ShowArabicInTranslation = false;
                 }
             }
 

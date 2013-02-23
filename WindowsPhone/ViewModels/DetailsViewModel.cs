@@ -1,6 +1,4 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -9,15 +7,10 @@ using QuranPhone.Common;
 using QuranPhone.Data;
 using QuranPhone.Utils;
 
-#endregion
-
 namespace QuranPhone.ViewModels
 {
     public class DetailsViewModel : ViewModelBase
     {
-        private readonly Dictionary<string, DatabaseHandler> translationDatabases =
-            new Dictionary<string, DatabaseHandler>();
-
         public DetailsViewModel()
         {
             Pages = new ObservableCollection<PageViewModel>();
@@ -36,8 +29,8 @@ namespace QuranPhone.ViewModels
                     return;
 
                 translationFile = value;
-                if (!translationDatabases.ContainsKey(translationFile))
-                    translationDatabases[translationFile] = new DatabaseHandler(translationFile);
+                resetAllVerses();
+
                 base.OnPropertyChanged(() => TranslationFile);
             }
         }
@@ -55,6 +48,22 @@ namespace QuranPhone.ViewModels
                 changePageShowTranslations();
 
                 base.OnPropertyChanged(() => ShowTranslation);
+            }
+        }
+
+        private bool showArabicInTranslation;
+        public bool ShowArabicInTranslation
+        {
+            get { return showArabicInTranslation; }
+            set
+            {
+                if (value == showArabicInTranslation)
+                    return;
+
+                showArabicInTranslation = value;
+                resetAllVerses();
+
+                base.OnPropertyChanged(() => ShowArabicInTranslation);
             }
         }
 
@@ -134,11 +143,6 @@ namespace QuranPhone.ViewModels
             {
                 cleanPage(Pages.IndexOf(page));
             }
-            foreach (var db in translationDatabases.Keys)
-            {
-                translationDatabases[db].Dispose();
-            }
-            translationDatabases.Clear();
         }
 
         #endregion
@@ -149,6 +153,14 @@ namespace QuranPhone.ViewModels
             foreach (var page in Pages)
             {
                 page.ShowTranslation = this.ShowTranslation;
+            }
+        }
+
+        private void resetAllVerses()
+        {
+            foreach (var pageViewModel in Pages)
+            {
+                pageViewModel.Verses.Clear();
             }
         }
 
@@ -169,7 +181,6 @@ namespace QuranPhone.ViewModels
             {
                 // Set translation
                 if (string.IsNullOrEmpty(this.TranslationFile) ||
-                    !this.translationDatabases.ContainsKey(this.TranslationFile) ||
                     !QuranFileUtils.FileExists(Path.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false),
                                                             this.TranslationFile)))
                     return false;
@@ -178,22 +189,28 @@ namespace QuranPhone.ViewModels
                     return false;
 
                 pageModel.Verses.Clear();
-                var db = translationDatabases[this.TranslationFile];
-                List<QuranAyah> verses = await Task.Run(() => db.GetVerses(pageModel.PageNumber));
-                List<QuranAyah> versesArabic = null;
+                List<QuranAyah> verses = null;
+                using (var db = new DatabaseHandler(this.TranslationFile))
+                {
+                    verses = await Task.Run(() => db.GetVerses(pageModel.PageNumber));
+                }
 
-                //if (SettingsUtils.Get<bool>(Constants.PREF_SHOW_ARABIC_IN_TRANSLATION)) 
-                //{
-                //    try
-                //    {
-                //        DatabaseHandler dbArabic = new ArabicDatabaseHandler();
-                //        versesArabic = dbArabic.GetVerses(pageModel.PageNumber);
-                //    }
-                //    catch
-                //    {
-                //        //Not able to get Arabic text - skipping
-                //    }
-                //}
+                List<QuranAyah> versesArabic = null;
+                if (this.ShowArabicInTranslation && QuranFileUtils.FileExists(Path.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false),
+                                                        QuranFileUtils.QURAN_ARABIC_DATABASE)))
+                {
+                    try
+                    {
+                        using (var dbArabic = new DatabaseHandler(QuranFileUtils.QURAN_ARABIC_DATABASE))
+                        {
+                            versesArabic = await Task.Run(() => dbArabic.GetVerses(pageModel.PageNumber, "arabic_text"));
+                        }
+                    }
+                    catch
+                    {
+                        //Not able to get Arabic text - skipping
+                    }
+                }
 
                 int tempSurah = -1;
                 for (int i = 0; i < verses.Count; i++)
@@ -217,13 +234,8 @@ namespace QuranPhone.ViewModels
                         };
                     if (versesArabic != null && i < versesArabic.Count)
                         vvm.QuranText = versesArabic[i].Text;
-                    pageModel.Verses.Add(new VerseViewModel
-                        {
-                            IsTitle = false,
-                            VerseNumber = verse.Ayah,
-                            SurahNumber = verse.Sura,
-                            Text = verse.Text
-                        });
+                    
+                    pageModel.Verses.Add(vvm);
                 }
             }
             catch (Exception e)
@@ -231,7 +243,6 @@ namespace QuranPhone.ViewModels
                 // Try delete bad translation file if error is "no such table: verses"
                 try
                 {
-                    translationDatabases[this.TranslationFile].CloseDatabase();
                     if (e.Message.StartsWith("no such table:", StringComparison.InvariantCultureIgnoreCase))
                     {
                         QuranFileUtils.DeleteFile(Path.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false, false),

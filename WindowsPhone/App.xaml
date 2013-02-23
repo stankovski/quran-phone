@@ -59,7 +59,7 @@
             <Setter Property="FontSize" Value="30"/>
         </Style>
         <Style TargetType="TextBlock" x:Key="ItemViewStyleBookmarkNumber">
-            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Foreground" Value="Transparent"/>
         </Style>
         <Style TargetType="TextBlock" x:Key="ItemViewStyleJuzNumber">
             <Setter Property="FontSize" Value="20"/>

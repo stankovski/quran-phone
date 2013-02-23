@@ -232,6 +232,15 @@ namespace QuranPhone.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to show ayah in Arabic above the translation.
+        /// </summary>
+        public static string prefs_ayah_before_translation_summary {
+            get {
+                return ResourceManager.GetString("prefs_ayah_before_translation_summary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;resources&gt;
         ///        &lt;string-array name=&quot;quarter_prefix_array&quot;&gt;

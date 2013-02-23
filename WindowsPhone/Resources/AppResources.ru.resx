@@ -380,4 +380,7 @@ the data used in the translations and Arabic comes from
 &amp;lt;br/&gt;Ahmed Essam (&amp;lt;a href="http://twitter.com/neo_4583"&gt;@neo_4583&amp;lt;/a&gt;)
 &amp;lt;br/&gt;Batoul Apps (&amp;lt;a href="http://twitter.com/batoulapps"&gt;@batoulapps&amp;lt;/a&gt;)</value>
   </data>
+  <data name="prefs_ayah_before_translation_summary" xml:space="preserve">
+    <value>показывать аят на Арабском вместе с переводом</value>
+  </data>
 </root>

@@ -1,10 +1,5 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using QuranPhone.Resources;
-using QuranPhone.Data;
-using System.Windows.Controls;
-using QuranPhone.Utils;
 
 namespace QuranPhone.ViewModels
 {

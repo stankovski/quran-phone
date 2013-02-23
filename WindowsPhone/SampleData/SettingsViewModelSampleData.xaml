@@ -4,4 +4,6 @@
     xmlns:vm="clr-namespace:QuranPhone.ViewModels">
     <vm:SettingsViewModel.ActiveTranslation>English</vm:SettingsViewModel.ActiveTranslation>
     <vm:SettingsViewModel.TextSize>30</vm:SettingsViewModel.TextSize>
+    <vm:SettingsViewModel.ShowArabicInTranslation>False</vm:SettingsViewModel.ShowArabicInTranslation>
+    <vm:SettingsViewModel.EnableShowArabicInTranslation>False</vm:SettingsViewModel.EnableShowArabicInTranslation>
 </vm:SettingsViewModel>

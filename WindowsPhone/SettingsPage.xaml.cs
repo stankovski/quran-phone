@@ -34,6 +34,7 @@ namespace QuranPhone
         {
             base.OnNavigatedFrom(e);
             SettingsUtils.Set(Constants.PREF_TRANSLATION_TEXT_SIZE, App.SettingsViewModel.TextSize);
+            SettingsUtils.Set(Constants.PREF_SHOW_ARABIC_IN_TRANSLATION, App.SettingsViewModel.ShowArabicInTranslation);
         }
 
         private void Translations_Click(object sender, RoutedEventArgs e)

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Phone.BackgroundTransfer;
 using QuranPhone.Common;
+using QuranPhone.Data;
 using QuranPhone.Utils;
 using QuranPhone.ViewModels;
 using System;
@@ -130,6 +131,10 @@ namespace QuranPhone.UI
                     QuranFileUtils.DeleteFile(this.LocalUrl);
                     if (DeleteComplete != null)
                         DeleteComplete(this, null);
+                    if (SettingsUtils.Get<string>(Constants.PREF_ACTIVE_TRANSLATION).StartsWith(this.FileName))
+                    {
+                        SettingsUtils.Set<string>(Constants.PREF_ACTIVE_TRANSLATION, string.Empty);
+                    }
                 }
                 catch
                 {
