@@ -15,7 +15,7 @@
 
     <UserControl.Resources>
         <myui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        <myui:IncrementalConverter x:Key="IncrementalConverter"/>
+        <myui:SettingsRetrieverConverter x:Key="SettingsRetrieverConverter"/>
     </UserControl.Resources>
     
     <Grid>
@@ -38,7 +38,7 @@
                         </StackPanel>
                         <TextBlock Text="{Binding QuranText}" Foreground="{StaticResource PhoneTextBoxForegroundBrush}" Margin="10, 10, 10, 10" TextWrapping="Wrap" 
                                    FontFamily="/Assets/UthmanicHafs.otf#KFGQPC Uthmanic Script HAFS"
-                                   FontSize="30"
+                                   FontSize="{Binding Converter={StaticResource SettingsRetrieverConverter}, ConverterParameter=arabicTextSize}"
                                    Visibility="{Binding QuranTextExists, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                         <TextBlock Text="{Binding Text}" Foreground="{StaticResource PhoneTextBoxForegroundBrush}" Margin="10, 10, 10, 35" TextWrapping="Wrap" 
                                            Visibility="{Binding IsTitle, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}"/>

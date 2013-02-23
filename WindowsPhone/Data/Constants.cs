@@ -11,6 +11,7 @@ namespace QuranPhone.Data
     {
         // Numerics
         public const int DEFAULT_TEXT_SIZE = 15;
+        public const double ARABIC_FONT_SCALE_RELATIVE_TO_TRANSLATION = 1.5;
 
         // 10 days in ms
         public const int TRANSLATION_REFRESH_TIME = 60 * 60 * 24 * 10 * 1000;
@@ -35,8 +36,10 @@ namespace QuranPhone.Data
         public const String PREF_LAST_PAGE = "lastPage";
         public const String PREF_LOCK_ORIENTATION = "lockOrientation";
         public const String PREF_LANDSCAPE_ORIENTATION = "landscapeOrientation";
-        [DefaultValue(20)]
+        [DefaultValue(25)]
         public const String PREF_TRANSLATION_TEXT_SIZE = "translationTextSize";
+        [DefaultValue(35)]
+        public const String PREF_ARABIC_TEXT_SIZE = "arabicTextSize";
         public const String PREF_ACTIVE_TRANSLATION = "activeTranslation";
         [DefaultValue(false)]
         public const String PREF_SHOW_TRANSLATION = "showTranslation";

@@ -36,7 +36,8 @@ namespace QuranPhone.ViewModels
                     return;
 
                 textSize = value;
-
+                SettingsUtils.Set(Constants.PREF_TRANSLATION_TEXT_SIZE, value);
+                SettingsUtils.Set(Constants.PREF_ARABIC_TEXT_SIZE, value * Constants.ARABIC_FONT_SCALE_RELATIVE_TO_TRANSLATION);
                 base.OnPropertyChanged(() => TextSize);
             }
         }
@@ -51,7 +52,7 @@ namespace QuranPhone.ViewModels
                     return;
 
                 showArabicInTranslation = value;
-
+                SettingsUtils.Set(Constants.PREF_SHOW_ARABIC_IN_TRANSLATION, value);
                 base.OnPropertyChanged(() => ShowArabicInTranslation);
             }
         }

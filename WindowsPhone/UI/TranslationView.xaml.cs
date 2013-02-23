@@ -19,6 +19,7 @@ namespace QuranPhone.UI
             InitializeComponent();
         }
 
+
         private void UserControl_MouseEnter_1(object sender, System.Windows.Input.MouseEventArgs e)
         {
             memoryUsage.Text = PhoneUtils.CurrentMemoryUsage();

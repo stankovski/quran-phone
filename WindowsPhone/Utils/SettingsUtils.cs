@@ -13,6 +13,7 @@ namespace QuranPhone.Utils
 {
     public class SettingsUtils
     {
+        private static IDictionary<string, object> cache = new Dictionary<string, object>();
         /// <summary>
         /// Gets value of object in dictionary and deserializes it to specified type
         /// </summary>
@@ -21,6 +22,18 @@ namespace QuranPhone.Utils
         /// <returns></returns>
         public static T Get<T>(string key)
         {
+            if (cache.ContainsKey(key))
+            {
+                try
+                {
+                    return (T)cache[key];
+                }
+                catch
+                {
+                    return getDefaultValue<T>(key);
+                }
+            }
+
             object value = null;
             if (IsolatedStorageSettings.ApplicationSettings.Contains(key))
             {
@@ -28,16 +41,28 @@ namespace QuranPhone.Utils
             }
 
             if (value == null)
-                return getDefaultValue<T>(key);
-
+            {
+                value = getDefaultValue<T>(key);
+            }
+            
             try
             {
-                return (T)value;
+                cache[key] = value;
+                return (T) value;
             }
             catch
             {
+                cache[key] = getDefaultValue<T>(key);
                 return getDefaultValue<T>(key);
             }
+        }
+
+        public static bool Contains(string key)
+        {
+            if (cache.ContainsKey(key))
+                return true;
+            else
+                return IsolatedStorageSettings.ApplicationSettings.Contains(key);
         }
 
         private static List<FieldInfo> constantKeys;
@@ -83,6 +108,8 @@ namespace QuranPhone.Utils
                 IsolatedStorageSettings.ApplicationSettings.Add(key, value);
             else
                 IsolatedStorageSettings.ApplicationSettings[key] = value;
+
+            cache[key] = value;
             Save();
         }
 
