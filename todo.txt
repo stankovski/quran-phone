@@ -3,7 +3,7 @@
 * --Fix jerks when navigating backwards--
 * --Settings page--
 * --About page--
-* Page transitions
+* --Page transitions--
 * --Downloading of all pages as zip--
 * App bar
 * --Fix slow translation loading--
