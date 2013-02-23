@@ -23,6 +23,8 @@ namespace QuranPhone
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             string selectedPage;
+            DataContext = null;
+
             if (NavigationContext.QueryString.TryGetValue("page", out selectedPage))
             {
                 int page = int.Parse(selectedPage);
@@ -31,6 +33,12 @@ namespace QuranPhone
                 var translation = SettingsUtils.Get<string>(Constants.PREF_ACTIVE_TRANSLATION);
                 if (!string.IsNullOrEmpty(translation))
                 {
+                    if (App.DetailsViewModel.TranslationFile != translation.Split('|')[0] ||
+                        App.DetailsViewModel.ShowTranslation != SettingsUtils.Get<bool>(Constants.PREF_SHOW_TRANSLATION) ||
+                        App.DetailsViewModel.ShowArabicInTranslation != SettingsUtils.Get<bool>(Constants.PREF_SHOW_ARABIC_IN_TRANSLATION))
+                    {
+                        App.DetailsViewModel.Pages.Clear();
+                    }
                     App.DetailsViewModel.TranslationFile = translation.Split('|')[0];
                     App.DetailsViewModel.ShowTranslation = SettingsUtils.Get<bool>(Constants.PREF_SHOW_TRANSLATION);
                     App.DetailsViewModel.ShowArabicInTranslation = SettingsUtils.Get<bool>(Constants.PREF_SHOW_ARABIC_IN_TRANSLATION);

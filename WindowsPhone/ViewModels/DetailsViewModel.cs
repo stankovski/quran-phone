@@ -29,8 +29,7 @@ namespace QuranPhone.ViewModels
                     return;
 
                 translationFile = value;
-                resetAllVerses();
-
+                
                 base.OnPropertyChanged(() => TranslationFile);
             }
         }
@@ -45,8 +44,7 @@ namespace QuranPhone.ViewModels
                     return;
 
                 showTranslation = value;
-                changePageShowTranslations();
-
+                
                 base.OnPropertyChanged(() => ShowTranslation);
             }
         }
@@ -61,8 +59,7 @@ namespace QuranPhone.ViewModels
                     return;
 
                 showArabicInTranslation = value;
-                resetAllVerses();
-
+                
                 base.OnPropertyChanged(() => ShowArabicInTranslation);
             }
         }
@@ -153,14 +150,6 @@ namespace QuranPhone.ViewModels
             foreach (var page in Pages)
             {
                 page.ShowTranslation = this.ShowTranslation;
-            }
-        }
-
-        private void resetAllVerses()
-        {
-            foreach (var pageViewModel in Pages)
-            {
-                pageViewModel.Verses.Clear();
             }
         }
 

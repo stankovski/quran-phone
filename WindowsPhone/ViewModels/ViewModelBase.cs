@@ -120,6 +120,12 @@ namespace QuranPhone.ViewModels
             return memberExpression.Member.Name;
         }
 
+        public bool IsPropertyChanged<T>(Func<T> expression, T newValue) where T : class
+        {
+            T expressionValue = expression.Invoke();
+            return expressionValue == newValue;
+        }
+
         #endregion // INotifyPropertyChanged Members
 
         #region IDisposable Members
