@@ -21,3 +21,4 @@
 * --Check db access - when is where being executed --
 * --Fix text overlay on bookmark icon--
 * --Flickering while switching pages--
+* Text - alif instead of hamza

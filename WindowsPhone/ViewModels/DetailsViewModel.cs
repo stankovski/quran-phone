@@ -203,6 +203,7 @@ namespace QuranPhone.ViewModels
                 }
 
                 int tempSurah = -1;
+                ArabicReshaper resharper = new ArabicReshaper();
                 for (int i = 0; i < verses.Count; i++)
                 {
                     var verse = verses[i];
@@ -223,7 +224,7 @@ namespace QuranPhone.ViewModels
                             Text = verse.Text
                         };
                     if (versesArabic != null && i < versesArabic.Count)
-                        vvm.QuranText = versesArabic[i].Text;
+                        vvm.QuranText = resharper.Reshape(versesArabic[i].Text);
                     
                     pageModel.Verses.Add(vvm);
                 }

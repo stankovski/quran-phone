@@ -60,7 +60,7 @@ namespace QuranPhone
             }
         }
 
-        private async void downloadAndExtractQuranData()
+        private void downloadAndExtractQuranData()
         {
             // If downloaded offline and stuck in temp storage
             if (App.MainViewModel.QuranData.IsInTempStorage)

@@ -91,7 +91,7 @@ namespace QuranPhone
                     menuToggleButton.Visibility = Visibility.Visible;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Console.WriteLine("error creating bookmark");
             }
