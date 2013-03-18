@@ -46,7 +46,7 @@
     <Grid Background="{StaticResource LightBackground}">
         <telerikPrimitives:RadSlideView x:Name="radSlideView" IsFilmstripModeEnabled="True" 
                                         ItemsSource="{Binding Pages}" IsLoopingEnabled="True" 
-                                        ItemRealizationMode="ViewportItem" SizeChanged="RadSlideView_OnSizeChanged">
+                                        ItemRealizationMode="ViewportItem">
             <telerikPrimitives:RadSlideView.ItemTemplate>
                 <DataTemplate>
                     <ScrollViewer HorizontalAlignment="Stretch">

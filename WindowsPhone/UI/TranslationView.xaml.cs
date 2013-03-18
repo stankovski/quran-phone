@@ -34,45 +34,43 @@ namespace QuranPhone.UI
 
         private void setFormattedText(string formattedText)
         {
-            translationTextBlock.Inlines.Clear();
+            stackPanel.Children.Clear();
             if (string.IsNullOrEmpty(formattedText))
                 return;
-
-            var inlines = new List<Inline>();
+            
             foreach (var line in formattedText.Split('\r', '\n'))
             {
-                var run = getRun(line, SettingsUtils.Get<int>(Constants.PREF_TRANSLATION_TEXT_SIZE));
-                inlines.Add(run);
-                inlines.Add(new LineBreak());
+                var run = getTextBlock(line, SettingsUtils.Get<int>(Constants.PREF_TRANSLATION_TEXT_SIZE));
+                stackPanel.Children.Add(run);
             }
-            inlines.ForEach(il => translationTextBlock.Inlines.Add(il));
         }
 
-        private Run getRun(string line, double fontSize)
+        private TextBlock getTextBlock(string line, double fontSize)
         {
             bool isHeader = line.StartsWith("h:");
             bool isBold = line.StartsWith("b:");
             bool isArabic = line.StartsWith("a:");
-            Run run = new Run() {Text = line, FontSize = fontSize};
+            var textBlock = new TextBlock() { Text = line, FontSize = fontSize, Margin = new Thickness(0),
+                Foreground = new SolidColorBrush(Colors.Black), TextWrapping = TextWrapping.Wrap};
             if (isHeader)
             {
-                run.Text = line.Substring(2);
-                run.FontSize = 50;
-                run.Foreground = new SolidColorBrush(new Color { A = 0xFF, R = 0x49, G = 0xA4, B = 0xC5 });
+                textBlock.Text = line.Substring(2);
+                textBlock.FontSize = 50;
+                textBlock.Foreground = new SolidColorBrush(new Color { A = 0xFF, R = 0x49, G = 0xA4, B = 0xC5 });
             }
             else if (isBold)
             {
-                run.Text = line.Substring(2);
-                run.FontWeight = FontWeights.Bold;
+                textBlock.Text = line.Substring(2);
+                textBlock.FontWeight = FontWeights.Bold;
             }
             else if (isArabic)
             {
-                run.Text = line.Substring(2);
-                run.FontSize = fontSize * Constants.ARABIC_FONT_SCALE_RELATIVE_TO_TRANSLATION;
-                run.FontFamily = new FontFamily("/Assets/UthmanicHafs.otf#KFGQPC Uthmanic Script HAFS");
-                run.FlowDirection = FlowDirection.RightToLeft;
+                textBlock.Text = line.Substring(2);
+                textBlock.FontSize = fontSize * Constants.ARABIC_FONT_SCALE_RELATIVE_TO_TRANSLATION;
+                textBlock.FontFamily = new FontFamily("/Assets/UthmanicHafs.otf#KFGQPC Uthmanic Script HAFS");
+                textBlock.FlowDirection = FlowDirection.RightToLeft;
             }
-            return run;
+            return textBlock;
         }
 
         public void Dispose()

@@ -130,12 +130,6 @@ namespace QuranPhone
             radSlideView.SelectionChanged -= PageFlipped;            
         }
 
-
-        private void RadSlideView_OnSizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            Debug.WriteLine(string.Format("Size changed: from {0} to {1}", e.PreviousSize, e.NewSize));
-        }
-
 #if DEBUG
         ~DetailsPage()
         {

@@ -10,6 +10,5 @@
     Foreground="{StaticResource PhoneForegroundBrush}"
     d:DesignHeight="480" d:DesignWidth="480">
 
-    <TextBlock TextWrapping="Wrap" Foreground="{StaticResource PhoneTextBoxForegroundBrush}"
-               Name="translationTextBlock" Margin="20 10"/>
+    <StackPanel Name="stackPanel" Margin="12 10" Orientation="Vertical"/>
 </UserControl>
