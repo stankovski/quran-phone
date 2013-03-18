@@ -46,14 +46,14 @@
     <Grid Background="{StaticResource LightBackground}">
         <telerikPrimitives:RadSlideView x:Name="radSlideView" IsFilmstripModeEnabled="True" 
                                         ItemsSource="{Binding Pages}" IsLoopingEnabled="True" 
-                                        ItemRealizationMode="ViewportItem">
+                                        ItemRealizationMode="ViewportItem" SizeChanged="RadSlideView_OnSizeChanged">
             <telerikPrimitives:RadSlideView.ItemTemplate>
                 <DataTemplate>
                     <ScrollViewer HorizontalAlignment="Stretch">
                         <Grid>
                             <myui:CachedImage ImageSource="{Binding ImageSource}" PageNumber="{Binding PageNumber}" 
                                               Visibility="{Binding ShowTranslation, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}"/>
-                            <myui:TranslationView DataContext="{Binding}" 
+                            <myui:TranslationView FormattedText="{Binding Translation}" 
                                                   Visibility="{Binding ShowTranslation, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                         </Grid>
                     </ScrollViewer>

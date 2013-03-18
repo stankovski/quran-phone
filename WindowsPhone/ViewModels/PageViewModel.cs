@@ -6,18 +6,29 @@ namespace QuranPhone.ViewModels
     public class PageViewModel : ViewModelBase
     {
         public PageViewModel()
-        {
-            Verses = new ObservableCollection<VerseViewModel>();
-        }
+        { }
 
         public PageViewModel(int page)
-            : this()
         {
             PageNumber = page;
         }
 
         #region Properties
-        public ObservableCollection<VerseViewModel> Verses { get; private set; }
+
+        private string translation;
+        public string Translation
+        {
+            get { return translation; }
+            set
+            {
+                if (value == translation)
+                    return;
+
+                translation = value;
+
+                base.OnPropertyChanged(() => Translation);
+            }
+        }
 
         private int pageNumber;
         public int PageNumber
@@ -84,8 +95,7 @@ namespace QuranPhone.ViewModels
         protected override void OnDispose()
         {
             base.OnDispose();
-            this.ImageSource = null;
-            this.Verses.Clear();
+            ImageSource = null;
         }
     }
 }
