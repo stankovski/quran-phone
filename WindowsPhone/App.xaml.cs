@@ -106,6 +106,9 @@ namespace QuranPhone
             // Language display initialization
             InitializeLanguage();
 
+            // Set theme
+            ThemeManager.ToDarkTheme();
+
             // Initialize directory
             QuranFileUtils.MakeQuranDirectory();
             QuranFileUtils.MakeQuranDatabaseDirectory();
