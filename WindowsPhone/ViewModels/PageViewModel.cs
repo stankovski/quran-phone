@@ -90,6 +90,16 @@ namespace QuranPhone.ViewModels
             }
         }
 
+        public double PageHeight
+        {
+            get { return System.Windows.Application.Current.Host.Content.ActualHeight; }
+        }
+
+        public double PageWidth
+        {
+            get { return System.Windows.Application.Current.Host.Content.ActualWidth - 20; }
+        }
+
         #endregion Properties
 
         protected override void OnDispose()

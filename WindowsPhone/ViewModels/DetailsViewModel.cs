@@ -221,7 +221,7 @@ namespace QuranPhone.ViewModels
                             Text = verse.Text
                         };
 
-                    translationBuilder.AppendLine(string.Format("b:[{0}:{1}]", verse.Sura, verse.Ayah));
+                    translationBuilder.AppendLine(string.Format("b:{0}:{1}", verse.Sura, verse.Ayah));
                     if (versesArabic != null && i < versesArabic.Count)
                         translationBuilder.AppendLine(string.Format("a:{0}", versesArabic[i].Text));
                     

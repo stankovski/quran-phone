@@ -362,6 +362,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Phone.Controls\Phone.Controls.csproj">
+      <Project>{71A41463-066F-444A-B774-5FB036C913A0}</Project>
+      <Name>Phone.Controls</Name>
+    </ProjectReference>
     <ProjectReference Include="..\sqlite-net-wp8\Sqlite.vcxproj">
       <Project>{59B35F6C-E062-4F0E-88D8-13F3F82A24F3}</Project>
       <Name>Sqlite</Name>

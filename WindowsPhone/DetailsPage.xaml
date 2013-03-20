@@ -11,6 +11,7 @@
     mc:Ignorable="d"
     xmlns:myui="clr-namespace:QuranPhone.UI"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:controls="clr-namespace:Phone.Controls;assembly=Phone.Controls"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
@@ -53,8 +54,12 @@
                         <Grid>
                             <myui:CachedImage ImageSource="{Binding ImageSource}" PageNumber="{Binding PageNumber}" 
                                               Visibility="{Binding ShowTranslation, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}"/>
-                            <myui:TranslationView FormattedText="{Binding Translation}" 
-                                                  Visibility="{Binding ShowTranslation, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                            <controls:ScrollableTextBlock Text="{Binding Translation}"           
+                                              HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="{Binding TextSize}" 
+                                              Height="{Binding PageHeight}" Width="{Binding PageWidth}" Foreground="Black" Margin="12,0" 
+                                              Visibility="{Binding ShowTranslation, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                            <!--<myui:TranslationView FormattedText="{Binding Translation}" 
+                                                  Visibility="{Binding ShowTranslation, Converter={StaticResource BooleanToVisibilityConverter}}"/>-->
                         </Grid>
                     </ScrollViewer>
                 </DataTemplate>
