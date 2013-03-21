@@ -51,10 +51,8 @@
             <telerikPrimitives:RadSlideView.ItemTemplate>
                 <DataTemplate>
                         <Grid>
-                            <ScrollViewer HorizontalAlignment="Stretch">
-                                <myui:CachedImage ImageSource="{Binding ImageSource}" PageNumber="{Binding PageNumber}" 
+                            <myui:CachedImage ImageSource="{Binding ImageSource}" PageNumber="{Binding PageNumber}" 
                                                   Visibility="{Binding ShowTranslation, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}"/>
-                            </ScrollViewer>
                             <controls:ScrollableTextBlock Text="{Binding Translation}"           
                                                   HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="{Binding TextSize}" 
                                                   DesiredWidth="{Binding ScreenWidth}" Foreground="Black" Margin="12,0" 
