@@ -44,24 +44,24 @@
     <phone:PhoneApplicationPage.Resources>
         <myui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </phone:PhoneApplicationPage.Resources>
-    <Grid Background="{StaticResource LightBackground}">
+    <Grid Background="{StaticResource LightBackground}" Name="MainContainer">
         <telerikPrimitives:RadSlideView x:Name="radSlideView" IsFilmstripModeEnabled="True" 
                                         ItemsSource="{Binding Pages}" IsLoopingEnabled="True" 
                                         ItemRealizationMode="ViewportItem">
             <telerikPrimitives:RadSlideView.ItemTemplate>
                 <DataTemplate>
-                    <ScrollViewer HorizontalAlignment="Stretch">
                         <Grid>
-                            <myui:CachedImage ImageSource="{Binding ImageSource}" PageNumber="{Binding PageNumber}" 
-                                              Visibility="{Binding ShowTranslation, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}"/>
+                            <ScrollViewer HorizontalAlignment="Stretch">
+                                <myui:CachedImage ImageSource="{Binding ImageSource}" PageNumber="{Binding PageNumber}" 
+                                                  Visibility="{Binding ShowTranslation, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}"/>
+                            </ScrollViewer>
                             <controls:ScrollableTextBlock Text="{Binding Translation}"           
-                                              HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="{Binding TextSize}" 
-                                              Height="{Binding PageHeight}" Width="{Binding PageWidth}" Foreground="Black" Margin="12,0" 
-                                              Visibility="{Binding ShowTranslation, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                                  HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="{Binding TextSize}" 
+                                                  DesiredWidth="{Binding ScreenWidth}" Foreground="Black" Margin="12,0" 
+                                                  Visibility="{Binding ShowTranslation, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                             <!--<myui:TranslationView FormattedText="{Binding Translation}" 
                                                   Visibility="{Binding ShowTranslation, Converter={StaticResource BooleanToVisibilityConverter}}"/>-->
                         </Grid>
-                    </ScrollViewer>
                 </DataTemplate>
             </telerikPrimitives:RadSlideView.ItemTemplate>
             <telerikPrimitives:RadSlideView.FilmstripModeItemTemplate>

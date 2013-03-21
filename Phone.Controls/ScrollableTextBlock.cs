@@ -11,6 +11,7 @@ namespace Phone.Controls
     public class ScrollableTextBlock : Control, IDisposable
     {
         private StackPanel stackPanel;
+        private double desiredWidth;
         private Dictionary<LineTypes, TextBlock> templateTextBlockCache = new Dictionary<LineTypes, TextBlock>();
         
         public ScrollableTextBlock()
@@ -45,6 +46,33 @@ namespace Phone.Controls
             source.ParseText(value);
         }
 
+        public static readonly DependencyProperty DesiredWidthProperty =
+            DependencyProperty.Register(
+                "DesiredWidth",
+                typeof(double),
+                typeof(ScrollableTextBlock),
+                new PropertyMetadata("ScrollableTextBlock", OnDesiredWidthPropertyChanged));
+
+        public double DesiredWidth
+        {
+            get
+            {
+                return (double)GetValue(DesiredWidthProperty);
+            }
+            set
+            {
+                SetValue(DesiredWidthProperty, value);
+            }
+        }
+
+        private static void OnDesiredWidthPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ScrollableTextBlock source = (ScrollableTextBlock)d;
+            double value = (double)e.NewValue;
+            source.desiredWidth = value;
+            source.ParseText(source.Text);
+        }
+
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
@@ -55,7 +83,7 @@ namespace Phone.Controls
 
         private void ParseText(string value)
         {
-            if (this.stackPanel == null || value == null)
+            if (this.stackPanel == null || value == null || double.IsNaN(desiredWidth))
             {
                 return;
             }
@@ -90,7 +118,7 @@ namespace Phone.Controls
             
             while (lineCount < maxLineCount)
             {
-                int charactersFitted = MeasureString(tempLine, (int)this.Width, lineType);
+                int charactersFitted = MeasureString(tempLine, (int)desiredWidth, lineType);
                 string leftSide = tempLine.Substring(0, charactersFitted);
                 sbLine.Append(leftSide);
                 tempLine = tempLine.Substring(charactersFitted, tempLine.Length - (charactersFitted));
@@ -238,7 +266,7 @@ namespace Phone.Controls
             // Get average char size
             Size size = this.MeasureText(" ", lineType);
             // Get number of char that fit in the line
-            int charLineCount = (int)(this.Width / size.Width);
+            int charLineCount = (int)(desiredWidth / size.Width);
             // Get line count
             int lineCount = (int)(2048 / size.Height);
 
@@ -249,7 +277,7 @@ namespace Phone.Controls
         {
             Size size = this.MeasureText(" ", lineType);
             // Get number of char that fit in the line
-            int charLineCount = (int)(this.Width / size.Width);
+            int charLineCount = (int)(desiredWidth / size.Width);
             // Get line count
             int lineCount = (int)(2048 / size.Height) - 5;
 

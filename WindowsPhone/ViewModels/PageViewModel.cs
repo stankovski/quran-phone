@@ -89,13 +89,8 @@ namespace QuranPhone.ViewModels
                 base.OnPropertyChanged(() => ImageSource);
             }
         }
-
-        public double PageHeight
-        {
-            get { return System.Windows.Application.Current.Host.Content.ActualHeight; }
-        }
-
-        public double PageWidth
+        
+        public double ScreenWidth
         {
             get { return System.Windows.Application.Current.Host.Content.ActualWidth - 20; }
         }

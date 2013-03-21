@@ -8,15 +8,13 @@
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="FontSize" Value="{StaticResource PhoneFontSizeMedium}"/>
         <Setter Property="Padding" Value="0"/>
-        <Setter Property="Width" Value="200" />
-        <Setter Property="Height" Value="70" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="local:ScrollableTextBlock">
-                    <ScrollViewer x:Name="ScrollViewer" Foreground="{TemplateBinding Foreground}" 
+                    <ScrollViewer x:Name="ScrollViewer" Foreground="{TemplateBinding Foreground}" HorizontalAlignment="Stretch"
                                   Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" 
                                   BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
-                        <StackPanel Orientation="Vertical" x:Name="StackPanel" />
+                        <StackPanel Orientation="Vertical" x:Name="StackPanel" HorizontalAlignment="Stretch"/>
                     </ScrollViewer>
                 </ControlTemplate>
             </Setter.Value>
