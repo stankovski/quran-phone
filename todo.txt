@@ -5,11 +5,11 @@
 * --About page--
 * --Page transitions--
 * --Downloading of all pages as zip--
-* App bar
+* --App bar--
 * --Fix slow translation loading--
 * --Tombstoning and restoring--
 * --Jump to page--
-* Test in light theme
+* --Test in light theme--
 * Test in diff resolution
 * --Bookmarks--
 * Error management

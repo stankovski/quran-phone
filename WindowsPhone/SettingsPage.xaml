@@ -66,6 +66,11 @@
                 </phone:PivotItem>
                 <phone:PivotItem Header="{Binding Path=LocalizedResources.about_us, Source={StaticResource LocalizedStrings}}">
                     <StackPanel Orientation="Vertical">
+                        <StackPanel.Resources>
+                            <Style TargetType="Hyperlink">
+                                <Setter Property="Foreground" Value="White"/>
+                            </Style>
+                        </StackPanel.Resources>
                         <RichTextBox FontSize="22">
                             <Paragraph>Quran Phone is a free, open source Quran application for Windows Phone based on Quran Android project. 
                                 The images used are from the
