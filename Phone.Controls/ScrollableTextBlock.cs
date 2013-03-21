@@ -51,7 +51,7 @@ namespace Phone.Controls
                 "DesiredWidth",
                 typeof(double),
                 typeof(ScrollableTextBlock),
-                new PropertyMetadata("ScrollableTextBlock", OnDesiredWidthPropertyChanged));
+                new PropertyMetadata(0.0, OnDesiredWidthPropertyChanged));
 
         public double DesiredWidth
         {
@@ -83,7 +83,7 @@ namespace Phone.Controls
 
         private void ParseText(string value)
         {
-            if (this.stackPanel == null || value == null || double.IsNaN(desiredWidth))
+            if (this.stackPanel == null || value == null || desiredWidth == 0.0)
             {
                 return;
             }
