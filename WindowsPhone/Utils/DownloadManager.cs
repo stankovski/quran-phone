@@ -65,9 +65,9 @@ namespace QuranPhone.Utils
             }            
         }
 
-        public BackgroundTransferRequest GetRequest(string tag)
+        public BackgroundTransferRequest GetRequest(string requestId)
         {
-            return BackgroundTransferService.Find(tag);
+            return BackgroundTransferService.Find(requestId);
         }
 
         public void FinalizeRequest(BackgroundTransferRequest request)

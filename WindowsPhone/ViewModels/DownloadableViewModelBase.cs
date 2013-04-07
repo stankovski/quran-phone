@@ -17,6 +17,7 @@ namespace QuranPhone.ViewModels
         public DownloadableViewModelBase()
         {
             IsDownloading = false;
+            IsIndeterminate = true;
         }
 
         #region Properties
@@ -119,7 +120,25 @@ namespace QuranPhone.ViewModels
 
                 progress = value;
 
+                if (progress > 0)
+                    IsIndeterminate = false;
+
                 base.OnPropertyChanged(() => Progress);
+            }
+        }
+
+        private bool isIndeterminate;
+        public bool IsIndeterminate
+        {
+            get { return isIndeterminate; }
+            set
+            {
+                if (value == isIndeterminate)
+                    return;
+
+                isIndeterminate = value;
+
+                base.OnPropertyChanged(() => IsIndeterminate);
             }
         }
 
@@ -149,6 +168,17 @@ namespace QuranPhone.ViewModels
                     return true;
                 else
                     return false;
+            }
+        }
+
+        public string DownloadId
+        {
+            get
+            {
+                if (downloadRequest != null)
+                    return downloadRequest.RequestId;
+                else
+                    return null;
             }
         }
 
@@ -223,6 +253,15 @@ namespace QuranPhone.ViewModels
                         TransferStatusChanged(this, new BackgroundTransferEventArgs(downloadRequest));
                 }
             }
+        }
+
+        public TransferStatus GetDownloadStatus(string requestId)
+        {
+            var request = DownloadManager.Instance.GetRequest(requestId);
+            if (request == null)
+                return TransferStatus.None;
+            else
+                return request.TransferStatus;
         }
 
         public void FinishPreviousDownload()

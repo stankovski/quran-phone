@@ -34,6 +34,8 @@ namespace QuranPhone.Data
         public const String PREF_USE_ARABIC_NAMES = "useArabicNames";
         public const String PREF_USE_ARABIC_RESHAPER = "useArabicReshaper";
         public const String PREF_LAST_PAGE = "lastPage";
+        [DefaultValue(null)]
+        public const String PREF_LAST_DOWNLOAD_ID = "lastDownloadId";
         public const String PREF_LOCK_ORIENTATION = "lockOrientation";
         public const String PREF_LANDSCAPE_ORIENTATION = "landscapeOrientation";
         [DefaultValue(25)]
@@ -58,5 +60,7 @@ namespace QuranPhone.Data
         public const String PREF_HAVE_UPDATED_TRANSLATIONS = "haveUpdatedTranslations";
         public const String PREF_USE_NEW_BACKGROUND = "useNewBackground";
         public const String PREF_USE_VOLUME_KEY_NAV = "volumeKeyNavigation";
+        [DefaultValue("0.0.0.0")]
+        public const String PREF_CURRENT_VERSION = "currentVersion";
     }
 }

@@ -157,6 +157,7 @@
     <Compile Include="Utils\ArabicResharper.cs" />
     <Compile Include="Utils\DownloadManager.cs" />
     <Compile Include="Utils\HttpExtensions.cs" />
+    <Compile Include="Utils\LittleWatson.cs" />
     <Compile Include="Utils\PhoneUtils.cs" />
     <Compile Include="Utils\QuranFileUtils.cs" />
     <Compile Include="Utils\QuranScreenInfo.cs" />
@@ -242,6 +243,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Images\settings.png" />
     <Content Include="Assets\UthmanicHafs.otf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -250,6 +252,7 @@
     <None Include="Properties\WMAppManifest.xml">
       <SubType>Designer</SubType>
     </None>
+    <None Include="QuranPhone_2013_03_26_08_59_50.sap" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\AlignmentGrid.png" />

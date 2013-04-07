@@ -142,13 +142,13 @@
     <value>Загруженные переводы</value>
   </data>
   <data name="downloadPrompt" xml:space="preserve">
-    <value>Для оптимальной работы необходимо скачать некоторые</value>
+    <value>Для оптимальной работы необходимо скачать некоторые файлы. Загрузить необходимые файлы?</value>
   </data>
   <data name="downloadPrompt_title" xml:space="preserve">
     <value>Загрузить необходимые файлы?</value>
   </data>
   <data name="extracting_message" xml:space="preserve">
-    <value>Разпаковка...</value>
+    <value>Распаковка...</value>
   </data>
   <data name="juz2_description" xml:space="preserve">
     <value>Джуз %1$d</value>

@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
+using Microsoft.Phone.Tasks;
 using QuranPhone.ViewModels;
 using QuranPhone.Utils;
 using QuranPhone.Data;
@@ -128,6 +129,14 @@ namespace QuranPhone
             }
             App.DetailsViewModel.CurrentPageIndex = -1;
             radSlideView.SelectionChanged -= PageFlipped;            
+        }
+
+        private void ContactUs_Click(object sender, EventArgs e)
+        {
+            var email = new EmailComposeTask();
+            email.To = "denis.stankovski@gmail.com";
+            email.Subject = "Email from QuranPhone";
+            email.Show();
         }
 
 #if DEBUG

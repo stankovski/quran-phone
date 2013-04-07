@@ -10,9 +10,9 @@
 * --Tombstoning and restoring--
 * --Jump to page--
 * --Test in light theme--
-* Test in diff resolution
+* --Test in diff resolution--
 * --Bookmarks--
-* Error management
+* -Error management--
 * --Layout cycle detected. Layout could not complete--
 * --Bug with the same page showing when flipping pages--
 * --Bug with double translation on 3rd page--
@@ -22,3 +22,6 @@
 * --Fix text overlay on bookmark icon--
 * --Flickering while switching pages--
 * Text - alif instead of hamza
+* Arabic tafseer not loading
+* --Contact us link--
+* Scroll up on page flip

@@ -88,6 +88,23 @@ namespace QuranPhone.ViewModels
                 return navigateCommand;
             }
         }
+        RelayCommand contactUsCommand;
+        /// <summary>
+        /// Returns a navigate command
+        /// </summary>
+        public ICommand ContactUsCommand
+        {
+            get
+            {
+                if (contactUsCommand == null)
+                {
+                    contactUsCommand = new RelayCommand(
+                        param => this.ContactUs()
+                    );
+                }
+                return contactUsCommand;
+            }
+        }
 
         #endregion Properties
 
@@ -113,6 +130,14 @@ namespace QuranPhone.ViewModels
             }
         }
 
+        private void ContactUs()
+        {
+            var email = new EmailComposeTask();
+            email.To = "denis.stankovski@gmail.com";
+            email.Subject = "Email from QuranPhone";
+            email.Show();
+        }
+
         private void Navigate(object param)
         {
             var link = param as string;
@@ -122,6 +147,5 @@ namespace QuranPhone.ViewModels
                 task.Show();
             }
         }
-
     }
 }

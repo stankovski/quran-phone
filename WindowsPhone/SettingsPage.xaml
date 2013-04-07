@@ -42,10 +42,10 @@
     </phone:PhoneApplicationPage.Resources>
 
     <!--LayoutRoot is the root grid where all page content is placed-->
-    <ScrollViewer x:Name="LayoutRoot" Background="Transparent">
-        <Grid>
-            <phone:Pivot>
-                <phone:PivotItem Header="{Binding Path=LocalizedResources.settings, Source={StaticResource LocalizedStrings}}">
+    <Grid x:Name="LayoutRoot">
+        <phone:Pivot>
+            <phone:PivotItem Header="{Binding Path=LocalizedResources.settings, Source={StaticResource LocalizedStrings}}">
+                <ScrollViewer Background="Transparent">
                     <StackPanel Grid.Row="0" Margin="12,17,0,28">
                         <TextBlock Text="{Binding Path=LocalizedResources.translations, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
                         <Button Grid.Column="2" HorizontalContentAlignment="Left" 
@@ -55,33 +55,36 @@
                         Foreground="{StaticResource PhoneContrastForegroundBrush}" 
                         FontFamily="{StaticResource PhoneFontFamilyNormal}" Click="Translations_Click"/>
                         <StackPanel Margin="0, 15, 0, 0" Orientation="Horizontal">
-                        <TextBlock Text="{Binding Path=LocalizedResources.text_size, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
-                        <TextBlock Text="{Binding TextSize}" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{Binding Path=LocalizedResources.text_size, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                            <TextBlock Text="{Binding TextSize}" HorizontalAlignment="Center"/>
                         </StackPanel>
                         <Slider Minimum="15" Maximum="50" Margin="0" SmallChange="1" Value="{Binding TextSize, Mode=TwoWay}"/>
                         <TextBlock Text="{Binding Path=LocalizedResources.prefs_ayah_before_translation_summary, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
                         <toolkit:ToggleSwitch IsChecked="{Binding ShowArabicInTranslation, Mode=TwoWay}"
-                                              IsEnabled="{Binding EnableShowArabicInTranslation}"/>
+                                                IsEnabled="{Binding EnableShowArabicInTranslation}"/>
                     </StackPanel>
-                </phone:PivotItem>
-                <phone:PivotItem Header="{Binding Path=LocalizedResources.about_us, Source={StaticResource LocalizedStrings}}">
+                </ScrollViewer>
+            </phone:PivotItem>
+            <phone:PivotItem Header="{Binding Path=LocalizedResources.about_us, Source={StaticResource LocalizedStrings}}">
+                <ScrollViewer Background="Transparent">
                     <StackPanel Orientation="Vertical">
                         <StackPanel.Resources>
                             <Style TargetType="Hyperlink">
                                 <Setter Property="Foreground" Value="White"/>
                             </Style>
                         </StackPanel.Resources>
+                        <Button Command="{Binding ContactUsCommand}">Contact Us</Button>
                         <RichTextBox FontSize="22">
                             <Paragraph>Quran Phone is a free, open source Quran application for Windows Phone based on Quran Android project. 
                                 The images used are from the
                                 <Hyperlink Command="{Binding NavigateCommand}" CommandParameter="http://quran.com">quran.com</Hyperlink> project, the audio comes from
-                                <Hyperlink Command="{Binding NavigateCommand}" CommandParameter="http://everyayah.com">everyayah.com</Hyperlink>, the data used in the 
+                                <Hyperlink Command="{Binding NavigateCommand}" CommandParameter="http://everyayah.com">everyayah.com</Hyperlink> , the data used in the 
                                 translations and Arabic comes from
                                 <Hyperlink Command="{Binding NavigateCommand}" CommandParameter="http://www.tanzil.net">tanzil.net</Hyperlink> and
                                 <Hyperlink Command="{Binding NavigateCommand}" CommandParameter="http://quran.ksu.edu.sa">quran.ksu.edu.sa</Hyperlink>
                             </Paragraph>
                             <Paragraph/>
-                            <Paragraph FontWeight="Bold">Quran for Windows Phone Contributors: </Paragraph>
+                            <Paragraph FontWeight="Bold">Quran for Windows Phone Contributors:</Paragraph>
                             <Paragraph>Denis Stankovski</Paragraph>
                             <Paragraph/>
                             <Paragraph FontWeight="Bold">Quran for Android Contributors:</Paragraph>
@@ -102,17 +105,21 @@
                             <Paragraph>khajavi (on github) - previous Farsi translation</Paragraph>
                             <Paragraph/>
                             <Paragraph FontWeight="Bold">Open Source Projects:</Paragraph>
-                            <Paragraph>ActionBarSherlock (<Hyperlink  Command="{Binding NavigateCommand}" CommandParameter="http://abs.io">abs.io</Hyperlink>)</Paragraph>
-                            <Paragraph>maven-android-plugin (<Hyperlink  Command="{Binding NavigateCommand}" CommandParameter="http://code.google.com/p/maven-android-plugin">maven-android-plugin</Hyperlink>)</Paragraph>
+                            <Paragraph>ActionBarSherlock (
+                                <Hyperlink  Command="{Binding NavigateCommand}" CommandParameter="http://abs.io">abs.io</Hyperlink> )
+                            </Paragraph>
+                            <Paragraph>maven-android-plugin (
+                                <Hyperlink  Command="{Binding NavigateCommand}" CommandParameter="http://code.google.com/p/maven-android-plugin">maven-android-plugin</Hyperlink> )
+                            </Paragraph>
                             <Paragraph/>
                             <Paragraph FontWeight="Bold">Special Thanks:</Paragraph>
                             <Paragraph>Ahmed Essam (@neo_4583)</Paragraph>
                             <Paragraph>Batoul Apps (@batoulapps)</Paragraph>
                         </RichTextBox>
                     </StackPanel>
-                </phone:PivotItem>
-            </phone:Pivot>
-        </Grid>
-    </ScrollViewer>
+                </ScrollViewer>
+            </phone:PivotItem>
+        </phone:Pivot>
+    </Grid>
 
 </phone:PhoneApplicationPage>

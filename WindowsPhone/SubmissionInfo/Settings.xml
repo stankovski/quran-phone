@@ -1,0 +1,6 @@
+<MarketplaceDetails>
+  <SmallAppTile>logo-300.png</SmallAppTile>
+  <ScreenShots>page-arabic.png;translation.png;landscape.png;main.png;bookmarks.png;translations.png;settings.png;about-us.png;</ScreenShots>
+  <ScreenShotsWXGA>page-arabic-wxga.png;translation-wxga.png;landscape-wxga.png;main-wxga.png;bookmarks-wxga.png;settings-wxga.png;translations-wxga.png;about-us-wxga.png;</ScreenShotsWXGA>
+  <ScreenShots720P>page-arabic-720p.png;translation-720p.png;landscape-720p.png;main-720p.png;bookmarks-720p.png;settings-720p.png;translations-720p.png;about-us-720p.png;</ScreenShots720P>
+</MarketplaceDetails>

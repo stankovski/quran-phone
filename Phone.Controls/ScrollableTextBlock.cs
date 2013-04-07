@@ -91,7 +91,7 @@ namespace Phone.Controls
             // Clear previous TextBlocks
             this.stackPanel.Children.Clear();
 
-            foreach (var line in value.Split('\r', '\n'))
+            foreach (var line in value.Split(new string[] { "\r\n", "\n", "\r" }, StringSplitOptions.None))
             {
                 // Calculate max char count
                 int maxTexCount = this.GetMaxTextSize(LineTypes.Regular);
@@ -154,6 +154,7 @@ namespace Phone.Controls
                     break;
 
                 case LineTypes.Bold:
+                    textBlock.Margin = new Thickness(0, this.FontSize, 0, 0);
                     textBlock.FontWeight = FontWeights.Bold;
                     break;
 
@@ -178,6 +179,7 @@ namespace Phone.Controls
                 FontSize = this.FontSize,
                 Margin = new Thickness(0, 0, this.Margin.Right, 0),
                 Foreground = new SolidColorBrush(Colors.Black),
+                LineHeight = this.FontSize * 1.5,
                 TextWrapping = TextWrapping.Wrap
             };
             switch (lineType)
@@ -190,6 +192,7 @@ namespace Phone.Controls
 
                 case LineTypes.Bold:
                     textBlock.Text = line.Substring(2);
+                    textBlock.Margin = new Thickness(0, this.FontSize, 0, this.FontSize / 2);
                     textBlock.FontWeight = FontWeights.Bold;
                     break;
 

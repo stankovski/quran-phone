@@ -160,7 +160,7 @@ namespace QuranPhone.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For optimal performance, some files must be downloaded.  If you choose not to do this now, each page will take significantly longer to load. Would you like to download the required files now?.
+        ///   Looks up a localized string similar to For optimal performance, some files must be downloaded.  If you choose not to do this now, each page will take significantly longer to load. Would you like to download the required files now (WiFi connection recommended)?.
         /// </summary>
         public static string downloadPrompt {
             get {

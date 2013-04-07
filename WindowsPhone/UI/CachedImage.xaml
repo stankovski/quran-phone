@@ -7,8 +7,7 @@
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
-    d:DesignHeight="480" d:DesignWidth="480" 
-    MouseEnter="UserControl_MouseEnter_1">
+    d:DesignHeight="480" d:DesignWidth="480">
 
     <ScrollViewer HorizontalAlignment="Stretch" x:Name="LayoutRoot">
         <Grid>
