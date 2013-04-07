@@ -160,7 +160,7 @@ namespace QuranPhone.ViewModels
             }
         }
 
-        public bool IsDownloaded
+        public bool IsInLocalStorage
         {
             get
             {
@@ -188,7 +188,7 @@ namespace QuranPhone.ViewModels
 
         RelayCommand downloadCommand;
         /// <summary>
-        /// Returns an undo command
+        /// Returns an download command
         /// </summary>
         public ICommand DownloadCommand
         {
@@ -205,6 +205,24 @@ namespace QuranPhone.ViewModels
             }
         }
 
+        RelayCommand cancelCommand;
+        /// <summary>
+        /// Returns an cancel command
+        /// </summary>
+        public ICommand CancelCommand
+        {
+            get
+            {
+                if (cancelCommand == null)
+                {
+                    cancelCommand = new RelayCommand(
+                        param => this.Cancel()
+                        );
+                }
+                return cancelCommand;
+            }
+        }
+        
         protected void TransferStatusChanged(object sender, BackgroundTransferEventArgs e)
         {
             if (e.Request.TransferStatus != TransferStatus.Completed && e.Request.TransferStatus == TransferStatus.None)
@@ -273,6 +291,22 @@ namespace QuranPhone.ViewModels
                 if (DownloadComplete != null)
                     DownloadComplete(this, null);
                 QuranFileUtils.MoveFile(this.TempUrl, this.LocalUrl);
+            }
+        }
+
+        public void Cancel()
+        {
+            if (downloadRequest != null)
+            {
+                DownloadManager.Instance.Cancel(downloadRequest);
+                try
+                {
+                    QuranFileUtils.DeleteFile(this.TempUrl);
+                }
+                catch
+                {
+                    //Ignore
+                }
             }
         }
         #endregion Public methods

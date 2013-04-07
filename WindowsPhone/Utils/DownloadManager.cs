@@ -70,9 +70,17 @@ namespace QuranPhone.Utils
             return BackgroundTransferService.Find(requestId);
         }
 
+        public void Cancel(BackgroundTransferRequest request)
+        {
+            FinalizeRequest(request);
+        }
+
         public void FinalizeRequest(BackgroundTransferRequest request)
         {
-            BackgroundTransferService.Remove(request);
+            if (BackgroundTransferService.Find(request.RequestId) != null)
+            {
+                BackgroundTransferService.Remove(request);
+            }
         }
 
         public IEnumerable<BackgroundTransferRequest> GetAllRequests()

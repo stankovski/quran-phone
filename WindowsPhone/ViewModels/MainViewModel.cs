@@ -98,16 +98,29 @@ namespace QuranPhone.ViewModels
             }
         }
 
-        public async void ExtractZipAndFinalize()
+        public async Task<bool> ExtractZipAndFinalize()
         {
             if (QuranFileUtils.FileExists(QuranData.LocalUrl))
             {
                 InstallationStep = AppResources.extracting_message;
                 QuranData.Progress = 100;
-                await Task.Run(() => QuranFileUtils.ExtractZipFile(QuranData.LocalUrl, QuranFileUtils.QURAN_BASE));
+                bool result = await Task.Run(() => QuranFileUtils.ExtractZipFile(QuranData.LocalUrl, QuranFileUtils.QURAN_BASE));
+                if (!result)
+                    return false;
+
                 QuranFileUtils.DeleteFile(QuranData.LocalUrl);
             }
+            
             IsInstalling = false;
+
+            if (QuranFileUtils.HaveAllImages())
+                return true;
+            else
+            {
+                InstallationStep = AppResources.loading_message;
+                QuranData.Progress = 0;
+                return false;
+            }
         }
 
         public void DeleteBookmark(ItemViewModel item)

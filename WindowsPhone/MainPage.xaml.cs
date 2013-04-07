@@ -80,43 +80,42 @@ namespace QuranPhone
             }
         }
 
-        private void downloadAndExtractQuranData()
+        private async void downloadAndExtractQuranData()
         {
+            bool finalizeSucceded = true;
             // If downloaded offline and stuck in temp storage
             if (App.MainViewModel.QuranData.IsInTempStorage)
             {
                 App.MainViewModel.IsInstalling = true;
                 App.MainViewModel.QuranData.FinishPreviousDownload();
-                App.MainViewModel.ExtractZipAndFinalize();
+                finalizeSucceded = await App.MainViewModel.ExtractZipAndFinalize();
             }
             // If downloaded offline and stuck in temp storage
-            else if (App.MainViewModel.QuranData.IsDownloaded)
+            else if (App.MainViewModel.QuranData.IsInLocalStorage)
             {
                 App.MainViewModel.IsInstalling = true;
-                App.MainViewModel.ExtractZipAndFinalize();
+                finalizeSucceded = await App.MainViewModel.ExtractZipAndFinalize();
             }
-            else
+
+            if (!App.MainViewModel.HasAskedToDownload || !finalizeSucceded)
             {
-                if (!App.MainViewModel.HasAskedToDownload)
+                App.MainViewModel.HasAskedToDownload = true;
+                bool isAlreadyDownloading = IsAlreadyDownloading();
+                MessageBoxResult askingToDownloadResult = MessageBoxResult.OK;
+
+                if (!isAlreadyDownloading)
                 {
-                    App.MainViewModel.HasAskedToDownload = true;
-                    bool isAlreadyDownloading = IsAlreadyDownloading();
-                    MessageBoxResult askingToDownloadResult = MessageBoxResult.OK;
+                    askingToDownloadResult = MessageBox.Show(AppResources.downloadPrompt,
+                                                             AppResources.downloadPrompt_title,
+                                                             MessageBoxButton.OKCancel);
+                }
 
-                    if (!isAlreadyDownloading)
-                    {
-                        askingToDownloadResult = MessageBox.Show(AppResources.downloadPrompt,
-                                                                 AppResources.downloadPrompt_title,
-                                                                 MessageBoxButton.OKCancel);
-                    }
-
-                    if (isAlreadyDownloading || askingToDownloadResult == MessageBoxResult.OK)
-                    {
-                        App.MainViewModel.IsInstalling = true;
-                        App.MainViewModel.Download();
-                        var downloadId = App.MainViewModel.QuranData.DownloadId;
-                        SettingsUtils.Set(Constants.PREF_LAST_DOWNLOAD_ID, downloadId);
-                    }
+                if (isAlreadyDownloading || askingToDownloadResult == MessageBoxResult.OK)
+                {
+                    App.MainViewModel.IsInstalling = true;
+                    App.MainViewModel.Download();
+                    var downloadId = App.MainViewModel.QuranData.DownloadId;
+                    SettingsUtils.Set(Constants.PREF_LAST_DOWNLOAD_ID, downloadId);
                 }
             }
         }

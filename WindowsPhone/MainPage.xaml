@@ -48,6 +48,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         
         <!--TitlePanel contains the name of the application and page title-->
@@ -135,7 +136,7 @@
             </phone:PivotItem>-->
         </phone:Pivot>
 
-        <Grid Visibility="{Binding IsInstalling, Converter={StaticResource BooleanToVisibilityConverter}}" Grid.RowSpan="2">
+        <Grid Visibility="{Binding IsInstalling, Converter={StaticResource BooleanToVisibilityConverter}}" Grid.Row="2" Height="70">
             <Border Grid.RowSpan="2" Background="{StaticResource PhoneBackgroundBrush}" Opacity="0.6"/>
             <StackPanel Orientation="Vertical" VerticalAlignment="Center">
                 <TextBlock HorizontalAlignment="Center" Text="{Binding Path=InstallationStep}"/>
@@ -143,12 +144,16 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="50"/>
                     </Grid.ColumnDefinitions>
                     <ProgressBar Grid.Column="0" Value="{Binding Progress}" IsIndeterminate="{Binding IsIndeterminate}" SmallChange="1"/>
                     <StackPanel Grid.Column="1" Orientation="Horizontal" Visibility="{Binding IsIndeterminate, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=inverse}">
                         <TextBlock Text="{Binding Progress}"/>
                         <TextBlock>%</TextBlock>
                     </StackPanel>
+                    <Button Grid.Column="2" BorderThickness="0" Padding="0" Margin="0,-10,0,0" Command="{Binding CancelCommand}">
+                        <Image Grid.Column="2" Source="/Assets/Images/ic_cancel.png"/>
+                    </Button>
                 </Grid>
             </StackPanel>
         </Grid>
