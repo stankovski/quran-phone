@@ -34,8 +34,6 @@ namespace QuranPhone.Data
         public const String PREF_USE_ARABIC_NAMES = "useArabicNames";
         public const String PREF_USE_ARABIC_RESHAPER = "useArabicReshaper";
         public const String PREF_LAST_PAGE = "lastPage";
-        [DefaultValue(null)]
-        public const String PREF_LAST_DOWNLOAD_ID = "lastDownloadId";
         public const String PREF_LOCK_ORIENTATION = "lockOrientation";
         public const String PREF_LANDSCAPE_ORIENTATION = "landscapeOrientation";
         [DefaultValue(25)]

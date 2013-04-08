@@ -57,6 +57,7 @@ namespace QuranPhone.Utils
                         return null;
                 }
                 BackgroundTransferService.Add(request);
+                PersistRequestToStorage(request);
                 return request;
             }
             catch (InvalidOperationException)
@@ -65,9 +66,31 @@ namespace QuranPhone.Utils
             }            
         }
 
-        public BackgroundTransferRequest GetRequest(string requestId)
+        private void PersistRequestToStorage(BackgroundTransferRequest request)
         {
-            return BackgroundTransferService.Find(requestId);
+            var requestUri = request.RequestUri;
+            var requestUriHash = CryptoUtils.GetHash(requestUri.ToString());
+            var trackerDir = QuranFileUtils.GetDowloadTrackerDirectory(false, true);
+            QuranFileUtils.WriteFile(string.Format("{0}\\{1}", trackerDir, requestUriHash), request.RequestId);
+        }
+
+        private void DeleteRequestFromStorage(BackgroundTransferRequest request)
+        {
+            var requestUri = request.RequestUri;
+            var requestUriHash = CryptoUtils.GetHash(requestUri.ToString());
+            var trackerDir = QuranFileUtils.GetDowloadTrackerDirectory(false, true);
+            QuranFileUtils.DeleteFile(string.Format("{0}\\{1}", trackerDir, requestUriHash));
+        }
+
+        public BackgroundTransferRequest GetRequest(string serverUri)
+        {
+            var requestUriHash = CryptoUtils.GetHash(serverUri);
+            var trackerDir = QuranFileUtils.GetDowloadTrackerDirectory(false, true);
+            var requestId = QuranFileUtils.ReadFile(string.Format("{0}\\{1}", trackerDir, requestUriHash));
+            if (!string.IsNullOrEmpty(requestId))
+                return BackgroundTransferService.Find(requestId);
+            else
+                return null;
         }
 
         public void Cancel(BackgroundTransferRequest request)
@@ -80,6 +103,7 @@ namespace QuranPhone.Utils
             if (BackgroundTransferService.Find(request.RequestId) != null)
             {
                 BackgroundTransferService.Remove(request);
+                DeleteRequestFromStorage(request);
             }
         }
 

@@ -23,6 +23,7 @@ namespace QuranPhone.Utils
         public static string QURAN_BASE = "quran_android" + PATH_SEPARATOR;
         public static string QURAN_BASE_URI = "isostore:/" + QURAN_BASE;
         private static string DATABASE_DIRECTORY = "databases";
+        private static string DOWNLOADS_DIRECTORY = "downloads";
         public static string PACKAGE_NAME = "com.quran.labs.androidquran";
         public static string QURAN_ARABIC_DATABASE = "quran.ar.db";
         public static string PATH_SEPARATOR = "/";
@@ -114,6 +115,23 @@ namespace QuranPhone.Utils
         }
 
         /// <summary>
+        /// Creates directory recursively and writes no-media file in it
+        /// </summary>
+        /// <returns></returns>
+        public static void MakeDirectoryRecursive(string path)
+        {
+            for (int i = 0; i < path.Length - 1; i++)
+            {
+                if (path[i] == '/')
+                {
+                    var folder = path.Substring(0, i);
+                    if (!string.IsNullOrEmpty(folder))
+                        MakeDirectory(folder);
+                }
+            }
+        }
+
+        /// <summary>
         /// Creates Quran root directory and writes no-media file in it
         /// </summary>
         /// <returns></returns>
@@ -129,18 +147,20 @@ namespace QuranPhone.Utils
                 return false;
         }
 
-        public static bool WriteNoMediaFile()
+        public static bool WriteFile(string path, string content)
         {
+            DeleteFile(path);
+
             using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
             {
-                if (isf.FileExists(GetQuranDirectory(false) + "/.nomedia"))
-                    return true;
-
                 try
                 {
-                    using (var stream = isf.CreateFile(GetQuranDirectory(false) + "/.nomedia"))
+                    using (var isoStream = new IsolatedStorageFileStream(path, FileMode.Create, isf))
                     {
-                        stream.WriteByte(1);
+                        using (var writer = new StreamWriter(isoStream))
+                        {
+                            writer.Write(content);
+                        }
                     }
                     return true;
                 }
@@ -149,6 +169,39 @@ namespace QuranPhone.Utils
                     return false;
                 }
             }
+        }
+
+        public static string ReadFile(string path)
+        {
+            if (FileExists(path))
+            {
+                using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
+                {
+                    try
+                    {
+                        using (var isoStream = new IsolatedStorageFileStream(path, FileMode.Open, isf))
+                        {
+                            using (var reader = new StreamReader(isoStream))
+                            {
+                                return reader.ReadToEnd();
+                            }
+                        }
+                    }
+                    catch (IOException е)
+                    {
+                        return string.Empty;
+                    }
+                }
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
+
+        public static bool WriteNoMediaFile()
+        {
+            return WriteFile(GetQuranDirectory(false) + "/.nomedia", " ");
         }
 
         public static bool NoMediaFileExists()
@@ -290,15 +343,20 @@ namespace QuranPhone.Utils
             if (createIfDoesntExist)
             {
                 var tempPath = QURAN_BASE + PATH_SEPARATOR + DATABASE_DIRECTORY;
-                for (int i = 0; i < tempPath.Length - 1; i++)
-                {
-                    if (tempPath[i] == '/')
-                    {
-                        var folder = tempPath.Substring(0, i);
-                        if (!string.IsNullOrEmpty(folder))
-                            MakeDirectory(folder);
-                    }
-                }
+                MakeDirectoryRecursive(tempPath);
+            }
+
+            return (baseDir == null) ? null : baseDir + PATH_SEPARATOR + DATABASE_DIRECTORY;
+        }
+
+        public static string GetDowloadTrackerDirectory(bool asUri, bool createIfDoesntExist = false)
+        {
+            string baseDir = (asUri ? QURAN_BASE_URI : QURAN_BASE);
+
+            if (createIfDoesntExist)
+            {
+                var tempPath = QURAN_BASE + PATH_SEPARATOR + DOWNLOADS_DIRECTORY;
+                MakeDirectoryRecursive(tempPath);
             }
 
             return (baseDir == null) ? null : baseDir + PATH_SEPARATOR + DATABASE_DIRECTORY;
@@ -314,15 +372,7 @@ namespace QuranPhone.Utils
             if (createIfDoesntExist)
             {
                 var tempPath = QURAN_BASE + "width" + qsi.GetWidthParam();
-                for (int i = 0; i < tempPath.Length - 1; i++)
-                {
-                    if (tempPath[i] == '/')
-                    {
-                        var folder = tempPath.Substring(0, i);
-                        if (!string.IsNullOrEmpty(folder))
-                            MakeDirectory(folder);
-                    }
-                }
+                MakeDirectoryRecursive(tempPath);
             }
 
             return (baseDir == null) ? null : Path.Combine(baseDir, "width" + qsi.GetWidthParam());

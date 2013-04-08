@@ -79,11 +79,12 @@ namespace QuranPhone.ViewModels
 
                 serverUrl = value;
 
-                if (string.IsNullOrEmpty(serverUrl)) 
+                if (!string.IsNullOrEmpty(serverUrl)) 
                 {
                     downloadRequest = DownloadManager.Instance.GetRequest(this.ServerUrl);
                     if (downloadRequest != null)
                     {
+                        UpdateDownloadStatus(downloadRequest.TransferStatus);
                         downloadRequest.TransferProgressChanged += TransferProgressChanged;
                         downloadRequest.TransferStatusChanged += TransferStatusChanged;
                     }
@@ -224,12 +225,7 @@ namespace QuranPhone.ViewModels
         
         protected void TransferStatusChanged(object sender, BackgroundTransferEventArgs e)
         {
-            if (e.Request.TransferStatus != TransferStatus.Completed && e.Request.TransferStatus == TransferStatus.None)
-            {
-                IsDownloading = true;
-            }
-            else
-                IsDownloading = false;
+            UpdateDownloadStatus(e.Request.TransferStatus);
             if (e.Request.TransferStatus == TransferStatus.Completed)
             {
                 QuranFileUtils.MoveFile(TempUrl, this.LocalUrl);
@@ -272,9 +268,9 @@ namespace QuranPhone.ViewModels
             }
         }
 
-        public TransferStatus GetDownloadStatus(string requestId)
+        public TransferStatus GetDownloadStatus()
         {
-            var request = DownloadManager.Instance.GetRequest(requestId);
+            var request = DownloadManager.Instance.GetRequest(this.ServerUrl);
             if (request == null)
                 return TransferStatus.None;
             else
@@ -309,6 +305,25 @@ namespace QuranPhone.ViewModels
             }
         }
         #endregion Public methods
+
+        private void UpdateDownloadStatus(TransferStatus status)
+        {
+            switch (status)
+            {
+                case TransferStatus.Paused:
+                case TransferStatus.Transferring:
+                case TransferStatus.Waiting:
+                case TransferStatus.WaitingForExternalPower:
+                case TransferStatus.WaitingForExternalPowerDueToBatterySaverMode:
+                case TransferStatus.WaitingForNonVoiceBlockingNetwork:
+                case TransferStatus.WaitingForWiFi:
+                    IsDownloading = true;
+                    break;
+                default:
+                    IsDownloading = false;
+                    break;
+            }
+        }
 
         public event EventHandler DownloadComplete;
     }

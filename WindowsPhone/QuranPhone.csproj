@@ -155,6 +155,7 @@
     </Compile>
     <Compile Include="UI\UiExtensions.cs" />
     <Compile Include="Utils\ArabicResharper.cs" />
+    <Compile Include="Utils\CryptoUtils.cs" />
     <Compile Include="Utils\DownloadManager.cs" />
     <Compile Include="Utils\HttpExtensions.cs" />
     <Compile Include="Utils\LittleWatson.cs" />

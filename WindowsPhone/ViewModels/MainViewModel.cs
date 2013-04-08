@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
+using System.Windows;
 using QuranPhone.Resources;
 using QuranPhone.Data;
 using QuranPhone.Utils;
@@ -17,12 +18,14 @@ namespace QuranPhone.ViewModels
             this.Bookmarks = new ObservableCollection<ItemViewModel>();
             this.LastPage = new ObservableCollection<ItemViewModel>();
             this.Tags = new ObservableCollection<ItemViewModel>();
-            this.QuranData = new DownloadableViewModelBase();
             this.HasAskedToDownload = false;
+            this.QuranData = new DownloadableViewModelBase();
+            this.QuranData.DownloadComplete += downloadComplete;
+            this.QuranData.PropertyChanged += quranDataPropertyChanged;
             this.QuranData.ServerUrl = QuranFileUtils.GetZipFileUrl();
             this.QuranData.FileName = Path.GetFileName(QuranData.ServerUrl);
             this.QuranData.LocalUrl = QuranData.FileName;
-            this.QuranData.DownloadComplete += downloadComplete;
+
             this.InstallationStep = Resources.AppResources.loading_message;
         }
 
@@ -90,16 +93,42 @@ namespace QuranPhone.ViewModels
             loadBookmarlList();
         }
         
-        public void Download()
+        public async void Download()
         {
-            if (QuranData.DownloadCommand.CanExecute(null))
+            if (!this.QuranData.IsDownloading)
             {
-                QuranData.DownloadCommand.Execute(null);
+                bool finalizeSucceded = true;
+                // If downloaded offline and stuck in temp storage
+                if (this.QuranData.IsInTempStorage && !this.QuranData.IsDownloading)
+                {
+                    this.QuranData.FinishPreviousDownload();
+                    await ExtractZipAndFinalize();
+                }
+                // If downloaded offline and stuck in temp storage
+                else if (this.QuranData.IsInLocalStorage && !this.QuranData.IsDownloading)
+                {
+                    await ExtractZipAndFinalize();
+                }
+
+                if (!this.HasAskedToDownload || !QuranFileUtils.HaveAllImages())
+                {
+                    this.HasAskedToDownload = true;
+                    var askingToDownloadResult = MessageBox.Show(AppResources.downloadPrompt,
+                                                                 AppResources.downloadPrompt_title,
+                                                                 MessageBoxButton.OKCancel);
+
+                    if (askingToDownloadResult == MessageBoxResult.OK && QuranData.DownloadCommand.CanExecute(null))
+                    {
+                        QuranData.DownloadCommand.Execute(null);
+                    }
+                }
             }
         }
 
         public async Task<bool> ExtractZipAndFinalize()
         {
+            IsInstalling = true;
+
             if (QuranFileUtils.FileExists(QuranData.LocalUrl))
             {
                 InstallationStep = AppResources.extracting_message;
@@ -141,6 +170,14 @@ namespace QuranPhone.ViewModels
         private void downloadComplete(object sender, EventArgs e)
         {
             ExtractZipAndFinalize();
+        }
+
+        void quranDataPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "IsDownloading")
+            {
+                IsInstalling = this.QuranData.IsDownloading;
+            }
         }
 
         private void loadSuraList()
