@@ -57,6 +57,9 @@ namespace QuranPhone.ViewModels
         public async void LoadData()
         {
             var list = await TranslationListTask.DownloadTranslations(true, "tag");
+            if (list == null)
+                return;
+
             foreach (var item in list)
             {
                 this.AvailableTranslations.Add(new ObservableTranslationItem(item));

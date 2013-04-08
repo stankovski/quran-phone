@@ -223,6 +223,15 @@ namespace QuranPhone.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sorry, but we were unable to load the data due to absence of network connection. Please try again later..
+        /// </summary>
+        public static string no_network_to_load {
+            get {
+                return ResourceManager.GetString("no_network_to_load", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to page %1$d, Juz&apos; %2$d.
         /// </summary>
         public static string page_description {

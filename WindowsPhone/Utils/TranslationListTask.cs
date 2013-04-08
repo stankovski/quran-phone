@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System.Windows;
+using Newtonsoft.Json.Linq;
 using QuranPhone.Common;
 using QuranPhone.Data;
 using QuranPhone.ViewModels;
@@ -97,7 +98,16 @@ namespace QuranPhone.Utils
                 }
 
                 if (string.IsNullOrEmpty(text))
+                {
+                    text = loadCachedResponse();
+                }
+
+                if (string.IsNullOrEmpty(text))
+                {
+                    MessageBox.Show(Resources.AppResources.no_network_to_load);
                     return null;
+                }
+
                 if (useCache)
                 {
                     cacheResponse(text);

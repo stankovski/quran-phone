@@ -31,7 +31,6 @@ namespace QuranPhone.ViewModels
                     return;
 
                 localUrl = value;
-                FinishPreviousDownload();
 
                 base.OnPropertyChanged(() => LocalUrl);
             }

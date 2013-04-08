@@ -383,4 +383,7 @@ the data used in the translations and Arabic comes from
   <data name="prefs_ayah_before_translation_summary" xml:space="preserve">
     <value>показывать аят на Арабском вместе с переводом</value>
   </data>
+  <data name="no_network_to_load" xml:space="preserve">
+    <value>Извините, но мы не смогли загрузить данные в связи с отсутствием подключения к сети. Пожалуйста, повторите попытку позже.</value>
+  </data>
 </root>

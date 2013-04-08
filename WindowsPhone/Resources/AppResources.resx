@@ -624,4 +624,7 @@ the data used in the translations and Arabic comes from
   <data name="prefs_ayah_before_translation_summary" xml:space="preserve">
     <value>show ayah in Arabic above the translation</value>
   </data>
+  <data name="no_network_to_load" xml:space="preserve">
+    <value>Sorry, but we were unable to load the data due to absence of network connection. Please try again later.</value>
+  </data>
 </root>
