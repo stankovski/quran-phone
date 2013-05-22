@@ -253,7 +253,6 @@
     <None Include="Properties\WMAppManifest.xml">
       <SubType>Designer</SubType>
     </None>
-    <None Include="QuranPhone_2013_03_26_08_59_50.sap" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\AlignmentGrid.png" />
