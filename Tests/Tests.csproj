@@ -131,10 +131,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\sqlite-net-wp8\Sqlite.vcxproj">
-      <Project>{59B35F6C-E062-4F0E-88D8-13F3F82A24F3}</Project>
-      <Name>Sqlite</Name>
-    </ProjectReference>
     <ProjectReference Include="..\WindowsPhone\QuranPhone.csproj">
       <Project>{B7984DBC-63DF-497C-B7FE-E8F6442A12B2}</Project>
       <Name>QuranPhone</Name>
