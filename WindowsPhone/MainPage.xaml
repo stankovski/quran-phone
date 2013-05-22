@@ -3,7 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
-    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:telerikPrimitives="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls.Primitives"
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -17,27 +17,6 @@
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait"  Orientation="Portrait"
     shell:SystemTray.IsVisible="True">
-
-    <toolkit:TransitionService.NavigationInTransition>
-        <toolkit:NavigationInTransition>
-            <toolkit:NavigationInTransition.Backward>
-                <toolkit:TurnstileTransition Mode="BackwardIn"/>
-            </toolkit:NavigationInTransition.Backward>
-            <toolkit:NavigationInTransition.Forward>
-                <toolkit:TurnstileTransition Mode="ForwardIn"/>
-            </toolkit:NavigationInTransition.Forward>
-        </toolkit:NavigationInTransition>
-    </toolkit:TransitionService.NavigationInTransition>
-    <toolkit:TransitionService.NavigationOutTransition>
-        <toolkit:NavigationOutTransition>
-            <toolkit:NavigationOutTransition.Backward>
-                <toolkit:TurnstileTransition Mode="BackwardOut"/>
-            </toolkit:NavigationOutTransition.Backward>
-            <toolkit:NavigationOutTransition.Forward>
-                <toolkit:TurnstileTransition Mode="ForwardOut"/>
-            </toolkit:NavigationOutTransition.Forward>
-        </toolkit:NavigationOutTransition>
-    </toolkit:TransitionService.NavigationOutTransition>
 
     <phone:PhoneApplicationPage.Resources>
         <myui:StyleConverter x:Key="StyleConverter"/>
@@ -102,12 +81,11 @@
                             <phone:LongListSelector.ItemTemplate>
                                 <DataTemplate>
                                     <Grid>
-                                        <toolkit:ContextMenuService.ContextMenu>
-                                            <toolkit:ContextMenu>
-                                                <toolkit:MenuItem Header="{Binding Path=LocalizedResources.delete_bookmark, Source={StaticResource LocalizedStrings}}"
-                                                                  Click="DeleteBookmark"/>
-                                            </toolkit:ContextMenu>
-                                        </toolkit:ContextMenuService.ContextMenu>
+                                        <telerikPrimitives:RadContextMenu.ContextMenu>
+                                            <telerikPrimitives:RadContextMenu>
+                                                <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.delete_bookmark, Source={StaticResource LocalizedStrings}}" Tapped="DeleteBookmark"/>
+                                            </telerikPrimitives:RadContextMenu>
+                                        </telerikPrimitives:RadContextMenu.ContextMenu>
                                         <ListBoxItem HorizontalContentAlignment="Stretch">
                                             <myui:PageLink/>
                                         </ListBoxItem>

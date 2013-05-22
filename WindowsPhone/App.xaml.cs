@@ -9,6 +9,7 @@ using Microsoft.Phone.Shell;
 using QuranPhone.Resources;
 using QuranPhone.ViewModels;
 using QuranPhone.Utils;
+using Telerik.Windows.Controls;
 
 namespace QuranPhone
 {
@@ -199,7 +200,8 @@ namespace QuranPhone
 
             // Create the frame but don't set it as RootVisual yet; this allows the splash
             // screen to remain active until the application is ready to render.
-            RootFrame = new TransitionFrame();
+            // Switch to only use Telerik, removing WPToolkit dependencies.
+            RootFrame = new RadPhoneApplicationFrame();
             RootFrame.Navigated += CompleteInitializePhoneApplication;
 
             // Handle navigation failures

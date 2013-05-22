@@ -13,6 +13,7 @@ using QuranPhone.Data;
 using QuranPhone.Resources;
 using QuranPhone.Utils;
 using QuranPhone.ViewModels;
+using Telerik.Windows.Controls;
 
 namespace QuranPhone
 {
@@ -95,9 +96,9 @@ namespace QuranPhone
             list.SelectedItem = null;
         }
 
-        private void DeleteBookmark(object sender, RoutedEventArgs e)
+        private void DeleteBookmark(object sender, ContextMenuItemSelectedEventArgs e)
         {
-            var menuItem = sender as MenuItem;
+            var menuItem = sender as RadContextMenuItem;
             if (menuItem != null)
             {
                 if (menuItem.DataContext != null)
