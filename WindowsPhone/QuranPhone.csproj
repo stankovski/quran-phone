@@ -143,7 +143,6 @@
     <Compile Include="UI\ListHeader.xaml.cs">
       <DependentUpon>ListHeader.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\ObservableDictionary.cs" />
     <Compile Include="UI\ObservableTranslationItem.cs" />
     <Compile Include="UI\PageLink.xaml.cs">
       <DependentUpon>PageLink.xaml</DependentUpon>
