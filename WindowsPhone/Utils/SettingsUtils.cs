@@ -80,7 +80,13 @@ namespace QuranPhone.Utils
                     }
                 }
             }
+            
+            // Find is not exist in WP7 API, change to Where -> FirstOrDefault instead
+#if WINDOWS_PHONE_8
             FieldInfo info = constantKeys.Find(fi => fi.FieldType == typeof(string) && fi.GetRawConstantValue() as string == key);
+#else
+            FieldInfo info = constantKeys.Where(fi => fi.FieldType == typeof(string) && fi.GetRawConstantValue() as string == key).FirstOrDefault<FieldInfo>();
+#endif
             if (info == null)
                 return default(T);
 
