@@ -2464,11 +2464,12 @@ namespace SQLite
 		{
 			Type nut = Nullable.GetUnderlyingType(t);
 			
+            // Modify to comply with Quran Phone 7
 			if (nut != null) {
-				if (obj == null) return null;				
-				return Convert.ChangeType (obj, nut);
+                if (obj == null) return null;
+				return Convert.ChangeType (obj, nut, null);
 			} else {
-				return Convert.ChangeType (obj, t);
+				return Convert.ChangeType (obj, t, null);
 			}
 		}
 

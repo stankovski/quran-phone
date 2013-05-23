@@ -133,7 +133,8 @@ namespace QuranPhone.ViewModels
             {
                 InstallationStep = AppResources.extracting_message;
                 QuranData.Progress = 100;
-                bool result = await Task.Run(() => QuranFileUtils.ExtractZipFile(QuranData.LocalUrl, QuranFileUtils.QURAN_BASE));
+
+                bool result = await new TaskFactory().StartNew(() => QuranFileUtils.ExtractZipFile(QuranData.LocalUrl, QuranFileUtils.QURAN_BASE));
                 if (!result)
                     return false;
 

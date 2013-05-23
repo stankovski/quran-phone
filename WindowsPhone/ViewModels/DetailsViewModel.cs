@@ -182,7 +182,7 @@ namespace QuranPhone.ViewModels
                 List<QuranAyah> verses = null;
                 using (var db = new DatabaseHandler(this.TranslationFile))
                 {
-                    verses = await Task.Run(() => db.GetVerses(pageModel.PageNumber));
+                    verses = await new TaskFactory().StartNew(() => db.GetVerses(pageModel.PageNumber));
                 }
 
                 List<QuranAyah> versesArabic = null;
@@ -193,7 +193,7 @@ namespace QuranPhone.ViewModels
                     {
                         using (var dbArabic = new DatabaseHandler(QuranFileUtils.QURAN_ARABIC_DATABASE))
                         {
-                            versesArabic = await Task.Run(() => dbArabic.GetVerses(pageModel.PageNumber, "arabic_text"));
+                            versesArabic = await new TaskFactory().StartNew(() => dbArabic.GetVerses(pageModel.PageNumber, "arabic_text"));
                         }
                     }
                     catch

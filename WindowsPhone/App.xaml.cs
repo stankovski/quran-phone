@@ -229,8 +229,11 @@ namespace QuranPhone
         {
             // If the app has received a 'reset' navigation, then we need to check
             // on the next navigation to see if the page stack should be reset
+            // only do this for windows phone 8
+#if WINDOWS_PHONE_8
             if (e.NavigationMode == NavigationMode.Reset)
                 RootFrame.Navigated += ClearBackStackAfterReset;
+#endif
         }
 
         private void ClearBackStackAfterReset(object sender, NavigationEventArgs e)
@@ -288,7 +291,7 @@ namespace QuranPhone
                 //
                 // If a compiler error is hit then ResourceFlowDirection is missing from
                 // the resource file.
-                FlowDirection flow = (FlowDirection)Enum.Parse(typeof(FlowDirection), AppResources.ResourceFlowDirection);
+                FlowDirection flow = (FlowDirection)Enum.Parse(typeof(FlowDirection), AppResources.ResourceFlowDirection, true);
                 RootFrame.FlowDirection = flow;
             }
             catch
