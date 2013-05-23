@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
     xmlns:telerikPrimitives="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls.Primitives"
+    xmlns:telerikData="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls.Data" 
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -35,50 +36,48 @@
 
         <phone:Pivot Grid.Row="1" Margin="12,0,12,0">
             <phone:PivotItem Header="{Binding Path=LocalizedResources.quran_sura_lower, Source={StaticResource LocalizedStrings}}">
-                <!--ContentPanel contains LongListSelector and LongListSelector ItemTemplate. Place additional content here-->
+                <!--ContentPanel contains RadJumpList and RadJumpList ItemTemplate. Place additional content here-->
                 <Grid x:Name="ContentPanel">
-                    <phone:LongListSelector Margin="0,0,-12,0" ItemsSource="{Binding Surahs}" SelectionChanged="List_SelectionChanged">
-                        <phone:LongListSelector.ItemTemplate>
+                    <telerikData:RadJumpList Margin="0,0,-12,0" ItemsSource="{Binding Surahs}" SelectionChanged="List_SelectionChanged">
+                        <telerikData:RadJumpList.ItemTemplate>
                             <DataTemplate>
                                 <ListBoxItem HorizontalContentAlignment="Stretch">
                                     <myui:PageLink/>
                                 </ListBoxItem>
                             </DataTemplate>
-                        </phone:LongListSelector.ItemTemplate>
-                    </phone:LongListSelector>
+                        </telerikData:RadJumpList.ItemTemplate>
+                    </telerikData:RadJumpList>
                 </Grid>
             </phone:PivotItem>
             <phone:PivotItem Header="{Binding Path=LocalizedResources.quran_juz2_lower, Source={StaticResource LocalizedStrings}}">
-                <!--ContentPanel contains LongListSelector and LongListSelector ItemTemplate. Place additional content here-->
                 <Grid>
-                    <phone:LongListSelector Margin="0,0,-12,0" ItemsSource="{Binding Juz}" SelectionChanged="List_SelectionChanged">
-                        <phone:LongListSelector.ItemTemplate>
+                    <telerikData:RadJumpList Margin="0,0,-12,0" ItemsSource="{Binding Juz}" SelectionChanged="List_SelectionChanged">
+                        <telerikData:RadJumpList.ItemTemplate>
                             <DataTemplate>
                                 <ListBoxItem HorizontalContentAlignment="Stretch">
                                     <myui:PageLink/>
                                 </ListBoxItem>
                             </DataTemplate>
-                        </phone:LongListSelector.ItemTemplate>
-                    </phone:LongListSelector>
+                        </telerikData:RadJumpList.ItemTemplate>
+                    </telerikData:RadJumpList>
                 </Grid>
             </phone:PivotItem>
             <phone:PivotItem Header="{Binding Path=LocalizedResources.quran_bookmarks_lower, Source={StaticResource LocalizedStrings}}">
-                <!--ContentPanel contains LongListSelector and LongListSelector ItemTemplate. Place additional content here-->
                 <Grid>
                     <StackPanel>
                         <TextBlock Text="{Binding Path=LocalizedResources.bookmarks_current_page, Source={StaticResource LocalizedStrings}}" HorizontalAlignment="Left" Style="{StaticResource BlueSmallHeader}"/>
-                        <phone:LongListSelector Margin="0,0,-12,0" ItemsSource="{Binding LastPage}" SelectionChanged="List_SelectionChanged">
-                            <phone:LongListSelector.ItemTemplate>
+                        <telerikData:RadJumpList Margin="0,0,-12,0" ItemsSource="{Binding LastPage}" SelectionChanged="List_SelectionChanged">
+                            <telerikData:RadJumpList.ItemTemplate>
                                 <DataTemplate>
                                     <ListBoxItem HorizontalContentAlignment="Stretch">
                                         <myui:PageLink/>
                                     </ListBoxItem>
                                 </DataTemplate>
-                            </phone:LongListSelector.ItemTemplate>
-                        </phone:LongListSelector>
+                            </telerikData:RadJumpList.ItemTemplate>
+                        </telerikData:RadJumpList>
                         <TextBlock Text="{Binding Path=LocalizedResources.bookmarks_page, Source={StaticResource LocalizedStrings}}" HorizontalAlignment="Left" Style="{StaticResource BlueSmallHeader}"/>
-                        <phone:LongListSelector Name="bookmarksList" Margin="0,0,-12,0" ItemsSource="{Binding Bookmarks}" SelectionChanged="List_SelectionChanged">
-                            <phone:LongListSelector.ItemTemplate>
+                        <telerikData:RadJumpList Margin="0,0,-12,0" ItemsSource="{Binding Bookmarks}" SelectionChanged="List_SelectionChanged">
+                            <telerikData:RadJumpList.ItemTemplate>
                                 <DataTemplate>
                                     <Grid>
                                         <telerikPrimitives:RadContextMenu.ContextMenu>
@@ -91,8 +90,8 @@
                                         </ListBoxItem>
                                     </Grid>
                                 </DataTemplate>
-                            </phone:LongListSelector.ItemTemplate>
-                        </phone:LongListSelector>
+                            </telerikData:RadJumpList.ItemTemplate>
+                        </telerikData:RadJumpList>
                     </StackPanel>
                 </Grid>
             </phone:PivotItem>

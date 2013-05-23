@@ -85,7 +85,7 @@ namespace QuranPhone
         private void List_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // If selected item is null (no selection) do nothing
-            var list = sender as LongListSelector;
+            var list = sender as RadJumpList;
             if (list == null || list.SelectedItem == null)
                 return;
 
