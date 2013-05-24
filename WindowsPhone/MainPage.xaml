@@ -2,10 +2,10 @@
     x:Class="QuranPhone.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
     xmlns:telerikPrimitives="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls.Primitives"
-    xmlns:telerikData="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls.Data" 
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -33,51 +33,50 @@
         
         <!--TitlePanel contains the name of the application and page title-->
         <myui:CommonHeader Grid.Row="0" Margin="12,0,0,0" Name="header"/>
-
-        <phone:Pivot Grid.Row="1" Margin="12,0,12,0">
-            <phone:PivotItem Header="{Binding Path=LocalizedResources.quran_sura_lower, Source={StaticResource LocalizedStrings}}">
-                <!--ContentPanel contains RadJumpList and RadJumpList ItemTemplate. Place additional content here-->
+        <controls:Pivot Grid.Row="1" Margin="12,0,12,0">
+            <controls:PivotItem Header="{Binding Path=LocalizedResources.quran_sura_lower, Source={StaticResource LocalizedStrings}}">
+                <!--ContentPanel contains DataBoundListBox and DataBoundListBox ItemTemplate. Place additional content here-->
                 <Grid x:Name="ContentPanel">
-                    <telerikData:RadJumpList Margin="0,0,-12,0" ItemsSource="{Binding Surahs}" SelectionChanged="List_SelectionChanged">
-                        <telerikData:RadJumpList.ItemTemplate>
+                    <telerikPrimitives:RadDataBoundListBox Margin="0,0,-12,0" ItemsSource="{Binding Surahs}" SelectionChanged="List_SelectionChanged" IsAsyncBalanceEnabled="True">
+                        <telerikPrimitives:RadDataBoundListBox.ItemTemplate>
                             <DataTemplate>
                                 <ListBoxItem HorizontalContentAlignment="Stretch">
                                     <myui:PageLink/>
                                 </ListBoxItem>
                             </DataTemplate>
-                        </telerikData:RadJumpList.ItemTemplate>
-                    </telerikData:RadJumpList>
+                        </telerikPrimitives:RadDataBoundListBox.ItemTemplate>
+                    </telerikPrimitives:RadDataBoundListBox>
                 </Grid>
-            </phone:PivotItem>
-            <phone:PivotItem Header="{Binding Path=LocalizedResources.quran_juz2_lower, Source={StaticResource LocalizedStrings}}">
+            </controls:PivotItem>
+            <controls:PivotItem Header="{Binding Path=LocalizedResources.quran_juz2_lower, Source={StaticResource LocalizedStrings}}">
                 <Grid>
-                    <telerikData:RadJumpList Margin="0,0,-12,0" ItemsSource="{Binding Juz}" SelectionChanged="List_SelectionChanged">
-                        <telerikData:RadJumpList.ItemTemplate>
+                    <telerikPrimitives:RadDataBoundListBox Margin="0,0,-12,0" ItemsSource="{Binding Juz}" SelectionChanged="List_SelectionChanged" IsAsyncBalanceEnabled="True">
+                        <telerikPrimitives:RadDataBoundListBox.ItemTemplate>
                             <DataTemplate>
                                 <ListBoxItem HorizontalContentAlignment="Stretch">
                                     <myui:PageLink/>
                                 </ListBoxItem>
                             </DataTemplate>
-                        </telerikData:RadJumpList.ItemTemplate>
-                    </telerikData:RadJumpList>
+                        </telerikPrimitives:RadDataBoundListBox.ItemTemplate>
+                    </telerikPrimitives:RadDataBoundListBox>
                 </Grid>
-            </phone:PivotItem>
-            <phone:PivotItem Header="{Binding Path=LocalizedResources.quran_bookmarks_lower, Source={StaticResource LocalizedStrings}}">
+            </controls:PivotItem>
+            <controls:PivotItem Header="{Binding Path=LocalizedResources.quran_bookmarks_lower, Source={StaticResource LocalizedStrings}}">
                 <Grid>
                     <StackPanel>
                         <TextBlock Text="{Binding Path=LocalizedResources.bookmarks_current_page, Source={StaticResource LocalizedStrings}}" HorizontalAlignment="Left" Style="{StaticResource BlueSmallHeader}"/>
-                        <telerikData:RadJumpList Margin="0,0,-12,0" ItemsSource="{Binding LastPage}" SelectionChanged="List_SelectionChanged">
-                            <telerikData:RadJumpList.ItemTemplate>
+                        <telerikPrimitives:RadDataBoundListBox Margin="0,0,-12,0" ItemsSource="{Binding LastPage}" SelectionChanged="List_SelectionChanged" IsAsyncBalanceEnabled="True">
+                            <telerikPrimitives:RadDataBoundListBox.ItemTemplate>
                                 <DataTemplate>
                                     <ListBoxItem HorizontalContentAlignment="Stretch">
                                         <myui:PageLink/>
                                     </ListBoxItem>
                                 </DataTemplate>
-                            </telerikData:RadJumpList.ItemTemplate>
-                        </telerikData:RadJumpList>
+                            </telerikPrimitives:RadDataBoundListBox.ItemTemplate>
+                        </telerikPrimitives:RadDataBoundListBox>
                         <TextBlock Text="{Binding Path=LocalizedResources.bookmarks_page, Source={StaticResource LocalizedStrings}}" HorizontalAlignment="Left" Style="{StaticResource BlueSmallHeader}"/>
-                        <telerikData:RadJumpList Margin="0,0,-12,0" ItemsSource="{Binding Bookmarks}" SelectionChanged="List_SelectionChanged">
-                            <telerikData:RadJumpList.ItemTemplate>
+                        <telerikPrimitives:RadDataBoundListBox Margin="0,0,-12,0" ItemsSource="{Binding Bookmarks}" SelectionChanged="List_SelectionChanged" IsAsyncBalanceEnabled="True">
+                            <telerikPrimitives:RadDataBoundListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Grid>
                                         <telerikPrimitives:RadContextMenu.ContextMenu>
@@ -90,12 +89,12 @@
                                         </ListBoxItem>
                                     </Grid>
                                 </DataTemplate>
-                            </telerikData:RadJumpList.ItemTemplate>
-                        </telerikData:RadJumpList>
+                            </telerikPrimitives:RadDataBoundListBox.ItemTemplate>
+                        </telerikPrimitives:RadDataBoundListBox>
                     </StackPanel>
                 </Grid>
-            </phone:PivotItem>
-            <!--<phone:PivotItem Header="{Binding Path=LocalizedResources.quran_tags_lower, Source={StaticResource LocalizedStrings}}">
+            </controls:PivotItem>
+            <!--<controls:PivotItem Header="{Binding Path=LocalizedResources.quran_tags_lower, Source={StaticResource LocalizedStrings}}">
                 <Grid>
                     <phone:LongListSelector Margin="0,0,-12,0" ItemsSource="{Binding Items}" SelectionChanged="List_SelectionChanged">
                         <phone:LongListSelector.ItemTemplate>
@@ -110,8 +109,8 @@
                         </phone:LongListSelector.ItemTemplate>
                     </phone:LongListSelector>
                 </Grid>
-            </phone:PivotItem>-->
-        </phone:Pivot>
+            </controls:PivotItem>-->
+        </controls:Pivot>
 
         <Grid Visibility="{Binding IsInstalling, Converter={StaticResource BooleanToVisibilityConverter}}" Grid.Row="2" Height="70">
             <Border Grid.RowSpan="2" Background="{StaticResource PhoneBackgroundBrush}" Opacity="0.6"/>

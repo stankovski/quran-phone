@@ -19,12 +19,12 @@ public class SQLiteDatabase : IDisposable
         dbConnection = new SQLite.SQLiteConnection(Path.Combine(ApplicationData.Current.LocalFolder.Path, inputFile), false);
 #else
         // Based on http://msdn.microsoft.com/en-us/library/windowsphone/develop/jj714087%28v=vs.105%29.aspx#BKMK_FilesandfoldersAPIoverview
-        string dataFolderName = "DataFolder";
-        IsolatedStorageFile localFile = IsolatedStorageFile.GetUserStoreForApplication();
-        if (!localFile.DirectoryExists(dataFolderName))
-        {
-            localFile.CreateDirectory(dataFolderName);
-        }
+        string dataFolderName = "";
+        //IsolatedStorageFile localFile = IsolatedStorageFile.GetUserStoreForApplication();
+        //if (!localFile.DirectoryExists(dataFolderName))
+        //{
+        //    localFile.CreateDirectory(dataFolderName);
+        //}
 
         dbConnection = new SQLite.SQLiteConnection(Path.Combine(dataFolderName, inputFile), false);
 #endif

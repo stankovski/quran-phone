@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:myui="clr-namespace:QuranPhone.UI"
@@ -22,8 +23,8 @@
 
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot">
-        <phone:Pivot>
-            <phone:PivotItem Header="{Binding Path=LocalizedResources.settings, Source={StaticResource LocalizedStrings}}">
+        <controls:Pivot>
+            <controls:PivotItem Header="{Binding Path=LocalizedResources.settings, Source={StaticResource LocalizedStrings}}">
                 <ScrollViewer Background="Transparent">
                     <StackPanel Grid.Row="0" Margin="12,17,0,28">
                         <TextBlock Text="{Binding Path=LocalizedResources.translations, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
@@ -42,8 +43,8 @@
                         <telerikPrimitives:RadToggleSwitch IsChecked="{Binding ShowArabicInTranslation, Mode=TwoWay}" IsEnabled="{Binding EnableShowArabicInTranslation}" />
                     </StackPanel>
                 </ScrollViewer>
-            </phone:PivotItem>
-            <phone:PivotItem Header="{Binding Path=LocalizedResources.about_us, Source={StaticResource LocalizedStrings}}">
+            </controls:PivotItem>
+            <controls:PivotItem Header="{Binding Path=LocalizedResources.about_us, Source={StaticResource LocalizedStrings}}">
                 <ScrollViewer Background="Transparent">
                     <StackPanel Orientation="Vertical">
                         <StackPanel.Resources>
@@ -96,8 +97,8 @@
                         </RichTextBox>
                     </StackPanel>
                 </ScrollViewer>
-            </phone:PivotItem>
-        </phone:Pivot>
+            </controls:PivotItem>
+        </controls:Pivot>
     </Grid>
 
 </phone:PhoneApplicationPage>

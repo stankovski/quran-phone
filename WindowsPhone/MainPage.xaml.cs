@@ -42,8 +42,8 @@ namespace QuranPhone
             while (NavigationService.BackStack.Count() > 0)
                 NavigationService.RemoveBackEntry();
 
-            // Show welcom message
-            showWelcomeMessage();
+            // Show welcome message
+            //showWelcomeMessage();
 
             if (!App.MainViewModel.IsDataLoaded)
             {
@@ -53,7 +53,8 @@ namespace QuranPhone
             {
                 App.MainViewModel.RefreshData();
             }
-            // Show prompt to download content if nomedia file exists
+            
+            // Show prompt to download content if not all images exist
             if (!QuranFileUtils.HaveAllImages())
             {
                 try
@@ -85,7 +86,7 @@ namespace QuranPhone
         private void List_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // If selected item is null (no selection) do nothing
-            var list = sender as RadJumpList;
+            var list = sender as RadDataBoundListBox;
             if (list == null || list.SelectedItem == null)
                 return;
 
