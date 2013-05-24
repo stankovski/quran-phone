@@ -20,7 +20,7 @@
     </SupportedCultures>
     <XapOutputs>true</XapOutputs>
     <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
-    <XapFilename>QuranPhone7.xap</XapFilename>
+    <XapFilename>QuranPhone.xap</XapFilename>
     <SilverlightManifestTemplate>Properties\AppManifest.xml</SilverlightManifestTemplate>
     <SilverlightAppEntry>QuranPhone.App</SilverlightAppEntry>
     <ValidateXaml>true</ValidateXaml>
