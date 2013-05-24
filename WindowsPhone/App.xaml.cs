@@ -201,7 +201,9 @@ namespace QuranPhone
             // Create the frame but don't set it as RootVisual yet; this allows the splash
             // screen to remain active until the application is ready to render.
             // Switch to only use Telerik, removing WPToolkit dependencies.
-            RootFrame = new RadPhoneApplicationFrame();
+            var frame = new RadPhoneApplicationFrame();
+            
+            RootFrame = frame;
             RootFrame.Navigated += CompleteInitializePhoneApplication;
 
             // Handle navigation failures

@@ -30,8 +30,10 @@ namespace QuranPhone
             {
                 DataContext = App.TranslationsListViewModel;                
             }
+
             if (!App.TranslationsListViewModel.IsDataLoaded)
                 App.TranslationsListViewModel.LoadData();
+            
             App.TranslationsListViewModel.NavigateRequested += viewModel_NavigateRequested;
         }
 

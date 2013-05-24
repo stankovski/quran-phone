@@ -7,6 +7,9 @@ using System.Windows.Controls;
 using QuranPhone.Common;
 using QuranPhone.Utils;
 using QuranPhone.UI;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Collections.Generic;
 
 namespace QuranPhone.ViewModels
 {
@@ -64,7 +67,7 @@ namespace QuranPhone.ViewModels
             {
                 this.AvailableTranslations.Add(new ObservableTranslationItem(item));
             }
-            
+
             this.IsDataLoaded = true;
         }
         #endregion Public methods
