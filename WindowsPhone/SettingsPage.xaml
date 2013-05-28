@@ -65,6 +65,7 @@
                             <Paragraph/>
                             <Paragraph FontWeight="Bold">Quran for Windows Phone Contributors:</Paragraph>
                             <Paragraph>Denis Stankovski</Paragraph>
+                            <Paragraph>Kemas Dimas R (@kemasdimas)</Paragraph>
                             <Paragraph/>
                             <Paragraph FontWeight="Bold">Quran for Android Contributors:</Paragraph>
                             <Paragraph>Ahmed El-Helw (@ahmedre)</Paragraph>
@@ -83,13 +84,13 @@
                             <Paragraph>Denis Stankovski - Russian</Paragraph>
                             <Paragraph>khajavi (on github) - previous Farsi translation</Paragraph>
                             <Paragraph/>
-                            <Paragraph FontWeight="Bold">Open Source Projects:</Paragraph>
+                            <!--<Paragraph FontWeight="Bold">Open Source Projects:</Paragraph>
                             <Paragraph>ActionBarSherlock (
                                 <Hyperlink  Command="{Binding NavigateCommand}" CommandParameter="http://abs.io">abs.io</Hyperlink> )
                             </Paragraph>
                             <Paragraph>maven-android-plugin (
                                 <Hyperlink  Command="{Binding NavigateCommand}" CommandParameter="http://code.google.com/p/maven-android-plugin">maven-android-plugin</Hyperlink> )
-                            </Paragraph>
+                            </Paragraph>-->
                             <Paragraph/>
                             <Paragraph FontWeight="Bold">Special Thanks:</Paragraph>
                             <Paragraph>Ahmed Essam (@neo_4583)</Paragraph>

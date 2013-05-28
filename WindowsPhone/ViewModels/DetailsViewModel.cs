@@ -4,9 +4,11 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using QuranPhone.Common;
 using QuranPhone.Data;
 using QuranPhone.Utils;
+using QuranPhone.UI;
 
 namespace QuranPhone.ViewModels
 {
@@ -15,7 +17,32 @@ namespace QuranPhone.ViewModels
         public DetailsViewModel()
         {
             Pages = new ObservableCollection<PageViewModel>();
+
+            // default detail page to full screen mode.
+            IsShowMenu = false;
+
+            cmdToggleMenu = new RelayCommand(ToggleMenu);
         }
+
+        #region Commands
+        /// <summary>
+        /// Toggle whether to show menu / hide it in detail page
+        /// </summary>
+        public void ToggleMenu()
+        {
+            ToggleMenu(null);
+        }
+
+        public void ToggleMenu(object obj)
+        {
+            IsShowMenu = !IsShowMenu;
+        }
+        public ICommand CommandToggleMenu { get { return cmdToggleMenu; } }
+        private RelayCommand cmdToggleMenu;
+        
+
+
+        #endregion Commands
 
         #region Properties
         public ObservableCollection<PageViewModel> Pages { get; private set; }
@@ -97,6 +124,20 @@ namespace QuranPhone.ViewModels
         }
 
         public bool IsDataLoaded { get; protected set; }
+
+        private bool isShowMenu;
+        public bool IsShowMenu 
+        {
+            get { return isShowMenu; }
+            set
+            {
+                if (value == isShowMenu)
+                    return;
+
+                isShowMenu = value;
+                base.OnPropertyChanged(() => IsShowMenu);
+            }
+        }
 
         #endregion Properties
 

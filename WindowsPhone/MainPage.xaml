@@ -140,7 +140,7 @@
                         <TextBlock Text="{Binding Progress}"/>
                         <TextBlock>%</TextBlock>
                     </StackPanel>
-                    <Button Grid.Column="2" BorderThickness="0" Padding="0" Margin="0,-10,0,0" Command="{Binding CancelCommand}">
+                    <Button Grid.Column="2" BorderThickness="0" Padding="0" Margin="0,-10,0,0" Command="{Binding CancelCommand}" Visibility="{Binding IsIndeterminate, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=inverse}">
                         <Image Grid.Column="2" Source="/Assets/Images/ic_cancel.png"/>
                     </Button>
                 </Grid>

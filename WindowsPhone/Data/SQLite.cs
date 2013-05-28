@@ -135,9 +135,7 @@ namespace SQLite
 #if NETFX_CORE
 			SQLite3.SetDirectory(/*temp directory type*/2, Windows.Storage.ApplicationData.Current.TemporaryFolder.Path);
 #endif
-
 			Sqlite3DatabaseHandle handle;
-
 #if SILVERLIGHT || USE_CSHARP_SQLITE
             var r = SQLite3.Open (databasePath, out handle, (int)openFlags, IntPtr.Zero);
 #else

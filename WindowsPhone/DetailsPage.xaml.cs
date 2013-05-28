@@ -89,8 +89,8 @@ namespace QuranPhone
                 using (var adapter = new BookmarksDBAdapter())
                 {
                     adapter.AddBookmarkIfNotExists(null, null, App.DetailsViewModel.CurrentPageNumber);
-                    this.ApplicationBar.IsVisible = false;
-                    menuToggleButton.Visibility = Visibility.Visible;
+
+                    App.DetailsViewModel.ToggleMenu();
                 }
             }
             catch (Exception)
@@ -101,20 +101,15 @@ namespace QuranPhone
 
         private void Settings_Click(object sender, EventArgs e)
         {
+            App.DetailsViewModel.ToggleMenu();
+
             int pageNumber = ((DetailsViewModel)DataContext).CurrentPageNumber;
             NavigationService.Navigate(new Uri("/SettingsPage.xaml", UriKind.Relative));
         }
 
         private void ScreenTap(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            this.ApplicationBar.IsVisible = false;
-            menuToggleButton.Visibility = Visibility.Visible;
-        }
-
-        private void MenuToggle(object sender, RoutedEventArgs e)
-        {
-            this.ApplicationBar.IsVisible = true;
-            menuToggleButton.Visibility = Visibility.Collapsed;
+            App.DetailsViewModel.IsShowMenu = false;
         }
 
         #endregion Menu Events
@@ -139,6 +134,21 @@ namespace QuranPhone
             email.Show();
         }
 
+        protected override void OnBackKeyPress(System.ComponentModel.CancelEventArgs e)
+        {
+            // if back key pressed when menu is visible, hide the menu
+            // somehow, I (kemasdimas) frequently expect "back" key to hide menu,
+            // instead of going back to previous page.
+            if (App.DetailsViewModel.IsShowMenu)
+            {
+                App.DetailsViewModel.ToggleMenu();
+                e.Cancel = true;
+            }
+            else
+            {
+                base.OnBackKeyPress(e);
+            }
+        }
 #if DEBUG
         ~DetailsPage()
         {

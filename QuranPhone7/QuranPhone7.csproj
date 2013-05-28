@@ -41,13 +41,16 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>Bin\Release</OutputPath>
-    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <DefineConstants>SILVERLIGHT;WINDOWS_PHONE;WINDOWS_PHONE_7</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AppBarUtils">
+      <HintPath>..\WindowsPhone\packages\AppBarUtils.2.3\lib\wp71\AppBarUtils.dll</HintPath>
+    </Reference>
     <Reference Include="Community.CsharpSqlite.WinPhone">
       <HintPath>Dependencies\Community.CsharpSqlite.WinPhone.dll</HintPath>
     </Reference>
@@ -106,6 +109,7 @@
     <Reference Include="system" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net" />
+    <Reference Include="System.Windows.Interactivity, Version=3.8.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="mscorlib.extensions" />
     <Reference Include="System.Xml.Linq" />
@@ -412,12 +416,20 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\WindowsPhone\Assets\UthmanicHafs.otf">
+    <Content Include="..\OfflineAssets\images_800.zip">
+      <Link>Assets\Offline\images_800.zip</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\UthmanicHafs.otf">
       <Link>Assets\UthmanicHafs.otf</Link>
-    </None>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
     <None Include="Properties\AppManifest.xml" />
     <None Include="Properties\WMAppManifest.xml" />
+    <None Include="QuranPhone7_2013_05_26_21_50_19.sap" />
+    <None Include="QuranPhone7_2013_05_27_07_07_08.sap" />
+    <None Include="QuranPhone7_2013_05_27_07_12_15.sap" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\WindowsPhone\Assets\AlignmentGrid.png">
@@ -562,6 +574,7 @@
       <Link>Resources\AppResources.ru.resx</Link>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

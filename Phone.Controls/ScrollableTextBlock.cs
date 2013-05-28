@@ -10,6 +10,7 @@ namespace Phone.Controls
 {
     public class ScrollableTextBlock : Control, IDisposable
     {
+        private ScrollViewer scrollViewer;
         private StackPanel stackPanel;
         private double desiredWidth;
         private Dictionary<LineTypes, TextBlock> templateTextBlockCache = new Dictionary<LineTypes, TextBlock>();
@@ -44,6 +45,12 @@ namespace Phone.Controls
             ScrollableTextBlock source = (ScrollableTextBlock)d;
             string value = (string)e.NewValue;
             source.ParseText(value);
+
+            // After parsing text, scrol to top of the page
+            if (source.scrollViewer != null)
+            {
+                source.scrollViewer.ScrollToVerticalOffset(0);
+            }
         }
 
         public static readonly DependencyProperty DesiredWidthProperty =
@@ -77,6 +84,7 @@ namespace Phone.Controls
         {
             base.OnApplyTemplate();
             this.stackPanel = this.GetTemplateChild("StackPanel") as StackPanel;
+            this.scrollViewer = this.GetTemplateChild("ScrollViewer") as ScrollViewer;
             this.ParseText(this.Text);
         }
 

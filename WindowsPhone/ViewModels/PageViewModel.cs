@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QuranPhone.Data;
+using System;
 using System.Collections.ObjectModel;
 
 namespace QuranPhone.ViewModels
@@ -93,6 +94,17 @@ namespace QuranPhone.ViewModels
         public double ScreenWidth
         {
             get { return System.Windows.Application.Current.Host.Content.ActualWidth - 20; }
+        }
+
+        // QuranInfo Properties
+        public String SuraName
+        {
+            get { return QuranInfo.GetSuraNameFromPage(PageNumber); }
+        }
+
+        public String JuzName
+        {
+            get { return QuranInfo.GetJuzString(PageNumber); }
         }
 
         #endregion Properties

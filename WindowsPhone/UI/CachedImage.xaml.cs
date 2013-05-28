@@ -98,6 +98,9 @@ namespace QuranPhone.UI
                 }
 
                 image.Source = imageSourceBitmap;
+
+                // Scroll to the top of ScrollView after updating image
+                LayoutRoot.ScrollToVerticalOffset(0);
             }
         }
 

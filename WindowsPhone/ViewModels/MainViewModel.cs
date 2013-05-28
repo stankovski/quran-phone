@@ -6,6 +6,7 @@ using System.Windows;
 using QuranPhone.Resources;
 using QuranPhone.Data;
 using QuranPhone.Utils;
+using System.IO.IsolatedStorage;
 
 namespace QuranPhone.ViewModels
 {
@@ -97,7 +98,15 @@ namespace QuranPhone.ViewModels
         {
             if (!this.QuranData.IsDownloading)
             {
-                bool finalizeSucceded = true;
+                //bool finalizeSucceded = true; // not used?
+
+                // kdimas: How if we include a zipped width_800 images for testing?
+                // will save cost for testing, cutting the need to always download it from server.
+#if DEBUG  
+                // MAKE SURE TO EXCLUDE "Assets/Offline" folder and its content before packaging for
+                // production. (apply to WP 8 / WP 7.1).
+                prepareOfflineZip();
+#endif
                 // If downloaded offline and stuck in temp storage
                 if (this.QuranData.IsInTempStorage && !this.QuranData.IsDownloading)
                 {
@@ -132,7 +141,11 @@ namespace QuranPhone.ViewModels
             if (QuranFileUtils.FileExists(QuranData.LocalUrl))
             {
                 InstallationStep = AppResources.extracting_message;
-                QuranData.Progress = 100;
+
+                // showing indeterminate progress instead off (100%), 
+                // using (100%) is kind of confusing, since the extraction is quite long
+                QuranData.IsIndeterminate = true;
+                //QuranData.Progress = 100;
 
                 bool result = await new TaskFactory().StartNew(() => QuranFileUtils.ExtractZipFile(QuranData.LocalUrl, QuranFileUtils.QURAN_BASE));
                 if (!result)
@@ -168,6 +181,43 @@ namespace QuranPhone.ViewModels
         #endregion Public methods
 
         #region Private methods
+        /// <summary>
+        /// Prepare offline zip for debugging purpose, this function will only be called
+        /// on debug configuration.
+        /// 
+        /// Reference: http://msdn.microsoft.com/en-us/library/windowsphone/develop/hh286411%28v=vs.105%29.aspx
+        /// </summary>
+        private void prepareOfflineZip()
+        { 
+            // TODO: still ERROR in device
+
+            // Move images_800.zip from Assets/Offline to temporary storage
+            Uri offlineZipUri = new Uri("Assets/Offline/images_800.zip", UriKind.Relative);
+
+            // Obtain the virtual store for the application.
+            IsolatedStorageFile iso = IsolatedStorageFile.GetUserStoreForApplication();
+
+            // Create a stream for the file in the installation folder.
+            using (Stream input = Application.GetResourceStream(offlineZipUri).Stream)
+            {
+                // Create a stream for the new file in the local folder.
+                using (IsolatedStorageFileStream output = iso.CreateFile(this.QuranData.LocalUrl))
+                {
+                    // Initialize the buffer.
+                    byte[] readBuffer = new byte[4096];
+                    int bytesRead = -1;
+
+                    // Copy the file from the installation folder to the local folder. 
+                    while ((bytesRead = input.Read(readBuffer, 0, readBuffer.Length)) > 0)
+                    {
+                        output.Write(readBuffer, 0, bytesRead);
+                    }
+                }
+
+                this.HasAskedToDownload = true;
+            }
+        }
+
         private void downloadComplete(object sender, EventArgs e)
         {
             ExtractZipAndFinalize();

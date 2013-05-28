@@ -7,63 +7,63 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:telerikPrimitives="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls.Primitives"
-    d:DataContext="{d:DesignData SampleData/TranslationViewModelSampleData.xaml}"
     mc:Ignorable="d"
     xmlns:myui="clr-namespace:QuranPhone.UI"
     xmlns:controls="clr-namespace:Phone.Controls;assembly=Phone.Controls"
+    xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+    xmlns:abu="clr-namespace:AppBarUtils;assembly=AppBarUtils"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="PortraitOrLandscape" Orientation="Portrait" 
-    shell:SystemTray.IsVisible="False"
-    MouseLeftButtonUp="ScreenTap"
-    Background="{StaticResource LightBackground}">
+    shell:SystemTray.IsVisible="{Binding IsShowMenu}"
+    MouseLeftButtonUp="ScreenTap">
     
     <phone:PhoneApplicationPage.Resources>
         <myui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </phone:PhoneApplicationPage.Resources>
-    <Grid Background="{StaticResource LightBackground}" Name="MainContainer">
+    <Grid Name="MainContainer" Background="{StaticResource LightBackground}">
         <telerikPrimitives:RadSlideView x:Name="radSlideView" IsFilmstripModeEnabled="True" 
                                         ItemsSource="{Binding Pages}" IsLoopingEnabled="True" 
                                         ItemRealizationMode="ViewportItem">
             <telerikPrimitives:RadSlideView.ItemTemplate>
                 <DataTemplate>
-                        <Grid>
-                            <myui:CachedImage ImageSource="{Binding ImageSource}" PageNumber="{Binding PageNumber}" 
-                                                  Visibility="{Binding ShowTranslation, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}"/>
-                            <controls:ScrollableTextBlock Text="{Binding Translation}"           
-                                                  HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="{Binding TextSize}" 
-                                                  DesiredWidth="{Binding ScreenWidth}" Foreground="Black" Margin="12,0" 
-                                                  Visibility="{Binding ShowTranslation, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                            <!--<myui:TranslationView FormattedText="{Binding Translation}" 
-                                                  Visibility="{Binding ShowTranslation, Converter={StaticResource BooleanToVisibilityConverter}}"/>-->
+                     <Grid>
+                         <myui:CachedImage ImageSource="{Binding ImageSource}" PageNumber="{Binding PageNumber}" 
+                                              Visibility="{Binding ShowTranslation, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}"/>
+                         <controls:ScrollableTextBlock Text="{Binding Translation}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="{Binding TextSize}" DesiredWidth="{Binding ScreenWidth}" Foreground="Black" Margin="12,0" Visibility="{Binding ShowTranslation, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Background="{StaticResource LightBackground}">
+                            <TextBlock Text="{Binding SuraName}" HorizontalAlignment="Left" FontSize="18" Foreground="Black" Margin="10,0,0,5"/>
+                            <TextBlock Text="{Binding PageNumber}" HorizontalAlignment="Center" FontSize="18" Foreground="Black" Margin="0,0,0,5"/>
+
+                            <TextBlock Text="{Binding JuzName}" HorizontalAlignment="Right" FontSize="18" Foreground="Black" Margin="0,0,75,5"/>
                         </Grid>
+                    </Grid>
                 </DataTemplate>
             </telerikPrimitives:RadSlideView.ItemTemplate>
             <telerikPrimitives:RadSlideView.FilmstripModeItemTemplate>
                 <DataTemplate>
-                    <Grid Width="200" Height="324" Margin="25">
-                        <Border BorderThickness="5" BorderBrush="{StaticResource DarkBlueText}" Padding="10">
+                    <Grid Width="80" Height="130" Margin="10">
+                        <Border BorderThickness="2" BorderBrush="{StaticResource DarkBlueText}" Padding="10">
                             <Image Source="Assets/Images/page-small.png"></Image>
                         </Border>
-                        <TextBlock Text="{Binding PageNumber}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="80" Foreground="{StaticResource DarkBlueText}" FontFamily="Segoe WP Black"/>
+                        <TextBlock Text="{Binding PageNumber}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" Foreground="{StaticResource DarkBlueText}"/>
                     </Grid>
                 </DataTemplate>
             </telerikPrimitives:RadSlideView.FilmstripModeItemTemplate>
         </telerikPrimitives:RadSlideView>
-        
-        <Button VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0" Width="100" Style="{StaticResource ChromelessButtonStyle}" Click="MenuToggle" Name="menuToggleButton">
-            <StackPanel Orientation="Horizontal" Background="Transparent" Height="50" Width="70">
-                <Ellipse Fill="{StaticResource DarkBlueText}" Width="8" Height="8" Margin="5"/>
-                <Ellipse Fill="{StaticResource DarkBlueText}" Width="8" Height="8" Margin="5" />
-                <Ellipse Fill="{StaticResource DarkBlueText}" Width="8" Height="8" Margin="5"/>
+
+        <Button VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0" Width="80" Style="{StaticResource ChromelessButtonStyle}" Name="menuToggleButton" Visibility="{Binding IsShowMenu, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}" Command="{Binding CommandToggleMenu}">
+            <StackPanel Orientation="Horizontal" Background="Transparent" VerticalAlignment="Bottom" Margin="0" Height="50">
+                <Ellipse Fill="{StaticResource DarkBlueText}" Width="8" Height="8" Margin="5,0,5,15" VerticalAlignment="Bottom"/>
+                <Ellipse Fill="{StaticResource DarkBlueText}" Width="8" Height="8" Margin="5,0,5,15" VerticalAlignment="Bottom"/>
+                <Ellipse Fill="{StaticResource DarkBlueText}" Width="8" Height="8" Margin="5,0,5,15" VerticalAlignment="Bottom"/>
             </StackPanel>
         </Button>
     </Grid>
+    
     <phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar Opacity="0.9" IsVisible="False"
-                              BackgroundColor="White"
-                              ForegroundColor="#FF49A4C5">
+        <shell:ApplicationBar>
             <shell:ApplicationBarIconButton IconUri="/Assets/Images/settings.png" 
                                             Text="Settings" Click="Settings_Click"/>
             <shell:ApplicationBarIconButton IconUri="/Assets/Images/favorite.png" 
@@ -75,4 +75,8 @@
             </shell:ApplicationBar.MenuItems>
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
+
+    <i:Interaction.Behaviors>
+        <abu:AppBarPropertyBinder IsVisible="{Binding IsShowMenu}" Opacity="0.9" BackgroundColor="White" ForegroundColor="#FF49A4C5" />
+    </i:Interaction.Behaviors>
 </phone:PhoneApplicationPage>
