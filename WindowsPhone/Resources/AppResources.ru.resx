@@ -386,4 +386,7 @@ the data used in the translations and Arabic comes from
   <data name="no_network_to_load" xml:space="preserve">
     <value>Извините, но мы не смогли загрузить данные в связи с отсутствием подключения к сети. Пожалуйста, повторите попытку позже.</value>
   </data>
+  <data name="download_cancel_confirmation" xml:space="preserve">
+    <value>Вы уверены, что хотите отменить загрузку?</value>
+  </data>
 </root>

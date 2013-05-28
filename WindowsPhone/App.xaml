@@ -47,6 +47,10 @@
             <Setter Property="Foreground" Value="#FF232323"/>
             <Setter Property="Margin" Value="0"/>
         </Style>
+        <Style TargetType="TextBlock" x:Key="WhiteSmallText" BasedOn="{StaticResource PhoneTextNormalStyle}">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Margin" Value="0"/>
+        </Style>
         <Style TargetType="TextBlock" x:Key="ItemViewStyleHeader" BasedOn="{StaticResource BlueSmallHeader}">
         </Style>
         <Style TargetType="TextBlock" x:Key="ItemViewStyleJuz" BasedOn="{StaticResource BlueSmallHeader}">

@@ -151,6 +151,15 @@ namespace QuranPhone.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you would like to cancel download?.
+        /// </summary>
+        public static string download_cancel_confirmation {
+            get {
+                return ResourceManager.GetString("download_cancel_confirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Downloaded translations.
         /// </summary>
         public static string downloaded_translations {

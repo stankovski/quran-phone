@@ -110,7 +110,7 @@ namespace QuranPhone.ViewModels
                     await ExtractZipAndFinalize();
                 }
 
-                if (!this.HasAskedToDownload || !QuranFileUtils.HaveAllImages())
+                if (!QuranFileUtils.HaveAllImages() && !this.HasAskedToDownload)
                 {
                     this.HasAskedToDownload = true;
                     var askingToDownloadResult = MessageBox.Show(AppResources.downloadPrompt,
@@ -133,7 +133,7 @@ namespace QuranPhone.ViewModels
             {
                 InstallationStep = AppResources.extracting_message;
                 QuranData.Progress = 100;
-                bool result = await Task.Run(() => QuranFileUtils.ExtractZipFile(QuranData.LocalUrl, QuranFileUtils.QURAN_BASE));
+                bool result = await Task.Run(() => QuranFileUtils.ExtractZipFile(QuranData.LocalUrl, QuranFileUtils.QURAN_BASE)).ConfigureAwait(false);
                 if (!result)
                     return false;
 

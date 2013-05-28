@@ -15,4 +15,5 @@
             </vm:PageViewModel.Translation>
         </vm:PageViewModel>
     </vm:DetailsViewModel.Pages>
+    <vm:DetailsViewModel.CurrentPageNumber>115</vm:DetailsViewModel.CurrentPageNumber>
 </vm:DetailsViewModel>

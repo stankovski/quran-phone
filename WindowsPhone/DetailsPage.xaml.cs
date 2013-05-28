@@ -105,15 +105,27 @@ namespace QuranPhone
             NavigationService.Navigate(new Uri("/SettingsPage.xaml", UriKind.Relative));
         }
 
+        private void ContactUs_Click(object sender, EventArgs e)
+        {
+            var email = new EmailComposeTask();
+            email.To = "denis.stankovski@gmail.com";
+            email.Subject = "Email from QuranPhone";
+            email.Show();
+        }
+
+
         private void ScreenTap(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             this.ApplicationBar.IsVisible = false;
+            infoPanel.Visibility = Visibility.Collapsed;
             menuToggleButton.Visibility = Visibility.Visible;
         }
 
         private void MenuToggle(object sender, RoutedEventArgs e)
         {
             this.ApplicationBar.IsVisible = true;
+            if (this.Orientation == PageOrientation.PortraitUp)
+                infoPanel.Visibility = Visibility.Visible;
             menuToggleButton.Visibility = Visibility.Collapsed;
         }
 
@@ -131,12 +143,10 @@ namespace QuranPhone
             radSlideView.SelectionChanged -= PageFlipped;            
         }
 
-        private void ContactUs_Click(object sender, EventArgs e)
+        private void PageOrientationChanged(object sender, OrientationChangedEventArgs e)
         {
-            var email = new EmailComposeTask();
-            email.To = "denis.stankovski@gmail.com";
-            email.Subject = "Email from QuranPhone";
-            email.Show();
+            if (this.Orientation == PageOrientation.LandscapeLeft || this.Orientation == PageOrientation.LandscapeRight)
+                infoPanel.Visibility = Visibility.Collapsed;
         }
 
 #if DEBUG
