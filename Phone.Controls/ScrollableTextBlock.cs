@@ -88,6 +88,9 @@ namespace Phone.Controls
                 return;
             }
 
+            // Scroll to top
+            ((ScrollViewer)this.stackPanel.Parent).ScrollToVerticalOffset(0);
+
             // Clear previous TextBlocks
             this.stackPanel.Children.Clear();
 
@@ -179,7 +182,6 @@ namespace Phone.Controls
                 FontSize = this.FontSize,
                 Margin = new Thickness(0, 0, this.Margin.Right, 0),
                 Foreground = new SolidColorBrush(Colors.Black),
-                LineHeight = this.FontSize * 1.5,
                 TextWrapping = TextWrapping.Wrap
             };
             switch (lineType)

@@ -1,4 +1,5 @@
-﻿using Microsoft.Phone.BackgroundTransfer;
+﻿using System.Windows;
+using Microsoft.Phone.BackgroundTransfer;
 using QuranPhone.UI;
 using QuranPhone.Utils;
 using System;
@@ -293,14 +294,19 @@ namespace QuranPhone.ViewModels
         {
             if (downloadRequest != null)
             {
-                DownloadManager.Instance.Cancel(downloadRequest);
-                try
+                if (
+                    MessageBox.Show(Resources.AppResources.download_cancel_confirmation, "Cancel download",
+                                    MessageBoxButton.OKCancel) == MessageBoxResult.OK)
                 {
-                    QuranFileUtils.DeleteFile(this.TempUrl);
-                }
-                catch
-                {
-                    //Ignore
+                    DownloadManager.Instance.Cancel(downloadRequest);
+                    try
+                    {
+                        QuranFileUtils.DeleteFile(this.TempUrl);
+                    }
+                    catch
+                    {
+                        //Ignore
+                    }
                 }
             }
         }

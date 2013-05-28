@@ -627,4 +627,7 @@ the data used in the translations and Arabic comes from
   <data name="no_network_to_load" xml:space="preserve">
     <value>Sorry, but we were unable to load the data due to absence of network connection. Please try again later.</value>
   </data>
+  <data name="download_cancel_confirmation" xml:space="preserve">
+    <value>Are you sure you would like to cancel download?</value>
+  </data>
 </root>

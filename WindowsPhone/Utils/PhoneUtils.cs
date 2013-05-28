@@ -1,4 +1,7 @@
-﻿using Microsoft.Phone.Info;
+﻿using System.ComponentModel;
+using System.IO.IsolatedStorage;
+using System.Windows;
+using Microsoft.Phone.Info;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +20,27 @@ namespace QuranPhone.Utils
         public static string TotalDeviceMemory()
         {
             return string.Format("{0}MB", (double)((long)DeviceExtendedProperties.GetValue("DeviceTotalMemory") / 1024 / 1024));
+        }
+
+        private static bool? designTime;
+        public static bool IsDesignMode
+        {
+            get
+            {
+                if (!designTime.HasValue)
+                {
+                    try
+                    {
+                        var isoStor = IsolatedStorageSettings.ApplicationSettings.Contains("asasdasd");
+                        designTime = false;
+                    }
+                    catch (Exception ex)
+                    {
+                        designTime = true;
+                    }
+                }
+                return designTime.Value;
+            }
         }
     }
 }

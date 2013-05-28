@@ -75,8 +75,57 @@ namespace QuranPhone.ViewModels
                 if (value == currentPageNumber)
                     return;
 
+                CurrentSurahName = QuranInfo.GetSuraNameFromPage(value, true);
+                CurrentSurahNumber = QuranInfo.GetSuraNumberFromPage(value);
+                CurrentJuzName = QuranInfo.GetJuzTitle() + " " + QuranInfo.GetJuzFromPage(value);
+
                 currentPageNumber = value;
                 base.OnPropertyChanged(() => CurrentPageNumber);
+            }
+        }
+
+        private string currentSurahName;
+        public string CurrentSurahName
+        {
+            get { return currentSurahName; }
+            set
+            {
+                if (value == currentSurahName)
+                    return;
+
+                currentSurahName = value;
+
+                base.OnPropertyChanged(() => CurrentSurahName);
+            }
+        }
+
+        private int currentSurahNumber;
+        public int CurrentSurahNumber
+        {
+            get { return currentSurahNumber; }
+            set
+            {
+                if (value == currentSurahNumber)
+                    return;
+
+                currentSurahNumber = value;
+
+                base.OnPropertyChanged(() => CurrentSurahNumber);
+            }
+        }
+
+        private string currentJuzName;
+        public string CurrentJuzName
+        {
+            get { return currentJuzName; }
+            set
+            {
+                if (value == currentJuzName)
+                    return;
+
+                currentJuzName = value;
+
+                base.OnPropertyChanged(() => CurrentJuzName);
             }
         }
 

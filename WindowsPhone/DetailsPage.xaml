@@ -18,7 +18,7 @@
     SupportedOrientations="PortraitOrLandscape" Orientation="Portrait" 
     shell:SystemTray.IsVisible="False"
     MouseLeftButtonUp="ScreenTap"
-    Background="{StaticResource LightBackground}">
+    Background="{StaticResource LightBackground}" OrientationChanged="PageOrientationChanged">
 
     <toolkit:TransitionService.NavigationInTransition>
         <toolkit:NavigationInTransition>
@@ -43,6 +43,7 @@
     
     <phone:PhoneApplicationPage.Resources>
         <myui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <myui:TextFormatConverter x:Key="TextFormatConverter"/>
     </phone:PhoneApplicationPage.Resources>
     <Grid Background="{StaticResource LightBackground}" Name="MainContainer">
         <telerikPrimitives:RadSlideView x:Name="radSlideView" IsFilmstripModeEnabled="True" 
@@ -73,6 +74,52 @@
                 </DataTemplate>
             </telerikPrimitives:RadSlideView.FilmstripModeItemTemplate>
         </telerikPrimitives:RadSlideView>
+        
+        <Grid x:Name="infoPanel" VerticalAlignment="Top" Visibility="Collapsed">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Border Grid.ColumnSpan="2" Grid.RowSpan="2" Background="White" Opacity="0.9"/>
+            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                <TextBlock VerticalAlignment="Top" 
+                           TextAlignment="Center"
+                           Text="p." 
+                           Margin="15,15,0,0"
+                           Foreground="{StaticResource DarkBlueText}" 
+                           FontSize="30"/>
+                <TextBlock VerticalAlignment="Top" 
+                           TextAlignment="Center"
+                           Text="{Binding CurrentPageNumber}" 
+                           Margin="5,15"
+                           Foreground="{StaticResource DarkBlueText}" 
+                           FontSize="30"/>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Right">
+                <StackPanel Orientation="Horizontal">
+                    <Grid Margin="10,10,10,0">
+                        <Path Fill="#FFFFFFFF" Stroke="{StaticResource DarkBlueText}" Data="F1 M81.3125,0.5 L57.65625,24.15625 24.15625,24.15625 24.15625,57.65625 0.5,81.3125 24.15625,104.96875 24.15625,138.4375 57.625,138.4375 81.3125,162.125 105,138.4375 138.46875,138.4375 138.46875,104.96875 162.125,81.3125 138.46875,57.65625 138.46875,24.15625 104.96875,24.15625 81.3125,0.5 z" Margin="0" Height="48.625" Stretch="Fill" VerticalAlignment="Top" HorizontalAlignment="Left" Width="48.624" UseLayoutRounding="False"/>
+                        <TextBlock VerticalAlignment="Center" 
+                                       TextAlignment="Center"
+                                       Text="{Binding CurrentSurahNumber}"
+                                       Foreground="{StaticResource DarkBlueText}" 
+                                       FontSize="22"/>
+                    </Grid>
+                    <TextBlock VerticalAlignment="Center" 
+                               TextAlignment="Center"
+                               Text="{Binding CurrentSurahName}" 
+                               Margin="0,5,15,0"
+                               Foreground="{StaticResource DarkBlueText}" 
+                               FontSize="30"/>
+                </StackPanel>
+                <TextBlock VerticalAlignment="Center" 
+                           TextAlignment="Right"
+                           Text="{Binding CurrentJuzName}" 
+                           Margin="0,-5,15,10"
+                           Foreground="{StaticResource DarkBlueText}" 
+                           FontSize="20"/>
+            </StackPanel>
+        </Grid>
         
         <Button VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0" Width="100" Style="{StaticResource ChromelessButtonStyle}" Click="MenuToggle" Name="menuToggleButton">
             <StackPanel Orientation="Horizontal" Background="Transparent" Height="50" Width="70">

@@ -56,6 +56,9 @@ namespace QuranPhone.UI
                 imageSourceUri = source;
             }
 
+            // Scroll to top
+            LayoutRoot.ScrollToVerticalOffset(0);
+
             progress.Visibility = System.Windows.Visibility.Visible;
             imageSourceBitmap.UriSource = null;
             image.Source = null;
@@ -66,6 +69,14 @@ namespace QuranPhone.UI
             }
             else
             {
+                // Design time preview
+                if (PhoneUtils.IsDesignMode)
+                {
+                    imageSourceBitmap.UriSource = source;
+                    ImageSource = source;
+                    return;
+                }
+
                 var uriBuilder = new UriBuilder(source);
                 var localPath = Path.Combine(QuranFileUtils.GetQuranDirectory(false), Path.GetFileName(uriBuilder.Path));
                 bool downloadSuccessful = true;
