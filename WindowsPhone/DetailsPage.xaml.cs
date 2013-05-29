@@ -19,6 +19,8 @@ namespace QuranPhone
         public DetailsPage()
         {
             InitializeComponent();
+
+            App.DetailsViewModel.Orientation = this.Orientation;
         }
 
         // When page is navigated to set data context to selected item in list
@@ -89,8 +91,8 @@ namespace QuranPhone
                 using (var adapter = new BookmarksDBAdapter())
                 {
                     adapter.AddBookmarkIfNotExists(null, null, App.DetailsViewModel.CurrentPageNumber);
-                    this.ApplicationBar.IsVisible = false;
-                    menuToggleButton.Visibility = Visibility.Visible;
+
+                    App.DetailsViewModel.ToggleMenu();
                 }
             }
             catch (Exception)
@@ -101,6 +103,8 @@ namespace QuranPhone
 
         private void Settings_Click(object sender, EventArgs e)
         {
+            App.DetailsViewModel.ToggleMenu();
+
             int pageNumber = ((DetailsViewModel)DataContext).CurrentPageNumber;
             NavigationService.Navigate(new Uri("/SettingsPage.xaml", UriKind.Relative));
         }
@@ -116,17 +120,8 @@ namespace QuranPhone
 
         private void ScreenTap(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            this.ApplicationBar.IsVisible = false;
-            infoPanel.Visibility = Visibility.Collapsed;
-            menuToggleButton.Visibility = Visibility.Visible;
-        }
-
-        private void MenuToggle(object sender, RoutedEventArgs e)
-        {
-            this.ApplicationBar.IsVisible = true;
-            if (this.Orientation == PageOrientation.PortraitUp)
-                infoPanel.Visibility = Visibility.Visible;
-            menuToggleButton.Visibility = Visibility.Collapsed;
+            App.DetailsViewModel.IsShowMenu = false;
+            App.DetailsViewModel.IsShowInfoPanel = false;
         }
 
         #endregion Menu Events
@@ -145,10 +140,24 @@ namespace QuranPhone
 
         private void PageOrientationChanged(object sender, OrientationChangedEventArgs e)
         {
-            if (this.Orientation == PageOrientation.LandscapeLeft || this.Orientation == PageOrientation.LandscapeRight)
-                infoPanel.Visibility = Visibility.Collapsed;
+            App.DetailsViewModel.Orientation = e.Orientation;
         }
 
+        protected override void OnBackKeyPress(System.ComponentModel.CancelEventArgs e)
+        {
+            // if back key pressed when menu is visible, hide the menu
+            // somehow, I (kemasdimas) frequently expect "back" key to hide menu,
+            // instead of going back to previous page.
+            if (App.DetailsViewModel.IsShowMenu)
+            {
+                App.DetailsViewModel.ToggleMenu();
+                e.Cancel = true;
+            }
+            else
+            {
+                base.OnBackKeyPress(e);
+            }
+        }
 #if DEBUG
         ~DetailsPage()
         {

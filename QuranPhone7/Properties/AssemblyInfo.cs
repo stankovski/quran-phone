@@ -6,12 +6,12 @@ using System.Resources;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("QuranPhone")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Quran Phone")]
+[assembly: AssemblyDescription("Quran Phone for Windows Phone 7.5")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("QuranPhone")]
-[assembly: AssemblyCopyright("Copyright ©  2013")]
+[assembly: AssemblyCompany("IslamWP")]
+[assembly: AssemblyProduct("Quran Phone")]
+[assembly: AssemblyCopyright("IslamWP ©  2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

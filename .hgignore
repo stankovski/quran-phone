@@ -41,3 +41,6 @@ dnGREP.ArchiveEngine/7z.dll
 WindowsPhone/PerfLogs/*
 *.opensdf
 *.sdf
+*.sap
+QuranPhone7/PerfLogs/*
+*.orig

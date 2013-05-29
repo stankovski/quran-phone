@@ -4,9 +4,12 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using QuranPhone.Common;
 using QuranPhone.Data;
 using QuranPhone.Utils;
+using QuranPhone.UI;
+using Microsoft.Phone.Controls;
 
 namespace QuranPhone.ViewModels
 {
@@ -15,7 +18,30 @@ namespace QuranPhone.ViewModels
         public DetailsViewModel()
         {
             Pages = new ObservableCollection<PageViewModel>();
+
+            // default detail page to full screen mode.
+            IsShowMenu = false;
+
+            cmdToggleMenu = new RelayCommand(ToggleMenu);
         }
+
+        #region Commands
+        /// <summary>
+        /// Toggle whether to show menu / hide it in detail page
+        /// </summary>
+        public void ToggleMenu()
+        {
+            ToggleMenu(null);
+        }
+
+        public void ToggleMenu(object obj)
+        {
+            IsShowMenu = !IsShowMenu;
+            IsShowInfoPanel = !IsShowInfoPanel;
+        }
+        public ICommand CommandToggleMenu { get { return cmdToggleMenu; } }
+        private RelayCommand cmdToggleMenu;
+        #endregion Commands
 
         #region Properties
         public ObservableCollection<PageViewModel> Pages { get; private set; }
@@ -147,6 +173,53 @@ namespace QuranPhone.ViewModels
 
         public bool IsDataLoaded { get; protected set; }
 
+        private PageOrientation orientation;
+        public PageOrientation Orientation
+        {
+            get { return orientation; }
+            set
+            {
+                if (value == orientation)
+                    return;
+
+                orientation = value;
+
+                base.OnPropertyChanged(() => Orientation);
+
+                // directly affect IShowInfoPanel
+                base.OnPropertyChanged(() => IsShowInfoPanel);
+            }
+        }
+
+        private bool isShowInfoPanel;
+        public bool IsShowInfoPanel 
+        {
+            get { return isShowInfoPanel && 
+                    (orientation == PageOrientation.PortraitUp || orientation == PageOrientation.PortraitDown); }
+            set
+            {
+                if (value == isShowInfoPanel)
+                    return;
+
+                isShowInfoPanel = value;
+                base.OnPropertyChanged(() => IsShowInfoPanel);
+            }
+        }
+
+        private bool isShowMenu;
+        public bool IsShowMenu 
+        {
+            get { return isShowMenu; }
+            set
+            {
+                if (value == isShowMenu)
+                    return;
+
+                isShowMenu = value;
+                base.OnPropertyChanged(() => IsShowMenu);
+            }
+        }
+
         #endregion Properties
 
         #region Public methods
@@ -231,7 +304,7 @@ namespace QuranPhone.ViewModels
                 List<QuranAyah> verses = null;
                 using (var db = new DatabaseHandler(this.TranslationFile))
                 {
-                    verses = await Task.Run(() => db.GetVerses(pageModel.PageNumber));
+                    verses = await new TaskFactory().StartNew(() => db.GetVerses(pageModel.PageNumber));
                 }
 
                 List<QuranAyah> versesArabic = null;
@@ -242,7 +315,7 @@ namespace QuranPhone.ViewModels
                     {
                         using (var dbArabic = new DatabaseHandler(QuranFileUtils.QURAN_ARABIC_DATABASE))
                         {
-                            versesArabic = await Task.Run(() => dbArabic.GetVerses(pageModel.PageNumber, "arabic_text"));
+                            versesArabic = await new TaskFactory().StartNew(() => dbArabic.GetVerses(pageModel.PageNumber, "arabic_text"));
                         }
                     }
                     catch

@@ -13,6 +13,7 @@ using QuranPhone.Data;
 using QuranPhone.Resources;
 using QuranPhone.Utils;
 using QuranPhone.ViewModels;
+using Telerik.Windows.Controls;
 
 namespace QuranPhone
 {
@@ -41,7 +42,7 @@ namespace QuranPhone
             while (NavigationService.BackStack.Count() > 0)
                 NavigationService.RemoveBackEntry();
 
-            // Show welcom message
+            // Show welcome message
             showWelcomeMessage();
 
             if (!App.MainViewModel.IsDataLoaded)
@@ -52,7 +53,8 @@ namespace QuranPhone
             {
                 App.MainViewModel.RefreshData();
             }
-            // Show prompt to download content if nomedia file exists
+            
+            // Show prompt to download content if not all images exist
             if (!QuranFileUtils.HaveAllImages())
             {
                 try
@@ -74,7 +76,7 @@ namespace QuranPhone
             if (versionFromAssembly > versionFromConfig)
             {
                 var message =
-                    "Assalamu Aleikum,\n\nThank you for downloading Quran Phone. Please note that this is a BETA release and is still work in progress. More features such as recitation will be added in the future inshaAllah. If you find any issues with the app or would like to provide suggestions, please use Contact Us option available via the menu. \n\nJazzakum Allahu Kheiran,\nDenis S.";
+                    "Assalamu Aleikum,\n\nThank you for downloading Quran Phone. Please note that this is a BETA release and is still work in progress. More features such as recitation will be added in the future inshaAllah. If you find any issues with the app or would like to provide suggestions, please use Contact Us option available via the menu. \n\nJazzakum Allahu Kheiran,\nQuran Phone Team.";
                 MessageBox.Show(message, "Welcome", MessageBoxButton.OK);
                 SettingsUtils.Set(Constants.PREF_CURRENT_VERSION, versionFromAssembly.ToString());
             }
@@ -84,7 +86,7 @@ namespace QuranPhone
         private void List_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // If selected item is null (no selection) do nothing
-            var list = sender as LongListSelector;
+            var list = sender as RadDataBoundListBox;
             if (list == null || list.SelectedItem == null)
                 return;
 
@@ -95,9 +97,9 @@ namespace QuranPhone
             list.SelectedItem = null;
         }
 
-        private void DeleteBookmark(object sender, RoutedEventArgs e)
+        private void DeleteBookmark(object sender, ContextMenuItemSelectedEventArgs e)
         {
-            var menuItem = sender as MenuItem;
+            var menuItem = sender as RadContextMenuItem;
             if (menuItem != null)
             {
                 if (menuItem.DataContext != null)

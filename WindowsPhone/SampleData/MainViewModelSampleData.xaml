@@ -24,7 +24,7 @@
         <vm:ItemViewModel Id="1" Title="Surat Al-Fatiha" PageNumber="1" ItemType="Bookmark"/>
         <vm:ItemViewModel Id="2" Title="Surat Al-Baqarah" PageNumber="42" ItemType="Bookmark"/>
     </vm:MainViewModel.Bookmarks>
-    <vm:MainViewModel.QuranData>
+    <!--<vm:MainViewModel.QuranData>
         <vm:DownloadableViewModelBase IsDownloading="True" Progress="50"/>
-    </vm:MainViewModel.QuranData>
+    </vm:MainViewModel.QuranData>-->
 </vm:MainViewModel>

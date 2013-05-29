@@ -9,6 +9,7 @@ using Microsoft.Phone.Shell;
 using QuranPhone.Resources;
 using QuranPhone.ViewModels;
 using QuranPhone.Utils;
+using Telerik.Windows.Controls;
 
 namespace QuranPhone
 {
@@ -199,7 +200,10 @@ namespace QuranPhone
 
             // Create the frame but don't set it as RootVisual yet; this allows the splash
             // screen to remain active until the application is ready to render.
-            RootFrame = new TransitionFrame();
+            // Switch to only use Telerik, removing WPToolkit dependencies.
+            var frame = new RadPhoneApplicationFrame();
+            
+            RootFrame = frame;
             RootFrame.Navigated += CompleteInitializePhoneApplication;
 
             // Handle navigation failures
@@ -227,8 +231,11 @@ namespace QuranPhone
         {
             // If the app has received a 'reset' navigation, then we need to check
             // on the next navigation to see if the page stack should be reset
+            // only do this for windows phone 8
+#if WINDOWS_PHONE_8
             if (e.NavigationMode == NavigationMode.Reset)
                 RootFrame.Navigated += ClearBackStackAfterReset;
+#endif
         }
 
         private void ClearBackStackAfterReset(object sender, NavigationEventArgs e)
@@ -286,7 +293,7 @@ namespace QuranPhone
                 //
                 // If a compiler error is hit then ResourceFlowDirection is missing from
                 // the resource file.
-                FlowDirection flow = (FlowDirection)Enum.Parse(typeof(FlowDirection), AppResources.ResourceFlowDirection);
+                FlowDirection flow = (FlowDirection)Enum.Parse(typeof(FlowDirection), AppResources.ResourceFlowDirection, true);
                 RootFrame.FlowDirection = flow;
             }
             catch

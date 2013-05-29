@@ -51,7 +51,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>Bin\x86\Debug</OutputPath>
-    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE;USE_WP8_NATIVE_SQLITE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE;WINDOWS_PHONE_8;USE_WP8_NATIVE_SQLITE</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
@@ -61,7 +61,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>Bin\x86\Release</OutputPath>
-    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE;USE_WP8_NATIVE_SQLITE</DefineConstants>
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE;WINDOWS_PHONE_8;USE_WP8_NATIVE_SQLITE</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
@@ -144,7 +144,6 @@
     <Compile Include="UI\ListHeader.xaml.cs">
       <DependentUpon>ListHeader.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\ObservableDictionary.cs" />
     <Compile Include="UI\ObservableTranslationItem.cs" />
     <Compile Include="UI\PageLink.xaml.cs">
       <DependentUpon>PageLink.xaml</DependentUpon>
@@ -249,6 +248,13 @@
     <Content Include="Assets\UthmanicHafs.otf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="SplashScreenImage.screen-720p.jpg" />
+    <Content Include="SplashScreenImage.screen-WVGA.jpg" />
+    <Content Include="SplashScreenImage.screen-WXGA.jpg" />
+    <Content Include="..\OfflineAssets\images_800.zip">
+      <Link>Assets\Offline\images_800.zip</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
     <None Include="Properties\AppManifest.xml" />
     <None Include="Properties\WMAppManifest.xml">
@@ -307,17 +313,10 @@
     <Content Include="Assets\Tiles\IconicTileSmall.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Toolkit.Content\ApplicationBar.Cancel.png" />
-    <Content Include="Toolkit.Content\ApplicationBar.Check.png" />
-    <Content Include="Toolkit.Content\ApplicationBar.Delete.png" />
-    <Content Include="Toolkit.Content\ApplicationBar.Select.png" />
     <Page Include="SampleData\PageViewModelSampleData.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Content Include="SplashScreenImage.screen-720p.jpg" />
-    <Content Include="SplashScreenImage.screen-WVGA.jpg" />
-    <Content Include="SplashScreenImage.screen-WXGA.jpg" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\AppResources.resx">
@@ -328,6 +327,9 @@
     <EmbeddedResource Include="Resources\AppResources.ru.resx" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="AppBarUtils">
+      <HintPath>packages\AppBarUtils.2.3\lib\windowsphone8\AppBarUtils.dll</HintPath>
+    </Reference>
     <Reference Include="ImageTools">
       <HintPath>Dependencies\ImageTools.dll</HintPath>
     </Reference>
@@ -341,9 +343,6 @@
       <HintPath>packages\PhoneThemeManager.1.3.3\lib\sl4-windowsphone71\JeffWilcox.PhoneThemeManager.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Phone.Controls, Version=8.0.0.0, Culture=neutral, PublicKeyToken=24eec0d8c86cda1e, processorArchitecture=MSIL" />
-    <Reference Include="Microsoft.Phone.Controls.Toolkit">
-      <HintPath>packages\WPtoolkit.4.2012.10.30\lib\wp8\Microsoft.Phone.Controls.Toolkit.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>packages\Newtonsoft.Json.4.5.11\lib\sl4-windowsphone71\Newtonsoft.Json.dll</HintPath>
@@ -352,10 +351,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Dependencies\SharpZipLib.WindowsPhone7.dll</HintPath>
     </Reference>
+    <Reference Include="System.Windows.Interactivity, Version=3.9.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Telerik.Windows.Behaviors, Version=2013.1.219.3040, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\AppData\Roaming\Telerik\Updates\RadControls_for_WindowsPhone8_2013_1_0219_DEV1_hotfix\Binaries\WindowsPhone\Telerik.Windows.Behaviors.dll</HintPath>
     </Reference>
+    <Reference Include="Telerik.Windows.Controls.Data, Version=2013.1.418.3040, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL" />
     <Reference Include="Telerik.Windows.Controls.Input, Version=2013.1.219.3040, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\AppData\Roaming\Telerik\Updates\RadControls_for_WindowsPhone8_2013_1_0219_DEV1_hotfix\Binaries\WindowsPhone\Telerik.Windows.Controls.Input.dll</HintPath>
@@ -379,6 +380,7 @@
       <Name>Sqlite</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

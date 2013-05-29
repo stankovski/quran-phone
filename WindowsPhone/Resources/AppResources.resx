@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="juz2_description" xml:space="preserve">
-    <value>Juz' %1$d</value>
+    <value>Juz' {0}</value>
   </data>
   <data name="madani" xml:space="preserve">
     <value>Madani</value>
@@ -558,7 +558,7 @@
     <value>Download Required Files?</value>
   </data>
   <data name="extracting_message" xml:space="preserve">
-    <value>Extracting...</value>
+    <value>Extracting Downloaded File...</value>
   </data>
   <data name="quran_page" xml:space="preserve">
     <value>page</value>

@@ -13,7 +13,8 @@
                 <ControlTemplate TargetType="local:ScrollableTextBlock">
                     <ScrollViewer x:Name="ScrollViewer" Foreground="{TemplateBinding Foreground}" HorizontalAlignment="Stretch"
                                   Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" 
-                                  BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+                                  BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}"
+                                  Margin="0,0,0,30">
                         <StackPanel Orientation="Vertical" x:Name="StackPanel" HorizontalAlignment="Stretch"/>
                     </ScrollViewer>
                 </ControlTemplate>

@@ -3,7 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+#if WINDOWS_PHONE_8
 using Windows.Storage;
+#else
+using System.IO.IsolatedStorage;
+#endif
 
 public class SQLiteDatabase : IDisposable
 {
@@ -11,7 +15,19 @@ public class SQLiteDatabase : IDisposable
 
     public SQLiteDatabase(string inputFile)
     {
+#if WINDOWS_PHONE_8
         dbConnection = new SQLite.SQLiteConnection(Path.Combine(ApplicationData.Current.LocalFolder.Path, inputFile), false);
+#else
+        // Based on http://msdn.microsoft.com/en-us/library/windowsphone/develop/jj714087%28v=vs.105%29.aspx#BKMK_FilesandfoldersAPIoverview
+        string dataFolderName = "";
+        //IsolatedStorageFile localFile = IsolatedStorageFile.GetUserStoreForApplication();
+        //if (!localFile.DirectoryExists(dataFolderName))
+        //{
+        //    localFile.CreateDirectory(dataFolderName);
+        //}
+
+        dbConnection = new SQLite.SQLiteConnection(Path.Combine(dataFolderName, inputFile), false);
+#endif
     }
 
     public bool IsOpen()
@@ -35,7 +51,8 @@ public class SQLiteDatabase : IDisposable
         var prop = t.GetProperty("AddedDate");
         if (prop != null)
         {
-            prop.SetValue(obj, DateTime.Now);
+            // Change setValue to 3 parameters overload, to comply with QuranPhone7
+            prop.SetValue(obj, DateTime.Now, null);
         }
         return dbConnection.Insert(obj);
     }
