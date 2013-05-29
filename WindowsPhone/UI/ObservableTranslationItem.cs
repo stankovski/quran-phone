@@ -129,17 +129,31 @@ namespace QuranPhone.UI
                 try
                 {
                     QuranFileUtils.DeleteFile(this.LocalUrl);
-                    if (DeleteComplete != null)
-                        DeleteComplete(this, null);
-                    if (SettingsUtils.Get<string>(Constants.PREF_ACTIVE_TRANSLATION).StartsWith(this.FileName))
-                    {
-                        SettingsUtils.Set<string>(Constants.PREF_ACTIVE_TRANSLATION, string.Empty);
-                    }
                 }
                 catch
                 {
                     Console.WriteLine("error deleting file " + this.LocalUrl);
                 }
+            }
+            else
+            { 
+                // Sometimes downloaded translation is kind of corrupted, need a way to delete this
+                // corrupted item.
+
+            }
+
+            if (DeleteComplete != null)
+                DeleteComplete(this, null);
+
+            try
+            {
+                if (SettingsUtils.Get<string>(Constants.PREF_ACTIVE_TRANSLATION).StartsWith(this.FileName))
+                {
+                    SettingsUtils.Set<string>(Constants.PREF_ACTIVE_TRANSLATION, string.Empty);
+                }
+            }
+            catch (Exception)
+            {
             }
         }
 

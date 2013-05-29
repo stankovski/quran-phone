@@ -103,7 +103,11 @@ namespace QuranPhone.ViewModels
             var translation = sender as ObservableTranslationItem;
             if (translation == null)
                 return;
-            translation.Exists = true;            
+            translation.Exists = true;
+
+            // Hack to update list after download / delete completed
+            AvailableTranslations.Remove(translation);
+            AvailableTranslations.Add(translation);
         }
 
         private void TranslationDeleteComplete(object sender, EventArgs e)
@@ -112,6 +116,10 @@ namespace QuranPhone.ViewModels
             if (translation == null)
                 return;
             translation.Exists = false;
+
+            // Hack to update list after download / delete completed
+            AvailableTranslations.Remove(translation);
+            AvailableTranslations.Add(translation);
         }
 
         private void TranslationNavigateRequested(object sender, EventArgs e)

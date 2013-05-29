@@ -128,6 +128,10 @@
     <Reference Include="Telerik.Windows.Core">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Telerik\RadControls for Windows Phone 7 Q1 2013\Binaries\WindowsPhone\Telerik.Windows.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Telerik.Windows.Data, Version=2013.1.418.2040, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Telerik\RadControls for Windows Phone 7 Q1 2013\Binaries\WindowsPhone\Telerik.Windows.Data.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\WindowsPhone\App.xaml.cs">
@@ -233,6 +237,9 @@
       <Link>UI\CommonHeader.xaml.cs</Link>
       <DependentUpon>CommonHeader.xaml</DependentUpon>
     </Compile>
+    <Compile Include="..\WindowsPhone\UI\DataTemplateSelector.cs">
+      <Link>UI\DataTemplateSelector.cs</Link>
+    </Compile>
     <Compile Include="..\WindowsPhone\UI\ListHeader.xaml.cs">
       <Link>UI\ListHeader.xaml.cs</Link>
       <DependentUpon>ListHeader.xaml</DependentUpon>
@@ -258,6 +265,9 @@
     </Compile>
     <Compile Include="..\WindowsPhone\UI\TiltEffect.cs">
       <Link>UI\TiltEffect.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\UI\TranslationItemTemplateSelector.cs">
+      <Link>UI\TranslationItemTemplateSelector.cs</Link>
     </Compile>
     <Compile Include="..\WindowsPhone\UI\TranslationView.xaml.cs">
       <Link>UI\TranslationView.xaml.cs</Link>

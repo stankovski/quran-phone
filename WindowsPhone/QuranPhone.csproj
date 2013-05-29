@@ -139,6 +139,7 @@
     <Compile Include="UI\CommonHeader.xaml.cs">
       <DependentUpon>CommonHeader.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\DataTemplateSelector.cs" />
     <Compile Include="UI\TextFormatConverter.cs" />
     <Compile Include="UI\SettingsRetrieverConverter.cs" />
     <Compile Include="UI\ListHeader.xaml.cs">
@@ -150,6 +151,7 @@
     </Compile>
     <Compile Include="UI\RelayCommand.cs" />
     <Compile Include="UI\TiltEffect.cs" />
+    <Compile Include="UI\TranslationItemTemplateSelector.cs" />
     <Compile Include="UI\TranslationView.xaml.cs">
       <DependentUpon>TranslationView.xaml</DependentUpon>
     </Compile>
@@ -369,6 +371,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\AppData\Roaming\Telerik\Updates\RadControls_for_WindowsPhone8_2013_1_0219_DEV1_hotfix\Binaries\WindowsPhone\Telerik.Windows.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Telerik.Windows.Data, Version=2013.1.418.3040, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Phone.Controls\Phone.Controls.csproj">
