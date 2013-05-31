@@ -46,6 +46,8 @@ namespace QuranPhone.Data
         public const String PREF_RESHAPE_ARABIC = "reshapeArabic";
         [DefaultValue(false)]
         public const String PREF_SHOW_ARABIC_IN_TRANSLATION = "showArabicInTranslation";
+        [DefaultValue(false)]
+        public const String PREF_PREVENT_SLEEP = "preventSleep";
         public const String PREF_NIGHT_MODE = "nightMode";
         public const String PREF_DEFAULT_QARI = "defaultQari";
         public const String PREF_SHOULD_FETCH_PAGES = "shouldFetchPages";

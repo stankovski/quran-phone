@@ -151,6 +151,15 @@ namespace QuranPhone.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to prevent phone from turning screen off.
+        /// </summary>
+        public static string disable_sleep {
+            get {
+                return ResourceManager.GetString("disable_sleep", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you would like to cancel download?.
         /// </summary>
         public static string download_cancel_confirmation {
@@ -187,7 +196,7 @@ namespace QuranPhone.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Extracting....
+        ///   Looks up a localized string similar to Extracting Downloaded File....
         /// </summary>
         public static string extracting_message {
             get {
@@ -196,7 +205,7 @@ namespace QuranPhone.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Juz&apos; %1$d.
+        ///   Looks up a localized string similar to Juz&apos; {0}.
         /// </summary>
         public static string juz2_description {
             get {
@@ -246,6 +255,15 @@ namespace QuranPhone.Resources {
         public static string page_description {
             get {
                 return ResourceManager.GetString("page_description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please relaunch an app for the change to take effect.
+        /// </summary>
+        public static string please_restart {
+            get {
+                return ResourceManager.GetString("please_restart", resourceCulture);
             }
         }
         

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Phone.Shell;
 
 namespace QuranPhone.Utils
 {
@@ -40,6 +41,30 @@ namespace QuranPhone.Utils
                     }
                 }
                 return designTime.Value;
+            }
+        }
+
+        public static void DisableIdleDetection()
+        {
+            try
+            {
+                PhoneApplicationService.Current.ApplicationIdleDetectionMode = IdleDetectionMode.Disabled;
+            }
+            catch (InvalidOperationException ex)
+            {
+                // This exception is expected in the current release.
+            }
+        }
+
+        public static void EnableIdleDetection()
+        {
+            try
+            {
+                PhoneApplicationService.Current.ApplicationIdleDetectionMode = IdleDetectionMode.Enabled;
+            }
+            catch (InvalidOperationException ex)
+            {
+                // This exception is expected in the current release.
             }
         }
     }

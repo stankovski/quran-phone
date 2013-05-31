@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Device.Location;
 using System.Diagnostics;
 using System.Resources;
+using System.Threading;
 using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Navigation;
+using System.Windows.Threading;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using QuranPhone.Data;
 using QuranPhone.Resources;
 using QuranPhone.ViewModels;
 using QuranPhone.Utils;
@@ -110,6 +114,9 @@ namespace QuranPhone
             // Set theme
             ThemeManager.ToDarkTheme();
 
+            // Toggle idle mode
+            ToggleIdleMode();
+
             // Initialize directory
             QuranFileUtils.MakeQuranDirectory();
             QuranFileUtils.MakeQuranDatabaseDirectory();
@@ -133,6 +140,15 @@ namespace QuranPhone
                 // and consume battery power when the user is not using the phone.
                 PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
             }
+        }
+
+        private void ToggleIdleMode()
+        {
+            var preventSleep = SettingsUtils.Get<bool>(Constants.PREF_PREVENT_SLEEP);
+            if (preventSleep)
+                PhoneUtils.DisableIdleDetection();
+            else
+                PhoneUtils.EnableIdleDetection();
         }
 
         // Code to execute when the application is launching (eg, from Start)

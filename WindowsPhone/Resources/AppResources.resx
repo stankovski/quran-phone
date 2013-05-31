@@ -630,4 +630,10 @@ the data used in the translations and Arabic comes from
   <data name="download_cancel_confirmation" xml:space="preserve">
     <value>Are you sure you would like to cancel download?</value>
   </data>
+  <data name="disable_sleep" xml:space="preserve">
+    <value>prevent phone from turning screen off</value>
+  </data>
+  <data name="please_restart" xml:space="preserve">
+    <value>Please relaunch an app for the change to take effect</value>
+  </data>
 </root>

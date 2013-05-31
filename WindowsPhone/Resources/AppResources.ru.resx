@@ -389,4 +389,10 @@ the data used in the translations and Arabic comes from
   <data name="download_cancel_confirmation" xml:space="preserve">
     <value>Вы уверены, что хотите отменить загрузку?</value>
   </data>
+  <data name="disable_sleep" xml:space="preserve">
+    <value>предотвратить телефон от выключения экрана</value>
+  </data>
+  <data name="please_restart" xml:space="preserve">
+    <value>Пожалуйста перезапустите приложение, чтобы изменения вступили в силу</value>
+  </data>
 </root>

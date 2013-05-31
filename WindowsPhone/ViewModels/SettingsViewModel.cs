@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Input;
+using Microsoft.Phone.Shell;
 using Microsoft.Phone.Tasks;
 using QuranPhone.Data;
+using QuranPhone.Resources;
 using QuranPhone.UI;
 using QuranPhone.Utils;
 using System.IO;
@@ -71,6 +74,24 @@ namespace QuranPhone.ViewModels
                 base.OnPropertyChanged(() => EnableShowArabicInTranslation);
             }
         }
+
+        private bool preventPhoneFromSleeping;
+        public bool PreventPhoneFromSleeping
+        {
+            get { return preventPhoneFromSleeping; }
+            set
+            {
+                if (value == preventPhoneFromSleeping)
+                    return;
+
+                preventPhoneFromSleeping = value;
+                var oldValue = SettingsUtils.Get<bool>(Constants.PREF_PREVENT_SLEEP);
+                SettingsUtils.Set(Constants.PREF_PREVENT_SLEEP, value);
+                if (oldValue != value)
+                    MessageBox.Show(AppResources.please_restart);
+                base.OnPropertyChanged(() => PreventPhoneFromSleeping);
+            }
+        }
         RelayCommand navigateCommand;
         /// <summary>
         /// Returns a navigate command
@@ -118,6 +139,7 @@ namespace QuranPhone.ViewModels
 
             TextSize = SettingsUtils.Get<int>(Constants.PREF_TRANSLATION_TEXT_SIZE);
             ShowArabicInTranslation = SettingsUtils.Get<bool>(Constants.PREF_SHOW_ARABIC_IN_TRANSLATION);
+            PreventPhoneFromSleeping = SettingsUtils.Get<bool>(Constants.PREF_PREVENT_SLEEP);
 
             if (QuranFileUtils.FileExists(Path.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false),
                                                        QuranFileUtils.QURAN_ARABIC_DATABASE)))
