@@ -395,4 +395,10 @@ the data used in the translations and Arabic comes from
   <data name="please_restart" xml:space="preserve">
     <value>Пожалуйста перезапустите приложение, чтобы изменения вступили в силу</value>
   </data>
+  <data name="search" xml:space="preserve">
+    <value>поиск</value>
+  </data>
+  <data name="search_results" xml:space="preserve">
+    <value>результаты поиска</value>
+  </data>
 </root>

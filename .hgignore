@@ -44,3 +44,4 @@ WindowsPhone/PerfLogs/*
 *.sap
 QuranPhone7/PerfLogs/*
 *.orig
+WindowsPhone/packages/Microsoft.Bcl.Build.1.0.5/tools/Microsoft.Bcl.Build.Tasks.dll-808dd1e0
