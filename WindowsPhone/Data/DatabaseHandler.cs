@@ -152,6 +152,7 @@ namespace QuranPhone.Data
                 if (!ReopenDatabase()) { return null; }
             }
 
+            // Couldn't get parameterized version to work - need to look into it in the future
             var sql = string.Format("select \"sura\", \"ayah\", \"text\" from \"{0}\" where \"text\" like '%{1}%' order by \"sura\", \"ayah\"", table, query);
 
             return mDatabase.Query<QuranAyah>(sql).Take(50).ToList();          

@@ -250,6 +250,15 @@ namespace QuranPhone.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No translation to search. Please go to settings page to select active translation..
+        /// </summary>
+        public static string no_translation_to_search {
+            get {
+                return ResourceManager.GetString("no_translation_to_search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to page %1$d, Juz&apos; %2$d.
         /// </summary>
         public static string page_description {

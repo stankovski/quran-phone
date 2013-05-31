@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Windows;
@@ -7,6 +8,8 @@ using System.Windows.Controls;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using QuranPhone.Resources;
+using QuranPhone.Utils;
 using QuranPhone.ViewModels;
 using Telerik.Windows.Controls;
 
@@ -38,8 +41,18 @@ namespace QuranPhone
         {
             if (e.Key == System.Windows.Input.Key.Enter)
             {
-                App.SearchViewModel.Load(SearchBox.Text);
-                ResultList.Focus();
+                if (string.IsNullOrEmpty(App.DetailsViewModel.TranslationFile) ||
+                    !QuranFileUtils.FileExists(Path.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false),
+                                                            App.DetailsViewModel.TranslationFile)))
+                {
+                    MessageBox.Show(AppResources.no_translation_to_search);
+                    NavigationService.Navigate(new Uri("/SettingsPage.xaml", UriKind.Relative));
+                }
+                else
+                {
+                    App.SearchViewModel.Load(SearchBox.Text);
+                    ResultList.Focus();
+                }
             }
         }
 

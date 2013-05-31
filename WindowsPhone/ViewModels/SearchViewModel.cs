@@ -2,8 +2,10 @@
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
+using System.Windows;
 using QuranPhone.Common;
 using QuranPhone.Data;
+using QuranPhone.Resources;
 using QuranPhone.Utils;
 
 namespace QuranPhone.ViewModels
@@ -44,7 +46,7 @@ namespace QuranPhone.ViewModels
                 !QuranFileUtils.FileExists(Path.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false),
                                                         App.DetailsViewModel.TranslationFile)))
             {
-                // Tell users to select translation
+                MessageBox.Show(AppResources.no_translation_to_search);
             }
             else
             {
