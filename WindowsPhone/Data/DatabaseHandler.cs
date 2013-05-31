@@ -152,9 +152,9 @@ namespace QuranPhone.Data
                 if (!ReopenDatabase()) { return null; }
             }
 
-            var sql = new StringBuilder("select \"sura\", \"ayah\", \"text\" from \"" + table + "\" where \"text\" like '%?%'");
+            var sql = string.Format("select \"sura\", \"ayah\", \"text\" from \"{0}\" where \"text\" like '%{1}%' order by \"sura\", \"ayah\"", table, query);
 
-            return mDatabase.Query<QuranAyah>(sql.ToString(), query).Take(50).ToList();          
+            return mDatabase.Query<QuranAyah>(sql).Take(50).ToList();          
         }        
     }
 }

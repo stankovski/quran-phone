@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
-using System.Windows;
 using QuranPhone.Common;
-using QuranPhone.Resources;
 using QuranPhone.Data;
 using QuranPhone.Utils;
-using System.IO.IsolatedStorage;
 
 namespace QuranPhone.ViewModels
 {
     public class SearchViewModel : ViewModelBase
     {
+        private const int MaxPreviewCharacter = 200;
         public SearchViewModel()
         {
             this.SearchResults = new ObservableCollection<ItemViewModel>();
@@ -21,6 +18,21 @@ namespace QuranPhone.ViewModels
 
         #region Properties
         public ObservableCollection<ItemViewModel> SearchResults { get; private set; }
+
+        private string query;
+        public string Query
+        {
+            get { return query; }
+            set
+            {
+                if (value == query)
+                    return;
+
+                query = value;
+
+                base.OnPropertyChanged(() => Query);
+            }
+        }
         #endregion Properties
 
         #region Public methods
@@ -44,13 +56,33 @@ namespace QuranPhone.ViewModels
                 this.SearchResults.Clear();
                 foreach (var verse in verses)
                 {
+                    var text = TrimText(verse.Text, MaxPreviewCharacter);
                     this.SearchResults.Add(new ItemViewModel
                         {
-                            Id = QuranInfo.GetSuraName(verse.Sura, true),
-                            Details = verse.Text,
+                            Id = string.Format("{0} ({1}:{2})", QuranInfo.GetSuraName(verse.Sura, false), verse.Sura, verse.Ayah),
+                            Details = text,
                             PageNumber = QuranInfo.GetPageFromSuraAyah(verse.Sura, verse.Ayah)
                         });
                 }
+            }
+        }
+
+        private string TrimText(string text, int maxPreviewCharacter)
+        {
+            if (text.Length <= MaxPreviewCharacter)
+            {
+                return text;
+            }
+            else
+            {
+                for (int i = MaxPreviewCharacter - 1; i >= 0; i--)
+                {
+                    if (text[i] == ' ')
+                    {
+                        return string.Format("{0}...", text.Substring(0, i));
+                    }
+                }
+                return string.Format("{0}...", text.Substring(0, maxPreviewCharacter - 1));
             }
         }
 

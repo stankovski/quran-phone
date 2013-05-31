@@ -16,7 +16,8 @@
     xmlns:tilt="clr-namespace:ControlTiltEffect"
     tilt:TiltEffect.IsTiltEnabled="True"
     xmlns:myui="clr-namespace:QuranPhone.UI"
-    d:DataContext="{d:DesignData SampleData/MainViewModelSampleData.xaml}"
+    Loaded="PageLoaded"
+    d:DataContext="{d:DesignData SampleData/SearchViewModelSampleData.xaml}"
     shell:SystemTray.IsVisible="True">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
@@ -27,11 +28,32 @@
         </Grid.RowDefinitions>
 
         <!--TitlePanel contains the name of the application and page title-->
-        <myui:CommonHeader Grid.Row="0" Margin="12,0,0,0" Name="header"/>
+        <TextBox Name="SearchBox" Text="{Binding Query, Mode=TwoWay}" Grid.Row="0" InputScope="Search" KeyDown="SearchKeyDown"/>
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <TextBlock Style="{StaticResource PhoneTextTitle1Style}" Text="{Binding Path=LocalizedResources.search_results, Source={StaticResource LocalizedStrings}}"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Style="{StaticResource PhoneTextTitle1Style}" Text="{Binding Path=LocalizedResources.search_results, Source={StaticResource LocalizedStrings}}"/>
+            <telerikPrimitives:RadDataBoundListBox Grid.Row="1" ItemsSource="{Binding SearchResults}" Margin="12,0,12,0"
+                                                   SelectionChanged="SearchResultsSelectionChanged" IsAsyncBalanceEnabled="True"
+                                                   Name="ResultList">
+                <telerikPrimitives:RadDataBoundListBox.ItemAddedAnimation>
+                    <telerikCore:RadFadeAnimation />
+                </telerikPrimitives:RadDataBoundListBox.ItemAddedAnimation>
+                <telerikPrimitives:RadDataBoundListBox.ItemTemplate>
+                    <DataTemplate>
+                        <ListBoxItem HorizontalContentAlignment="Stretch" Padding="0,10">
+                            <StackPanel>
+                                <TextBlock Text="{Binding Id}"/>
+                                <TextBlock TextWrapping="Wrap" Text="{Binding Details}" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                            </StackPanel>
+                        </ListBoxItem>
+                    </DataTemplate>
+                </telerikPrimitives:RadDataBoundListBox.ItemTemplate>
+            </telerikPrimitives:RadDataBoundListBox>
         </Grid>
     </Grid>
 

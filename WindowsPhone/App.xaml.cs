@@ -20,7 +20,8 @@ namespace QuranPhone
     public partial class App : Application
     {
         private static MainViewModel mainViewModel = null;
-        private static DetailsViewModel _detailsViewModel = null;
+        private static SearchViewModel searchViewModel = null;
+        private static DetailsViewModel detailsViewModel = null;
         private static TranslationsListViewModel translationsListViewModel = null;
         private static SettingsViewModel settingsViewModel = null;
 
@@ -41,6 +42,22 @@ namespace QuranPhone
         }
 
         /// <summary>
+        /// A static ViewModel used by the views to bind against.
+        /// </summary>
+        /// <returns>The SearchViewModel object.</returns>
+        public static SearchViewModel SearchViewModel
+        {
+            get
+            {
+                // Delay creation of the view model until necessary
+                if (searchViewModel == null)
+                    searchViewModel = new SearchViewModel();
+
+                return searchViewModel;
+            }
+        }
+
+        /// <summary>
         /// A static DetailsViewModel used by the views to bind against.
         /// </summary>
         /// <returns>The DetailsViewModel object.</returns>
@@ -49,10 +66,10 @@ namespace QuranPhone
             get
             {
                 // Delay creation of the view model until necessary
-                if (_detailsViewModel == null)
-                    _detailsViewModel = new DetailsViewModel();
+                if (detailsViewModel == null)
+                    detailsViewModel = new DetailsViewModel();
 
-                return _detailsViewModel;
+                return detailsViewModel;
             }
         }
 

@@ -212,6 +212,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </DesignData>
+    <DesignData Include="SampleData\SearchViewModelSampleData.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </DesignData>
     <Page Include="SampleData\TranslationViewSampleData.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -254,6 +258,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Images\search.png" />
     <Content Include="Assets\Images\settings.png" />
     <Content Include="Assets\UthmanicHafs.otf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -286,7 +291,6 @@
     <Content Include="Assets\Images\hizb_quarter.png" />
     <Content Include="Assets\Images\hizb_threequarters.png" />
     <Content Include="Assets\Images\icon.png" />
-    <Content Include="Assets\Images\ic_ab_search.png" />
     <Content Include="Assets\Images\ic_ab_settings.png" />
     <Content Include="Assets\Images\ic_accept.png" />
     <Content Include="Assets\Images\ic_cancel.png" />

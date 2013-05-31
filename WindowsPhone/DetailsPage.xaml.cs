@@ -104,9 +104,13 @@ namespace QuranPhone
         private void Settings_Click(object sender, EventArgs e)
         {
             App.DetailsViewModel.ToggleMenu();
-
-            int pageNumber = ((DetailsViewModel)DataContext).CurrentPageNumber;
             NavigationService.Navigate(new Uri("/SettingsPage.xaml", UriKind.Relative));
+        }
+
+        private void Search_Click(object sender, EventArgs e)
+        {
+            App.DetailsViewModel.ToggleMenu();
+            NavigationService.Navigate(new Uri("/SearchPage.xaml", UriKind.Relative));
         }
 
         private void ContactUs_Click(object sender, EventArgs e)

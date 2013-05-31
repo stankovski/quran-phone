@@ -112,13 +112,14 @@
     
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar>
-            <shell:ApplicationBarIconButton IconUri="/Assets/Images/settings.png" 
-                                            Text="Settings" Click="Settings_Click"/>
+            <shell:ApplicationBarIconButton IconUri="/Assets/Images/search.png" 
+                                            Text="Search" Click="Search_Click"/>
             <shell:ApplicationBarIconButton IconUri="/Assets/Images/favorite.png" 
                                             Text="Bookmark" Click="Bookmark_Click"/>
             <shell:ApplicationBarIconButton IconUri="/Assets/Images/appbar.globe.png" 
                                             Text="Translate" Click="Translation_Click"/>
             <shell:ApplicationBar.MenuItems>
+                <shell:ApplicationBarMenuItem Text="Settings" Click="Settings_Click"/>
                 <shell:ApplicationBarMenuItem Text="Contact us" Click="ContactUs_Click"/>
             </shell:ApplicationBar.MenuItems>
         </shell:ApplicationBar>
