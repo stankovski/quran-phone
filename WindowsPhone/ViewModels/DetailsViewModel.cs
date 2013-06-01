@@ -101,7 +101,7 @@ namespace QuranPhone.ViewModels
                 if (value == currentPageNumber)
                     return;
 
-                CurrentSurahName = QuranInfo.GetSuraNameFromPage(value, true);
+                CurrentSurahName = QuranInfo.GetSuraNameFromPage(value, false);
                 CurrentSurahNumber = QuranInfo.GetSuraNumberFromPage(value);
                 CurrentJuzName = QuranInfo.GetJuzTitle() + " " + QuranInfo.GetJuzFromPage(value);
 
