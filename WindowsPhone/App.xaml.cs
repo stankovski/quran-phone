@@ -156,11 +156,11 @@ namespace QuranPhone
                 // and consume battery power when the user is not using the phone.
                 
                 // commented, test user idle detection
-                //PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
+                PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
             }
         }
 
-        private void ToggleIdleMode()
+        public static void ToggleIdleMode()
         {
             var preventSleep = SettingsUtils.Get<bool>(Constants.PREF_PREVENT_SLEEP);
 
