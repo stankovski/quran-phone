@@ -34,12 +34,6 @@
                          <myui:CachedImage ImageSource="{Binding ImageSource}" PageNumber="{Binding PageNumber}" 
                                               Visibility="{Binding ShowTranslation, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}"/>
                          <controls:ScrollableTextBlock Text="{Binding Translation}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="{Binding TextSize}" DesiredWidth="{Binding ScreenWidth}" Foreground="Black" Margin="12,0" Visibility="{Binding ShowTranslation, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Background="{StaticResource LightBackground}">
-                            <TextBlock Text="{Binding SuraName}" HorizontalAlignment="Left" FontSize="18" Foreground="Black" Margin="10,0,0,5"/>
-                            <TextBlock Text="{Binding PageNumber}" HorizontalAlignment="Center" FontSize="18" Foreground="Black" Margin="0,0,0,5"/>
-
-                            <TextBlock Text="{Binding JuzName}" HorizontalAlignment="Right" FontSize="18" Foreground="Black" Margin="0,0,75,5"/>
-                        </Grid>
                     </Grid>
                 </DataTemplate>
             </telerikPrimitives:RadSlideView.ItemTemplate>
@@ -99,6 +93,13 @@
                            Foreground="{StaticResource DarkBlueText}" 
                            FontSize="20"/>
             </StackPanel>
+        </Grid>
+
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Background="{StaticResource LightBackground}" Visibility="{Binding ShowInfoOverlay, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <TextBlock Text="{Binding CurrentSurahName}" HorizontalAlignment="Left" FontSize="18" Foreground="Black" Margin="10,0,0,5"/>
+            <TextBlock Text="{Binding CurrentPageNumber}" HorizontalAlignment="Center" FontSize="18" Foreground="Black" Margin="0,0,0,5"/>
+
+            <TextBlock Text="{Binding CurrentJuzName}" HorizontalAlignment="Right" FontSize="18" Foreground="Black" Margin="0,0,75,5"/>
         </Grid>
 
         <Button VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0" Width="80" Style="{StaticResource ChromelessButtonStyle}" Name="menuToggleButton" Visibility="{Binding IsShowMenu, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}" Command="{Binding CommandToggleMenu}">
