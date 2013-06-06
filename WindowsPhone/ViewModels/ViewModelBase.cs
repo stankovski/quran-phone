@@ -167,5 +167,22 @@ namespace QuranPhone.ViewModels
             return memberExpression.Member.Name;
         }
         #endregion
+
+        #region Base Properties
+        private bool isLoading;
+        public bool IsLoading
+        {
+            get { return isLoading; }
+            set
+            {
+                if (value == isLoading)
+                    return;
+
+                isLoading = value;
+
+                this.OnPropertyChanged(() => IsLoading);
+            }
+        }
+        #endregion Base Properties
     }
 }

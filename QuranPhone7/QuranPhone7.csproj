@@ -215,6 +215,10 @@
     <Compile Include="..\WindowsPhone\Resources\AppResources.Designer.cs">
       <Link>Resources\AppResources.Designer.cs</Link>
     </Compile>
+    <Compile Include="..\WindowsPhone\SearchPage.xaml.cs">
+      <Link>SearchPage.xaml.cs</Link>
+      <DependentUpon>SearchPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="..\WindowsPhone\SettingsPage.xaml.cs">
       <Link>SettingsPage.xaml.cs</Link>
       <DependentUpon>SettingsPage.xaml</DependentUpon>
@@ -327,6 +331,9 @@
     <Compile Include="..\WindowsPhone\ViewModels\PageViewModel.cs">
       <Link>ViewModels\PageViewModel.cs</Link>
     </Compile>
+    <Compile Include="..\WindowsPhone\ViewModels\SearchViewModel.cs">
+      <Link>ViewModels\SearchViewModel.cs</Link>
+    </Compile>
     <Compile Include="..\WindowsPhone\ViewModels\SettingsViewModel.cs">
       <Link>ViewModels\SettingsViewModel.cs</Link>
     </Compile>
@@ -372,6 +379,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="..\WindowsPhone\SampleData\SearchViewModelSampleData.xaml">
+      <Link>SampleData\SearchViewModelSampleData.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="..\WindowsPhone\SampleData\SettingsViewModelSampleData.xaml">
       <Link>SampleData\SettingsViewModelSampleData.xaml</Link>
       <Generator>MSBuild:Compile</Generator>
@@ -389,6 +401,11 @@
     </Page>
     <Page Include="..\WindowsPhone\SampleData\TranslationViewSampleData.xaml">
       <Link>SampleData\TranslationViewSampleData.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\WindowsPhone\SearchPage.xaml">
+      <Link>SearchPage.xaml</Link>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -432,6 +449,9 @@
     <Content Include="..\OfflineAssets\images_800.zip">
       <Link>Assets\Offline\images_800.zip</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Images\search.png">
+      <Link>Assets\Images\search.png</Link>
     </Content>
     <Content Include="..\WindowsPhone\Assets\UthmanicHafs.otf">
       <Link>Assets\UthmanicHafs.otf</Link>
@@ -480,9 +500,6 @@
     </Content>
     <Content Include="..\WindowsPhone\Assets\Images\icon.png">
       <Link>Assets\Images\icon.png</Link>
-    </Content>
-    <Content Include="..\WindowsPhone\Assets\Images\ic_ab_search.png">
-      <Link>Assets\Images\ic_ab_search.png</Link>
     </Content>
     <Content Include="..\WindowsPhone\Assets\Images\ic_ab_settings.png">
       <Link>Assets\Images\ic_ab_settings.png</Link>

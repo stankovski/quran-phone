@@ -103,6 +103,9 @@
     <Compile Include="Data\SQLite.cs" />
     <Compile Include="Data\SQLiteAsync.cs" />
     <Compile Include="Data\TranslationsDBAdapter.cs" />
+    <Compile Include="SearchPage.xaml.cs">
+      <DependentUpon>SearchPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
@@ -169,6 +172,7 @@
     <Compile Include="UI\StyleConverter.cs" />
     <Compile Include="Utils\TranslationListTask.cs" />
     <Compile Include="Utils\TranslationUtils.cs" />
+    <Compile Include="ViewModels\SearchViewModel.cs" />
     <Compile Include="ViewModels\DownloadableViewModelBase.cs" />
     <Compile Include="ViewModels\ItemViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
@@ -208,6 +212,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </DesignData>
+    <DesignData Include="SampleData\SearchViewModelSampleData.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </DesignData>
     <Page Include="SampleData\TranslationViewSampleData.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -215,6 +223,10 @@
     <Page Include="SampleData\TranslationViewModelSampleData.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SearchPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SettingsPage.xaml">
       <SubType>Designer</SubType>
@@ -246,6 +258,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Images\search.png" />
     <Content Include="Assets\Images\settings.png" />
     <Content Include="Assets\UthmanicHafs.otf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -278,7 +291,6 @@
     <Content Include="Assets\Images\hizb_quarter.png" />
     <Content Include="Assets\Images\hizb_threequarters.png" />
     <Content Include="Assets\Images\icon.png" />
-    <Content Include="Assets\Images\ic_ab_search.png" />
     <Content Include="Assets\Images\ic_ab_settings.png" />
     <Content Include="Assets\Images\ic_accept.png" />
     <Content Include="Assets\Images\ic_cancel.png" />

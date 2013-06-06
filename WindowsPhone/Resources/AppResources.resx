@@ -636,4 +636,13 @@ the data used in the translations and Arabic comes from
   <data name="please_restart" xml:space="preserve">
     <value>Please relaunch an app for the change to take effect</value>
   </data>
+  <data name="search" xml:space="preserve">
+    <value>search</value>
+  </data>
+  <data name="search_results" xml:space="preserve">
+    <value>search results</value>
+  </data>
+  <data name="no_translation_to_search" xml:space="preserve">
+    <value>No translation to search. Please go to settings page to select active translation.</value>
+  </data>
 </root>
