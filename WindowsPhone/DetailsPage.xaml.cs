@@ -80,6 +80,7 @@ namespace QuranPhone
                 //App.DetailsViewModel.UpdatePages();
                 App.DetailsViewModel.ShowTranslation = !App.DetailsViewModel.ShowTranslation;
                 SettingsUtils.Set(Constants.PREF_SHOW_TRANSLATION, App.DetailsViewModel.ShowTranslation);
+                App.DetailsViewModel.ToggleMenu();
             }
             else
             {
@@ -94,7 +95,6 @@ namespace QuranPhone
                 using (var adapter = new BookmarksDBAdapter())
                 {
                     adapter.AddBookmarkIfNotExists(null, null, App.DetailsViewModel.CurrentPageNumber);
-
                     App.DetailsViewModel.ToggleMenu();
                 }
             }
@@ -125,10 +125,9 @@ namespace QuranPhone
         }
 
 
-        private void ScreenTap(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void ScreenTap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            App.DetailsViewModel.IsShowMenu = false;
-            App.DetailsViewModel.IsShowInfoPanel = false;
+            App.DetailsViewModel.ToggleMenu();
         }
 
         #endregion Menu Events
