@@ -214,6 +214,9 @@
     </Compile>
     <Compile Include="..\WindowsPhone\Resources\AppResources.Designer.cs">
       <Link>Resources\AppResources.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.resx</DependentUpon>
     </Compile>
     <Compile Include="..\WindowsPhone\SearchPage.xaml.cs">
       <Link>SearchPage.xaml.cs</Link>
@@ -599,12 +602,13 @@
   <ItemGroup>
     <EmbeddedResource Include="..\WindowsPhone\Resources\AppResources.resx">
       <Link>Resources\AppResources.resx</Link>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="..\WindowsPhone\Resources\AppResources.ru.resx">
       <Link>Resources\AppResources.ru.resx</Link>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
