@@ -33,6 +33,8 @@ namespace QuranPhone.ViewModels
                 query = value;
 
                 base.OnPropertyChanged(() => Query);
+
+                IsLoading = true;
             }
         }
         #endregion Properties
@@ -66,6 +68,8 @@ namespace QuranPhone.ViewModels
                             PageNumber = QuranInfo.GetPageFromSuraAyah(verse.Sura, verse.Ayah)
                         });
                 }
+
+                IsLoading = false;
             }
         }
 
