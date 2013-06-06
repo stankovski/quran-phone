@@ -60,6 +60,9 @@ namespace QuranPhone
                 DataContext = App.DetailsViewModel;
             radSlideView.SelectedItem = App.DetailsViewModel.Pages[App.DetailsViewModel.CurrentPageIndex];
             radSlideView.SelectionChanged += PageFlipped;
+
+            // set keepinfooverlay according to setting
+            App.DetailsViewModel.KeepInfoOverlay = SettingsUtils.Get<bool>(Constants.PREF_KEEP_INFO_OVERLAY);
         }
 
         private void PageFlipped(object sender, SelectionChangedEventArgs e)

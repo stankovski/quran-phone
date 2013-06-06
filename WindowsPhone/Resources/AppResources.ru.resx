@@ -404,4 +404,7 @@ the data used in the translations and Arabic comes from
   <data name="no_translation_to_search" xml:space="preserve">
     <value>Отсутствует перевод для поиска. Пожалуйста, перейдите на страницу настроек для выбора активного перевода.</value>
   </data>
+  <data name="keep_info_overlay" xml:space="preserve">
+    <value>always show page info</value>
+  </data>
 </root>

@@ -20,6 +20,10 @@
     d:DataContext="{d:DesignData SampleData/SearchViewModelSampleData.xaml}"
     shell:SystemTray.IsVisible="True">
 
+    <phone:PhoneApplicationPage.Resources>
+        <myui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </phone:PhoneApplicationPage.Resources>
+
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
         <Grid.RowDefinitions>
@@ -27,17 +31,20 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!--TitlePanel contains the name of the application and page title-->
-        <TextBox Name="SearchBox" Text="{Binding Query, Mode=TwoWay}" Grid.Row="0" InputScope="Search" KeyDown="SearchKeyDown"/>
-
+        <!--Loading indicator-->
+        <ProgressBar IsIndeterminate="{Binding IsLoading}" VerticalAlignment="Top" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"
+                         Margin="20,5,20,0" FlowDirection="LeftToRight"/>
+        
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Style="{StaticResource PhoneTextTitle1Style}" Text="{Binding Path=LocalizedResources.search_results, Source={StaticResource LocalizedStrings}}"/>
-            <telerikPrimitives:RadDataBoundListBox Grid.Row="1" ItemsSource="{Binding SearchResults}" Margin="12,0,12,0"
+            <TextBlock Grid.Row="0" Style="{StaticResource PhoneTextTitle1Style}" Text="{Binding Path=LocalizedResources.search, Source={StaticResource LocalizedStrings}}"/>
+            <TextBox Grid.Row="1" Name="SearchBox" Text="{Binding Query, Mode=TwoWay}" InputScope="Search" KeyDown="SearchKeyDown"/>
+            <telerikPrimitives:RadDataBoundListBox Grid.Row="2" Grid.RowSpan="2" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=inverse}" ItemsSource="{Binding SearchResults}" Margin="12,0,12,0"
                                                    SelectionChanged="SearchResultsSelectionChanged" IsAsyncBalanceEnabled="True"
                                                    Name="ResultList">
                 <telerikPrimitives:RadDataBoundListBox.ItemAddedAnimation>

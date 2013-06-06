@@ -186,8 +186,9 @@ namespace QuranPhone.ViewModels
 
                 base.OnPropertyChanged(() => Orientation);
 
-                // directly affect IShowInfoPanel
+                // directly affect IshowInfoPanel and ShowInfoOverlay
                 base.OnPropertyChanged(() => IsShowInfoPanel);
+                base.OnPropertyChanged(() => ShowInfoOverlay);
             }
         }
 
@@ -195,7 +196,9 @@ namespace QuranPhone.ViewModels
         public bool IsShowInfoPanel 
         {
             get { return isShowInfoPanel && 
-                    (orientation == PageOrientation.PortraitUp || orientation == PageOrientation.PortraitDown); }
+                    (orientation == PageOrientation.PortraitUp || 
+                    orientation == PageOrientation.PortraitDown || 
+                    orientation == PageOrientation.Portrait); }
             set
             {
                 if (value == isShowInfoPanel)
@@ -217,6 +220,38 @@ namespace QuranPhone.ViewModels
 
                 isShowMenu = value;
                 base.OnPropertyChanged(() => IsShowMenu);
+            }
+        }
+
+        public bool ShowInfoOverlay
+        {
+            get 
+            {
+                if (Orientation == PageOrientation.Landscape || 
+                        Orientation == PageOrientation.LandscapeLeft || 
+                        Orientation == PageOrientation.LandscapeRight)
+                {
+                    return keepInfoOverlay;
+                }
+
+                // always show info overlay on portrait
+                return true;
+            }
+        }
+
+        private bool keepInfoOverlay;
+        public bool KeepInfoOverlay 
+        {
+            get { return keepInfoOverlay; }
+            set
+            {
+                if (value == keepInfoOverlay)
+                    return;
+
+                keepInfoOverlay = value;
+
+                base.OnPropertyChanged(() => KeepInfoOverlay);
+                base.OnPropertyChanged(() => ShowInfoOverlay);
             }
         }
 

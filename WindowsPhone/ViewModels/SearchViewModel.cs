@@ -50,6 +50,8 @@ namespace QuranPhone.ViewModels
             }
             else
             {
+                IsLoading = true;
+
                 List<QuranAyah> verses = null;
                 using (var db = new DatabaseHandler(App.DetailsViewModel.TranslationFile))
                 {
@@ -66,6 +68,8 @@ namespace QuranPhone.ViewModels
                             PageNumber = QuranInfo.GetPageFromSuraAyah(verse.Sura, verse.Ayah)
                         });
                 }
+
+                IsLoading = false;
             }
         }
 

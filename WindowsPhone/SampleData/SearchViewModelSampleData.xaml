@@ -3,6 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:vm="clr-namespace:QuranPhone.ViewModels">
     <vm:SearchViewModel.Query>Moon</vm:SearchViewModel.Query>
+    <vm:SearchViewModel.IsLoading>false</vm:SearchViewModel.IsLoading>
     <vm:SearchViewModel.SearchResults>
         <vm:ItemViewModel Id="Al Baqarah (2:12)" Details="This is a verse..." PageNumber="1"/>
         <vm:ItemViewModel Id="Al Imran (3:24)" Details="And another one" PageNumber="5"/>

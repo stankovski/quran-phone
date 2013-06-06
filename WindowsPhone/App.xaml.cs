@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Device.Location;
 using System.Diagnostics;
 using System.Resources;
 using System.Threading;
@@ -132,7 +131,7 @@ namespace QuranPhone
             ThemeManager.ToDarkTheme();
 
             // Toggle idle mode
-            ToggleIdleMode();
+            PhoneUtils.ToggleIdleMode();
 
             // Initialize directory
             QuranFileUtils.MakeQuranDirectory();
@@ -155,17 +154,10 @@ namespace QuranPhone
                 // the application's idle detection.
                 // Caution:- Use this under debug mode only. Application that disables user idle detection will continue to run
                 // and consume battery power when the user is not using the phone.
+                
+                // commented, test user idle detection
                 PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
             }
-        }
-
-        private void ToggleIdleMode()
-        {
-            var preventSleep = SettingsUtils.Get<bool>(Constants.PREF_PREVENT_SLEEP);
-            if (preventSleep)
-                PhoneUtils.DisableIdleDetection();
-            else
-                PhoneUtils.EnableIdleDetection();
         }
 
         // Code to execute when the application is launching (eg, from Start)

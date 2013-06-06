@@ -88,10 +88,36 @@ namespace QuranPhone.ViewModels
                 var oldValue = SettingsUtils.Get<bool>(Constants.PREF_PREVENT_SLEEP);
                 SettingsUtils.Set(Constants.PREF_PREVENT_SLEEP, value);
                 if (oldValue != value)
-                    MessageBox.Show(AppResources.please_restart);
+                {
+                    PhoneUtils.ToggleIdleMode();
+                }
+
                 base.OnPropertyChanged(() => PreventPhoneFromSleeping);
             }
         }
+
+        private bool keepInfoOverlay;
+        public bool KeepInfoOverlay 
+        {
+            get { return keepInfoOverlay; } 
+            set
+            {
+                if (value == keepInfoOverlay)
+                    return;
+
+                keepInfoOverlay = value;
+
+                // saving to setting utils
+                SettingsUtils.Set(Constants.PREF_KEEP_INFO_OVERLAY, value);
+
+                base.OnPropertyChanged(() => KeepInfoOverlay);
+
+                // somehow, must reload this setting to be referred in DetailsPage.xaml
+            } 
+        }
+        #endregion Properties
+
+        #region Commands
         RelayCommand navigateCommand;
         /// <summary>
         /// Returns a navigate command
@@ -126,8 +152,7 @@ namespace QuranPhone.ViewModels
                 return contactUsCommand;
             }
         }
-
-        #endregion Properties
+        #endregion Commands
 
         public void LoadData()
         {
@@ -140,6 +165,7 @@ namespace QuranPhone.ViewModels
             TextSize = SettingsUtils.Get<int>(Constants.PREF_TRANSLATION_TEXT_SIZE);
             ShowArabicInTranslation = SettingsUtils.Get<bool>(Constants.PREF_SHOW_ARABIC_IN_TRANSLATION);
             PreventPhoneFromSleeping = SettingsUtils.Get<bool>(Constants.PREF_PREVENT_SLEEP);
+            KeepInfoOverlay = SettingsUtils.Get<bool>(Constants.PREF_KEEP_INFO_OVERLAY);
 
             if (QuranFileUtils.FileExists(Path.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false),
                                                        QuranFileUtils.QURAN_ARABIC_DATABASE)))

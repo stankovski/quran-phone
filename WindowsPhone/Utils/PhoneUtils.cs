@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Phone.Shell;
+using QuranPhone.Data;
 
 namespace QuranPhone.Utils
 {
@@ -44,28 +45,14 @@ namespace QuranPhone.Utils
             }
         }
 
-        public static void DisableIdleDetection()
+        public static void ToggleIdleMode()
         {
-            try
-            {
-                PhoneApplicationService.Current.ApplicationIdleDetectionMode = IdleDetectionMode.Disabled;
-            }
-            catch (InvalidOperationException ex)
-            {
-                // This exception is expected in the current release.
-            }
-        }
+            var preventSleep = SettingsUtils.Get<bool>(Constants.PREF_PREVENT_SLEEP);
 
-        public static void EnableIdleDetection()
-        {
-            try
-            {
-                PhoneApplicationService.Current.ApplicationIdleDetectionMode = IdleDetectionMode.Enabled;
-            }
-            catch (InvalidOperationException ex)
-            {
-                // This exception is expected in the current release.
-            }
+            if (preventSleep)
+                PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
+            else
+                PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Enabled;
         }
     }
 }
