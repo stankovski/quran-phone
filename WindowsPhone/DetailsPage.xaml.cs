@@ -119,7 +119,7 @@ namespace QuranPhone
         private void ContactUs_Click(object sender, EventArgs e)
         {
             var email = new EmailComposeTask();
-            email.To = "denis.stankovski@gmail.com";
+            email.To = "quran.phone@gmail.com";
             email.Subject = "Email from QuranPhone";
             email.Show();
         }

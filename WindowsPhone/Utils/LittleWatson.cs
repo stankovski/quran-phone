@@ -66,7 +66,7 @@ namespace QuranPhone.Utils
                             "Problem Report", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
                     {
                         var email = new EmailComposeTask();
-                        email.To = "denis.stankovski@gmail.com";
+                        email.To = "quran.phone@gmail.com";
                         email.Subject = "QuranPhone auto-generated problem report";
                         email.Body = contents;
                         SafeDeleteFile(IsolatedStorageFile.GetUserStoreForApplication());
