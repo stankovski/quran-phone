@@ -131,7 +131,7 @@ namespace QuranPhone
             ThemeManager.ToDarkTheme();
 
             // Toggle idle mode
-            ToggleIdleMode();
+            PhoneUtils.ToggleIdleMode();
 
             // Initialize directory
             QuranFileUtils.MakeQuranDirectory();
@@ -158,16 +158,6 @@ namespace QuranPhone
                 // commented, test user idle detection
                 PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
             }
-        }
-
-        public static void ToggleIdleMode()
-        {
-            var preventSleep = SettingsUtils.Get<bool>(Constants.PREF_PREVENT_SLEEP);
-
-            if (preventSleep)
-                PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
-            else
-                PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Enabled;
         }
 
         // Code to execute when the application is launching (eg, from Start)

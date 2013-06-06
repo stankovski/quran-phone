@@ -89,9 +89,7 @@ namespace QuranPhone.ViewModels
                 SettingsUtils.Set(Constants.PREF_PREVENT_SLEEP, value);
                 if (oldValue != value)
                 {
-                    // is this approach ok?
-                    // more convinient for users, they don't have to restart the app
-                    App.ToggleIdleMode();
+                    PhoneUtils.ToggleIdleMode();
                 }
 
                 base.OnPropertyChanged(() => PreventPhoneFromSleeping);
