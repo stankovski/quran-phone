@@ -49,7 +49,7 @@
             </telerikPrimitives:RadSlideView.FilmstripModeItemTemplate>
         </telerikPrimitives:RadSlideView>
 
-        <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" x:Name="infoPanel" Visibility="{Binding IsShowInfoPanel, Converter={StaticResource BooleanToVisibilityConverter}}">
+        <!--<Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" x:Name="infoPanel" Visibility="{Binding IsShowInfoPanel, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Border Background="White" Opacity="0.6"/>
             <StackPanel Orientation="Vertical" VerticalAlignment="Center">
                 <TextBlock VerticalAlignment="Center" 
@@ -64,13 +64,13 @@
                                Foreground="{StaticResource DarkBlueText}" 
                                FontSize="120"/>
             </StackPanel>
-        </Grid>
+        </Grid>-->
 
         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Background="{StaticResource LightBackground}" Visibility="{Binding ShowInfoOverlay, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <TextBlock Text="{Binding CurrentSurahName}" HorizontalAlignment="Left" FontSize="18" Foreground="Black" Margin="10,0,0,5"/>
+            <TextBlock Text="{Binding CurrentSurahName}" HorizontalAlignment="Left" FontSize="18" Foreground="Black" Margin="20,0,0,5"/>
             <TextBlock Text="{Binding CurrentPageNumber}" HorizontalAlignment="Center" FontSize="18" Foreground="Black" Margin="0,0,0,5"/>
 
-            <TextBlock Text="{Binding CurrentJuzName}" HorizontalAlignment="Right" FontSize="18" Foreground="Black" Margin="0,0,75,5"/>
+            <TextBlock Text="{Binding CurrentJuzName}" HorizontalAlignment="Right" FontSize="18" Foreground="Black" Margin="0,0,20,5"/>
         </Grid>
     </Grid>
     
