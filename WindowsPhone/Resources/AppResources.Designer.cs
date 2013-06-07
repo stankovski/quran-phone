@@ -214,7 +214,7 @@ namespace QuranPhone.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to always show page info.
+        ///   Looks up a localized string similar to show bottom page info in landscape.
         /// </summary>
         public static string keep_info_overlay {
             get {
