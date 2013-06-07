@@ -16,10 +16,10 @@
     <TargetFrameworkProfile>WindowsPhone71</TargetFrameworkProfile>
     <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
     <SilverlightApplication>true</SilverlightApplication>
-    <SupportedCultures>ru%3bru-RU</SupportedCultures>
+    <SupportedCultures>ru%3bru-RU%3bid%3bid-ID</SupportedCultures>
     <XapOutputs>true</XapOutputs>
     <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
-    <XapFilename>QuranPhone.xap</XapFilename>
+    <XapFilename>QuranPhone_WP7.xap</XapFilename>
     <SilverlightManifestTemplate>Properties\AppManifest.xml</SilverlightManifestTemplate>
     <SilverlightAppEntry>QuranPhone.App</SilverlightAppEntry>
     <ValidateXaml>true</ValidateXaml>
@@ -448,10 +448,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\OfflineAssets\images_800.zip">
+    <None Include="..\OfflineAssets\images_800.zip">
       <Link>Assets\Offline\images_800.zip</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
     <Content Include="..\WindowsPhone\Assets\Images\search.png">
       <Link>Assets\Images\search.png</Link>
     </Content>
@@ -596,6 +595,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="..\WindowsPhone\Resources\AppResources.id.resx">
+      <Link>Resources\AppResources.id.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\WindowsPhone\Resources\AppResources.resx">
       <Link>Resources\AppResources.resx</Link>
       <Generator>PublicResXFileCodeGenerator</Generator>
