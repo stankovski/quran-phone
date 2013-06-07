@@ -16,8 +16,7 @@
     <TargetFrameworkProfile>WindowsPhone71</TargetFrameworkProfile>
     <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
     <SilverlightApplication>true</SilverlightApplication>
-    <SupportedCultures>
-    </SupportedCultures>
+    <SupportedCultures>ru%3bru-RU</SupportedCultures>
     <XapOutputs>true</XapOutputs>
     <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
     <XapFilename>QuranPhone.xap</XapFilename>
@@ -463,9 +462,6 @@
     <None Include="packages.config" />
     <None Include="Properties\AppManifest.xml" />
     <None Include="Properties\WMAppManifest.xml" />
-    <None Include="QuranPhone7_2013_05_26_21_50_19.sap" />
-    <None Include="QuranPhone7_2013_05_27_07_07_08.sap" />
-    <None Include="QuranPhone7_2013_05_27_07_12_15.sap" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\WindowsPhone\Assets\AlignmentGrid.png">
