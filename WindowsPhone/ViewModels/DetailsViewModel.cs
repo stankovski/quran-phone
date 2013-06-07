@@ -37,7 +37,6 @@ namespace QuranPhone.ViewModels
         public void ToggleMenu(object obj)
         {
             IsShowMenu = !IsShowMenu;
-            IsShowInfoPanel = !IsShowInfoPanel;
         }
         public ICommand CommandToggleMenu { get { return cmdToggleMenu; } }
         private RelayCommand cmdToggleMenu;
@@ -186,26 +185,8 @@ namespace QuranPhone.ViewModels
 
                 base.OnPropertyChanged(() => Orientation);
 
-                // directly affect IshowInfoPanel and ShowInfoOverlay
-                base.OnPropertyChanged(() => IsShowInfoPanel);
+                // directly affect ShowInfoOverlay
                 base.OnPropertyChanged(() => ShowInfoOverlay);
-            }
-        }
-
-        private bool isShowInfoPanel;
-        public bool IsShowInfoPanel 
-        {
-            get { return isShowInfoPanel && 
-                    (orientation == PageOrientation.PortraitUp || 
-                    orientation == PageOrientation.PortraitDown || 
-                    orientation == PageOrientation.Portrait); }
-            set
-            {
-                if (value == isShowInfoPanel)
-                    return;
-
-                isShowInfoPanel = value;
-                base.OnPropertyChanged(() => IsShowInfoPanel);
             }
         }
 
@@ -219,6 +200,7 @@ namespace QuranPhone.ViewModels
                     return;
 
                 isShowMenu = value;
+
                 base.OnPropertyChanged(() => IsShowMenu);
             }
         }
