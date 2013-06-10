@@ -6,6 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace QuranPhone.ViewModels
 {
@@ -98,7 +99,14 @@ namespace QuranPhone.ViewModels
             if (handler != null)
             {
                 var e = new PropertyChangedEventArgs(propertyName);
-                handler(this, e);
+                if (Deployment.Current.Dispatcher.CheckAccess())
+                {
+                    handler(this, e);
+                }
+                else
+                {
+                    Deployment.Current.Dispatcher.BeginInvoke(() => handler(this, e));
+                }
             }
         }
 
