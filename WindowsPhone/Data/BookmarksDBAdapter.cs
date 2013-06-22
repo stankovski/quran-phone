@@ -51,7 +51,7 @@ namespace QuranPhone.Data
             switch (sortOrder)
             {
                 case BoomarkSortOrder.Location:
-                    bookmarks = bookmarks.OrderBy(b => b.Page).ThenBy(b => b.Sura).ThenBy(b => b.Ayah);
+                    bookmarks = bookmarks.OrderBy(b => b.Page).OrderBy(b => b.Sura).OrderBy(b => b.Ayah);
                     break;
                 default:
                     bookmarks = bookmarks.OrderByDescending(b => b.AddedDate);

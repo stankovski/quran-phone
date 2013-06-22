@@ -11,6 +11,7 @@ using Microsoft.Phone.Shell;
 using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Windows.Media.Imaging;
+using QuranPhone.Data;
 using QuranPhone.Utils;
 using ImageTools;
 using System.IO.IsolatedStorage;
@@ -213,6 +214,22 @@ namespace QuranPhone.UI
                 image.Source = null;
             imageSourceBitmap = null;
             ImageSource = null;
+        }
+
+        private void ImageTap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            //var position = e.GetPosition(image);
+            //string basePath = QuranFileUtils.GetQuranDatabaseDirectory(false, true);
+            //if (basePath == null) return;
+            //string path = basePath + QuranFileUtils.PATH_SEPARATOR + QuranFileUtils.GetAyaPositionFileName();
+            //if (QuranFileUtils.FileExists(path))
+            //{
+            //    using (var dbh = new AyahInfoDatabaseHandler(QuranFileUtils.GetAyaPositionFileName()))
+            //    {
+            //        var ayah = dbh.GetVerseAtPoint(PageNumber, position.X, position.Y);
+            //        MessageBox.Show(string.Format("{0}:{1}", ayah.Sura, ayah.Ayah));
+            //    }
+            //}
         }
     }
 }

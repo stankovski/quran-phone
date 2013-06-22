@@ -1,4 +1,5 @@
-﻿using QuranPhone.Common;
+﻿using System.Windows.Input;
+using QuranPhone.Common;
 using QuranPhone.Utils;
 using System;
 using System.Collections.Generic;
@@ -27,132 +28,118 @@ namespace QuranPhone.Data
 
         public Rect? GetPageBounds(int page)
         {
-            AyahLimits limits = mDatabase.Query<AyahLimits>().Where(a => a.PageNumber == page).FirstOrDefault();
+            AyahLimits limits = mDatabase.Query<AyahLimits>().FirstOrDefault(a => a.PageNumber == page);
             if (limits == null) return null;
-            Rect r = new Rect(limits.MinX, limits.MinY, limits.MaxX, limits.MaxY);
+            var r = new Rect(limits.MinX, limits.MinY, limits.MaxX, limits.MaxY);
             return r;
         }
 
-        //// TODO Improve efficiency -AF
-        //public QuranAyah getVerseAtPoint(int page, float x, float y)
-        //{
-        //    if (!validDatabase())
-        //        return null;
-        //    Cursor cursor = database.query(GLYPHS_TABLE,
-        //            new string[]{ COL_PAGE, COL_LINE, COL_SURA, COL_AYAH, COL_POSITION,
-        //                        MIN_X, MIN_Y, MAX_X, MAX_Y },
-        //            COL_PAGE + "=" + page,
-        //            null, null, null, COL_LINE);
-        //    if (!cursor.moveToFirst())
-        //        return null;
-        //    Dictionary<int, int[]> lines = new Dictionary<int, int[]>();
-        //    do
-        //    {
-        //        int lineNumber = cursor.getInt(1);
-        //        int minY = cursor.getInt(6);
-        //        int maxY = cursor.getInt(8);
-        //        int[] lineBounds = lines[lineNumber];
-        //        if (lineBounds == null)
-        //        {
-        //            int[] bounds = { minY, maxY };
-        //            lines[lineNumber] = bounds;
-        //        }
-        //        else
-        //        {
-        //            if (minY < lineBounds[0])
-        //                lineBounds[0] = minY;
-        //            if (maxY > lineBounds[1])
-        //                lineBounds[1] = maxY;
-        //        }
-        //    } while (cursor.moveToNext());
-        //    cursor.close();
+        public QuranAyah GetVerseAtPoint(int page, double x, double y)
+        {
+            var ayahBounds = mDatabase.Query<AyahBounds>().Where(a => a.PageNumber == page);
+            if (!ayahBounds.Any()) return null;
 
-        //    float? delta = null;
-        //    int? closestNeighbor = null;
-        //    foreach (var line in lines.Keys)
-        //    {
-        //        int[] bounds = lines[line];
-        //        if (y >= bounds[0] && y <= bounds[1])
-        //        {
-        //            return getVerseAtPoint(page, line, x);
-        //        }
-        //        else if (y >= bounds[1])
-        //        {
-        //            // past this line
-        //            if (delta == null)
-        //            {
-        //                delta = y - bounds[1];
-        //                closestNeighbor = line;
-        //            }
-        //            else if ((y - bounds[1]) < delta)
-        //            {
-        //                delta = y - bounds[1];
-        //                closestNeighbor = line;
-        //            }
-        //        }
-        //        else if (bounds[0] >= y)
-        //        {
-        //            // before this line
-        //            if (delta == null)
-        //            {
-        //                delta = bounds[0] - y;
-        //                closestNeighbor = line;
-        //            }
-        //            else if ((bounds[0] - y) < delta)
-        //            {
-        //                delta = bounds[0] - y;
-        //                closestNeighbor = line;
-        //            }
-        //        }
-        //    }
+            var lines = new Dictionary<int, int[]>();
+            foreach (var bound in ayahBounds)
+            {
+                int lineNumber = bound.Line;
+                int minY = bound.MinY;
+                int maxY = bound.MaxY;
+                if (!lines.ContainsKey(lineNumber))
+                {
+                    int[] bounds = { minY, maxY };
+                    lines[lineNumber] = bounds;
+                }
+                else
+                {
+                    int[] lineBounds = lines[lineNumber];
+                    if (minY < lineBounds[0])
+                        lineBounds[0] = minY;
+                    if (maxY > lineBounds[1])
+                        lineBounds[1] = maxY;
+                }
+            }
 
-        //    if (delta != null && closestNeighbor != null)
-        //    {
-        //        return getVerseAtPoint(page, (int)closestNeighbor, x);
-        //    }
-        //    return null;
-        //}
+            double? delta = null;
+            int? closestNeighbor = null;
+            foreach (var line in lines.Keys)
+            {
+                int[] bounds = lines[line];
+                if (y >= bounds[0] && y <= bounds[1])
+                {
+                    return GetVerseAtLine(page, line, x);
+                }
+                else if (y >= bounds[1])
+                {
+                    // past this line
+                    if (delta == null)
+                    {
+                        delta = y - bounds[1];
+                        closestNeighbor = line;
+                    }
+                    else if ((y - bounds[1]) < delta)
+                    {
+                        delta = y - bounds[1];
+                        closestNeighbor = line;
+                    }
+                }
+                else if (bounds[0] >= y)
+                {
+                    // before this line
+                    if (delta == null)
+                    {
+                        delta = bounds[0] - y;
+                        closestNeighbor = line;
+                    }
+                    else if ((bounds[0] - y) < delta)
+                    {
+                        delta = bounds[0] - y;
+                        closestNeighbor = line;
+                    }
+                }
+            }
 
-        //public QuranAyah getVerseAtPoint(int page, int line, float x)
-        //{
-        //    if (!validDatabase() || line < 1 || line > 15)
-        //        return null;
-        //    Cursor cursor = database.query(GLYPHS_TABLE,
-        //            new string[]{ COL_PAGE, COL_LINE, COL_SURA, COL_AYAH, COL_POSITION,
-        //                        MIN_X, MIN_Y, MAX_X, MAX_Y },
-        //            COL_PAGE + "=" + page + " and " + COL_LINE + "=" + line,
-        //            null, null, null, COL_AYAH);
-        //    if (!cursor.moveToFirst())
-        //        return null;
-        //    int suraNumber = cursor.getInt(2);
-        //    Dictionary<int, int[]> ayahs = new Dictionary<int, int[]>();
-        //    do
-        //    {
-        //        int ayahNumber = cursor.getInt(3);
-        //        int minX = cursor.getInt(5);
-        //        int maxX = cursor.getInt(7);
-        //        int[] ayahBounds = ayahs[ayahNumber];
-        //        if (ayahBounds == null)
-        //        {
-        //            int[] bounds = { minX, maxX };
-        //            ayahs[ayahNumber] = bounds;
-        //        }
-        //        else
-        //        {
-        //            if (minX < ayahBounds[0])
-        //                ayahBounds[0] = minX;
-        //            if (maxX > ayahBounds[1])
-        //                ayahBounds[1] = maxX;
-        //        }
-        //    } while (cursor.moveToNext());
-        //    cursor.close();
-        //    foreach (int ayah in ayahs.Keys)
-        //    {
-        //        int[] bounds = ayahs[ayah];
-        //        if (x >= bounds[0] && x <= bounds[1])
-        //            return new QuranAyah(suraNumber, ayah);
-        //    }
-        //    return null;
-        //}
+            if (delta != null && closestNeighbor != null)
+            {
+                return GetVerseAtLine(page, (int)closestNeighbor, x);
+            }
+            return null;
+        }
+
+        public QuranAyah GetVerseAtLine(int page, int line, double x)
+        {
+            var allAyahBounds = mDatabase.Query<AyahBounds>().Where(a => a.PageNumber == page && a.Line == line);
+            if (!allAyahBounds.Any()) return null;
+
+            int suraNumber = allAyahBounds.First().SurahNumber;
+            var ayahs = new Dictionary<int, int[]>();
+		    foreach(var bound in allAyahBounds)
+		    {
+		        int ayahNumber = bound.AyahNumber;
+			    int minX = bound.MinX;
+			    int maxX = bound.MaxX;
+                if (!ayahs.ContainsKey(ayahNumber)) 
+                {
+				    var bounds = new[]{minX, maxX};
+				    ayahs[ayahNumber] = bounds;
+			    } 
+                else 
+                {
+                    int[] ayahBounds = ayahs[ayahNumber];
+				    if (minX < ayahBounds[0])
+					    ayahBounds[0] = minX;
+				    if (maxX > ayahBounds[1])
+					    ayahBounds[1] = maxX;
+			    }
+		    }
+
+		    foreach (var ayahNumber in ayahs.Keys) 
+            {
+			    int[] bounds = ayahs[ayahNumber];
+			    if (x >= bounds[0] && x <= bounds[1])
+				    return new QuranAyah(suraNumber, ayahNumber);
+		    }
+		    return null;
+        }
     }
 }

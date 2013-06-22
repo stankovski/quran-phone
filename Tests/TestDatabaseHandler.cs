@@ -27,5 +27,24 @@ namespace Tests
                 Assert.AreEqual(0, dbh.Search("test").Count);
             }
         }
+
+        [TestMethod]
+        public void TestGetVerseBounds()
+        {
+            string basePath = QuranFileUtils.GetQuranDatabaseDirectory(false);
+            if (basePath == null) return;
+            string path = basePath + QuranFileUtils.PATH_SEPARATOR + QuranFileUtils.GetAyaPositionFileName();
+
+            var isf = IsolatedStorageFile.GetUserStoreForApplication();
+            if (!isf.FileExists(path))
+            {
+                QuranFileUtils.DownloadFileFromWebAsync(QuranFileUtils.GetAyaPositionFileUrl(), path).Wait();
+            }
+
+            using (var dbh = new AyahInfoDatabaseHandler(QuranFileUtils.GetAyaPositionFileName()))
+            {
+                Assert.IsTrue(dbh.GetVerseBounds(2, 2).Count > 0);
+            }
+        }
     }
 }

@@ -40,7 +40,7 @@ public class SQLiteDatabase : IDisposable
         return dbConnection.Query<T>(query, args);
     }
 
-    public IEnumerable<T> Query<T>() where T : new()
+    public TableQuery<T> Query<T>() where T : new()
     {
         return dbConnection.Table<T>();
     }

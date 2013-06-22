@@ -88,45 +88,21 @@ namespace QuranPhone.Data
                 if (!ReopenDatabase()) { return null; }
             }
 
-            StringBuilder sql = new StringBuilder("select \"sura\", \"ayah\", \"text\" from \"" + table + "\" where ");
-
-            sql.Append("(");
+            var result = mDatabase.Query<QuranAyah>();
 
             if (minSura == maxSura)
             {
-                sql.Append("sura")
-                        .Append("=").Append(minSura)
-                        .Append(" and ").Append("ayah")
-                        .Append(">=").Append(minAyah)
-                        .Append(" and ").Append("ayah")
-                        .Append("<=").Append(maxAyah);
+                result = result.Where(a => a.Sura == minSura && a.Ayah >= minAyah && a.Ayah <= maxAyah);
             }
             else
             {
-                // (sura = minSura and ayah >= minAyah)
-                sql.Append("(").Append("sura").Append("=")
-                        .Append(minSura).Append(" and ")
-                        .Append("ayah").Append(">=").Append(minAyah).Append(")");
-
-                sql.Append(" or ");
-
-                // (sura = maxSura and ayah <= maxAyah)
-                sql.Append("(").Append("sura").Append("=")
-                        .Append(maxSura).Append(" and ")
-                        .Append("ayah").Append("<=").Append(maxAyah).Append(")");
-
-                sql.Append(" or ");
-
-                // (sura > minSura and sura < maxSura)
-                sql.Append("(").Append("sura").Append(">")
-                        .Append(minSura).Append(" and ")
-                        .Append("sura").Append("<")
-                        .Append(maxSura).Append(")");
+                result = result.Where(a =>
+                    (a.Sura == minSura && a.Ayah >= minAyah) ||
+                    (a.Sura == maxSura && a.Ayah <= maxAyah) ||
+                    (a.Sura > minSura && a.Sura < maxSura));
             }
 
-            sql.Append(")");
-
-            return mDatabase.Query<QuranAyah>(sql.ToString()).ToList();
+            return result.ToList();
         }
 
         public List<QuranAyah> GetVerses(int page, string table = "verses")
