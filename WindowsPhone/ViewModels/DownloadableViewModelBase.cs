@@ -69,6 +69,21 @@ namespace QuranPhone.ViewModels
             }
         }
 
+        private bool isCompressed;
+        public bool IsCompressed
+        {
+            get { return isCompressed; }
+            set
+            {
+                if (value == isCompressed)
+                    return;
+
+                isCompressed = value;
+
+                base.OnPropertyChanged(() => IsCompressed);
+            }
+        }
+
         private string serverUrl;
         public string ServerUrl
         {
@@ -229,7 +244,16 @@ namespace QuranPhone.ViewModels
             UpdateDownloadStatus(e.Request.TransferStatus);
             if (e.Request.TransferStatus == TransferStatus.Completed)
             {
-                QuranFileUtils.MoveFile(TempUrl, this.LocalUrl);
+                if (IsCompressed)
+                {
+                    IsIndeterminate = true;
+                    QuranFileUtils.ExtractZipFile(TempUrl, QuranFileUtils.GetQuranDatabaseDirectory(false, true));
+                    IsIndeterminate = false;
+                }
+                else
+                {
+                    QuranFileUtils.MoveFile(TempUrl, this.LocalUrl);
+                }
                 DownloadManager.Instance.FinalizeRequest(e.Request);
                 if (DownloadComplete != null)
                     DownloadComplete(this, null);

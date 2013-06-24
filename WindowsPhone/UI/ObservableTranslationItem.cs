@@ -23,6 +23,7 @@ namespace QuranPhone.UI
             this.FileName = item.Filename;
             this.Exists = item.Exists;
             this.LocalUrl = Path.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false, true), this.FileName);
+            this.IsCompressed = item.Compressed;
         }
 
         private int id;

@@ -134,6 +134,8 @@ namespace QuranPhone.Utils
                     item.LatestVersion = t["current_version"].ToObject<int>();
                     item.Filename = (string)t["fileName"];
                     item.Url = (string)t["fileUrl"];
+                    if (item.Url.EndsWith("ext=zip", StringComparison.InvariantCultureIgnoreCase))
+                        item.Compressed = true;
                 
 
                     int firstParen = item.Name.IndexOf("(");

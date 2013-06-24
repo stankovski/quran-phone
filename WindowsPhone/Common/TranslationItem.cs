@@ -1,14 +1,4 @@
-﻿using Microsoft.Phone.BackgroundTransfer;
-using QuranPhone.UI;
-using QuranPhone.Utils;
-using SQLite;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using SQLite;
 
 namespace QuranPhone.Common
 {
@@ -25,6 +15,8 @@ namespace QuranPhone.Common
         public string Filename { get; set; }
         [Column("url")]
         public string Url { get; set; }
+        [Ignore]
+        public bool Compressed { get; set; }
         [Ignore]
         public bool Exists { get; set; }
         [Ignore]
