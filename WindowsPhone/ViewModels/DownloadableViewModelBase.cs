@@ -274,22 +274,20 @@ namespace QuranPhone.ViewModels
                 return;
             if (QuranFileUtils.FileExists(TempUrl))
                 QuranFileUtils.DeleteFile(TempUrl);
-            else
+
+            IsDownloading = true;
+            if (downloadRequest != null)
             {
-                IsDownloading = true;
-                if (downloadRequest != null)
-                {
-                    downloadRequest.TransferProgressChanged -= TransferProgressChanged;
-                    downloadRequest.TransferStatusChanged -= TransferStatusChanged;
-                }
-                downloadRequest = DownloadManager.Instance.Download(this.ServerUrl, this.TempUrl);
-                if (downloadRequest != null)
-                {
-                    downloadRequest.TransferProgressChanged += TransferProgressChanged;
-                    downloadRequest.TransferStatusChanged += TransferStatusChanged;
-                    if (downloadRequest.TransferStatus == TransferStatus.Completed)
-                        TransferStatusChanged(this, new BackgroundTransferEventArgs(downloadRequest));
-                }
+                downloadRequest.TransferProgressChanged -= TransferProgressChanged;
+                downloadRequest.TransferStatusChanged -= TransferStatusChanged;
+            }
+            downloadRequest = DownloadManager.Instance.Download(this.ServerUrl, this.TempUrl);
+            if (downloadRequest != null)
+            {
+                downloadRequest.TransferProgressChanged += TransferProgressChanged;
+                downloadRequest.TransferStatusChanged += TransferStatusChanged;
+                if (downloadRequest.TransferStatus == TransferStatus.Completed)
+                    TransferStatusChanged(this, new BackgroundTransferEventArgs(downloadRequest));
             }
         }
 
