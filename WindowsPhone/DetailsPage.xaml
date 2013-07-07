@@ -9,7 +9,6 @@
     xmlns:telerikPrimitives="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls.Primitives"
     mc:Ignorable="d"
     xmlns:myui="clr-namespace:QuranPhone.UI"
-    xmlns:controls="clr-namespace:Phone.Controls;assembly=Phone.Controls"
     xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
     xmlns:abu="clr-namespace:AppBarUtils;assembly=AppBarUtils"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
@@ -22,7 +21,7 @@
     
     <phone:PhoneApplicationPage.Resources>
         <myui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        <myui:TextFormatConverter x:Key="TextFormatConverter"/>
+        <myui:ConditionalStyleConverter x:Key="ConditionalStyleConverter"/>
     </phone:PhoneApplicationPage.Resources>
     <Grid Name="MainContainer" Background="{StaticResource LightBackground}">
         <telerikPrimitives:RadSlideView x:Name="radSlideView" IsFilmstripModeEnabled="True" 
@@ -31,9 +30,37 @@
             <telerikPrimitives:RadSlideView.ItemTemplate>
                 <DataTemplate>
                      <Grid>
-                         <myui:CachedImage ImageSource="{Binding ImageSource}" PageNumber="{Binding PageNumber}" 
-                                              Visibility="{Binding ShowTranslation, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}"/>
-                         <controls:ScrollableTextBlock Text="{Binding Translation}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="{Binding TextSize}" DesiredWidth="{Binding ScreenWidth}" Foreground="Black" Margin="12,0" Visibility="{Binding ShowTranslation, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        <myui:CachedImage ImageSource="{Binding ImageSource}" PageNumber="{Binding PageNumber}" 
+                                            Visibility="{Binding ShowTranslation, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}"/>
+
+                        <telerikPrimitives:RadDataBoundListBox Margin="0,20,0,30" FontSize="{Binding TextSize}"
+                                                               Foreground="Black" Visibility="{Binding ShowTranslation, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                                ItemsSource="{Binding Translations}" IsAsyncBalanceEnabled="True">
+                            <telerikPrimitives:RadDataBoundListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <ListBoxItem HorizontalContentAlignment="Stretch">
+                                        <StackPanel>
+                                            <TextBlock Margin="22, 20" FontWeight="Bold" Visibility="{Binding IsTitle, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
+                                                <Run Text="{Binding SurahNumber}"/>
+                                                <Run Text=":"/>
+                                                <Run Text="{Binding VerseNumber}"/>
+                                            </TextBlock>
+                                            <TextBlock Margin="22, 0" TextWrapping="Wrap" Text="{Binding QuranText}"
+                                                       FontFamily="/Assets/UthmanicHafs.otf#KFGQPC Uthmanic Script HAFS"
+                                                       FlowDirection="RightToLeft" FontSize="40"
+                                                       Visibility="{Binding QuranTextExists, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                            <TextBlock Margin="22, 0" TextWrapping="Wrap" Text="{Binding Text}" 
+                                                       Style="{Binding IsTitle, Mode=OneWay, Converter={StaticResource ConditionalStyleConverter}, ConverterParameter=BlueHeader}"/>
+                                        </StackPanel>
+                                    </ListBoxItem>
+                                </DataTemplate>
+                            </telerikPrimitives:RadDataBoundListBox.ItemTemplate>
+                        </telerikPrimitives:RadDataBoundListBox>
+
+
+                        <!--<controls:ScrollableTextBlock Text="{Binding Translation}" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                                                      FontSize="{Binding TextSize}" DesiredWidth="{Binding ScreenWidth}" Foreground="Black" Margin="12,0" 
+                                                      Visibility="{Binding ShowTranslation, Converter={StaticResource BooleanToVisibilityConverter}}"/>-->
                     </Grid>
                 </DataTemplate>
             </telerikPrimitives:RadSlideView.ItemTemplate>

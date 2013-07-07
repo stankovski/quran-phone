@@ -21,7 +21,6 @@
     shell:SystemTray.IsVisible="True">
 
     <phone:PhoneApplicationPage.Resources>
-        <myui:StyleConverter x:Key="StyleConverter"/>
         <myui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </phone:PhoneApplicationPage.Resources>
     <!--Data context is set to sample data above and LayoutRoot contains the root grid where all other page content is placed-->

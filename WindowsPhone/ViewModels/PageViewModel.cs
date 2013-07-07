@@ -7,14 +7,18 @@ namespace QuranPhone.ViewModels
     public class PageViewModel : ViewModelBase
     {
         public PageViewModel()
-        { }
+        {
+            Translations = new ObservableCollection<VerseViewModel>();
+        }
 
-        public PageViewModel(int page)
+        public PageViewModel(int page) : this()
         {
             PageNumber = page;
         }
 
         #region Properties
+
+        public ObservableCollection<VerseViewModel> Translations { get; set; }
 
         private string translation;
         public string Translation

@@ -40,8 +40,22 @@ namespace QuranPhone.ViewModels
 
                 textSize = value;
                 SettingsUtils.Set(Constants.PREF_TRANSLATION_TEXT_SIZE, value);
-                SettingsUtils.Set(Constants.PREF_ARABIC_TEXT_SIZE, value * Constants.ARABIC_FONT_SCALE_RELATIVE_TO_TRANSLATION);
+                ArabicTextSize = (int)(value*Constants.ARABIC_FONT_SCALE_RELATIVE_TO_TRANSLATION);
                 base.OnPropertyChanged(() => TextSize);
+            }
+        }
+
+        private int arabicTextSize;
+        public int ArabicTextSize
+        {
+            get { return arabicTextSize; }
+            set
+            {
+                if (value == arabicTextSize)
+                    return;
+
+                arabicTextSize = value;
+                base.OnPropertyChanged(() => ArabicTextSize);
             }
         }
 
@@ -163,6 +177,7 @@ namespace QuranPhone.ViewModels
                 ActiveTranslation = "None";
 
             TextSize = SettingsUtils.Get<int>(Constants.PREF_TRANSLATION_TEXT_SIZE);
+            ArabicTextSize = (int)(TextSize * Constants.ARABIC_FONT_SCALE_RELATIVE_TO_TRANSLATION);
             ShowArabicInTranslation = SettingsUtils.Get<bool>(Constants.PREF_SHOW_ARABIC_IN_TRANSLATION);
             PreventPhoneFromSleeping = SettingsUtils.Get<bool>(Constants.PREF_PREVENT_SLEEP);
             KeepInfoOverlay = SettingsUtils.Get<bool>(Constants.PREF_KEEP_INFO_OVERLAY);

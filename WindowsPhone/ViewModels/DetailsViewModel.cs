@@ -298,7 +298,7 @@ namespace QuranPhone.ViewModels
         {
             var pageModel = Pages[pageIndex];
             pageModel.ImageSource = null;
-            pageModel.Translation = string.Empty;
+            pageModel.Translations.Clear();
         }
 
         private async Task<bool> loadPage(int pageIndex, bool force)
@@ -315,7 +315,7 @@ namespace QuranPhone.ViewModels
                                                             this.TranslationFile)))
                     return false;
 
-                if (!force && !string.IsNullOrEmpty(pageModel.Translation))
+                if (!force && pageModel.Translations.Count > 0)
                     return false;
 
                 List<QuranAyah> verses = null;
@@ -342,16 +342,21 @@ namespace QuranPhone.ViewModels
                 }
 
                 int tempSurah = -1;
-                StringBuilder translationBuilder = new StringBuilder();
+                pageModel.Translations.Clear();
                 for (int i = 0; i < verses.Count; i++)
                 {
                     var verse = verses[i];
                     if (verse.Sura != tempSurah)
                     {
-                        translationBuilder.AppendLine(string.Format("h:{0}",
-                                                                    QuranInfo.GetSuraName(verse.Sura, true)));
+                        pageModel.Translations.Add(new VerseViewModel
+                        {
+                            IsTitle = true,
+                            Text = QuranInfo.GetSuraName(verse.Sura, true)
+                        });
+
                         tempSurah = verse.Sura;
                     }
+
                     var vvm = new VerseViewModel
                         {
                             IsTitle = false,
@@ -360,13 +365,14 @@ namespace QuranPhone.ViewModels
                             Text = verse.Text
                         };
 
-                    translationBuilder.AppendLine(string.Format("b:{0}:{1}", verse.Sura, verse.Ayah));
-                    if (versesArabic != null && i < versesArabic.Count)
-                        translationBuilder.AppendLine(string.Format("a:{0}", versesArabic[i].Text));
-                    
-                    translationBuilder.AppendLine(verse.Text);
+                    if (versesArabic != null)
+                    {
+                        vvm.QuranText = versesArabic[i].Text;
+                        vvm.QuranTextExists = true;
+                    }
+
+                    pageModel.Translations.Add(vvm);
                 }
-                pageModel.Translation = translationBuilder.ToString();
             }
             catch (Exception e)
             {
@@ -383,7 +389,7 @@ namespace QuranPhone.ViewModels
                 {
                     // Do nothing
                 }
-                pageModel.Translation = "Error loading translation...";
+                pageModel.Translations.Add(new VerseViewModel {Text = "Error loading translation..."});
             }
             return true;
         }

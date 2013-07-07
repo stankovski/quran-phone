@@ -142,6 +142,7 @@
     <Compile Include="UI\CommonHeader.xaml.cs">
       <DependentUpon>CommonHeader.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\ConditionalStyleConverter.cs" />
     <Compile Include="UI\DataTemplateSelector.cs" />
     <Compile Include="UI\TextFormatConverter.cs" />
     <Compile Include="UI\SettingsRetrieverConverter.cs" />
