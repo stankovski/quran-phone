@@ -58,8 +58,15 @@ namespace QuranPhone.Utils
 
             using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
             {
-                if (isf.FileExists(path))
-                    isf.DeleteFile(path);
+                try
+                {
+                    if (isf.FileExists(path))
+                        isf.DeleteFile(path);
+                }
+                catch
+                {
+                    // Do nothing
+                }
             }
         }
 
