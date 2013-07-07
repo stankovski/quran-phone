@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
@@ -51,22 +52,35 @@ namespace QuranPhone.ViewModels
             else
             {
                 IsLoading = true;
-
-                List<QuranAyah> verses = null;
-                using (var db = new DatabaseHandler(App.DetailsViewModel.TranslationFile))
+                try
                 {
-                    verses = await new TaskFactory().StartNew(() => db.Search(query));
+                    List<QuranAyah> verses = null;
+                    using (var db = new DatabaseHandler(App.DetailsViewModel.TranslationFile))
+                    {
+                        verses = await new TaskFactory().StartNew(() => db.Search(query));
+                    }
+                    this.SearchResults.Clear();
+                    foreach (var verse in verses)
+                    {
+                        var text = TrimText(verse.Text, MaxPreviewCharacter);
+                        this.SearchResults.Add(new ItemViewModel
+                            {
+                                Id =
+                                    string.Format("{0} ({1}:{2})", QuranInfo.GetSuraName(verse.Sura, false), verse.Sura,
+                                                  verse.Ayah),
+                                Details = text,
+                                PageNumber = QuranInfo.GetPageFromSuraAyah(verse.Sura, verse.Ayah)
+                            });
+                    }
                 }
-                this.SearchResults.Clear();
-                foreach (var verse in verses)
+                catch (Exception e)
                 {
-                    var text = TrimText(verse.Text, MaxPreviewCharacter);
                     this.SearchResults.Add(new ItemViewModel
-                        {
-                            Id = string.Format("{0} ({1}:{2})", QuranInfo.GetSuraName(verse.Sura, false), verse.Sura, verse.Ayah),
-                            Details = text,
-                            PageNumber = QuranInfo.GetPageFromSuraAyah(verse.Sura, verse.Ayah)
-                        });
+                    {
+                        Id = "Error",
+                        Details = "Error performing translation",
+                        PageNumber = 1
+                    });
                 }
 
                 IsLoading = false;
