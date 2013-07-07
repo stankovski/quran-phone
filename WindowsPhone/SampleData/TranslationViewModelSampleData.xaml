@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:vm="clr-namespace:QuranPhone.ViewModels">
     <vm:DetailsViewModel.Pages>
-        <vm:PageViewModel TextSize="22" ImageSource="http://android.quran.com/data/width_320/page055.png">
+        <vm:PageViewModel ImageSource="http://android.quran.com/data/width_320/page055.png">
             <vm:PageViewModel.Translation>
                 Surat Aal Imran
                 3:22
@@ -22,6 +22,7 @@
             </vm:PageViewModel.Translations>
         </vm:PageViewModel>
     </vm:DetailsViewModel.Pages>
+    <vm:DetailsViewModel.TextSize>22</vm:DetailsViewModel.TextSize>
     <vm:DetailsViewModel.ShowTranslation>True</vm:DetailsViewModel.ShowTranslation>
     <vm:DetailsViewModel.CurrentPageNumber>115</vm:DetailsViewModel.CurrentPageNumber>
     <vm:DetailsViewModel.CurrentSurahName>Al Baqara</vm:DetailsViewModel.CurrentSurahName>

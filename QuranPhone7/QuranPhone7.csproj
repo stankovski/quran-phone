@@ -243,6 +243,9 @@
       <Link>UI\CommonHeader.xaml.cs</Link>
       <DependentUpon>CommonHeader.xaml</DependentUpon>
     </Compile>
+    <Compile Include="..\WindowsPhone\UI\ConditionalStyleConverter.cs">
+      <Link>UI\ConditionalStyleConverter.cs</Link>
+    </Compile>
     <Compile Include="..\WindowsPhone\UI\DataTemplateSelector.cs">
       <Link>UI\DataTemplateSelector.cs</Link>
     </Compile>

@@ -71,7 +71,6 @@ namespace QuranPhone.ViewModels
 
                 showTranslation = value;
 
-                changePageShowTranslations();
                 base.OnPropertyChanged(() => ShowTranslation);
             }
         }
@@ -237,6 +236,36 @@ namespace QuranPhone.ViewModels
             }
         }
 
+        private int textSize;
+        public int TextSize
+        {
+            get { return textSize; }
+            set
+            {
+                if (value == textSize)
+                    return;
+
+                textSize = value;
+
+                base.OnPropertyChanged(() => TextSize);
+            }
+        }
+
+        private int arabicTextSize;
+        public int ArabicTextSize
+        {
+            get { return arabicTextSize; }
+            set
+            {
+                if (value == arabicTextSize)
+                    return;
+
+                arabicTextSize = value;
+
+                base.OnPropertyChanged(() => ArabicTextSize);
+            }
+        }
+
         #endregion Properties
 
         #region Public methods
@@ -255,12 +284,9 @@ namespace QuranPhone.ViewModels
             }
 
             //Set text size
-            var textSize = SettingsUtils.Get<int>(Constants.PREF_TRANSLATION_TEXT_SIZE);
-            foreach (var pageViewModel in Pages)
-            {
-                pageViewModel.TextSize = textSize;
-            }
-
+            this.TextSize = SettingsUtils.Get<int>(Constants.PREF_TRANSLATION_TEXT_SIZE);
+            this.ArabicTextSize = SettingsUtils.Get<int>(Constants.PREF_ARABIC_TEXT_SIZE);
+            
             this.CurrentPageIndex = getIndexFromPageNumber(this.CurrentPageNumber);
             this.IsDataLoaded = true;
         }
@@ -286,14 +312,6 @@ namespace QuranPhone.ViewModels
         #endregion
 
         #region Private helper methods
-        private void changePageShowTranslations()
-        {
-            foreach (var page in Pages)
-            {
-                page.ShowTranslation = this.ShowTranslation;
-            }
-        }
-
         private void cleanPage(int pageIndex)
         {
             var pageModel = Pages[pageIndex];

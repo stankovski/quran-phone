@@ -1,5 +1,6 @@
 ﻿<phone:PhoneApplicationPage
     x:Class="QuranPhone.DetailsPage"
+    x:Name="ThisPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
@@ -31,23 +32,24 @@
                 <DataTemplate>
                      <Grid>
                         <myui:CachedImage ImageSource="{Binding ImageSource}" PageNumber="{Binding PageNumber}" 
-                                            Visibility="{Binding ShowTranslation, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}"/>
+                                            Visibility="{Binding DataContext.ShowTranslation, ElementName=ThisPage, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}"/>
 
-                        <telerikPrimitives:RadDataBoundListBox Margin="0,20,0,30" FontSize="{Binding TextSize}"
-                                                               Foreground="Black" Visibility="{Binding ShowTranslation, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                                ItemsSource="{Binding Translations}" IsAsyncBalanceEnabled="True">
+                        <telerikPrimitives:RadDataBoundListBox Margin="0,20,0,30" FontSize="{Binding DataContext.TextSize, ElementName=ThisPage}" x:Name="TranslationListBox"
+                                                               Foreground="Black" Visibility="{Binding DataContext.ShowTranslation, ElementName=ThisPage, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                               ItemsSource="{Binding Translations}" IsAsyncBalanceEnabled="True">
                             <telerikPrimitives:RadDataBoundListBox.ItemTemplate>
                                 <DataTemplate>
                                     <ListBoxItem HorizontalContentAlignment="Stretch">
                                         <StackPanel>
-                                            <TextBlock Margin="22, 20" FontWeight="Bold" Visibility="{Binding IsTitle, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
+                                            <TextBlock Margin="22, 10" FontWeight="Bold" Visibility="{Binding IsTitle, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
                                                 <Run Text="{Binding SurahNumber}"/>
                                                 <Run Text=":"/>
                                                 <Run Text="{Binding VerseNumber}"/>
                                             </TextBlock>
                                             <TextBlock Margin="22, 0" TextWrapping="Wrap" Text="{Binding QuranText}"
+                                                       FontSize="{Binding DataContext.ArabicTextSize, ElementName=ThisPage}"
                                                        FontFamily="/Assets/UthmanicHafs.otf#KFGQPC Uthmanic Script HAFS"
-                                                       FlowDirection="RightToLeft" FontSize="40"
+                                                       FlowDirection="RightToLeft"
                                                        Visibility="{Binding QuranTextExists, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                             <TextBlock Margin="22, 0" TextWrapping="Wrap" Text="{Binding Text}" 
                                                        Style="{Binding IsTitle, Mode=OneWay, Converter={StaticResource ConditionalStyleConverter}, ConverterParameter=BlueHeader}"/>

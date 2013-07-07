@@ -65,21 +65,6 @@ namespace QuranPhone.ViewModels
             }
         }
 
-        private int textSize;
-        public int TextSize
-        {
-            get { return textSize; }
-            set
-            {
-                if (value == textSize)
-                    return;
-
-                textSize = value;
-
-                base.OnPropertyChanged(() => TextSize);
-            }
-        }
-
         private Uri imageSource;
         public Uri ImageSource
         {
