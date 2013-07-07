@@ -22,7 +22,7 @@
     
     <phone:PhoneApplicationPage.Resources>
         <myui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        <myui:ConditionalStyleConverter x:Key="ConditionalStyleConverter"/>
+        <myui:StyleConverter x:Key="StyleConverter"/>
     </phone:PhoneApplicationPage.Resources>
     <Grid Name="MainContainer" Background="{StaticResource LightBackground}">
         <telerikPrimitives:RadSlideView x:Name="radSlideView" IsFilmstripModeEnabled="True" 
@@ -40,20 +40,8 @@
                             <telerikPrimitives:RadDataBoundListBox.ItemTemplate>
                                 <DataTemplate>
                                     <ListBoxItem HorizontalContentAlignment="Stretch">
-                                        <StackPanel>
-                                            <TextBlock Margin="22, 10" FontWeight="Bold" Visibility="{Binding IsTitle, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
-                                                <Run Text="{Binding SurahNumber}"/>
-                                                <Run Text=":"/>
-                                                <Run Text="{Binding VerseNumber}"/>
-                                            </TextBlock>
-                                            <TextBlock Margin="22, 0" TextWrapping="Wrap" Text="{Binding QuranText}"
-                                                       FontSize="{Binding DataContext.ArabicTextSize, ElementName=ThisPage}"
-                                                       FontFamily="/Assets/UthmanicHafs.otf#KFGQPC Uthmanic Script HAFS"
-                                                       FlowDirection="RightToLeft"
-                                                       Visibility="{Binding QuranTextExists, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                            <TextBlock Margin="22, 0" TextWrapping="Wrap" Text="{Binding Text}" 
-                                                       Style="{Binding IsTitle, Mode=OneWay, Converter={StaticResource ConditionalStyleConverter}, ConverterParameter=BlueHeader}"/>
-                                        </StackPanel>
+                                        <TextBlock Margin="22, 0" TextWrapping="Wrap" Text="{Binding Text}" 
+                                                   Style="{Binding StyleName, Mode=OneWay, Converter={StaticResource StyleConverter}}"/>
                                     </ListBoxItem>
                                 </DataTemplate>
                             </telerikPrimitives:RadDataBoundListBox.ItemTemplate>

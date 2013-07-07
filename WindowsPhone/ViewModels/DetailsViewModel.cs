@@ -285,7 +285,6 @@ namespace QuranPhone.ViewModels
 
             //Set text size
             this.TextSize = SettingsUtils.Get<int>(Constants.PREF_TRANSLATION_TEXT_SIZE);
-            this.ArabicTextSize = SettingsUtils.Get<int>(Constants.PREF_ARABIC_TEXT_SIZE);
             
             this.CurrentPageIndex = getIndexFromPageNumber(this.CurrentPageNumber);
             this.IsDataLoaded = true;
@@ -368,28 +367,21 @@ namespace QuranPhone.ViewModels
                     {
                         pageModel.Translations.Add(new VerseViewModel
                         {
-                            IsTitle = true,
+                            StyleName = "TranslationViewHeader",
                             Text = QuranInfo.GetSuraName(verse.Sura, true)
                         });
 
                         tempSurah = verse.Sura;
                     }
 
-                    var vvm = new VerseViewModel
-                        {
-                            IsTitle = false,
-                            VerseNumber = verse.Ayah,
-                            SurahNumber = verse.Sura,
-                            Text = verse.Text
-                        };
+                    pageModel.Translations.Add(new VerseViewModel(string.Format("{0}:{1}", verse.Sura, verse.Ayah), "BoldText"));
 
                     if (versesArabic != null)
                     {
-                        vvm.QuranText = versesArabic[i].Text;
-                        vvm.QuranTextExists = true;
+                        pageModel.Translations.Add(new VerseViewModel(versesArabic[i].Text, "ArabicText"));
                     }
 
-                    pageModel.Translations.Add(vvm);
+                    pageModel.Translations.Add(new VerseViewModel(verse.Text));
                 }
             }
             catch (Exception e)

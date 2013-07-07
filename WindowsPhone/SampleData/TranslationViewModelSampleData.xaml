@@ -14,11 +14,9 @@
                 أَلَمْ تَرَ إِلَى الَّذِينَ أُوتُوا نَصِيبًا مِنَ الْكِتَابِ يُدْعَوْنَ إِلَىٰ كِتَابِ اللَّهِ لِيَحْكُمَ بَيْنَهُمْ ثُمَّ يَتَوَلَّىٰ فَرِيقٌ مِنْهُمْ وَهُمْ مُعْرِضُونَ
             </vm:PageViewModel.Translation>
             <vm:PageViewModel.Translations>
-                <vm:VerseViewModel IsTitle="True" Text="Surat Aal Imran"/>
-                <vm:VerseViewModel SurahNumber="3" VerseNumber="22" 
-                                   Text="They are the ones whose deeds have become worthless in this world and the Hereafter, and for them there will be no helpers."/>
-                <vm:VerseViewModel SurahNumber="3" VerseNumber="23" 
-                                   Text="Do you not consider, [O Muhammad], those who were given a portion of the Scripture? They are invited to the Scripture of Allah that it should arbitrate between them; then a party of them turns away, and they are refusing."/>
+                <vm:VerseViewModel StyleName="BlueHeader" Text="Surat Aal Imran"/>
+                <vm:VerseViewModel Text="They are the ones whose deeds have become worthless in this world and the Hereafter, and for them there will be no helpers."/>
+                <vm:VerseViewModel Text="Do you not consider, [O Muhammad], those who were given a portion of the Scripture? They are invited to the Scripture of Allah that it should arbitrate between them; then a party of them turns away, and they are refusing."/>
             </vm:PageViewModel.Translations>
         </vm:PageViewModel>
     </vm:DetailsViewModel.Pages>

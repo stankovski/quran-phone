@@ -2,8 +2,8 @@
     x:Class="QuranPhone.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:myui="clr-namespace:QuranPhone.UI"
     xmlns:telerikCore="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Core">
 
     <!--Application Resources-->
@@ -23,6 +23,24 @@
             <GradientStop Color="White" Offset="0.939"/>
         </LinearGradientBrush>
         <local:LocalizedStrings xmlns:local="clr-namespace:QuranPhone" x:Key="LocalizedStrings"/>
+
+        <!-- Styles of DetailsPage -->
+        <Style TargetType="TextBlock" x:Key="TranslationViewHeader" BasedOn="{StaticResource PhoneTextTitle2Style}">
+            <Setter Property="Margin" Value="20, 10"/>
+            <Setter Property="FontSize" Value="40"/>
+            <Setter Property="Foreground" Value="{StaticResource BlueText}"/>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="BoldText">
+            <Setter Property="Margin" Value="20, 10"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="ArabicText">
+            <Setter Property="Margin" Value="20, 0"/>
+            <Setter Property="FlowDirection" Value="RightToLeft"/>
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>
+        <!-- End styles of DetailsPage -->
 
         <Style TargetType="TextBlock" x:Key="BlueHeader" BasedOn="{StaticResource PhoneTextTitle2Style}">
             <Setter Property="Margin" Value="10,5,0,5"/>
