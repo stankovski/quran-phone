@@ -229,6 +229,9 @@
       <Link>TranslationListPage.xaml.cs</Link>
       <DependentUpon>TranslationListPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="..\WindowsPhone\UI\ArabicFontSizeConverter.cs">
+      <Link>UI\ArabicFontSizeConverter.cs</Link>
+    </Compile>
     <Compile Include="..\WindowsPhone\UI\BooleanInversionConverter.cs">
       <Link>UI\BooleanInversionConverter.cs</Link>
     </Compile>
@@ -590,12 +593,6 @@
     <Content Include="FlipCycleTileSmall.png" />
     <Content Include="README_FIRST.txt" />
     <Content Include="SplashScreenImage.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Phone.Controls\Phone.Controls.csproj">
-      <Project>{71A41463-066F-444A-B774-5FB036C913A0}</Project>
-      <Name>Phone.Controls</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\WindowsPhone\Resources\AppResources.id.resx">

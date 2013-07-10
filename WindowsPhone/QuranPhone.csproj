@@ -143,8 +143,8 @@
       <DependentUpon>CommonHeader.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\ConditionalStyleConverter.cs" />
+    <Compile Include="UI\ArabicFontSizeConverter.cs" />
     <Compile Include="UI\DataTemplateSelector.cs" />
-    <Compile Include="UI\RelativeFontSizeHelper.cs" />
     <Compile Include="UI\TextFormatConverter.cs" />
     <Compile Include="UI\SettingsRetrieverConverter.cs" />
     <Compile Include="UI\ListHeader.xaml.cs">
@@ -385,10 +385,6 @@
     <Reference Include="Telerik.Windows.Data, Version=2013.1.418.3040, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Phone.Controls\Phone.Controls.csproj">
-      <Project>{71A41463-066F-444A-B774-5FB036C913A0}</Project>
-      <Name>Phone.Controls</Name>
-    </ProjectReference>
     <ProjectReference Include="..\sqlite-net-wp8\Sqlite.vcxproj">
       <Project>{59B35F6C-E062-4F0E-88D8-13F3F82A24F3}</Project>
       <Name>Sqlite</Name>

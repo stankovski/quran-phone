@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using QuranPhone.Common;
 using QuranPhone.Data;
@@ -246,6 +247,7 @@ namespace QuranPhone.ViewModels
                     return;
 
                 textSize = value;
+                this.ArabicTextSize = (int)(value * Constants.ARABIC_FONT_SCALE_RELATIVE_TO_TRANSLATION);
 
                 base.OnPropertyChanged(() => TextSize);
             }
@@ -294,7 +296,7 @@ namespace QuranPhone.ViewModels
         {
             CurrentPageNumber = Pages[CurrentPageIndex].PageNumber;
             SettingsUtils.Set<int>(Constants.PREF_LAST_PAGE, CurrentPageNumber);
-
+            
             await loadPage(CurrentPageIndex, false);
         }
 

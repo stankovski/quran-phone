@@ -37,6 +37,7 @@
         </Style>
         <Style TargetType="TextBlock" x:Key="ArabicText">
             <Setter Property="Margin" Value="20, 0"/>
+            <Setter Property="FontFamily" Value="/Assets/UthmanicHafs.otf#KFGQPC Uthmanic Script HAFS"/>
             <Setter Property="FlowDirection" Value="RightToLeft"/>
             <Setter Property="Foreground" Value="Black"/>
         </Style>

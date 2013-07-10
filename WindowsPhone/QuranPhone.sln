@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuranPhone", "QuranPhone.csproj", "{B7984DBC-63DF-497C-B7FE-E8F6442A12B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phone.Controls", "..\Phone.Controls\Phone.Controls.csproj", "{71A41463-066F-444A-B774-5FB036C913A0}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "..\Tests\Tests.csproj", "{32295BEA-9799-443E-9B1F-589DA161BCA1}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sqlite", "..\sqlite-net-wp8\Sqlite.vcxproj", "{59B35F6C-E062-4F0E-88D8-13F3F82A24F3}"
@@ -55,21 +53,6 @@ Global
 		{B7984DBC-63DF-497C-B7FE-E8F6442A12B2}.Release|x86.ActiveCfg = Release|x86
 		{B7984DBC-63DF-497C-B7FE-E8F6442A12B2}.Release|x86.Build.0 = Release|x86
 		{B7984DBC-63DF-497C-B7FE-E8F6442A12B2}.Release|x86.Deploy.0 = Release|x86
-		{71A41463-066F-444A-B774-5FB036C913A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{71A41463-066F-444A-B774-5FB036C913A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{71A41463-066F-444A-B774-5FB036C913A0}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{71A41463-066F-444A-B774-5FB036C913A0}.Debug|ARM.Build.0 = Debug|Any CPU
-		{71A41463-066F-444A-B774-5FB036C913A0}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{71A41463-066F-444A-B774-5FB036C913A0}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{71A41463-066F-444A-B774-5FB036C913A0}.Debug|Win32.ActiveCfg = Debug|Any CPU
-		{71A41463-066F-444A-B774-5FB036C913A0}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{71A41463-066F-444A-B774-5FB036C913A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{71A41463-066F-444A-B774-5FB036C913A0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{71A41463-066F-444A-B774-5FB036C913A0}.Release|ARM.ActiveCfg = Release|Any CPU
-		{71A41463-066F-444A-B774-5FB036C913A0}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{71A41463-066F-444A-B774-5FB036C913A0}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{71A41463-066F-444A-B774-5FB036C913A0}.Release|Win32.ActiveCfg = Release|Any CPU
-		{71A41463-066F-444A-B774-5FB036C913A0}.Release|x86.ActiveCfg = Release|Any CPU
 		{32295BEA-9799-443E-9B1F-589DA161BCA1}.Debug|Any CPU.ActiveCfg = Debug|ARM
 		{32295BEA-9799-443E-9B1F-589DA161BCA1}.Debug|ARM.ActiveCfg = Debug|ARM
 		{32295BEA-9799-443E-9B1F-589DA161BCA1}.Debug|ARM.Build.0 = Debug|ARM
