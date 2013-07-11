@@ -20,8 +20,11 @@ namespace QuranPhone.UI
                 throw new InvalidOperationException("The target must be double");
             }
 
-            if (value != null && value.ToString() == "ArabicText")
-                return (SettingsUtils.Get<int>(Constants.PREF_TRANSLATION_TEXT_SIZE)* Constants.ARABIC_FONT_SCALE_RELATIVE_TO_TRANSLATION);
+            if (value != null && value.ToString() == "TranslationViewHeader")
+                return 50;
+            else if (value != null && value.ToString() == "ArabicText")
+                return (SettingsUtils.Get<int>(Constants.PREF_TRANSLATION_TEXT_SIZE)*
+                        Constants.ARABIC_FONT_SCALE_RELATIVE_TO_TRANSLATION);
             else
                 return SettingsUtils.Get<int>(Constants.PREF_TRANSLATION_TEXT_SIZE);
         }
