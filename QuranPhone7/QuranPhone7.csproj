@@ -318,6 +318,9 @@
     <Compile Include="..\WindowsPhone\Utils\SettingsUtils.cs">
       <Link>Utils\SettingsUtils.cs</Link>
     </Compile>
+    <Compile Include="..\WindowsPhone\Utils\TextBlockSplitter.cs">
+      <Link>Utils\TextBlockSplitter.cs</Link>
+    </Compile>
     <Compile Include="..\WindowsPhone\Utils\TranslationListTask.cs">
       <Link>Utils\TranslationListTask.cs</Link>
     </Compile>

@@ -237,36 +237,36 @@ namespace QuranPhone.ViewModels
             }
         }
 
-        private int textSize;
-        public int TextSize
-        {
-            get { return textSize; }
-            set
-            {
-                if (value == textSize)
-                    return;
+        //private int textSize;
+        //public int TextSize
+        //{
+        //    get { return textSize; }
+        //    set
+        //    {
+        //        if (value == textSize)
+        //            return;
 
-                textSize = value;
-                this.ArabicTextSize = (int)(value * Constants.ARABIC_FONT_SCALE_RELATIVE_TO_TRANSLATION);
+        //        textSize = value;
+        //        this.ArabicTextSize = (int)(value * Constants.ARABIC_FONT_SCALE_RELATIVE_TO_TRANSLATION);
 
-                base.OnPropertyChanged(() => TextSize);
-            }
-        }
+        //        base.OnPropertyChanged(() => TextSize);
+        //    }
+        //}
 
-        private int arabicTextSize;
-        public int ArabicTextSize
-        {
-            get { return arabicTextSize; }
-            set
-            {
-                if (value == arabicTextSize)
-                    return;
+        //private int arabicTextSize;
+        //public int ArabicTextSize
+        //{
+        //    get { return arabicTextSize; }
+        //    set
+        //    {
+        //        if (value == arabicTextSize)
+        //            return;
 
-                arabicTextSize = value;
+        //        arabicTextSize = value;
 
-                base.OnPropertyChanged(() => ArabicTextSize);
-            }
-        }
+        //        base.OnPropertyChanged(() => ArabicTextSize);
+        //    }
+        //}
 
         #endregion Properties
 
@@ -284,10 +284,7 @@ namespace QuranPhone.ViewModels
                     Pages.Add(new PageViewModel(page) {ShowTranslation = this.ShowTranslation});
                 }
             }
-
-            //Set text size
-            this.TextSize = SettingsUtils.Get<int>(Constants.PREF_TRANSLATION_TEXT_SIZE);
-            
+          
             this.CurrentPageIndex = getIndexFromPageNumber(this.CurrentPageNumber);
             this.IsDataLoaded = true;
         }
@@ -383,7 +380,12 @@ namespace QuranPhone.ViewModels
                         pageModel.Translations.Add(new VerseViewModel(versesArabic[i].Text, "ArabicText"));
                     }
 
-                    pageModel.Translations.Add(new VerseViewModel(verse.Text));
+                    var versesSplit = TextBlockSplitter.Instance.Split(verse.Text, SettingsUtils.Get<int>(Constants.PREF_TRANSLATION_TEXT_SIZE), FontWeights.Normal);
+
+                    foreach (var vs in versesSplit)
+                    {
+                        pageModel.Translations.Add(new VerseViewModel(vs));
+                    }
                 }
             }
             catch (Exception e)

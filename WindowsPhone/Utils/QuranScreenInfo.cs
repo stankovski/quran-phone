@@ -27,14 +27,24 @@ namespace QuranPhone.Utils
             this.max_width = (width > height) ? width : height;
         }
 
-        public static QuranScreenInfo GetInstance()
+        public static QuranScreenInfo Instance
         {
-            if (instance == null)
+            get
             {
-                instance = new QuranScreenInfo((int)Application.Current.Host.Content.ActualWidth,
-                (int)Application.Current.Host.Content.ActualHeight);
+                if (instance == null)
+                {
+                    if (Application.Current != null)
+                    {
+                        instance = new QuranScreenInfo((int) Application.Current.Host.Content.ActualWidth,
+                                                       (int) Application.Current.Host.Content.ActualHeight);
+                    }
+                    else
+                    {
+                        instance = new QuranScreenInfo(800, 1294);
+                    }
+                }
+                return instance;
             }
-            return instance;
         }
 
         public int Width { get { return this.width; }}

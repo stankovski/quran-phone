@@ -172,6 +172,7 @@
     <Compile Include="Utils\QuranUtils.cs" />
     <Compile Include="Utils\SettingsUtils.cs" />
     <Compile Include="UI\StyleConverter.cs" />
+    <Compile Include="Utils\TextBlockSplitter.cs" />
     <Compile Include="Utils\TranslationListTask.cs" />
     <Compile Include="Utils\TranslationUtils.cs" />
     <Compile Include="ViewModels\SearchViewModel.cs" />

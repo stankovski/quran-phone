@@ -310,7 +310,7 @@ namespace QuranPhone.Utils
             }
             else
             {
-                QuranScreenInfo instance = QuranScreenInfo.GetInstance();
+                QuranScreenInfo instance = QuranScreenInfo.Instance;
                 if (instance == null) return null;
 
                 string urlString = IMG_HOST + "width"
@@ -372,7 +372,7 @@ namespace QuranPhone.Utils
         public static string GetQuranDirectory(bool asUri, bool createIfDoesntExist = false)
         {
             string baseDir = (asUri ? QURAN_BASE_URI : QURAN_BASE);
-            QuranScreenInfo qsi = QuranScreenInfo.GetInstance();
+            QuranScreenInfo qsi = QuranScreenInfo.Instance;
             if (qsi == null)
                 return null;
 
@@ -388,7 +388,7 @@ namespace QuranPhone.Utils
         public static string GetZipFileUrl()
         {
             string url = IMG_HOST;
-            QuranScreenInfo qsi = QuranScreenInfo.GetInstance();
+            QuranScreenInfo qsi = QuranScreenInfo.Instance;
             if (qsi == null)
                 return null;
             url += "images" + qsi.GetWidthParam() + ".zip";
@@ -411,14 +411,14 @@ namespace QuranPhone.Utils
 
         public static string GetAyaPositionFileName()
         {
-            QuranScreenInfo qsi = QuranScreenInfo.GetInstance();
+            QuranScreenInfo qsi = QuranScreenInfo.Instance;
             if (qsi == null) return null;
             return "ayahinfo" + qsi.GetWidthParam() + ".db";
         }
 
         public static string GetAyaPositionFileUrl()
         {
-            QuranScreenInfo qsi = QuranScreenInfo.GetInstance();
+            QuranScreenInfo qsi = QuranScreenInfo.Instance;
             if (qsi == null)
                 return null;
             string url = IMG_HOST + "width" + qsi.GetWidthParam();
@@ -428,7 +428,7 @@ namespace QuranPhone.Utils
 
         public static string GetGaplessDatabaseRootUrl()
         {
-            QuranScreenInfo qsi = QuranScreenInfo.GetInstance();
+            QuranScreenInfo qsi = QuranScreenInfo.Instance;
             if (qsi == null)
                 return null;
             return IMG_HOST + "databases/audio/";
