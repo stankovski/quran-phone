@@ -387,6 +387,8 @@ namespace QuranPhone.ViewModels
                         pageModel.Translations.Add(new VerseViewModel(vs));
                     }
                 }
+                // Adding padding
+                pageModel.Translations.Add(new VerseViewModel(" "));
             }
             catch (Exception e)
             {
