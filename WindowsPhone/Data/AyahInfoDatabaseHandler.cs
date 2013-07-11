@@ -26,6 +26,71 @@ namespace QuranPhone.Data
             return mDatabase.Query<AyahBounds>().Where(a => a.SurahNumber == sura && a.AyahNumber == ayah).ToList();
         }
 
+        public IList<AyahBounds> GetVerseBoundsCombined(int sura, int ayah)
+        {
+            var bounds = GetVerseBounds(sura, ayah);
+            var lineCoords = new Dictionary<int, AyahBounds>();
+            AyahBounds first = null, last = null, current = null;
+            foreach(var bound in bounds)
+            {
+                current = bound;
+                if (first == null) 
+                    first = current;
+
+                if (!lineCoords.ContainsKey(current.Line))
+                {
+                    lineCoords[current.Line] = current;
+                }
+                else
+                {
+                    lineCoords[current.Line].Engulf(current);
+                }
+            }
+
+            if ((first != null) && (current != null) &&
+                (first.Position != current.Position))
+                last = current;
+
+            return doHighlightAyah(first, last, lineCoords);
+        }
+
+        private IList<AyahBounds> doHighlightAyah(AyahBounds first, AyahBounds last, Dictionary<int, AyahBounds> lineCoordinates)
+        {
+            if (first == null) 
+                return null;
+
+            var rangesToDraw = new List<AyahBounds>();
+            if (last == null)
+            {
+                rangesToDraw.Add(first);
+            }
+            else
+            {
+                if (first.Line == last.Line)
+                {
+                    first.Engulf(last);
+                    rangesToDraw.Add(first);
+                }
+                else
+                {
+                    AyahBounds b = lineCoordinates[first.Line];
+                    rangesToDraw.Add(b);
+
+                    int currentLine = first.Line + 1;
+                    int diff = last.Line - first.Line - 1;
+                    for (int i = 0; i < diff; i++)
+                    {
+                        b = lineCoordinates[currentLine + i];
+                        rangesToDraw.Add(b);
+                    }
+
+                    b = lineCoordinates[last.Line];
+                    rangesToDraw.Add(b);
+                }
+            }
+            return rangesToDraw;
+        }
+
         public Rect? GetPageBounds(int page)
         {
             AyahLimits limits = mDatabase.Query<AyahLimits>().FirstOrDefault(a => a.PageNumber == page);

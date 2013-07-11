@@ -160,6 +160,9 @@
     <Compile Include="..\WindowsPhone\Common\QuranAyah.cs">
       <Link>Common\QuranAyah.cs</Link>
     </Compile>
+    <Compile Include="..\WindowsPhone\Common\QuranAyahEventArgs.cs">
+      <Link>Common\QuranAyahEventArgs.cs</Link>
+    </Compile>
     <Compile Include="..\WindowsPhone\Common\Tags.cs">
       <Link>Common\Tags.cs</Link>
     </Compile>

@@ -17,7 +17,7 @@ namespace QuranPhone.Common
             MaxY = maxY;
         }
 
-        public void engulf(AyahBounds other)
+        public void Engulf(AyahBounds other)
         {
 		    if (MinX > other.MinX)
 			    MinX = other.MinX;

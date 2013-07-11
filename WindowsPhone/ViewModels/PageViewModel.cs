@@ -1,4 +1,5 @@
-﻿using QuranPhone.Data;
+﻿using QuranPhone.Common;
+using QuranPhone.Data;
 using System;
 using System.Collections.ObjectModel;
 
@@ -77,6 +78,21 @@ namespace QuranPhone.ViewModels
                 imageSource = value;
 
                 base.OnPropertyChanged(() => ImageSource);
+            }
+        }
+
+        private QuranAyah selectedAyah;
+        public QuranAyah SelectedAyah
+        {
+            get { return selectedAyah; }
+            set
+            {
+                if (value == selectedAyah)
+                    return;
+
+                selectedAyah = value;
+
+                base.OnPropertyChanged(() => SelectedAyah);
             }
         }
         

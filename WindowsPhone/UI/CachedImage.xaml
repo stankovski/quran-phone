@@ -12,10 +12,6 @@
     <ScrollViewer HorizontalAlignment="Stretch" x:Name="LayoutRoot">
         <Grid>
             <StackPanel Orientation="Vertical">
-                <!--<Border BorderThickness="0,2" Margin="0, 10" BorderBrush="{StaticResource DarkBlueText}">
-                    <TextBlock Name="pageNumber" VerticalAlignment="Bottom" Foreground="{StaticResource DarkBlueText}" 
-                               Style="{StaticResource BlueHeader}" TextWrapping="Wrap"/>
-                </Border>-->
                 <Image Name="image" Margin="0,0,0,20" Tap="ImageTap"/>
             </StackPanel>
             <ProgressBar Name="progress" IsIndeterminate="True" VerticalAlignment="Top"
@@ -23,6 +19,11 @@
             <TextBlock Name="memoryUsage" FontSize="20" 
                        Foreground="#FF444444" VerticalAlignment="Top"
                        HorizontalAlignment="Center" Margin="0,0,0,0"/>
+            <Viewbox>
+                <Canvas Name="canvas">
+                
+                </Canvas>
+            </Viewbox>
         </Grid>
     </ScrollViewer>
 </UserControl>

@@ -130,6 +130,12 @@ namespace QuranPhone
             App.DetailsViewModel.ToggleMenu();
         }
 
+        // TO BE USED IN THE FUTURE
+        private void AyahTapped(object sender, Common.QuranAyahEventArgs e)
+        {
+            App.DetailsViewModel.Pages[App.DetailsViewModel.CurrentPageIndex].SelectedAyah = e.QuranAyah;
+        }
+
         #endregion Menu Events
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
