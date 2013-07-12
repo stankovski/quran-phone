@@ -35,7 +35,7 @@
                      <Grid>
                         <myui:CachedImage ImageSource="{Binding ImageSource}" PageNumber="{Binding PageNumber}" 
                                           SelectedAyah="{Binding DataContext.SelectedAyah, ElementName=ThisPage}"
-                                          Hold="ImageHold" Tap="ImageTap" Padding="0,0,0,10"
+                                          Hold="ImageHold" DoubleTap="ImageHold" Tap="ImageTap" Padding="0,0,0,10"
                                           Visibility="{Binding DataContext.ShowTranslation, ElementName=ThisPage, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
                         </myui:CachedImage>
 
@@ -51,11 +51,6 @@
                                 </DataTemplate>
                             </telerikPrimitives:RadDataBoundListBox.ItemTemplate>
                         </telerikPrimitives:RadDataBoundListBox>
-
-
-                        <!--<controls:ScrollableTextBlock Text="{Binding Translation}" HorizontalAlignment="Left" VerticalAlignment="Top" 
-                                                      FontSize="{Binding TextSize}" DesiredWidth="{Binding ScreenWidth}" Foreground="Black" Margin="12,0" 
-                                                      Visibility="{Binding ShowTranslation, Converter={StaticResource BooleanToVisibilityConverter}}"/>-->
                     </Grid>
                 </DataTemplate>
             </telerikPrimitives:RadSlideView.ItemTemplate>
