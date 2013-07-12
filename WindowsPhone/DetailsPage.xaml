@@ -18,7 +18,7 @@
     SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
     d:DataContext="{d:DesignData SampleData/TranslationViewModelSampleData.xaml}"
     shell:SystemTray.IsVisible="{Binding IsShowMenu}"
-    Background="{StaticResource LightBackground}" OrientationChanged="PageOrientationChanged" Tap="ScreenTap" Margin="0,9,0,-9">
+    Background="{StaticResource LightBackground}" OrientationChanged="PageOrientationChanged" Tap="ScreenTap">
     
     <phone:PhoneApplicationPage.Resources>
         <myui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
@@ -34,7 +34,9 @@
                      <Grid>
                         <myui:CachedImage ImageSource="{Binding ImageSource}" PageNumber="{Binding PageNumber}" 
                                           SelectedAyah="{Binding SelectedAyah}"
-                                          Visibility="{Binding DataContext.ShowTranslation, ElementName=ThisPage, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}"/>
+                                          Hold="ImageHold"
+                                          Visibility="{Binding DataContext.ShowTranslation, ElementName=ThisPage, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
+                        </myui:CachedImage>
 
                         <telerikPrimitives:RadDataBoundListBox x:Name="TranslationListBox"
                                                                Foreground="Black" Visibility="{Binding DataContext.ShowTranslation, ElementName=ThisPage, Converter={StaticResource BooleanToVisibilityConverter}}"
@@ -85,11 +87,11 @@
             </StackPanel>
         </Grid>-->
 
-        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Background="{StaticResource LightBackground}" Visibility="{Binding ShowInfoOverlay, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="0">
-            <TextBlock Text="{Binding CurrentSurahName}" HorizontalAlignment="Left" FontSize="18" Foreground="Black" Margin="25,0,0,0"/>
-            <TextBlock Text="{Binding CurrentPageNumber}" HorizontalAlignment="Center" FontSize="18" Foreground="Black" Margin="0,0,0,0"/>
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Background="{StaticResource LightBackground}" Visibility="{Binding ShowInfoOverlay, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <TextBlock Text="{Binding CurrentSurahName}" HorizontalAlignment="Left" FontSize="18" Foreground="Black" Margin="25,3,0,3"/>
+            <TextBlock Text="{Binding CurrentPageNumber}" HorizontalAlignment="Center" FontSize="18" Foreground="Black" Margin="0,3,0,3"/>
 
-            <TextBlock Text="{Binding CurrentJuzName}" HorizontalAlignment="Right" FontSize="18" Foreground="Black" Margin="0,0,25,0"/>
+            <TextBlock Text="{Binding CurrentJuzName}" HorizontalAlignment="Right" FontSize="18" Foreground="Black" Margin="0,3,25,3"/>
         </Grid>
     </Grid>
     

@@ -4,11 +4,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using Microsoft.Phone.Tasks;
+using QuranPhone.UI;
 using QuranPhone.ViewModels;
 using QuranPhone.Utils;
 using QuranPhone.Data;
 using System.Globalization;
 using Microsoft.Phone.Controls;
+using Telerik.Windows.Controls;
 
 namespace QuranPhone
 {
@@ -128,6 +130,21 @@ namespace QuranPhone
         private void ScreenTap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             App.DetailsViewModel.ToggleMenu();
+        }
+
+        private void ImageHold(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            var ayah = CachedImage.GetAyahFromGesture(e.GetPosition(radSlideView), App.DetailsViewModel.CurrentPageNumber, radSlideView.ActualWidth);
+            App.DetailsViewModel.Pages[App.DetailsViewModel.CurrentPageIndex].SelectedAyah = ayah;
+            RadContextMenu menu = new RadContextMenu();
+            menu.Items.Add(new RadContextMenuItem() { Content = "Item 2" });
+            menu.RegionOfInterest = new Rect(e.GetPosition(ThisPage), new Size(50,50));
+            menu.IsOpen = true;
+        }
+
+        private void AddBookmark(object sender, Telerik.Windows.Controls.ContextMenuItemSelectedEventArgs e)
+        {
+
         }
 
         // TO BE USED IN THE FUTURE

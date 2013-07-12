@@ -1,25 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
 using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Windows.Media.Imaging;
 using QuranPhone.Common;
 using QuranPhone.Data;
 using QuranPhone.Utils;
-using ImageTools;
 using System.IO.IsolatedStorage;
 using System.IO;
-using System.Diagnostics;
 using Path = System.IO.Path;
 
 namespace QuranPhone.UI
@@ -70,6 +61,9 @@ namespace QuranPhone.UI
                     using (var dbh = new AyahInfoDatabaseHandler(QuranFileUtils.GetAyaPositionFileName()))
                     {
                         var bounds = dbh.GetVerseBoundsCombined(ayahInfo.Sura, ayahInfo.Ayah);
+                        // Reset any overlays
+                        canvas.Children.Clear();
+
                         foreach (var bound in bounds)
                         {
                             drawAyahBound(bound);
@@ -265,23 +259,20 @@ namespace QuranPhone.UI
             ImageSource = null;
         }
 
-        private void ImageTap(object sender, System.Windows.Input.GestureEventArgs e)
+        public static QuranAyah GetAyahFromGesture(Point p, int pageNumber, double width)
         {
             try
             {
-                if (AyahTapped != null)
+                var position = adjustPoint(p, width);
+                string basePath = QuranFileUtils.GetQuranDatabaseDirectory(false, true);
+                if (basePath == null) 
+                    return null;
+                string path = basePath + QuranFileUtils.PATH_SEPARATOR + QuranFileUtils.GetAyaPositionFileName();
+                if (QuranFileUtils.FileExists(path))
                 {
-                    var position = adjustPoint(e.GetPosition(image));
-                    string basePath = QuranFileUtils.GetQuranDatabaseDirectory(false, true);
-                    if (basePath == null) return;
-                    string path = basePath + QuranFileUtils.PATH_SEPARATOR + QuranFileUtils.GetAyaPositionFileName();
-                    if (QuranFileUtils.FileExists(path))
+                    using (var dbh = new AyahInfoDatabaseHandler(QuranFileUtils.GetAyaPositionFileName()))
                     {
-                        using (var dbh = new AyahInfoDatabaseHandler(QuranFileUtils.GetAyaPositionFileName()))
-                        {
-                            var ayah = dbh.GetVerseAtPoint(PageNumber, position.X, position.Y);
-                            AyahTapped(this, new QuranAyahEventArgs(ayah));
-                        }
+                        return dbh.GetVerseAtPoint(pageNumber, position.X, position.Y);
                     }
                 }
             }
@@ -289,12 +280,23 @@ namespace QuranPhone.UI
             {
                 // Ignore
             }
+            return null;
         }
 
-        private Point adjustPoint(Point p)
+        private void ImageTap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            if (AyahTapped != null)
+            {
+                var ayah = GetAyahFromGesture(e.GetPosition(image), PageNumber, image.ActualWidth);
+                if (ayah != null)
+                    AyahTapped(this, new QuranAyahEventArgs(ayah));
+            }
+        }
+
+        private static Point adjustPoint(Point p, double width)
         {
             var imageWidth = QuranScreenInfo.Instance.ImageWidth;
-            var actualWidth = image.ActualWidth;
+            var actualWidth = width;
             var scale = imageWidth/actualWidth;
             return new Point(p.X*scale, p.Y*scale);
         }
