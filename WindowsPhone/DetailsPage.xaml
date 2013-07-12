@@ -18,7 +18,8 @@
     SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
     d:DataContext="{d:DesignData SampleData/TranslationViewModelSampleData.xaml}"
     shell:SystemTray.IsVisible="{Binding IsShowMenu}"
-    Background="{StaticResource LightBackground}" OrientationChanged="PageOrientationChanged" Tap="ScreenTap">
+    Tap="ScreenTap"
+    Background="{StaticResource LightBackground}" OrientationChanged="PageOrientationChanged">
     
     <phone:PhoneApplicationPage.Resources>
         <myui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
@@ -34,7 +35,7 @@
                      <Grid>
                         <myui:CachedImage ImageSource="{Binding ImageSource}" PageNumber="{Binding PageNumber}" 
                                           SelectedAyah="{Binding DataContext.SelectedAyah, ElementName=ThisPage}"
-                                          Hold="ImageHold"
+                                          Hold="ImageHold" Tap="ImageTap" Padding="0,0,0,10"
                                           Visibility="{Binding DataContext.ShowTranslation, ElementName=ThisPage, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
                         </myui:CachedImage>
 
@@ -87,12 +88,22 @@
             </StackPanel>
         </Grid>-->
 
-        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Background="{StaticResource LightBackground}" Visibility="{Binding ShowInfoOverlay, Converter={StaticResource BooleanToVisibilityConverter}}">
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Background="{StaticResource LightBackground}" 
+              Visibility="{Binding ShowInfoOverlay, Converter={StaticResource BooleanToVisibilityConverter}}">
             <TextBlock Text="{Binding CurrentSurahName}" HorizontalAlignment="Left" FontSize="18" Foreground="Black" Margin="25,3,0,3"/>
             <TextBlock Text="{Binding CurrentPageNumber}" HorizontalAlignment="Center" FontSize="18" Foreground="Black" Margin="0,3,0,3"/>
 
             <TextBlock Text="{Binding CurrentJuzName}" HorizontalAlignment="Right" FontSize="18" Foreground="Black" Margin="0,3,25,3"/>
         </Grid>
+
+        <Button VerticalAlignment="Bottom" HorizontalAlignment="Right" Padding="0,0,0,10" Width="80" Style="{StaticResource ChromelessButtonStyle}" Name="menuToggleButton" 
+                Visibility="{Binding IsShowMenu, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}" Tap="MenuTap">
+            <StackPanel Orientation="Horizontal" Background="Transparent" VerticalAlignment="Bottom" Margin="0" Height="50">
+                <Ellipse Fill="{StaticResource DarkBlueText}" Width="8" Height="8" Margin="5,0,5,15" VerticalAlignment="Bottom"/>
+                <Ellipse Fill="{StaticResource DarkBlueText}" Width="8" Height="8" Margin="5,0,5,15" VerticalAlignment="Bottom"/>
+                <Ellipse Fill="{StaticResource DarkBlueText}" Width="8" Height="8" Margin="5,0,5,15" VerticalAlignment="Bottom"/>
+            </StackPanel>
+        </Button>
     </Grid>
     
     <phone:PhoneApplicationPage.ApplicationBar>

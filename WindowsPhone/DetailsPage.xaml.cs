@@ -28,6 +28,7 @@ namespace QuranPhone
             
             bookmarkMenu.Items.Add(new RadContextMenuItem() { Content = AppResources.bookmark_ayah });
             bookmarkMenu.ItemTapped += BookmarkAyah_Click;
+            bookmarkMenu.Closed += (obj, e) => App.DetailsViewModel.SelectedAyah = null;
         }
 
         // When page is navigated to set data context to selected item in list
@@ -93,7 +94,19 @@ namespace QuranPhone
 
         private void ScreenTap(object sender, System.Windows.Input.GestureEventArgs e)
         {
+            if (App.DetailsViewModel.IsShowMenu)
+                App.DetailsViewModel.ToggleMenu();
+        }
+
+        private void MenuTap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
             App.DetailsViewModel.ToggleMenu();
+            e.Handled = true;
+        }
+
+        private void ImageTap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            App.DetailsViewModel.SelectedAyah = null;
         }
 
         private void ImageHold(object sender, System.Windows.Input.GestureEventArgs e)

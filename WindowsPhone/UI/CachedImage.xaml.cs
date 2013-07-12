@@ -49,31 +49,35 @@ namespace QuranPhone.UI
         private void UpdateSelectedAyah(QuranAyah ayahInfo)
         {
             if (ayahInfo == null)
-                return;
-
-            try
             {
-                string basePath = QuranFileUtils.GetQuranDatabaseDirectory(false, true);
-                if (basePath == null) return;
-                string path = basePath + QuranFileUtils.PATH_SEPARATOR + QuranFileUtils.GetAyaPositionFileName();
-                if (QuranFileUtils.FileExists(path))
+                canvas.Children.Clear();
+            }
+            else
+            {
+                try
                 {
-                    using (var dbh = new AyahInfoDatabaseHandler(QuranFileUtils.GetAyaPositionFileName()))
+                    string basePath = QuranFileUtils.GetQuranDatabaseDirectory(false, true);
+                    if (basePath == null) return;
+                    string path = basePath + QuranFileUtils.PATH_SEPARATOR + QuranFileUtils.GetAyaPositionFileName();
+                    if (QuranFileUtils.FileExists(path))
                     {
-                        var bounds = dbh.GetVerseBoundsCombined(ayahInfo.Sura, ayahInfo.Ayah);
-                        // Reset any overlays
-                        canvas.Children.Clear();
-
-                        foreach (var bound in bounds)
+                        using (var dbh = new AyahInfoDatabaseHandler(QuranFileUtils.GetAyaPositionFileName()))
                         {
-                            drawAyahBound(bound);
+                            var bounds = dbh.GetVerseBoundsCombined(ayahInfo.Sura, ayahInfo.Ayah);
+                            // Reset any overlays
+                            canvas.Children.Clear();
+
+                            foreach (var bound in bounds)
+                            {
+                                drawAyahBound(bound);
+                            }
                         }
                     }
                 }
-            }
-            catch
-            {
-                //Ignore
+                catch
+                {
+                    //Ignore
+                }
             }
         }
 
