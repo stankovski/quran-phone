@@ -344,14 +344,32 @@
     <Reference Include="AppBarUtils">
       <HintPath>packages\AppBarUtils.2.3\lib\windowsphone8\AppBarUtils.dll</HintPath>
     </Reference>
-    <Reference Include="ImageTools">
-      <HintPath>Dependencies\ImageTools.dll</HintPath>
+    <Reference Include="ICSharpCode.SharpZLib.Phone">
+      <HintPath>packages\ImageTools.0.3.1\lib\sl3-wp\ICSharpCode.SharpZLib.Phone.dll</HintPath>
     </Reference>
-    <Reference Include="ImageTools.IO.Png">
-      <HintPath>Dependencies\ImageTools.IO.Png.dll</HintPath>
+    <Reference Include="ImageTools, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>packages\ImageTools.0.3.1\lib\sl3-wp\ImageTools.dll</HintPath>
     </Reference>
-    <Reference Include="ImageTools.Utils">
-      <HintPath>Dependencies\ImageTools.Utils.dll</HintPath>
+    <Reference Include="ImageTools.Controls">
+      <HintPath>packages\ImageTools.0.3.1\lib\sl3-wp\ImageTools.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageTools.Filtering">
+      <HintPath>packages\ImageTools.0.3.1\lib\sl3-wp\ImageTools.Filtering.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageTools.IO.Bmp">
+      <HintPath>packages\ImageTools.0.3.1\lib\sl3-wp\ImageTools.IO.Bmp.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageTools.IO.Gif">
+      <HintPath>packages\ImageTools.0.3.1\lib\sl3-wp\ImageTools.IO.Gif.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageTools.IO.Png, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>packages\ImageTools.0.3.1\lib\sl3-wp\ImageTools.IO.Png.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageTools.Utils, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>packages\ImageTools.0.3.1\lib\sl3-wp\ImageTools.Utils.dll</HintPath>
     </Reference>
     <Reference Include="JeffWilcox.PhoneThemeManager">
       <HintPath>packages\PhoneThemeManager.1.3.3\lib\sl4-windowsphone71\JeffWilcox.PhoneThemeManager.dll</HintPath>
@@ -360,6 +378,10 @@
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>packages\Newtonsoft.Json.4.5.11\lib\sl4-windowsphone71\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PhoneCodeContractsAssemblies, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>packages\ImageTools.0.3.1\lib\sl3-wp\PhoneCodeContractsAssemblies.dll</HintPath>
     </Reference>
     <Reference Include="SharpZipLib.WindowsPhone7, Version=0.86.0.518, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -378,6 +400,12 @@
     <Reference Include="Telerik.Windows.Controls.Primitives, Version=2013.1.418.3040, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL" />
     <Reference Include="Telerik.Windows.Core, Version=2013.1.418.3040, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL" />
     <Reference Include="Telerik.Windows.Data, Version=2013.1.418.3040, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL" />
+    <Reference Include="WriteableBitmapExWinPhone">
+      <HintPath>packages\WriteableBitmapEx.1.0.8.0\lib\WindowsPhone8\WriteableBitmapExWinPhone.dll</HintPath>
+    </Reference>
+    <Reference Include="WriteableBitmapExWinPhoneXnaDependant">
+      <HintPath>packages\WriteableBitmapEx.1.0.8.0\lib\WindowsPhone8\WriteableBitmapExWinPhoneXnaDependant.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Phone.Controls\Phone.Controls.csproj">

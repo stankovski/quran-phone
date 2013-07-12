@@ -10,6 +10,7 @@
     <Application.Resources>
         <Brush x:Key="BlueText">#30B6E7</Brush>
 		<SolidColorBrush x:Key="DarkBlueText" Color="#FF49A4C5"/>
+        <SolidColorBrush x:Key="PitchBlack" Color="#FF000000"/>
 		<LinearGradientBrush x:Key="LightBackground" EndPoint="0,0.5" StartPoint="1,0.5">
         	<GradientStop Color="#FFE4E4E4" Offset="0"/>
         	<GradientStop Color="WhiteSmoke" Offset="1"/>

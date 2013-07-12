@@ -13,6 +13,8 @@ using QuranPhone.Resources;
 using QuranPhone.ViewModels;
 using QuranPhone.Utils;
 using Telerik.Windows.Controls;
+using ImageTools.IO;
+using ImageTools.IO.Png;
 
 namespace QuranPhone
 {
@@ -136,6 +138,9 @@ namespace QuranPhone
             // Initialize directory
             QuranFileUtils.MakeQuranDirectory();
             QuranFileUtils.MakeQuranDatabaseDirectory();
+
+            // Register ImageTools PNG encoder
+            Decoders.AddDecoder<PngDecoder>();
 
             // Show graphics profiling information while debugging.
             if (Debugger.IsAttached)
