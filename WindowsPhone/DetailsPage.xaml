@@ -33,7 +33,7 @@
                 <DataTemplate>
                      <Grid>
                         <myui:CachedImage ImageSource="{Binding ImageSource}" PageNumber="{Binding PageNumber}" 
-                                          SelectedAyah="{Binding SelectedAyah}"
+                                          SelectedAyah="{Binding DataContext.SelectedAyah, ElementName=ThisPage}"
                                           Hold="ImageHold"
                                           Visibility="{Binding DataContext.ShowTranslation, ElementName=ThisPage, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
                         </myui:CachedImage>

@@ -81,21 +81,6 @@ namespace QuranPhone.ViewModels
             }
         }
 
-        private QuranAyah selectedAyah;
-        public QuranAyah SelectedAyah
-        {
-            get { return selectedAyah; }
-            set
-            {
-                if (value == selectedAyah)
-                    return;
-
-                selectedAyah = value;
-
-                base.OnPropertyChanged(() => SelectedAyah);
-            }
-        }
-        
         public double ScreenWidth
         {
             get { return System.Windows.Application.Current.Host.Content.ActualWidth - 20; }

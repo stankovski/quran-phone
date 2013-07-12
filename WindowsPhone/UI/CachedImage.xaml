@@ -19,7 +19,7 @@
             <TextBlock Name="memoryUsage" FontSize="20" 
                        Foreground="#FF444444" VerticalAlignment="Top"
                        HorizontalAlignment="Center" Margin="0,0,0,0"/>
-            <Viewbox>
+            <Viewbox Margin="0,-20,0,0">
                 <Canvas Name="canvas">
                 
                 </Canvas>
