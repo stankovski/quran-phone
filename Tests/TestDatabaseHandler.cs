@@ -1,5 +1,6 @@
 ﻿using System.IO.IsolatedStorage;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using QuranPhone.Common;
 using QuranPhone.Data;
 using QuranPhone.Utils;
 
@@ -22,7 +23,7 @@ namespace Tests
                 return;
             }
 
-            using (var dbh = new DatabaseHandler(QuranFileUtils.QURAN_ARABIC_DATABASE))
+            using (var dbh = new DatabaseHandler<QuranAyah>(QuranFileUtils.QURAN_ARABIC_DATABASE))
             {
                 Assert.AreEqual(0, dbh.Search("test").Count);
             }

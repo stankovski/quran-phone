@@ -5,10 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SQLite;
 
 namespace QuranPhone.Data
 {
-    public class DatabaseHandler : BaseDatabaseHandler
+    public class DatabaseHandler<T> : BaseDatabaseHandler where T: QuranAyah, new()
     {
         private string mDatabasePath = null;
 
@@ -75,20 +76,19 @@ namespace QuranPhone.Data
             }
         }
 
-        public List<QuranAyah> GetVerses(int sura, int minAyah, int maxAyah, string table = "verses")
+        public List<T> GetVerses(int sura, int minAyah, int maxAyah)
         {
-            return GetVerses(sura, minAyah, sura, maxAyah, table);
+            return GetVerses(sura, minAyah, sura, maxAyah);
         }
 
-        public virtual List<QuranAyah> GetVerses(int minSura, int minAyah, int maxSura,
-                                int maxAyah, string table = "verses")
+        public virtual List<T> GetVerses(int minSura, int minAyah, int maxSura, int maxAyah)
         {
             if (!ValidDatabase())
             {
                 if (!ReopenDatabase()) { return null; }
             }
 
-            var result = mDatabase.Query<QuranAyah>();
+            var result = mDatabase.Query<T>();
 
             if (minSura == maxSura)
             {
@@ -105,7 +105,7 @@ namespace QuranPhone.Data
             return result.ToList();
         }
 
-        public List<QuranAyah> GetVerses(int page, string table = "verses")
+        public List<T> GetVerses(int page)
         {
             if (!ValidDatabase())
             {
@@ -113,25 +113,31 @@ namespace QuranPhone.Data
             }
 
             int[] bound = QuranInfo.GetPageBounds(page);
-            return GetVerses(bound[0], bound[1], bound[2], bound[3], table);
+            return GetVerses(bound[0], bound[1], bound[2], bound[3]);
         }
 
-        public List<QuranAyah> GetVerse(int sura, int ayah)
+        public List<T> GetVerse(int sura, int ayah)
         {
             return GetVerses(sura, ayah, ayah);
         }
 
-        public virtual List<QuranAyah> Search(string query, string table = "verses")
+        public virtual List<T> Search(string query)
         {
             if (!ValidDatabase())
             {
                 if (!ReopenDatabase()) { return null; }
             }
 
-            // Couldn't get parameterized version to work - need to look into it in the future
-            var sql = string.Format("select \"sura\", \"ayah\", \"text\" from \"{0}\" where \"text\" like '%{1}%' order by \"sura\", \"ayah\"", table, query);
+            // Get table name
+            var tableName = "verses";
+            var tableAttr = (TableAttribute)(typeof(T)).GetCustomAttributes(typeof(TableAttribute), true).FirstOrDefault();
+            if (tableAttr != null)
+                tableName = tableAttr.Name;
 
-            return mDatabase.Query<QuranAyah>(sql).Take(50).ToList();          
+            // Couldn't get parameterized version to work - need to look into it in the future
+            var sql = string.Format("select \"sura\", \"ayah\", \"text\" from \"{0}\" where \"text\" like '%{1}%' order by \"sura\", \"ayah\"", tableName, query);
+
+            return mDatabase.Query<T>(sql).Take(50).ToList();          
         }        
     }
 }

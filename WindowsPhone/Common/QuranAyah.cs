@@ -27,4 +27,13 @@ namespace QuranPhone.Common
             Ayah = ayah;
         }
     }
+
+    [Table("arabic_text")]
+    public class ArabicAyah : QuranAyah
+    {
+        public ArabicAyah() { }
+
+        public ArabicAyah(int sura, int ayah) : base(sura, ayah)
+        {}
+    }
 }

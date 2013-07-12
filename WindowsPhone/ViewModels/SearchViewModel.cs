@@ -55,7 +55,7 @@ namespace QuranPhone.ViewModels
                 try
                 {
                     List<QuranAyah> verses = null;
-                    using (var db = new DatabaseHandler(App.DetailsViewModel.TranslationFile))
+                    using (var db = new DatabaseHandler<QuranAyah>(App.DetailsViewModel.TranslationFile))
                     {
                         verses = await new TaskFactory().StartNew(() => db.Search(query));
                     }

@@ -351,20 +351,20 @@ namespace QuranPhone.ViewModels
                     return false;
 
                 List<QuranAyah> verses = null;
-                using (var db = new DatabaseHandler(this.TranslationFile))
+                using (var db = new DatabaseHandler<QuranAyah>(this.TranslationFile))
                 {
                     verses = await new TaskFactory().StartNew(() => db.GetVerses(pageModel.PageNumber));
                 }
 
-                List<QuranAyah> versesArabic = null;
+                List<ArabicAyah> versesArabic = null;
                 if (this.ShowArabicInTranslation && QuranFileUtils.FileExists(Path.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false),
                                                         QuranFileUtils.QURAN_ARABIC_DATABASE)))
                 {
                     try
                     {
-                        using (var dbArabic = new DatabaseHandler(QuranFileUtils.QURAN_ARABIC_DATABASE))
+                        using (var dbArabic = new DatabaseHandler<ArabicAyah>(QuranFileUtils.QURAN_ARABIC_DATABASE))
                         {
-                            versesArabic = await new TaskFactory().StartNew(() => dbArabic.GetVerses(pageModel.PageNumber, "arabic_text"));
+                            versesArabic = await new TaskFactory().StartNew(() => dbArabic.GetVerses(pageModel.PageNumber));
                         }
                     }
                     catch

@@ -160,7 +160,7 @@ namespace QuranPhone.Utils
                             needsUpdate = true;
                             try
                             {
-                                using (DatabaseHandler mHandler = new DatabaseHandler(item.Filename))
+                                using (var mHandler = new DatabaseHandler<QuranAyah>(item.Filename))
                                 {
                                     if (mHandler.ValidDatabase())
                                     {
