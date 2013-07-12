@@ -351,9 +351,8 @@ namespace QuranPhone.ViewModels
                 {
                     Id = bookmark.Id.ToString(CultureInfo.InvariantCulture),
                     Title = QuranInfo.GetSuraNameFromPage(bookmark.Page, true),
-                    Details = string.Format(CultureInfo.InvariantCulture, "{0} {1}, {2} {3} {4}, {5} {6}", 
+                    Details = string.Format(CultureInfo.InvariantCulture, "{0} {1}, {2} {3}, {4} {5}", 
                                             AppResources.quran_page, bookmark.Page,
-                                            QuranInfo.GetSuraName(bookmark.Sura.Value, true),
                                             AppResources.verse,
                                             bookmark.Ayah.Value,
                                             QuranInfo.GetJuzTitle(),
