@@ -95,6 +95,7 @@
     <Compile Include="Common\Bookmarks.cs" />
     <Compile Include="Common\BookmarkTags.cs" />
     <Compile Include="Common\DatabaseProperties.cs" />
+    <Compile Include="Common\QuranAyahEventArgs.cs" />
     <Compile Include="Common\Tags.cs" />
     <Compile Include="Data\BaseDatabaseHandler.cs" />
     <Compile Include="Data\BookmarksDBAdapter.cs" />

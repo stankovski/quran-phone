@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
+using QuranPhone.Common;
 using QuranPhone.Resources;
 using QuranPhone.Data;
 using QuranPhone.Utils;
@@ -330,17 +332,7 @@ namespace QuranPhone.ViewModels
                     {
                         foreach (var bookmark in bookmarks)
                         {
-                            Bookmarks.Add(new ItemViewModel
-                                {
-                                    Id = bookmark.Id.ToString(),
-                                    Title = QuranInfo.GetSuraNameFromPage(bookmark.Page, true),
-                                    Details = string.Format("{0} {1}, {2} {3}", AppResources.quran_page, bookmark.Page,
-                                                            QuranInfo.GetJuzTitle(),
-                                                            QuranInfo.GetJuzFromPage(bookmark.Page)),
-                                    PageNumber = bookmark.Page,
-                                    Image = new Uri("/Assets/Images/favorite.png", UriKind.Relative),
-                                    ItemType = ItemViewModelType.Bookmark
-                                });
+                            Bookmarks.Add(createBookmarkModel(bookmark));
                         }
                     }
                 }
@@ -350,6 +342,44 @@ namespace QuranPhone.ViewModels
                 }
             }
         }
+
+        private static ItemViewModel createBookmarkModel(Bookmarks bookmark)
+        {
+            if (bookmark.Ayah != null && bookmark.Sura != null)
+            {
+                return new ItemViewModel
+                {
+                    Id = bookmark.Id.ToString(CultureInfo.InvariantCulture),
+                    Title = QuranInfo.GetSuraNameFromPage(bookmark.Page, true),
+                    Details = string.Format(CultureInfo.InvariantCulture, "{0} {1}, {2} {3} {4}, {5} {6}", 
+                                            AppResources.quran_page, bookmark.Page,
+                                            QuranInfo.GetSuraName(bookmark.Sura.Value, true),
+                                            AppResources.verse,
+                                            bookmark.Ayah.Value,
+                                            QuranInfo.GetJuzTitle(),
+                                            QuranInfo.GetJuzFromPage(bookmark.Page)),
+                    PageNumber = bookmark.Page,
+                    SelectedAyah = new QuranAyah(bookmark.Sura.Value, bookmark.Ayah.Value),
+                    Image = new Uri("/Assets/Images/favorite.png", UriKind.Relative),
+                    ItemType = ItemViewModelType.Bookmark
+                };
+            }
+            else
+            {
+                return new ItemViewModel
+                    {
+                        Id = bookmark.Id.ToString(CultureInfo.InvariantCulture),
+                        Title = QuranInfo.GetSuraNameFromPage(bookmark.Page, true),
+                        Details = string.Format(CultureInfo.InvariantCulture, "{0} {1}, {2} {3}", AppResources.quran_page, bookmark.Page,
+                                                QuranInfo.GetJuzTitle(),
+                                                QuranInfo.GetJuzFromPage(bookmark.Page)),
+                        PageNumber = bookmark.Page,
+                        Image = new Uri("/Assets/Images/favorite.png", UriKind.Relative),
+                        ItemType = ItemViewModelType.Bookmark
+                    };
+            }
+        }
+
         #endregion
     }
 }

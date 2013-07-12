@@ -136,7 +136,7 @@
     <value>Закладки страниц</value>
   </data>
   <data name="delete_bookmark" xml:space="preserve">
-    <value>Удалить Закладку</value>
+    <value>Удалить закладку</value>
   </data>
   <data name="downloaded_translations" xml:space="preserve">
     <value>Загруженные переводы</value>
@@ -406,5 +406,8 @@ the data used in the translations and Arabic comes from
   </data>
   <data name="keep_info_overlay" xml:space="preserve">
     <value>Показывать номер страницы в горизонтальном режиме</value>
+  </data>
+  <data name="bookmark_ayah" xml:space="preserve">
+    <value>Добавить закладку</value>
   </data>
 </root>

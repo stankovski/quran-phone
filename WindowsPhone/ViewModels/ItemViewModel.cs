@@ -1,4 +1,5 @@
 ﻿using System;
+using QuranPhone.Common;
 
 namespace QuranPhone.ViewModels
 {
@@ -73,6 +74,21 @@ namespace QuranPhone.ViewModels
                 pageNumber = value;
 
                 base.OnPropertyChanged(() => PageNumber);
+            }
+        }
+
+        private QuranAyah selectedAyah;
+        public QuranAyah SelectedAyah
+        {
+            get { return selectedAyah; }
+            set
+            {
+                if (value == selectedAyah)
+                    return;
+
+                selectedAyah = value;
+
+                base.OnPropertyChanged(() => SelectedAyah);
             }
         }
 

@@ -89,7 +89,7 @@
                             </DataTemplate>
                         </telerikPrimitives:RadDataBoundListBox.ItemTemplate>
                     </telerikPrimitives:RadDataBoundListBox>
-                    <TextBlock Grid.Row="2" Text="{Binding Path=LocalizedResources.bookmarks_page, Source={StaticResource LocalizedStrings}}" HorizontalAlignment="Left" Style="{StaticResource BlueSmallHeader}"/>
+                    <TextBlock Grid.Row="2" Text="{Binding Path=LocalizedResources.bookmarks, Source={StaticResource LocalizedStrings}}" HorizontalAlignment="Left" Style="{StaticResource BlueSmallHeader}"/>
                     <telerikPrimitives:RadDataBoundListBox Grid.Row="3" Margin="0,0,-12,0" ItemsSource="{Binding Bookmarks}" SelectionChanged="List_SelectionChanged" IsAsyncBalanceEnabled="True">
                         <telerikPrimitives:RadDataBoundListBox.ItemAddedAnimation>
                             <telerikCore:RadFadeAnimation />

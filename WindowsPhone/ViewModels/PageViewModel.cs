@@ -1,4 +1,5 @@
-﻿using QuranPhone.Data;
+﻿using QuranPhone.Common;
+using QuranPhone.Data;
 using System;
 using System.Collections.ObjectModel;
 
@@ -79,7 +80,7 @@ namespace QuranPhone.ViewModels
                 base.OnPropertyChanged(() => ImageSource);
             }
         }
-        
+
         public double ScreenWidth
         {
             get { return System.Windows.Application.Current.Host.Content.ActualWidth - 20; }

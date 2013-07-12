@@ -401,4 +401,7 @@ the data used in the translations and Arabic comes from
   <data name="keep_info_overlay" xml:space="preserve">
     <value>tetap tampilkan info halaman saat landscape</value>
   </data>
+  <data name="bookmark_ayah" xml:space="preserve">
+    <value>bookmark ayat</value>
+  </data>
 </root>
