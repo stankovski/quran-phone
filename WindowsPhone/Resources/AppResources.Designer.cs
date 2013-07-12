@@ -368,6 +368,15 @@ namespace QuranPhone.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rub&apos;.
+        /// </summary>
+        public static string quran_rub3 {
+            get {
+                return ResourceManager.GetString("quran_rub3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sura.
         /// </summary>
         public static string quran_sura {

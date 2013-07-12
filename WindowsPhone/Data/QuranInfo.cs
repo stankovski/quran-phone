@@ -595,7 +595,12 @@ namespace QuranPhone.Data
         public static int GetRub3FromPage(int page)
         {
             if ((page > Constants.PAGES_LAST) || (page < 1)) return -1;
-            return PAGE_RUB3_START[page - 1];
+            for (int i = page - 1; i >= 0; i--)
+            {
+                if (PAGE_RUB3_START[i] != -1)
+                    return PAGE_RUB3_START[i];
+            }
+            return 0;
         }
 
         public static int GetPageFromSuraAyah(int sura, int ayah)

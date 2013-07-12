@@ -3,10 +3,7 @@ using QuranPhone.Utils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO.IsolatedStorage;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace QuranPhone.Data
 {
@@ -20,9 +17,6 @@ namespace QuranPhone.Data
     public class BookmarksDBAdapter : BaseDatabaseHandler
     {
         public static string DB_NAME = "bookmarks.db";
-        public static int SORT_DATE_ADDED = 0;
-        public static int SORT_LOCATION = 1;
-        public static int SORT_ALPHABETICAL = 2;
 
         public BookmarksDBAdapter()
         {

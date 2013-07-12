@@ -91,8 +91,11 @@
         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Top" Background="{StaticResource LightBackground}" 
               Visibility="{Binding ShowInfoOverlay, Converter={StaticResource BooleanToVisibilityConverter}}">
             <TextBlock Text="{Binding CurrentSurahName}" HorizontalAlignment="Left" FontSize="18" Foreground="Black" Margin="25,3,0,3"/>
-            <TextBlock Text="{Binding CurrentPageNumber}" HorizontalAlignment="Center" FontSize="18" Foreground="Black" Margin="0,3,0,3"/>
-
+            <StackPanel Margin="0,3,0,3" HorizontalAlignment="Center" Orientation="Horizontal">
+                <Image Source="Assets\Images\left.png" Height="25" Width="50"/>
+                <TextBlock Text="{Binding CurrentPageNumber}" FontSize="18" Foreground="Black"/>
+                <Image Source="Assets\Images\right.png" Height="25" Width="50"/>
+            </StackPanel>
             <TextBlock Text="{Binding CurrentJuzName}" HorizontalAlignment="Right" FontSize="18" Foreground="Black" Margin="0,3,25,3"/>
         </Grid>
 

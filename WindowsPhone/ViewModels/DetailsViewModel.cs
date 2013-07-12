@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Input;
 using QuranPhone.Common;
 using QuranPhone.Data;
+using QuranPhone.Resources;
 using QuranPhone.Utils;
 using QuranPhone.UI;
 using Microsoft.Phone.Controls;
@@ -102,7 +103,9 @@ namespace QuranPhone.ViewModels
 
                 CurrentSurahName = QuranInfo.GetSuraNameFromPage(value, false);
                 CurrentSurahNumber = QuranInfo.GetSuraNumberFromPage(value);
-                CurrentJuzName = QuranInfo.GetJuzTitle() + " " + QuranInfo.GetJuzFromPage(value);
+                CurrentJuzName = string.Format("{0} {1} {2} {3}", QuranInfo.GetJuzTitle(),
+                                               QuranInfo.GetJuzFromPage(value), AppResources.quran_rub3,
+                                               QuranInfo.GetRub3FromPage(value));
 
                 currentPageNumber = value;
                 base.OnPropertyChanged(() => CurrentPageNumber);

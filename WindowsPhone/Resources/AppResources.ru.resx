@@ -410,4 +410,7 @@ the data used in the translations and Arabic comes from
   <data name="bookmark_ayah" xml:space="preserve">
     <value>Добавить закладку</value>
   </data>
+  <data name="quran_rub3" xml:space="preserve">
+    <value>Руб</value>
+  </data>
 </root>

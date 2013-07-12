@@ -262,6 +262,8 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Images\left.png" />
+    <Content Include="Assets\Images\right.png" />
     <Content Include="Assets\Images\search.png" />
     <Content Include="Assets\Images\settings.png" />
     <Content Include="Assets\UthmanicHafs.otf">
