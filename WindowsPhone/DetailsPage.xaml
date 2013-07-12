@@ -27,71 +27,60 @@
         <myui:ArabicFontSizeConverter x:Key="ArabicFontSizeConverter"/>
     </phone:PhoneApplicationPage.Resources>
     <Grid Name="MainContainer" Background="{StaticResource LightBackground}">
-        <telerikPrimitives:RadSlideView x:Name="radSlideView" IsFilmstripModeEnabled="True" Margin="0,25,0,0"
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid HorizontalAlignment="Stretch" Grid.Row="0" Background="{StaticResource LightBackground}" Height="33"
+              Visibility="{Binding ShowInfoOverlay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <TextBlock Text="{Binding CurrentSurahName}" HorizontalAlignment="Left" FontSize="18" Foreground="Black" Margin="25,3,0,3"/>
+                <StackPanel Margin="0,3,0,3" HorizontalAlignment="Center" Orientation="Horizontal">
+                    <Image Source="Assets\Images\left.png" Height="25" Width="50"/>
+                    <TextBlock Text="{Binding CurrentPageNumber}" FontSize="18" Foreground="Black"/>
+                    <Image Source="Assets\Images\right.png" Height="25" Width="50"/>
+                </StackPanel>
+                <TextBlock Text="{Binding CurrentJuzName}" HorizontalAlignment="Right" FontSize="18" Foreground="Black" Margin="0,3,25,3"/>
+            </Grid>
+
+            <telerikPrimitives:RadSlideView x:Name="radSlideView" Grid.Row="1" IsFilmstripModeEnabled="True" Margin="0" 
                                         ItemsSource="{Binding Pages}" IsLoopingEnabled="True" 
                                         ItemRealizationMode="ViewportItem">
-            <telerikPrimitives:RadSlideView.ItemTemplate>
-                <DataTemplate>
-                     <Grid>
-                        <myui:CachedImage ImageSource="{Binding ImageSource}" PageNumber="{Binding PageNumber}" 
-                                          SelectedAyah="{Binding DataContext.SelectedAyah, ElementName=ThisPage}"
-                                          Hold="ImageHold" DoubleTap="ImageHold" Tap="ImageTap" Padding="0,0,0,10"
-                                          Visibility="{Binding DataContext.ShowTranslation, ElementName=ThisPage, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
-                        </myui:CachedImage>
+                <telerikPrimitives:RadSlideView.ItemTemplate>
+                    <DataTemplate>
+                         <Grid>
+                            <myui:CachedImage ImageSource="{Binding ImageSource}" PageNumber="{Binding PageNumber}" 
+                                              SelectedAyah="{Binding DataContext.SelectedAyah, ElementName=ThisPage}"
+                                              Hold="ImageHold" DoubleTap="ImageHold" Tap="ImageTap" Padding="0,0,0,10"
+                                              Visibility="{Binding DataContext.ShowTranslation, ElementName=ThisPage, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
+                            </myui:CachedImage>
 
-                        <telerikPrimitives:RadDataBoundListBox x:Name="TranslationListBox"
-                                                               Foreground="Black" Visibility="{Binding DataContext.ShowTranslation, ElementName=ThisPage, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                               ItemsSource="{Binding Translations}" IsAsyncBalanceEnabled="True">
-                            <telerikPrimitives:RadDataBoundListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <ListBoxItem HorizontalContentAlignment="Stretch">
-                                        <TextBlock Margin="22, 0" TextWrapping="Wrap" Text="{Binding Text}" FontSize="{Binding StyleName, Mode=OneWay, Converter={StaticResource ArabicFontSizeConverter}}"
-                                                   Style="{Binding StyleName, Mode=OneWay, Converter={StaticResource StyleConverter}}"/>
-                                    </ListBoxItem>
-                                </DataTemplate>
-                            </telerikPrimitives:RadDataBoundListBox.ItemTemplate>
-                        </telerikPrimitives:RadDataBoundListBox>
-                    </Grid>
-                </DataTemplate>
-            </telerikPrimitives:RadSlideView.ItemTemplate>
-            <telerikPrimitives:RadSlideView.FilmstripModeItemTemplate>
-                <DataTemplate>
-                    <Grid Width="80" Height="130" Margin="10">
-                        <Border BorderThickness="2" BorderBrush="{StaticResource DarkBlueText}" Padding="10">
-                            <Image Source="Assets/Images/page-small.png"></Image>
-                        </Border>
-                        <TextBlock Text="{Binding PageNumber}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" Foreground="{StaticResource DarkBlueText}"/>
-                    </Grid>
-                </DataTemplate>
-            </telerikPrimitives:RadSlideView.FilmstripModeItemTemplate>
-        </telerikPrimitives:RadSlideView>
-
-        <!--<Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" x:Name="infoPanel" Visibility="{Binding IsShowInfoPanel, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <Border Background="White" Opacity="0.6"/>
-            <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                <TextBlock VerticalAlignment="Center" 
-                                   TextAlignment="Center"
-                                   TextWrapping="Wrap"
-                                   Text="{Binding CurrentSurahName}"
-                                   Foreground="{StaticResource DarkBlueText}" 
-                                   FontSize="50"/>
-                <TextBlock VerticalAlignment="Center" 
-                               TextAlignment="Center"
-                               Text="{Binding CurrentPageNumber, Converter={StaticResource TextFormatConverter}, ConverterParameter='\{0:000\}'}" 
-                               Foreground="{StaticResource DarkBlueText}" 
-                               FontSize="120"/>
-            </StackPanel>
-        </Grid>-->
-
-        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Top" Background="{StaticResource LightBackground}" 
-              Visibility="{Binding ShowInfoOverlay, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <TextBlock Text="{Binding CurrentSurahName}" HorizontalAlignment="Left" FontSize="18" Foreground="Black" Margin="25,3,0,3"/>
-            <StackPanel Margin="0,3,0,3" HorizontalAlignment="Center" Orientation="Horizontal">
-                <Image Source="Assets\Images\left.png" Height="25" Width="50"/>
-                <TextBlock Text="{Binding CurrentPageNumber}" FontSize="18" Foreground="Black"/>
-                <Image Source="Assets\Images\right.png" Height="25" Width="50"/>
-            </StackPanel>
-            <TextBlock Text="{Binding CurrentJuzName}" HorizontalAlignment="Right" FontSize="18" Foreground="Black" Margin="0,3,25,3"/>
+                            <telerikPrimitives:RadDataBoundListBox x:Name="TranslationListBox"
+                                                                   Foreground="Black" Visibility="{Binding DataContext.ShowTranslation, ElementName=ThisPage, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                                   ItemsSource="{Binding Translations}" IsAsyncBalanceEnabled="True">
+                                <telerikPrimitives:RadDataBoundListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <ListBoxItem HorizontalContentAlignment="Stretch">
+                                            <TextBlock Margin="22, 0" TextWrapping="Wrap" Text="{Binding Text}" FontSize="{Binding StyleName, Mode=OneWay, Converter={StaticResource ArabicFontSizeConverter}}"
+                                                       Style="{Binding StyleName, Mode=OneWay, Converter={StaticResource StyleConverter}}"/>
+                                        </ListBoxItem>
+                                    </DataTemplate>
+                                </telerikPrimitives:RadDataBoundListBox.ItemTemplate>
+                            </telerikPrimitives:RadDataBoundListBox>
+                        </Grid>
+                    </DataTemplate>
+                </telerikPrimitives:RadSlideView.ItemTemplate>
+                <telerikPrimitives:RadSlideView.FilmstripModeItemTemplate>
+                    <DataTemplate>
+                        <Grid Width="80" Height="130" Margin="10">
+                            <Border BorderThickness="2" BorderBrush="{StaticResource DarkBlueText}" Padding="10">
+                                <Image Source="Assets/Images/page-small.png"></Image>
+                            </Border>
+                            <TextBlock Text="{Binding PageNumber}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" Foreground="{StaticResource DarkBlueText}"/>
+                        </Grid>
+                    </DataTemplate>
+                </telerikPrimitives:RadSlideView.FilmstripModeItemTemplate>
+            </telerikPrimitives:RadSlideView>
         </Grid>
 
         <Button VerticalAlignment="Bottom" HorizontalAlignment="Right" Padding="0" Width="80" Style="{StaticResource ChromelessButtonStyle}" Name="menuToggleButton" 
