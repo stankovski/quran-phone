@@ -111,10 +111,16 @@ namespace QuranPhone
 
         private void ImageHold(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            var ayah = CachedImage.GetAyahFromGesture(e.GetPosition(radSlideView), App.DetailsViewModel.CurrentPageNumber, radSlideView.ActualWidth);
-            App.DetailsViewModel.SelectedAyah = ayah;
-            bookmarkMenu.RegionOfInterest = new Rect(e.GetPosition(ThisPage), new Size(50, 50));
-            bookmarkMenu.IsOpen = true;
+            if (App.DetailsViewModel.AyahDetailsExist)
+            {
+                var ayah = CachedImage.GetAyahFromGesture(e.GetPosition(radSlideView),
+                                                          App.DetailsViewModel.CurrentPageNumber,
+                                                          radSlideView.ActualWidth);
+                App.DetailsViewModel.SelectedAyah = ayah;
+
+                bookmarkMenu.RegionOfInterest = new Rect(e.GetPosition(ThisPage), new Size(50, 50));
+                bookmarkMenu.IsOpen = true;
+            }
         }
 
         #region Menu Events

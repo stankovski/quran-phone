@@ -646,7 +646,7 @@ the data used in the translations and Arabic comes from
     <value>No translation to search. Please go to settings page to select active translation.</value>
   </data>
   <data name="keep_info_overlay" xml:space="preserve">
-    <value>show bottom page info in landscape</value>
+    <value>show page info in landscape</value>
   </data>
   <data name="bookmark_ayah" xml:space="preserve">
     <value>Bookmark ayah</value>

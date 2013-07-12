@@ -252,6 +252,18 @@ namespace QuranPhone.ViewModels
             }
         }
 
+        public bool AyahDetailsExist
+        {
+            get
+            {
+                string path = QuranFileUtils.GetQuranDatabaseDirectory(false, true) + QuranFileUtils.PATH_SEPARATOR + QuranFileUtils.GetAyaPositionFileName();
+                if (QuranFileUtils.FileExists(path))
+                    return true;
+                else
+                    return false;
+            }
+        }
+
         #endregion Properties
 
         #region Public methods
