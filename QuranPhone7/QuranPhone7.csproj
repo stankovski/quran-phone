@@ -187,6 +187,9 @@
     <Compile Include="..\WindowsPhone\Data\DatabaseHandler.cs">
       <Link>Data\DatabaseHandler.cs</Link>
     </Compile>
+    <Compile Include="..\WindowsPhone\Data\DuaGenerator.cs">
+      <Link>Data\DuaGenerator.cs</Link>
+    </Compile>
     <Compile Include="..\WindowsPhone\Data\Mappings.cs">
       <Link>Data\Mappings.cs</Link>
     </Compile>

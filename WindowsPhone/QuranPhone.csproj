@@ -100,6 +100,7 @@
     <Compile Include="Data\BaseDatabaseHandler.cs" />
     <Compile Include="Data\BookmarksDBAdapter.cs" />
     <Compile Include="Data\DatabaseHandler.cs" />
+    <Compile Include="Data\DuaGenerator.cs" />
     <Compile Include="Data\QuranDataProvider.cs" />
     <Compile Include="Data\SQLite.cs" />
     <Compile Include="Data\SQLiteAsync.cs" />

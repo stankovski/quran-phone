@@ -169,8 +169,17 @@ namespace QuranPhone.Data
 
         public int AddTag(string name)
         {
-            Tags tag = new Tags { Name = name };
-            return mDatabase.Insert(tag);
+            var existingTag = mDatabase.Query<Tags>().FirstOrDefault(t => t.Name.ToLower() == name.ToLower());
+
+            if (existingTag == null)
+            {
+                Tags tag = new Tags {Name = name};
+                return mDatabase.Insert(tag);
+            }
+            else
+            {
+                return existingTag.Id;
+            }
         }
 
         public bool UpdateTag(int id, string newName)

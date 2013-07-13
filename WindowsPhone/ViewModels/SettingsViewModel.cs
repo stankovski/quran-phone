@@ -114,6 +114,33 @@ namespace QuranPhone.ViewModels
                 // somehow, must reload this setting to be referred in DetailsPage.xaml
             } 
         }
+
+        RelayCommand generate;
+        /// <summary>
+        /// Returns an download command
+        /// </summary>
+        public ICommand Generate
+        {
+            get
+            {
+                if (generate == null)
+                {
+                    generate = new RelayCommand(
+                        param => this.GenerateDua(),
+                        param => this.CanGenerateDuaDownload
+                        );
+                }
+                return generate;
+            }
+        }
+
+        public bool CanGenerateDuaDownload
+        {
+            get
+            {
+                return true;
+            }
+        }
         #endregion Properties
 
         #region Commands
@@ -175,6 +202,11 @@ namespace QuranPhone.ViewModels
             {
                 EnableShowArabicInTranslation = false;
             }
+        }
+
+        public void GenerateDua()
+        {
+            DuaGenerator.Generate();
         }
 
         private void ContactUs()

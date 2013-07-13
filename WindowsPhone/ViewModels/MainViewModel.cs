@@ -307,7 +307,7 @@ namespace QuranPhone.ViewModels
             }
         }
 
-        private void loadBookmarlList()
+        private async void loadBookmarlList()
         {
             var lastPage = SettingsUtils.Get<int>(Constants.PREF_LAST_PAGE);
             if (lastPage > 0)
@@ -332,7 +332,7 @@ namespace QuranPhone.ViewModels
                     {
                         foreach (var bookmark in bookmarks)
                         {
-                            Bookmarks.Add(createBookmarkModel(bookmark));
+                            Bookmarks.Add(await createBookmarkModel(bookmark));
                         }
                     }
                 }
@@ -343,20 +343,69 @@ namespace QuranPhone.ViewModels
             }
         }
 
-        private static ItemViewModel createBookmarkModel(Bookmarks bookmark)
+        private const int maxBookmarkTitle = 40;
+        private static async Task<ItemViewModel> createBookmarkModel(Bookmarks bookmark)
         {
             if (bookmark.Ayah != null && bookmark.Sura != null)
             {
+                string title = QuranInfo.GetSuraNameFromPage(bookmark.Page, true);
+                string details = "";
+
+                if (
+                    QuranFileUtils.FileExists(Path.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false),
+                                                           QuranFileUtils.QURAN_ARABIC_DATABASE)))
+                {
+                    try
+                    {
+                        using (var dbArabic = new DatabaseHandler<ArabicAyah>(QuranFileUtils.QURAN_ARABIC_DATABASE))
+                        {
+                            var ayahSurah =
+                                await
+                                new TaskFactory().StartNew(
+                                    () => dbArabic.GetVerse(bookmark.Sura.Value, bookmark.Ayah.Value));
+                            title = ayahSurah.Text;
+                        }
+                    }
+                    catch
+                    {
+                        //Not able to get Arabic text - skipping
+                    }
+
+                    details = string.Format(CultureInfo.InvariantCulture, "{0} {1}, {2} {3}:{4}, {5} {6}",
+                                               AppResources.quran_page, bookmark.Page,
+                                               AppResources.verse,
+                                               bookmark.Sura.Value,
+                                               bookmark.Ayah.Value,
+                                               QuranInfo.GetJuzTitle(),
+                                               QuranInfo.GetJuzFromPage(bookmark.Page));
+                }
+                else
+                {
+                    details = string.Format(CultureInfo.InvariantCulture, "{0} {1}, {2} {3}, {4} {5}",
+                                               AppResources.quran_page, bookmark.Page,
+                                               AppResources.verse,
+                                               bookmark.Ayah.Value,
+                                               QuranInfo.GetJuzTitle(),
+                                               QuranInfo.GetJuzFromPage(bookmark.Page));
+                }
+
+                if (title.Length > maxBookmarkTitle)
+                {
+                    for (int i = maxBookmarkTitle; i > 1; i--)
+                    {
+                        if (title[i] == ' ')
+                        {
+                            title = title.Substring(0, i - 1);
+                            break;
+                        }
+                    }
+                }
+
                 return new ItemViewModel
                 {
                     Id = bookmark.Id.ToString(CultureInfo.InvariantCulture),
-                    Title = QuranInfo.GetSuraNameFromPage(bookmark.Page, true),
-                    Details = string.Format(CultureInfo.InvariantCulture, "{0} {1}, {2} {3}, {4} {5}", 
-                                            AppResources.quran_page, bookmark.Page,
-                                            AppResources.verse,
-                                            bookmark.Ayah.Value,
-                                            QuranInfo.GetJuzTitle(),
-                                            QuranInfo.GetJuzFromPage(bookmark.Page)),
+                    Title = title,
+                    Details = details,
                     PageNumber = bookmark.Page,
                     SelectedAyah = new QuranAyah(bookmark.Sura.Value, bookmark.Ayah.Value),
                     Image = new Uri("/Assets/Images/favorite.png", UriKind.Relative),

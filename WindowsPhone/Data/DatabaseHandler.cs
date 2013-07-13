@@ -116,9 +116,9 @@ namespace QuranPhone.Data
             return GetVerses(bound[0], bound[1], bound[2], bound[3]);
         }
 
-        public List<T> GetVerse(int sura, int ayah)
+        public T GetVerse(int sura, int ayah)
         {
-            return GetVerses(sura, ayah, ayah);
+            return GetVerses(sura, ayah, ayah).FirstOrDefault();
         }
 
         public virtual List<T> Search(string query)

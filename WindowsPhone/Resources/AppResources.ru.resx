@@ -413,4 +413,13 @@ the data used in the translations and Arabic comes from
   <data name="quran_rub3" xml:space="preserve">
     <value>Руб</value>
   </data>
+  <data name="generate" xml:space="preserve">
+    <value>создать</value>
+  </data>
+  <data name="generate_bookmarks_for_dua" xml:space="preserve">
+    <value>Создать закладки на дуа</value>
+  </data>
+  <data name="dua" xml:space="preserve">
+    <value>Дуа</value>
+  </data>
 </root>

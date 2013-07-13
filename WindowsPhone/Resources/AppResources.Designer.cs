@@ -205,11 +205,38 @@ namespace QuranPhone.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dua.
+        /// </summary>
+        public static string dua {
+            get {
+                return ResourceManager.GetString("dua", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Extracting Downloaded File....
         /// </summary>
         public static string extracting_message {
             get {
                 return ResourceManager.GetString("extracting_message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to generate.
+        /// </summary>
+        public static string generate {
+            get {
+                return ResourceManager.GetString("generate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Generate bookmarks for Quranic dua.
+        /// </summary>
+        public static string generate_bookmarks_for_dua {
+            get {
+                return ResourceManager.GetString("generate_bookmarks_for_dua", resourceCulture);
             }
         }
         
