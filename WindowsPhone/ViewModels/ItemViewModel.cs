@@ -138,6 +138,21 @@ namespace QuranPhone.ViewModels
                 base.OnPropertyChanged(() => Style);
             }
         }
+
+        private string group;
+        public string Group
+        {
+            get { return group; }
+            set
+            {
+                if (value == group)
+                    return;
+
+                group = value;
+
+                base.OnPropertyChanged(() => Group);
+            }
+        }
         #endregion Properties
     }
 }

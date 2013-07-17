@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
@@ -9,6 +10,7 @@ using QuranPhone.Resources;
 using QuranPhone.Data;
 using QuranPhone.Utils;
 using System.IO.IsolatedStorage;
+using Telerik.Windows.Data;
 
 namespace QuranPhone.ViewModels
 {
@@ -19,7 +21,14 @@ namespace QuranPhone.ViewModels
             this.Surahs = new ObservableCollection<ItemViewModel>();
             this.Juz = new ObservableCollection<ItemViewModel>();
             this.Bookmarks = new ObservableCollection<ItemViewModel>();
-            this.LastPage = new ObservableCollection<ItemViewModel>();
+            this.BookmarksGroup = new ObservableCollection<GenericGroupDescriptor<ItemViewModel, string>>();
+            this.BookmarksGroupSort = new ObservableCollection<GenericSortDescriptor<ItemViewModel, string>>();
+            // Load group
+            var group = new GenericGroupDescriptor<ItemViewModel, string>();
+            group.KeySelector = (item) => item.Group;
+            group.SortMode = ListSortMode.None;
+            BookmarksGroup.Add(group);
+
             this.Tags = new ObservableCollection<ItemViewModel>();
             this.HasAskedToDownload = false;
             this.QuranData = new DownloadableViewModelBase();
@@ -36,7 +45,8 @@ namespace QuranPhone.ViewModels
         public ObservableCollection<ItemViewModel> Surahs { get; private set; }
         public ObservableCollection<ItemViewModel> Juz { get; private set; }
         public ObservableCollection<ItemViewModel> Bookmarks { get; private set; }
-        public ObservableCollection<ItemViewModel> LastPage { get; private set; }
+        public ObservableCollection<GenericGroupDescriptor<ItemViewModel, string>> BookmarksGroup { get; private set; }
+        public ObservableCollection<GenericSortDescriptor<ItemViewModel, string>> BookmarksGroupSort { get; private set; }
         public ObservableCollection<ItemViewModel> Tags { get; private set; }
         public bool IsDataLoaded { get; set; }
         public bool HasAskedToDownload { get; set; }
@@ -92,7 +102,6 @@ namespace QuranPhone.ViewModels
         public void RefreshData()
         {
             this.Bookmarks.Clear();
-            this.LastPage.Clear();
             loadBookmarlList();
         }
         
@@ -320,19 +329,33 @@ namespace QuranPhone.ViewModels
                 lastPageItem.PageNumber = lastPage;
                 lastPageItem.Image = new Uri("/Assets/Images/favorite.png", UriKind.Relative);
                 lastPageItem.ItemType = ItemViewModelType.Bookmark;
-                LastPage.Add(lastPageItem);
+                lastPageItem.Group = AppResources.bookmarks_current_page;
+                Bookmarks.Add(lastPageItem);
             }
 
             using (var bookmarksAdapter = new BookmarksDBAdapter())
             {
                 try
                 {
-                    var bookmarks = bookmarksAdapter.GetBookmarks(false, BoomarkSortOrder.Location);
+                    var bookmarks = bookmarksAdapter.GetBookmarks(true, BoomarkSortOrder.Location);
                     if (bookmarks.Count > 0)
                     {
+                        //Load untagged first
                         foreach (var bookmark in bookmarks)
                         {
-                            Bookmarks.Add(await createBookmarkModel(bookmark));
+                            if (bookmark.Tags == null)
+                            {
+                                Bookmarks.Add(await createBookmarkModel(bookmark));
+                            }
+                        }
+
+                        //Load tagged
+                        foreach (var bookmark in bookmarks)
+                        {
+                            if (bookmark.Tags != null)
+                            {
+                                Bookmarks.Add(await createBookmarkModel(bookmark));
+                            }
                         }
                     }
                 }
@@ -346,6 +369,10 @@ namespace QuranPhone.ViewModels
         private const int maxBookmarkTitle = 40;
         private static async Task<ItemViewModel> createBookmarkModel(Bookmarks bookmark)
         {
+            var group = AppResources.bookmarks;
+            if (bookmark.Tags != null && bookmark.Tags.Count > 0)
+                group = bookmark.Tags[0].Name;
+
             if (bookmark.Ayah != null && bookmark.Sura != null)
             {
                 string title = QuranInfo.GetSuraNameFromPage(bookmark.Page, true);
@@ -371,10 +398,9 @@ namespace QuranPhone.ViewModels
                         //Not able to get Arabic text - skipping
                     }
 
-                    details = string.Format(CultureInfo.InvariantCulture, "{0} {1}, {2} {3}:{4}, {5} {6}",
-                                               AppResources.quran_page, bookmark.Page,
+                    details = string.Format(CultureInfo.InvariantCulture, "{0} {1} {2}, {3} {4}",
+                                               QuranInfo.GetSuraName(bookmark.Sura.Value, true),
                                                AppResources.verse,
-                                               bookmark.Sura.Value,
                                                bookmark.Ayah.Value,
                                                QuranInfo.GetJuzTitle(),
                                                QuranInfo.GetJuzFromPage(bookmark.Page));
@@ -409,7 +435,8 @@ namespace QuranPhone.ViewModels
                     PageNumber = bookmark.Page,
                     SelectedAyah = new QuranAyah(bookmark.Sura.Value, bookmark.Ayah.Value),
                     Image = new Uri("/Assets/Images/favorite.png", UriKind.Relative),
-                    ItemType = ItemViewModelType.Bookmark
+                    ItemType = ItemViewModelType.Bookmark,
+                    Group = group
                 };
             }
             else
@@ -423,7 +450,8 @@ namespace QuranPhone.ViewModels
                                                 QuranInfo.GetJuzFromPage(bookmark.Page)),
                         PageNumber = bookmark.Page,
                         Image = new Uri("/Assets/Images/favorite.png", UriKind.Relative),
-                        ItemType = ItemViewModelType.Bookmark
+                        ItemType = ItemViewModelType.Bookmark,
+                        Group = group
                     };
             }
         }

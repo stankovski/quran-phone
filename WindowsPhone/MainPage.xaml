@@ -13,6 +13,7 @@
     xmlns:tilt="clr-namespace:ControlTiltEffect"
     tilt:TiltEffect.IsTiltEnabled="True"
     xmlns:myui="clr-namespace:QuranPhone.UI"
+    xmlns:telerikDataControls="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls.Data"
     d:DataContext="{d:DesignData SampleData/MainViewModelSampleData.xaml}"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
@@ -69,7 +70,7 @@
             </controls:PivotItem>
             <controls:PivotItem Header="{Binding Path=LocalizedResources.quran_bookmarks_lower, Source={StaticResource LocalizedStrings}}">
                 <Grid>
-                    <Grid.RowDefinitions>
+                    <!--<Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
@@ -108,25 +109,34 @@
                                 </Grid>
                             </DataTemplate>
                         </telerikPrimitives:RadDataBoundListBox.ItemTemplate>
-                    </telerikPrimitives:RadDataBoundListBox>
+                    </telerikPrimitives:RadDataBoundListBox>-->
+                    <telerikDataControls:RadJumpList ItemsSource="{Binding Bookmarks}" SelectionChanged="List_SelectionChanged" 
+                                                     GroupDescriptorsSource="{Binding BookmarksGroup}" IsAsyncBalanceEnabled="True">
+                        <telerikPrimitives:RadDataBoundListBox.ItemAddedAnimation>
+                            <telerikCore:RadFadeAnimation />
+                        </telerikPrimitives:RadDataBoundListBox.ItemAddedAnimation>
+                        <telerikDataControls:RadJumpList.GroupHeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Grid.Row="0" Text="{Binding}" HorizontalAlignment="Left" Style="{StaticResource BlueSmallHeader}"/>
+                            </DataTemplate>
+                        </telerikDataControls:RadJumpList.GroupHeaderTemplate>
+                        <telerikPrimitives:RadDataBoundListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <telerikPrimitives:RadContextMenu.ContextMenu>
+                                        <telerikPrimitives:RadContextMenu>
+                                            <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.delete_bookmark, Source={StaticResource LocalizedStrings}}" Tapped="DeleteBookmark"/>
+                                        </telerikPrimitives:RadContextMenu>
+                                    </telerikPrimitives:RadContextMenu.ContextMenu>
+                                    <ListBoxItem HorizontalContentAlignment="Stretch">
+                                        <myui:PageLink/>
+                                    </ListBoxItem>
+                                </Grid>
+                            </DataTemplate>
+                        </telerikPrimitives:RadDataBoundListBox.ItemTemplate>
+                    </telerikDataControls:RadJumpList>
                 </Grid>
             </controls:PivotItem>
-            <!--<controls:PivotItem Header="{Binding Path=LocalizedResources.quran_tags_lower, Source={StaticResource LocalizedStrings}}">
-                <Grid>
-                    <phone:LongListSelector Margin="0,0,-12,0" ItemsSource="{Binding Items}" SelectionChanged="List_SelectionChanged">
-                        <phone:LongListSelector.ItemTemplate>
-                            <DataTemplate>
-                                <ListBoxItem HorizontalContentAlignment="Stretch">
-                                    <StackPanel Margin="0,0,0,17">
-                                        <TextBlock Text="{Binding Title}" TextWrapping="Wrap" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
-                                        <TextBlock Text="{Binding Details}" TextWrapping="Wrap" Margin="12,-6,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
-                                    </StackPanel>
-                                </ListBoxItem>
-                            </DataTemplate>
-                        </phone:LongListSelector.ItemTemplate>
-                    </phone:LongListSelector>
-                </Grid>
-            </controls:PivotItem>-->
         </controls:Pivot>
 
         <Grid Visibility="{Binding IsInstalling, Converter={StaticResource BooleanToVisibilityConverter}}" Grid.Row="2" Height="70">
