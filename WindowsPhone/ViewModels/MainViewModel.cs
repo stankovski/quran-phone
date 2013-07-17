@@ -94,7 +94,7 @@ namespace QuranPhone.ViewModels
             // Sample data; replace with real data
             loadSuraList();
             loadJuz2List();
-            loadBookmarlList();
+            loadBookmarkList();
 
             this.IsDataLoaded = true;
         }
@@ -102,7 +102,7 @@ namespace QuranPhone.ViewModels
         public void RefreshData()
         {
             this.Bookmarks.Clear();
-            loadBookmarlList();
+            loadBookmarkList();
         }
         
         public async void Download()
@@ -316,7 +316,7 @@ namespace QuranPhone.ViewModels
             }
         }
 
-        private async void loadBookmarlList()
+        private async void loadBookmarkList()
         {
             var lastPage = SettingsUtils.Get<int>(Constants.PREF_LAST_PAGE);
             if (lastPage > 0)
