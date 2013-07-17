@@ -77,7 +77,18 @@ namespace QuranPhone
             if (versionFromAssembly > versionFromConfig)
             {
                 var message =
-                    "Assalamu Aleikum,\n\nThank you for downloading Quran Phone. Please note that this is a BETA release and is still work in progress. More features such as recitation will be added in the future inshaAllah. If you find any issues with the app or would like to provide suggestions, please use Contact Us option available via the menu. \n\nJazzakum Allahu Kheiran,\nQuran Phone Team";
+                    @"Assalamu Aleikum,
+
+Thank you for downloading Quran Phone. Please note that this is a BETA release and is still work in progress. 
+New in Version 0.3.1:
+* Support for Ibn Katheer tafseer
+* Ability to generate Quranic Dua as bookmarks (accessible from Settings)
+* Misc. layout changes and bug fixes
+
+If you find any issues with the app or would like to provide suggestions, please use Contact Us option available via the menu. 
+
+Jazzakum Allahu Kheiran,
+Quran Phone Team";
                 MessageBox.Show(message, "Welcome", MessageBoxButton.OK);
                 SettingsUtils.Set(Constants.PREF_CURRENT_VERSION, versionFromAssembly.ToString());
             }
