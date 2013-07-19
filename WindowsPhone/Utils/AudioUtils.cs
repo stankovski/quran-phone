@@ -110,7 +110,8 @@ namespace QuranPhone.Utils
    }
 
    public static QuranAyah getLastAyahToPlay(QuranAyah startAyah,
-                                             int page, int mode){
+                                             int page, LookAheadAmount mode)
+   {
       int pageLastSura = 114;
       int pageLastAyah = 6;
       if (page > 604 || page < 0){ return null; }
@@ -128,19 +129,19 @@ namespace QuranPhone.Utils
       }
 
       if (mode == LookAheadAmount.SURA){
-         int sura = startAyah.getSura();
-         int lastAyah = QuranInfo.getNumAyahs(sura);
+         int sura = startAyah.Sura;
+         int lastAyah = QuranInfo.GetNumAyahs(sura);
          if (lastAyah == -1){ return null; }
 
          // if we start playback between two suras, download both suras
          if (pageLastSura > sura){
             sura = pageLastSura;
-            lastAyah = QuranInfo.getNumAyahs(sura);
+            lastAyah = QuranInfo.GetNumAyahs(sura);
          }
          return new QuranAyah(sura, lastAyah);
       }
       else if (mode == LookAheadAmount.JUZ){
-         int juz = QuranInfo.getJuzFromPage(page);
+         int juz = QuranInfo.GetJuzFromPage(page);
          if (juz == 30){
             return new QuranAyah(114, 6);
          }

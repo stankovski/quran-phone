@@ -302,6 +302,9 @@
     <Compile Include="..\WindowsPhone\Utils\ArabicResharper.cs">
       <Link>Utils\ArabicResharper.cs</Link>
     </Compile>
+    <Compile Include="..\WindowsPhone\Utils\AudioUtils.cs">
+      <Link>Utils\AudioUtils.cs</Link>
+    </Compile>
     <Compile Include="..\WindowsPhone\Utils\CryptoUtils.cs">
       <Link>Utils\CryptoUtils.cs</Link>
     </Compile>
