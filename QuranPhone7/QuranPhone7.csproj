@@ -468,10 +468,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\OfflineAssets\images_800.zip">
+    <None Include="..\OfflineAssets\images_800.zip">
       <Link>Assets\Offline\images_800.zip</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
+    </None>
     <Content Include="..\WindowsPhone\Assets\Images\left.png">
       <Link>Assets\Images\left.png</Link>
     </Content>

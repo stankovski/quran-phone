@@ -1,0 +1,25 @@
+Note: This is a BETA release and is still work in progress. More features such as recitation will be added in the future inshaAllah. If you find any issues with the app or would like to provide suggestions, please use Contact Us option available via the menu.
+
+Quran Phone is a free, open source Quran application for Windows Phone based on Quran Android project (http://android.quran.com/). There are many features still under development. Please send me your feedback and feature requests and keep all the contributors to this project in your prayers!
+
+Quran Windows provides the following features in the current version:
+- crystal clear Madani compliant images.
+- beautiful and smooth page transition effect.
+- landscape mode for even larger fonts and more comfortable image viewing.
+- bookmarking of an unlimited number of pages and ayah (tap the screen to find the bookmark button).
+- searching translations.
+- quran dua
+- translations in many different languages (currently, Arabic Tafseer, English Sahih International Translation, French, German, Indonesian, Malay, Spanish, Turkish, Transliteration, Bosnian, Russian, Bengali, Kurdish, Somali, Dutch, Swahili, Malayalam, Azerbaijani, Tamil, and Urdu) with more coming soon.
+
+The following features are *not* yet available but planned for the future inshaAllah:
+- audio recitations are available for streaming and downloading with highlighting support
+- ayah tagging, and sharing
+
+Because Quran Phone is an open source project, it makes it easy for anyone to contribute and help improve the project. We are also open to hearing your suggestions to make Quran Windows the best Quran application on the market.
+
+Change Log:
+Release 0.3.1
+* Support for Ibn Katheer tafseer
+* Ayah bookmarking
+* Ability to generate Quranic Dua as bookmarks (accessible from Settings)
+* Misc. layout changes and bug fixes

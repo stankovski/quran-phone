@@ -82,6 +82,7 @@ namespace QuranPhone
 Thank you for downloading Quran Phone. Please note that this is a BETA release and is still work in progress. 
 New in Version 0.3.1:
 * Support for Ibn Katheer tafseer
+* Ayah bookmarking
 * Ability to generate Quranic Dua as bookmarks (accessible from Settings)
 * Misc. layout changes and bug fixes
 

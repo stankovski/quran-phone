@@ -15,9 +15,3 @@ Fitur-fitur berikut belum tersedia, tapi sudah direncanakan untuk ditambahkan, i
 - Pencarian ayat dengan bahasa Arab dan juga terjemahan
 
 Quran Phone adalah proyek open source, akan sangat mudah bagi Anda yang ingin berkontribusi dalam mengembangkan aplikasi ini. Kami sangat terbuka mendengar saran-saran Anda untuk menjadikan Quran Phone sebagai aplikasi Quran terbaik di Windows Phone Store.
-
-Update:
-Versi 0.2.1
-* Perbaikan unduhan data awal
-* Tambahan informasi halaman
-* Perbaikan bug
