@@ -29,6 +29,12 @@ namespace QuranPhone
             App.SettingsViewModel.LoadData();
             DataContext = App.SettingsViewModel;
         }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            App.DetailsViewModel.ClearPages();
+            base.OnNavigatedFrom(e);
+        }
         
         private void Translations_Click(object sender, RoutedEventArgs e)
         {

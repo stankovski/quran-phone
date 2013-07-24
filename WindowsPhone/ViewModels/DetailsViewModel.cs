@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using QuranPhone.Common;
 using QuranPhone.Data;
 using QuranPhone.Resources;
@@ -17,9 +18,16 @@ namespace QuranPhone.ViewModels
 {
     public class DetailsViewModel : ViewModelBase
     {
+        private static SolidColorBrush lightColor;
+        private static SolidColorBrush darkColor;
+
         public DetailsViewModel()
         {
             Pages = new ObservableCollection<PageViewModel>();
+            lightColor = new SolidColorBrush(Colors.White);
+            darkColor = new SolidColorBrush(Colors.Black);
+            BackgroundColor = (LinearGradientBrush)Application.Current.TryFindResource("LightBackground");
+            ForegroundColor = darkColor;
 
             // default detail page to full screen mode.
             IsShowMenu = false;
@@ -240,6 +248,66 @@ namespace QuranPhone.ViewModels
             }
         }
 
+        private bool isNightMode;
+        public bool IsNightMode
+        {
+            get { return isNightMode; }
+            set
+            {
+                if (value == isNightMode)
+                    return;
+
+                isNightMode = value;
+                UpdateStyles();
+
+                base.OnPropertyChanged(() => IsNightMode);
+            }
+        }
+
+        private void UpdateStyles()
+        {
+            if (IsNightMode)
+            {
+                BackgroundColor = (LinearGradientBrush)Application.Current.TryFindResource("DarkBackground");
+                ForegroundColor = lightColor;
+            }
+            else
+            {
+                BackgroundColor = (LinearGradientBrush)Application.Current.TryFindResource("LightBackground");
+                ForegroundColor = darkColor;
+            }
+        }
+
+        private LinearGradientBrush backgroundColor;
+        public LinearGradientBrush BackgroundColor
+        {
+            get { return backgroundColor; }
+            set
+            {
+                if (value == backgroundColor)
+                    return;
+
+                backgroundColor = value;
+
+                base.OnPropertyChanged(() => BackgroundColor);
+            }
+        }
+
+        private SolidColorBrush foregroundColor;
+        public SolidColorBrush ForegroundColor
+        {
+            get { return foregroundColor; }
+            set
+            {
+                if (value == foregroundColor)
+                    return;
+
+                foregroundColor = value;
+
+                base.OnPropertyChanged(() => ForegroundColor);
+            }
+        }
+
         private QuranAyah selectedAyah;
         public QuranAyah SelectedAyah
         {
@@ -294,6 +362,15 @@ namespace QuranPhone.ViewModels
             SettingsUtils.Set<int>(Constants.PREF_LAST_PAGE, CurrentPageNumber);
             
             await loadPage(CurrentPageIndex, false);
+        }
+
+        public void ClearPages()
+        {
+            foreach (var page in Pages)
+            {
+                page.Translations.Clear();
+                page.ImageSource = null;
+            }
         }
 
         public bool AddBookmark()

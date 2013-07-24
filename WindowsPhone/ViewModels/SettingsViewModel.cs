@@ -40,6 +40,7 @@ namespace QuranPhone.ViewModels
 
                 textSize = value;
                 SettingsUtils.Set(Constants.PREF_TRANSLATION_TEXT_SIZE, value);
+                
                 base.OnPropertyChanged(() => TextSize);
             }
         }
@@ -95,6 +96,24 @@ namespace QuranPhone.ViewModels
             }
         }
 
+        private bool nightMode;
+        public bool NightMode
+        {
+            get { return nightMode; }
+            set
+            {
+                if (value == nightMode)
+                    return;
+
+                nightMode = value;
+
+                // saving to setting utils
+                SettingsUtils.Set(Constants.PREF_NIGHT_MODE, value);
+
+                base.OnPropertyChanged(() => NightMode);
+            }
+        }
+
         private bool keepInfoOverlay;
         public bool KeepInfoOverlay 
         {
@@ -110,8 +129,6 @@ namespace QuranPhone.ViewModels
                 SettingsUtils.Set(Constants.PREF_KEEP_INFO_OVERLAY, value);
 
                 base.OnPropertyChanged(() => KeepInfoOverlay);
-
-                // somehow, must reload this setting to be referred in DetailsPage.xaml
             } 
         }
 
@@ -192,6 +209,7 @@ namespace QuranPhone.ViewModels
             ShowArabicInTranslation = SettingsUtils.Get<bool>(Constants.PREF_SHOW_ARABIC_IN_TRANSLATION);
             PreventPhoneFromSleeping = SettingsUtils.Get<bool>(Constants.PREF_PREVENT_SLEEP);
             KeepInfoOverlay = SettingsUtils.Get<bool>(Constants.PREF_KEEP_INFO_OVERLAY);
+            NightMode = SettingsUtils.Get<bool>(Constants.PREF_NIGHT_MODE);
 
             if (QuranFileUtils.FileExists(Path.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false),
                                                        QuranFileUtils.QURAN_ARABIC_DATABASE)))

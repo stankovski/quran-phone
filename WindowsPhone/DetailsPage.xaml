@@ -19,28 +19,28 @@
     d:DataContext="{d:DesignData SampleData/TranslationViewModelSampleData.xaml}"
     shell:SystemTray.IsVisible="{Binding IsShowMenu}"
     Tap="ScreenTap"
-    Background="{StaticResource LightBackground}" OrientationChanged="PageOrientationChanged">
+    Background="{Binding BackgroundColor, Mode=OneWay}" OrientationChanged="PageOrientationChanged">
     
     <phone:PhoneApplicationPage.Resources>
         <myui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <myui:StyleConverter x:Key="StyleConverter"/>
         <myui:ArabicFontSizeConverter x:Key="ArabicFontSizeConverter"/>
     </phone:PhoneApplicationPage.Resources>
-    <Grid Name="MainContainer" Background="{StaticResource LightBackground}">
+    <Grid Name="MainContainer" Background="{Binding BackgroundColor, Mode=OneWay}">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Grid HorizontalAlignment="Stretch" Grid.Row="0" Background="{StaticResource LightBackground}" Height="33"
+            <Grid HorizontalAlignment="Stretch" Grid.Row="0" Background="{Binding BackgroundColor, Mode=OneWay}" Height="33"
               Visibility="{Binding ShowInfoOverlay, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <TextBlock Text="{Binding CurrentSurahName}" HorizontalAlignment="Left" FontSize="18" Foreground="Black" Margin="25,3,0,3"/>
+                <TextBlock Text="{Binding CurrentSurahName}" HorizontalAlignment="Left" FontSize="18" Foreground="{Binding ForegroundColor, Mode=OneWay}" Margin="25,3,0,3"/>
                 <StackPanel Margin="0,3,0,3" HorizontalAlignment="Center" Orientation="Horizontal">
                     <Image Source="Assets\Images\left.png" Height="25" Width="50"/>
-                    <TextBlock Text="{Binding CurrentPageNumber}" FontSize="18" Foreground="Black"/>
+                    <TextBlock Text="{Binding CurrentPageNumber}" FontSize="18" Foreground="{Binding ForegroundColor, Mode=OneWay}"/>
                     <Image Source="Assets\Images\right.png" Height="25" Width="50"/>
                 </StackPanel>
-                <TextBlock Text="{Binding CurrentJuzName}" HorizontalAlignment="Right" FontSize="18" Foreground="Black" Margin="0,3,25,3"/>
+                <TextBlock Text="{Binding CurrentJuzName}" HorizontalAlignment="Right" FontSize="18" Foreground="{Binding ForegroundColor, Mode=OneWay}" Margin="0,3,25,3"/>
             </Grid>
 
             <telerikPrimitives:RadSlideView x:Name="radSlideView" Grid.Row="1" IsFilmstripModeEnabled="True" Margin="0" 
@@ -50,17 +50,18 @@
                     <DataTemplate>
                          <Grid>
                             <myui:CachedImage ImageSource="{Binding ImageSource}" PageNumber="{Binding PageNumber}" 
+                                              NightMode="{Binding DataContext.IsNightMode, ElementName=ThisPage}"
                                               SelectedAyah="{Binding DataContext.SelectedAyah, ElementName=ThisPage}"
                                               Hold="ImageHold" DoubleTap="ImageHold" Tap="ImageTap" Padding="0,0,0,10"
                                               Visibility="{Binding DataContext.ShowTranslation, ElementName=ThisPage, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
                             </myui:CachedImage>
 
                             <telerikPrimitives:RadDataBoundListBox x:Name="TranslationListBox"
-                                                                   Foreground="Black" Visibility="{Binding DataContext.ShowTranslation, ElementName=ThisPage, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                                   Visibility="{Binding DataContext.ShowTranslation, ElementName=ThisPage, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                                    ItemsSource="{Binding Translations}" IsAsyncBalanceEnabled="True">
                                 <telerikPrimitives:RadDataBoundListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <ListBoxItem HorizontalContentAlignment="Stretch">
+                                        <ListBoxItem HorizontalContentAlignment="Stretch" Foreground="{Binding DataContext.ForegroundColor, Mode=OneWay, ElementName=ThisPage}">
                                             <TextBlock Margin="22, 0" TextWrapping="Wrap" Text="{Binding Text}" FontSize="{Binding StyleName, Mode=OneWay, Converter={StaticResource ArabicFontSizeConverter}}"
                                                        Style="{Binding StyleName, Mode=OneWay, Converter={StaticResource StyleConverter}}"/>
                                         </ListBoxItem>

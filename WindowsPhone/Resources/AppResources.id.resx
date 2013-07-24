@@ -416,4 +416,7 @@ the data used in the translations and Arabic comes from
   <data name="dua" xml:space="preserve">
     <value>Duat</value>
   </data>
+  <data name="night_mode" xml:space="preserve">
+    <value>night mode</value>
+  </data>
 </root>

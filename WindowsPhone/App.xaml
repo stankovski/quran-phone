@@ -16,11 +16,11 @@
         	<GradientStop Color="White" Offset="0.041"/>
         	<GradientStop Color="White" Offset="0.939"/>
         </LinearGradientBrush>
-		<LinearGradientBrush x:Key="LightBackgroundInverse" StartPoint="1,0.5" EndPoint="0,0.5">
-            <GradientStop Color="#FFE4E4E4" Offset="0"/>
-            <GradientStop Color="WhiteSmoke" Offset="1"/>
-            <GradientStop Color="White" Offset="0.041"/>
-            <GradientStop Color="White" Offset="0.939"/>
+        <LinearGradientBrush x:Key="DarkBackground" EndPoint="0,0.5" StartPoint="1,0.5">
+            <GradientStop Color="#FF212121" Offset="0"/>
+            <GradientStop Color="#FF080808" Offset="1"/>
+            <GradientStop Color="Black" Offset="0.041"/>
+            <GradientStop Color="Black" Offset="0.939"/>
         </LinearGradientBrush>
         <local:LocalizedStrings xmlns:local="clr-namespace:QuranPhone" x:Key="LocalizedStrings"/>
 
@@ -33,13 +33,11 @@
         <Style TargetType="TextBlock" x:Key="BoldText">
             <Setter Property="Margin" Value="20, 10"/>
             <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Foreground" Value="Black"/>
         </Style>
         <Style TargetType="TextBlock" x:Key="ArabicText">
             <Setter Property="Margin" Value="20, 0"/>
             <Setter Property="FontFamily" Value="/Assets/UthmanicHafs.otf#KFGQPC Uthmanic Script HAFS"/>
             <Setter Property="FlowDirection" Value="RightToLeft"/>
-            <Setter Property="Foreground" Value="Black"/>
         </Style>
         <!-- End styles of DetailsPage -->
 

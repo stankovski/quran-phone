@@ -55,6 +55,9 @@ namespace QuranPhone
                     App.DetailsViewModel.SelectedAyah = new Common.QuranAyah(surah, ayah);
                 }
 
+                //Update settings
+                App.DetailsViewModel.IsNightMode = SettingsUtils.Get<bool>(Constants.PREF_NIGHT_MODE);
+
                 //Try extract translation from query
                 var translation = SettingsUtils.Get<string>(Constants.PREF_ACTIVE_TRANSLATION);
                 if (!string.IsNullOrEmpty(translation))
@@ -173,7 +176,6 @@ namespace QuranPhone
             email.Show();
         }
 
-
         // TO BE USED IN THE FUTURE
         private void AyahTapped(object sender, Common.QuranAyahEventArgs e)
         {
@@ -220,5 +222,6 @@ namespace QuranPhone
             Console.WriteLine("Destroying DetailsPage");
         }
 #endif
+        
     }
 }

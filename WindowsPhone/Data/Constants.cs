@@ -48,6 +48,7 @@ namespace QuranPhone.Data
         public const String PREF_PREVENT_SLEEP = "preventSleep";
         [DefaultValue(false)]
         public const String PREF_KEEP_INFO_OVERLAY = "keepInfoOverlay";
+        [DefaultValue(false)]
         public const String PREF_NIGHT_MODE = "nightMode";
         public const String PREF_DEFAULT_QARI = "defaultQari";
         public const String PREF_SHOULD_FETCH_PAGES = "shouldFetchPages";

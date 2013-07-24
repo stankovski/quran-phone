@@ -19,13 +19,13 @@ namespace QuranPhone.UI
     {
         public event EventHandler<QuranAyahEventArgs> AyahTapped;
 
-        private BitmapImage imageSourceBitmap;
-        private Uri imageSourceUri; 
+        private ImageSource imageSourceBitmap;
+        private Uri imageSourceUri;
+        private bool nightMode;
 
         public CachedImage()
         {
-            imageSourceBitmap = new BitmapImage();
-            imageSourceBitmap.CreateOptions = BitmapCreateOptions.DelayCreation;
+            imageSourceBitmap = new WriteableBitmap(1, 1);
             InitializeComponent();
             canvas.Width = QuranScreenInfo.Instance.ImageWidth;
             canvas.Height = QuranScreenInfo.Instance.ImageHeight;
@@ -81,6 +81,30 @@ namespace QuranPhone.UI
             }
         }
 
+        public bool NightMode
+        {
+            get { return (bool)GetValue(NightModeProperty); }
+            set { SetValue(NightModeProperty, value); }
+        }
+
+        public static readonly DependencyProperty NightModeProperty = DependencyProperty.Register("NightMode",
+            typeof(bool), typeof(CachedImage), new PropertyMetadata(
+            new PropertyChangedCallback(changeNightMode)));
+
+        private static void changeNightMode(DependencyObject source, DependencyPropertyChangedEventArgs e)
+        {
+            (source as CachedImage).UpdateNightMode((bool)e.NewValue);
+        }
+
+        private void UpdateNightMode(bool isNightMode)
+        {
+            if (this.nightMode != isNightMode)
+            {
+                this.nightMode = isNightMode;
+                UpdateSource(imageSourceUri, true);
+            }
+        }
+
         public Uri ImageSource {
             get { return (Uri)GetValue(ImageSourceProperty); }
             set { SetValue(ImageSourceProperty, value); } 
@@ -92,12 +116,12 @@ namespace QuranPhone.UI
         
         private static void changeSource(DependencyObject source, DependencyPropertyChangedEventArgs e) 
         { 
-            (source as CachedImage).UpdateSource(e.NewValue as Uri); 
+            (source as CachedImage).UpdateSource(e.NewValue as Uri, false); 
         }
 
-        private async void UpdateSource(Uri source)
+        private async void UpdateSource(Uri source, bool force)
         {
-            if (imageSourceUri == source)
+            if (imageSourceUri == source && !force)
             {
                 return;
             }
@@ -113,7 +137,6 @@ namespace QuranPhone.UI
             LayoutRoot.ScrollToVerticalOffset(0);
 
             progress.Visibility = System.Windows.Visibility.Visible;
-            imageSourceBitmap.UriSource = null;
             image.Source = null;
             if (source == null)
             {
@@ -125,7 +148,7 @@ namespace QuranPhone.UI
                 // Design time preview
                 if (PhoneUtils.IsDesignMode)
                 {
-                    imageSourceBitmap.UriSource = source;
+                    imageSourceBitmap = new BitmapImage(source);
                     ImageSource = source;
                     return;
                 }
@@ -149,11 +172,11 @@ namespace QuranPhone.UI
                     if (downloadSuccessful)
                         loadImageFromLocalPath(localPath);
                     else
-                        loadImageFromRemotePath(source);
+                        throw new ApplicationException();
                 }
                 catch
                 {
-                    loadImageFromRemotePath(source);
+                    MessageBox.Show("Error loading quran page.");
                 }
                 finally
                 {
@@ -165,20 +188,40 @@ namespace QuranPhone.UI
             }
         }
 
-        private void loadImageFromRemotePath(Uri source)
-        {
-            var backupSource = QuranFileUtils.GetImageFromWeb(Path.GetFileName(source.LocalPath), false);
-            imageSourceBitmap.UriSource = backupSource;
-            ImageSource = backupSource;
-        }
-
         private void loadImageFromLocalPath(string localPath)
         {
             using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
             using (var stream = isf.OpenFile(localPath, FileMode.Open))
             {
-                imageSourceBitmap.SetSource(stream);
+                var bitmap = new WriteableBitmap(1, 1); // avoid creating intermediate BitmapImage
+                bitmap.SetSource(stream);
+                if (nightMode)
+                {
+                    invertColors(bitmap);
+                }
+                imageSourceBitmap = bitmap;
                 progress.Visibility = System.Windows.Visibility.Collapsed;
+            }
+        }
+
+        private void invertColors(WriteableBitmap bitmap)
+        {
+            int size = bitmap.Pixels.Length;
+            for (int i = 0; i < size; i++)
+            {
+                var c = bitmap.Pixels[i];
+                var a = 0x000000FF & (c >> 24);
+                var r = 0x000000FF & (c >> 16);
+                var g = 0x000000FF & (c >> 8);
+                var b = 0x000000FF & (c);
+
+                // Invert
+                r = 0x000000FF & (0xFF - r);
+                g = 0x000000FF & (0xFF - g);
+                b = 0x000000FF & (0xFF - b);
+
+                // Set result color
+                bitmap.Pixels[i] = (a << 24) | (r << 16) | (g << 8) | b;
             }
         }
 
@@ -256,7 +299,6 @@ namespace QuranPhone.UI
 
         public void Dispose()
         {
-            imageSourceBitmap.UriSource = null;
             if (image != null)
                 image.Source = null;
             imageSourceBitmap = null;

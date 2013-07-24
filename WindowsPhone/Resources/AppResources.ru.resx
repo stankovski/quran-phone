@@ -422,4 +422,7 @@ the data used in the translations and Arabic comes from
   <data name="dua" xml:space="preserve">
     <value>Дуа</value>
   </data>
+  <data name="night_mode" xml:space="preserve">
+    <value>ночной вид</value>
+  </data>
 </root>
