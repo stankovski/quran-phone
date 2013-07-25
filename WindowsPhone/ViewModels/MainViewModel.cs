@@ -183,12 +183,13 @@ namespace QuranPhone.ViewModels
 
         public void DeleteBookmark(ItemViewModel item)
         {
-             if (item != null)
+             int id = 0;
+             if (item != null && item.Id != null && int.TryParse(item.Id, out id))
              {
                  Bookmarks.Remove(item);
                  using (var bookmarksAdapter = new BookmarksDBAdapter())
                  {
-                     bookmarksAdapter.RemoveBookmark(int.Parse(item.Id));
+                     bookmarksAdapter.RemoveBookmark(id);
                  }
              }
         }

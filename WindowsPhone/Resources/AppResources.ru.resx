@@ -425,4 +425,7 @@ the data used in the translations and Arabic comes from
   <data name="night_mode" xml:space="preserve">
     <value>ночной вид</value>
   </data>
+  <data name="loading" xml:space="preserve">
+    <value>загрузка...</value>
+  </data>
 </root>

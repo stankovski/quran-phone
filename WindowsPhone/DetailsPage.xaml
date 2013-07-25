@@ -59,6 +59,11 @@
                             <telerikPrimitives:RadDataBoundListBox x:Name="TranslationListBox"
                                                                    Visibility="{Binding DataContext.ShowTranslation, ElementName=ThisPage, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                                    ItemsSource="{Binding Translations}" IsAsyncBalanceEnabled="True">
+                                <telerikPrimitives:RadDataBoundListBox.EmptyContentTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=LocalizedResources.loading, Source={StaticResource LocalizedStrings}}"/>
+                                    </DataTemplate>
+                                </telerikPrimitives:RadDataBoundListBox.EmptyContentTemplate>
                                 <telerikPrimitives:RadDataBoundListBox.ItemTemplate>
                                     <DataTemplate>
                                         <ListBoxItem HorizontalContentAlignment="Stretch" Foreground="{Binding DataContext.ForegroundColor, Mode=OneWay, ElementName=ThisPage}">

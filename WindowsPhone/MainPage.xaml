@@ -70,46 +70,6 @@
             </controls:PivotItem>
             <controls:PivotItem Header="{Binding Path=LocalizedResources.quran_bookmarks_lower, Source={StaticResource LocalizedStrings}}">
                 <Grid>
-                    <!--<Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    
-                    <TextBlock Grid.Row="0" Text="{Binding Path=LocalizedResources.bookmarks_current_page, Source={StaticResource LocalizedStrings}}" HorizontalAlignment="Left" Style="{StaticResource BlueSmallHeader}"/>
-                    <telerikPrimitives:RadDataBoundListBox Grid.Row="1" Margin="0,0,-12,0" ItemsSource="{Binding LastPage}" SelectionChanged="List_SelectionChanged" IsAsyncBalanceEnabled="True">
-                        <telerikPrimitives:RadDataBoundListBox.ItemAddedAnimation>
-                            <telerikCore:RadFadeAnimation />
-                        </telerikPrimitives:RadDataBoundListBox.ItemAddedAnimation>
-                        <telerikPrimitives:RadDataBoundListBox.ItemTemplate>
-                            <DataTemplate>
-                                <ListBoxItem HorizontalContentAlignment="Stretch">
-                                    <myui:PageLink/>
-                                </ListBoxItem>
-                            </DataTemplate>
-                        </telerikPrimitives:RadDataBoundListBox.ItemTemplate>
-                    </telerikPrimitives:RadDataBoundListBox>
-                    <TextBlock Grid.Row="2" Text="{Binding Path=LocalizedResources.bookmarks, Source={StaticResource LocalizedStrings}}" HorizontalAlignment="Left" Style="{StaticResource BlueSmallHeader}"/>
-                    <telerikPrimitives:RadDataBoundListBox Grid.Row="3" Margin="0,0,-12,0" ItemsSource="{Binding Bookmarks}" SelectionChanged="List_SelectionChanged" IsAsyncBalanceEnabled="True">
-                        <telerikPrimitives:RadDataBoundListBox.ItemAddedAnimation>
-                            <telerikCore:RadFadeAnimation />
-                        </telerikPrimitives:RadDataBoundListBox.ItemAddedAnimation>
-                        <telerikPrimitives:RadDataBoundListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <telerikPrimitives:RadContextMenu.ContextMenu>
-                                        <telerikPrimitives:RadContextMenu>
-                                            <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.delete_bookmark, Source={StaticResource LocalizedStrings}}" Tapped="DeleteBookmark"/>
-                                        </telerikPrimitives:RadContextMenu>
-                                    </telerikPrimitives:RadContextMenu.ContextMenu>
-                                    <ListBoxItem HorizontalContentAlignment="Stretch">
-                                        <myui:PageLink/>
-                                    </ListBoxItem>
-                                </Grid>
-                            </DataTemplate>
-                        </telerikPrimitives:RadDataBoundListBox.ItemTemplate>
-                    </telerikPrimitives:RadDataBoundListBox>-->
                     <telerikDataControls:RadJumpList ItemsSource="{Binding Bookmarks}" SelectionChanged="List_SelectionChanged" 
                                                      GroupDescriptorsSource="{Binding BookmarksGroup}" IsAsyncBalanceEnabled="True">
                         <telerikPrimitives:RadDataBoundListBox.ItemAddedAnimation>

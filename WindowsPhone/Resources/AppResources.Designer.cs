@@ -259,6 +259,15 @@ namespace QuranPhone.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to loading....
+        /// </summary>
+        public static string loading {
+            get {
+                return ResourceManager.GetString("loading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Loading Quran data....
         /// </summary>
         public static string loading_message {
