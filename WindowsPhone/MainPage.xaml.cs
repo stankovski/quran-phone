@@ -105,20 +105,28 @@ Quran Phone Team";
 
             var selectedItem = (ItemViewModel)list.SelectedItem;
 
-            // Navigate to the new page
-            if (selectedItem.SelectedAyah == null)
+            try
             {
-                NavigationService.Navigate(
-                    new Uri("/DetailsPage.xaml?page=" + selectedItem.PageNumber,
-                            UriKind.Relative));
+                // Navigate to the new page
+                if (selectedItem.SelectedAyah == null)
+                {
+                    NavigationService.Navigate(
+                        new Uri("/DetailsPage.xaml?page=" + selectedItem.PageNumber,
+                                UriKind.Relative));
+                }
+                else
+                {
+                    NavigationService.Navigate(
+                        new Uri(
+                            string.Format(CultureInfo.InvariantCulture, "/DetailsPage.xaml?page={0}&surah={1}&ayah={2}",
+                                          selectedItem.PageNumber,
+                                          selectedItem.SelectedAyah.Sura,
+                                          selectedItem.SelectedAyah.Ayah), UriKind.Relative));
+                }
             }
-            else
+            catch
             {
-                NavigationService.Navigate(
-                    new Uri(string.Format(CultureInfo.InvariantCulture, "/DetailsPage.xaml?page={0}&surah={1}&ayah={2}",
-                        selectedItem.PageNumber,
-                        selectedItem.SelectedAyah.Sura,
-                        selectedItem.SelectedAyah.Ayah), UriKind.Relative));
+                // Navigation exception - ignore
             }
 
             // Reset selected item to null (no selection)
