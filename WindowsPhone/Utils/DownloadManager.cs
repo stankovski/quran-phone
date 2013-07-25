@@ -35,12 +35,14 @@ namespace QuranPhone.Utils
         {
             var serverUri = new Uri(from, UriKind.Absolute);
             var phoneUri = new Uri(to, UriKind.Relative);
-            var request = new BackgroundTransferRequest(serverUri, phoneUri);
-            request.Tag = from;
-            if (allowCellular)
-                request.TransferPreferences = TransferPreferences.AllowCellularAndBattery;
+            
             try
             {
+                var request = new BackgroundTransferRequest(serverUri, phoneUri);
+                request.Tag = from;
+                if (allowCellular)
+                    request.TransferPreferences = TransferPreferences.AllowCellularAndBattery;
+
                 int count = 0;
                 foreach (var r in BackgroundTransferService.Requests)
                 {
@@ -62,7 +64,7 @@ namespace QuranPhone.Utils
             }
             catch (InvalidOperationException)
             {
-                return BackgroundTransferService.Find(request.Tag);
+                return GetRequest(from);
             }            
         }
 
