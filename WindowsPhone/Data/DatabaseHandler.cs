@@ -136,7 +136,7 @@ namespace QuranPhone.Data
                 tableName = tableAttr.Name;
 
             // Couldn't get parameterized version to work - need to look into it in the future
-            var sql = string.Format("select \"sura\", \"ayah\", \"text\" from \"{0}\" where \"text\" like '%{1}%' order by \"sura\", \"ayah\"", tableName, query);
+            var sql = string.Format("select \"sura\", \"ayah\", \"text\" from \"{0}\" where \"text\" match '{1}' order by \"sura\", \"ayah\"", tableName, query);
 
             return mDatabase.Query<T>(sql).Take(50).ToList();          
         }        
