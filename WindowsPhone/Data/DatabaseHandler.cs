@@ -103,7 +103,7 @@ namespace QuranPhone.Data
                     (a.Sura > minSura && a.Sura < maxSura));
             }
 
-            return result.ToList();
+            return result.OrderBy(a => a.Sura).OrderBy(a => a.Ayah).ToList();
         }
 
         public List<T> GetVerses(int page)

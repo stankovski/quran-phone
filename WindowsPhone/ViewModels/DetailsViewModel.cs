@@ -165,7 +165,7 @@ namespace QuranPhone.ViewModels
             }
         }
 
-        private int currentPageIndex;
+        private int currentPageIndex = -1;
         public int CurrentPageIndex
         {
             get { return currentPageIndex; }
