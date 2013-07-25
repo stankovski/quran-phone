@@ -1,4 +1,5 @@
-﻿using QuranPhone.Data;
+﻿using System.Windows;
+using QuranPhone.Data;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -122,7 +123,14 @@ namespace QuranPhone.Utils
 
         public static void Save()
         {
-            IsolatedStorageSettings.ApplicationSettings.Save();
+            try
+            {
+                IsolatedStorageSettings.ApplicationSettings.Save();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Unable to save settings. " + e.Message, "Error", MessageBoxButton.OK);
+            }
         }
     }
 }
