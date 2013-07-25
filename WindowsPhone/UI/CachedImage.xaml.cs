@@ -58,7 +58,7 @@ namespace QuranPhone.UI
                 {
                     string basePath = QuranFileUtils.GetQuranDatabaseDirectory(false, true);
                     if (basePath == null) return;
-                    string path = basePath + QuranFileUtils.PATH_SEPARATOR + QuranFileUtils.GetAyaPositionFileName();
+                    string path = Path.Combine(basePath, QuranFileUtils.GetAyaPositionFileName());
                     if (QuranFileUtils.FileExists(path))
                     {
                         using (var dbh = new AyahInfoDatabaseHandler(QuranFileUtils.GetAyaPositionFileName()))
@@ -172,7 +172,7 @@ namespace QuranPhone.UI
                     if (downloadSuccessful)
                         loadImageFromLocalPath(localPath);
                     else
-                        throw new ApplicationException();
+                        throw new Exception();
                 }
                 catch
                 {
@@ -313,7 +313,7 @@ namespace QuranPhone.UI
                 string basePath = QuranFileUtils.GetQuranDatabaseDirectory(false, true);
                 if (basePath == null) 
                     return null;
-                string path = basePath + QuranFileUtils.PATH_SEPARATOR + QuranFileUtils.GetAyaPositionFileName();
+                string path = Path.Combine(basePath, QuranFileUtils.GetAyaPositionFileName());
                 if (QuranFileUtils.FileExists(path))
                 {
                     using (var dbh = new AyahInfoDatabaseHandler(QuranFileUtils.GetAyaPositionFileName()))

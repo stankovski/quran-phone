@@ -17,7 +17,7 @@ namespace QuranPhone.Data
         {
             string b = QuranFileUtils.GetQuranDatabaseDirectory(false, true);
             if (b == null) return;
-            string path = b + QuranFileUtils.PATH_SEPARATOR + databaseName;
+            string path = Path.Combine(b, databaseName);
             mDatabase = new SQLiteDatabase(path);
         }
 

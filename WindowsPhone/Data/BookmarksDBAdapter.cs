@@ -1,4 +1,5 @@
-﻿using QuranPhone.Common;
+﻿using System.IO;
+using QuranPhone.Common;
 using QuranPhone.Utils;
 using System;
 using System.Collections.Generic;
@@ -22,7 +23,7 @@ namespace QuranPhone.Data
         {
             string basePath = QuranFileUtils.GetQuranDatabaseDirectory(false, true);
             if (basePath == null) return;
-            string path = basePath + QuranFileUtils.PATH_SEPARATOR + DB_NAME;
+            string path = Path.Combine(basePath, DB_NAME);
 
             if (!QuranFileUtils.FileExists(path))
                 mDatabase = CreateDatabase(path);

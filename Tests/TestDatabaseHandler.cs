@@ -1,4 +1,5 @@
-﻿using System.IO.IsolatedStorage;
+﻿using System.IO;
+using System.IO.IsolatedStorage;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using QuranPhone.Common;
 using QuranPhone.Data;
@@ -14,7 +15,7 @@ namespace Tests
         {
             string basePath = QuranFileUtils.GetQuranDatabaseDirectory(false);
             if (basePath == null) return;
-            string path = basePath + QuranFileUtils.PATH_SEPARATOR + QuranFileUtils.QURAN_ARABIC_DATABASE;
+            string path = Path.Combine(basePath, QuranFileUtils.QURAN_ARABIC_DATABASE);
 
             var isf = IsolatedStorageFile.GetUserStoreForApplication();
             if (!isf.FileExists(path))
@@ -34,7 +35,7 @@ namespace Tests
         {
             string basePath = QuranFileUtils.GetQuranDatabaseDirectory(false);
             if (basePath == null) return;
-            string path = basePath + QuranFileUtils.PATH_SEPARATOR + QuranFileUtils.GetAyaPositionFileName();
+            string path = Path.Combine(basePath, QuranFileUtils.GetAyaPositionFileName());
 
             var isf = IsolatedStorageFile.GetUserStoreForApplication();
             if (!isf.FileExists(path))

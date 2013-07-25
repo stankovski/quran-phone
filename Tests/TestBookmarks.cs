@@ -1,4 +1,5 @@
-﻿using System.IO.IsolatedStorage;
+﻿using System.IO;
+using System.IO.IsolatedStorage;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using QuranPhone.Data;
 using QuranPhone.Utils;
@@ -13,7 +14,7 @@ namespace Tests
         {
             string basePath = QuranFileUtils.GetQuranDatabaseDirectory(false, true);
             if (basePath == null) return;
-            string path = basePath + QuranFileUtils.PATH_SEPARATOR + BookmarksDBAdapter.DB_NAME;
+            string path = Path.Combine(basePath, BookmarksDBAdapter.DB_NAME);
 
             var isf = IsolatedStorageFile.GetUserStoreForApplication();
             if (isf.FileExists(path))

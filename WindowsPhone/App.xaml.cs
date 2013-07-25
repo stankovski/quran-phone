@@ -137,6 +137,9 @@ namespace QuranPhone
             QuranFileUtils.MakeQuranDirectory();
             QuranFileUtils.MakeQuranDatabaseDirectory();
 
+            // Delete stuck files
+            QuranFileUtils.DeleteStuckFiles();
+
             // Show graphics profiling information while debugging.
             if (Debugger.IsAttached)
             {

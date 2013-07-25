@@ -1,4 +1,5 @@
-﻿using QuranPhone.Common;
+﻿using System.IO;
+using QuranPhone.Common;
 using QuranPhone.Utils;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace QuranPhone.Data
         {
             string basePath = QuranFileUtils.GetQuranDatabaseDirectory(false, true);
             if (basePath == null) return;
-            string path = basePath + QuranFileUtils.PATH_SEPARATOR + databaseName;
+            string path = Path.Combine(basePath, databaseName);
             mDatabase = new SQLiteDatabase(path);
             schemaVersion = GetSchemaVersion();
             mDatabasePath = path;

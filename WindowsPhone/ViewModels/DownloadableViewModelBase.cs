@@ -252,7 +252,15 @@ namespace QuranPhone.ViewModels
                 }
                 else
                 {
-                    QuranFileUtils.MoveFile(TempUrl, this.LocalUrl);
+                    try
+                    {
+                        QuranFileUtils.MoveFile(TempUrl, this.LocalUrl);
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Something went wrong with the download. Please try again.", "Error",
+                                        MessageBoxButton.OK);
+                    }
                 }
                 DownloadManager.Instance.FinalizeRequest(e.Request);
                 if (DownloadComplete != null)
@@ -308,7 +316,15 @@ namespace QuranPhone.ViewModels
 
                 if (DownloadComplete != null)
                     DownloadComplete(this, null);
-                QuranFileUtils.MoveFile(this.TempUrl, this.LocalUrl);
+                try
+                {
+                    QuranFileUtils.MoveFile(this.TempUrl, this.LocalUrl);
+                }
+                catch
+                {
+                    MessageBox.Show("Something went wrong with the download. Please try again.", "Error",
+                                    MessageBoxButton.OK);
+                }
             }
         }
 

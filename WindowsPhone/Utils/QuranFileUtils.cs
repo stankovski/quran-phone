@@ -16,17 +16,22 @@ using QuranPhone.Data;
 
 namespace QuranPhone.Utils
 {
-    public class QuranFileUtils
+    public static class QuranFileUtils
     {
         public static bool failedToWrite = false;
         public static string IMG_HOST = "http://android.quran.com/data/";
-        public static string QURAN_BASE = "quran_android" + PATH_SEPARATOR;
+        public static string QURAN_BASE = "quran_android";
         public static string QURAN_BASE_URI = "isostore:/" + QURAN_BASE;
         private static string DATABASE_DIRECTORY = "databases";
         private static string DOWNLOADS_DIRECTORY = "downloads";
+        private static string UNDELETED_FILES_DIRECTORY = "to-delete";
         public static string PACKAGE_NAME = "com.quran.labs.androidquran";
         public static string QURAN_ARABIC_DATABASE = "quran.ar.db";
-        public static string PATH_SEPARATOR = "/";
+
+        public static bool IsSeparator(this char c)
+        {
+            return c == '\\' || c == '/';
+        }
 
         /// <summary>
         /// Deletes folder even if it contains read only files
@@ -39,6 +44,9 @@ namespace QuranPhone.Utils
 
             using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
             {
+                if (!isf.DirectoryExists(path))
+                    return;
+
                 foreach (var dir in isf.GetDirectoryNames(path + "/*"))
                 {
                     DeleteFolder(path + "/" + dir);
@@ -62,6 +70,36 @@ namespace QuranPhone.Utils
                 {
                     if (isf.FileExists(path))
                         isf.DeleteFile(path);
+                }
+                catch
+                {
+                    var tempPath = GetUndeletedFilesDirectory(false, true);
+                    WriteFile(Path.Combine(tempPath, string.Format("{0}.txt", Guid.NewGuid())), path);
+                }
+            }
+        }
+
+        public static void DeleteStuckFiles()
+        {
+            using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                var path = GetUndeletedFilesDirectory(false, true);
+                try
+                {
+                    foreach (var fileName in isf.GetFileNames(string.Format("{0}/*", path)))
+                    {
+                        try
+                        {
+                            var filePath = Path.Combine(path, fileName);
+                            var badFilePath = ReadFile(filePath);
+                            isf.DeleteFile(badFilePath);
+                            isf.DeleteFile(filePath);
+                        }
+                        catch
+                        {
+                            // Continue
+                        }
+                    }
                 }
                 catch
                 {
@@ -127,9 +165,15 @@ namespace QuranPhone.Utils
         /// <returns></returns>
         public static void MakeDirectoryRecursive(string path)
         {
-            for (int i = 0; i < path.Length - 1; i++)
+            if (string.IsNullOrEmpty(path))
+                return;
+
+            if (!path[path.Length - 1].IsSeparator())
+                path = string.Format("{0}/",path);
+
+            for (int i = 0; i < path.Length; i++)
             {
-                if (path[i] == '/')
+                if (path[i].IsSeparator())
                 {
                     var folder = path.Substring(0, i);
                     if (!string.IsNullOrEmpty(folder))
@@ -303,7 +347,7 @@ namespace QuranPhone.Utils
         public static Uri GetImageFromWeb(string filename, bool useDriveIfExists = true)
         {
             MakeQuranDirectory();
-            string path = GetQuranDirectory(false) + PATH_SEPARATOR + filename;
+            string path = Path.Combine(GetQuranDirectory(false), filename);
             if (useDriveIfExists && QuranFileUtils.FileExists(path))
             {
                 return GetImageFromSD(filename);
@@ -313,9 +357,8 @@ namespace QuranPhone.Utils
                 QuranScreenInfo instance = QuranScreenInfo.Instance;
                 if (instance == null) return null;
 
-                string urlString = IMG_HOST + "width"
-                        + instance.GetWidthParam() + "/"
-                        + filename;
+                string urlString = Path.Combine(IMG_HOST + "width" + instance.GetWidthParam(),
+                                                filename);
                 return new Uri(urlString, UriKind.Absolute);                
             }
         }
@@ -345,28 +388,30 @@ namespace QuranPhone.Utils
         
         public static string GetQuranDatabaseDirectory(bool asUri, bool createIfDoesntExist = false)
         {
-            string baseDir = (asUri ? QURAN_BASE_URI : QURAN_BASE);
-
-            if (createIfDoesntExist)
-            {
-                var tempPath = QURAN_BASE + PATH_SEPARATOR + DATABASE_DIRECTORY;
-                MakeDirectoryRecursive(tempPath);
-            }
-
-            return (baseDir == null) ? null : baseDir + PATH_SEPARATOR + DATABASE_DIRECTORY;
+            return GetSubdirectory(asUri, DOWNLOADS_DIRECTORY, createIfDoesntExist);
         }
 
         public static string GetDowloadTrackerDirectory(bool asUri, bool createIfDoesntExist = false)
+        {
+            return GetSubdirectory(asUri, DOWNLOADS_DIRECTORY, createIfDoesntExist);
+        }
+
+        public static string GetUndeletedFilesDirectory(bool asUri, bool createIfDoesntExist = false)
+        {
+            return GetSubdirectory(asUri, UNDELETED_FILES_DIRECTORY, createIfDoesntExist);
+        }
+
+        public static string GetSubdirectory(bool asUri, string name, bool createIfDoesntExist = false)
         {
             string baseDir = (asUri ? QURAN_BASE_URI : QURAN_BASE);
 
             if (createIfDoesntExist)
             {
-                var tempPath = QURAN_BASE + PATH_SEPARATOR + DOWNLOADS_DIRECTORY;
+                var tempPath = Path.Combine(QURAN_BASE, name);
                 MakeDirectoryRecursive(tempPath);
             }
 
-            return (baseDir == null) ? null : baseDir + PATH_SEPARATOR + DATABASE_DIRECTORY;
+            return (baseDir == null) ? null : Path.Combine(baseDir, name);
         }
 
         public static string GetQuranDirectory(bool asUri, bool createIfDoesntExist = false)
@@ -442,7 +487,7 @@ namespace QuranPhone.Utils
             string filename = QuranFileUtils.GetAyaPositionFileName();
             if (filename != null)
             {
-                string ayaPositionDb = baseDir + PATH_SEPARATOR + filename;
+                string ayaPositionDb = Path.Combine(baseDir, filename);
                 if (!QuranFileUtils.FileExists(ayaPositionDb))
                 {
                     return false;
@@ -458,8 +503,8 @@ namespace QuranPhone.Utils
             string path = GetQuranDatabaseDirectory(false);
             if (path != null)
             {
-                path += PATH_SEPARATOR + fileName;
-                return QuranFileUtils.FileExists(path);
+                path = Path.Combine(path, fileName);
+                return FileExists(path);
             }
             return false;
         }
@@ -469,7 +514,7 @@ namespace QuranPhone.Utils
             string path = GetQuranDatabaseDirectory(false);
             if (path != null)
             {
-                path += PATH_SEPARATOR + fileName;
+                path = Path.Combine(path, fileName);
                 using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
                 {
                     if (isf.FileExists(path))

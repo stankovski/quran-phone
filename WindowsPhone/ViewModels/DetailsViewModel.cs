@@ -327,7 +327,7 @@ namespace QuranPhone.ViewModels
         {
             get
             {
-                string path = QuranFileUtils.GetQuranDatabaseDirectory(false, true) + QuranFileUtils.PATH_SEPARATOR + QuranFileUtils.GetAyaPositionFileName();
+                string path = Path.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false, true), QuranFileUtils.GetAyaPositionFileName());
                 if (QuranFileUtils.FileExists(path))
                     return true;
                 else

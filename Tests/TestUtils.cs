@@ -1,4 +1,7 @@
-﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+﻿using System.IO;
+using System.Linq;
+using System.IO.IsolatedStorage;
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using QuranPhone.Utils;
 
 namespace Tests
@@ -78,6 +81,73 @@ namespace Tests
 
             QuranFileUtils.WriteFile(testFile, "hello world");
             Assert.AreEqual("hello world", QuranFileUtils.ReadFile(testFile));
+        }
+
+        [TestMethod]
+        public void DeleteDoesntThrowExceptionAndLogsFile()
+        {
+            var udPath = QuranFileUtils.GetUndeletedFilesDirectory(false);
+            var testFile = "test-file-verifyfilereadandwrite.txt";
+            QuranFileUtils.DeleteFile(testFile);
+            QuranFileUtils.DeleteFolder(udPath);
+
+            Assert.AreEqual(string.Empty, QuranFileUtils.ReadFile(testFile));
+
+            QuranFileUtils.WriteFile(testFile, "hello world");
+            using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                using (var isoStream = new IsolatedStorageFileStream(testFile, FileMode.Open, isf))
+                {
+                    QuranFileUtils.DeleteFile(testFile);
+                }
+            }
+
+            using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                var files = isf.GetFileNames(udPath + "/*");
+                Assert.IsTrue(files.Length > 0);
+            }
+        }
+
+        [TestMethod]
+        public void DeleteStuckFilesCleansFiles()
+        {
+            DeleteDoesntThrowExceptionAndLogsFile();
+            var udPath = QuranFileUtils.GetUndeletedFilesDirectory(false);
+            var testFile = "test-file-verifyfilereadandwrite.txt";
+
+            QuranFileUtils.DeleteStuckFiles();
+
+            using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                var files = isf.GetFileNames(udPath + "/*");
+                Assert.AreEqual(0, files.Length);
+                Assert.IsFalse(isf.FileExists(testFile));
+            }
+        }
+
+        [TestMethod]
+        public void MakeDirectoryRecursivelyWorksWithNormalPath()
+        {
+            var path = "foo/bar/abc";
+            QuranFileUtils.DeleteFolder(path);
+            QuranFileUtils.MakeDirectoryRecursive(path);
+            using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                Assert.IsTrue(isf.DirectoryExists(path));
+            }
+        }
+
+        [TestMethod]
+        public void MakeDirectoryRecursivelyWorksWithInversePath()
+        {
+            var path = "foo\\bar\\abc";
+            QuranFileUtils.DeleteFolder(path);
+            QuranFileUtils.MakeDirectoryRecursive(path);
+            using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                Assert.IsTrue(isf.DirectoryExists(path));
+            }
         }
     }
 }
