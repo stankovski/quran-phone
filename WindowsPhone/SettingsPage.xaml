@@ -9,6 +9,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:myui="clr-namespace:QuranPhone.UI"
     xmlns:telerikPrimitives="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls.Primitives"
+    xmlns:telerikInput="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls.Input"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
@@ -39,6 +41,8 @@
                             <TextBlock Text="{Binding TextSize}" HorizontalAlignment="Center"/>
                         </StackPanel>
                         <Slider Minimum="15" Maximum="50" Margin="0" SmallChange="1" Value="{Binding TextSize, Mode=TwoWay}"/>
+                        <!--<TextBlock Text="{Binding Path=LocalizedResources.change_language, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                        <telerikInput:RadListPicker Style="{StaticResource QSFListPickerStyle}"/>-->
                         <TextBlock Text="{Binding Path=LocalizedResources.prefs_ayah_before_translation_summary, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
                         <telerikPrimitives:RadToggleSwitch IsChecked="{Binding ShowArabicInTranslation, Mode=TwoWay}" IsEnabled="{Binding EnableShowArabicInTranslation}" />
                         <TextBlock Text="{Binding Path=LocalizedResources.disable_sleep, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.Resources;
 using System.Threading;
 using System.Windows;
@@ -139,6 +140,10 @@ namespace QuranPhone
 
             // Delete stuck files
             QuranFileUtils.DeleteStuckFiles();
+
+            // Set the current thread culture
+            //Thread.CurrentThread.CurrentCulture = new CultureInfo("ru-RU");
+            //Thread.CurrentThread.CurrentUICulture = new CultureInfo("ru-RU");
 
             // Show graphics profiling information while debugging.
             if (Debugger.IsAttached)

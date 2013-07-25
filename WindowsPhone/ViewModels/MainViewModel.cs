@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
+using Microsoft.Phone.BackgroundTransfer;
 using QuranPhone.Common;
 using QuranPhone.Resources;
 using QuranPhone.Data;
@@ -29,6 +30,8 @@ namespace QuranPhone.ViewModels
             group.SortMode = ListSortMode.None;
             BookmarksGroup.Add(group);
 
+            this.InstallationStep = Resources.AppResources.loading_message;
+
             this.Tags = new ObservableCollection<ItemViewModel>();
             this.HasAskedToDownload = false;
             this.QuranData = new DownloadableViewModelBase();
@@ -37,8 +40,6 @@ namespace QuranPhone.ViewModels
             this.QuranData.ServerUrl = QuranFileUtils.GetZipFileUrl();
             this.QuranData.FileName = Path.GetFileName(QuranData.ServerUrl);
             this.QuranData.LocalUrl = QuranData.FileName;
-
-            this.InstallationStep = Resources.AppResources.loading_message;
         }
 
         #region Properties
@@ -244,6 +245,28 @@ namespace QuranPhone.ViewModels
             if (e.PropertyName == "IsDownloading")
             {
                 IsInstalling = this.QuranData.IsDownloading;
+            }
+            if (e.PropertyName == "DownloadStatus")
+            {
+                switch (QuranData.DownloadStatus)
+                {
+                    case TransferStatus.Paused:
+                    case TransferStatus.Waiting:
+                    case TransferStatus.WaitingForNonVoiceBlockingNetwork:
+                        InstallationStep = AppResources.waiting;
+                        break;
+                    case TransferStatus.WaitingForExternalPower:
+                    case TransferStatus.WaitingForExternalPowerDueToBatterySaverMode:
+                        InstallationStep = AppResources.waiting_for_power;
+                        break;
+                    case TransferStatus.WaitingForWiFi:
+                        InstallationStep = AppResources.waiting_for_wifi;
+                        break;
+                    case TransferStatus.Completed:
+                    case TransferStatus.Transferring:
+                        InstallationStep = AppResources.loading_message;
+                        break;
+                }
             }
         }
 

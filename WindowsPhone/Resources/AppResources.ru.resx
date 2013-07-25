@@ -428,4 +428,16 @@ the data used in the translations and Arabic comes from
   <data name="loading" xml:space="preserve">
     <value>загрузка...</value>
   </data>
+  <data name="change_language" xml:space="preserve">
+    <value>изменить язык</value>
+  </data>
+  <data name="waiting" xml:space="preserve">
+    <value>Ждем...</value>
+  </data>
+  <data name="waiting_for_power" xml:space="preserve">
+    <value>Ждем источника питания...</value>
+  </data>
+  <data name="waiting_for_wifi" xml:space="preserve">
+    <value>Ждем сети WIFI...</value>
+  </data>
 </root>

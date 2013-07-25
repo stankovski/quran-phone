@@ -151,6 +151,15 @@ namespace QuranPhone.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to change language.
+        /// </summary>
+        public static string change_language {
+            get {
+                return ResourceManager.GetString("change_language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete Bookmark.
         /// </summary>
         public static string delete_bookmark {
@@ -578,6 +587,33 @@ namespace QuranPhone.Resources {
         public static string verses {
             get {
                 return ResourceManager.GetString("verses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Waiting....
+        /// </summary>
+        public static string waiting {
+            get {
+                return ResourceManager.GetString("waiting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Waiting for power....
+        /// </summary>
+        public static string waiting_for_power {
+            get {
+                return ResourceManager.GetString("waiting_for_power", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Waiting for WIFI....
+        /// </summary>
+        public static string waiting_for_wifi {
+            get {
+                return ResourceManager.GetString("waiting_for_wifi", resourceCulture);
             }
         }
     }

@@ -669,4 +669,16 @@ the data used in the translations and Arabic comes from
   <data name="loading" xml:space="preserve">
     <value>loading...</value>
   </data>
+  <data name="change_language" xml:space="preserve">
+    <value>change language</value>
+  </data>
+  <data name="waiting" xml:space="preserve">
+    <value>Waiting...</value>
+  </data>
+  <data name="waiting_for_power" xml:space="preserve">
+    <value>Waiting for power...</value>
+  </data>
+  <data name="waiting_for_wifi" xml:space="preserve">
+    <value>Waiting for WIFI...</value>
+  </data>
 </root>

@@ -158,6 +158,21 @@ namespace QuranPhone.ViewModels
             }
         }
 
+        private TransferStatus downloadStatus;
+        public TransferStatus DownloadStatus
+        {
+            get { return downloadStatus; }
+            set
+            {
+                if (value == downloadStatus)
+                    return;
+
+                downloadStatus = value;
+
+                base.OnPropertyChanged(() => DownloadStatus);
+            }
+        }
+
         public bool CanDownload
         {
             get {
@@ -299,15 +314,6 @@ namespace QuranPhone.ViewModels
             }
         }
 
-        public TransferStatus GetDownloadStatus()
-        {
-            var request = DownloadManager.Instance.GetRequest(this.ServerUrl);
-            if (request == null)
-                return TransferStatus.None;
-            else
-                return request.TransferStatus;
-        }
-
         public void FinishPreviousDownload()
         {
             if (!string.IsNullOrEmpty(this.TempUrl) && !string.IsNullOrEmpty(this.LocalUrl) &&
@@ -352,6 +358,7 @@ namespace QuranPhone.ViewModels
 
         private void UpdateDownloadStatus(TransferStatus status)
         {
+            DownloadStatus = status;
             switch (status)
             {
                 case TransferStatus.Paused:
