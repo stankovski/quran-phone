@@ -28,29 +28,7 @@ namespace QuranPhone.ViewModels
             darkColor = new SolidColorBrush(Colors.Black);
             BackgroundColor = (LinearGradientBrush)Application.Current.TryFindResource("LightBackground");
             ForegroundColor = darkColor;
-
-            // default detail page to full screen mode.
-            IsShowMenu = false;
-
-            cmdToggleMenu = new RelayCommand(ToggleMenu);
         }
-
-        #region Commands
-        /// <summary>
-        /// Toggle whether to show menu / hide it in detail page
-        /// </summary>
-        public void ToggleMenu()
-        {
-            ToggleMenu(null);
-        }
-
-        public void ToggleMenu(object obj)
-        {
-            IsShowMenu = !IsShowMenu;
-        }
-        public ICommand CommandToggleMenu { get { return cmdToggleMenu; } }
-        private RelayCommand cmdToggleMenu;
-        #endregion Commands
 
         #region Properties
         public ObservableCollection<PageViewModel> Pages { get; private set; }

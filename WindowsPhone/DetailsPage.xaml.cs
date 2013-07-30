@@ -93,19 +93,7 @@ namespace QuranPhone
         private void PageFlipped(object sender, SelectionChangedEventArgs e)
         {
             App.DetailsViewModel.CurrentPageIndex = App.DetailsViewModel.Pages.IndexOf((PageViewModel)radSlideView.SelectedItem);
-        }
-
-        private void ScreenTap(object sender, System.Windows.Input.GestureEventArgs e)
-        {
-            if (App.DetailsViewModel.IsShowMenu)
-                App.DetailsViewModel.ToggleMenu();
-        }
-
-        private void MenuTap(object sender, System.Windows.Input.GestureEventArgs e)
-        {
-            App.DetailsViewModel.ToggleMenu();
-            e.Handled = true;
-        }
+        }        
 
         private void ImageTap(object sender, System.Windows.Input.GestureEventArgs e)
         {
@@ -136,7 +124,6 @@ namespace QuranPhone
                 //App.DetailsViewModel.UpdatePages();
                 App.DetailsViewModel.ShowTranslation = !App.DetailsViewModel.ShowTranslation;
                 SettingsUtils.Set(Constants.PREF_SHOW_TRANSLATION, App.DetailsViewModel.ShowTranslation);
-                App.DetailsViewModel.ToggleMenu();
             }
             else
             {
@@ -147,7 +134,6 @@ namespace QuranPhone
         private void Bookmark_Click(object sender, EventArgs e)
         {
             App.DetailsViewModel.AddBookmark();
-            App.DetailsViewModel.ToggleMenu();
         }
 
         private void BookmarkAyah_Click(object sender, ContextMenuItemSelectedEventArgs e)
@@ -158,13 +144,11 @@ namespace QuranPhone
 
         private void Settings_Click(object sender, EventArgs e)
         {
-            App.DetailsViewModel.ToggleMenu();
             NavigationService.Navigate(new Uri("/SettingsPage.xaml", UriKind.Relative));
         }
 
         private void Search_Click(object sender, EventArgs e)
         {
-            App.DetailsViewModel.ToggleMenu();
             NavigationService.Navigate(new Uri("/SearchPage.xaml", UriKind.Relative));
         }
 
@@ -208,7 +192,6 @@ namespace QuranPhone
             // instead of going back to previous page.
             if (App.DetailsViewModel.IsShowMenu)
             {
-                App.DetailsViewModel.ToggleMenu();
                 e.Cancel = true;
             }
             else

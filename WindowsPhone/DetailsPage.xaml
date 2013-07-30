@@ -10,15 +10,11 @@
     xmlns:telerikPrimitives="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls.Primitives"
     mc:Ignorable="d"
     xmlns:myui="clr-namespace:QuranPhone.UI"
-    xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-    xmlns:abu="clr-namespace:AppBarUtils;assembly=AppBarUtils"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
     d:DataContext="{d:DesignData SampleData/TranslationViewModelSampleData.xaml}"
-    shell:SystemTray.IsVisible="{Binding IsShowMenu}"
-    Tap="ScreenTap"
     Background="{Binding BackgroundColor, Mode=OneWay}" OrientationChanged="PageOrientationChanged">
     
     <phone:PhoneApplicationPage.Resources>
@@ -88,19 +84,10 @@
                 </telerikPrimitives:RadSlideView.FilmstripModeItemTemplate>
             </telerikPrimitives:RadSlideView>
         </Grid>
-
-        <Button VerticalAlignment="Bottom" HorizontalAlignment="Right" Padding="0" Width="80" Style="{StaticResource ChromelessButtonStyle}" Name="menuToggleButton" 
-                Visibility="{Binding IsShowMenu, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}" Tap="MenuTap">
-            <StackPanel Orientation="Horizontal" Background="Transparent" VerticalAlignment="Bottom" Margin="0" Height="70" Width="80">
-                <Ellipse Fill="{StaticResource DarkBlueText}" Width="8" Height="8" Margin="5,0,5,15" VerticalAlignment="Bottom"/>
-                <Ellipse Fill="{StaticResource DarkBlueText}" Width="8" Height="8" Margin="5,0,5,15" VerticalAlignment="Bottom"/>
-                <Ellipse Fill="{StaticResource DarkBlueText}" Width="8" Height="8" Margin="5,0,5,15" VerticalAlignment="Bottom"/>
-            </StackPanel>
-        </Button>
     </Grid>
     
     <phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar>
+        <shell:ApplicationBar BackgroundColor="White" Opacity="0.8" ForegroundColor="#FF49A4C5" Mode="Minimized">
             <shell:ApplicationBarIconButton IconUri="/Assets/Images/search.png" 
                                             Text="Search" Click="Search_Click"/>
             <shell:ApplicationBarIconButton IconUri="/Assets/Images/favorite.png" 
@@ -113,8 +100,4 @@
             </shell:ApplicationBar.MenuItems>
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
-
-    <i:Interaction.Behaviors>
-        <abu:AppBarPropertyBinder IsVisible="{Binding IsShowMenu}" Opacity="0.9" BackgroundColor="White" ForegroundColor="#FF49A4C5" />
-    </i:Interaction.Behaviors>
 </phone:PhoneApplicationPage>
