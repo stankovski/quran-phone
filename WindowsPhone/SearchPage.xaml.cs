@@ -41,9 +41,9 @@ namespace QuranPhone
         {
             if (e.Key == System.Windows.Input.Key.Enter)
             {
-                if (string.IsNullOrEmpty(App.DetailsViewModel.TranslationFile) ||
-                    !QuranFileUtils.FileExists(Path.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false),
-                                                            App.DetailsViewModel.TranslationFile)))
+                if ((string.IsNullOrEmpty(App.DetailsViewModel.TranslationFile) || 
+                    !QuranFileUtils.FileExists(Path.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false), App.DetailsViewModel.TranslationFile))) 
+                    && !QuranFileUtils.FileExists(Path.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false), QuranFileUtils.QURAN_ARABIC_DATABASE)))
                 {
                     MessageBox.Show(AppResources.no_translation_to_search);
                     NavigationService.Navigate(new Uri("/SettingsPage.xaml", UriKind.Relative));

@@ -131,9 +131,6 @@ namespace QuranPhone.Data
 
             // Get table name
             var tableName = "verses";
-            var tableAttr = (TableAttribute)(typeof(T)).GetCustomAttributes(typeof(TableAttribute), true).FirstOrDefault();
-            if (tableAttr != null)
-                tableName = tableAttr.Name;
 
             // Couldn't get parameterized version to work - need to look into it in the future
             var sql = string.Format("select \"sura\", \"ayah\", \"text\" from \"{0}\" where \"text\" match '{1}' order by \"sura\", \"ayah\"", tableName, query);

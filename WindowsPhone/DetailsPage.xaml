@@ -91,7 +91,7 @@
 
         <Button VerticalAlignment="Bottom" HorizontalAlignment="Right" Padding="0" Width="80" Style="{StaticResource ChromelessButtonStyle}" Name="menuToggleButton" 
                 Visibility="{Binding IsShowMenu, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}" Tap="MenuTap">
-            <StackPanel Orientation="Horizontal" Background="Transparent" VerticalAlignment="Bottom" Margin="0" Height="40">
+            <StackPanel Orientation="Horizontal" Background="Transparent" VerticalAlignment="Bottom" Margin="0" Height="70" Width="80">
                 <Ellipse Fill="{StaticResource DarkBlueText}" Width="8" Height="8" Margin="5,0,5,15" VerticalAlignment="Bottom"/>
                 <Ellipse Fill="{StaticResource DarkBlueText}" Width="8" Height="8" Margin="5,0,5,15" VerticalAlignment="Bottom"/>
                 <Ellipse Fill="{StaticResource DarkBlueText}" Width="8" Height="8" Margin="5,0,5,15" VerticalAlignment="Bottom"/>

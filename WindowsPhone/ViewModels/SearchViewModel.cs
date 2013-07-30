@@ -43,9 +43,9 @@ namespace QuranPhone.ViewModels
         public async void Load(string query)
         {
             // Set translation
-            if (string.IsNullOrEmpty(App.DetailsViewModel.TranslationFile) ||
-                !QuranFileUtils.FileExists(Path.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false),
-                                                        App.DetailsViewModel.TranslationFile)))
+            if ((string.IsNullOrEmpty(App.DetailsViewModel.TranslationFile) 
+                || !QuranFileUtils.FileExists(Path.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false), App.DetailsViewModel.TranslationFile))) 
+                && !QuranFileUtils.FileExists(Path.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false), QuranFileUtils.QURAN_ARABIC_DATABASE)))
             {
                 MessageBox.Show(AppResources.no_translation_to_search);
             }
@@ -54,14 +54,66 @@ namespace QuranPhone.ViewModels
                 IsLoading = true;
                 try
                 {
-                    List<QuranAyah> verses = null;
-                    using (var db = new DatabaseHandler<QuranAyah>(App.DetailsViewModel.TranslationFile))
+                    var translationVerses = new List<QuranAyah>();
+                    var arabicVerses = new List<ArabicAyah>();
+                    var tasks = new List<Task>();
+                    var taskFactory = new TaskFactory();
+
+                    if (App.DetailsViewModel.TranslationFile != null && 
+                        QuranFileUtils.FileExists(Path.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false), App.DetailsViewModel.TranslationFile)))
                     {
-                        verses = await new TaskFactory().StartNew(() => db.Search(query));
+                        using (var db = new DatabaseHandler<QuranAyah>(App.DetailsViewModel.TranslationFile))
+                        {
+                            translationVerses = await taskFactory.StartNew(() => db.Search(query));
+                        }
+                    }
+                    if (QuranFileUtils.FileExists(Path.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false), QuranFileUtils.QURAN_ARABIC_DATABASE)))
+                    {
+                        using (var dbArabic = new DatabaseHandler<ArabicAyah>(QuranFileUtils.QURAN_ARABIC_DATABASE))
+                        {
+                            arabicVerses = await taskFactory.StartNew(() => dbArabic.Search(query));
+                        }
                     }
                     this.SearchResults.Clear();
-                    foreach (var verse in verses)
+
+                    // Merging 2 results
+                    int a = 0;
+                    int t = 0;
+                    var arabicVerse = new QuranAyah { Sura = int.MaxValue, Ayah = int.MaxValue };
+                    var translationVerse = new QuranAyah { Sura = int.MaxValue, Ayah = int.MaxValue };
+                    var verseToDisplay = new QuranAyah();
+                    var comparer = new AyahComparer();
+
+                    while (a < arabicVerses.Count || t < translationVerses.Count)
                     {
+                        if (a < arabicVerses.Count)
+                            arabicVerse = arabicVerses[a];
+                        else
+                            arabicVerse = new QuranAyah { Sura = int.MaxValue, Ayah = int.MaxValue };
+
+                        if (t < translationVerses.Count)
+                            translationVerse = translationVerses[t];
+                        else
+                            translationVerse = new QuranAyah { Sura = int.MaxValue, Ayah = int.MaxValue };
+
+                        if (comparer.Compare(arabicVerse, translationVerse) > 0)
+                        {
+                            verseToDisplay = translationVerse;
+                            t++;
+                        }
+                        else if (comparer.Compare(arabicVerse, translationVerse) < 0)
+                        {
+                            verseToDisplay = arabicVerse;
+                            a++;
+                        }
+                        else if (comparer.Compare(arabicVerse, translationVerse) == 0)
+                        {
+                            verseToDisplay = arabicVerse;
+                            a++;
+                            t++;
+                        }
+
+                        var verse = verseToDisplay;
                         var text = TrimText(verse.Text, MaxPreviewCharacter);
                         this.SearchResults.Add(new ItemViewModel
                             {

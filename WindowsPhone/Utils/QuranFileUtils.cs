@@ -388,7 +388,7 @@ namespace QuranPhone.Utils
         
         public static string GetQuranDatabaseDirectory(bool asUri, bool createIfDoesntExist = false)
         {
-            return GetSubdirectory(asUri, DOWNLOADS_DIRECTORY, createIfDoesntExist);
+            return GetSubdirectory(asUri, DATABASE_DIRECTORY, createIfDoesntExist);
         }
 
         public static string GetDowloadTrackerDirectory(bool asUri, bool createIfDoesntExist = false)

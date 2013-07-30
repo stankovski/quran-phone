@@ -1,4 +1,5 @@
-﻿using SQLite;
+﻿using System.Collections.Generic;
+using SQLite;
 
 namespace QuranPhone.Common
 {
@@ -21,6 +22,11 @@ namespace QuranPhone.Common
             Sura = sura;
             Ayah = ayah;
         }
+
+        public override string ToString()
+        {
+            return string.Format("{0}:{1}", Sura, Ayah);
+        }
     }
 
     [Table("arabic_text")]
@@ -30,5 +36,22 @@ namespace QuranPhone.Common
 
         public ArabicAyah(int sura, int ayah) : base(sura, ayah)
         {}
+    }
+
+    public class AyahComparer : IComparer<QuranAyah>
+    {
+        public int Compare(QuranAyah x, QuranAyah y)
+        {
+            if (x.Ayah == y.Ayah && x.Sura == y.Sura)
+                return 0;
+            else if (x.Sura < y.Sura)
+                return -1;
+            else if (x.Sura > y.Sura)
+                return 1;
+            else if (x.Sura == y.Sura && x.Ayah < y.Ayah)
+                return -1;
+            else
+                return 1;
+        }
     }
 }
