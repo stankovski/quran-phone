@@ -111,12 +111,38 @@ namespace QuranPhone.ViewModels
 
                 CurrentSurahName = QuranInfo.GetSuraNameFromPage(value, false);
                 CurrentSurahNumber = QuranInfo.GetSuraNumberFromPage(value);
-                CurrentJuzName = string.Format("{0} {1} {2} {3}", QuranInfo.GetJuzTitle(),
-                                               QuranInfo.GetJuzFromPage(value), AppResources.quran_rub3,
-                                               QuranInfo.GetRub3FromPage(value));
+                var rub = QuranInfo.GetRub3FromPage(value);
+                CurrentJuzName = string.Format("{0} {1}{2} {3} {4}", QuranInfo.GetJuzTitle(),
+                                               QuranInfo.GetJuzFromPage(value),
+                                               getJuzPart(rub), AppResources.quran_rub3, rub);
 
                 currentPageNumber = value;
                 base.OnPropertyChanged(() => CurrentPageNumber);
+            }
+        }
+
+        private string getJuzPart(int rub)
+        {
+            switch (rub%8)
+            {
+                case 0:
+                    return "";
+                case 1:
+                    return "⅛";
+                case 2:
+                    return "¼";
+                case 3:
+                    return "⅜";
+                case 4:
+                    return "½";
+                case 5:
+                    return "⅝";
+                case 6:
+                    return "¾";
+                case 7:
+                    return "⅞";
+                default:
+                    return "";
             }
         }
 
