@@ -21,6 +21,21 @@ namespace QuranPhone.ViewModels
 
         public ObservableCollection<VerseViewModel> Translations { get; set; }
 
+        private VerseViewModel selectedVerse;
+        public VerseViewModel SelectedVerse
+        {
+            get { return selectedVerse; }
+            set
+            {
+                if (value == selectedVerse)
+                    return;
+
+                selectedVerse = value;
+
+                base.OnPropertyChanged(() => SelectedVerse);
+            }
+        }
+
         private string translation;
         public string Translation
         {

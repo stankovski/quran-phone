@@ -207,6 +207,17 @@ namespace QuranPhone.ViewModels
             }
         }
 
+        public PageViewModel CurrentPage
+        {
+            get
+            {
+                if (CurrentPageIndex >= 0 && CurrentPageIndex < Pages.Count)
+                    return Pages[CurrentPageIndex];
+                else
+                    return null;
+            }
+        }
+
         public bool IsDataLoaded { get; protected set; }
 
         private PageOrientation orientation;
@@ -499,14 +510,14 @@ namespace QuranPhone.ViewModels
 
                     if (versesArabic != null)
                     {
-                        pageModel.Translations.Add(new VerseViewModel(versesArabic[i].Text, "ArabicText"));
+                        pageModel.Translations.Add(new VerseViewModel(versesArabic[i].Text, "ArabicText", verse.Sura, verse.Ayah));
                     }
 
                     var versesSplit = TextBlockSplitter.Instance.Split(verse.Text, SettingsUtils.Get<int>(Constants.PREF_TRANSLATION_TEXT_SIZE), FontWeights.Normal);
 
                     foreach (var vs in versesSplit)
                     {
-                        pageModel.Translations.Add(new VerseViewModel(vs));
+                        pageModel.Translations.Add(new VerseViewModel(vs, null, verse.Sura, verse.Ayah));
                     }
                 }
                 // Adding padding

@@ -147,6 +147,7 @@
     <Compile Include="UI\ConditionalStyleConverter.cs" />
     <Compile Include="UI\ArabicFontSizeConverter.cs" />
     <Compile Include="UI\DataTemplateSelector.cs" />
+    <Compile Include="UI\ListBoxPropertyBinder.cs" />
     <Compile Include="UI\TextFormatConverter.cs" />
     <Compile Include="UI\SettingsRetrieverConverter.cs" />
     <Compile Include="UI\ListHeader.xaml.cs">

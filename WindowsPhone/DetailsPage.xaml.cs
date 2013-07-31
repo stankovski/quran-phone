@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
@@ -123,6 +123,41 @@ namespace QuranPhone
 
                 bookmarkMenu.RegionOfInterest = new Rect(e.GetPosition(ThisPage), new Size(50, 50));
                 bookmarkMenu.IsOpen = true;
+            }
+        }
+
+        private void ImageDoubleTap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            if (App.DetailsViewModel.AyahDetailsExist && !string.IsNullOrEmpty(App.DetailsViewModel.TranslationFile))
+            {
+                var ayah = CachedImage.GetAyahFromGesture(e.GetPosition(radSlideView),
+                                                          App.DetailsViewModel.CurrentPageNumber,
+                                                          radSlideView.ActualWidth);
+                var currentPage = App.DetailsViewModel.CurrentPage;
+                if (currentPage != null)
+                {
+                    var ayahTranslation = currentPage.Translations.FirstOrDefault(t => t.Surah == ayah.Sura && t.Ayah == ayah.Ayah);
+                    if (ayahTranslation != null)
+                    {
+                        App.DetailsViewModel.CurrentPage.SelectedVerse = ayahTranslation;
+                        App.DetailsViewModel.ShowTranslation = !App.DetailsViewModel.ShowTranslation;
+                        SettingsUtils.Set(Constants.PREF_SHOW_TRANSLATION, App.DetailsViewModel.ShowTranslation);
+                    }
+                }
+            }
+        }
+
+        private void ListBoxDoubleTap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            if (App.DetailsViewModel.AyahDetailsExist && 
+                App.DetailsViewModel.CurrentPage.SelectedVerse != null && 
+                App.DetailsViewModel.CurrentPage.SelectedVerse.Surah > 0)
+            {
+                App.DetailsViewModel.SelectedAyah =
+                    new Common.QuranAyah(App.DetailsViewModel.CurrentPage.SelectedVerse.Surah,
+                                         App.DetailsViewModel.CurrentPage.SelectedVerse.Ayah);
+                App.DetailsViewModel.ShowTranslation = !App.DetailsViewModel.ShowTranslation;
+                SettingsUtils.Set(Constants.PREF_SHOW_TRANSLATION, App.DetailsViewModel.ShowTranslation);
             }
         }
 

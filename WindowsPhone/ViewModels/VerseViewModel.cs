@@ -17,6 +17,14 @@
             StyleName = style;
         }
 
+        public VerseViewModel(string text, string style, int surah, int ayah)
+        {
+            Text = text;
+            StyleName = style;
+            Surah = surah;
+            Ayah = ayah;
+        }
+
         #region Properties
         private string styleName;
         public string StyleName
@@ -45,6 +53,36 @@
                 text = value;
 
                 base.OnPropertyChanged(() => Text);
+            }
+        }
+
+        private int surah;
+        public int Surah
+        {
+            get { return surah; }
+            set
+            {
+                if (value == surah)
+                    return;
+
+                surah = value;
+
+                base.OnPropertyChanged(() => Surah);
+            }
+        }
+
+        private int ayah;
+        public int Ayah
+        {
+            get { return ayah; }
+            set
+            {
+                if (value == ayah)
+                    return;
+
+                ayah = value;
+
+                base.OnPropertyChanged(() => Ayah);
             }
         }
         #endregion Properties

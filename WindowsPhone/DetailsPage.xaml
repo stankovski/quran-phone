@@ -52,11 +52,12 @@
                             <myui:CachedImage ImageSource="{Binding ImageSource}" PageNumber="{Binding PageNumber}" 
                                               NightMode="{Binding DataContext.IsNightMode, ElementName=ThisPage}"
                                               SelectedAyah="{Binding DataContext.SelectedAyah, ElementName=ThisPage}"
-                                              Hold="ImageHold" DoubleTap="ImageHold" Tap="ImageTap" Padding="0,0,0,10"
+                                              Hold="ImageHold" DoubleTap="ImageDoubleTap" Tap="ImageTap" Padding="0,0,0,10"
                                               Visibility="{Binding DataContext.ShowTranslation, ElementName=ThisPage, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
                             </myui:CachedImage>
 
-                            <telerikPrimitives:RadDataBoundListBox x:Name="TranslationListBox"
+                            <telerikPrimitives:RadDataBoundListBox x:Name="TranslationListBox" DoubleTap="ListBoxDoubleTap"
+                                                                   SelectedItem="{Binding SelectedVerse, Mode=TwoWay}"
                                                                    Visibility="{Binding DataContext.ShowTranslation, ElementName=ThisPage, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                                    ItemsSource="{Binding Translations}" IsAsyncBalanceEnabled="True">
                                 <telerikPrimitives:RadDataBoundListBox.EmptyContentTemplate>
@@ -72,6 +73,9 @@
                                         </ListBoxItem>
                                     </DataTemplate>
                                 </telerikPrimitives:RadDataBoundListBox.ItemTemplate>
+                                <i:Interaction.Behaviors>
+                                    <myui:ListBoxPropertyBinder SelectedItem="{Binding SelectedVerse}"/>
+                                </i:Interaction.Behaviors>
                             </telerikPrimitives:RadDataBoundListBox>
                         </Grid>
                     </DataTemplate>
