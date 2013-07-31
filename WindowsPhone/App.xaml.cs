@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Globalization;
+using System.Reflection;
 using System.Resources;
 using System.Threading;
 using System.Windows;
@@ -141,6 +142,9 @@ namespace QuranPhone
             // Delete stuck files
             QuranFileUtils.DeleteStuckFiles();
 
+            // One time fix for page 270
+            OneTimePage270Fix();
+
             // Set the current thread culture
             //Thread.CurrentThread.CurrentCulture = new CultureInfo("ru-RU");
             //Thread.CurrentThread.CurrentUICulture = new CultureInfo("ru-RU");
@@ -165,6 +169,21 @@ namespace QuranPhone
                 
                 // commented, test user idle detection
                 PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
+            }
+        }
+
+        private void OneTimePage270Fix()
+        {
+            var versionFromConfig = new Version(SettingsUtils.Get<string>(Constants.PREF_CURRENT_VERSION));
+            var nameHelper = new AssemblyName(Assembly.GetExecutingAssembly().FullName);
+            if (nameHelper.Version == new Version(0, 3, 2, 0) && versionFromConfig < nameHelper.Version)
+            {
+                var pageFileName = QuranFileUtils.GetPageFileName(270);
+                var filePath = QuranFileUtils.GetImageFromSD(pageFileName);
+                if (QuranFileUtils.FileExists(filePath.LocalPath))
+                {
+                    QuranFileUtils.DeleteFile(filePath.LocalPath);
+                }
             }
         }
 

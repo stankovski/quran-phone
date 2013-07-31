@@ -6,6 +6,7 @@
     <Language code="ru-RU" />
     <Language code="id" />
     <Language code="id-ID" />
+    <Language code="ar" />
   </Languages>
   <App xmlns="" ProductID="{b7984dbc-63df-497c-b7fe-e8f6442a12b2}" Title="Quran Phone" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="Denis Stankovski" Description="Quran" Publisher="Denis Stankovski" PublisherID="{144b1182-f0a1-479e-9b2a-6dbe7c51a340}">
     <IconPath IsRelative="true" IsResource="false">Assets\ApplicationIcon.png</IconPath>

@@ -285,7 +285,8 @@ namespace QuranPhone.Utils
                 if (isf.DirectoryExists(GetQuranDirectory(false)))
                 {
                     var files = isf.GetFileNames(Path.Combine(GetQuranDirectory(false), "*.png"));
-                    if (files.Length >= 604)
+                    // Should have at least 95% of pages; of more than that it's not efficient to download the ZIP
+                    if (files.Length >= 600)
                     {
                         // ideally, we should loop for each page and ensure
                         // all pages are there, but this will do for now.

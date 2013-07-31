@@ -16,7 +16,7 @@
     <TargetFrameworkProfile>WindowsPhone71</TargetFrameworkProfile>
     <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
     <SilverlightApplication>true</SilverlightApplication>
-    <SupportedCultures>ru%3bru-RU%3bid%3bid-ID</SupportedCultures>
+    <SupportedCultures>ru%3bru-RU%3bid%3bid-ID%3bar</SupportedCultures>
     <XapOutputs>true</XapOutputs>
     <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
     <XapFilename>QuranPhone_WP7.xap</XapFilename>
@@ -615,6 +615,9 @@
     <Content Include="SplashScreenImage.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="..\WindowsPhone\Resources\AppResources.ar.resx">
+      <Link>Resources\AppResources.ar.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\WindowsPhone\Resources\AppResources.id.resx">
       <Link>Resources\AppResources.id.resx</Link>
     </EmbeddedResource>
