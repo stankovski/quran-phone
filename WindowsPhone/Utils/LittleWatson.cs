@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.IO.IsolatedStorage;
+using System.Reflection;
 using System.Windows;
 using Microsoft.Phone.Tasks;
 
@@ -18,11 +19,15 @@ namespace QuranPhone.Utils
         {
             try
             {
+                var nameHelper = new AssemblyName(Assembly.GetExecutingAssembly().FullName);
+
                 using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
                 {
                     SafeDeleteFile(store);
                     using (TextWriter output = new StreamWriter(store.CreateFile(filename)))
                     {
+                        output.WriteLine("QuranPhone Version: " + nameHelper.Version);
+                        output.WriteLine("OS Version: " + Environment.OSVersion);
                         output.WriteLine(extra);
                         output.WriteLine(ex.Message);
                         output.WriteLine(ex.StackTrace);
