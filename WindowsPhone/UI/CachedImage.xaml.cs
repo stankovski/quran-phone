@@ -68,12 +68,14 @@ namespace QuranPhone.UI
                             var bounds = dbh.GetVerseBoundsCombined(ayahInfo.Sura, ayahInfo.Ayah);
                             // Reset any overlays
                             canvas.Children.Clear();
+                            canvas.Opacity = 1.0;
 
                             foreach (var bound in bounds)
                             {
                                 drawAyahBound(bound);
                             }
                         }
+                        canvasStoryboard.Begin();
                     }
                 }
                 catch

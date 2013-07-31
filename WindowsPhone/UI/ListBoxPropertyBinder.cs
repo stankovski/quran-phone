@@ -1,5 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Interactivity;
+using QuranPhone.Common;
+using QuranPhone.ViewModels;
 using Telerik.Windows.Controls;
 
 namespace QuranPhone.UI
@@ -10,19 +12,19 @@ namespace QuranPhone.UI
         {
         }
 
-        public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register("SelectedItem", typeof(object), typeof(ListBoxPropertyBinder), new PropertyMetadata(null, SelectedItemPropertyChanged));
+        public static readonly DependencyProperty SelectedAyahProperty = DependencyProperty.Register("SelectedAyah", typeof(QuranAyah), typeof(ListBoxPropertyBinder), new PropertyMetadata(null, SelectedItemPropertyChanged));
 
         private RadDataBoundListBox listBox;
 
-        public object SelectedItem
+        public QuranAyah SelectedAyah
         {
             get
             {
-                return this.GetValue(ListBoxPropertyBinder.SelectedItemProperty);
+                return this.GetValue(ListBoxPropertyBinder.SelectedAyahProperty) as QuranAyah;
             }
             set
             {
-                this.SetValue(ListBoxPropertyBinder.SelectedItemProperty, value);
+                this.SetValue(ListBoxPropertyBinder.SelectedAyahProperty, value);
             }
         }
 
@@ -30,8 +32,30 @@ namespace QuranPhone.UI
         {
             if (this.listBox == null)
                 return;
-            this.listBox.SelectedItem = this.SelectedItem;
-            this.listBox.BringIntoView(this.SelectedItem);
+            if (SelectedAyah == null)
+            {
+                this.listBox.SelectedItem = null;
+            }
+            else
+            {
+                var verse = getMatchedItem(this.SelectedAyah);
+                if (verse != null)
+                {
+                    this.listBox.BringIntoView(verse);
+                }
+            }
+        }
+
+        private object getMatchedItem(QuranAyah ayah)
+        {
+            foreach (VerseViewModel item in this.listBox.RealizedItems)
+            {
+                if (item.Surah == ayah.Sura && item.Ayah == ayah.Ayah)
+                {
+                    return item;
+                }
+            }
+            return null;
         }
 
         private static void SelectedItemPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
@@ -43,9 +67,6 @@ namespace QuranPhone.UI
         {
             base.OnAttached();
             this.listBox = this.AssociatedObject;
-            if (this.listBox == null)
-                return;
-            this.listBox.SelectedItem = this.SelectedItem;
         }
     }
 }

@@ -57,7 +57,6 @@
                             </myui:CachedImage>
 
                             <telerikPrimitives:RadDataBoundListBox x:Name="TranslationListBox" DoubleTap="ListBoxDoubleTap"
-                                                                   SelectedItem="{Binding SelectedVerse, Mode=TwoWay}"
                                                                    Visibility="{Binding DataContext.ShowTranslation, ElementName=ThisPage, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                                    ItemsSource="{Binding Translations}" IsAsyncBalanceEnabled="True">
                                 <telerikPrimitives:RadDataBoundListBox.EmptyContentTemplate>
@@ -68,13 +67,12 @@
                                 <telerikPrimitives:RadDataBoundListBox.ItemTemplate>
                                     <DataTemplate>
                                         <ListBoxItem HorizontalContentAlignment="Stretch" Foreground="{Binding DataContext.ForegroundColor, Mode=OneWay, ElementName=ThisPage}">
-                                            <TextBlock Margin="22, 0" TextWrapping="Wrap" Text="{Binding Text}" FontSize="{Binding StyleName, Mode=OneWay, Converter={StaticResource ArabicFontSizeConverter}}"
-                                                       Style="{Binding StyleName, Mode=OneWay, Converter={StaticResource StyleConverter}}"/>
+                                            <myui:TranslationView DataContext="{Binding}" SelectedAyah="{Binding DataContext.SelectedAyah, ElementName=ThisPage}"/>
                                         </ListBoxItem>
                                     </DataTemplate>
                                 </telerikPrimitives:RadDataBoundListBox.ItemTemplate>
                                 <i:Interaction.Behaviors>
-                                    <myui:ListBoxPropertyBinder SelectedItem="{Binding SelectedVerse}"/>
+                                    <myui:ListBoxPropertyBinder SelectedAyah="{Binding DataContext.SelectedAyah, ElementName=ThisPage}"/>
                                 </i:Interaction.Behaviors>
                             </telerikPrimitives:RadDataBoundListBox>
                         </Grid>

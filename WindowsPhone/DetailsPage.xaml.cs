@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using Microsoft.Phone.Tasks;
+using QuranPhone.Common;
 using QuranPhone.Resources;
 using QuranPhone.UI;
 using QuranPhone.ViewModels;
@@ -136,26 +137,23 @@ namespace QuranPhone
                 var currentPage = App.DetailsViewModel.CurrentPage;
                 if (currentPage != null)
                 {
-                    var ayahTranslation = currentPage.Translations.FirstOrDefault(t => t.Surah == ayah.Sura && t.Ayah == ayah.Ayah);
-                    if (ayahTranslation != null)
-                    {
-                        App.DetailsViewModel.CurrentPage.SelectedVerse = ayahTranslation;
-                        App.DetailsViewModel.ShowTranslation = !App.DetailsViewModel.ShowTranslation;
-                        SettingsUtils.Set(Constants.PREF_SHOW_TRANSLATION, App.DetailsViewModel.ShowTranslation);
-                    }
+                    App.DetailsViewModel.SelectedAyah = ayah;
+                    App.DetailsViewModel.ShowTranslation = !App.DetailsViewModel.ShowTranslation;
+                    SettingsUtils.Set(Constants.PREF_SHOW_TRANSLATION, App.DetailsViewModel.ShowTranslation);
                 }
             }
         }
 
         private void ListBoxDoubleTap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            if (App.DetailsViewModel.AyahDetailsExist && 
-                App.DetailsViewModel.CurrentPage.SelectedVerse != null && 
-                App.DetailsViewModel.CurrentPage.SelectedVerse.Surah > 0)
+            if (App.DetailsViewModel.AyahDetailsExist &&
+                sender != null && sender is RadDataBoundListBox)
             {
-                App.DetailsViewModel.SelectedAyah =
-                    new Common.QuranAyah(App.DetailsViewModel.CurrentPage.SelectedVerse.Surah,
-                                         App.DetailsViewModel.CurrentPage.SelectedVerse.Ayah);
+                var selectedVerse = ((RadDataBoundListBox)sender).SelectedItem as VerseViewModel;
+                if (selectedVerse != null)
+                {
+                    App.DetailsViewModel.SelectedAyah = new QuranAyah(selectedVerse.Surah, selectedVerse.Ayah);
+                }
                 App.DetailsViewModel.ShowTranslation = !App.DetailsViewModel.ShowTranslation;
                 SettingsUtils.Set(Constants.PREF_SHOW_TRANSLATION, App.DetailsViewModel.ShowTranslation);
             }
