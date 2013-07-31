@@ -118,164 +118,164 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="juz2_description" xml:space="preserve">
-    <value>Juz' {0}</value>
+    <value>الجزء {0}</value>
   </data>
   <data name="madani" xml:space="preserve">
-    <value>Madani</value>
+    <value>مدنية</value>
   </data>
   <data name="makki" xml:space="preserve">
-    <value>Мakki</value>
+    <value>مكية</value>
   </data>
   <data name="page_description" xml:space="preserve">
-    <value>page %1$d, Juz' %2$d</value>
+    <value>الصفحة %1$d، الجزء %2$d</value>
   </data>
   <data name="quran_ayah" xml:space="preserve">
-    <value>Ayah</value>
+    <value>الآية</value>
   </data>
   <data name="quran_juz2" xml:space="preserve">
-    <value>Juz'</value>
+    <value>الجزء</value>
   </data>
   <data name="quran_sura" xml:space="preserve">
-    <value>Sura</value>
+    <value>السورة</value>
   </data>
   <data name="quran_sura_title" xml:space="preserve">
-    <value>Surat</value>
+    <value>سورة</value>
   </data>
   <data name="ResourceFlowDirection" xml:space="preserve">
     <value>RightToLeft</value>
   </data>
   <data name="ResourceLanguage" xml:space="preserve">
-    <value>ar</value>
+    <value>ar-SA</value>
   </data>
   <data name="sura_ayah_notification_str" xml:space="preserve">
-    <value>Sura %1$s, Ayah %2$d</value>
+    <value>السورة %1$s, الآية %2$d</value>
   </data>
   <data name="sura_names" xml:space="preserve">
     <value>&lt;string-array name="sura_names"&gt;
-        &lt;item&gt;Al-Fatiha&lt;/item&gt;
-        &lt;item&gt;Al-Baqara&lt;/item&gt;
-        &lt;item&gt;Aal-E-Imran&lt;/item&gt;
-        &lt;item&gt;An-Nisa&lt;/item&gt;
-        &lt;item&gt;Al-Maeda&lt;/item&gt;
-        &lt;item&gt;Al-Anaam&lt;/item&gt;
-        &lt;item&gt;Al-Araf&lt;/item&gt;
-        &lt;item&gt;Al-Anfal&lt;/item&gt;
-        &lt;item&gt;At-Tawba&lt;/item&gt;
-        &lt;item&gt;Yunus&lt;/item&gt;
-        &lt;item&gt;Hud&lt;/item&gt;
-        &lt;item&gt;Yusuf&lt;/item&gt;
-        &lt;item&gt;Ar-Rad&lt;/item&gt;
-        &lt;item&gt;Ibrahim&lt;/item&gt;
-        &lt;item&gt;Al-Hijr&lt;/item&gt;
-        &lt;item&gt;An-Nahl&lt;/item&gt;
-        &lt;item&gt;Al-Isra&lt;/item&gt;
-        &lt;item&gt;Al-Kahf&lt;/item&gt;
-        &lt;item&gt;Maryam&lt;/item&gt;
-        &lt;item&gt;Ta-Ha&lt;/item&gt;
-        &lt;item&gt;Al-Anbiya&lt;/item&gt;
-        &lt;item&gt;Al-Hajj&lt;/item&gt;
-        &lt;item&gt;Al-Mumenoon&lt;/item&gt;
-        &lt;item&gt;An-Noor&lt;/item&gt;
-        &lt;item&gt;Al-Furqan&lt;/item&gt;
-        &lt;item&gt;Ash-Shu'ara&lt;/item&gt;
-        &lt;item&gt;An-Naml&lt;/item&gt;
-        &lt;item&gt;Al-Qasas&lt;/item&gt;
-        &lt;item&gt;Al-Ankaboot&lt;/item&gt;
-        &lt;item&gt;Ar-Room&lt;/item&gt;
-        &lt;item&gt;Luqman&lt;/item&gt;
-        &lt;item&gt;As-Sajda&lt;/item&gt;
-        &lt;item&gt;Al-Ahzab&lt;/item&gt;
-        &lt;item&gt;Saba&lt;/item&gt;
-        &lt;item&gt;Fatir&lt;/item&gt;
-        &lt;item&gt;Ya-Seen&lt;/item&gt;
-        &lt;item&gt;As-Saaffat&lt;/item&gt;
-        &lt;item&gt;Sad&lt;/item&gt;
-        &lt;item&gt;Az-Zumar&lt;/item&gt;
-        &lt;item&gt;Ghafir&lt;/item&gt;
-        &lt;item&gt;Fussilat&lt;/item&gt;
-        &lt;item&gt;Ash-Shura&lt;/item&gt;
-        &lt;item&gt;Az-Zukhruf&lt;/item&gt;
-        &lt;item&gt;Ad-Dukhan&lt;/item&gt;
-        &lt;item&gt;Al-Jathiya&lt;/item&gt;
-        &lt;item&gt;Al-Ahqaf&lt;/item&gt;
-        &lt;item&gt;Muhammad&lt;/item&gt;
-        &lt;item&gt;Al-Fath&lt;/item&gt;
-        &lt;item&gt;Al-Hujraat&lt;/item&gt;
-        &lt;item&gt;Qaf&lt;/item&gt;
-        &lt;item&gt;Adh-Dhariyat&lt;/item&gt;
-        &lt;item&gt;At-Tur&lt;/item&gt;
-        &lt;item&gt;An-Najm&lt;/item&gt;
-        &lt;item&gt;Al-Qamar&lt;/item&gt;
-        &lt;item&gt;Ar-Rahman&lt;/item&gt;
-        &lt;item&gt;Al-Waqia&lt;/item&gt;
-        &lt;item&gt;Al-Hadid&lt;/item&gt;
-        &lt;item&gt;Al-Mujadala&lt;/item&gt;
-        &lt;item&gt;Al-Hashr&lt;/item&gt;
-        &lt;item&gt;Al-Mumtahana&lt;/item&gt;
-        &lt;item&gt;As-Saff&lt;/item&gt;
-        &lt;item&gt;Al-Jumua&lt;/item&gt;
-        &lt;item&gt;Al-Munafiqoon&lt;/item&gt;
-        &lt;item&gt;At-Taghabun&lt;/item&gt;
-        &lt;item&gt;At-Talaq&lt;/item&gt;
-        &lt;item&gt;At-Tahrim&lt;/item&gt;
-        &lt;item&gt;Al-Mulk&lt;/item&gt;
-        &lt;item&gt;Al-Qalam&lt;/item&gt;
-        &lt;item&gt;Al-Haaqqa&lt;/item&gt;
-        &lt;item&gt;Al-Maarij&lt;/item&gt;
-        &lt;item&gt;Nooh&lt;/item&gt;
-        &lt;item&gt;Al-Jinn&lt;/item&gt;
-        &lt;item&gt;Al-Muzzammil&lt;/item&gt;
-        &lt;item&gt;Al-Muddaththir&lt;/item&gt;
-        &lt;item&gt;Al-Qiyama&lt;/item&gt;
-        &lt;item&gt;Al-Insan&lt;/item&gt;
-        &lt;item&gt;Al-Mursalat&lt;/item&gt;
-        &lt;item&gt;An-Naba&lt;/item&gt;
-        &lt;item&gt;An-Naziat&lt;/item&gt;
-        &lt;item&gt;Abasa&lt;/item&gt;
-        &lt;item&gt;At-Takwir&lt;/item&gt;
-        &lt;item&gt;Al-Infitar&lt;/item&gt;
-        &lt;item&gt;Al-Mutaffifin&lt;/item&gt;
-        &lt;item&gt;Al-Inshiqaq&lt;/item&gt;
-        &lt;item&gt;Al-Burooj&lt;/item&gt;
-        &lt;item&gt;At-Tariq&lt;/item&gt;
-        &lt;item&gt;Al-Ala&lt;/item&gt;
-        &lt;item&gt;Al-Ghashiya&lt;/item&gt;
-        &lt;item&gt;Al-Fajr&lt;/item&gt;
-        &lt;item&gt;Al-Balad&lt;/item&gt;
-        &lt;item&gt;Ash-Shams&lt;/item&gt;
-        &lt;item&gt;Al-Lail&lt;/item&gt;
-        &lt;item&gt;Ad-Dhuha&lt;/item&gt;
-        &lt;item&gt;Al-Inshirah&lt;/item&gt;
-        &lt;item&gt;At-Tin&lt;/item&gt;
-        &lt;item&gt;Al-Alaq&lt;/item&gt;
-        &lt;item&gt;Al-Qadr&lt;/item&gt;
-        &lt;item&gt;Al-Bayyina&lt;/item&gt;
-        &lt;item&gt;Az-Zalzala&lt;/item&gt;
-        &lt;item&gt;Al-Adiyat&lt;/item&gt;
-        &lt;item&gt;Al-Qaria&lt;/item&gt;
-        &lt;item&gt;At-Takathur&lt;/item&gt;
-        &lt;item&gt;Al-Asr&lt;/item&gt;
-        &lt;item&gt;Al-Humaza&lt;/item&gt;
-        &lt;item&gt;Al-Fil&lt;/item&gt;
-        &lt;item&gt;Quraish&lt;/item&gt;
-        &lt;item&gt;Al-Maun&lt;/item&gt;
-        &lt;item&gt;Al-Kauther&lt;/item&gt;
-        &lt;item&gt;Al-Kafiroon&lt;/item&gt;
-        &lt;item&gt;An-Nasr&lt;/item&gt;
-        &lt;item&gt;Al-Masadd&lt;/item&gt;
-        &lt;item&gt;Al-Ikhlas&lt;/item&gt;
-        &lt;item&gt;Al-Falaq&lt;/item&gt;
-        &lt;item&gt;An-Nas&lt;/item&gt;
+        &lt;item&gt;الفاتحة&lt;/item&gt;
+        &lt;item&gt;البقرة&lt;/item&gt;
+        &lt;item&gt;آل عمران&lt;/item&gt;
+        &lt;item&gt;النساء&lt;/item&gt;
+        &lt;item&gt;المائدة&lt;/item&gt;
+        &lt;item&gt;الأنعام&lt;/item&gt;
+        &lt;item&gt;الأعراف&lt;/item&gt;
+        &lt;item&gt;الأنفال&lt;/item&gt;
+        &lt;item&gt;التوبة&lt;/item&gt;
+        &lt;item&gt;يونس&lt;/item&gt;
+        &lt;item&gt;هود&lt;/item&gt;
+        &lt;item&gt;يوسف&lt;/item&gt;
+        &lt;item&gt;الرعد&lt;/item&gt;
+        &lt;item&gt;إبراهيم&lt;/item&gt;
+        &lt;item&gt;الحجر&lt;/item&gt;
+        &lt;item&gt;النحل&lt;/item&gt;
+        &lt;item&gt;الإسراء&lt;/item&gt;
+        &lt;item&gt;الكهف&lt;/item&gt;
+        &lt;item&gt;مريم&lt;/item&gt;
+        &lt;item&gt;طه&lt;/item&gt;
+        &lt;item&gt;الأنبياء&lt;/item&gt;
+        &lt;item&gt;الحج&lt;/item&gt;
+        &lt;item&gt;المؤمنون&lt;/item&gt;
+        &lt;item&gt;النور&lt;/item&gt;
+        &lt;item&gt;الفرقان&lt;/item&gt;
+        &lt;item&gt;الشعراء&lt;/item&gt;
+        &lt;item&gt;النمل&lt;/item&gt;
+        &lt;item&gt;القصص&lt;/item&gt;
+        &lt;item&gt;العنكبوت&lt;/item&gt;
+        &lt;item&gt;الروم&lt;/item&gt;
+        &lt;item&gt;لقمان&lt;/item&gt;
+        &lt;item&gt;السجدة&lt;/item&gt;
+        &lt;item&gt;الأحزاب&lt;/item&gt;
+        &lt;item&gt;سبأ&lt;/item&gt;
+        &lt;item&gt;فاطر&lt;/item&gt;
+        &lt;item&gt;يس&lt;/item&gt;
+        &lt;item&gt;الصافات&lt;/item&gt;
+        &lt;item&gt;ص&lt;/item&gt;
+        &lt;item&gt;الزمر&lt;/item&gt;
+        &lt;item&gt;غافر&lt;/item&gt;
+        &lt;item&gt;فصلت&lt;/item&gt;
+        &lt;item&gt;الشورى&lt;/item&gt;
+        &lt;item&gt;الزخرف&lt;/item&gt;
+        &lt;item&gt;الدخان&lt;/item&gt;
+        &lt;item&gt;الجاثية&lt;/item&gt;
+        &lt;item&gt;الأحقاف&lt;/item&gt;
+        &lt;item&gt;محمد&lt;/item&gt;
+        &lt;item&gt;الفتح&lt;/item&gt;
+        &lt;item&gt;الحجرات&lt;/item&gt;
+        &lt;item&gt;ق&lt;/item&gt;
+        &lt;item&gt;الذاريات&lt;/item&gt;
+        &lt;item&gt;الطور&lt;/item&gt;
+        &lt;item&gt;النجم&lt;/item&gt;
+        &lt;item&gt;القمر&lt;/item&gt;
+        &lt;item&gt;الرحمن&lt;/item&gt;
+        &lt;item&gt;الواقعة&lt;/item&gt;
+        &lt;item&gt;الحديد&lt;/item&gt;
+        &lt;item&gt;المجادلة&lt;/item&gt;
+        &lt;item&gt;الحشر&lt;/item&gt;
+        &lt;item&gt;الممتحنة&lt;/item&gt;
+        &lt;item&gt;الصف&lt;/item&gt;
+        &lt;item&gt;الجمعة&lt;/item&gt;
+        &lt;item&gt;المنافقون&lt;/item&gt;
+        &lt;item&gt;التغابن&lt;/item&gt;
+        &lt;item&gt;الطلاق&lt;/item&gt;
+        &lt;item&gt;التحريم&lt;/item&gt;
+        &lt;item&gt;الملك&lt;/item&gt;
+        &lt;item&gt;القلم&lt;/item&gt;
+        &lt;item&gt;الحاقة&lt;/item&gt;
+        &lt;item&gt;المعارج&lt;/item&gt;
+        &lt;item&gt;نوح&lt;/item&gt;
+        &lt;item&gt;الجن&lt;/item&gt;
+        &lt;item&gt;المزمل&lt;/item&gt;
+        &lt;item&gt;المدثر&lt;/item&gt;
+        &lt;item&gt;القيامة&lt;/item&gt;
+        &lt;item&gt;الإنسان&lt;/item&gt;
+        &lt;item&gt;المرسلات&lt;/item&gt;
+        &lt;item&gt;النبأ&lt;/item&gt;
+        &lt;item&gt;النازعات&lt;/item&gt;
+        &lt;item&gt;عبس&lt;/item&gt;
+        &lt;item&gt;التكوير&lt;/item&gt;
+        &lt;item&gt;الانفطار&lt;/item&gt;
+        &lt;item&gt;المطففين&lt;/item&gt;
+        &lt;item&gt;الانشقاق&lt;/item&gt;
+        &lt;item&gt;البروج&lt;/item&gt;
+        &lt;item&gt;الطارق&lt;/item&gt;
+        &lt;item&gt;الأعلى&lt;/item&gt;
+        &lt;item&gt;الغاشية&lt;/item&gt;
+        &lt;item&gt;الفجر&lt;/item&gt;
+        &lt;item&gt;البلد&lt;/item&gt;
+        &lt;item&gt;الشمس&lt;/item&gt;
+        &lt;item&gt;الليل&lt;/item&gt;
+        &lt;item&gt;الضحى&lt;/item&gt;
+        &lt;item&gt;الشرح&lt;/item&gt;
+        &lt;item&gt;التين&lt;/item&gt;
+        &lt;item&gt;العلق&lt;/item&gt;
+        &lt;item&gt;القدر&lt;/item&gt;
+        &lt;item&gt;البينة&lt;/item&gt;
+        &lt;item&gt;الزلزلة&lt;/item&gt;
+        &lt;item&gt;العاديات&lt;/item&gt;
+        &lt;item&gt;القارعة&lt;/item&gt;
+        &lt;item&gt;التكاثر&lt;/item&gt;
+        &lt;item&gt;العصر&lt;/item&gt;
+        &lt;item&gt;الهمزة&lt;/item&gt;
+        &lt;item&gt;الفيل&lt;/item&gt;
+        &lt;item&gt;قريش&lt;/item&gt;
+        &lt;item&gt;الماعون&lt;/item&gt;
+        &lt;item&gt;الكوثر&lt;/item&gt;
+        &lt;item&gt;الكافرون&lt;/item&gt;
+        &lt;item&gt;النصر&lt;/item&gt;
+        &lt;item&gt;المسد&lt;/item&gt;
+        &lt;item&gt;الإخلاص&lt;/item&gt;
+        &lt;item&gt;الفلق&lt;/item&gt;
+        &lt;item&gt;الناس&lt;/item&gt;
     &lt;/string-array&gt;</value>
   </data>
   <data name="app_name" xml:space="preserve">
-    <value>QURAN</value>
+    <value>القرآن</value>
   </data>
   <data name="verse" xml:space="preserve">
-    <value>verse</value>
+    <value>آية</value>
   </data>
   <data name="verses" xml:space="preserve">
-    <value>verses</value>
+    <value>آيات</value>
   </data>
   <data name="quarters" xml:space="preserve">
     <value>&lt;?xml version="1.0" encoding="utf-8"?&gt;
@@ -525,81 +525,79 @@
 &lt;/resources&gt;</value>
   </data>
   <data name="quran_bookmarks_lower" xml:space="preserve">
-    <value>bookmarks</value>
+    <value>العلامات</value>
   </data>
   <data name="quran_juz2_lower" xml:space="preserve">
-    <value>juz'</value>
+    <value>الجزء</value>
   </data>
   <data name="quran_sura_lower" xml:space="preserve">
-    <value>sura</value>
+    <value>السورة</value>
   </data>
   <data name="quran_tags_lower" xml:space="preserve">
-    <value>tags</value>
+    <value>التصنيفات</value>
   </data>
   <data name="translations" xml:space="preserve">
-    <value>translations</value>
+    <value>التفاسير</value>
   </data>
   <data name="available_translations" xml:space="preserve">
-    <value>Available translations</value>
+    <value>التفاسير المتاحة</value>
   </data>
   <data name="downloaded_translations" xml:space="preserve">
-    <value>Downloaded translations</value>
+    <value>التفاسير المحملة</value>
   </data>
   <data name="settings" xml:space="preserve">
-    <value>settings</value>
+    <value>الإعدادات</value>
   </data>
   <data name="loading_message" xml:space="preserve">
-    <value>Loading Quran data...</value>
+    <value>تحميل بيانات القرآن...</value>
   </data>
   <data name="downloadPrompt" xml:space="preserve">
-    <value>For optimal performance, some files must be downloaded.  If you choose not to do this now, each page will take significantly longer to load. Would you like to download the required files now (WiFi connection recommended)?</value>
+    <value>لأداء أفضل بعض الملفات في حاجة إلى التحميل، إذا اخترت عدم التحميل الآن فإن الصفحات ستستغرق وقتًا أطول لتحميلها أثناء التصفح. هل ترغب في تحميل الملفات المطلوبة الآن (يفضل وجود اتصال WiFi)؟</value>
   </data>
   <data name="downloadPrompt_title" xml:space="preserve">
-    <value>Download Required Files?</value>
+    <value>تحميل الملفات المطلوبة؟</value>
   </data>
   <data name="extracting_message" xml:space="preserve">
-    <value>Extracting Downloaded File...</value>
+    <value>استخراج الملف المحمل...</value>
   </data>
   <data name="quran_page" xml:space="preserve">
-    <value>page</value>
+    <value>الصفحة</value>
   </data>
   <data name="bookmarks" xml:space="preserve">
-    <value>Bookmarks</value>
+    <value>العلامات</value>
   </data>
   <data name="bookmarks_ayah" xml:space="preserve">
-    <value>Ayah Bookmarks</value>
+    <value>علامات الآيات</value>
   </data>
   <data name="bookmarks_current_page" xml:space="preserve">
-    <value>Current Page</value>
+    <value>الصفحة الحالية</value>
   </data>
   <data name="bookmarks_page" xml:space="preserve">
-    <value>Page Bookmarks</value>
+    <value>علامات الصفحات</value>
   </data>
   <data name="tags" xml:space="preserve">
-    <value>Tags</value>
+    <value>التصنيفات</value>
   </data>
   <data name="delete_bookmark" xml:space="preserve">
-    <value>Delete Bookmark</value>
+    <value>حذف علامة</value>
   </data>
   <data name="text_size" xml:space="preserve">
-    <value>translation text size</value>
+    <value>حجم نص التفسير</value>
   </data>
   <data name="about_us" xml:space="preserve">
-    <value>about us</value>
+    <value>عن البرنامج</value>
   </data>
   <data name="about_us_text" xml:space="preserve">
-    <value>Quran Phone is a free, open source Quran
-application for Windows Phone based on Quran 
-Android project.  The images used are from the
-&amp;lt;a href="http://quran.com"&gt;quran.com&amp;lt;/a&gt;
-project, the audio comes from
-&amp;lt;a href="http://everyayah.com"&gt;everyayah.com&amp;lt;/a&gt;,
-the data used in the translations and Arabic comes from
-&amp;lt;a href="http://tanzil.net"&gt;tanzil.net&amp;lt;/a&gt; and
+    <value>قرآن فون برنامج قرآن مجامي ومفتوح المصدر
+مبني على مشروع قرآن أندرويد.
+الصور مأخوذة من مشروع &amp;lt;a href="http://quran.com"&gt;quran.com&amp;lt;/a&gt;،
+الصوت مأخوذ من &amp;lt;a href="http://everyayah.com"&gt;everyayah.com&amp;lt;/a&gt;,
+البيانات المستعملة في الترجمات والتفاسير والنص القرآني مأخوذة من 
+&amp;lt;a href="http://tanzil.net"&gt;tanzil.net&amp;lt;/a&gt; و
 &amp;lt;a href="http://quran.ksu.edu.sa"&gt;quran.ksu.edu.sa&amp;lt;/a&gt;
-&amp;lt;br/&gt;&amp;lt;br/&gt;&amp;lt;b&gt;Quran for Windows Phone Contributors:&amp;lt;/b&gt;
+&amp;lt;br/&gt;&amp;lt;br/&gt;&amp;lt;b&gt;المساهمون في برنامج قرآن لويندوز فون:&amp;lt;/b&gt;
 &amp;lt;br/&gt;Denis Stankovski
-&amp;lt;br/&gt;&amp;lt;br/&gt;&amp;lt;b&gt;Quran for Android Contributors:&amp;lt;/b&gt;
+&amp;lt;br/&gt;&amp;lt;br/&gt;&amp;lt;b&gt;المساهمون في برنامج قرآن أندرويد:&amp;lt;/b&gt;
 &amp;lt;br/&gt;Ahmed El-Helw (&amp;lt;a href="http://twitter.com/ahmedre"&gt;@ahmedre&amp;lt;/a&gt;)
 &amp;lt;br/&gt;Hussein Maher (&amp;lt;a href="http://twitter.com/husseinmaher"&gt;@husseinmaher&amp;lt;/a&gt;)
 &amp;lt;br/&gt;Ahmed Farra (&amp;lt;a href="https://github.com/afarra"&gt;github&amp;lt;/a&gt;)
@@ -608,13 +606,13 @@ the data used in the translations and Arabic comes from
 &amp;lt;br/&gt;Somaia Gabr (&amp;lt;a href="http://somaiagabr.com"&gt;web&amp;lt;/a&gt;)
 &amp;lt;br/&gt;Mahmoud Hossam (&amp;lt;a href="https://github.com/mahmoudhossam"&gt;github&amp;lt;/a&gt;)
 &amp;lt;br/&gt;Rehab Mohamed (&amp;lt;a href="http://twitter.com/hams_rrr"&gt;@hams_rrr&amp;lt;/a&gt;)
-&amp;lt;br/&gt;&amp;lt;br/&gt;&amp;lt;b&gt;Translators:&amp;lt;/b&gt;
+&amp;lt;br/&gt;&amp;lt;br/&gt;&amp;lt;b&gt;المترجمون:&amp;lt;/b&gt;
 &amp;lt;br/&gt;Mehmed Mahmudoglu - Turkish
 &amp;lt;br/&gt;M. Jafar Nanakar - Farsi
 &amp;lt;br/&gt;Rinat (Ринат Валеев) - Russian
 &amp;lt;br/&gt;Denis Stankovski - Russian
 &amp;lt;br/&gt;khajavi (on github) - previous Farsi translation
-&amp;lt;br/&gt;&amp;lt;br/&gt;&amp;lt;b&gt;Open Source Projects:&amp;lt;/b&gt;
+&amp;lt;br/&gt;&amp;lt;br/&gt;&amp;lt;b&gt;المشاريع المفتوحة المصدر:&amp;lt;/b&gt;
 &amp;lt;br/&gt;ActionBarSherlock (&amp;lt;a href="http://abs.io"&gt;abs.io&amp;lt;/a&gt;)
 &amp;lt;br/&gt;maven-android-plugin (&amp;lt;a href="http://code.google.com/p/maven-android-plugin"&gt;maven-android-plugin&amp;lt;/a&gt;)
 &amp;lt;br/&gt;&amp;lt;br/&gt;&amp;lt;b&gt;Special Thanks:&amp;lt;/b&gt;
@@ -622,63 +620,63 @@ the data used in the translations and Arabic comes from
 &amp;lt;br/&gt;Batoul Apps (&amp;lt;a href="http://twitter.com/batoulapps"&gt;@batoulapps&amp;lt;/a&gt;)</value>
   </data>
   <data name="prefs_ayah_before_translation_summary" xml:space="preserve">
-    <value>show ayah in Arabic above the translation</value>
+    <value>إظهار نص الآية أعلى التفسير</value>
   </data>
   <data name="no_network_to_load" xml:space="preserve">
-    <value>Sorry, but we were unable to load the data due to absence of network connection. Please try again later.</value>
+    <value>نأسف بأن البرنامج لا يستطيع تحميل الملفات بسبب اتصال البيانات، بإمكانك المحاولة في وقت لاحق.</value>
   </data>
   <data name="download_cancel_confirmation" xml:space="preserve">
-    <value>Are you sure you would like to cancel download?</value>
+    <value>هل أنت واثق أنك تريد إلغاء التحميل؟?</value>
   </data>
   <data name="disable_sleep" xml:space="preserve">
-    <value>prevent phone from turning screen off</value>
+    <value>منع الهاتف من إغلاق الشاشة</value>
   </data>
   <data name="please_restart" xml:space="preserve">
-    <value>Please relaunch an app for the change to take effect</value>
+    <value>يرجى إعادة تشغيل البرنامج حتى يتم تفعيل الإعداد</value>
   </data>
   <data name="search" xml:space="preserve">
-    <value>search</value>
+    <value>البحث</value>
   </data>
   <data name="search_results" xml:space="preserve">
-    <value>search results</value>
+    <value>نتائج البحث</value>
   </data>
   <data name="no_translation_to_search" xml:space="preserve">
-    <value>No translation to search. Please go to settings page to select active translation.</value>
+    <value>لا يوجد تفسير للبحث في، افتح الإعدادات لتحديد التفسير الحالي.</value>
   </data>
   <data name="keep_info_overlay" xml:space="preserve">
-    <value>show page info in landscape</value>
+    <value>إظهار بيانات الصفحة في الوضع الأفقي</value>
   </data>
   <data name="bookmark_ayah" xml:space="preserve">
-    <value>Bookmark ayah</value>
+    <value>تعليم الآية</value>
   </data>
   <data name="quran_rub3" xml:space="preserve">
-    <value>Rub'</value>
+    <value>الربع</value>
   </data>
   <data name="generate" xml:space="preserve">
-    <value>generate</value>
+    <value>تكوين</value>
   </data>
   <data name="generate_bookmarks_for_dua" xml:space="preserve">
-    <value>Generate bookmarks for Quranic dua</value>
+    <value>تكوين علامات لآيات الدعاء في القرآن</value>
   </data>
   <data name="dua" xml:space="preserve">
-    <value>Dua</value>
+    <value>الدعاء</value>
   </data>
   <data name="night_mode" xml:space="preserve">
-    <value>night mode</value>
+    <value>وضعية الليل</value>
   </data>
   <data name="loading" xml:space="preserve">
-    <value>loading...</value>
+    <value>تحميل...</value>
   </data>
   <data name="change_language" xml:space="preserve">
-    <value>change language</value>
+    <value>تغيير اللغة</value>
   </data>
   <data name="waiting" xml:space="preserve">
-    <value>Waiting...</value>
+    <value>انتظار...</value>
   </data>
   <data name="waiting_for_power" xml:space="preserve">
-    <value>Waiting for power...</value>
+    <value>انتظار الطاقة...</value>
   </data>
   <data name="waiting_for_wifi" xml:space="preserve">
-    <value>Waiting for WIFI...</value>
+    <value>انتظار الشبكة اللاسلكية...</value>
   </data>
 </root>
