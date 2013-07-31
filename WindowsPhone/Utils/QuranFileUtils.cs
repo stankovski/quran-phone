@@ -92,7 +92,9 @@ namespace QuranPhone.Utils
                         {
                             var filePath = Path.Combine(path, fileName);
                             var badFilePath = ReadFile(filePath);
-                            isf.DeleteFile(badFilePath);
+                            if (isf.FileExists(badFilePath))
+                                isf.DeleteFile(badFilePath);
+
                             isf.DeleteFile(filePath);
                         }
                         catch
