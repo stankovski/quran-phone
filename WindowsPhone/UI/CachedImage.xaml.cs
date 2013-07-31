@@ -6,6 +6,7 @@ using System.Windows.Shapes;
 using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Windows.Media.Imaging;
+using Microsoft.Phone.Controls;
 using QuranPhone.Common;
 using QuranPhone.Data;
 using QuranPhone.Utils;
@@ -19,7 +20,8 @@ namespace QuranPhone.UI
     {
         public event EventHandler<QuranAyahEventArgs> AyahTapped;
 
-        private ImageSource imageSourceBitmap;
+        private WriteableBitmap imageSourceBitmap;
+        private WriteableBitmap imageSourceBitmapResized;
         private Uri imageSourceUri;
         private bool nightMode;
 
@@ -128,6 +130,8 @@ namespace QuranPhone.UI
             else
             {
                 imageSourceUri = source;
+                imageSourceBitmap = null;
+                imageSourceBitmapResized = null;
             }
 
             // Reset any overlays
@@ -148,7 +152,7 @@ namespace QuranPhone.UI
                 // Design time preview
                 if (PhoneUtils.IsDesignMode)
                 {
-                    imageSourceBitmap = new BitmapImage(source);
+                    imageSourceBitmap = new WriteableBitmap(1,1);
                     ImageSource = source;
                     return;
                 }
@@ -184,7 +188,10 @@ namespace QuranPhone.UI
                     progress.IsIndeterminate = false;
                 }
 
-                image.Source = imageSourceBitmap;
+                if (IsPortrate && nightMode)
+                    image.Source = imageSourceBitmapResized;
+                else 
+                    image.Source = imageSourceBitmap;
             }
         }
 
@@ -197,32 +204,58 @@ namespace QuranPhone.UI
                 bitmap.SetSource(stream);
                 if (nightMode)
                 {
+                    imageSourceBitmapResized = resizeBitmapIfNotExists(bitmap);
                     invertColors(bitmap);
+                    invertColors(imageSourceBitmapResized);
                 }
                 imageSourceBitmap = bitmap;
                 progress.Visibility = System.Windows.Visibility.Collapsed;
             }
         }
 
+        private WriteableBitmap resizeBitmapIfNotExists(WriteableBitmap bitmap)
+        {
+            if (imageSourceBitmapResized == null)
+            {
+                var hightToWidthRatio = ((double)bitmap.PixelHeight / (double)bitmap.PixelWidth);
+
+                return bitmap.Resize((int) Application.Current.Host.Content.ActualWidth,
+                                     (int) (Application.Current.Host.Content.ActualWidth*hightToWidthRatio),
+                                     WriteableBitmapExtensions.Interpolation.Bilinear);
+            }
+            else
+            {
+                return imageSourceBitmapResized;
+            }
+        }
+
         private void invertColors(WriteableBitmap bitmap)
         {
             int size = bitmap.Pixels.Length;
-            for (int i = 0; i < size; i++)
-            {
+                for (int i = 0; i < size; i++)
+                {
                 var c = bitmap.Pixels[i];
-                var a = 0x000000FF & (c >> 24);
-                var r = 0x000000FF & (c >> 16);
-                var g = 0x000000FF & (c >> 8);
-                var b = 0x000000FF & (c);
+                    var a = 0x000000FF & (c >> 24);
+                    var r = 0x000000FF & (c >> 16);
+                    var g = 0x000000FF & (c >> 8);
+                    var b = 0x000000FF & (c);
 
-                // Invert
-                r = 0x000000FF & (0xFF - r);
-                g = 0x000000FF & (0xFF - g);
-                b = 0x000000FF & (0xFF - b);
+                    // Invert
+                    r = 0x000000FF & (0xFF - r);
+                    g = 0x000000FF & (0xFF - g);
+                    b = 0x000000FF & (0xFF - b);
 
-                // Set result color
+                    // Set result color
                 bitmap.Pixels[i] = (a << 24) | (r << 16) | (g << 8) | b;
             }
+        }
+
+        private void SizeChange(object sender, SizeChangedEventArgs e)
+        {
+            if (IsPortrate && nightMode)
+                image.Source = imageSourceBitmapResized;
+            else
+                image.Source = imageSourceBitmap;
         }
 
         public int PageNumber
@@ -243,6 +276,18 @@ namespace QuranPhone.UI
         private void UpdatePageNumber(int source)
         {
             //pageNumber.Text = "Page " + source;
+        }
+
+        private bool IsPortrate
+        {
+            get
+            {
+                return ((PhoneApplicationFrame)Application.Current.RootVisual).Orientation == PageOrientation.Portrait ||
+                       ((PhoneApplicationFrame)Application.Current.RootVisual).Orientation ==
+                       PageOrientation.PortraitUp ||
+                       ((PhoneApplicationFrame)Application.Current.RootVisual).Orientation ==
+                       PageOrientation.PortraitDown;
+            }
         }
 
         
@@ -302,6 +347,7 @@ namespace QuranPhone.UI
             if (image != null)
                 image.Source = null;
             imageSourceBitmap = null;
+            imageSourceBitmapResized = null;
             ImageSource = null;
         }
 

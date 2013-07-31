@@ -136,6 +136,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\ignorefromhg\RadControls_for_WindowsPhone7_2013_2_0704_DEV_hotfix\Binaries\WindowsPhone\Telerik.Windows.Data.dll</HintPath>
     </Reference>
+    <Reference Include="WriteableBitmapExWinPhone">
+      <HintPath>..\WindowsPhone\packages\WriteableBitmapEx.1.0.8.0\lib\sl4-wp71\WriteableBitmapExWinPhone.dll</HintPath>
+    </Reference>
+    <Reference Include="WriteableBitmapExWinPhoneXnaDependant">
+      <HintPath>..\WindowsPhone\packages\WriteableBitmapEx.1.0.8.0\lib\sl4-wp71\WriteableBitmapExWinPhoneXnaDependant.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\WindowsPhone\App.xaml.cs">
@@ -487,6 +493,8 @@
     <None Include="packages.config" />
     <None Include="Properties\AppManifest.xml" />
     <None Include="Properties\WMAppManifest.xml" />
+    <None Include="QuranPhone7_2013_07_31_11_49_35.sap" />
+    <None Include="QuranPhone7_2013_07_31_11_49_48.sap" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\WindowsPhone\Assets\AlignmentGrid.png">

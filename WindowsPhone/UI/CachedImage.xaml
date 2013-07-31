@@ -11,7 +11,7 @@
     <ScrollViewer HorizontalAlignment="Stretch" x:Name="LayoutRoot">
         <Grid>
             <StackPanel Orientation="Vertical">
-                <Image Name="image" Margin="0,0,0,20" Tap="ImageTap"/>
+                <Image Name="image" Margin="0,0,0,20" Tap="ImageTap" SizeChanged="SizeChange"/>
             </StackPanel>
             <ProgressBar Name="progress" IsIndeterminate="True" VerticalAlignment="Top"
                          Margin="20,5,20,0" FlowDirection="LeftToRight"/>
