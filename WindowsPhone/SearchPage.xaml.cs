@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -63,8 +64,17 @@ namespace QuranPhone
             if (list == null || list.SelectedItem == null)
                 return;
 
+            var item = list.SelectedItem as ItemViewModel;
+
+            if (item == null || item.SelectedAyah == null)
+                return;
+
             // Navigate to the new page
-            NavigationService.Navigate(new Uri("/DetailsPage.xaml?page=" + (list.SelectedItem as ItemViewModel).PageNumber, UriKind.Relative));
+            NavigationService.Navigate(new Uri(
+                string.Format(CultureInfo.InvariantCulture, "/DetailsPage.xaml?page={0}&surah={1}&ayah={2}",
+                                          item.PageNumber,
+                                          item.SelectedAyah.Sura,
+                                          item.SelectedAyah.Ayah), UriKind.Relative));
 
             // Reset selected item to null (no selection)
             list.SelectedItem = null;

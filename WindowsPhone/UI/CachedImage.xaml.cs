@@ -33,6 +33,11 @@ namespace QuranPhone.UI
             canvas.Height = QuranScreenInfo.Instance.ImageHeight;
         }
 
+        public Image Image
+        {
+            get { return image; }
+        }
+
         public QuranAyah SelectedAyah
         {
             get { return (QuranAyah)GetValue(SelectedAyahProperty); }
@@ -63,9 +68,13 @@ namespace QuranPhone.UI
                     string path = Path.Combine(basePath, QuranFileUtils.GetAyaPositionFileName());
                     if (QuranFileUtils.FileExists(path))
                     {
+                        int offsetToScrollTo = 0;
                         using (var dbh = new AyahInfoDatabaseHandler(QuranFileUtils.GetAyaPositionFileName()))
                         {
                             var bounds = dbh.GetVerseBoundsCombined(ayahInfo.Sura, ayahInfo.Ayah);
+                            if (bounds == null)
+                                return;
+
                             // Reset any overlays
                             canvas.Children.Clear();
                             canvas.Opacity = 1.0;
@@ -73,8 +82,11 @@ namespace QuranPhone.UI
                             foreach (var bound in bounds)
                             {
                                 drawAyahBound(bound);
+                                if (offsetToScrollTo == 0)
+                                    offsetToScrollTo = bound.MinY;
                             }
                         }
+                        LayoutRoot.ScrollToVerticalOffset(offsetToScrollTo);
                         canvasStoryboard.Begin();
                     }
                 }

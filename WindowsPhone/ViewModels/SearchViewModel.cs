@@ -121,7 +121,8 @@ namespace QuranPhone.ViewModels
                                     string.Format("{0} ({1}:{2})", QuranInfo.GetSuraName(verse.Sura, false), verse.Sura,
                                                   verse.Ayah),
                                 Details = text,
-                                PageNumber = QuranInfo.GetPageFromSuraAyah(verse.Sura, verse.Ayah)
+                                PageNumber = QuranInfo.GetPageFromSuraAyah(verse.Sura, verse.Ayah),
+                                SelectedAyah = new QuranAyah(verse.Sura, verse.Ayah)
                             });
                     }
                 }
@@ -131,7 +132,8 @@ namespace QuranPhone.ViewModels
                     {
                         Id = "Error",
                         Details = "Error performing translation",
-                        PageNumber = 1
+                        PageNumber = 1,
+                        SelectedAyah = new QuranAyah()
                     });
                 }
 

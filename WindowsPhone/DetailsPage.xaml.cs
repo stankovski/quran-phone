@@ -48,14 +48,7 @@ namespace QuranPhone
             {
                 int page = int.Parse(selectedPage);
                 App.DetailsViewModel.CurrentPageNumber = page;
-                //Select ayah
-                if (selectedSurah != null && selectedAyah != null)
-                {
-                    int surah = int.Parse(selectedSurah);
-                    int ayah = int.Parse(selectedAyah);
-                    App.DetailsViewModel.SelectedAyah = new Common.QuranAyah(surah, ayah);
-                }
-
+                
                 //Update settings
                 App.DetailsViewModel.IsNightMode = SettingsUtils.Get<bool>(Constants.PREF_NIGHT_MODE);
 
@@ -89,6 +82,14 @@ namespace QuranPhone
 
             // set keepinfooverlay according to setting
             App.DetailsViewModel.KeepInfoOverlay = SettingsUtils.Get<bool>(Constants.PREF_KEEP_INFO_OVERLAY);
+
+            //Select ayah
+            if (selectedSurah != null && selectedAyah != null)
+            {
+                int surah = int.Parse(selectedSurah);
+                int ayah = int.Parse(selectedAyah);
+                App.DetailsViewModel.SelectedAyah = new Common.QuranAyah(surah, ayah);
+            }
         }
 
         private void PageFlipped(object sender, SelectionChangedEventArgs e)
@@ -115,9 +116,13 @@ namespace QuranPhone
 
         private void ImageHold(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            if (App.DetailsViewModel.AyahDetailsExist)
+            if (App.DetailsViewModel.AyahDetailsExist && sender != null)
             {
-                var ayah = CachedImage.GetAyahFromGesture(e.GetPosition(radSlideView),
+                var cachedImage = sender as CachedImage;
+                if (cachedImage == null)
+                    return;
+
+                var ayah = CachedImage.GetAyahFromGesture(e.GetPosition(cachedImage.Image),
                                                           App.DetailsViewModel.CurrentPageNumber,
                                                           radSlideView.ActualWidth);
                 App.DetailsViewModel.SelectedAyah = ayah;
@@ -129,9 +134,14 @@ namespace QuranPhone
 
         private void ImageDoubleTap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            if (App.DetailsViewModel.AyahDetailsExist && !string.IsNullOrEmpty(App.DetailsViewModel.TranslationFile))
+            if (App.DetailsViewModel.AyahDetailsExist && sender != null && 
+                !string.IsNullOrEmpty(App.DetailsViewModel.TranslationFile))
             {
-                var ayah = CachedImage.GetAyahFromGesture(e.GetPosition(radSlideView),
+                var cachedImage = sender as CachedImage;
+                if (cachedImage == null)
+                    return;
+
+                var ayah = CachedImage.GetAyahFromGesture(e.GetPosition(cachedImage.Image),
                                                           App.DetailsViewModel.CurrentPageNumber,
                                                           radSlideView.ActualWidth);
                 var currentPage = App.DetailsViewModel.CurrentPage;

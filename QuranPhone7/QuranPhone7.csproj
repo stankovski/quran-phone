@@ -269,6 +269,9 @@
     <Compile Include="..\WindowsPhone\UI\DataTemplateSelector.cs">
       <Link>UI\DataTemplateSelector.cs</Link>
     </Compile>
+    <Compile Include="..\WindowsPhone\UI\ListBoxPropertyBinder.cs">
+      <Link>UI\ListBoxPropertyBinder.cs</Link>
+    </Compile>
     <Compile Include="..\WindowsPhone\UI\ListHeader.xaml.cs">
       <Link>UI\ListHeader.xaml.cs</Link>
       <DependentUpon>ListHeader.xaml</DependentUpon>
