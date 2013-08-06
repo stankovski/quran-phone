@@ -90,10 +90,15 @@ namespace QuranPhone
                 int ayah = int.Parse(selectedAyah);
                 App.DetailsViewModel.SelectedAyah = new Common.QuranAyah(surah, ayah);
             }
+            else
+            {
+                App.DetailsViewModel.SelectedAyah = null;
+            }
         }
 
         private void PageFlipped(object sender, SelectionChangedEventArgs e)
         {
+            App.DetailsViewModel.SelectedAyah = null;
             App.DetailsViewModel.CurrentPageIndex = App.DetailsViewModel.Pages.IndexOf((PageViewModel)radSlideView.SelectedItem);
         }
 
@@ -189,6 +194,7 @@ namespace QuranPhone
 
         private void Bookmark_Click(object sender, EventArgs e)
         {
+            App.DetailsViewModel.SelectedAyah = null;
             App.DetailsViewModel.AddBookmark();
             App.DetailsViewModel.ToggleMenu();
         }

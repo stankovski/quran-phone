@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Interactivity;
 using QuranPhone.Common;
 using QuranPhone.ViewModels;
@@ -48,7 +50,14 @@ namespace QuranPhone.UI
 
         private object getMatchedItem(QuranAyah ayah)
         {
-            foreach (VerseViewModel item in this.listBox.RealizedItems)
+            ICollection listboxItems = null;
+            if (App.DetailsViewModel.CurrentPage == null || 
+                (this.listBox.RealizedItems != null && this.listBox.RealizedItems.Length > 0))
+                listboxItems = this.listBox.RealizedItems;
+            else
+                listboxItems = App.DetailsViewModel.CurrentPage.Translations;
+
+            foreach (VerseViewModel item in listboxItems)
             {
                 if (item.Surah == ayah.Sura && item.Ayah == ayah.Ayah)
                 {
