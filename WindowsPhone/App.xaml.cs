@@ -146,8 +146,19 @@ namespace QuranPhone
             OneTimePage270Fix();
 
             // Set the current thread culture
-            //Thread.CurrentThread.CurrentCulture = new CultureInfo("ar");
-            //Thread.CurrentThread.CurrentUICulture = new CultureInfo("ar");
+            var cultureOverride = SettingsUtils.Get<string>(Constants.PREF_CULTURE_OVERRIDE);
+            if (cultureOverride != "")
+            {
+                try
+                {
+                    Thread.CurrentThread.CurrentCulture = new CultureInfo(cultureOverride);
+                    Thread.CurrentThread.CurrentUICulture = new CultureInfo(cultureOverride);
+                }
+                catch
+                {
+                    //Ignore
+                }
+            }
 
             // Show graphics profiling information while debugging.
             if (Debugger.IsAttached)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using QuranPhone.Common;
 
 namespace QuranPhone.ViewModels
@@ -117,7 +118,7 @@ namespace QuranPhone.ViewModels
                     return;
 
                 itemType = value;
-                Style = value.ToString();
+                Style = value.ToString(CultureInfo.InvariantCulture);
 
                 base.OnPropertyChanged(() => ItemType);
             }

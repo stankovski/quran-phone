@@ -2,7 +2,10 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Navigation;
+using AppBarUtils;
+using Microsoft.Phone.Shell;
 using Microsoft.Phone.Tasks;
 using QuranPhone.Common;
 using QuranPhone.Resources;
@@ -24,6 +27,7 @@ namespace QuranPhone
         public DetailsPage()
         {
             InitializeComponent();
+            BuildLocalizedApplicationBar();
 
             App.DetailsViewModel.Orientation = this.Orientation;
             
@@ -46,7 +50,7 @@ namespace QuranPhone
 
             if (selectedPage != null)
             {
-                int page = int.Parse(selectedPage);
+                int page = int.Parse(selectedPage, CultureInfo.InvariantCulture);
                 App.DetailsViewModel.CurrentPageNumber = page;
                 
                 //Update settings
@@ -86,8 +90,8 @@ namespace QuranPhone
             //Select ayah
             if (selectedSurah != null && selectedAyah != null)
             {
-                int surah = int.Parse(selectedSurah);
-                int ayah = int.Parse(selectedAyah);
+                int surah = int.Parse(selectedSurah, CultureInfo.InvariantCulture);
+                int ayah = int.Parse(selectedAyah, CultureInfo.InvariantCulture);
                 App.DetailsViewModel.SelectedAyah = new Common.QuranAyah(surah, ayah);
             }
             else
@@ -104,13 +108,12 @@ namespace QuranPhone
 
         private void ScreenTap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            if (App.DetailsViewModel.IsShowMenu)
-                App.DetailsViewModel.ToggleMenu();
+            App.DetailsViewModel.IsShowMenu = false;
         }
 
         private void MenuTap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            App.DetailsViewModel.ToggleMenu();
+            App.DetailsViewModel.IsShowMenu = true;
             e.Handled = true;
         }
 
@@ -184,7 +187,7 @@ namespace QuranPhone
                 //App.DetailsViewModel.UpdatePages();
                 App.DetailsViewModel.ShowTranslation = !App.DetailsViewModel.ShowTranslation;
                 SettingsUtils.Set(Constants.PREF_SHOW_TRANSLATION, App.DetailsViewModel.ShowTranslation);
-                App.DetailsViewModel.ToggleMenu();
+                App.DetailsViewModel.IsShowMenu = false;
             }
             else
             {
@@ -194,26 +197,25 @@ namespace QuranPhone
 
         private void Bookmark_Click(object sender, EventArgs e)
         {
-            App.DetailsViewModel.SelectedAyah = null;
-            App.DetailsViewModel.AddBookmark();
-            App.DetailsViewModel.ToggleMenu();
+            App.DetailsViewModel.AddPageBookmark();
+            App.DetailsViewModel.IsShowMenu = false;
         }
 
         private void BookmarkAyah_Click(object sender, ContextMenuItemSelectedEventArgs e)
         {
-            App.DetailsViewModel.AddBookmark();
+            App.DetailsViewModel.AddAyahBookmark(App.DetailsViewModel.SelectedAyah);
             App.DetailsViewModel.SelectedAyah = null;
         }
 
         private void Settings_Click(object sender, EventArgs e)
         {
-            App.DetailsViewModel.ToggleMenu();
+            App.DetailsViewModel.IsShowMenu = false;
             NavigationService.Navigate(new Uri("/SettingsPage.xaml", UriKind.Relative));
         }
 
         private void Search_Click(object sender, EventArgs e)
         {
-            App.DetailsViewModel.ToggleMenu();
+            App.DetailsViewModel.IsShowMenu = false;
             NavigationService.Navigate(new Uri("/SearchPage.xaml", UriKind.Relative));
         }
 
@@ -232,6 +234,54 @@ namespace QuranPhone
         }
 
         #endregion Menu Events
+
+        #region AppBar creation
+        // Build a localized ApplicationBar
+        private void BuildLocalizedApplicationBar()
+        {
+            // Set the page's ApplicationBar to a new instance of ApplicationBar.
+            ApplicationBar = new ApplicationBar();
+
+            var searchButton = new ApplicationBarIconButton(new Uri("/Assets/Images/search.png", UriKind.Relative)) { Text = AppResources.search };
+            searchButton.Click += Search_Click;
+            ApplicationBar.Buttons.Add(searchButton);
+            var bookmarkButton = new ApplicationBarIconButton(new Uri("/Assets/Images/favorite.png", UriKind.Relative)) { Text = AppResources.bookmark };
+            bookmarkButton.Click += Bookmark_Click;
+            ApplicationBar.Buttons.Add(bookmarkButton);
+            var translationButton = new ApplicationBarIconButton(new Uri("/Assets/Images/appbar.globe.png", UriKind.Relative)) { Text = AppResources.translation };
+            translationButton.Click += Translation_Click;
+            ApplicationBar.Buttons.Add(translationButton);
+
+            // Create a new menu item with the localized string from AppResources.
+            var settingsButton = new ApplicationBarMenuItem(AppResources.settings);
+            settingsButton.Click += Settings_Click;
+            ApplicationBar.MenuItems.Add(settingsButton);
+            var contactButton = new ApplicationBarMenuItem(AppResources.contact_us);
+            contactButton.Click += ContactUs_Click;
+            ApplicationBar.MenuItems.Add(contactButton);
+
+            // Set style
+            ApplicationBar.Opacity = 0.9;
+            ApplicationBar.BackgroundColor = Colors.White;
+            ApplicationBar.ForegroundColor = Color.FromArgb(0xFF, 0x49, 0xA4, 0xC5);
+            App.DetailsViewModel.IsShowMenu = (this.Orientation & PageOrientation.Landscape) != PageOrientation.Landscape;
+
+            ApplicationBar.Mode = ApplicationBarMode.Minimized;
+
+            App.DetailsViewModel.PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName == "IsShowMenu")
+                {
+                    ApplicationBar.IsVisible = App.DetailsViewModel.IsShowMenu;
+                }
+                else if (e.PropertyName == "Orientation")
+                {
+                    App.DetailsViewModel.IsShowMenu = PhoneUtils.IsPortaitOrientation;
+                }
+            };
+        }
+
+        #endregion
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
@@ -257,7 +307,7 @@ namespace QuranPhone
             // instead of going back to previous page.
             if (App.DetailsViewModel.IsShowMenu)
             {
-                App.DetailsViewModel.ToggleMenu();
+                App.DetailsViewModel.IsShowMenu = false;
                 e.Cancel = true;
             }
             else

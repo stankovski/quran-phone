@@ -670,7 +670,7 @@ the data used in the translations and Arabic comes from
     <value>loading...</value>
   </data>
   <data name="change_language" xml:space="preserve">
-    <value>change language</value>
+    <value>language</value>
   </data>
   <data name="waiting" xml:space="preserve">
     <value>Waiting...</value>
@@ -680,5 +680,14 @@ the data used in the translations and Arabic comes from
   </data>
   <data name="waiting_for_wifi" xml:space="preserve">
     <value>Waiting for WIFI...</value>
+  </data>
+  <data name="bookmark" xml:space="preserve">
+    <value>bookmark</value>
+  </data>
+  <data name="translation" xml:space="preserve">
+    <value>translation</value>
+  </data>
+  <data name="contact_us" xml:space="preserve">
+    <value>contact us</value>
   </data>
 </root>

@@ -31,7 +31,8 @@ namespace QuranPhone.Data
         public const int NO_PAGE_SAVED = -1;
 
         // Settings Key
-        public const String PREF_USE_ARABIC_NAMES = "useArabicNames";
+        [DefaultValue("")]
+        public const String PREF_CULTURE_OVERRIDE = "cultureOverride";
         public const String PREF_USE_ARABIC_RESHAPER = "useArabicReshaper";
         public const String PREF_LAST_PAGE = "lastPage";
         public const String PREF_LOCK_ORIENTATION = "lockOrientation";

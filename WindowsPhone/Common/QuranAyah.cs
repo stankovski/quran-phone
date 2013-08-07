@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using SQLite;
 
 namespace QuranPhone.Common
@@ -25,7 +26,7 @@ namespace QuranPhone.Common
 
         public override string ToString()
         {
-            return string.Format("{0}:{1}", Sura, Ayah);
+            return string.Format("{0}:{1}", Sura, Ayah, CultureInfo.InvariantCulture);
         }
     }
 

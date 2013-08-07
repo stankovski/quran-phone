@@ -311,7 +311,7 @@ namespace QuranPhone.Utils
         /// <returns></returns>
         public static string GetPageFileName(int p)
         {
-            return "page" + p.ToString("000", new CultureInfo("en-US")) + ".png";
+            return "page" + p.ToString("000", CultureInfo.InvariantCulture) + ".png";
         }
 
         public static Uri GetImageFromSD(string filename)

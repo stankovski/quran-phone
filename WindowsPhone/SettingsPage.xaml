@@ -41,8 +41,8 @@
                             <TextBlock Text="{Binding TextSize}" HorizontalAlignment="Center"/>
                         </StackPanel>
                         <Slider Minimum="15" Maximum="50" Margin="0" SmallChange="1" Value="{Binding TextSize, Mode=TwoWay}"/>
-                        <!--<TextBlock Text="{Binding Path=LocalizedResources.change_language, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
-                        <telerikInput:RadListPicker Style="{StaticResource QSFListPickerStyle}"/>-->
+                        <TextBlock Text="{Binding Path=LocalizedResources.change_language, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                        <telerikInput:RadListPicker ItemsSource="{Binding SupportedLanguages}" DisplayMemberPath="Value" SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}"/>
                         <TextBlock Text="{Binding Path=LocalizedResources.prefs_ayah_before_translation_summary, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
                         <telerikPrimitives:RadToggleSwitch IsChecked="{Binding ShowArabicInTranslation, Mode=TwoWay}" IsEnabled="{Binding EnableShowArabicInTranslation}" />
                         <TextBlock Text="{Binding Path=LocalizedResources.disable_sleep, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
@@ -64,7 +64,7 @@
                                 <Setter Property="Foreground" Value="White"/>
                             </Style>
                         </StackPanel.Resources>
-                        <Button Command="{Binding ContactUsCommand}">Contact Us</Button>
+                        <Button Command="{Binding ContactUsCommand}" Content="{Binding Path=LocalizedResources.contact_us, Source={StaticResource LocalizedStrings}}" />
                         <RichTextBox FontSize="22">
                             <Paragraph>Quran Phone is a free, open source Quran application for Windows Phone based on Quran Android project. 
                                 The images used are from the
@@ -90,11 +90,10 @@
                             <Paragraph>Rehab Mohamed (@hams_rrr)</Paragraph>
                             <Paragraph/>
                             <Paragraph FontWeight="Bold">Translators:</Paragraph>
-                            <Paragraph>Mehmed Mahmudoglu - Turkish</Paragraph>
-                            <Paragraph>M. Jafar Nanakar - Farsi</Paragraph>
+                            <Paragraph>Saeed Hubaishan - Arabic</Paragraph>
+                            <Paragraph>Kemas Dimas R - Indonesian</Paragraph>
                             <Paragraph>Rinat (Ринат Валеев) - Russian</Paragraph>
                             <Paragraph>Denis Stankovski - Russian</Paragraph>
-                            <Paragraph>khajavi (on github) - previous Farsi translation</Paragraph>
                             <Paragraph/>
                             <!--<Paragraph FontWeight="Bold">Open Source Projects:</Paragraph>
                             <Paragraph>ActionBarSherlock (

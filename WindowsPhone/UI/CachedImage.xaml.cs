@@ -202,7 +202,7 @@ namespace QuranPhone.UI
                     progress.IsIndeterminate = false;
                 }
 
-                if (IsPortrate && nightMode)
+                if (PhoneUtils.IsPortaitOrientation && nightMode)
                     image.Source = imageSourceBitmapResized;
                 else 
                     image.Source = imageSourceBitmap;
@@ -266,7 +266,7 @@ namespace QuranPhone.UI
 
         private void SizeChange(object sender, SizeChangedEventArgs e)
         {
-            if (IsPortrate && nightMode)
+            if (PhoneUtils.IsPortaitOrientation && nightMode)
                 image.Source = imageSourceBitmapResized;
             else
                 image.Source = imageSourceBitmap;
@@ -292,19 +292,6 @@ namespace QuranPhone.UI
             //pageNumber.Text = "Page " + source;
         }
 
-        private bool IsPortrate
-        {
-            get
-            {
-                return ((PhoneApplicationFrame)Application.Current.RootVisual).Orientation == PageOrientation.Portrait ||
-                       ((PhoneApplicationFrame)Application.Current.RootVisual).Orientation ==
-                       PageOrientation.PortraitUp ||
-                       ((PhoneApplicationFrame)Application.Current.RootVisual).Orientation ==
-                       PageOrientation.PortraitDown;
-            }
-        }
-
-        
         #region INotifyPropertyChanged Members
 
         /// <summary>

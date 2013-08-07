@@ -1,4 +1,5 @@
-﻿using QuranPhone.Common;
+﻿using System.Globalization;
+using QuranPhone.Common;
 using QuranPhone.Resources;
 using System;
 using System.Collections.Generic;
@@ -146,7 +147,7 @@ namespace QuranPhone.Data
             info += " - ";
 
             int ayahs = QuranInfo.SURA_NUM_AYAHS[sura - 1];
-            info += ayahs.ToString(" 0 ");
+            info += ayahs.ToString(" 0 ", CultureInfo.InvariantCulture);
             if (ayahs == 1)
                 info += AppResources.verse;
             else

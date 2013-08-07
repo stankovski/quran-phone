@@ -25,6 +25,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Reflection;
@@ -853,7 +854,7 @@ namespace SQLite
 			int firstLen = savepoint.IndexOf ('D');
 			if (firstLen >= 2 && savepoint.Length > firstLen + 1) {
 				int depth;
-				if (Int32.TryParse (savepoint.Substring (firstLen + 1), out depth)) {
+				if (Int32.TryParse (savepoint.Substring (firstLen + 1), NumberStyles.None, CultureInfo.InvariantCulture, out depth)) {
 					// TODO: Mild race here, but inescapable without locking almost everywhere.
 					if (0 <= depth && depth < _trasactionDepth) {
 #if NETFX_CORE
@@ -1758,7 +1759,7 @@ namespace SQLite
 				string msg = SQLite3.GetErrmsg (_conn.Handle);
 				throw SQLiteException.New (r, msg);
 			} else {
-				throw SQLiteException.New (r, r.ToString ());
+				throw SQLiteException.New (r, r.ToString(CultureInfo.InvariantCulture));
 			}
 		}
 
@@ -1866,7 +1867,7 @@ namespace SQLite
 			parts [0] = CommandText;
 			var i = 1;
 			foreach (var b in _bindings) {
-				parts [i] = string.Format ("  {0}: {1}", i - 1, b.Value);
+				parts [i] = string.Format (CultureInfo.InvariantCulture, "  {0}: {1}", i - 1, b.Value);
 				i++;
 			}
 			return string.Join (Environment.NewLine, parts);
@@ -1922,7 +1923,7 @@ namespace SQLite
 						SQLite3.BindInt64 (stmt, index, ((DateTime)value).Ticks);
 					}
 					else {
-						SQLite3.BindText (stmt, index, ((DateTime)value).ToString ("yyyy-MM-dd HH:mm:ss"), -1, NegativePointer);
+                        SQLite3.BindText(stmt, index, ((DateTime)value).ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), -1, NegativePointer);
 					}
 #if !NETFX_CORE
 				} else if (value.GetType().IsEnum) {
@@ -1934,7 +1935,7 @@ namespace SQLite
                     SQLite3.BindBlob(stmt, index, (byte[]) value, ((byte[]) value).Length, NegativePointer);
 #if SQLITE_SUPPORT_GUID
                 } else if (value is Guid) {
-                    SQLite3.BindText(stmt, index, ((Guid)value).ToString(), 72, NegativePointer);
+                    SQLite3.BindText(stmt, index, ((Guid)value).ToString(CultureInfo.InvariantCulture), 72, NegativePointer);
 #endif
                 } else {
                     throw new NotSupportedException("Cannot store type: " + value.GetType());
@@ -1972,7 +1973,7 @@ namespace SQLite
 					}
 					else {
 						var text = SQLite3.ColumnString (stmt, index);
-						return DateTime.Parse (text);
+                        return DateTime.Parse(text, CultureInfo.InvariantCulture);
 					}
 #if !NETFX_CORE
 				} else if (clrType.IsEnum) {
@@ -2058,7 +2059,7 @@ namespace SQLite
 				throw SQLiteException.New (r, msg);
 			} else {
 				SQLite3.Reset (Statement);
-				throw SQLiteException.New (r, r.ToString ());
+                throw SQLiteException.New(r, r.ToString(CultureInfo.InvariantCulture));
 			}
 		}
 

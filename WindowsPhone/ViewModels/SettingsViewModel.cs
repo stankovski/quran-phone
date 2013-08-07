@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Globalization;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using Microsoft.Phone.Shell;
@@ -13,6 +17,11 @@ namespace QuranPhone.ViewModels
 {
     public class SettingsViewModel : ViewModelBase
     {
+        public SettingsViewModel()
+        {
+            SupportedLanguages = new ObservableCollection<KeyValuePair<string, string>>(GetSupportedLanguages());
+        }
+
         #region Properties
         private string activeTranslation;
         public string ActiveTranslation
@@ -132,6 +141,31 @@ namespace QuranPhone.ViewModels
             } 
         }
 
+        private KeyValuePair<string, string> selectedLanguage;
+        public KeyValuePair<string, string> SelectedLanguage
+        {
+            get { return selectedLanguage; }
+            set
+            {
+                if (value.Key == selectedLanguage.Key)
+                    return;
+
+                selectedLanguage = value;
+
+                if (SettingsUtils.Get<string>(Constants.PREF_CULTURE_OVERRIDE) != value.Key)
+                {
+                    MessageBox.Show(AppResources.please_restart);
+                }
+
+                // saving to setting utils
+                SettingsUtils.Set(Constants.PREF_CULTURE_OVERRIDE, value.Key);
+
+                base.OnPropertyChanged(() => SelectedLanguage);
+            }
+        }
+
+        public ObservableCollection<KeyValuePair<string, string>> SupportedLanguages { get; private set; }
+
         RelayCommand generate;
         /// <summary>
         /// Returns an download command
@@ -205,6 +239,7 @@ namespace QuranPhone.ViewModels
             else
                 ActiveTranslation = "None";
 
+            SelectedLanguage = SupportedLanguages.FirstOrDefault(kv => kv.Key == SettingsUtils.Get<string>(Constants.PREF_CULTURE_OVERRIDE));
             TextSize = SettingsUtils.Get<int>(Constants.PREF_TRANSLATION_TEXT_SIZE);
             ShowArabicInTranslation = SettingsUtils.Get<bool>(Constants.PREF_SHOW_ARABIC_IN_TRANSLATION);
             PreventPhoneFromSleeping = SettingsUtils.Get<bool>(Constants.PREF_PREVENT_SLEEP);
@@ -242,6 +277,28 @@ namespace QuranPhone.ViewModels
             {
                 var task = new WebBrowserTask() { Uri = new Uri(link) };
                 task.Show();
+            }
+        }
+
+        private IEnumerable<KeyValuePair<string, string>> GetSupportedLanguages()
+        {
+            yield return new KeyValuePair<string, string>("", "Default");
+            var cultures = new string[] {"ar", "id", "ru"};
+            foreach (var c in cultures)
+            {
+                CultureInfo cultureInfo = null;
+                try
+                {
+                    cultureInfo = new CultureInfo(c);
+                }
+                catch
+                {
+                    // Ignore
+                }
+                if (cultureInfo != null)
+                {
+                    yield return new KeyValuePair<string, string>(c, cultureInfo.NativeName);
+                }
             }
         }
     }

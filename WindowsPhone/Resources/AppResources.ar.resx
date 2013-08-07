@@ -668,7 +668,7 @@
     <value>تحميل...</value>
   </data>
   <data name="change_language" xml:space="preserve">
-    <value>تغيير اللغة</value>
+    <value>اللغة</value>
   </data>
   <data name="waiting" xml:space="preserve">
     <value>انتظار...</value>
@@ -678,5 +678,14 @@
   </data>
   <data name="waiting_for_wifi" xml:space="preserve">
     <value>انتظار الشبكة اللاسلكية...</value>
+  </data>
+  <data name="bookmark" xml:space="preserve">
+    <value>يوم</value>
+  </data>
+  <data name="translation" xml:space="preserve">
+    <value>ترجمة</value>
+  </data>
+  <data name="contact_us" xml:space="preserve">
+    <value>الاتصال بنا</value>
   </data>
 </root>

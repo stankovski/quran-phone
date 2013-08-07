@@ -31,26 +31,7 @@ namespace QuranPhone.ViewModels
 
             // default detail page to full screen mode.
             IsShowMenu = false;
-
-            cmdToggleMenu = new RelayCommand(ToggleMenu);
         }
-
-        #region Commands
-        /// <summary>
-        /// Toggle whether to show menu / hide it in detail page
-        /// </summary>
-        public void ToggleMenu()
-        {
-            ToggleMenu(null);
-        }
-
-        public void ToggleMenu(object obj)
-        {
-            IsShowMenu = !IsShowMenu;
-        }
-        public ICommand CommandToggleMenu { get { return cmdToggleMenu; } }
-        private RelayCommand cmdToggleMenu;
-        #endregion Commands
 
         #region Properties
         public ObservableCollection<PageViewModel> Pages { get; private set; }
@@ -247,6 +228,9 @@ namespace QuranPhone.ViewModels
                 if (value == isShowMenu)
                     return;
 
+                if (!value && PhoneUtils.IsPortaitOrientation)
+                    return;
+
                 isShowMenu = value;
 
                 base.OnPropertyChanged(() => IsShowMenu);
@@ -410,16 +394,26 @@ namespace QuranPhone.ViewModels
             }
         }
 
-        public bool AddBookmark()
+        public bool AddPageBookmark()
+        {
+            return AddBookmark(null);
+        }
+
+        public bool AddAyahBookmark(QuranAyah ayah)
+        {
+            return AddBookmark(ayah);
+        }
+
+        private bool AddBookmark(QuranAyah ayah)
         {
             try
             {
                 using (var adapter = new BookmarksDBAdapter())
                 {
-                    if (SelectedAyah == null)
+                    if (ayah == null)
                         adapter.AddBookmarkIfNotExists(null, null, CurrentPageNumber);
                     else
-                        adapter.AddBookmarkIfNotExists(SelectedAyah.Sura, SelectedAyah.Ayah, CurrentPageNumber);
+                        adapter.AddBookmarkIfNotExists(ayah.Sura, ayah.Ayah, CurrentPageNumber);
                 }
                 return true;
             }

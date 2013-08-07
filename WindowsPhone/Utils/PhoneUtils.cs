@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.IO.IsolatedStorage;
 using System.Windows;
+using Microsoft.Phone.Controls;
 using Microsoft.Phone.Info;
 using System;
 using System.Collections.Generic;
@@ -53,6 +54,18 @@ namespace QuranPhone.Utils
                 PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
             else
                 PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Enabled;
+        }
+
+        public static bool IsPortaitOrientation
+        {
+            get
+            {
+                return ((PhoneApplicationFrame) Application.Current.RootVisual).Orientation == PageOrientation.Portrait ||
+                       ((PhoneApplicationFrame) Application.Current.RootVisual).Orientation ==
+                       PageOrientation.PortraitUp ||
+                       ((PhoneApplicationFrame) Application.Current.RootVisual).Orientation ==
+                       PageOrientation.PortraitDown;
+            }
         }
     }
 }

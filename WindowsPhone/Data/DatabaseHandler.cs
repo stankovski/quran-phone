@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Globalization;
+using System.IO;
 using QuranPhone.Common;
 using QuranPhone.Utils;
 using System;
@@ -50,7 +51,7 @@ namespace QuranPhone.Data
             {
                 var result = mDatabase.Query<DatabaseProperties>().Where(p => p.Property == "schema_version").FirstOrDefault();
                 if (result != null)
-                    version = int.Parse(result.Value);
+                    version = int.Parse(result.Value, CultureInfo.InvariantCulture);
                 return version;
             }
             catch (Exception)
@@ -68,7 +69,7 @@ namespace QuranPhone.Data
             {
                 var result = mDatabase.Query<DatabaseProperties>().Where(p => p.Property == "text_version").FirstOrDefault();
                 if (result != null)
-                    version = int.Parse(result.Value);
+                    version = int.Parse(result.Value, CultureInfo.InvariantCulture);
                 return version;
             }
             catch (Exception)

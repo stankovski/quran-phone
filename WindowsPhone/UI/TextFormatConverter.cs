@@ -16,7 +16,7 @@ namespace QuranPhone.UI
             if (parameter == null)
                 return value;
 
-            return string.Format(parameter.ToString(), value);
+            return string.Format(CultureInfo.InvariantCulture, parameter.ToString(), value);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

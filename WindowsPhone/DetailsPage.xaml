@@ -17,7 +17,6 @@
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
     d:DataContext="{d:DesignData SampleData/TranslationViewModelSampleData.xaml}"
-    shell:SystemTray.IsVisible="{Binding IsShowMenu}"
     Tap="ScreenTap"
     Background="{Binding BackgroundColor, Mode=OneWay}" OrientationChanged="PageOrientationChanged">
     
@@ -101,7 +100,7 @@
         </Button>
     </Grid>
     
-    <phone:PhoneApplicationPage.ApplicationBar>
+    <!--<phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar>
             <shell:ApplicationBarIconButton IconUri="/Assets/Images/search.png" 
                                             Text="Search" Click="Search_Click"/>
@@ -114,9 +113,9 @@
                 <shell:ApplicationBarMenuItem Text="Contact us" Click="ContactUs_Click"/>
             </shell:ApplicationBar.MenuItems>
         </shell:ApplicationBar>
-    </phone:PhoneApplicationPage.ApplicationBar>
+    </phone:PhoneApplicationPage.ApplicationBar>-->
 
-    <i:Interaction.Behaviors>
+    <!--<i:Interaction.Behaviors>
         <abu:AppBarPropertyBinder IsVisible="{Binding IsShowMenu}" Opacity="0.9" BackgroundColor="White" ForegroundColor="#FF49A4C5" />
-    </i:Interaction.Behaviors>
+    </i:Interaction.Behaviors>-->
 </phone:PhoneApplicationPage>

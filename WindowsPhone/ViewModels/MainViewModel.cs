@@ -185,7 +185,7 @@ namespace QuranPhone.ViewModels
         public void DeleteBookmark(ItemViewModel item)
         {
              int id = 0;
-             if (item != null && item.Id != null && int.TryParse(item.Id, out id))
+             if (item != null && item.Id != null && int.TryParse(item.Id, NumberStyles.None, CultureInfo.InvariantCulture, out id))
              {
                  Bookmarks.Remove(item);
                  using (var bookmarksAdapter = new BookmarksDBAdapter())
@@ -290,7 +290,7 @@ namespace QuranPhone.ViewModels
                     string title = QuranInfo.GetSuraName(sura, true);
                     Surahs.Add(new ItemViewModel
                     {
-                        Id = sura.ToString(),
+                        Id = sura.ToString(CultureInfo.InvariantCulture),
                         Title = title,
                         Details = QuranInfo.GetSuraListMetaString(sura),
                         PageNumber = QuranInfo.SURA_PAGE_START[sura - 1],
@@ -336,7 +336,7 @@ namespace QuranPhone.ViewModels
                 });
 
                 if (i % 4 == 0)
-                    Juz[Juz.Count - 1].Id = (1 + (i / 4)).ToString("0");
+                    Juz[Juz.Count - 1].Id = (1 + (i / 4)).ToString("0", CultureInfo.InvariantCulture);
             }
         }
 
