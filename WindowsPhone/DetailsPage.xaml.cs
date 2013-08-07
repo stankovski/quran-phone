@@ -262,9 +262,9 @@ namespace QuranPhone
 
             // Set style
             ApplicationBar.Opacity = 0.9;
-            ApplicationBar.BackgroundColor = Colors.White;
+            ApplicationBar.BackgroundColor = App.DetailsViewModel.IsNightMode ? Colors.Black : Colors.White;
             ApplicationBar.ForegroundColor = Color.FromArgb(0xFF, 0x49, 0xA4, 0xC5);
-            App.DetailsViewModel.IsShowMenu = (this.Orientation & PageOrientation.Landscape) != PageOrientation.Landscape;
+            App.DetailsViewModel.IsShowMenu = PhoneUtils.IsPortaitOrientation;
 
             ApplicationBar.Mode = ApplicationBarMode.Minimized;
 
@@ -273,6 +273,10 @@ namespace QuranPhone
                 if (e.PropertyName == "IsShowMenu")
                 {
                     ApplicationBar.IsVisible = App.DetailsViewModel.IsShowMenu;
+                }
+                if (e.PropertyName == "IsNightMode")
+                {
+                    ApplicationBar.BackgroundColor = App.DetailsViewModel.IsNightMode ? Colors.Black : Colors.White;
                 }
                 else if (e.PropertyName == "Orientation")
                 {
@@ -305,7 +309,7 @@ namespace QuranPhone
             // if back key pressed when menu is visible, hide the menu
             // somehow, I (kemasdimas) frequently expect "back" key to hide menu,
             // instead of going back to previous page.
-            if (App.DetailsViewModel.IsShowMenu)
+            if (App.DetailsViewModel.IsShowMenu && !PhoneUtils.IsPortaitOrientation)
             {
                 App.DetailsViewModel.IsShowMenu = false;
                 e.Cancel = true;
