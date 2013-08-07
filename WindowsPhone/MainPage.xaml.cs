@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Net;
 using System.Reflection;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
 using QuranPhone.Data;
-using QuranPhone.Resources;
 using QuranPhone.Utils;
 using QuranPhone.ViewModels;
 using Telerik.Windows.Controls;
@@ -80,10 +75,12 @@ namespace QuranPhone
                     @"Assalamu Aleikum,
 
 Thank you for downloading Quran Phone. Please note that this is a BETA release and is still work in progress. 
-New in Version 0.3.1:
-* Support for Ibn Katheer tafseer
-* Ayah bookmarking
-* Ability to generate Quranic Dua as bookmarks (accessible from Settings)
+New in Version 0.3.2:
+* Implemented night mode
+* Added Arabic support
+* Added ability to switch interface languages
+* Added double-tap navigation between Quran and translation
+* Added support for Quran text search
 * Misc. layout changes and bug fixes
 
 If you find any issues with the app or would like to provide suggestions, please use Contact Us option available via the menu. 

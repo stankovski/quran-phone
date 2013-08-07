@@ -17,8 +17,7 @@
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
     d:DataContext="{d:DesignData SampleData/TranslationViewModelSampleData.xaml}"
-    Tap="ScreenTap"
-    Background="{Binding BackgroundColor, Mode=OneWay}" OrientationChanged="PageOrientationChanged">
+    Tap="ScreenTap" Background="{Binding BackgroundColor, Mode=OneWay}" OrientationChanged="PageOrientationChanged">
     
     <phone:PhoneApplicationPage.Resources>
         <myui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
