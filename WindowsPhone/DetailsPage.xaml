@@ -42,8 +42,8 @@
             </Grid>
 
             <telerikPrimitives:RadSlideView x:Name="radSlideView" Grid.Row="1" IsFilmstripModeEnabled="True" Margin="0" 
-                                        ItemsSource="{Binding Pages}" IsLoopingEnabled="True" 
-                                        ItemRealizationMode="ViewportItem">
+                                        ItemsSource="{Binding Pages}" IsLoopingEnabled="True"
+                                        ItemRealizationMode="ViewportItem" FlowDirection="LeftToRight">
                 <telerikPrimitives:RadSlideView.ItemTemplate>
                     <DataTemplate>
                          <Grid>
