@@ -60,7 +60,10 @@ namespace QuranPhone.Utils
         {
             get
             {
-                return ((PhoneApplicationFrame) Application.Current.RootVisual).Orientation == PageOrientation.Portrait ||
+                if (Application.Current == null || Application.Current.RootVisual == null)
+                    return true;
+                else
+                    return ((PhoneApplicationFrame) Application.Current.RootVisual).Orientation == PageOrientation.Portrait ||
                        ((PhoneApplicationFrame) Application.Current.RootVisual).Orientation ==
                        PageOrientation.PortraitUp ||
                        ((PhoneApplicationFrame) Application.Current.RootVisual).Orientation ==
