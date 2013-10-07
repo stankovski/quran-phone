@@ -86,7 +86,8 @@ namespace QuranPhone.UI
                                     offsetToScrollTo = bound.MinY;
                             }
                         }
-                        LayoutRoot.ScrollToVerticalOffset(offsetToScrollTo);
+                        var adjustedScrollPoint = adjustPointRevert(new Point(1, offsetToScrollTo), LayoutRoot.ActualWidth);
+                        LayoutRoot.ScrollToVerticalOffset(adjustedScrollPoint.Y); //Adjusting for ViewBox offset
                         canvasStoryboard.Begin();
                     }
                 }
@@ -392,6 +393,14 @@ namespace QuranPhone.UI
             var actualWidth = width;
             var scale = imageWidth/actualWidth;
             return new Point(p.X*scale, p.Y*scale);
+        }
+
+        private static Point adjustPointRevert(Point p, double width)
+        {
+            var imageWidth = QuranScreenInfo.Instance.ImageWidth;
+            var actualWidth = width;
+            var scale = imageWidth / actualWidth;
+            return new Point(p.X / scale, p.Y / scale);
         }
 
         private void drawAyahBound(Common.AyahBounds bound)
