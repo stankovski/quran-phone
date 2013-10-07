@@ -688,4 +688,10 @@
   <data name="contact_us" xml:space="preserve">
     <value>الاتصال بنا</value>
   </data>
+  <data name="keep_orientation" xml:space="preserve">
+    <value>الحفاظ على التوجه</value>
+  </data>
+  <data name="auto_orientation" xml:space="preserve">
+    <value>التوجيه التلقائي</value>
+  </data>
 </root>

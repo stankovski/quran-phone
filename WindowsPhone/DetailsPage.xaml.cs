@@ -227,6 +227,27 @@ namespace QuranPhone
             email.Show();
         }
 
+        private void KeepOrientation_Click(object sender, EventArgs e)
+        {
+            var button = sender as ApplicationBarMenuItem;
+            if (button == null)
+                return;
+
+            if (this.SupportedOrientations == SupportedPageOrientation.PortraitOrLandscape)
+            {
+                button.Text = AppResources.auto_orientation;
+                if (PhoneUtils.IsPortaitOrientation)
+                    this.SupportedOrientations = SupportedPageOrientation.Portrait;
+                else
+                    this.SupportedOrientations = SupportedPageOrientation.Landscape;
+            }
+            else
+            {
+                button.Text = AppResources.keep_orientation;
+                this.SupportedOrientations = SupportedPageOrientation.PortraitOrLandscape;
+            }
+        }
+
         // TO BE USED IN THE FUTURE
         private void AyahTapped(object sender, Common.QuranAyahEventArgs e)
         {
@@ -259,6 +280,9 @@ namespace QuranPhone
             var contactButton = new ApplicationBarMenuItem(AppResources.contact_us);
             contactButton.Click += ContactUs_Click;
             ApplicationBar.MenuItems.Add(contactButton);
+            var orientationButton = new ApplicationBarMenuItem(AppResources.keep_orientation);
+            orientationButton.Click += KeepOrientation_Click;
+            ApplicationBar.MenuItems.Add(orientationButton);
 
             // Set style
             ApplicationBar.Opacity = 0.9;

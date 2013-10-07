@@ -690,4 +690,10 @@ the data used in the translations and Arabic comes from
   <data name="contact_us" xml:space="preserve">
     <value>contact us</value>
   </data>
+  <data name="keep_orientation" xml:space="preserve">
+    <value>keep orientation</value>
+  </data>
+  <data name="auto_orientation" xml:space="preserve">
+    <value>automatic orientation</value>
+  </data>
 </root>
