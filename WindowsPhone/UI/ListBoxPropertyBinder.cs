@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Interactivity;
 using QuranPhone.Common;
@@ -40,10 +39,17 @@ namespace QuranPhone.UI
             }
             else
             {
-                var verse = getMatchedItem(this.SelectedAyah);
-                if (verse != null)
+                try
                 {
-                    this.listBox.BringIntoView(verse);
+                    var verse = getMatchedItem(this.SelectedAyah);
+                    if (verse != null)
+                    {
+                        this.listBox.BringIntoView(verse);
+                    }
+                }
+                catch
+                {
+                    // Ignore exception
                 }
             }
         }
