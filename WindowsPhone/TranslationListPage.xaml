@@ -95,7 +95,7 @@
                                                 <ColumnDefinition Width="50"/>
                                             </Grid.ColumnDefinitions>
                                             <ProgressBar Grid.Column="0" Value="{Binding Progress}" SmallChange="1"/>
-                                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                            <StackPanel Grid.Column="1" Orientation="Horizontal" FlowDirection="LeftToRight">
                                                 <TextBlock Text="{Binding Progress}"/>
                                                 <TextBlock>%</TextBlock>
                                             </StackPanel>

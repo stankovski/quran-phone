@@ -110,7 +110,7 @@
                         <ColumnDefinition Width="50"/>
                     </Grid.ColumnDefinitions>
                     <ProgressBar Grid.Column="0" Value="{Binding Progress}" IsIndeterminate="{Binding IsIndeterminate}" SmallChange="1"/>
-                    <StackPanel Grid.Column="1" Orientation="Horizontal" Visibility="{Binding IsIndeterminate, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=inverse}">
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" Visibility="{Binding IsIndeterminate, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=inverse}" FlowDirection="LeftToRight">
                         <TextBlock Text="{Binding Progress}"/>
                         <TextBlock>%</TextBlock>
                     </StackPanel>

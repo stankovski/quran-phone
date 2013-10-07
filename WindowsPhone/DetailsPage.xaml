@@ -33,7 +33,7 @@
             <Grid HorizontalAlignment="Stretch" Grid.Row="0" Background="{Binding BackgroundColor, Mode=OneWay}" Height="33"
               Visibility="{Binding ShowInfoOverlay, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <TextBlock Text="{Binding CurrentSurahName}" HorizontalAlignment="Left" FontSize="18" Foreground="{Binding ForegroundColor, Mode=OneWay}" Margin="25,3,0,3"/>
-                <StackPanel Margin="0,3,0,3" HorizontalAlignment="Center" Orientation="Horizontal">
+                <StackPanel Margin="0,3,0,3" HorizontalAlignment="Center" Orientation="Horizontal" FlowDirection="LeftToRight">
                     <Image Source="Assets\Images\left.png" Height="25" Width="50"/>
                     <TextBlock Text="{Binding CurrentPageNumber}" FontSize="18" Foreground="{Binding ForegroundColor, Mode=OneWay}"/>
                     <Image Source="Assets\Images\right.png" Height="25" Width="50"/>
