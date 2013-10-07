@@ -9,7 +9,7 @@
     d:DesignHeight="480" d:DesignWidth="480">
 
     <ScrollViewer HorizontalAlignment="Stretch" x:Name="LayoutRoot">
-        <Grid>
+        <Grid VerticalAlignment="Top">
             <StackPanel Orientation="Vertical">
                 <Image Name="image" Margin="0,0,0,20" Tap="ImageTap" SizeChanged="SizeChange"/>
             </StackPanel>
