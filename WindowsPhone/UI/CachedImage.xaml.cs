@@ -21,7 +21,6 @@ namespace QuranPhone.UI
         public event EventHandler<QuranAyahEventArgs> AyahTapped;
 
         private WriteableBitmap imageSourceBitmap;
-        private WriteableBitmap imageSourceBitmapResized;
         private Uri imageSourceUri;
         private bool nightMode;
 
@@ -146,7 +145,6 @@ namespace QuranPhone.UI
             {
                 imageSourceUri = source;
                 imageSourceBitmap = null;
-                imageSourceBitmapResized = null;
             }
 
             // Reset any overlays
@@ -203,10 +201,7 @@ namespace QuranPhone.UI
                     progress.IsIndeterminate = false;
                 }
 
-                if (PhoneUtils.IsPortaitOrientation && nightMode)
-                    image.Source = imageSourceBitmapResized;
-                else 
-                    image.Source = imageSourceBitmap;
+                image.Source = imageSourceBitmap;
             }
         }
 
@@ -219,28 +214,10 @@ namespace QuranPhone.UI
                 bitmap.SetSource(stream);
                 if (nightMode)
                 {
-                    imageSourceBitmapResized = resizeBitmapIfNotExists(bitmap);
                     invertColors(bitmap);
-                    invertColors(imageSourceBitmapResized);
                 }
                 imageSourceBitmap = bitmap;
                 progress.Visibility = System.Windows.Visibility.Collapsed;
-            }
-        }
-
-        private WriteableBitmap resizeBitmapIfNotExists(WriteableBitmap bitmap)
-        {
-            if (imageSourceBitmapResized == null)
-            {
-                var hightToWidthRatio = ((double)bitmap.PixelHeight / (double)bitmap.PixelWidth);
-
-                return bitmap.Resize((int) Application.Current.Host.Content.ActualWidth,
-                                     (int) (Application.Current.Host.Content.ActualWidth*hightToWidthRatio),
-                                     WriteableBitmapExtensions.Interpolation.Bilinear);
-            }
-            else
-            {
-                return imageSourceBitmapResized;
             }
         }
 
@@ -256,21 +233,17 @@ namespace QuranPhone.UI
                     var b = 0x000000FF & (c);
 
                     // Invert
-                    r = 0x000000FF & (0xFF - r);
-                    g = 0x000000FF & (0xFF - g);
-                    b = 0x000000FF & (0xFF - b);
+                    if (a > 0)
+                    {
+                        r = 0x000000FF & (0xFF - r);
+                        g = 0x000000FF & (0xFF - g);
+                        b = 0x000000FF & (0xFF - b);
+                    }
+                    a = 255;
 
                     // Set result color
                 bitmap.Pixels[i] = (a << 24) | (r << 16) | (g << 8) | b;
             }
-        }
-
-        private void SizeChange(object sender, SizeChangedEventArgs e)
-        {
-            if (PhoneUtils.IsPortaitOrientation && nightMode)
-                image.Source = imageSourceBitmapResized;
-            else
-                image.Source = imageSourceBitmap;
         }
 
         public int PageNumber
@@ -349,7 +322,6 @@ namespace QuranPhone.UI
             if (image != null)
                 image.Source = null;
             imageSourceBitmap = null;
-            imageSourceBitmapResized = null;
             ImageSource = null;
         }
 
