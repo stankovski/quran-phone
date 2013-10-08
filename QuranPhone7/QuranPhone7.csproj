@@ -311,6 +311,9 @@
     <Compile Include="..\WindowsPhone\Utils\ArabicResharper.cs">
       <Link>Utils\ArabicResharper.cs</Link>
     </Compile>
+    <Compile Include="..\WindowsPhone\Utils\AudioRequest.cs">
+      <Link>Utils\AudioRequest.cs</Link>
+    </Compile>
     <Compile Include="..\WindowsPhone\Utils\AudioUtils.cs">
       <Link>Utils\AudioUtils.cs</Link>
     </Compile>
@@ -337,6 +340,9 @@
     </Compile>
     <Compile Include="..\WindowsPhone\Utils\QuranUtils.cs">
       <Link>Utils\QuranUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Utils\RepeatInfo.cs">
+      <Link>Utils\RepeatInfo.cs</Link>
     </Compile>
     <Compile Include="..\WindowsPhone\Utils\SettingsUtils.cs">
       <Link>Utils\SettingsUtils.cs</Link>
@@ -491,6 +497,9 @@
     </Content>
     <Content Include="..\WindowsPhone\Assets\Images\search.png">
       <Link>Assets\Images\search.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\quran_readers_urls.xml">
+      <Link>Assets\quran_readers_urls.xml</Link>
     </Content>
     <Content Include="..\WindowsPhone\Assets\UthmanicHafs.otf">
       <Link>Assets\UthmanicHafs.otf</Link>

@@ -131,6 +131,17 @@ namespace QuranPhone.Utils
             }
         }
 
+        public static bool DirectoryExists(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentNullException("path");
+
+            using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                return isf.DirectoryExists(path);
+            }
+        }
+
         /// <summary>
         /// Creates directory and writes no-media file in it
         /// </summary>
