@@ -696,4 +696,7 @@ the data used in the translations and Arabic comes from
   <data name="auto_orientation" xml:space="preserve">
     <value>automatic orientation</value>
   </data>
+  <data name="copy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
 </root>

@@ -65,6 +65,12 @@
                                 <telerikPrimitives:RadDataBoundListBox.ItemTemplate>
                                     <DataTemplate>
                                         <ListBoxItem HorizontalContentAlignment="Stretch" Foreground="{Binding DataContext.ForegroundColor, Mode=OneWay, ElementName=ThisPage}">
+                                            <telerikPrimitives:RadContextMenu.ContextMenu>
+                                                <telerikPrimitives:RadContextMenu>
+                                                    <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.bookmark_ayah, Source={StaticResource LocalizedStrings}}" Tapped="AyahContextMenuClick"/>
+                                                    <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.copy, Source={StaticResource LocalizedStrings}}" Tapped="AyahContextMenuClick"/>
+                                                </telerikPrimitives:RadContextMenu>
+                                            </telerikPrimitives:RadContextMenu.ContextMenu>
                                             <myui:TranslationView DataContext="{Binding}" SelectedAyah="{Binding DataContext.SelectedAyah, ElementName=ThisPage}"/>
                                         </ListBoxItem>
                                     </DataTemplate>

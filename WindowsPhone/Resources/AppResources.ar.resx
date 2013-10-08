@@ -694,4 +694,7 @@
   <data name="auto_orientation" xml:space="preserve">
     <value>التوجيه التلقائي</value>
   </data>
+  <data name="copy" xml:space="preserve">
+    <value>نسخة</value>
+  </data>
 </root>

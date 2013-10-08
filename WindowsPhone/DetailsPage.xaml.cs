@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -16,12 +18,13 @@ using QuranPhone.Data;
 using System.Globalization;
 using Microsoft.Phone.Controls;
 using Telerik.Windows.Controls;
+using GestureEventArgs = System.Windows.Input.GestureEventArgs;
 
 namespace QuranPhone
 {
     public partial class DetailsPage : PhoneApplicationPage
     {
-        private RadContextMenu bookmarkMenu = new RadContextMenu();
+        private RadContextMenu ayahContextMenu = new RadContextMenu();
             
         // Constructor
         public DetailsPage()
@@ -30,10 +33,15 @@ namespace QuranPhone
             BuildLocalizedApplicationBar();
 
             App.DetailsViewModel.Orientation = this.Orientation;
-            
-            bookmarkMenu.Items.Add(new RadContextMenuItem() { Content = AppResources.bookmark_ayah });
-            bookmarkMenu.ItemTapped += BookmarkAyah_Click;
-            bookmarkMenu.Closed += (obj, e) => App.DetailsViewModel.SelectedAyah = null;
+
+            ayahContextMenu.Items.Add(new RadContextMenuItem() { Content = AppResources.bookmark_ayah });
+            if (QuranFileUtils.FileExists(Path.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false),
+                                                       QuranFileUtils.QURAN_ARABIC_DATABASE)))
+            {
+                ayahContextMenu.Items.Add(new RadContextMenuItem() {Content = AppResources.copy});
+            }
+            ayahContextMenu.ItemTapped += AyahContextMenuClick;
+            ayahContextMenu.Closed += (obj, e) => App.DetailsViewModel.SelectedAyah = null;
         }
 
         // When page is navigated to set data context to selected item in list
@@ -135,8 +143,8 @@ namespace QuranPhone
                                                           radSlideView.ActualWidth);
                 App.DetailsViewModel.SelectedAyah = ayah;
 
-                bookmarkMenu.RegionOfInterest = new Rect(e.GetPosition(ThisPage), new Size(50, 50));
-                bookmarkMenu.IsOpen = true;
+                ayahContextMenu.RegionOfInterest = new Rect(e.GetPosition(ThisPage), new Size(50, 50));
+                ayahContextMenu.IsOpen = true;
             }
         }
 
@@ -201,10 +209,32 @@ namespace QuranPhone
             App.DetailsViewModel.IsShowMenu = false;
         }
 
-        private void BookmarkAyah_Click(object sender, ContextMenuItemSelectedEventArgs e)
+        private async void AyahContextMenuClick(object sender, ContextMenuItemSelectedEventArgs e)
         {
-            App.DetailsViewModel.AddAyahBookmark(App.DetailsViewModel.SelectedAyah);
-            App.DetailsViewModel.SelectedAyah = null;
+            var menuItem = e.SelectedItem as string;
+            if (menuItem == null)
+                return;
+
+            if (sender is RadContextMenuItem)
+            {
+                var menu = sender as RadContextMenuItem;
+                var data = menu.DataContext as VerseViewModel;
+                if (data != null)
+                {
+                    App.DetailsViewModel.SelectedAyah = new QuranAyah(data.Surah, data.Ayah) { Translation = data.Text };
+                }
+            }
+
+            if (menuItem == AppResources.bookmark_ayah)
+            {
+                App.DetailsViewModel.AddAyahBookmark(App.DetailsViewModel.SelectedAyah);
+                App.DetailsViewModel.SelectedAyah = null;
+            } 
+            else if (menuItem == AppResources.copy)
+            {
+                App.DetailsViewModel.CopyAyahToClipboard(App.DetailsViewModel.SelectedAyah);
+                App.DetailsViewModel.SelectedAyah = null;
+            }
         }
 
         private void Settings_Click(object sender, EventArgs e)
@@ -349,6 +379,5 @@ namespace QuranPhone
             Console.WriteLine("Destroying DetailsPage");
         }
 #endif
-        
     }
 }
