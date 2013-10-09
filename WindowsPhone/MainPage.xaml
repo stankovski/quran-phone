@@ -10,74 +10,83 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    xmlns:tilt="clr-namespace:ControlTiltEffect"
-    tilt:TiltEffect.IsTiltEnabled="True"
+    myui:TiltEffect.IsTiltEnabled="True"
     xmlns:myui="clr-namespace:QuranPhone.UI"
     xmlns:telerikDataControls="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls.Data"
     d:DataContext="{d:DesignData SampleData/MainViewModelSampleData.xaml}"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
-    SupportedOrientations="Portrait"  Orientation="Portrait"
+    SupportedOrientations="Portrait" Orientation="Portrait"
     shell:SystemTray.IsVisible="True">
 
     <phone:PhoneApplicationPage.Resources>
-        <myui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <myui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <myui:ArabicDigitsConverter x:Key="ArabicDigits" />
     </phone:PhoneApplicationPage.Resources>
-    <!--Data context is set to sample data above and LayoutRoot contains the root grid where all other page content is placed-->
+
     <Grid x:Name="LayoutRoot" Background="Transparent">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        
-        <!--TitlePanel contains the name of the application and page title-->
-        <myui:CommonHeader Grid.Row="0" Margin="12,0,0,0" Name="header"/>
+
+        <myui:CommonHeader Grid.Row="0" Margin="12,0,0,0" Name="Header" />
+
         <controls:Pivot Grid.Row="1" Margin="12,0,12,0">
-            <controls:PivotItem Header="{Binding Path=LocalizedResources.quran_sura_lower, Source={StaticResource LocalizedStrings}}">
-                <!--ContentPanel contains DataBoundListBox and DataBoundListBox ItemTemplate. Place additional content here-->
-                <Grid x:Name="ContentPanel">
-                    <telerikPrimitives:RadDataBoundListBox Margin="0,0,-12,0" ItemsSource="{Binding Surahs}" SelectionChanged="List_SelectionChanged" IsAsyncBalanceEnabled="True">
+            <controls:PivotItem
+                Header="{Binding Path=LocalizedResources.quran_sura_lower, Source={StaticResource LocalizedStrings}}">
+                <Grid>
+                    <telerikPrimitives:RadDataBoundListBox Margin="0,0,-12,0" ItemsSource="{Binding Surahs}"
+                                                           SelectionChanged="List_SelectionChanged"
+                                                           IsAsyncBalanceEnabled="True">
                         <telerikPrimitives:RadDataBoundListBox.ItemAddedAnimation>
                             <telerikCore:RadFadeAnimation />
                         </telerikPrimitives:RadDataBoundListBox.ItemAddedAnimation>
                         <telerikPrimitives:RadDataBoundListBox.ItemTemplate>
                             <DataTemplate>
                                 <ListBoxItem HorizontalContentAlignment="Stretch">
-                                    <myui:PageLink/>
+                                    <myui:PageLink />
                                 </ListBoxItem>
                             </DataTemplate>
                         </telerikPrimitives:RadDataBoundListBox.ItemTemplate>
                     </telerikPrimitives:RadDataBoundListBox>
                 </Grid>
             </controls:PivotItem>
-            <controls:PivotItem Header="{Binding Path=LocalizedResources.quran_juz2_lower, Source={StaticResource LocalizedStrings}}">
+            <controls:PivotItem
+                Header="{Binding Path=LocalizedResources.quran_juz2_lower, Source={StaticResource LocalizedStrings}}">
                 <Grid>
-                    <telerikPrimitives:RadDataBoundListBox Margin="0,0,-12,0" ItemsSource="{Binding Juz}" SelectionChanged="List_SelectionChanged" IsAsyncBalanceEnabled="True">
+                    <telerikPrimitives:RadDataBoundListBox Margin="0,0,-12,0" ItemsSource="{Binding Juz}"
+                                                           SelectionChanged="List_SelectionChanged"
+                                                           IsAsyncBalanceEnabled="True">
                         <telerikPrimitives:RadDataBoundListBox.ItemAddedAnimation>
                             <telerikCore:RadFadeAnimation />
                         </telerikPrimitives:RadDataBoundListBox.ItemAddedAnimation>
                         <telerikPrimitives:RadDataBoundListBox.ItemTemplate>
                             <DataTemplate>
                                 <ListBoxItem HorizontalContentAlignment="Stretch">
-                                    <myui:PageLink/>
+                                    <myui:PageLink />
                                 </ListBoxItem>
                             </DataTemplate>
                         </telerikPrimitives:RadDataBoundListBox.ItemTemplate>
                     </telerikPrimitives:RadDataBoundListBox>
                 </Grid>
             </controls:PivotItem>
-            <controls:PivotItem Header="{Binding Path=LocalizedResources.quran_bookmarks_lower, Source={StaticResource LocalizedStrings}}">
+            <controls:PivotItem
+                Header="{Binding Path=LocalizedResources.quran_bookmarks_lower, Source={StaticResource LocalizedStrings}}">
                 <Grid>
-                    <telerikDataControls:RadJumpList ItemsSource="{Binding Bookmarks}" SelectionChanged="List_SelectionChanged" 
-                                                     GroupDescriptorsSource="{Binding BookmarksGroup}" IsAsyncBalanceEnabled="True">
+                    <telerikDataControls:RadJumpList ItemsSource="{Binding Bookmarks}"
+                                                     SelectionChanged="List_SelectionChanged"
+                                                     GroupDescriptorsSource="{Binding BookmarksGroup}"
+                                                     IsAsyncBalanceEnabled="True">
                         <telerikPrimitives:RadDataBoundListBox.ItemAddedAnimation>
                             <telerikCore:RadFadeAnimation />
                         </telerikPrimitives:RadDataBoundListBox.ItemAddedAnimation>
                         <telerikDataControls:RadJumpList.GroupHeaderTemplate>
                             <DataTemplate>
-                                <TextBlock Grid.Row="0" Text="{Binding}" HorizontalAlignment="Left" Style="{StaticResource BlueSmallHeader}"/>
+                                <TextBlock Text="{Binding}" HorizontalAlignment="Left"
+                                           Style="{StaticResource BlueSmallHeader}" />
                             </DataTemplate>
                         </telerikDataControls:RadJumpList.GroupHeaderTemplate>
                         <telerikPrimitives:RadDataBoundListBox.ItemTemplate>
@@ -85,11 +94,13 @@
                                 <Grid>
                                     <telerikPrimitives:RadContextMenu.ContextMenu>
                                         <telerikPrimitives:RadContextMenu>
-                                            <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.delete_bookmark, Source={StaticResource LocalizedStrings}}" Tapped="DeleteBookmark"/>
+                                            <telerikPrimitives:RadContextMenuItem
+                                                Content="{Binding Path=LocalizedResources.delete_bookmark, Source={StaticResource LocalizedStrings}}"
+                                                Tapped="DeleteBookmark" />
                                         </telerikPrimitives:RadContextMenu>
                                     </telerikPrimitives:RadContextMenu.ContextMenu>
                                     <ListBoxItem HorizontalContentAlignment="Stretch">
-                                        <myui:PageLink/>
+                                        <myui:PageLink />
                                     </ListBoxItem>
                                 </Grid>
                             </DataTemplate>
@@ -99,33 +110,31 @@
             </controls:PivotItem>
         </controls:Pivot>
 
-        <Grid Visibility="{Binding IsInstalling, Converter={StaticResource BooleanToVisibilityConverter}}" Grid.Row="2" Height="70">
-            <Border Grid.RowSpan="2" Background="{StaticResource PhoneBackgroundBrush}" Opacity="0.6"/>
+        <Grid Visibility="{Binding IsInstalling, Converter={StaticResource BooleanToVisibilityConverter}}" Grid.Row="2"
+              Height="70">
+            <Border Grid.RowSpan="2" Background="{StaticResource PhoneBackgroundBrush}" Opacity="0.6" />
             <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                <TextBlock HorizontalAlignment="Center" Text="{Binding Path=InstallationStep}"/>
-                <Grid DataContext="{Binding QuranData}" >
+                <TextBlock HorizontalAlignment="Center" Text="{Binding Path=InstallationStep}" />
+                <Grid DataContext="{Binding QuranData}">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="50"/>
-                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="50" />
+                        <ColumnDefinition Width="50" />
                     </Grid.ColumnDefinitions>
-                    <ProgressBar Grid.Column="0" Value="{Binding Progress}" IsIndeterminate="{Binding IsIndeterminate}" SmallChange="1"/>
-                    <StackPanel Grid.Column="1" Orientation="Horizontal" Visibility="{Binding IsIndeterminate, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=inverse}">
-                        <TextBlock Text="{Binding Progress}"/>
+                    <ProgressBar Grid.Column="0" Value="{Binding Progress}" IsIndeterminate="{Binding IsIndeterminate}"
+                                 SmallChange="1" />
+                    <StackPanel Grid.Column="1" Orientation="Horizontal"
+                                Visibility="{Binding IsIndeterminate, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=inverse}">
+                        <TextBlock Text="{Binding Progress, Converter={StaticResource ArabicDigits}}" />
                         <TextBlock>%</TextBlock>
                     </StackPanel>
-                    <Button Grid.Column="2" BorderThickness="0" Padding="0" Margin="0,-10,0,0" Command="{Binding CancelCommand}" Visibility="{Binding IsIndeterminate, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=inverse}">
-                        <Image Grid.Column="2" Source="/Assets/Images/ic_cancel.png"/>
+                    <Button Grid.Column="2" BorderThickness="0" Padding="0" Margin="0,-10,0,0"
+                            Command="{Binding CancelCommand}"
+                            Visibility="{Binding IsIndeterminate, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=inverse}">
+                        <Image Source="/Assets/Images/ic_cancel.png" />
                     </Button>
                 </Grid>
             </StackPanel>
         </Grid>
-        <!--Uncomment to see an alignment grid to help ensure your controls are
-            aligned on common boundaries.  The image has a top margin of -32px to
-            account for the System Tray. Set this to 0 (or remove the margin altogether)
-            if the System Tray is hidden.
-
-            Before shipping remove this XAML and the image itself.-->
-        <!--<Image Source="/Assets/AlignmentGrid.png" VerticalAlignment="Top" Height="800" Width="480" Margin="0,-32,0,0" Grid.Row="0" Grid.RowSpan="2" IsHitTestVisible="False" />-->
     </Grid>
 </phone:PhoneApplicationPage>

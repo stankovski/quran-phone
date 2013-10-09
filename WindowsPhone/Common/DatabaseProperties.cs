@@ -1,9 +1,4 @@
-﻿using SQLite;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using QuranPhone.SQLite;
 
 namespace QuranPhone.Common
 {
@@ -12,6 +7,7 @@ namespace QuranPhone.Common
     {
         [Column("property")]
         public string Property { get; set; }
+
         [Column("value")]
         public string Value { get; set; }
     }

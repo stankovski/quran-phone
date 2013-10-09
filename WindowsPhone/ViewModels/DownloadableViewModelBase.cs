@@ -1,19 +1,16 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
+using System.Windows.Input;
 using Microsoft.Phone.BackgroundTransfer;
+using QuranPhone.Resources;
 using QuranPhone.UI;
 using QuranPhone.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace QuranPhone.ViewModels
 {
     public class DownloadableViewModelBase : ViewModelBase
     {
-        protected BackgroundTransferRequest downloadRequest;
+        protected BackgroundTransferRequest DownloadRequest;
 
         public DownloadableViewModelBase()
         {
@@ -22,172 +19,138 @@ namespace QuranPhone.ViewModels
         }
 
         #region Properties
-        private string localUrl;
+
+        private TransferStatus _downloadStatus;
+        private string _filename;
+        private bool _isCompressed;
+        private bool _isDownloading;
+        private bool _isIndeterminate;
+        private string _localUrl;
+        private int _progress;
+        private string _serverUrl;
+        private string _tempUrl;
+
         public string LocalUrl
         {
-            get { return localUrl; }
+            get { return _localUrl; }
             set
             {
-                if (value == localUrl)
-                    return;
-
-                localUrl = value;
-
+                _localUrl = value;
                 base.OnPropertyChanged(() => LocalUrl);
             }
         }
 
-        private string tempUrl;
         public string TempUrl
         {
-            get { return tempUrl; }
+            get { return _tempUrl; }
             private set
             {
-                if (value == tempUrl)
-                    return;
-
-                tempUrl = value;
-
+                _tempUrl = value;
                 base.OnPropertyChanged(() => TempUrl);
             }
         }
 
-        private string filename;
         public string FileName
         {
-            get { return filename; }
+            get { return _filename; }
             set
             {
-                if (value == filename)
-                    return;
-
-                filename = value;
+                _filename = value;
                 TempUrl = string.Format("/shared/transfers/{0}", FileName);
                 FinishPreviousDownload();
-
                 base.OnPropertyChanged(() => FileName);
             }
         }
 
-        private bool isCompressed;
         public bool IsCompressed
         {
-            get { return isCompressed; }
+            get { return _isCompressed; }
             set
             {
-                if (value == isCompressed)
-                    return;
-
-                isCompressed = value;
-
+                _isCompressed = value;
                 base.OnPropertyChanged(() => IsCompressed);
             }
         }
 
-        private string serverUrl;
         public string ServerUrl
         {
-            get { return serverUrl; }
+            get { return _serverUrl; }
             set
             {
-                if (value == serverUrl)
-                    return;
+                _serverUrl = value;
 
-                serverUrl = value;
-
-                if (!string.IsNullOrEmpty(serverUrl)) 
+                if (!string.IsNullOrEmpty(_serverUrl))
                 {
-                    downloadRequest = DownloadManager.Instance.GetRequest(this.ServerUrl);
-                    if (downloadRequest != null)
+                    DownloadRequest = DownloadManager.Instance.GetRequest(ServerUrl);
+                    if (DownloadRequest != null)
                     {
-                        UpdateDownloadStatus(downloadRequest.TransferStatus);
-                        downloadRequest.TransferProgressChanged += TransferProgressChanged;
-                        downloadRequest.TransferStatusChanged += TransferStatusChanged;
+                        UpdateDownloadStatus(DownloadRequest.TransferStatus);
+                        DownloadRequest.TransferProgressChanged += TransferProgressChanged;
+                        DownloadRequest.TransferStatusChanged += TransferStatusChanged;
                     }
                 }
-
                 base.OnPropertyChanged(() => ServerUrl);
             }
         }
 
-        private bool isDownloading;
         public bool IsDownloading
         {
-            get { return isDownloading; }
+            get { return _isDownloading; }
             set
             {
-                if (value == isDownloading)
-                    return;
-
-                isDownloading = value;
-
+                _isDownloading = value;
                 base.OnPropertyChanged(() => IsDownloading);
             }
         }
 
-        private int progress;
         public int Progress
         {
-            get { return progress; }
+            get { return _progress; }
             set
             {
-                if (value == progress)
-                    return;
-
-                progress = value;
-
-                if (progress > 0)
+                _progress = value;
+                if (_progress > 0)
+                {
                     IsIndeterminate = false;
-
+                }
                 base.OnPropertyChanged(() => Progress);
             }
         }
 
-        private bool isIndeterminate;
         public bool IsIndeterminate
         {
-            get { return isIndeterminate; }
+            get { return _isIndeterminate; }
             set
             {
-                if (value == isIndeterminate)
-                    return;
-
-                isIndeterminate = value;
-
+                _isIndeterminate = value;
                 base.OnPropertyChanged(() => IsIndeterminate);
             }
         }
 
-        private TransferStatus downloadStatus;
         public TransferStatus DownloadStatus
         {
-            get { return downloadStatus; }
+            get { return _downloadStatus; }
             set
             {
-                if (value == downloadStatus)
-                    return;
-
-                downloadStatus = value;
-
+                _downloadStatus = value;
                 base.OnPropertyChanged(() => DownloadStatus);
             }
         }
 
         public bool CanDownload
         {
-            get {
-                return !IsDownloading;            
-            }            
+            get { return !IsDownloading; }
         }
 
         public bool IsInTempStorage
         {
             get
             {
-                if (!IsDownloading && QuranFileUtils.FileExists(this.TempUrl))
+                if (!IsDownloading && QuranFileUtils.FileExists(TempUrl))
+                {
                     return true;
-                else
-                    return false;
+                }
+                return false;
             }
         }
 
@@ -195,10 +158,11 @@ namespace QuranPhone.ViewModels
         {
             get
             {
-                if (!IsDownloading && QuranFileUtils.FileExists(this.LocalUrl))
+                if (!IsDownloading && QuranFileUtils.FileExists(LocalUrl))
+                {
                     return true;
-                else
-                    return false;
+                }
+                return false;
             }
         }
 
@@ -206,10 +170,11 @@ namespace QuranPhone.ViewModels
         {
             get
             {
-                if (downloadRequest != null)
-                    return downloadRequest.RequestId;
-                else
-                    return null;
+                if (DownloadRequest != null)
+                {
+                    return DownloadRequest.RequestId;
+                }
+                return null;
             }
         }
 
@@ -217,9 +182,11 @@ namespace QuranPhone.ViewModels
 
         #region Event handlers and commands
 
-        RelayCommand downloadCommand;
+        private RelayCommand cancelCommand;
+        private RelayCommand downloadCommand;
+
         /// <summary>
-        /// Returns an download command
+        ///     Returns an download command
         /// </summary>
         public ICommand DownloadCommand
         {
@@ -227,18 +194,14 @@ namespace QuranPhone.ViewModels
             {
                 if (downloadCommand == null)
                 {
-                    downloadCommand = new RelayCommand(
-                        param => this.Download(),
-                        param => this.CanDownload
-                        );
+                    downloadCommand = new RelayCommand(param => Download(), param => CanDownload);
                 }
                 return downloadCommand;
             }
         }
 
-        RelayCommand cancelCommand;
         /// <summary>
-        /// Returns an cancel command
+        ///     Returns an cancel command
         /// </summary>
         public ICommand CancelCommand
         {
@@ -246,14 +209,12 @@ namespace QuranPhone.ViewModels
             {
                 if (cancelCommand == null)
                 {
-                    cancelCommand = new RelayCommand(
-                        param => this.Cancel()
-                        );
+                    cancelCommand = new RelayCommand(param => Cancel());
                 }
                 return cancelCommand;
             }
         }
-        
+
         protected void TransferStatusChanged(object sender, BackgroundTransferEventArgs e)
         {
             UpdateDownloadStatus(e.Request.TransferStatus);
@@ -269,91 +230,101 @@ namespace QuranPhone.ViewModels
                 {
                     try
                     {
-                        QuranFileUtils.MoveFile(TempUrl, this.LocalUrl);
+                        QuranFileUtils.MoveFile(TempUrl, LocalUrl);
                     }
                     catch
                     {
                         MessageBox.Show("Something went wrong with the download. Please try again.", "Error",
-                                        MessageBoxButton.OK);
+                            MessageBoxButton.OK);
                     }
                 }
                 DownloadManager.Instance.FinalizeRequest(e.Request);
                 if (DownloadComplete != null)
+                {
                     DownloadComplete(this, null);
+                }
             }
         }
 
         protected void TransferProgressChanged(object sender, BackgroundTransferEventArgs e)
         {
-            this.Progress = (int)(e.Request.BytesReceived * 100 / e.Request.TotalBytesToReceive);
+            Progress = (int) (e.Request.BytesReceived*100/e.Request.TotalBytesToReceive);
         }
 
         #endregion Event handlers and commands
 
         #region Public methods
+
         public void Download()
         {
-            if (QuranFileUtils.FileExists(this.LocalUrl))
+            if (QuranFileUtils.FileExists(LocalUrl))
+            {
                 return;
+            }
             if (QuranFileUtils.FileExists(TempUrl))
+            {
                 QuranFileUtils.DeleteFile(TempUrl);
+            }
 
             IsDownloading = true;
-            if (downloadRequest != null)
+            if (DownloadRequest != null)
             {
-                downloadRequest.TransferProgressChanged -= TransferProgressChanged;
-                downloadRequest.TransferStatusChanged -= TransferStatusChanged;
+                DownloadRequest.TransferProgressChanged -= TransferProgressChanged;
+                DownloadRequest.TransferStatusChanged -= TransferStatusChanged;
             }
-            downloadRequest = DownloadManager.Instance.Download(this.ServerUrl, this.TempUrl);
-            if (downloadRequest != null)
+            DownloadRequest = DownloadManager.Instance.Download(ServerUrl, TempUrl);
+            if (DownloadRequest != null)
             {
-                downloadRequest.TransferProgressChanged += TransferProgressChanged;
-                downloadRequest.TransferStatusChanged += TransferStatusChanged;
-                if (downloadRequest.TransferStatus == TransferStatus.Completed)
-                    TransferStatusChanged(this, new BackgroundTransferEventArgs(downloadRequest));
+                DownloadRequest.TransferProgressChanged += TransferProgressChanged;
+                DownloadRequest.TransferStatusChanged += TransferStatusChanged;
+                if (DownloadRequest.TransferStatus == TransferStatus.Completed)
+                {
+                    TransferStatusChanged(this, new BackgroundTransferEventArgs(DownloadRequest));
+                }
             }
         }
 
         public void FinishPreviousDownload()
         {
-            if (!string.IsNullOrEmpty(this.TempUrl) && !string.IsNullOrEmpty(this.LocalUrl) &&
-                QuranFileUtils.FileExists(this.TempUrl))
+            if (!string.IsNullOrEmpty(TempUrl) && !string.IsNullOrEmpty(LocalUrl) && QuranFileUtils.FileExists(TempUrl))
             {
-
                 if (DownloadComplete != null)
+                {
                     DownloadComplete(this, null);
+                }
                 try
                 {
-                    QuranFileUtils.MoveFile(this.TempUrl, this.LocalUrl);
+                    QuranFileUtils.MoveFile(TempUrl, LocalUrl);
                 }
                 catch
                 {
                     MessageBox.Show("Something went wrong with the download. Please try again.", "Error",
-                                    MessageBoxButton.OK);
+                        MessageBoxButton.OK);
                 }
             }
         }
 
         public void Cancel()
         {
-            if (downloadRequest != null)
+            if (DownloadRequest != null)
             {
                 if (
-                    MessageBox.Show(Resources.AppResources.download_cancel_confirmation, "Cancel download",
-                                    MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                    MessageBox.Show(AppResources.download_cancel_confirmation, "Cancel download",
+                        MessageBoxButton.OKCancel) == MessageBoxResult.OK)
                 {
-                    DownloadManager.Instance.Cancel(downloadRequest);
+                    DownloadManager.Instance.Cancel(DownloadRequest);
                     try
                     {
-                        QuranFileUtils.DeleteFile(this.TempUrl);
+                        QuranFileUtils.DeleteFile(TempUrl);
                     }
-                    catch
+                    catch (Exception e)
                     {
-                        //Ignore
+                        MessageBox.Show(e.Message);
                     }
                 }
             }
         }
+
         #endregion Public methods
 
         private void UpdateDownloadStatus(TransferStatus status)

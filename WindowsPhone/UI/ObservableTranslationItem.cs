@@ -1,39 +1,46 @@
-﻿using Microsoft.Phone.BackgroundTransfer;
+﻿using System;
+using System.IO;
+using System.Windows;
+using System.Windows.Input;
 using QuranPhone.Common;
 using QuranPhone.Data;
 using QuranPhone.Utils;
 using QuranPhone.ViewModels;
-using System;
-using System.IO;
-using System.Windows.Input;
 
 namespace QuranPhone.UI
 {
     public class ObservableTranslationItem : DownloadableViewModelBase
     {
-        public ObservableTranslationItem() { }
+        private RelayCommand deleteCommand;
+        private bool exists;
+        private int id;
+        private string name;
+        private RelayCommand navigateCommand;
+        private string translator;
+
+        public ObservableTranslationItem() {}
 
         public ObservableTranslationItem(TranslationItem item)
-            : base()
         {
-            this.Id = item.Id;
-            this.Name = item.Name;
-            this.Translator = item.Translator;
-            this.ServerUrl = item.Url;
-            this.FileName = item.Filename;
-            this.Exists = item.Exists;
-            this.LocalUrl = Path.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false, true), this.FileName);
-            this.IsCompressed = item.Compressed;
+            Id = item.Id;
+            Name = item.Name;
+            Translator = item.Translator;
+            ServerUrl = item.Url;
+            FileName = item.Filename;
+            Exists = item.Exists;
+            LocalUrl = Path.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false, true), FileName);
+            IsCompressed = item.Compressed;
         }
 
-        private int id;
         public int Id
         {
             get { return id; }
             set
             {
                 if (value == id)
+                {
                     return;
+                }
 
                 id = value;
 
@@ -41,14 +48,15 @@ namespace QuranPhone.UI
             }
         }
 
-        private string name;
         public string Name
         {
             get { return name; }
             set
             {
                 if (value == name)
+                {
                     return;
+                }
 
                 name = value;
 
@@ -56,14 +64,15 @@ namespace QuranPhone.UI
             }
         }
 
-        private string translator;
         public string Translator
         {
             get { return translator; }
             set
             {
                 if (value == translator)
+                {
                     return;
+                }
 
                 translator = value;
 
@@ -71,14 +80,15 @@ namespace QuranPhone.UI
             }
         }
 
-        private bool exists;
         public bool Exists
         {
             get { return exists; }
             set
             {
                 if (value == exists)
+                {
                     return;
+                }
 
                 exists = value;
 
@@ -86,9 +96,8 @@ namespace QuranPhone.UI
             }
         }
 
-        RelayCommand deleteCommand;
         /// <summary>
-        /// Returns an undo command
+        ///     Returns an undo command
         /// </summary>
         public ICommand DeleteCommand
         {
@@ -96,17 +105,14 @@ namespace QuranPhone.UI
             {
                 if (deleteCommand == null)
                 {
-                    deleteCommand = new RelayCommand(
-                        param => this.Delete()
-                        );
+                    deleteCommand = new RelayCommand(param => Delete());
                 }
                 return deleteCommand;
             }
         }
 
-        RelayCommand navigateCommand;
         /// <summary>
-        /// Returns an undo command
+        ///     Returns an undo command
         /// </summary>
         public ICommand NavigateCommand
         {
@@ -114,10 +120,7 @@ namespace QuranPhone.UI
             {
                 if (navigateCommand == null)
                 {
-                    navigateCommand = new RelayCommand(
-                        param => this.Navigate(),
-                        canExecute => this.Exists
-                        );
+                    navigateCommand = new RelayCommand(param => Navigate(), canExecute => Exists);
                 }
                 return navigateCommand;
             }
@@ -125,43 +128,42 @@ namespace QuranPhone.UI
 
         public void Delete()
         {
-            if (QuranFileUtils.FileExists(this.LocalUrl))
+            if (QuranFileUtils.FileExists(LocalUrl))
             {
                 try
                 {
-                    QuranFileUtils.DeleteFile(this.LocalUrl);
+                    QuranFileUtils.DeleteFile(LocalUrl);
                 }
                 catch
                 {
-                    Console.WriteLine("error deleting file " + this.LocalUrl);
+                    MessageBox.Show("error deleting file " + LocalUrl);
                 }
-            }
-            else
-            { 
-                // Sometimes downloaded translation is kind of corrupted, need a way to delete this
-                // corrupted item.
-
             }
 
             if (DeleteComplete != null)
+            {
                 DeleteComplete(this, null);
+            }
 
             try
             {
-                if (SettingsUtils.Get<string>(Constants.PREF_ACTIVE_TRANSLATION).StartsWith(this.FileName))
+                if (SettingsUtils.Get<string>(Constants.PrefActiveTranslation).StartsWith(FileName))
                 {
-                    SettingsUtils.Set<string>(Constants.PREF_ACTIVE_TRANSLATION, string.Empty);
+                    SettingsUtils.Set(Constants.PrefActiveTranslation, string.Empty);
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                MessageBox.Show(e.Message);
             }
         }
 
         public void Navigate()
         {
             if (NavigateRequested != null)
+            {
                 NavigateRequested(this, null);
+            }
         }
 
         public event EventHandler DeleteComplete;

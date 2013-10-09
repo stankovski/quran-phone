@@ -11,66 +11,79 @@
     mc:Ignorable="d"
     xmlns:myui="clr-namespace:QuranPhone.UI"
     xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-    xmlns:abu="clr-namespace:AppBarUtils;assembly=AppBarUtils"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
     d:DataContext="{d:DesignData SampleData/TranslationViewModelSampleData.xaml}"
     Tap="ScreenTap" Background="{Binding BackgroundColor, Mode=OneWay}" OrientationChanged="PageOrientationChanged">
-    
+
     <phone:PhoneApplicationPage.Resources>
-        <myui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        <myui:StyleConverter x:Key="StyleConverter"/>
-        <myui:ArabicFontSizeConverter x:Key="ArabicFontSizeConverter"/>
+        <myui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <myui:StyleConverter x:Key="StyleConverter" />
+        <myui:ArabicFontSizeConverter x:Key="ArabicFontSizeConverter" />
+        <myui:ArabicDigitsConverter x:Key="ArabicDigits" />
     </phone:PhoneApplicationPage.Resources>
+
     <Grid Name="MainContainer" Background="{Binding BackgroundColor, Mode=OneWay}">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Grid HorizontalAlignment="Stretch" Grid.Row="0" Background="{Binding BackgroundColor, Mode=OneWay}" Height="33"
-              Visibility="{Binding ShowInfoOverlay, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <TextBlock Text="{Binding CurrentSurahName}" HorizontalAlignment="Left" FontSize="18" Foreground="{Binding ForegroundColor, Mode=OneWay}" Margin="25,3,0,3"/>
+
+            <Grid HorizontalAlignment="Stretch" Grid.Row="0" Background="{Binding BackgroundColor, Mode=OneWay}"
+                  Height="33"
+                  Visibility="{Binding ShowInfoOverlay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <TextBlock Text="{Binding CurrentSurahName}" HorizontalAlignment="Left" FontSize="18"
+                           Foreground="{Binding ForegroundColor, Mode=OneWay}" Margin="25,3,0,3" />
                 <StackPanel Margin="0,3,0,3" HorizontalAlignment="Center" Orientation="Horizontal">
-                    <Image Source="Assets\Images\left.png" Height="25" Width="50"/>
-                    <TextBlock Text="{Binding CurrentPageNumber}" FontSize="18" Foreground="{Binding ForegroundColor, Mode=OneWay}"/>
-                    <Image Source="Assets\Images\right.png" Height="25" Width="50"/>
+                    <Image Source="Assets\Images\left.png" Height="25" Width="50" />
+                    <TextBlock Text="{Binding CurrentPageNumber, Converter={StaticResource ArabicDigits}}"
+                               FontSize="18" Foreground="{Binding ForegroundColor, Mode=OneWay}" />
+                    <Image Source="Assets\Images\right.png" Height="25" Width="50" />
                 </StackPanel>
-                <TextBlock Text="{Binding CurrentJuzName}" HorizontalAlignment="Right" FontSize="18" Foreground="{Binding ForegroundColor, Mode=OneWay}" Margin="0,3,25,3"/>
+                <TextBlock Text="{Binding CurrentJuzName, Converter={StaticResource ArabicDigits}}"
+                           HorizontalAlignment="Right" FontSize="18"
+                           Foreground="{Binding ForegroundColor, Mode=OneWay}" Margin="0,3,25,3" />
             </Grid>
 
-            <telerikPrimitives:RadSlideView x:Name="radSlideView" Grid.Row="1" IsFilmstripModeEnabled="True" Margin="0" 
-                                        ItemsSource="{Binding Pages}" IsLoopingEnabled="True" 
-                                        ItemRealizationMode="ViewportItem">
+            <telerikPrimitives:RadSlideView x:Name="radSlideView" Grid.Row="1" IsFilmstripModeEnabled="True" Margin="0"
+                                            ItemsSource="{Binding Pages}" IsLoopingEnabled="True"
+                                            FlowDirection="LeftToRight"
+                                            ItemRealizationMode="ViewportItem">
                 <telerikPrimitives:RadSlideView.ItemTemplate>
                     <DataTemplate>
-                         <Grid>
-                            <myui:CachedImage ImageSource="{Binding ImageSource}" PageNumber="{Binding PageNumber}" 
+                        <Grid>
+                            <myui:CachedImage ImageSource="{Binding ImageSource}" PageNumber="{Binding PageNumber}"
                                               NightMode="{Binding DataContext.IsNightMode, ElementName=ThisPage}"
                                               SelectedAyah="{Binding DataContext.SelectedAyah, ElementName=ThisPage}"
-                                              Hold="ImageHold" DoubleTap="ImageDoubleTap" Tap="ImageTap" Padding="0,0,0,10"
-                                              Visibility="{Binding DataContext.ShowTranslation, ElementName=ThisPage, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
-                            </myui:CachedImage>
-
-                            <telerikPrimitives:RadDataBoundListBox x:Name="TranslationListBox" DoubleTap="ListBoxDoubleTap"
+                                              Hold="ImageHold" DoubleTap="ImageDoubleTap" Tap="ImageTap"
+                                              Padding="0,0,0,10"
+                                              Visibility="{Binding DataContext.ShowTranslation, ElementName=ThisPage, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}" />
+                            <telerikPrimitives:RadDataBoundListBox x:Name="TranslationListBox"
+                                                                   DoubleTap="ListBoxDoubleTap"
                                                                    Visibility="{Binding DataContext.ShowTranslation, ElementName=ThisPage, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                                   ItemsSource="{Binding Translations}" IsAsyncBalanceEnabled="True">
+                                                                   ItemsSource="{Binding Translations}"
+                                                                   IsAsyncBalanceEnabled="True">
                                 <telerikPrimitives:RadDataBoundListBox.EmptyContentTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=LocalizedResources.loading, Source={StaticResource LocalizedStrings}}"/>
+                                        <TextBlock
+                                            Text="{Binding Path=LocalizedResources.loading, Source={StaticResource LocalizedStrings}}" />
                                     </DataTemplate>
                                 </telerikPrimitives:RadDataBoundListBox.EmptyContentTemplate>
                                 <telerikPrimitives:RadDataBoundListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <ListBoxItem HorizontalContentAlignment="Stretch" Foreground="{Binding DataContext.ForegroundColor, Mode=OneWay, ElementName=ThisPage}">
-                                            <myui:TranslationView DataContext="{Binding}" SelectedAyah="{Binding DataContext.SelectedAyah, ElementName=ThisPage}"/>
+                                        <ListBoxItem HorizontalContentAlignment="Stretch"
+                                                     Foreground="{Binding DataContext.ForegroundColor, Mode=OneWay, ElementName=ThisPage}">
+                                            <myui:TranslationView DataContext="{Binding}"
+                                                                  SelectedAyah="{Binding DataContext.SelectedAyah, ElementName=ThisPage}" />
                                         </ListBoxItem>
                                     </DataTemplate>
                                 </telerikPrimitives:RadDataBoundListBox.ItemTemplate>
                                 <i:Interaction.Behaviors>
-                                    <myui:ListBoxPropertyBinder SelectedAyah="{Binding DataContext.SelectedAyah, ElementName=ThisPage}"/>
+                                    <myui:ListBoxPropertyBinder
+                                        SelectedAyah="{Binding DataContext.SelectedAyah, ElementName=ThisPage}" />
                                 </i:Interaction.Behaviors>
                             </telerikPrimitives:RadDataBoundListBox>
                         </Grid>
@@ -80,41 +93,31 @@
                     <DataTemplate>
                         <Grid Width="80" Height="130" Margin="10">
                             <Border BorderThickness="2" BorderBrush="{StaticResource DarkBlueText}" Padding="10">
-                                <Image Source="Assets/Images/page-small.png"></Image>
+                                <Image Source="Assets/Images/page-small.png" />
                             </Border>
-                            <TextBlock Text="{Binding PageNumber}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" Foreground="{StaticResource DarkBlueText}"/>
+                            <TextBlock Text="{Binding PageNumber}" HorizontalAlignment="Center"
+                                       VerticalAlignment="Center" FontSize="30"
+                                       Foreground="{StaticResource DarkBlueText}" />
                         </Grid>
                     </DataTemplate>
                 </telerikPrimitives:RadSlideView.FilmstripModeItemTemplate>
             </telerikPrimitives:RadSlideView>
         </Grid>
 
-        <Button VerticalAlignment="Bottom" HorizontalAlignment="Right" Padding="0" Width="80" Style="{StaticResource ChromelessButtonStyle}" Name="menuToggleButton" 
-                Visibility="{Binding IsShowMenu, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}" Tap="MenuTap">
-            <StackPanel Orientation="Horizontal" Background="Transparent" VerticalAlignment="Bottom" Margin="0" Height="70" Width="80">
-                <Ellipse Fill="{StaticResource DarkBlueText}" Width="8" Height="8" Margin="5,0,5,15" VerticalAlignment="Bottom"/>
-                <Ellipse Fill="{StaticResource DarkBlueText}" Width="8" Height="8" Margin="5,0,5,15" VerticalAlignment="Bottom"/>
-                <Ellipse Fill="{StaticResource DarkBlueText}" Width="8" Height="8" Margin="5,0,5,15" VerticalAlignment="Bottom"/>
+        <Button VerticalAlignment="Bottom" HorizontalAlignment="Right" Padding="0" Width="80"
+                Style="{StaticResource ChromelessButtonStyle}"
+                Visibility="{Binding IsShowMenu, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}"
+                Tap="MenuTap">
+            <StackPanel Orientation="Horizontal" Background="Transparent" VerticalAlignment="Bottom" Margin="0"
+                        Height="70" Width="80">
+                <Ellipse Fill="{StaticResource DarkBlueText}" Width="8" Height="8" Margin="5,0,5,15"
+                         VerticalAlignment="Bottom" />
+                <Ellipse Fill="{StaticResource DarkBlueText}" Width="8" Height="8" Margin="5,0,5,15"
+                         VerticalAlignment="Bottom" />
+                <Ellipse Fill="{StaticResource DarkBlueText}" Width="8" Height="8" Margin="5,0,5,15"
+                         VerticalAlignment="Bottom" />
             </StackPanel>
         </Button>
     </Grid>
-    
-    <!--<phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar>
-            <shell:ApplicationBarIconButton IconUri="/Assets/Images/search.png" 
-                                            Text="Search" Click="Search_Click"/>
-            <shell:ApplicationBarIconButton IconUri="/Assets/Images/favorite.png" 
-                                            Text="Bookmark" Click="Bookmark_Click"/>
-            <shell:ApplicationBarIconButton IconUri="/Assets/Images/appbar.globe.png" 
-                                            Text="Translate" Click="Translation_Click"/>
-            <shell:ApplicationBar.MenuItems>
-                <shell:ApplicationBarMenuItem Text="Settings" Click="Settings_Click"/>
-                <shell:ApplicationBarMenuItem Text="Contact us" Click="ContactUs_Click"/>
-            </shell:ApplicationBar.MenuItems>
-        </shell:ApplicationBar>
-    </phone:PhoneApplicationPage.ApplicationBar>-->
 
-    <!--<i:Interaction.Behaviors>
-        <abu:AppBarPropertyBinder IsVisible="{Binding IsShowMenu}" Opacity="0.9" BackgroundColor="White" ForegroundColor="#FF49A4C5" />
-    </i:Interaction.Behaviors>-->
 </phone:PhoneApplicationPage>

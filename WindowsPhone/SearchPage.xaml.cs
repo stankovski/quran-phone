@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Net;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
 using QuranPhone.Resources;
 using QuranPhone.Utils;
 using QuranPhone.ViewModels;
@@ -21,14 +18,12 @@ namespace QuranPhone
         public SearchPage()
         {
             InitializeComponent();
-
-            // Set the data context of the LongListSelector control to the sample data
             DataContext = App.SearchViewModel;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            string query = string.Empty;
+            string query;
             if (NavigationContext.QueryString.TryGetValue("query", out query))
             {
                 if (!string.IsNullOrEmpty(query))
@@ -37,14 +32,16 @@ namespace QuranPhone
                 }
             }
         }
-        
-        private void SearchKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+
+        private void SearchKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == System.Windows.Input.Key.Enter)
+            if (e.Key == Key.Enter)
             {
-                if ((string.IsNullOrEmpty(App.DetailsViewModel.TranslationFile) || 
-                    !QuranFileUtils.FileExists(Path.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false), App.DetailsViewModel.TranslationFile))) 
-                    && !QuranFileUtils.FileExists(Path.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false), QuranFileUtils.QURAN_ARABIC_DATABASE)))
+                if ((string.IsNullOrEmpty(App.DetailsViewModel.TranslationFile) ||
+                     !QuranFileUtils.FileExists(Path.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false),
+                         App.DetailsViewModel.TranslationFile))) &&
+                    !QuranFileUtils.FileExists(Path.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false),
+                        QuranFileUtils.QuranArabicDatabase)))
                 {
                     MessageBox.Show(AppResources.no_translation_to_search);
                     NavigationService.Navigate(new Uri("/SettingsPage.xaml", UriKind.Relative));
@@ -59,33 +56,37 @@ namespace QuranPhone
 
         private void SearchResultsSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // If selected item is null (no selection) do nothing
             var list = sender as RadDataBoundListBox;
             if (list == null || list.SelectedItem == null)
+            {
                 return;
+            }
 
             var item = list.SelectedItem as ItemViewModel;
 
             if (item == null || item.SelectedAyah == null)
+            {
                 return;
+            }
 
-            // Navigate to the new page
-            NavigationService.Navigate(new Uri(
-                string.Format(CultureInfo.InvariantCulture, "/DetailsPage.xaml?page={0}&surah={1}&ayah={2}",
-                                          item.PageNumber,
-                                          item.SelectedAyah.Sura,
-                                          item.SelectedAyah.Ayah), UriKind.Relative));
+            NavigationService.Navigate(
+                new Uri(
+                    string.Format(CultureInfo.InvariantCulture, "/DetailsPage.xaml?page={0}&surah={1}&ayah={2}",
+                        item.PageNumber, item.SelectedAyah.Sura, item.SelectedAyah.Ayah), UriKind.Relative));
 
-            // Reset selected item to null (no selection)
             list.SelectedItem = null;
         }
 
         private void PageLoaded(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(App.SearchViewModel.Query))
+            {
                 SearchBox.Focus();
+            }
             else
+            {
                 ResultList.Focus();
+            }
         }
     }
 }

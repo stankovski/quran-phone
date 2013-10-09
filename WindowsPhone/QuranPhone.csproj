@@ -10,7 +10,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>QuranPhone</RootNamespace>
-    <AssemblyName>QuranPhone</AssemblyName>
+    <AssemblyName>Telerik.Examples.WP</AssemblyName>
     <TargetFrameworkIdentifier>WindowsPhone</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v8.0</TargetFrameworkVersion>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
@@ -18,7 +18,7 @@
     <SupportedCultures>ru%3bid%3bar</SupportedCultures>
     <XapOutputs>true</XapOutputs>
     <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
-    <XapFilename>QuranPhone_WP8.xap</XapFilename>
+    <XapFilename>QuranPhone.xap</XapFilename>
     <SilverlightManifestTemplate>Properties\AppManifest.xml</SilverlightManifestTemplate>
     <SilverlightAppEntry>QuranPhone.App</SilverlightAppEntry>
     <ValidateXaml>true</ValidateXaml>
@@ -28,9 +28,9 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>Bin\Debug</OutputPath>
-    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE;USE_WP8_NATIVE_SQLITE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE;WINDOWS_PHONE_8;USE_WP8_NATIVE_SQLITE</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
@@ -40,7 +40,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>Bin\Release</OutputPath>
-    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE;USE_WP8_NATIVE_SQLITE</DefineConstants>
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
@@ -51,7 +51,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>Bin\x86\Debug</OutputPath>
-    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE;WINDOWS_PHONE_8;USE_WP8_NATIVE_SQLITE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE;WINDOWS_PHONE_8;SQLITE_SILVERLIGHT NET_40 TRUE WIN32 _MSC_VER SQLITE_DEBUG NDEBUG NO_TCL SQLITE_ASCII SQLITE_DISABLE_LFS SQLITE_HAS_CODEC SQLITE_MEM_POOL SQLITE_MUTEX_OMIT SQLITE_OMIT_AUTHORIZATION SQLITE_OMIT_DEPRECATED SQLITE_OMIT_GET_TABLE SQLITE_OMIT_INCRBLOB SQLITE_OMIT_LOOKASIDE SQLITE_OMIT_SHARED_CACHE SQLITE_OMIT_UTF16 SQLITE_OMIT_VIRTUALTABLE SQLITE_OMIT_WAL SQLITE_OS_WIN SQLITE_SYSTEM_MALLOC VDBE_PROFILE_OFF  WINDOWS_PHONE SQLITE_ENABLE_COLUMN_METADATA</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
@@ -72,7 +72,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>Bin\ARM\Debug</OutputPath>
-    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE;USE_WP8_NATIVE_SQLITE;WINDOWS_PHONE_8</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE;WINDOWS_PHONE_8;USE_WP8_NATIVE_SQLITE</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
@@ -92,6 +92,8 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Common\ArabicAyah.cs" />
+    <Compile Include="Common\AyahComparer.cs" />
     <Compile Include="Common\Bookmarks.cs" />
     <Compile Include="Common\BookmarkTags.cs" />
     <Compile Include="Common\DatabaseProperties.cs" />
@@ -100,8 +102,78 @@
     <Compile Include="Data\BaseDatabaseHandler.cs" />
     <Compile Include="Data\BookmarksDBAdapter.cs" />
     <Compile Include="Data\DatabaseHandler.cs" />
-    <Compile Include="Data\DuaGenerator.cs" />
-    <Compile Include="Data\QuranDataProvider.cs" />
+    <Compile Include="SharpZipLib\BZip2\BZip2.cs" />
+    <Compile Include="SharpZipLib\BZip2\BZip2Constants.cs" />
+    <Compile Include="SharpZipLib\BZip2\BZip2Exception.cs" />
+    <Compile Include="SharpZipLib\BZip2\BZip2InputStream.cs" />
+    <Compile Include="SharpZipLib\BZip2\BZip2OutputStream.cs" />
+    <Compile Include="SharpZipLib\Checksums\Adler32.cs" />
+    <Compile Include="SharpZipLib\Checksums\CRC32.cs" />
+    <Compile Include="SharpZipLib\Checksums\IChecksum.cs" />
+    <Compile Include="SharpZipLib\Checksums\StrangeCRC.cs" />
+    <Compile Include="SharpZipLib\Core\FileSystemScanner.cs" />
+    <Compile Include="SharpZipLib\Core\INameTransform.cs" />
+    <Compile Include="SharpZipLib\Core\IScanFilter.cs" />
+    <Compile Include="SharpZipLib\Core\NameFilter.cs" />
+    <Compile Include="SharpZipLib\Core\PathFilter.cs" />
+    <Compile Include="SharpZipLib\Core\StreamUtils.cs" />
+    <Compile Include="SharpZipLib\Core\WindowsPathUtils.cs" />
+    <Compile Include="SharpZipLib\Encryption\PkzipClassic.cs" />
+    <Compile Include="SharpZipLib\GZip\GZIPConstants.cs" />
+    <Compile Include="SharpZipLib\GZip\GZipException.cs" />
+    <Compile Include="SharpZipLib\GZip\GzipInputStream.cs" />
+    <Compile Include="SharpZipLib\GZip\GzipOutputStream.cs" />
+    <Compile Include="SharpZipLib\IsolatedStorage\Core\IsolatedExtendedPathFilter.cs" />
+    <Compile Include="SharpZipLib\IsolatedStorage\Core\IsolatedFileSystemScanner.cs" />
+    <Compile Include="SharpZipLib\IsolatedStorage\Core\IsolatedNameAndSizeFilter.cs" />
+    <Compile Include="SharpZipLib\IsolatedStorage\Core\IsolatedPathFilter.cs" />
+    <Compile Include="SharpZipLib\IsolatedStorage\Zip\IsolatedDiskArchiveStorage.cs" />
+    <Compile Include="SharpZipLib\IsolatedStorage\Zip\IsolatedDynamicDiskDataSource.cs" />
+    <Compile Include="SharpZipLib\IsolatedStorage\Zip\IsolatedFastZip.cs" />
+    <Compile Include="SharpZipLib\IsolatedStorage\Zip\IsolatedNameTransform.cs" />
+    <Compile Include="SharpZipLib\IsolatedStorage\Zip\IsolatedStaticDiskDataSource.cs" />
+    <Compile Include="SharpZipLib\IsolatedStorage\Zip\IsolatedStreamUtilities.cs" />
+    <Compile Include="SharpZipLib\IsolatedStorage\Zip\IsolatedZipEntryFactory.cs" />
+    <Compile Include="SharpZipLib\IsolatedStorage\Zip\IsolatedZipFile.cs" />
+    <Compile Include="SharpZipLib\Lzw\LzwConstants.cs" />
+    <Compile Include="SharpZipLib\Lzw\LzwException.cs" />
+    <Compile Include="SharpZipLib\Lzw\LzwInputStream.cs" />
+    <Compile Include="SharpZipLib\SharpZipBaseException.cs" />
+    <Compile Include="SharpZipLib\Tar\InvalidHeaderException.cs" />
+    <Compile Include="SharpZipLib\Tar\TarArchive.cs" />
+    <Compile Include="SharpZipLib\Tar\TarBuffer.cs" />
+    <Compile Include="SharpZipLib\Tar\TarEntry.cs" />
+    <Compile Include="SharpZipLib\Tar\TarException.cs" />
+    <Compile Include="SharpZipLib\Tar\TarHeader.cs" />
+    <Compile Include="SharpZipLib\Tar\TarInputStream.cs" />
+    <Compile Include="SharpZipLib\Tar\TarOutputStream.cs" />
+    <Compile Include="SharpZipLib\Zip\Compression\Deflater.cs" />
+    <Compile Include="SharpZipLib\Zip\Compression\DeflaterConstants.cs" />
+    <Compile Include="SharpZipLib\Zip\Compression\DeflaterEngine.cs" />
+    <Compile Include="SharpZipLib\Zip\Compression\DeflaterHuffman.cs" />
+    <Compile Include="SharpZipLib\Zip\Compression\DeflaterPending.cs" />
+    <Compile Include="SharpZipLib\Zip\Compression\Inflater.cs" />
+    <Compile Include="SharpZipLib\Zip\Compression\InflaterDynHeader.cs" />
+    <Compile Include="SharpZipLib\Zip\Compression\InflaterHuffmanTree.cs" />
+    <Compile Include="SharpZipLib\Zip\Compression\PendingBuffer.cs" />
+    <Compile Include="SharpZipLib\Zip\Compression\Streams\DeflaterOutputStream.cs" />
+    <Compile Include="SharpZipLib\Zip\Compression\Streams\InflaterInputStream.cs" />
+    <Compile Include="SharpZipLib\Zip\Compression\Streams\OutputWindow.cs" />
+    <Compile Include="SharpZipLib\Zip\Compression\Streams\StreamManipulator.cs" />
+    <Compile Include="SharpZipLib\Zip\FastZip.cs" />
+    <Compile Include="SharpZipLib\Zip\IEntryFactory.cs" />
+    <Compile Include="SharpZipLib\Zip\WindowsNameTransform.cs" />
+    <Compile Include="SharpZipLib\Zip\ZipConstants.cs" />
+    <Compile Include="SharpZipLib\Zip\ZipEntry.cs" />
+    <Compile Include="SharpZipLib\Zip\ZipEntryFactory.cs" />
+    <Compile Include="SharpZipLib\Zip\ZipException.cs" />
+    <Compile Include="SharpZipLib\Zip\ZipExtraData.cs" />
+    <Compile Include="SharpZipLib\Zip\ZipFile.cs" />
+    <Compile Include="SharpZipLib\Zip\ZipHelperStream.cs" />
+    <Compile Include="SharpZipLib\Zip\ZipInputStream.cs" />
+    <Compile Include="SharpZipLib\Zip\ZipNameTransform.cs" />
+    <Compile Include="SharpZipLib\Zip\ZipOutputStream.cs" />
+    <Compile Include="SharpZipLib\Zip\ZipTesting.cs" />
     <Compile Include="Data\SQLite.cs" />
     <Compile Include="Data\SQLiteAsync.cs" />
     <Compile Include="Data\TranslationsDBAdapter.cs" />
@@ -125,7 +197,6 @@
     <Compile Include="Data\AyahInfoDatabaseHandler.cs" />
     <Compile Include="Common\AyahLimits.cs" />
     <Compile Include="Data\Constants.cs" />
-    <Compile Include="Data\Mappings.cs" />
     <Compile Include="Data\QuranInfo.cs" />
     <Compile Include="Data\SQLiteDatabase.cs" />
     <Compile Include="LocalizedStrings.cs" />
@@ -136,6 +207,7 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\ArabicDigitsConverter.cs" />
     <Compile Include="UI\BooleanInversionConverter.cs" />
     <Compile Include="UI\BooleanToVisibilityConverter.cs" />
     <Compile Include="UI\CachedImage.xaml.cs">
@@ -144,11 +216,9 @@
     <Compile Include="UI\CommonHeader.xaml.cs">
       <DependentUpon>CommonHeader.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\ConditionalStyleConverter.cs" />
     <Compile Include="UI\ArabicFontSizeConverter.cs" />
     <Compile Include="UI\DataTemplateSelector.cs" />
     <Compile Include="UI\ListBoxPropertyBinder.cs" />
-    <Compile Include="UI\TextFormatConverter.cs" />
     <Compile Include="UI\SettingsRetrieverConverter.cs" />
     <Compile Include="UI\ListHeader.xaml.cs">
       <DependentUpon>ListHeader.xaml</DependentUpon>
@@ -163,21 +233,16 @@
     <Compile Include="UI\TranslationView.xaml.cs">
       <DependentUpon>TranslationView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\UiExtensions.cs" />
-    <Compile Include="Utils\ArabicResharper.cs" />
-    <Compile Include="Utils\CryptoUtils.cs" />
     <Compile Include="Utils\DownloadManager.cs" />
     <Compile Include="Utils\HttpExtensions.cs" />
     <Compile Include="Utils\LittleWatson.cs" />
     <Compile Include="Utils\PhoneUtils.cs" />
     <Compile Include="Utils\QuranFileUtils.cs" />
     <Compile Include="Utils\QuranScreenInfo.cs" />
-    <Compile Include="Utils\QuranUtils.cs" />
     <Compile Include="Utils\SettingsUtils.cs" />
     <Compile Include="UI\StyleConverter.cs" />
     <Compile Include="Utils\TextBlockSplitter.cs" />
     <Compile Include="Utils\TranslationListTask.cs" />
-    <Compile Include="Utils\TranslationUtils.cs" />
     <Compile Include="ViewModels\SearchViewModel.cs" />
     <Compile Include="ViewModels\DownloadableViewModelBase.cs" />
     <Compile Include="ViewModels\ItemViewModel.cs" />
@@ -264,6 +329,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Images\favorite.png" />
     <Content Include="Assets\Images\left.png" />
     <Content Include="Assets\Images\right.png" />
     <Content Include="Assets\Images\search.png" />
@@ -274,15 +340,11 @@
     <Content Include="SplashScreenImage.screen-720p.jpg" />
     <Content Include="SplashScreenImage.screen-WVGA.jpg" />
     <Content Include="SplashScreenImage.screen-WXGA.jpg" />
-    <None Include="..\OfflineAssets\images_800.zip">
-      <Link>Assets\Offline\images_800.zip</Link>
-    </None>
     <None Include="packages.config" />
     <None Include="Properties\AppManifest.xml" />
     <None Include="Properties\WMAppManifest.xml">
       <SubType>Designer</SubType>
     </None>
-    <None Include="QuranPhone_2013_07_31_11_49_02.sap" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\AlignmentGrid.png" />
@@ -293,7 +355,6 @@
     <Content Include="Assets\Images\bookmark_ayah.png" />
     <Content Include="Assets\Images\bookmark_currentpage.png" />
     <Content Include="Assets\Images\bookmark_page.png" />
-    <Content Include="Assets\Images\favorite.png" />
     <Content Include="Assets\Images\hizb_full.png" />
     <Content Include="Assets\Images\hizb_half.png" />
     <Content Include="Assets\Images\hizb_quarter.png" />
@@ -302,8 +363,6 @@
     <Content Include="Assets\Images\ic_ab_settings.png" />
     <Content Include="Assets\Images\ic_accept.png" />
     <Content Include="Assets\Images\ic_cancel.png" />
-    <Content Include="Assets\Images\ic_delete.png" />
-    <Content Include="Assets\Images\ic_download.png" />
     <Content Include="Assets\Images\ic_edit.png" />
     <Content Include="Assets\Images\ic_goto_quran.png" />
     <Content Include="Assets\Images\ic_new.png" />
@@ -316,23 +375,13 @@
     <Content Include="Assets\Images\ic_sort.png" />
     <Content Include="Assets\Images\ic_stop.png" />
     <Content Include="Assets\Images\ic_tag.png" />
-    <Content Include="Assets\Images\ic_translation.png" />
     <Content Include="Assets\Images\not_favorite.png" />
     <Content Include="Assets\Images\page-small.png" />
     <Content Include="Assets\Images\sura_icon.png" />
-    <Content Include="Assets\Tiles\FlipCycleTileLarge.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Assets\Tiles\FlipCycleTileMedium.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Tiles\FlipCycleTileSmall.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Tiles\IconicTileMediumLarge.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Tiles\IconicTileSmall.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Page Include="SampleData\PageViewModelSampleData.xaml">
@@ -341,46 +390,28 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\AppResources.ar.resx" />
+    <EmbeddedResource Include="Resources\AppResources.ar.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\AppResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AppResources.ru.resx" />
+    <EmbeddedResource Include="Resources\AppResources.ru.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\AppResources.id.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="AppBarUtils">
-      <HintPath>packages\AppBarUtils.2.3\lib\windowsphone8\AppBarUtils.dll</HintPath>
-    </Reference>
-    <Reference Include="ImageTools">
-      <HintPath>Dependencies\ImageTools.dll</HintPath>
-    </Reference>
-    <Reference Include="ImageTools.IO.Png">
-      <HintPath>Dependencies\ImageTools.IO.Png.dll</HintPath>
-    </Reference>
-    <Reference Include="ImageTools.Utils">
-      <HintPath>Dependencies\ImageTools.Utils.dll</HintPath>
-    </Reference>
-    <Reference Include="JeffWilcox.PhoneThemeManager">
-      <HintPath>packages\PhoneThemeManager.1.3.3\lib\sl4-windowsphone71\JeffWilcox.PhoneThemeManager.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Phone.Controls, Version=8.0.0.0, Culture=neutral, PublicKeyToken=24eec0d8c86cda1e, processorArchitecture=MSIL" />
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>packages\Newtonsoft.Json.4.5.11\lib\sl4-windowsphone71\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpZipLib.WindowsPhone7, Version=0.86.0.518, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Dependencies\SharpZipLib.WindowsPhone7.dll</HintPath>
+      <HintPath>packages\Newtonsoft.Json.5.0.6\lib\portable-net45+wp80+win8\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows.Interactivity, Version=3.9.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="Telerik.Windows.Behaviors, Version=2013.2.704.3040, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
     <Reference Include="Telerik.Windows.Controls.Data, Version=2013.2.704.3040, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
@@ -399,25 +430,27 @@
     <Reference Include="WriteableBitmapExWinPhone">
       <HintPath>packages\WriteableBitmapEx.1.0.8.0\lib\WindowsPhone8\WriteableBitmapExWinPhone.dll</HintPath>
     </Reference>
-    <Reference Include="WriteableBitmapExWinPhoneXnaDependant">
-      <HintPath>packages\WriteableBitmapEx.1.0.8.0\lib\WindowsPhone8\WriteableBitmapExWinPhoneXnaDependant.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\sqlite-net-wp8\Sqlite.vcxproj">
+    <ProjectReference Include="sqlite\Sqlite.vcxproj">
       <Project>{59B35F6C-E062-4F0E-88D8-13F3F82A24F3}</Project>
       <Name>Sqlite</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+ 
        Other similar extension points exist, see Microsoft.Common.targets.
+ 
   <Target Name="BeforeBuild">
+ 
   </Target>
+ 
   <Target Name="AfterBuild">
+ 
   </Target>
+ 
   -->
   <ProjectExtensions />
 </Project>

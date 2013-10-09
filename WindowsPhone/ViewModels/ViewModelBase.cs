@@ -1,36 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace QuranPhone.ViewModels
 {
     /// <summary>
-    /// Base class for all ViewModel classes in the application.
-    /// It provides support for property change notifications 
-    /// and has a DisplayName property.  This class is abstract.
+    ///     Base class for all ViewModel classes in the application.
+    ///     It provides support for property change notifications
+    ///     and has a DisplayName property.  This class is abstract.
     /// </summary>
     public abstract class ViewModelBase : INotifyPropertyChanged, IDisposable
     {
         #region Constructor
-
-        protected ViewModelBase()
-        {
-        }
 
         #endregion // Constructor
 
         #region DisplayName
 
         /// <summary>
-        /// Returns the user-friendly name of this object.
-        /// Child classes can set this property to a new value,
-        /// or override it to determine the value on-demand.
+        ///     Returns the user-friendly name of this object.
+        ///     Child classes can set this property to a new value,
+        ///     or override it to determine the value on-demand.
         /// </summary>
         public virtual string DisplayName { get; protected set; }
 
@@ -39,9 +31,9 @@ namespace QuranPhone.ViewModels
         #region Debugging Aides
 
         /// <summary>
-        /// Warns the developer if this object does not have
-        /// a public property with the specified name. This 
-        /// method does not exist in a Release build.
+        ///     Warns the developer if this object does not have
+        ///     a public property with the specified name. This
+        ///     method does not exist in a Release build.
         /// </summary>
         [Conditional("DEBUG")]
         [DebuggerStepThrough]
@@ -49,22 +41,23 @@ namespace QuranPhone.ViewModels
         {
             // Verify that the property name matches a real,  
             // public, instance property on this object.
-            if (this.GetType().GetProperty(propertyName) == null)
+            if (GetType().GetProperty(propertyName) == null)
             {
                 string msg = "Invalid property name: " + propertyName;
 
-                if (this.ThrowOnInvalidPropertyName)
+                if (ThrowOnInvalidPropertyName)
+                {
                     throw new Exception(msg);
-                else
-                    Debug.Assert(false, msg);
+                }
+                Debug.Assert(false, msg);
             }
         }
 
         /// <summary>
-        /// Returns whether an exception is thrown, or if a Debug.Fail() is used
-        /// when an invalid property name is passed to the VerifyPropertyName method.
-        /// The default value is false, but subclasses used by unit tests might 
-        /// override this property's getter to return true.
+        ///     Returns whether an exception is thrown, or if a Debug.Fail() is used
+        ///     when an invalid property name is passed to the VerifyPropertyName method.
+        ///     The default value is false, but subclasses used by unit tests might
+        ///     override this property's getter to return true.
         /// </summary>
         protected virtual bool ThrowOnInvalidPropertyName { get; private set; }
 
@@ -73,12 +66,12 @@ namespace QuranPhone.ViewModels
         #region INotifyPropertyChanged Members
 
         /// <summary>
-        /// Raised when a property on this object has a new value.
+        ///     Raised when a property on this object has a new value.
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
-        /// Raises this object's PropertyChanged event.
+        ///     Raises this object's PropertyChanged event.
         /// </summary>
         /// <param name="propertyName">The property that has a new value.</param>
         protected virtual void OnPropertyChanged<T>(Expression<Func<T>> expression)
@@ -88,14 +81,14 @@ namespace QuranPhone.ViewModels
         }
 
         /// <summary>
-        /// Raises this object's PropertyChanged event.
+        ///     Raises this object's PropertyChanged event.
         /// </summary>
         /// <param name="propertyName">The property that has a new value.</param>
         protected virtual void OnPropertyChanged(string propertyName)
         {
-            this.VerifyPropertyName(propertyName);
+            VerifyPropertyName(propertyName);
 
-            PropertyChangedEventHandler handler = this.PropertyChanged;
+            PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null)
             {
                 var e = new PropertyChangedEventArgs(propertyName);
@@ -117,14 +110,14 @@ namespace QuranPhone.ViewModels
         }
 
         /// <summary>
-        /// Get the string name for the property
+        ///     Get the string name for the property
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="expression"></param>
         /// <returns></returns>
         protected string GetPropertyName<T>(Expression<Func<T>> expression)
         {
-            MemberExpression memberExpression = (MemberExpression)expression.Body;
+            var memberExpression = (MemberExpression) expression.Body;
             return memberExpression.Member.Name;
         }
 
@@ -139,58 +132,52 @@ namespace QuranPhone.ViewModels
         #region IDisposable Members
 
         /// <summary>
-        /// Invoked when this object is being removed from the application
-        /// and will be subject to garbage collection.
+        ///     Invoked when this object is being removed from the application
+        ///     and will be subject to garbage collection.
         /// </summary>
         public void Dispose()
         {
-            this.OnDispose();
+            OnDispose();
         }
 
         /// <summary>
-        /// Child classes can override this method to perform 
-        /// clean-up logic, such as removing event handlers.
+        ///     Child classes can override this method to perform
+        ///     clean-up logic, such as removing event handlers.
         /// </summary>
-        protected virtual void OnDispose()
-        {
-        }
-
-#if DEBUG
-        /// <summary>
-        /// Useful for ensuring that ViewModel objects are properly garbage collected.
-        /// </summary>
-        ~ViewModelBase()
-        {
-            string msg = string.Format("{0} ({1}) ({2}) Finalized", this.GetType().Name, this.DisplayName, this.GetHashCode());
-            System.Diagnostics.Debug.WriteLine(msg);
-        }
-#endif
+        protected virtual void OnDispose() {}
 
         #endregion // IDisposable Members
 
         #region Helper Methods
+
         public static string GetPropertyName<T, V>(Expression<Func<T, V>> expression)
         {
-            MemberExpression memberExpression = (MemberExpression)expression.Body;
+            var memberExpression = (MemberExpression) expression.Body;
             return memberExpression.Member.Name;
         }
+
         #endregion
 
         #region Base Properties
+
         private bool isLoading;
+
         public bool IsLoading
         {
             get { return isLoading; }
             set
             {
                 if (value == isLoading)
+                {
                     return;
+                }
 
                 isLoading = value;
 
-                this.OnPropertyChanged(() => IsLoading);
+                OnPropertyChanged(() => IsLoading);
             }
         }
+
         #endregion Base Properties
     }
 }

@@ -2,9 +2,7 @@
 {
     public class VerseViewModel : ViewModelBase
     {
-        public VerseViewModel()
-        {
-        }
+        public VerseViewModel() {}
 
         public VerseViewModel(string text)
         {
@@ -26,65 +24,52 @@
         }
 
         #region Properties
-        private string styleName;
+
+        private int _ayah;
+        private string _styleName;
+        private int _surah;
+        private string _text;
+
         public string StyleName
         {
-            get { return styleName; }
+            get { return _styleName; }
             set
             {
-                if (value == styleName)
-                    return;
-
-                styleName = value;
-
+                _styleName = value;
                 base.OnPropertyChanged(() => StyleName);
             }
-        }       
+        }
 
-        private string text;
         public string Text
         {
-            get { return text; }
+            get { return _text; }
             set
             {
-                if (value == text)
-                    return;
-
-                text = value;
-
+                _text = value;
                 base.OnPropertyChanged(() => Text);
             }
         }
 
-        private int surah;
         public int Surah
         {
-            get { return surah; }
+            get { return _surah; }
             set
             {
-                if (value == surah)
-                    return;
-
-                surah = value;
-
+                _surah = value;
                 base.OnPropertyChanged(() => Surah);
             }
         }
 
-        private int ayah;
         public int Ayah
         {
-            get { return ayah; }
+            get { return _ayah; }
             set
             {
-                if (value == ayah)
-                    return;
-
-                ayah = value;
-
+                _ayah = value;
                 base.OnPropertyChanged(() => Ayah);
             }
         }
+
         #endregion Properties
     }
 }

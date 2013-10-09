@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Interactivity;
 using QuranPhone.Common;
@@ -10,40 +9,35 @@ namespace QuranPhone.UI
 {
     public class ListBoxPropertyBinder : Behavior<RadDataBoundListBox>
     {
-        static ListBoxPropertyBinder()
-        {
-        }
-
-        public static readonly DependencyProperty SelectedAyahProperty = DependencyProperty.Register("SelectedAyah", typeof(QuranAyah), typeof(ListBoxPropertyBinder), new PropertyMetadata(null, SelectedItemPropertyChanged));
+        public static readonly DependencyProperty SelectedAyahProperty = DependencyProperty.Register("SelectedAyah",
+            typeof (QuranAyah), typeof (ListBoxPropertyBinder), new PropertyMetadata(null, SelectedItemPropertyChanged));
 
         private RadDataBoundListBox listBox;
 
+        static ListBoxPropertyBinder() {}
+
         public QuranAyah SelectedAyah
         {
-            get
-            {
-                return this.GetValue(ListBoxPropertyBinder.SelectedAyahProperty) as QuranAyah;
-            }
-            set
-            {
-                this.SetValue(ListBoxPropertyBinder.SelectedAyahProperty, value);
-            }
+            get { return GetValue(SelectedAyahProperty) as QuranAyah; }
+            set { SetValue(SelectedAyahProperty, value); }
         }
 
         private void ChangeSelectedItem()
         {
-            if (this.listBox == null)
+            if (listBox == null)
+            {
                 return;
+            }
             if (SelectedAyah == null)
             {
-                this.listBox.SelectedItem = null;
+                listBox.SelectedItem = null;
             }
             else
             {
-                var verse = getMatchedItem(this.SelectedAyah);
+                object verse = getMatchedItem(SelectedAyah);
                 if (verse != null)
                 {
-                    this.listBox.BringIntoView(verse);
+                    listBox.BringIntoView(verse);
                 }
             }
         }
@@ -51,11 +45,15 @@ namespace QuranPhone.UI
         private object getMatchedItem(QuranAyah ayah)
         {
             ICollection listboxItems = null;
-            if (App.DetailsViewModel.CurrentPage == null || 
-                (this.listBox.RealizedItems != null && this.listBox.RealizedItems.Length > 0))
-                listboxItems = this.listBox.RealizedItems;
+            if (App.DetailsViewModel.CurrentPage == null ||
+                (listBox.RealizedItems != null && listBox.RealizedItems.Length > 0))
+            {
+                listboxItems = listBox.RealizedItems;
+            }
             else
+            {
                 listboxItems = App.DetailsViewModel.CurrentPage.Translations;
+            }
 
             foreach (VerseViewModel item in listboxItems)
             {
@@ -69,13 +67,13 @@ namespace QuranPhone.UI
 
         private static void SelectedItemPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            ((ListBoxPropertyBinder)sender).ChangeSelectedItem();
+            ((ListBoxPropertyBinder) sender).ChangeSelectedItem();
         }
 
         protected override void OnAttached()
         {
             base.OnAttached();
-            this.listBox = this.AssociatedObject;
+            listBox = AssociatedObject;
         }
     }
 }

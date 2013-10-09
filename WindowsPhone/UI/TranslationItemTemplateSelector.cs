@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 
 namespace QuranPhone.UI
 {
@@ -14,14 +9,15 @@ namespace QuranPhone.UI
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            ObservableTranslationItem translationItem = item as ObservableTranslationItem;
+            var translationItem = item as ObservableTranslationItem;
 
             if (translationItem != null)
             {
                 if (translationItem.Exists)
+                {
                     return ItemDownloadedTemplate;
-                else
-                    return ItemAvailableTemplate;
+                }
+                return ItemAvailableTemplate;
             }
 
             return base.SelectTemplate(item, container);

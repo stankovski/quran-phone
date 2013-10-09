@@ -1,53 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.IO;
-using System.Text;
 using System.Windows.Media;
 
 namespace QuranPhone.Utils
 {
     public class TextBlockSplitter
     {
-        private TextBlock measureBlock;
-        private const double maxHeight = 2048;
+        private const double MaxHeight = 2048;
+        private static TextBlockSplitter _instance;
+        private readonly TextBlock _measureBlock;
 
-        public FontFamily FontFamily { get; set; }
-      
         private TextBlockSplitter()
         {
-            measureBlock = GenerateTextBlock();
+            _measureBlock = GenerateTextBlock();
         }
 
-        private static TextBlockSplitter instance;
+        public FontFamily FontFamily { get; set; }
+
         public static TextBlockSplitter Instance
         {
-            get
-            {
-                if (instance == null)
-                    instance = new TextBlockSplitter();
-                return instance;
-            }
+            get { return _instance ?? (_instance = new TextBlockSplitter()); }
         }
 
         private TextBlock GenerateTextBlock()
         {
-            TextBlock textBlock = new TextBlock();
+            var textBlock = new TextBlock();
             textBlock.TextWrapping = TextWrapping.Wrap;
             textBlock.Margin = new Thickness(10);
             return textBlock;
         }
-        
+
         public IList<string> Split(string value, double fontSize, FontWeight fontWeight)
         {
-            List<string> parsedText = new List<string>();
-            StringReader reader = new StringReader(value);
-            measureBlock.FontSize = fontSize;
-            measureBlock.FontWeight = fontWeight;
-            measureBlock.Width = QuranScreenInfo.Instance.Width;
-            
-            int maxTextCount = this.GetMaxTextSize();
+            var parsedText = new List<string>();
+            var reader = new StringReader(value);
+            _measureBlock.FontSize = fontSize;
+            _measureBlock.FontWeight = fontWeight;
+            _measureBlock.Width = QuranScreenInfo.Instance.Width;
+
+            int maxTextCount = GetMaxTextSize();
 
             if (value.Length < maxTextCount)
             {
@@ -81,7 +75,7 @@ namespace QuranPhone.Utils
             }
             catch (Exception e)
             {
-                // Ignore
+                MessageBox.Show(e.Message);
             }
             return parsedText;
         }
@@ -93,9 +87,11 @@ namespace QuranPhone.Utils
             {
                 if (text[i] == ' ')
                 {
-                    var nHeight = MeasureString(text.Substring(0, i - 1)).Height;
-                    if (nHeight <= maxHeight)
+                    double nHeight = MeasureString(text.Substring(0, i - 1)).Height;
+                    if (nHeight <= MaxHeight)
+                    {
                         return i;
+                    }
                 }
             }
             return maxLineLength;
@@ -103,37 +99,37 @@ namespace QuranPhone.Utils
 
         private Size MeasureString(string text)
         {
-            this.measureBlock.Text = text;
-            return new Size(measureBlock.ActualWidth, measureBlock.ActualHeight);
+            _measureBlock.Text = text;
+            return new Size(_measureBlock.ActualWidth, _measureBlock.ActualHeight);
         }
 
         private int GetMaxTextSize()
         {
             // Get average char size
-            Size size = this.MeasureText(" ");
+            Size size = MeasureText(" ");
             // Get number of char that fit in the line
-            int charLineCount = (int)(measureBlock.Width / size.Width);
+            var charLineCount = (int) (_measureBlock.Width/size.Width);
             // Get line count
-            int lineCount = (int)(maxHeight / size.Height);
+            var lineCount = (int) (MaxHeight/size.Height);
 
-            return charLineCount * lineCount / 2;
+            return charLineCount*lineCount/2;
         }
 
         private int GetMaxLineCount()
         {
-            Size size = this.MeasureText(" ");
+            Size size = MeasureText(" ");
             // Get number of char that fit in the line
-            int charLineCount = (int)(measureBlock.Width / size.Width);
+            var charLineCount = (int) (_measureBlock.Width/size.Width);
             // Get line count
-            int lineCount = (int)(maxHeight / size.Height) - 5;
+            int lineCount = (int) (MaxHeight/size.Height) - 5;
 
             return lineCount;
         }
 
         private Size MeasureText(string value)
         {
-            measureBlock.Text = value;
-            return new Size(measureBlock.ActualWidth, measureBlock.ActualHeight);
+            _measureBlock.Text = value;
+            return new Size(_measureBlock.ActualWidth, _measureBlock.ActualHeight);
         }
     }
 }

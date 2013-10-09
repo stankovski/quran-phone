@@ -1,27 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Media;
 using QuranPhone.Common;
-using QuranPhone.Data;
-using QuranPhone.Utils;
 using QuranPhone.ViewModels;
 
 namespace QuranPhone.UI
 {
     public partial class TranslationView : UserControl
     {
-        public QuranAyah SelectedAyah
+        public static readonly DependencyProperty SelectedAyahProperty = DependencyProperty.Register("SelectedAyah",
+            typeof (QuranAyah), typeof (TranslationView), new PropertyMetadata(changeSelectedAyah));
+
+        public TranslationView()
         {
-            get { return (QuranAyah)GetValue(SelectedAyahProperty); }
-            set { SetValue(SelectedAyahProperty, value); }
+            InitializeComponent();
         }
 
-        public static readonly DependencyProperty SelectedAyahProperty = DependencyProperty.Register("SelectedAyah",
-            typeof(QuranAyah), typeof(TranslationView), new PropertyMetadata(new PropertyChangedCallback(changeSelectedAyah)));
+        public QuranAyah SelectedAyah
+        {
+            get { return (QuranAyah) GetValue(SelectedAyahProperty); }
+            set { SetValue(SelectedAyahProperty, value); }
+        }
 
         private static void changeSelectedAyah(DependencyObject source, DependencyPropertyChangedEventArgs e)
         {
@@ -36,19 +34,13 @@ namespace QuranPhone.UI
             }
             else
             {
-                var currentModel = this.DataContext as VerseViewModel;
-                if (currentModel != null && currentModel.Surah == ayahInfo.Sura && 
-                    currentModel.Ayah == ayahInfo.Ayah)
+                var currentModel = DataContext as VerseViewModel;
+                if (currentModel != null && currentModel.Surah == ayahInfo.Sura && currentModel.Ayah == ayahInfo.Ayah)
                 {
                     canvas.Opacity = 1.0;
                     canvasStoryboard.Begin();
                 }
             }
-        }
-
-        public TranslationView()
-        {
-            InitializeComponent();
         }
     }
 }

@@ -15,64 +15,71 @@
     SupportedOrientations="Portrait" Orientation="Portrait"
     xmlns:myui="clr-namespace:QuranPhone.UI"
     mc:Ignorable="d"
-    xmlns:tilt="clr-namespace:ControlTiltEffect"
-    tilt:TiltEffect.IsTiltEnabled="True"
+    myui:TiltEffect.IsTiltEnabled="True"
     shell:SystemTray.IsVisible="True">
-    
+
     <phone:PhoneApplicationPage.Resources>
-        <myui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        <myui:BooleanInversionConverter x:Key="BooleanInversionConverter"/>
+        <myui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <myui:BooleanInversionConverter x:Key="BooleanInversionConverter" />
     </phone:PhoneApplicationPage.Resources>
-    
-    <!--LayoutRoot is the root grid where all page content is placed-->
+
     <Grid x:Name="LayoutRoot" Background="Transparent">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!--TitlePanel contains the name of the application and page title-->
         <StackPanel Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock Text="{Binding Path=LocalizedResources.translations, Source={StaticResource LocalizedStrings}}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+            <TextBlock Text="{Binding Path=LocalizedResources.translations, Source={StaticResource LocalizedStrings}}"
+                       Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}" />
         </StackPanel>
-        <ProgressBar Grid.Row="0" VerticalAlignment="Top" Visibility="{Binding IsDataLoaded, Converter={StaticResource BooleanToVisibilityConverter}, 
-                ConverterParameter=Inverse}" IsIndeterminate="{Binding IsDataLoaded, Converter={StaticResource BooleanInversionConverter}}"/>
 
-        <!--ContentPanel - place additional content here-->
-        
-        <telerikData:RadJumpList x:Name="jmpTranslation" Grid.Row="1" ItemsSource="{Binding AvailableTranslations}"
+        <ProgressBar Grid.Row="0" VerticalAlignment="Top"
+                     Visibility="{Binding IsDataLoaded, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}"
+                     IsIndeterminate="{Binding IsDataLoaded, Converter={StaticResource BooleanInversionConverter}}" />
+
+        <telerikData:RadJumpList x:Name="JmpTranslation" Grid.Row="1" ItemsSource="{Binding AvailableTranslations}"
                                  IsAsyncBalanceEnabled="True">
             <telerikPrimitives:RadDataBoundListBox.ItemAddedAnimation>
                 <telerikCore:RadFadeAnimation />
             </telerikPrimitives:RadDataBoundListBox.ItemAddedAnimation>
             <telerikData:RadJumpList.GroupHeaderTemplate>
                 <DataTemplate>
-                    <Border Grid.Row="1" BorderBrush="{StaticResource BlueText}" BorderThickness="0,1,0,2">
-                        <TextBlock Style="{StaticResource BlueHeader}" Name="textBlock" Text="{Binding}"/>
+                    <Border BorderBrush="{StaticResource BlueText}" BorderThickness="0,1,0,2">
+                        <TextBlock Style="{StaticResource BlueHeader}" Name="textBlock" Text="{Binding}" />
                     </Border>
                 </DataTemplate>
             </telerikData:RadJumpList.GroupHeaderTemplate>
             <telerikPrimitives:RadDataBoundListBox.ItemTemplate>
                 <DataTemplate>
-                    <myui:TranslationItemTemplateSelector Content="{Binding}" HorizontalContentAlignment="Stretch" HorizontalAlignment="Stretch">
+                    <myui:TranslationItemTemplateSelector Content="{Binding}" HorizontalContentAlignment="Stretch"
+                                                          HorizontalAlignment="Stretch">
                         <myui:TranslationItemTemplateSelector.ItemDownloadedTemplate>
                             <DataTemplate>
                                 <Grid HorizontalAlignment="Stretch">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="70"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="60"/>
+                                        <ColumnDefinition Width="70" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="60" />
                                     </Grid.ColumnDefinitions>
-                                    <Image Grid.Column="0" Source="/Assets/Images/ic_translation.png"/>
+                                    <Path
+                                        Data="M20.432352,4.9639994C31.71748,4.9639993 40.866001,14.111145 40.866001,25.397063 40.866001,36.681483 31.71748,45.829997 20.432352,45.829997 9.1472426,45.829997 7.8715175E-08,36.681483 0,25.397063 7.8715175E-08,14.111145 9.1472426,4.9639993 20.432352,4.9639994z M35.016335,0.00098896027C35.221798,-0.011742592,35.408474,0.10265112,35.408474,0.1026516L37.674252,1.5896616C37.674252,1.5896611 37.797749,1.6580212 37.891449,1.7686718 38.257546,2.1990938 38.045246,2.9236472 38.484043,3.2803991 49.79512,12.475761 52.538593,28.925036 44.369278,41.380195 40.180523,47.770221 33.882492,51.943442 26.991865,53.587249 26.70027,53.656348 26.407372,53.71635 26.114275,53.771548 25.576582,53.873752 25.228985,54.377551 25.228985,54.923854L25.228985,57.480567C25.228985,58.03007,25.672979,58.473971,26.222475,58.473971L38.599941,58.473971C40.125927,58.473971 41.364113,59.710979 41.364113,61.237784 41.364113,62.76509 40.125927,63.999995 38.599941,63.999995L7.7656027,63.999995C6.2395488,63.999995 5.0026918,62.76509 5.0026918,61.237784 5.0026918,59.710979 6.2395488,58.473971 7.7656027,58.473971L20.13394,58.473971C20.683434,58.473971,21.127428,58.03007,21.127428,57.480567L21.127428,55.333358C21.127428,54.798953 20.704233,54.354354 20.16914,54.356853 19.21345,54.358752 18.25366,54.321052 17.295469,54.221454 13.772008,53.855449 10.272045,52.831447 6.9843613,51.110637 6.4947658,50.852836 5.8893023,51.169936 5.3802782,50.953837 5.3072787,50.923835 5.2278395,50.878936 5.1406303,50.820334 4.5546966,50.414134 3.6679862,49.85023 3.1418722,49.492229 2.5481282,49.089828 3.0768326,48.361323 3.0768326,48.361323 3.0768326,48.361323 4.1862908,46.651118 4.5481067,46.119815 4.908753,45.588412 5.3906279,45.947913 5.3906284,45.947913L7.5767847,47.383422C7.5767842,47.383422 7.703003,47.45972 7.7955318,47.58982 8.075409,47.983024 7.9974399,48.617126 8.4270249,48.836627 13.871007,51.63024 19.933441,52.330142 25.614281,51.149238 32.158512,49.787833 38.170147,45.940112 42.128502,39.910186 46.08416,33.87746 47.21695,26.828027 45.858864,20.283696 44.676678,14.603371 41.620709,9.3220563 36.888958,5.4399582 36.446365,5.076737 35.741772,5.4236585 35.293976,5.066177 35.293976,5.0661769 33.472397,3.8754915 33.037502,3.5974805 32.601307,3.318849 32.840904,2.9926775 32.840904,2.9926775 32.840904,2.9926775 34.395485,0.61693573 34.662483,0.21336937 34.76302,0.062031746 34.893059,0.0086278915 35.016335,0.00098896027z"
+                                        Stretch="Uniform" Fill="{StaticResource PhoneForegroundBrush}" Width="26"
+                                        Height="26" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5" />
                                     <Button Grid.Column="1" Padding="0" Margin="0" Command="{Binding NavigateCommand}"
-                                        Style="{StaticResource ChromelessButtonStyle}" HorizontalContentAlignment="Left">
+                                            Style="{StaticResource ChromelessButtonStyle}"
+                                            HorizontalContentAlignment="Left">
                                         <StackPanel>
-                                            <TextBlock Text="{Binding Name}" Style="{StaticResource PhoneTextLargeStyle}" TextWrapping="NoWrap"/>
-                                            <TextBlock Text="{Binding Translator}" TextWrapping="Wrap" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                            <TextBlock Text="{Binding Name}" FontSize="32" />
+                                            <TextBlock Text="{Binding Translator}" />
                                         </StackPanel>
                                     </Button>
-                                    <Button Grid.Column="2" BorderThickness="0" Padding="0" Margin="-10,0,0,0" Command="{Binding DeleteCommand}">
-                                        <Image Grid.Column="2" Source="/Assets/Images/ic_delete.png"/>
+                                    <Button Grid.Column="2" BorderThickness="0" Padding="0" Margin="-10,0,0,0"
+                                            Command="{Binding DeleteCommand}">
+                                        <Path
+                                            Data="F1M54.0573,47.8776L38.1771,31.9974 54.0547,16.1198C55.7604,14.4141 55.7604,11.6511 54.0573,9.94531 52.3516,8.23962 49.5859,8.23962 47.8802,9.94531L32.0026,25.8229 16.1224,9.94531C14.4167,8.23962 11.6511,8.23962 9.94794,9.94531 8.24219,11.6511 8.24219,14.4141 9.94794,16.1198L25.8255,32 9.94794,47.8776C8.24219,49.5834 8.24219,52.3477 9.94794,54.0534 11.6511,55.7572 14.4167,55.7585 16.1224,54.0534L32.0026,38.1745 47.8802,54.0534C49.5859,55.7585 52.3516,55.7572 54.0573,54.0534 55.7604,52.3477 55.763,49.5834 54.0573,47.8776z"
+                                            Stretch="Uniform" Fill="{StaticResource PhoneForegroundBrush}" Width="26"
+                                            Height="26" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5" />
                                     </Button>
                                 </Grid>
                             </DataTemplate>
@@ -81,28 +88,36 @@
                             <DataTemplate>
                                 <Grid HorizontalAlignment="Stretch">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="70"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="70"/>
+                                        <ColumnDefinition Width="70" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="70" />
                                     </Grid.ColumnDefinitions>
-                                    <Image Grid.Column="0" Source="/Assets/Images/ic_translation.png"/>
+                                    <Path
+                                        Data="M20.432352,4.9639994C31.71748,4.9639993 40.866001,14.111145 40.866001,25.397063 40.866001,36.681483 31.71748,45.829997 20.432352,45.829997 9.1472426,45.829997 7.8715175E-08,36.681483 0,25.397063 7.8715175E-08,14.111145 9.1472426,4.9639993 20.432352,4.9639994z M35.016335,0.00098896027C35.221798,-0.011742592,35.408474,0.10265112,35.408474,0.1026516L37.674252,1.5896616C37.674252,1.5896611 37.797749,1.6580212 37.891449,1.7686718 38.257546,2.1990938 38.045246,2.9236472 38.484043,3.2803991 49.79512,12.475761 52.538593,28.925036 44.369278,41.380195 40.180523,47.770221 33.882492,51.943442 26.991865,53.587249 26.70027,53.656348 26.407372,53.71635 26.114275,53.771548 25.576582,53.873752 25.228985,54.377551 25.228985,54.923854L25.228985,57.480567C25.228985,58.03007,25.672979,58.473971,26.222475,58.473971L38.599941,58.473971C40.125927,58.473971 41.364113,59.710979 41.364113,61.237784 41.364113,62.76509 40.125927,63.999995 38.599941,63.999995L7.7656027,63.999995C6.2395488,63.999995 5.0026918,62.76509 5.0026918,61.237784 5.0026918,59.710979 6.2395488,58.473971 7.7656027,58.473971L20.13394,58.473971C20.683434,58.473971,21.127428,58.03007,21.127428,57.480567L21.127428,55.333358C21.127428,54.798953 20.704233,54.354354 20.16914,54.356853 19.21345,54.358752 18.25366,54.321052 17.295469,54.221454 13.772008,53.855449 10.272045,52.831447 6.9843613,51.110637 6.4947658,50.852836 5.8893023,51.169936 5.3802782,50.953837 5.3072787,50.923835 5.2278395,50.878936 5.1406303,50.820334 4.5546966,50.414134 3.6679862,49.85023 3.1418722,49.492229 2.5481282,49.089828 3.0768326,48.361323 3.0768326,48.361323 3.0768326,48.361323 4.1862908,46.651118 4.5481067,46.119815 4.908753,45.588412 5.3906279,45.947913 5.3906284,45.947913L7.5767847,47.383422C7.5767842,47.383422 7.703003,47.45972 7.7955318,47.58982 8.075409,47.983024 7.9974399,48.617126 8.4270249,48.836627 13.871007,51.63024 19.933441,52.330142 25.614281,51.149238 32.158512,49.787833 38.170147,45.940112 42.128502,39.910186 46.08416,33.87746 47.21695,26.828027 45.858864,20.283696 44.676678,14.603371 41.620709,9.3220563 36.888958,5.4399582 36.446365,5.076737 35.741772,5.4236585 35.293976,5.066177 35.293976,5.0661769 33.472397,3.8754915 33.037502,3.5974805 32.601307,3.318849 32.840904,2.9926775 32.840904,2.9926775 32.840904,2.9926775 34.395485,0.61693573 34.662483,0.21336937 34.76302,0.062031746 34.893059,0.0086278915 35.016335,0.00098896027z"
+                                        Stretch="Uniform" Fill="{StaticResource PhoneForegroundBrush}" Width="26"
+                                        Height="26" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5" />
                                     <StackPanel Grid.Column="1">
-                                        <TextBlock Text="{Binding Name}" Style="{StaticResource PhoneTextLargeStyle}" TextWrapping="NoWrap"/>
-                                        <TextBlock Text="{Binding Translator}" TextWrapping="Wrap" Style="{StaticResource PhoneTextSubtleStyle}"/>
-                                        <Grid Visibility="{Binding IsDownloading, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        <TextBlock Text="{Binding Name}" FontSize="32" />
+                                        <TextBlock Text="{Binding Translator}" />
+                                        <Grid
+                                            Visibility="{Binding IsDownloading, Converter={StaticResource BooleanToVisibilityConverter}}">
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="50"/>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="50" />
                                             </Grid.ColumnDefinitions>
-                                            <ProgressBar Grid.Column="0" Value="{Binding Progress}" SmallChange="1"/>
+                                            <ProgressBar Grid.Column="0" Value="{Binding Progress}" SmallChange="1" />
                                             <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                                <TextBlock Text="{Binding Progress}"/>
+                                                <TextBlock Text="{Binding Progress}" />
                                                 <TextBlock>%</TextBlock>
                                             </StackPanel>
                                         </Grid>
                                     </StackPanel>
-                                    <Button Command="{Binding DownloadCommand}" Grid.Column="2" BorderThickness="0" Padding="0" Margin="0">
-                                        <Image Grid.Column="2" Source="/Assets/Images/ic_download.png"/>
+                                    <Button Command="{Binding DownloadCommand}" Grid.Column="2" BorderThickness="0"
+                                            Padding="0" Margin="0">
+                                        <Path
+                                            Data="M0,33.893959L4.4794149,33.893959 4.4794149,44.677959 48.903614,44.677959 48.903614,33.893959 53.333035,33.893959 53.333035,49.104958 0,49.104958z M24.842734,0L28.513577,0 28.513577,24.615005 35.345016,17.78297 40.346104,17.78297 40.436089,17.883007 26.673088,31.644001 24.072548,29.047991 12.910089,17.883007 13.010208,17.78297 18.001283,17.78297 24.842734,24.615005z"
+                                            Stretch="Uniform" Fill="{StaticResource PhoneForegroundBrush}" Width="26"
+                                            Height="26" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5" />
                                     </Button>
                                 </Grid>
                             </DataTemplate>

@@ -1,24 +1,34 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
+using System.IO.IsolatedStorage;
+using System.Linq.Expressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Shapes;
-using System.ComponentModel;
-using System.Linq.Expressions;
 using System.Windows.Media.Imaging;
-using Microsoft.Phone.Controls;
+using System.Windows.Shapes;
 using QuranPhone.Common;
 using QuranPhone.Data;
 using QuranPhone.Utils;
-using System.IO.IsolatedStorage;
-using System.IO;
-using Path = System.IO.Path;
 
 namespace QuranPhone.UI
 {
     public partial class CachedImage : UserControl, INotifyPropertyChanged, IDisposable
     {
-        public event EventHandler<QuranAyahEventArgs> AyahTapped;
+        public static readonly DependencyProperty SelectedAyahProperty = DependencyProperty.Register("SelectedAyah",
+            typeof (QuranAyah), typeof (CachedImage), new PropertyMetadata(ChangeSelectedAyah));
+
+        public static readonly DependencyProperty NightModeProperty = DependencyProperty.Register("NightMode",
+            typeof (bool), typeof (CachedImage), new PropertyMetadata(ChangeNightMode));
+
+        public static readonly DependencyProperty ImageSourceProperty = DependencyProperty.Register("ImageSource",
+            typeof (Uri), typeof (CachedImage), new PropertyMetadata(ChangeSource));
+
+        public static readonly DependencyProperty PageNumberProperty = DependencyProperty.Register("PageNumber",
+            typeof (int), typeof (CachedImage), new PropertyMetadata(ChangePageNumber));
 
         private WriteableBitmap imageSourceBitmap;
         private WriteableBitmap imageSourceBitmapResized;
@@ -40,17 +50,44 @@ namespace QuranPhone.UI
 
         public QuranAyah SelectedAyah
         {
-            get { return (QuranAyah)GetValue(SelectedAyahProperty); }
+            get { return (QuranAyah) GetValue(SelectedAyahProperty); }
             set { SetValue(SelectedAyahProperty, value); }
         }
 
-        public static readonly DependencyProperty SelectedAyahProperty = DependencyProperty.Register("SelectedAyah",
-            typeof(QuranAyah), typeof(CachedImage), new PropertyMetadata(
-            new PropertyChangedCallback(changeSelectedAyah)));
-
-        private static void changeSelectedAyah(DependencyObject source, DependencyPropertyChangedEventArgs e)
+        public bool NightMode
         {
-            (source as CachedImage).UpdateSelectedAyah(e.NewValue as QuranAyah);
+            get { return (bool) GetValue(NightModeProperty); }
+            set { SetValue(NightModeProperty, value); }
+        }
+
+        public Uri ImageSource
+        {
+            get { return (Uri) GetValue(ImageSourceProperty); }
+            set { SetValue(ImageSourceProperty, value); }
+        }
+
+        public int PageNumber
+        {
+            get { return (int) GetValue(PageNumberProperty); }
+            set { SetValue(PageNumberProperty, value); }
+        }
+
+        public void Dispose()
+        {
+            if (image != null)
+            {
+                image.Source = null;
+            }
+            imageSourceBitmap = null;
+            imageSourceBitmapResized = null;
+            ImageSource = null;
+        }
+
+        public event EventHandler<QuranAyahEventArgs> AyahTapped;
+
+        private static void ChangeSelectedAyah(DependencyObject source, DependencyPropertyChangedEventArgs e)
+        {
+            ((CachedImage) source).UpdateSelectedAyah(e.NewValue as QuranAyah);
         }
 
         private void UpdateSelectedAyah(QuranAyah ayahInfo)
@@ -64,75 +101,63 @@ namespace QuranPhone.UI
                 try
                 {
                     string basePath = QuranFileUtils.GetQuranDatabaseDirectory(false, true);
-                    if (basePath == null) return;
-                    string path = Path.Combine(basePath, QuranFileUtils.GetAyaPositionFileName());
+                    if (basePath == null)
+                    {
+                        return;
+                    }
+                    string path = System.IO.Path.Combine(basePath, QuranFileUtils.GetAyaPositionFileName());
                     if (QuranFileUtils.FileExists(path))
                     {
                         int offsetToScrollTo = 0;
                         using (var dbh = new AyahInfoDatabaseHandler(QuranFileUtils.GetAyaPositionFileName()))
                         {
-                            var bounds = dbh.GetVerseBoundsCombined(ayahInfo.Sura, ayahInfo.Ayah);
+                            IList<AyahBounds> bounds = dbh.GetVerseBoundsCombined(ayahInfo.Sura, ayahInfo.Ayah);
                             if (bounds == null)
+                            {
                                 return;
+                            }
 
                             // Reset any overlays
                             canvas.Children.Clear();
                             canvas.Opacity = 1.0;
 
-                            foreach (var bound in bounds)
+                            foreach (AyahBounds bound in bounds)
                             {
-                                drawAyahBound(bound);
+                                DrawAyahBound(bound);
                                 if (offsetToScrollTo == 0)
+                                {
                                     offsetToScrollTo = bound.MinY;
+                                }
                             }
                         }
                         LayoutRoot.ScrollToVerticalOffset(offsetToScrollTo);
                         canvasStoryboard.Begin();
                     }
                 }
-                catch
+                catch (Exception e)
                 {
-                    //Ignore
+                    MessageBox.Show(e.Message);
                 }
             }
         }
 
-        public bool NightMode
+        private static void ChangeNightMode(DependencyObject source, DependencyPropertyChangedEventArgs e)
         {
-            get { return (bool)GetValue(NightModeProperty); }
-            set { SetValue(NightModeProperty, value); }
-        }
-
-        public static readonly DependencyProperty NightModeProperty = DependencyProperty.Register("NightMode",
-            typeof(bool), typeof(CachedImage), new PropertyMetadata(
-            new PropertyChangedCallback(changeNightMode)));
-
-        private static void changeNightMode(DependencyObject source, DependencyPropertyChangedEventArgs e)
-        {
-            (source as CachedImage).UpdateNightMode((bool)e.NewValue);
+            ((CachedImage) source).UpdateNightMode((bool) e.NewValue);
         }
 
         private void UpdateNightMode(bool isNightMode)
         {
-            if (this.nightMode != isNightMode)
+            if (nightMode != isNightMode)
             {
-                this.nightMode = isNightMode;
+                nightMode = isNightMode;
                 UpdateSource(imageSourceUri, true);
             }
         }
 
-        public Uri ImageSource {
-            get { return (Uri)GetValue(ImageSourceProperty); }
-            set { SetValue(ImageSourceProperty, value); } 
-        }
-
-        public static readonly DependencyProperty ImageSourceProperty = DependencyProperty.Register("ImageSource",
-            typeof(Uri), typeof(CachedImage), new PropertyMetadata(
-            new PropertyChangedCallback(changeSource))); 
-        
-        private static void changeSource(DependencyObject source, DependencyPropertyChangedEventArgs e) 
-        { 
-            (source as CachedImage).UpdateSource(e.NewValue as Uri, false); 
+        private static void ChangeSource(DependencyObject source, DependencyPropertyChangedEventArgs e)
+        {
+            ((CachedImage) source).UpdateSource(e.NewValue as Uri, false);
         }
 
         private async void UpdateSource(Uri source, bool force)
@@ -141,12 +166,9 @@ namespace QuranPhone.UI
             {
                 return;
             }
-            else
-            {
-                imageSourceUri = source;
-                imageSourceBitmap = null;
-                imageSourceBitmapResized = null;
-            }
+            imageSourceUri = source;
+            imageSourceBitmap = null;
+            imageSourceBitmapResized = null;
 
             // Reset any overlays
             canvas.Children.Clear();
@@ -154,31 +176,26 @@ namespace QuranPhone.UI
             // Scroll to top
             LayoutRoot.ScrollToVerticalOffset(0);
 
-            progress.Visibility = System.Windows.Visibility.Visible;
+            progress.Visibility = Visibility.Visible;
             image.Source = null;
+
             if (source == null)
             {
-                progress.Visibility = System.Windows.Visibility.Collapsed;
-                progress.IsIndeterminate = false;
+                progress.Visibility = Visibility.Collapsed;
             }
             else
             {
-                // Design time preview
-                if (PhoneUtils.IsDesignMode)
-                {
-                    imageSourceBitmap = new WriteableBitmap(1,1);
-                    ImageSource = source;
-                    return;
-                }
-
                 var uriBuilder = new UriBuilder(source);
-                var localPath = Path.Combine(QuranFileUtils.GetQuranDirectory(false), Path.GetFileName(uriBuilder.Path));
+                string localPath = System.IO.Path.Combine(QuranFileUtils.GetQuranDirectory(false),
+                    System.IO.Path.GetFileName(uriBuilder.Path));
                 bool downloadSuccessful = true;
 
                 if (source.Scheme == "http")
                 {
                     if (!QuranFileUtils.FileExists(localPath))
+                    {
                         downloadSuccessful = await QuranFileUtils.DownloadFileFromWebAsync(source.ToString(), localPath);
+                    }
                 }
                 else
                 {
@@ -188,9 +205,9 @@ namespace QuranPhone.UI
                 try
                 {
                     if (downloadSuccessful)
-                        loadImageFromLocalPath(localPath);
-                    else
-                        throw new Exception();
+                    {
+                        LoadImageFromLocalPath(localPath);
+                    }
                 }
                 catch
                 {
@@ -198,68 +215,70 @@ namespace QuranPhone.UI
                 }
                 finally
                 {
-                    progress.Visibility = System.Windows.Visibility.Collapsed;
-                    progress.IsIndeterminate = false;
+                    progress.Visibility = Visibility.Collapsed;
                 }
 
                 if (PhoneUtils.IsPortaitOrientation && nightMode)
-                    image.Source = imageSourceBitmapResized;
-                else 
-                    image.Source = imageSourceBitmap;
-            }
-        }
-
-        private void loadImageFromLocalPath(string localPath)
-        {
-            using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
-            using (var stream = isf.OpenFile(localPath, FileMode.Open))
-            {
-                var bitmap = new WriteableBitmap(1, 1); // avoid creating intermediate BitmapImage
-                bitmap.SetSource(stream);
-                if (nightMode)
                 {
-                    imageSourceBitmapResized = resizeBitmapIfNotExists(bitmap);
-                    invertColors(bitmap);
-                    invertColors(imageSourceBitmapResized);
+                    image.Source = imageSourceBitmapResized;
                 }
-                imageSourceBitmap = bitmap;
-                progress.Visibility = System.Windows.Visibility.Collapsed;
+                else
+                {
+                    image.Source = imageSourceBitmap;
+                }
             }
         }
 
-        private WriteableBitmap resizeBitmapIfNotExists(WriteableBitmap bitmap)
+        private void LoadImageFromLocalPath(string localPath)
+        {
+            using (IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                using (IsolatedStorageFileStream stream = isf.OpenFile(localPath, FileMode.Open))
+                {
+                    var bitmap = new WriteableBitmap(1, 1); 
+                    bitmap.SetSource(stream);
+                    if (nightMode)
+                    {
+                        imageSourceBitmapResized = ResizeBitmapIfNotExists(bitmap);
+                        InvertColors(bitmap);
+                        InvertColors(imageSourceBitmapResized);
+                    }
+                    imageSourceBitmap = bitmap;
+                    progress.Visibility = Visibility.Collapsed;
+                }
+            }
+        }
+
+        private WriteableBitmap ResizeBitmapIfNotExists(WriteableBitmap bitmap)
         {
             if (imageSourceBitmapResized == null)
             {
-                var hightToWidthRatio = ((double)bitmap.PixelHeight / (double)bitmap.PixelWidth);
+                double hightToWidthRatio = (bitmap.PixelHeight/(double) bitmap.PixelWidth);
 
                 return bitmap.Resize((int) Application.Current.Host.Content.ActualWidth,
-                                     (int) (Application.Current.Host.Content.ActualWidth*hightToWidthRatio),
-                                     WriteableBitmapExtensions.Interpolation.Bilinear);
+                    (int) (Application.Current.Host.Content.ActualWidth*hightToWidthRatio),
+                    WriteableBitmapExtensions.Interpolation.Bilinear);
             }
-            else
-            {
-                return imageSourceBitmapResized;
-            }
+            return imageSourceBitmapResized;
         }
 
-        private void invertColors(WriteableBitmap bitmap)
+        private void InvertColors(WriteableBitmap bitmap)
         {
             int size = bitmap.Pixels.Length;
-                for (int i = 0; i < size; i++)
-                {
-                var c = bitmap.Pixels[i];
-                    var a = 0x000000FF & (c >> 24);
-                    var r = 0x000000FF & (c >> 16);
-                    var g = 0x000000FF & (c >> 8);
-                    var b = 0x000000FF & (c);
+            for (int i = 0; i < size; i++)
+            {
+                int c = bitmap.Pixels[i];
+                int a = 0x000000FF & (c >> 24);
+                int r = 0x000000FF & (c >> 16);
+                int g = 0x000000FF & (c >> 8);
+                int b = 0x000000FF & (c);
 
-                    // Invert
-                    r = 0x000000FF & (0xFF - r);
-                    g = 0x000000FF & (0xFF - g);
-                    b = 0x000000FF & (0xFF - b);
+                // Invert
+                r = 0x000000FF & (0xFF - r);
+                g = 0x000000FF & (0xFF - g);
+                b = 0x000000FF & (0xFF - b);
 
-                    // Set result color
+                // Set result color
                 bitmap.Pixels[i] = (a << 24) | (r << 16) | (g << 8) | b;
             }
         }
@@ -267,40 +286,86 @@ namespace QuranPhone.UI
         private void SizeChange(object sender, SizeChangedEventArgs e)
         {
             if (PhoneUtils.IsPortaitOrientation && nightMode)
+            {
                 image.Source = imageSourceBitmapResized;
+            }
             else
+            {
                 image.Source = imageSourceBitmap;
+            }
         }
 
-        public int PageNumber
+        private static void ChangePageNumber(DependencyObject source, DependencyPropertyChangedEventArgs e) {}
+
+        public static QuranAyah GetAyahFromGesture(Point p, int pageNumber, double width)
         {
-            get { return (int)GetValue(PageNumberProperty); }
-            set { SetValue(PageNumberProperty, value); }
+            try
+            {
+                Point position = AdjustPoint(p, width);
+                string basePath = QuranFileUtils.GetQuranDatabaseDirectory(false, true);
+                if (basePath == null)
+                {
+                    return null;
+                }
+                string path = System.IO.Path.Combine(basePath, QuranFileUtils.GetAyaPositionFileName());
+                if (QuranFileUtils.FileExists(path))
+                {
+                    using (var dbh = new AyahInfoDatabaseHandler(QuranFileUtils.GetAyaPositionFileName()))
+                    {
+                        return dbh.GetVerseAtPoint(pageNumber, position.X, position.Y);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+            return null;
         }
 
-        public static readonly DependencyProperty PageNumberProperty = DependencyProperty.Register("PageNumber",
-            typeof(int), typeof(CachedImage), new PropertyMetadata(
-            new PropertyChangedCallback(changePageNumber)));
-
-        private static void changePageNumber(DependencyObject source, DependencyPropertyChangedEventArgs e)
+        private void ImageTap(object sender, GestureEventArgs e)
         {
-            (source as CachedImage).UpdatePageNumber((int)e.NewValue);
+            if (AyahTapped != null)
+            {
+                QuranAyah ayah = GetAyahFromGesture(e.GetPosition(image), PageNumber, image.ActualWidth);
+                if (ayah != null)
+                {
+                    AyahTapped(this, new QuranAyahEventArgs(ayah));
+                }
+            }
         }
 
-        private void UpdatePageNumber(int source)
+        private static Point AdjustPoint(Point p, double width)
         {
-            //pageNumber.Text = "Page " + source;
+            int imageWidth = QuranScreenInfo.Instance.ImageWidth;
+            double actualWidth = width;
+            double scale = imageWidth/actualWidth;
+            return new Point(p.X*scale, p.Y*scale);
+        }
+
+        private void DrawAyahBound(AyahBounds bound)
+        {
+            var myPointCollection = new PointCollection();
+            myPointCollection.Add(new Point(bound.MinX, bound.MinY));
+            myPointCollection.Add(new Point(bound.MaxX, bound.MinY));
+            myPointCollection.Add(new Point(bound.MaxX, bound.MaxY));
+            myPointCollection.Add(new Point(bound.MinX, bound.MaxY));
+
+            var myPolygon = new Polygon();
+            myPolygon.Points = myPointCollection;
+            myPolygon.Fill = new SolidColorBrush(Color.FromArgb(50, 48, 182, 231));
+            canvas.Children.Add(myPolygon);
         }
 
         #region INotifyPropertyChanged Members
 
         /// <summary>
-        /// Raised when a property on this object has a new value.
+        ///     Raised when a property on this object has a new value.
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
-        /// Raises this object's PropertyChanged event.
+        ///     Raises this object's PropertyChanged event.
         /// </summary>
         /// <param name="propertyName">The property that has a new value.</param>
         protected virtual void OnPropertyChanged<T>(Expression<Func<T>> expression)
@@ -310,12 +375,12 @@ namespace QuranPhone.UI
         }
 
         /// <summary>
-        /// Raises this object's PropertyChanged event.
+        ///     Raises this object's PropertyChanged event.
         /// </summary>
         /// <param name="propertyName">The property that has a new value.</param>
         protected virtual void OnPropertyChanged(string propertyName)
         {
-            PropertyChangedEventHandler handler = this.PropertyChanged;
+            PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null)
             {
                 var e = new PropertyChangedEventArgs(propertyName);
@@ -330,82 +395,17 @@ namespace QuranPhone.UI
         }
 
         /// <summary>
-        /// Get the string name for the property
+        ///     Get the string name for the property
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="expression"></param>
         /// <returns></returns>
         protected string GetPropertyName<T>(Expression<Func<T>> expression)
         {
-            MemberExpression memberExpression = (MemberExpression)expression.Body;
+            var memberExpression = (MemberExpression) expression.Body;
             return memberExpression.Member.Name;
         }
 
         #endregion // INotifyPropertyChanged Members
-
-        public void Dispose()
-        {
-            if (image != null)
-                image.Source = null;
-            imageSourceBitmap = null;
-            imageSourceBitmapResized = null;
-            ImageSource = null;
-        }
-
-        public static QuranAyah GetAyahFromGesture(Point p, int pageNumber, double width)
-        {
-            try
-            {
-                var position = adjustPoint(p, width);
-                string basePath = QuranFileUtils.GetQuranDatabaseDirectory(false, true);
-                if (basePath == null) 
-                    return null;
-                string path = Path.Combine(basePath, QuranFileUtils.GetAyaPositionFileName());
-                if (QuranFileUtils.FileExists(path))
-                {
-                    using (var dbh = new AyahInfoDatabaseHandler(QuranFileUtils.GetAyaPositionFileName()))
-                    {
-                        return dbh.GetVerseAtPoint(pageNumber, position.X, position.Y);
-                    }
-                }
-            }
-            catch
-            {
-                // Ignore
-            }
-            return null;
-        }
-
-        private void ImageTap(object sender, System.Windows.Input.GestureEventArgs e)
-        {
-            if (AyahTapped != null)
-            {
-                var ayah = GetAyahFromGesture(e.GetPosition(image), PageNumber, image.ActualWidth);
-                if (ayah != null)
-                    AyahTapped(this, new QuranAyahEventArgs(ayah));
-            }
-        }
-
-        private static Point adjustPoint(Point p, double width)
-        {
-            var imageWidth = QuranScreenInfo.Instance.ImageWidth;
-            var actualWidth = width;
-            var scale = imageWidth/actualWidth;
-            return new Point(p.X*scale, p.Y*scale);
-        }
-
-        private void drawAyahBound(Common.AyahBounds bound)
-        {
-            PointCollection myPointCollection = new PointCollection();
-            myPointCollection.Add(new Point(bound.MinX, bound.MinY));
-            myPointCollection.Add(new Point(bound.MaxX, bound.MinY));
-            myPointCollection.Add(new Point(bound.MaxX, bound.MaxY));
-            myPointCollection.Add(new Point(bound.MinX, bound.MaxY));
-
-            Polygon myPolygon = new Polygon();
-            myPolygon.Points = myPointCollection;
-            myPolygon.Fill = new SolidColorBrush(Color.FromArgb(50, 48, 182, 231));
-            canvas.Children.Add(myPolygon);
-        }
     }
 }

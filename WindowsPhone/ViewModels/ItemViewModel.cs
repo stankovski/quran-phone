@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using QuranPhone.Common;
 
 namespace QuranPhone.ViewModels
@@ -13,147 +12,113 @@ namespace QuranPhone.ViewModels
         Header,
         Tag
     }
-    
+
     public class ItemViewModel : ViewModelBase
     {
         #region Properties
-        private string id;
+
+        private string _details;
+        private string _group;
+        private string _id;
+        private Uri _image;
+        private ItemViewModelType _itemType;
+        private int _pageNumber;
+        private QuranAyah _selectedAyah;
+        private string _style;
+        private string _title;
+
         public string Id
         {
-            get { return id; }
+            get { return _id; }
             set
             {
-                if (value == id)
-                    return;
-
-                id = value;
-
+                _id = value;
                 base.OnPropertyChanged(() => Id);
             }
         }
 
-
-        private string title;
         public string Title
         {
-            get { return title; }
+            get { return _title; }
             set
             {
-                if (value == title)
-                    return;
-
-                title = value;
-
+                _title = value;
                 base.OnPropertyChanged(() => Title);
             }
         }
 
-        private string details;
         public string Details
         {
-            get { return details; }
+            get { return _details; }
             set
             {
-                if (value == details)
-                    return;
-
-                details = value;
-
+                _details = value;
                 base.OnPropertyChanged(() => Details);
             }
         }
 
-        private int pageNumber;
         public int PageNumber
         {
-            get { return pageNumber; }
+            get { return _pageNumber; }
             set
             {
-                if (value == pageNumber)
-                    return;
-
-                pageNumber = value;
-
+                _pageNumber = value;
                 base.OnPropertyChanged(() => PageNumber);
             }
         }
 
-        private QuranAyah selectedAyah;
         public QuranAyah SelectedAyah
         {
-            get { return selectedAyah; }
+            get { return _selectedAyah; }
             set
             {
-                if (value == selectedAyah)
-                    return;
-
-                selectedAyah = value;
-
+                _selectedAyah = value;
                 base.OnPropertyChanged(() => SelectedAyah);
             }
         }
 
-        private Uri image;
         public Uri Image
         {
-            get { return image; }
+            get { return _image; }
             set
             {
-                if (value == image)
-                    return;
-
-                image = value;
-
+                _image = value;
                 base.OnPropertyChanged(() => Image);
             }
         }
 
-        private ItemViewModelType itemType;
         public ItemViewModelType ItemType
         {
-            get { return itemType; }
+            get { return _itemType; }
             set
             {
-                if (value == itemType)
-                    return;
-
-                itemType = value;
-                Style = value.ToString(CultureInfo.InvariantCulture);
-
+                _itemType = value;
+                Style = value.ToString();
                 base.OnPropertyChanged(() => ItemType);
             }
         }
 
-        private string style;
         public string Style
         {
-            get { return style; }
+            get { return _style; }
             set
             {
                 value = string.Format("ItemViewStyle{0}", value);
-                if (value == style)
-                    return;
-
-                style = value;
-
+                _style = value;
                 base.OnPropertyChanged(() => Style);
             }
         }
 
-        private string group;
         public string Group
         {
-            get { return group; }
+            get { return _group; }
             set
             {
-                if (value == group)
-                    return;
-
-                group = value;
-
+                _group = value;
                 base.OnPropertyChanged(() => Group);
             }
         }
+
         #endregion Properties
     }
 }

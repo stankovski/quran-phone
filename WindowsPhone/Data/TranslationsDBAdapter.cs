@@ -1,30 +1,35 @@
-﻿using System.IO;
-using QuranPhone.Common;
-using QuranPhone.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO.IsolatedStorage;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using QuranPhone.Common;
+using QuranPhone.SQLite;
+using QuranPhone.Utils;
 
 namespace QuranPhone.Data
 {
     public class TranslationsDBAdapter : BaseDatabaseHandler
     {
-        public static string DB_NAME = "translations.db";
+        public const string DbName = "translations.db";
 
         public TranslationsDBAdapter()
         {
             string basePath = QuranFileUtils.GetQuranDatabaseDirectory(false, true);
-            if (basePath == null) return;
-            string path = Path.Combine(basePath, DB_NAME);
+            if (basePath == null)
+            {
+                return;
+            }
+            string path = Path.Combine(basePath, DbName);
 
             if (!QuranFileUtils.FileExists(path))
-                mDatabase = CreateDatabase(path);
+            {
+                MDatabase = CreateDatabase(path);
+            }
             else
-                mDatabase = new SQLiteDatabase(path);
+            {
+                MDatabase = new SQLiteDatabase(path);
+            }
         }
 
         private SQLiteDatabase CreateDatabase(string path)
@@ -36,40 +41,41 @@ namespace QuranPhone.Data
 
         public List<TranslationItem> GetTranslations()
         {
-            return mDatabase.Query<TranslationItem>().OrderBy(ti => ti.Id).ToList();
+            return MDatabase.Query<TranslationItem>().OrderBy(ti => ti.Id).ToList();
         }
 
         public bool WriteTranslationUpdates(List<TranslationItem> updates)
         {
             bool result = true;
-            mDatabase.BeginTransaction();
+            MDatabase.BeginTransaction();
             try
             {
-                foreach (var item in updates)
+                foreach (TranslationItem item in updates)
                 {
-                    var translation = mDatabase.Query<TranslationItem>().Where(ti => ti.Id == item.Id).FirstOrDefault();
+                    TranslationItem translation =
+                        MDatabase.Query<TranslationItem>().Where(ti => ti.Id == item.Id).FirstOrDefault();
                     if (item.Exists)
                     {
                         if (translation != null)
                         {
-                            mDatabase.Update(item);
+                            MDatabase.Update(item);
                         }
                         else
                         {
-                            mDatabase.Insert(item);
+                            MDatabase.Insert(item);
                         }
                     }
                     else
                     {
-                        mDatabase.Delete(item);
+                        MDatabase.Delete(item);
                     }
                 }
-                mDatabase.CommitTransaction();
+                MDatabase.CommitTransaction();
             }
             catch (Exception e)
             {
                 result = false;
-                mDatabase.RollbackTransaction();
+                MDatabase.RollbackTransaction();
                 Debug.WriteLine("error writing translation updates: " + e.Message);
             }
 

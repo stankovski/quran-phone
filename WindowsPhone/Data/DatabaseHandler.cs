@@ -1,75 +1,64 @@
-﻿using System.Globalization;
-using System.IO;
-using QuranPhone.Common;
-using QuranPhone.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SQLite;
+using QuranPhone.Common;
+using QuranPhone.SQLite;
+using QuranPhone.Utils;
 
 namespace QuranPhone.Data
 {
-    public class DatabaseHandler<T> : BaseDatabaseHandler where T: QuranAyah, new()
+    public class DatabaseHandler<T> : BaseDatabaseHandler where T : QuranAyah, new()
     {
-        private string mDatabasePath = null;
-
-        private int schemaVersion = 1;
+        private readonly string _mDatabasePath;
 
         public DatabaseHandler(string databaseName)
         {
             string basePath = QuranFileUtils.GetQuranDatabaseDirectory(false, true);
-            if (basePath == null) return;
+            if (basePath == null)
+            {
+                return;
+            }
             string path = Path.Combine(basePath, databaseName);
-            mDatabase = new SQLiteDatabase(path);
-            schemaVersion = GetSchemaVersion();
-            mDatabasePath = path;
+            MDatabase = new SQLiteDatabase(path);
+            _mDatabasePath = path;
         }
 
         public bool ValidDatabase()
         {
-            return (mDatabase == null) ? false : mDatabase.IsOpen();
+            return (MDatabase != null) && MDatabase.IsOpen();
         }
 
         public bool ReopenDatabase()
         {
             try
             {
-                mDatabase = new SQLiteDatabase(mDatabasePath);
-                return (mDatabase != null);
-            }
-            catch (Exception) { return false; }
-        }
-
-        public int GetSchemaVersion()
-        {
-            int version = 1;
-            if (!ValidDatabase()) { return version; }
-
-            try
-            {
-                var result = mDatabase.Query<DatabaseProperties>().Where(p => p.Property == "schema_version").FirstOrDefault();
-                if (result != null)
-                    version = int.Parse(result.Value, CultureInfo.InvariantCulture);
-                return version;
+                MDatabase = new SQLiteDatabase(_mDatabasePath);
+                return (MDatabase != null);
             }
             catch (Exception)
             {
-                return version;
+                return false;
             }
         }
 
         public int GetTextVersion()
         {
             int version = 1;
-            if (!ValidDatabase()) { return version; }
+            if (!ValidDatabase())
+            {
+                return version;
+            }
 
             try
             {
-                var result = mDatabase.Query<DatabaseProperties>().Where(p => p.Property == "text_version").FirstOrDefault();
+                DatabaseProperties result =
+                    MDatabase.Query<DatabaseProperties>().FirstOrDefault(p => p.Property == "text_version");
                 if (result != null)
+                {
                     version = int.Parse(result.Value, CultureInfo.InvariantCulture);
+                }
                 return version;
             }
             catch (Exception)
@@ -78,7 +67,7 @@ namespace QuranPhone.Data
             }
         }
 
-        public List<T> GetVerses(int sura, int minAyah, int maxAyah)
+        public IEnumerable<T> GetVerses(int sura, int minAyah, int maxAyah)
         {
             return GetVerses(sura, minAyah, sura, maxAyah);
         }
@@ -87,10 +76,13 @@ namespace QuranPhone.Data
         {
             if (!ValidDatabase())
             {
-                if (!ReopenDatabase()) { return null; }
+                if (!ReopenDatabase())
+                {
+                    return null;
+                }
             }
 
-            var result = mDatabase.Query<T>();
+            TableQuery<T> result = MDatabase.Query<T>();
 
             if (minSura == maxSura)
             {
@@ -98,10 +90,11 @@ namespace QuranPhone.Data
             }
             else
             {
-                result = result.Where(a =>
-                    (a.Sura == minSura && a.Ayah >= minAyah) ||
-                    (a.Sura == maxSura && a.Ayah <= maxAyah) ||
-                    (a.Sura > minSura && a.Sura < maxSura));
+                result =
+                    result.Where(
+                        a =>
+                            (a.Sura == minSura && a.Ayah >= minAyah) || (a.Sura == maxSura && a.Ayah <= maxAyah) ||
+                            (a.Sura > minSura && a.Sura < maxSura));
             }
 
             return result.OrderBy(a => a.Sura).OrderBy(a => a.Ayah).ToList();
@@ -111,7 +104,10 @@ namespace QuranPhone.Data
         {
             if (!ValidDatabase())
             {
-                if (!ReopenDatabase()) { return null; }
+                if (!ReopenDatabase())
+                {
+                    return null;
+                }
             }
 
             int[] bound = QuranInfo.GetPageBounds(page);
@@ -127,16 +123,22 @@ namespace QuranPhone.Data
         {
             if (!ValidDatabase())
             {
-                if (!ReopenDatabase()) { return null; }
+                if (!ReopenDatabase())
+                {
+                    return null;
+                }
             }
 
             // Get table name
-            var tableName = "verses";
+            string tableName = "verses";
 
             // Couldn't get parameterized version to work - need to look into it in the future
-            var sql = string.Format("select \"sura\", \"ayah\", \"text\" from \"{0}\" where \"text\" match '{1}' order by \"sura\", \"ayah\"", tableName, query);
+            string sql =
+                string.Format(
+                    "select \"sura\", \"ayah\", \"text\" from \"{0}\" where \"text\" match '{1}' order by \"sura\", \"ayah\"",
+                    tableName, query);
 
-            return mDatabase.Query<T>(sql).Take(50).ToList();          
-        }        
+            return MDatabase.Query<T>(sql).Take(50).ToList();
+        }
     }
 }

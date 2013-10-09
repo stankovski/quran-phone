@@ -1,10 +1,11 @@
-﻿using System.IO;
-using QuranPhone.Common;
-using QuranPhone.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using QuranPhone.Common;
+using QuranPhone.SQLite;
+using QuranPhone.Utils;
 
 namespace QuranPhone.Data
 {
@@ -17,18 +18,25 @@ namespace QuranPhone.Data
 
     public class BookmarksDBAdapter : BaseDatabaseHandler
     {
-        public static string DB_NAME = "bookmarks.db";
+        public const string DbName = "bookmarks.db";
 
         public BookmarksDBAdapter()
         {
             string basePath = QuranFileUtils.GetQuranDatabaseDirectory(false, true);
-            if (basePath == null) return;
-            string path = Path.Combine(basePath, DB_NAME);
+            if (basePath == null)
+            {
+                return;
+            }
+            string path = Path.Combine(basePath, DbName);
 
             if (!QuranFileUtils.FileExists(path))
-                mDatabase = CreateDatabase(path);
+            {
+                MDatabase = CreateDatabase(path);
+            }
             else
-                mDatabase = new SQLiteDatabase(path);
+            {
+                MDatabase = new SQLiteDatabase(path);
+            }
         }
 
         private SQLiteDatabase CreateDatabase(string path)
@@ -42,7 +50,7 @@ namespace QuranPhone.Data
 
         public List<Bookmarks> GetBookmarks(bool loadTags, BoomarkSortOrder sortOrder)
         {
-            var bookmarks = mDatabase.Query<Bookmarks>();
+            TableQuery<Bookmarks> bookmarks = MDatabase.Query<Bookmarks>();
             switch (sortOrder)
             {
                 case BoomarkSortOrder.Location:
@@ -52,19 +60,21 @@ namespace QuranPhone.Data
                     bookmarks = bookmarks.OrderByDescending(b => b.AddedDate);
                     break;
             }
-            var result = bookmarks.ToList();
+            List<Bookmarks> result = bookmarks.ToList();
             if (loadTags)
             {
-                var tags = GetTags().ToDictionary(t=>t.Id);
-                var bookmarkTags = GetBookmarkTags();
-                foreach (var bt in bookmarkTags)
+                Dictionary<int, Tags> tags = GetTags().ToDictionary(t => t.Id);
+                List<BookmarkTags> bookmarkTags = GetBookmarkTags();
+                foreach (BookmarkTags bt in bookmarkTags)
                 {
-                    var bookmark = result.FirstOrDefault(b => b.Id == bt.BookmarkId);
-                    var tag = tags[bt.TagId];
+                    Bookmarks bookmark = result.FirstOrDefault(b => b.Id == bt.BookmarkId);
+                    Tags tag = tags[bt.TagId];
                     if (bookmark != null)
                     {
                         if (bookmark.Tags == null)
+                        {
                             bookmark.Tags = new List<Tags>();
+                        }
                         bookmark.Tags.Add(new Tags {Id = bt.TagId, Name = tag.Name});
                     }
                 }
@@ -74,12 +84,17 @@ namespace QuranPhone.Data
 
         public List<int> GetBookmarkTagIds(int bookmarkId)
         {
-            return mDatabase.Query<BookmarkTags>().Where(bt => bt.BookmarkId == bookmarkId).OrderBy(bt => bt.TagId).Select(bt => bt.TagId).ToList();
+            return
+                MDatabase.Query<BookmarkTags>()
+                    .Where(bt => bt.BookmarkId == bookmarkId)
+                    .OrderBy(bt => bt.TagId)
+                    .Select(bt => bt.TagId)
+                    .ToList();
         }
 
         public List<BookmarkTags> GetBookmarkTags(int? bookmarkId = null)
         {
-            var query = mDatabase.Query<BookmarkTags>();
+            TableQuery<BookmarkTags> query = MDatabase.Query<BookmarkTags>();
             if (bookmarkId != null)
             {
                 query = query.Where(bt => bt.BookmarkId == bookmarkId);
@@ -95,11 +110,8 @@ namespace QuranPhone.Data
                 AddBookmark(page);
                 return true;
             }
-            else
-            {
-                RemoveBookmark(bookmarkId);
-                return false;
-            }
+            RemoveBookmark(bookmarkId);
+            return false;
         }
 
         public bool IsPageBookmarked(int page)
@@ -109,16 +121,16 @@ namespace QuranPhone.Data
 
         public int GetBookmarkId(int? sura, int? ayah, int page)
         {
-            var bookmarks = mDatabase.Query<Bookmarks>().Where(b => b.Page == page);
+            TableQuery<Bookmarks> bookmarks = MDatabase.Query<Bookmarks>().Where(b => b.Page == page);
             if (sura != null)
             {
-                bookmarks = bookmarks.Where(b => b.Sura == (int)sura);
+                bookmarks = bookmarks.Where(b => b.Sura == (int) sura);
             }
             if (ayah != null)
             {
-                bookmarks = bookmarks.Where(b => b.Ayah == (int)ayah);
+                bookmarks = bookmarks.Where(b => b.Ayah == (int) ayah);
             }
-            var results = bookmarks.ToList();
+            List<Bookmarks> results = bookmarks.ToList();
             if (results.Count > 0)
             {
                 return results[0].Id;
@@ -128,7 +140,7 @@ namespace QuranPhone.Data
 
         public bool IsTagged(int bookmarkId)
         {
-            return mDatabase.Query<BookmarkTags>().Where(bt => bt.BookmarkId == bookmarkId).Count() > 0;
+            return MDatabase.Query<BookmarkTags>().Where(bt => bt.BookmarkId == bookmarkId).Count() > 0;
         }
 
         public int AddBookmark(int page)
@@ -140,21 +152,23 @@ namespace QuranPhone.Data
         {
             int bookmarkId = GetBookmarkId(sura, ayah, page);
             if (bookmarkId < 0)
+            {
                 bookmarkId = AddBookmark(sura, ayah, page);
+            }
             return bookmarkId;
         }
 
         public int AddBookmark(int? sura, int? ayah, int page)
         {
-            var bookmark = new Bookmarks { Ayah = ayah, Sura = sura, Page = page };
-            mDatabase.Insert(bookmark);
+            var bookmark = new Bookmarks {Ayah = ayah, Sura = sura, Page = page};
+            MDatabase.Insert(bookmark);
             return bookmark.Id;
         }
 
         public bool RemoveBookmark(int bookmarkId)
         {
             ClearBookmarkTags(bookmarkId);
-            return mDatabase.Delete(new Bookmarks { Id = bookmarkId }) == 1;
+            return MDatabase.Delete(new Bookmarks {Id = bookmarkId}) == 1;
         }
 
         public List<Tags> GetTags()
@@ -164,7 +178,7 @@ namespace QuranPhone.Data
 
         public List<Tags> GetTags(BoomarkSortOrder sortOrder)
         {
-            var tags = mDatabase.Query<Tags>();
+            TableQuery<Tags> tags = MDatabase.Query<Tags>();
             switch (sortOrder)
             {
                 case BoomarkSortOrder.Location:
@@ -179,32 +193,29 @@ namespace QuranPhone.Data
 
         public int AddTag(string name)
         {
-            var existingTag = mDatabase.Query<Tags>().FirstOrDefault(t => t.Name.ToLower() == name.ToLower());
+            Tags existingTag = MDatabase.Query<Tags>().FirstOrDefault(t => t.Name.ToLower() == name.ToLower());
 
             if (existingTag == null)
             {
-                Tags tag = new Tags {Name = name};
-                return mDatabase.Insert(tag);
+                var tag = new Tags {Name = name};
+                return MDatabase.Insert(tag);
             }
-            else
-            {
-                return existingTag.Id;
-            }
+            return existingTag.Id;
         }
 
         public bool UpdateTag(int id, string newName)
         {
-            Tags tag = new Tags { Id = id, Name = newName };
+            var tag = new Tags {Id = id, Name = newName};
 
-            return mDatabase.Update(tag) == 1;
+            return MDatabase.Update(tag) == 1;
         }
 
         public bool RemoveTag(int tagId)
         {
-            bool removed = mDatabase.Delete(new Tags { Id = tagId }) == 1;
+            bool removed = MDatabase.Delete(new Tags {Id = tagId}) == 1;
             if (removed)
             {
-                mDatabase.Execute("delete from \"bookmark_tag\" where \"tag_id\" = ?", tagId);
+                MDatabase.Execute("delete from \"bookmark_tag\" where \"tag_id\" = ?", tagId);
             }
 
             return removed;
@@ -212,32 +223,38 @@ namespace QuranPhone.Data
 
         public int GetBookmarkTagId(int bookmarkId, int tagId)
         {
-            var result = mDatabase.Query<BookmarkTags>().Where(bt => bt.BookmarkId == bookmarkId && bt.TagId == tagId).Select(bt => bt.Id);
+            TableQuery<int> result =
+                MDatabase.Query<BookmarkTags>()
+                    .Where(bt => bt.BookmarkId == bookmarkId && bt.TagId == tagId)
+                    .Select(bt => bt.Id);
 
             if (result.Count() == 0)
+            {
                 return -1;
-            else
-                return result.First();
+            }
+            return result.First();
         }
 
         public void TagBookmarks(int[] bookmarkIds, List<Tags> tags)
         {
-            mDatabase.BeginTransaction();
+            MDatabase.BeginTransaction();
             try
             {
-                foreach (var t in tags)
+                foreach (Tags t in tags)
                 {
                     if (t.Id < 0)
+                    {
                         continue;
+                    }
 
                     if (t.Checked)
                     {
                         for (int i = 0; i < bookmarkIds.Length; i++)
                         {
-                            var btId = GetBookmarkTagId(bookmarkIds[i], t.Id);
+                            int btId = GetBookmarkTagId(bookmarkIds[i], t.Id);
                             if (btId == -1)
                             {
-                                mDatabase.Insert(new BookmarkTags { BookmarkId = bookmarkIds[i], TagId = t.Id });
+                                MDatabase.Insert(new BookmarkTags {BookmarkId = bookmarkIds[i], TagId = t.Id});
                             }
                         }
                     }
@@ -245,48 +262,46 @@ namespace QuranPhone.Data
                     {
                         for (int i = 0; i < bookmarkIds.Length; i++)
                         {
-                            var btId = GetBookmarkTagId(bookmarkIds[i], t.Id);
+                            int btId = GetBookmarkTagId(bookmarkIds[i], t.Id);
                             if (btId != -1)
                             {
-                                mDatabase.Delete(new BookmarkTags { Id = btId });
+                                MDatabase.Delete(new BookmarkTags {Id = btId});
                             }
                         }
                     }
                 }
-                mDatabase.CommitTransaction();
+                MDatabase.CommitTransaction();
             }
             catch (Exception e)
             {
                 Debug.WriteLine("exception in tagBookmark: " + e.Message);
-                mDatabase.RollbackTransaction();
+                MDatabase.RollbackTransaction();
             }
         }
 
         public void TagBookmark(int bookmarkId, List<Tags> tags)
         {
-            TagBookmarks(new int[] { bookmarkId }, tags);
+            TagBookmarks(new[] {bookmarkId}, tags);
         }
 
         public void TagBookmark(int bookmarkId, int tagId)
         {
-            var tag = mDatabase.Query<Tags>().Where(t => t.Id == tagId).FirstOrDefault();
+            Tags tag = MDatabase.Query<Tags>().FirstOrDefault(t => t.Id == tagId);
             if (tag != null)
             {
                 tag.Checked = true;
-                var list = new List<Tags>();
-                list.Add(tag);
-                TagBookmarks(new int[] { bookmarkId }, list);
+                TagBookmarks(new[] {bookmarkId}, new List<Tags> {tag});
             }
         }
 
         public void UntagBookmark(int bookmarkId, int tagId)
         {
-            mDatabase.Execute("delete \"bookmark_tag\" where \"bookmark_id\" = ? and \"tag_id\" = ?", bookmarkId, tagId);
+            MDatabase.Execute("delete \"bookmark_tag\" where \"bookmark_id\" = ? and \"tag_id\" = ?", bookmarkId, tagId);
         }
 
         public void ClearBookmarkTags(int bookmarkId)
         {
-            mDatabase.Execute("delete from \"bookmark_tag\" where \"bookmark_id\" = ?", bookmarkId);
+            MDatabase.Execute("delete from \"bookmark_tag\" where \"bookmark_id\" = ?", bookmarkId);
         }
     }
 }

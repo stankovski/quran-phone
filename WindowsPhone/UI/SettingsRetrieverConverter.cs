@@ -9,18 +9,12 @@ namespace QuranPhone.UI
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (parameter == null)
-                return null;
-            else
-                return SettingsUtils.Get<object>(parameter.ToString());
+            return parameter == null ? null : SettingsUtils.Get<object>(parameter.ToString());
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (parameter == null)
-                return null;
-            else
-                return SettingsUtils.Get<object>(parameter.ToString());
+            return parameter == null ? null : SettingsUtils.Get<object>(parameter.ToString());
         }
     }
 }

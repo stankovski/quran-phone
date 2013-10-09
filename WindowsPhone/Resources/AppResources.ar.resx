@@ -537,7 +537,7 @@
     <value>التصنيفات</value>
   </data>
   <data name="translations" xml:space="preserve">
-    <value>التفاسير</value>
+    <value>الترجمة</value>
   </data>
   <data name="available_translations" xml:space="preserve">
     <value>التفاسير المتاحة</value>
@@ -558,7 +558,7 @@
     <value>تحميل الملفات المطلوبة؟</value>
   </data>
   <data name="extracting_message" xml:space="preserve">
-    <value>استخراج الملف المحمل...</value>
+    <value>استخراج الملف...</value>
   </data>
   <data name="quran_page" xml:space="preserve">
     <value>الصفحة</value>
@@ -582,10 +582,10 @@
     <value>حذف علامة</value>
   </data>
   <data name="text_size" xml:space="preserve">
-    <value>حجم نص التفسير</value>
+    <value>حجم الخط</value>
   </data>
   <data name="about_us" xml:space="preserve">
-    <value>عن البرنامج</value>
+    <value>عن التطبيق</value>
   </data>
   <data name="about_us_text" xml:space="preserve">
     <value>قرآن فون برنامج قرآن مجامي ومفتوح المصدر
@@ -626,7 +626,7 @@
     <value>نأسف بأن البرنامج لا يستطيع تحميل الملفات بسبب اتصال البيانات، بإمكانك المحاولة في وقت لاحق.</value>
   </data>
   <data name="download_cancel_confirmation" xml:space="preserve">
-    <value>هل أنت واثق أنك تريد إلغاء التحميل؟?</value>
+    <value>هل أنت واثق أنك تريد إلغاء التحميل؟</value>
   </data>
   <data name="disable_sleep" xml:space="preserve">
     <value>منع الهاتف من إغلاق الشاشة</value>
@@ -647,7 +647,7 @@
     <value>إظهار بيانات الصفحة في الوضع الأفقي</value>
   </data>
   <data name="bookmark_ayah" xml:space="preserve">
-    <value>تعليم الآية</value>
+    <value>وضع علامة</value>
   </data>
   <data name="quran_rub3" xml:space="preserve">
     <value>الربع</value>
@@ -680,7 +680,7 @@
     <value>انتظار الشبكة اللاسلكية...</value>
   </data>
   <data name="bookmark" xml:space="preserve">
-    <value>يوم</value>
+    <value>علامة</value>
   </data>
   <data name="translation" xml:space="preserve">
     <value>ترجمة</value>

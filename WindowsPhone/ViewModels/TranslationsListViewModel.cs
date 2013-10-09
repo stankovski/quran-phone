@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using QuranPhone.Resources;
-using QuranPhone.Data;
-using System.Windows.Controls;
-using QuranPhone.Common;
-using QuranPhone.Utils;
-using QuranPhone.UI;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using QuranPhone.Common;
+using QuranPhone.UI;
+using QuranPhone.Utils;
 
 namespace QuranPhone.ViewModels
 {
@@ -17,66 +12,64 @@ namespace QuranPhone.ViewModels
     {
         public TranslationsListViewModel()
         {
-            this.IsDataLoaded = false;
-            this.AvailableTranslations = new ObservableCollection<ObservableTranslationItem>();
-            this.AvailableTranslations.CollectionChanged += AvailableTranslationsCollectionChanged;
+            IsDataLoaded = false;
+            AvailableTranslations = new ObservableCollection<ObservableTranslationItem>();
+            AvailableTranslations.CollectionChanged += AvailableTranslationsCollectionChanged;
         }
 
         #region Properties
+
+        private bool _anyTranslationsDownloaded;
+        private bool _isDataLoaded;
         public ObservableCollection<ObservableTranslationItem> AvailableTranslations { get; private set; }
 
-        private bool isDataLoaded;
         public bool IsDataLoaded
         {
-            get { return isDataLoaded; }
+            get { return _isDataLoaded; }
             set
             {
-                if (value == isDataLoaded)
-                    return;
-
-                isDataLoaded = value;
-
+                _isDataLoaded = value;
                 base.OnPropertyChanged(() => IsDataLoaded);
             }
         }
 
-        private bool anyTranslationsDownloaded;
         public bool AnyTranslationsDownloaded
         {
-            get { return anyTranslationsDownloaded; }
+            get { return _anyTranslationsDownloaded; }
             set
             {
-                if (value == anyTranslationsDownloaded)
-                    return;
-
-                anyTranslationsDownloaded = value;
-
+                _anyTranslationsDownloaded = value;
                 base.OnPropertyChanged(() => AnyTranslationsDownloaded);
             }
         }
+
         #endregion Properties
 
         #region Public methods
+
         public async void LoadData()
         {
-            var list = await TranslationListTask.DownloadTranslations(true, "tag");
+            IEnumerable<TranslationItem> list = await TranslationListTask.DownloadTranslations(true, "tag");
             if (list == null)
-                return;
-
-            foreach (var item in list)
             {
-                this.AvailableTranslations.Add(new ObservableTranslationItem(item));
+                return;
             }
 
-            this.IsDataLoaded = true;
+            foreach (TranslationItem item in list)
+            {
+                AvailableTranslations.Add(new ObservableTranslationItem(item));
+            }
+
+            IsDataLoaded = true;
         }
+
         #endregion Public methods
 
         #region Event handlers
-        void AvailableTranslationsCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+
+        private void AvailableTranslationsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add ||
-                e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
+            if (e.Action == NotifyCollectionChangedAction.Add || e.Action == NotifyCollectionChangedAction.Replace)
             {
                 foreach (ObservableTranslationItem item in e.NewItems)
                 {
@@ -85,9 +78,8 @@ namespace QuranPhone.ViewModels
                     item.NavigateRequested += TranslationNavigateRequested;
                 }
             }
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove ||
-                e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace ||
-                e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Reset)
+            if (e.Action == NotifyCollectionChangedAction.Remove || e.Action == NotifyCollectionChangedAction.Replace ||
+                e.Action == NotifyCollectionChangedAction.Reset)
             {
                 foreach (ObservableTranslationItem item in e.OldItems)
                 {
@@ -95,14 +87,16 @@ namespace QuranPhone.ViewModels
                     item.DeleteComplete -= TranslationDeleteComplete;
                     item.NavigateRequested -= TranslationNavigateRequested;
                 }
-            }            
+            }
         }
 
         private void TranslationDownloadComplete(object sender, EventArgs e)
         {
             var translation = sender as ObservableTranslationItem;
             if (translation == null)
+            {
                 return;
+            }
             translation.Exists = true;
 
             // Hack to update list after download / delete completed
@@ -114,10 +108,11 @@ namespace QuranPhone.ViewModels
         {
             var translation = sender as ObservableTranslationItem;
             if (translation == null)
+            {
                 return;
+            }
             translation.Exists = false;
 
-            // Hack to update list after download / delete completed
             AvailableTranslations.Remove(translation);
             AvailableTranslations.Add(translation);
         }
@@ -126,10 +121,15 @@ namespace QuranPhone.ViewModels
         {
             var translation = sender as ObservableTranslationItem;
             if (translation == null)
+            {
                 return;
+            }
             if (NavigateRequested != null)
+            {
                 NavigateRequested(sender, e);
+            }
         }
+
         #endregion
 
         public event EventHandler NavigateRequested;

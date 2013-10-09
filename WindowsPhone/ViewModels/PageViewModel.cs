@@ -1,7 +1,7 @@
-﻿using QuranPhone.Common;
-using QuranPhone.Data;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
+using System.Windows;
+using QuranPhone.Data;
 
 namespace QuranPhone.ViewModels
 {
@@ -19,74 +19,57 @@ namespace QuranPhone.ViewModels
 
         #region Properties
 
+        private Uri _imageSource;
+        private int _pageNumber;
+        private bool _showTranslation;
+        private string _translation;
         public ObservableCollection<VerseViewModel> Translations { get; set; }
 
-        private string translation;
         public string Translation
         {
-            get { return translation; }
+            get { return _translation; }
             set
             {
-                if (value == translation)
-                    return;
-
-                translation = value;
-
+                _translation = value;
                 base.OnPropertyChanged(() => Translation);
             }
         }
 
-        private int pageNumber;
         public int PageNumber
         {
-            get { return pageNumber; }
+            get { return _pageNumber; }
             set
             {
-                if (value == pageNumber)
-                    return;
-
-                pageNumber = value;
-
+                _pageNumber = value;
                 base.OnPropertyChanged(() => PageNumber);
             }
         }
 
-        private bool showTranslation;
         public bool ShowTranslation
         {
-            get { return showTranslation; }
+            get { return _showTranslation; }
             set
             {
-                if (value == showTranslation)
-                    return;
-
-                showTranslation = value;
-
+                _showTranslation = value;
                 base.OnPropertyChanged(() => ShowTranslation);
             }
         }
 
-        private Uri imageSource;
         public Uri ImageSource
         {
-            get { return imageSource; }
+            get { return _imageSource; }
             set
             {
-                if (value == imageSource)
-                    return;
-
-                imageSource = value;
-
+                _imageSource = value;
                 base.OnPropertyChanged(() => ImageSource);
             }
         }
 
         public double ScreenWidth
         {
-            get { return System.Windows.Application.Current.Host.Content.ActualWidth - 20; }
+            get { return Application.Current.Host.Content.ActualWidth - 20; }
         }
 
-        // QuranInfo Properties
         public String SuraName
         {
             get { return QuranInfo.GetSuraNameFromPage(PageNumber); }

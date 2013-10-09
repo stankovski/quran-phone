@@ -1,68 +1,77 @@
-﻿using System.Windows;
-using Newtonsoft.Json.Linq;
-using QuranPhone.Common;
-using QuranPhone.Data;
-using QuranPhone.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using Newtonsoft.Json.Linq;
+using QuranPhone.Common;
+using QuranPhone.Data;
+using QuranPhone.Resources;
 
 namespace QuranPhone.Utils
 {
-    public class TranslationListTask
+    public static class TranslationListTask
     {
-        public const string WEB_SERVICE_URL = "http://android.quran.com/data/translations.php?v=2";
-        private const string CACHED_RESPONSE_FILE_NAME = "cached-translation-list";
+        public const string WebServiceUrl = "http://android.quran.com/data/translations.php?v=2";
+        private const string CachedResponseFileName = "cached-translation-list";
 
-        private static void cacheResponse(string response)
+        private static void CacheResponse(string response)
         {
             try
             {
-                using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
+                using (IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication())
                 {
-                    var filePath = getCachedResponseFilePath();
+                    string filePath = GetCachedResponseFilePath();
                     if (isf.FileExists(filePath))
-                        isf.DeleteFile(filePath);
-                    QuranFileUtils.MakeDirectory(Path.GetDirectoryName(filePath));
-                    using (var stream = isf.OpenFile(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite))
-                    using (var writer = new StreamWriter(stream))
                     {
-                        writer.Write(response);
+                        isf.DeleteFile(filePath);
+                    }
+                    QuranFileUtils.MakeDirectory(Path.GetDirectoryName(filePath));
+                    using (
+                        IsolatedStorageFileStream stream = isf.OpenFile(filePath, FileMode.OpenOrCreate,
+                            FileAccess.ReadWrite))
+                    {
+                        using (var writer = new StreamWriter(stream))
+                        {
+                            writer.Write(response);
+                        }
                     }
                 }
             }
             catch (Exception e)
             {
-                Debug.WriteLine("failed to cache response: " + e.Message);
+                MessageBox.Show("failed to cache response: " + e.Message);
             }
         }
 
-        private static string loadCachedResponse()
+        private static string LoadCachedResponse()
         {
             string response = null;
             try
             {
-                using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
+                using (IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication())
                 {
-                    var filePath = getCachedResponseFilePath();
+                    string filePath = GetCachedResponseFilePath();
                     if (!isf.FileExists(filePath))
-                        return null;
-                    using (var stream = isf.OpenFile(filePath, FileMode.Open, FileAccess.ReadWrite))
-                    using (var reader = new StreamReader(stream))
                     {
-                        return reader.ReadToEnd();
+                        return null;
+                    }
+                    using (
+                        IsolatedStorageFileStream stream = isf.OpenFile(filePath, FileMode.Open, FileAccess.ReadWrite))
+                    {
+                        using (var reader = new StreamReader(stream))
+                        {
+                            return reader.ReadToEnd();
+                        }
                     }
                 }
             }
             catch (Exception e)
             {
-                Debug.WriteLine("failed reading cached response: " + e.Message);
+                MessageBox.Show("failed reading cached response: " + e.Message);
             }
             return response;
         }
@@ -72,9 +81,9 @@ namespace QuranPhone.Utils
             bool shouldUseCache = false;
             if (useCache)
             {
-                var when = SettingsUtils.Get<DateTime>(Constants.PREF_LAST_UPDATED_TRANSLATIONS);
-                var now = DateTime.Now;
-                if (when.AddMilliseconds(Constants.MIN_TRANSLATION_REFRESH_TIME) > now)
+                var when = SettingsUtils.Get<DateTime>(Constants.PrefLastUpdatedTranslations);
+                DateTime now = DateTime.Now;
+                if (when.AddMilliseconds(Constants.MinimumTranslationRefreshTime) > now)
                 {
                     shouldUseCache = true;
                 }
@@ -83,15 +92,15 @@ namespace QuranPhone.Utils
             string text = null;
             if (shouldUseCache)
             {
-                text = loadCachedResponse();
+                text = LoadCachedResponse();
             }
 
             bool refreshed = false;
             if (string.IsNullOrEmpty(text))
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(WEB_SERVICE_URL);
+                var request = (HttpWebRequest) WebRequest.Create(WebServiceUrl);
                 request.Method = HttpMethod.Get;
-                HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync();
+                HttpWebResponse response = await request.GetResponseAsync();
                 using (var sr = new StreamReader(response.GetResponseStream()))
                 {
                     text = sr.ReadToEnd();
@@ -99,44 +108,48 @@ namespace QuranPhone.Utils
 
                 if (string.IsNullOrEmpty(text))
                 {
-                    text = loadCachedResponse();
+                    text = LoadCachedResponse();
                 }
 
                 if (string.IsNullOrEmpty(text))
                 {
-                    MessageBox.Show(Resources.AppResources.no_network_to_load);
+                    MessageBox.Show(AppResources.no_network_to_load);
                     return null;
                 }
 
                 if (useCache)
                 {
-                    cacheResponse(text);
+                    CacheResponse(text);
                 }
                 refreshed = true;
             }
 
-            TranslationsDBAdapter adapter = new TranslationsDBAdapter();
-            var cachedItems = adapter.GetTranslations();
-            List<TranslationItem> items = new List<TranslationItem>();
-            List<TranslationItem> updates = new List<TranslationItem>();
-            
+            var adapter = new TranslationsDBAdapter();
+            List<TranslationItem> cachedItems = adapter.GetTranslations();
+            var items = new List<TranslationItem>();
+            var updates = new List<TranslationItem>();
+
             try
             {
-                var token = JObject.Parse(text);
-                foreach(var t in token["data"]) 
+                JObject token = JObject.Parse(text);
+                foreach (JToken t in token["data"])
                 {
-                    TranslationItem item = new TranslationItem();
+                    var item = new TranslationItem();
                     item.Id = t["id"].ToObject<int>();
-                    item.Name = (string)t["displayName"];
-                    item.Translator = (string)t["translator_foreign"];
+                    item.Name = (string) t["displayName"];
+                    item.Translator = (string) t["translator_foreign"];
                     if (string.IsNullOrEmpty(item.Translator))
-                        item.Translator = (string)t["translator"];
+                    {
+                        item.Translator = (string) t["translator"];
+                    }
                     item.LatestVersion = t["current_version"].ToObject<int>();
-                    item.Filename = (string)t["fileName"];
-                    item.Url = (string)t["fileUrl"];
+                    item.Filename = (string) t["fileName"];
+                    item.Url = (string) t["fileUrl"];
                     if (item.Url.EndsWith("ext=zip", StringComparison.InvariantCultureIgnoreCase))
+                    {
                         item.Compressed = true;
-                
+                    }
+
 
                     int firstParen = item.Name.IndexOf("(");
                     if (firstParen != -1)
@@ -170,12 +183,12 @@ namespace QuranPhone.Utils
                             }
                             catch
                             {
-                                Debug.WriteLine("exception opening database: " + item.Filename);
+                                MessageBox.Show("exception opening database: " + item.Filename);
                             }
                         }
-                        else 
-                        { 
-                            needsUpdate = true; 
+                        else
+                        {
+                            needsUpdate = true;
                         }
                     }
                     else if (localItem != null)
@@ -193,7 +206,7 @@ namespace QuranPhone.Utils
 
                 if (refreshed)
                 {
-                    SettingsUtils.Set<DateTime>(Constants.PREF_LAST_UPDATED_TRANSLATIONS, DateTime.Now);
+                    SettingsUtils.Set(Constants.PrefLastUpdatedTranslations, DateTime.Now);
                 }
 
                 if (updates.Count() > 0)
@@ -203,17 +216,15 @@ namespace QuranPhone.Utils
             }
             catch (Exception je)
             {
-                Debug.WriteLine("error parsing json: " + je.Message);
+                MessageBox.Show("error parsing json: " + je.Message);
             }
 
             return items;
         }
 
-        private static string getCachedResponseFilePath()
+        private static string GetCachedResponseFilePath()
         {
-            string fileName = CACHED_RESPONSE_FILE_NAME;
-            string dir = QuranFileUtils.GetQuranDatabaseDirectory(false, true);
-            return Path.Combine(dir, fileName);
+            return Path.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false, true), CachedResponseFileName);
         }
     }
 }

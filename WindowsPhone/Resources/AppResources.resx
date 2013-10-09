@@ -679,7 +679,7 @@ the data used in the translations and Arabic comes from
     <value>Waiting for power...</value>
   </data>
   <data name="waiting_for_wifi" xml:space="preserve">
-    <value>Waiting for WIFI...</value>
+    <value>Waiting for WiFi...</value>
   </data>
   <data name="bookmark" xml:space="preserve">
     <value>bookmark</value>

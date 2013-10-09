@@ -1,136 +1,74 @@
-﻿using System.Windows;
-using QuranPhone.Data;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using QuranPhone.Data;
 
 namespace QuranPhone.Utils
 {
-    public class SettingsUtils
+    public static class SettingsUtils
     {
-        private static IDictionary<string, object> cache = new Dictionary<string, object>();
-        /// <summary>
-        /// Gets value of object in dictionary and deserializes it to specified type
-        /// </summary>
-        /// <typeparam name="T">Type of object to deserialize from</typeparam>
-        /// <param name="key">Key</param>
-        /// <returns></returns>
+        private static List<FieldInfo> _constantKeys;
+
         public static T Get<T>(string key)
         {
-            if (cache.ContainsKey(key))
-            {
-                try
-                {
-                    return (T)cache[key];
-                }
-                catch
-                {
-                    return getDefaultValue<T>(key);
-                }
-            }
-
             object value = null;
-            if (IsolatedStorageSettings.ApplicationSettings.Contains(key))
+
+            if (Contains(key))
             {
                 value = IsolatedStorageSettings.ApplicationSettings[key];
             }
 
             if (value == null)
             {
-                value = getDefaultValue<T>(key);
+                value = GetDefaultValue<T>(key);
             }
-            
-            try
-            {
-                cache[key] = value;
-                return (T) value;
-            }
-            catch
-            {
-                cache[key] = getDefaultValue<T>(key);
-                return getDefaultValue<T>(key);
-            }
+
+            return (T) value;
         }
 
-        public static bool Contains(string key)
+        private static T GetDefaultValue<T>(string key)
         {
-            if (cache.ContainsKey(key))
-                return true;
-            else
-                return IsolatedStorageSettings.ApplicationSettings.Contains(key);
-        }
-
-        private static List<FieldInfo> constantKeys;
-        private static T getDefaultValue<T>(string key)
-        {
-            if (constantKeys == null)
+            if (_constantKeys == null)
             {
-                constantKeys = new List<FieldInfo>();
-                FieldInfo[] thisObjectProperties = typeof(Constants).GetFields();
-                foreach (FieldInfo fi in thisObjectProperties)
-                {
-                    if (fi.IsLiteral)
-                    {
-                        constantKeys.Add(fi);
-                    }
+                _constantKeys = new List<FieldInfo>();
+                FieldInfo[] thisObjectProperties = typeof (Constants).GetFields();
+                foreach (FieldInfo fi in thisObjectProperties.Where(fi => fi.IsLiteral)) {
+                    _constantKeys.Add(fi);
                 }
             }
-            
-            // Find is not exist in WP7 API, change to Where -> FirstOrDefault instead
-            FieldInfo info = null;
-#if WINDOWS_PHONE_8
-            info = constantKeys.Find(fi => fi.FieldType == typeof(string) && fi.GetRawConstantValue() as string == key);
-#else
-            info = constantKeys.Where(fi => fi.FieldType == typeof(string) && fi.GetValue(null) as string == key).FirstOrDefault<FieldInfo>();
-#endif
-            if (info == null)
-                return default(T);
 
-            DefaultValueAttribute[] attr = info.GetCustomAttributes(typeof(DefaultValueAttribute), false) as DefaultValueAttribute[];
+            FieldInfo info =
+                _constantKeys.Find(fi => fi.FieldType == typeof (string) && fi.GetRawConstantValue() as string == key);
+            if (info == null)
+            {
+                return default(T);
+            }
+
+            var attr = info.GetCustomAttributes(typeof (DefaultValueAttribute), false) as DefaultValueAttribute[];
             if (attr != null && attr.Length == 1)
-                return (T)attr[0].Value;
+            {
+                return (T) attr[0].Value;
+            }
 
             return default(T);
         }
 
-        /// <summary>
-        /// Sets value of object in dictionary and serializes it to specified type
-        /// </summary>
-        /// <typeparam name="T">Type of object to serialize into</typeparam>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
         public static void Set<T>(string key, T value)
         {
-            if (value == null)
-                return;
-
-            bool keyExists = IsolatedStorageSettings.ApplicationSettings.Contains(key);
-
-            if (!keyExists)
-                IsolatedStorageSettings.ApplicationSettings.Add(key, value);
-            else
-                IsolatedStorageSettings.ApplicationSettings[key] = value;
-
-            cache[key] = value;
+            IsolatedStorageSettings.ApplicationSettings[key] = value;
             Save();
+        }
+
+        public static bool Contains(string key)
+        {
+            return IsolatedStorageSettings.ApplicationSettings.Contains(key);
         }
 
         public static void Save()
         {
-            try
-            {
-                IsolatedStorageSettings.ApplicationSettings.Save();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Unable to save settings. " + e.Message, "Error", MessageBoxButton.OK);
-            }
+            IsolatedStorageSettings.ApplicationSettings.Save();
         }
     }
 }

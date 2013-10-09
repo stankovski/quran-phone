@@ -1,33 +1,47 @@
-﻿using Microsoft.Phone.BackgroundTransfer;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.IO.IsolatedStorage;
-using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Phone.BackgroundTransfer;
 
 namespace QuranPhone.Utils
 {
     public class DownloadManager : IDisposable
     {
-        private DownloadManager() { }
+        private static DownloadManager _instance;
 
-        private static DownloadManager instance;
+        private DownloadManager() {}
+
         public static DownloadManager Instance
         {
             get
             {
-                if (instance == null)
+                if (_instance == null)
                 {
-                    instance = new DownloadManager();
+                    _instance = new DownloadManager();
                     // Cleanup old requests
-                    foreach (var request in BackgroundTransferService.Requests)
+                    foreach (BackgroundTransferRequest request in BackgroundTransferService.Requests)
                     {
                         if (request.TransferStatus == TransferStatus.Completed)
+                        {
                             BackgroundTransferService.Remove(request);
+                        }
                     }
                 }
-                return instance;
+                return _instance;
+            }
+        }
+
+        public void Dispose()
+        {
+            foreach (BackgroundTransferRequest request in BackgroundTransferService.Requests)
+            {
+                if (request.TransferStatus == TransferStatus.Completed)
+                {
+                    BackgroundTransferService.Remove(request);
+                }
             }
         }
 
@@ -35,20 +49,25 @@ namespace QuranPhone.Utils
         {
             var serverUri = new Uri(from, UriKind.Absolute);
             var phoneUri = new Uri(to, UriKind.Relative);
-            
+
             try
             {
                 var request = new BackgroundTransferRequest(serverUri, phoneUri);
                 request.Tag = from;
+
                 if (allowCellular)
+                {
                     request.TransferPreferences = TransferPreferences.AllowCellularAndBattery;
+                }
 
                 int count = 0;
-                foreach (var r in BackgroundTransferService.Requests)
+                foreach (BackgroundTransferRequest r in BackgroundTransferService.Requests)
                 {
                     count++;
                     if (r.RequestUri == serverUri)
+                    {
                         return r;
+                    }
                     if (r.TransferStatus == TransferStatus.Completed)
                     {
                         BackgroundTransferService.Remove(r);
@@ -56,7 +75,9 @@ namespace QuranPhone.Utils
                     }
                     // Max 5 downloads
                     if (count >= 5)
+                    {
                         return null;
+                    }
                 }
                 BackgroundTransferService.Add(request);
                 PersistRequestToStorage(request);
@@ -65,34 +86,35 @@ namespace QuranPhone.Utils
             catch (InvalidOperationException)
             {
                 return GetRequest(from);
-            }            
+            }
         }
 
         private void PersistRequestToStorage(BackgroundTransferRequest request)
         {
-            var requestUri = request.RequestUri;
-            var requestUriHash = CryptoUtils.GetHash(requestUri.ToString());
-            var trackerDir = QuranFileUtils.GetDowloadTrackerDirectory(false, true);
+            Uri requestUri = request.RequestUri;
+            string requestUriHash = GetHash(requestUri.ToString());
+            string trackerDir = QuranFileUtils.GetDowloadTrackerDirectory(false, true);
             QuranFileUtils.WriteFile(string.Format("{0}\\{1}", trackerDir, requestUriHash), request.RequestId);
         }
 
         private void DeleteRequestFromStorage(BackgroundTransferRequest request)
         {
-            var requestUri = request.RequestUri;
-            var requestUriHash = CryptoUtils.GetHash(requestUri.ToString());
-            var trackerDir = QuranFileUtils.GetDowloadTrackerDirectory(false, true);
+            Uri requestUri = request.RequestUri;
+            string requestUriHash = GetHash(requestUri.ToString());
+            string trackerDir = QuranFileUtils.GetDowloadTrackerDirectory(false, true);
             QuranFileUtils.DeleteFile(string.Format("{0}\\{1}", trackerDir, requestUriHash));
         }
 
         public BackgroundTransferRequest GetRequest(string serverUri)
         {
-            var requestUriHash = CryptoUtils.GetHash(serverUri);
-            var trackerDir = QuranFileUtils.GetDowloadTrackerDirectory(false, true);
-            var requestId = QuranFileUtils.ReadFile(string.Format("{0}\\{1}", trackerDir, requestUriHash));
+            string requestUriHash = GetHash(serverUri);
+            string trackerDir = QuranFileUtils.GetDowloadTrackerDirectory(false, true);
+            string requestId = QuranFileUtils.ReadFile(string.Format("{0}\\{1}", trackerDir, requestUriHash));
             if (!string.IsNullOrEmpty(requestId))
+            {
                 return BackgroundTransferService.Find(requestId);
-            else
-                return null;
+            }
+            return null;
         }
 
         public void Cancel(BackgroundTransferRequest request)
@@ -116,29 +138,36 @@ namespace QuranPhone.Utils
 
         public IEnumerable<string> GetAllStuckFiles()
         {
-            using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
+            using (IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication())
             {
                 return isf.GetFileNames("/shared/transfers/*");
             }
         }
 
-        public void Dispose()
-        {
-            foreach (var request in BackgroundTransferService.Requests)
-            {
-                if (request.TransferStatus == TransferStatus.Completed)
-                    BackgroundTransferService.Remove(request);
-            }
-        }
-
         internal void FinalizeRequests()
         {
-            foreach (var request in BackgroundTransferService.Requests)
+            foreach (BackgroundTransferRequest request in BackgroundTransferService.Requests)
             {
                 if (request.TransferStatus == TransferStatus.Completed)
                 {
                     BackgroundTransferService.Remove(request);
                 }
+            }
+        }
+
+        public static string GetHash(string value)
+        {
+            var sha1 = new SHA1Managed();
+            byte[] unencryptedByteArray = Encoding.Unicode.GetBytes(value);
+            using (var stream = new MemoryStream(unencryptedByteArray))
+            {
+                byte[] encryptedByteArray = sha1.ComputeHash(stream);
+                var encryptedStringBuilder = new StringBuilder();
+                foreach (byte b in encryptedByteArray)
+                {
+                    encryptedStringBuilder.AppendFormat("{0:x2}", b);
+                }
+                return encryptedStringBuilder.ToString();
             }
         }
     }
