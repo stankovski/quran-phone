@@ -75,13 +75,12 @@ namespace QuranPhone
                     @"Assalamu Aleikum,
 
 Thank you for downloading Quran Phone. Please note that this is a BETA release and is still work in progress. 
-New in Version 0.3.2:
-* Implemented night mode
-* Added Arabic support
-* Added ability to switch interface languages
-* Added double-tap navigation between Quran and translation
-* Added support for Quran text search
-* Misc. layout changes and bug fixes
+New in Version 0.3.3:
+* Added menu to lock orientation
+* Added ability to copy verse to clipboard
+* Fixed night mode bluriness
+* Fixed Arabic support (page flipping)
+* Misc. bug fixes
 
 If you find any issues with the app or would like to provide suggestions, please use Contact Us option available via the menu. 
 

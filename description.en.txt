@@ -18,8 +18,9 @@ The following features are *not* yet available but planned for the future inshaA
 Because Quran Phone is an open source project, it makes it easy for anyone to contribute and help improve the project. We are also open to hearing your suggestions to make Quran Windows the best Quran application on the market.
 
 Change Log:
-Release 0.3.1
-* Support for Ibn Katheer tafseer
-* Ayah bookmarking
-* Ability to generate Quranic Dua as bookmarks (accessible from Settings)
-* Misc. layout changes and bug fixes
+Release 0.3.3
+* Added menu to lock orientation
+* Added ability to copy verse to clipboard
+* Fixed night mode bluriness
+* Fixed Arabic support (page flipping)
+* Misc. bug fixes
