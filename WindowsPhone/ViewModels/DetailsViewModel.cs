@@ -424,6 +424,41 @@ namespace QuranPhone.ViewModels
             }
         }
 
+        public async void CopyAyahToClipboard(QuranAyah ayah)
+        {
+            if (ayah == null)
+                return;
+
+            if (ayah.Translation != null)
+            {
+                Clipboard.SetText(ayah.Translation);
+            }
+            else if (ayah.Text != null)
+            {
+                Clipboard.SetText(ayah.Text);
+            }
+            else
+            {
+                if (QuranFileUtils.FileExists(Path.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false),
+                                                           QuranFileUtils.QURAN_ARABIC_DATABASE)))
+                {
+                    try
+                    {
+                        using (var dbArabic = new DatabaseHandler<ArabicAyah>(QuranFileUtils.QURAN_ARABIC_DATABASE))
+                        {
+                            var ayahSurah =
+                                await new TaskFactory().StartNew(() => dbArabic.GetVerse(ayah.Sura, ayah.Ayah));
+                            Clipboard.SetText(ayahSurah.Text);
+                        }
+                    }
+                    catch
+                    {
+                        //Not able to get Arabic text - skipping
+                    }
+                }
+            }
+        }
+
         protected override void OnDispose()
         {
             base.OnDispose();

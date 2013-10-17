@@ -455,4 +455,7 @@ the data used in the translations and Arabic comes from
   <data name="auto_orientation" xml:space="preserve">
     <value>авто. ориентация</value>
   </data>
+  <data name="copy" xml:space="preserve">
+    <value>Скопировать</value>
+  </data>
 </root>
