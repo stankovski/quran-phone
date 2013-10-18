@@ -304,7 +304,7 @@ namespace QuranPhone.ViewModels
                 downloadRequest.TransferProgressChanged -= TransferProgressChanged;
                 downloadRequest.TransferStatusChanged -= TransferStatusChanged;
             }
-            downloadRequest = DownloadManager.Instance.Download(this.ServerUrl, this.TempUrl);
+            downloadRequest = DownloadManager.Instance.DownloadAsync(this.ServerUrl, this.TempUrl);
             if (downloadRequest != null)
             {
                 downloadRequest.TransferProgressChanged += TransferProgressChanged;

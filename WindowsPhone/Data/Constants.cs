@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using QuranPhone.Utils;
 
 namespace QuranPhone.Data
 {
@@ -56,7 +57,9 @@ namespace QuranPhone.Data
         public const String PREF_OVERLAY_PAGE_INFO = "overlayPageInfo";
         public const String PREF_DISPLAY_MARKER_POPUP = "displayMarkerPopup";
         public const String PREF_AYAH_BEFORE_TRANSLATION = "ayahBeforeTranslation";
+        [DefaultValue(false)]
         public const String PREF_PREFER_STREAMING = "preferStreaming";
+        [DefaultValue(LookAheadAmount.PAGE)]
         public const String PREF_DOWNLOAD_AMOUNT = "preferredDownloadAmount";
         public const String PREF_LAST_UPDATED_TRANSLATIONS = "lastTranslationsUpdate";
         public const String PREF_HAVE_UPDATED_TRANSLATIONS = "haveUpdatedTranslations";

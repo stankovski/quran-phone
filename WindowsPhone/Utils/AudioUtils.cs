@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Xml.Linq;
 using QuranPhone.Common;
@@ -20,18 +16,16 @@ namespace QuranPhone.Utils
 
     public class AudioUtils
     {
-        private const string TAG = "AudioUtils";
         public const string DB_EXTENSION = ".db";
         public const string AUDIO_EXTENSION = ".mp3";
         public const string ZIP_EXTENSION = ".zip";
         private const string AUDIO_DIRECTORY = "audio";
         public const int MIN = 1;
         public const int MAX = 3;
-
-
         private static string[] mQariBaseUrls = null;
         private static string[] mQariFilePaths = null;
         private static string[] mQariDatabaseFiles = null;
+        private static string[] mQariNames = null;
 
         private static string[] GetResources(string name)
         {
@@ -44,11 +38,16 @@ namespace QuranPhone.Utils
             }
         }
 
-        public static string getQariUrl(int position, bool addPlaceHolders)
+        public static int GetQariPositionByName(string name)
+        {
+            return 1;
+        }
+
+        public static string GetQariUrl(int position, bool addPlaceHolders)
         {
             if (mQariBaseUrls == null)
             {
-                mQariBaseUrls = GetResources("array.quran_readers_urls");
+                mQariBaseUrls = GetResources("quran_readers_urls");
             }
 
             if (position >= mQariBaseUrls.Length || 0 > position)
@@ -58,41 +57,50 @@ namespace QuranPhone.Utils
             string url = mQariBaseUrls[position];
             if (addPlaceHolders)
             {
-                if (isQariGapless(position))
+                if (IsQariGapless(position))
                 {
-                    url += "%03d" + AudioUtils.AUDIO_EXTENSION;
+                    url += "%03d" + AUDIO_EXTENSION;
                 }
                 else
                 {
-                    url += "%03d%03d" + AudioUtils.AUDIO_EXTENSION;
+                    url += "%03d%03d" + AUDIO_EXTENSION;
                 }
             }
             return url;
         }
 
-        public static string getLocalQariUrl(int position)
+        public static string GetLocalQariUrl(int position)
         {
             if (mQariFilePaths == null)
             {
-                mQariFilePaths = GetResources("array.quran_readers_path");
+                mQariFilePaths = GetResources("quran_readers_path");
             }
 
-            string rootDirectory = getAudioRootDirectory();
+            string rootDirectory = GetAudioRootDirectory();
             return rootDirectory == null
                        ? null
                        : rootDirectory + mQariFilePaths[position];
         }
 
-        public static bool isQariGapless(int position)
+        public static bool IsQariGapless(int position)
         {
-            return getQariDatabasePathIfGapless(position) != null;
+            return GetQariDatabasePathIfGapless(position) != null;
         }
 
-        public static string getQariDatabasePathIfGapless(int position)
+        public static string[] GetQariNames()
+        {
+            if (mQariNames == null)
+            {
+                mQariNames = GetResources("quran_readers_name");
+            }
+            return mQariNames;
+        }
+
+        public static string GetQariDatabasePathIfGapless(int position)
         {
             if (mQariDatabaseFiles == null)
             {
-                mQariDatabaseFiles = GetResources("array.quran_readers_db_name");
+                mQariDatabaseFiles = GetResources("quran_readers_db_name");
             }
 
             if (position > mQariDatabaseFiles.Length)
@@ -106,7 +114,7 @@ namespace QuranPhone.Utils
                 return null;
             }
 
-            string path = getLocalQariUrl(position);
+            string path = GetLocalQariUrl(position);
             if (path == null)
             {
                 return null;
@@ -116,13 +124,13 @@ namespace QuranPhone.Utils
             return overall;
         }
 
-        public static bool shouldDownloadGaplessDatabase(AudioRequest request)
+        public static bool ShouldDownloadGaplessDatabase(AudioRequest request)
         {
-            if (!request.isGapless())
+            if (!request.IsGapless())
             {
                 return false;
             }
-            string dbPath = request.getGaplessDatabaseFilePath();
+            string dbPath = request.GetGaplessDatabaseFilePath();
             if (string.IsNullOrWhiteSpace(dbPath))
             {
                 return false;
@@ -131,17 +139,17 @@ namespace QuranPhone.Utils
             return !QuranFileUtils.FileExists(dbPath);
         }
 
-        public static string getGaplessDatabaseUrl(AudioRequest request)
+        public static string GetGaplessDatabaseUrl(AudioRequest request)
         {
-            if (!request.isGapless())
+            if (!request.IsGapless())
             {
                 return null;
             }
-            int qariId = request.getQariId();
+            int qariId = request.GetQariId();
 
             if (mQariDatabaseFiles == null)
             {
-                mQariDatabaseFiles = GetResources("array.quran_readers_db_name");
+                mQariDatabaseFiles = GetResources("quran_readers_db_name");
             }
 
             if (qariId > mQariDatabaseFiles.Length)
@@ -153,7 +161,7 @@ namespace QuranPhone.Utils
             return QuranFileUtils.GetGaplessDatabaseRootUrl() + "/" + dbname;
         }
 
-        public static QuranAyah getLastAyahToPlay(QuranAyah startAyah,
+        public static QuranAyah GetLastAyahToPlay(QuranAyah startAyah,
                                                   int page, LookAheadAmount mode)
         {
             int pageLastSura = 114;
@@ -227,13 +235,13 @@ namespace QuranPhone.Utils
             return new QuranAyah(pageLastSura, pageLastAyah);
         }
 
-        public static bool shouldDownloadBasmallah(AudioRequest request)
+        public static bool ShouldDownloadBasmallah(AudioRequest request)
         {
-            if (request.isGapless())
+            if (request.IsGapless())
             {
                 return false;
             }
-            string baseDirectory = request.getLocalPath();
+            string baseDirectory = request.GetLocalPath();
             if (!string.IsNullOrWhiteSpace(baseDirectory))
             {
                 if (QuranFileUtils.DirectoryExists(baseDirectory))
@@ -250,23 +258,23 @@ namespace QuranPhone.Utils
                 }
             }
 
-            return doesRequireBasmallah(request);
+            return DoesRequireBasmallah(request);
         }
 
-        public static bool haveSuraAyahForQari(string baseDir, int sura, int ayah)
+        public static bool HaveSuraAyahForQari(string baseDir, int sura, int ayah)
         {
             string filename = baseDir + "/" + sura +
                               "/" + ayah + AUDIO_EXTENSION;
             return QuranFileUtils.FileExists(filename);
         }
 
-        private static bool doesRequireBasmallah(AudioRequest request)
+        private static bool DoesRequireBasmallah(AudioRequest request)
         {
-            QuranAyah minAyah = request.getMinAyah();
+            QuranAyah minAyah = request.GetMinAyah();
             int startSura = minAyah.Sura;
             int startAyah = minAyah.Ayah;
 
-            QuranAyah maxAyah = request.getMaxAyah();
+            QuranAyah maxAyah = request.GetMaxAyah();
             int endSura = maxAyah.Sura;
             int endAyah = maxAyah.Ayah;
 
@@ -295,26 +303,26 @@ namespace QuranPhone.Utils
             return false;
         }
 
-        public static bool haveAllFiles(AudioRequest request)
+        public static bool HaveAllFiles(AudioRequest request)
         {
-            string baseDirectory = request.getLocalPath();
+            string baseDirectory = request.GetLocalPath();
             if (string.IsNullOrWhiteSpace(baseDirectory))
             {
                 return false;
             }
 
-            bool isGapless = request.isGapless();
+            bool isGapless = request.IsGapless();
             if (!QuranFileUtils.DirectoryExists(baseDirectory))
             {
                 QuranFileUtils.MakeDirectory(baseDirectory);
                 return false;
             }
 
-            QuranAyah minAyah = request.getMinAyah();
+            QuranAyah minAyah = request.GetMinAyah();
             int startSura = minAyah.Sura;
             int startAyah = minAyah.Ayah;
 
-            QuranAyah maxAyah = request.getMaxAyah();
+            QuranAyah maxAyah = request.GetMaxAyah();
             int endSura = maxAyah.Sura;
             int endAyah = maxAyah.Ayah;
 
@@ -337,7 +345,7 @@ namespace QuranPhone.Utils
                     {
                         continue;
                     }
-                    string p = request.getBaseUrl();
+                    string p = request.GetBaseUrl();
                     string fileName = string.Format(p, i);
                     if (!QuranFileUtils.FileExists(fileName))
                     {
@@ -359,7 +367,7 @@ namespace QuranPhone.Utils
             return true;
         }
 
-        public static string getAudioRootDirectory()
+        public static string GetAudioRootDirectory()
         {
             string s = QuranFileUtils.GetQuranDirectory(false);
             return (s == null) ? null : s + AUDIO_DIRECTORY + "/";

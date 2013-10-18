@@ -285,6 +285,34 @@ namespace QuranPhone.ViewModels
             }
         }
 
+        private bool isPlayingAudio;
+        public bool IsPlayingAudio
+        {
+            get { return isPlayingAudio; }
+            set
+            {
+                if (value == isPlayingAudio)
+                    return;
+
+                isPlayingAudio = value;
+                base.OnPropertyChanged(() => IsPlayingAudio);
+            }
+        }
+
+        private bool isAudioControlVisible;
+        public bool IsAudioControlVisible
+        {
+            get { return isAudioControlVisible; }
+            set
+            {
+                if (value == isAudioControlVisible)
+                    return;
+
+                isAudioControlVisible = value;
+                base.OnPropertyChanged(() => IsAudioControlVisible);
+            }
+        }
+
         private void UpdateStyles()
         {
             if (IsNightMode)
@@ -467,6 +495,188 @@ namespace QuranPhone.ViewModels
             {
                 cleanPage(Pages.IndexOf(page));
             }
+        }
+
+        #endregion
+
+        #region Audio
+
+        private bool mShouldOverridePlaying = false;
+        private AudioRequest mLastAudioDownloadRequest = null;
+
+        public void PlayFromAyah(int page, int sura, int ayah)
+        {
+            PlayFromAyah(page, sura, ayah, true);
+        }
+
+        private void PlayFromAyah(int page, int startSura,
+                                  int startAyah, bool force)
+        {
+            if (force)
+            {
+                mShouldOverridePlaying = true;
+            }
+            int currentQari = AudioUtils.GetQariPositionByName(App.SettingsViewModel.ActiveQari);
+
+            QuranAyah ayah = new QuranAyah(startSura, startAyah);
+            if (SettingsUtils.Get<bool>(Constants.PREF_PREFER_STREAMING))
+            {
+                PlayStreaming(ayah, page, currentQari);
+            }
+            else
+            {
+                DownloadAndPlayAudio(ayah, page, currentQari);
+            }
+        }
+
+        private void PlayStreaming(QuranAyah ayah, int page, int qari)
+        {
+            string qariUrl = AudioUtils.GetQariUrl(qari, true);
+            string dbFile = AudioUtils.GetQariDatabasePathIfGapless(qari);
+            if (!string.IsNullOrEmpty(dbFile))
+            {
+                // gapless audio is "download only"
+                DownloadAndPlayAudio(ayah, page, qari);
+                return;
+            }
+
+            var request = new AudioRequest(qariUrl, ayah);
+            request.SetGaplessDatabaseFilePath(dbFile);
+            Play(request);
+
+            IsPlayingAudio = true;
+        }
+
+        private void DownloadAndPlayAudio(QuranAyah ayah, int page, int qari)
+        {
+            QuranAyah endAyah = AudioUtils.GetLastAyahToPlay(ayah, page,
+                                                             SettingsUtils.Get<LookAheadAmount>(
+                                                                 Constants.PREF_DOWNLOAD_AMOUNT));
+            string baseUri = AudioUtils.GetLocalQariUrl(qari);
+            if (endAyah == null || baseUri == null)
+            {
+                return;
+            }
+            string dbFile = AudioUtils.GetQariDatabasePathIfGapless(qari);
+
+            string fileUrl = "";
+            if (string.IsNullOrEmpty(dbFile))
+            {
+                fileUrl = baseUri + "/" + "%d" + "/" +
+                          "%d" + AudioUtils.AUDIO_EXTENSION;
+            }
+            else
+            {
+                fileUrl = baseUri + "/" + "%03d" +
+                          AudioUtils.AUDIO_EXTENSION;
+            }
+
+            var request = new AudioRequest(fileUrl, ayah, qari, baseUri);
+            request.SetGaplessDatabaseFilePath(dbFile);
+            request.SetPlayBounds(ayah, endAyah);
+            mLastAudioDownloadRequest = request;
+            PlayAudioRequest(request);
+        }
+
+        private void PlayAudioRequest(AudioRequest request)
+        {
+            if (request == null)
+            {
+                IsPlayingAudio = false;
+                return;
+            }
+
+            // seeing if we can play audio request...
+            if (!QuranFileUtils.HaveAyaPositionFile())
+            {
+                string url = QuranFileUtils.GetAyaPositionFileUrl();
+                string destination = QuranFileUtils.GetQuranDatabaseDirectory(false);
+                // start the download
+
+                // DO THE DOWNLOAD HERE
+            }
+            else if (AudioUtils.ShouldDownloadGaplessDatabase(request))
+            {
+                string url = AudioUtils.GetGaplessDatabaseUrl(request);
+                string destination = request.GetLocalPath();
+                // start the download
+
+                // DO THE DOWNLOAD HERE
+            }
+            else if (AudioUtils.HaveAllFiles(request))
+            {
+                if (!AudioUtils.ShouldDownloadBasmallah(request))
+                {
+                    request.RemovePlayBounds();
+                    Play(request);
+                    mLastAudioDownloadRequest = null;
+                }
+                else
+                {
+                    //should download basmalla...
+                    QuranAyah firstAyah = new QuranAyah(1, 1);
+                    string url = AudioUtils.GetQariUrl(request.GetQariId(), true);
+                    string destination = request.GetLocalPath();
+
+                    //intent.putExtra(QuranDownloadService.EXTRA_START_VERSE, firstAyah);
+                    //intent.putExtra(QuranDownloadService.EXTRA_END_VERSE, firstAyah);
+
+                    // DO THE DOWNLOAD HERE
+                }
+            }
+            else
+            {
+                string qariUrl = AudioUtils.GetQariUrl(request.GetQariId(), true);
+                string destination = request.GetLocalPath();
+
+                // start service
+                //intent.putExtra(QuranDownloadService.EXTRA_START_VERSE,
+                //        request.getMinAyah());
+                //intent.putExtra(QuranDownloadService.EXTRA_END_VERSE,
+                //        request.getMaxAyah());
+                //intent.putExtra(QuranDownloadService.EXTRA_IS_GAPLESS,
+                //        request.isGapless());
+
+                // DO THE DOWNLOAD HERE
+            }
+        }
+
+        private void Play(AudioRequest request)
+        {
+            // DO THE PLAYBACK
+
+            if (mShouldOverridePlaying)
+            {
+                // force the current audio to stop and start playing new request
+                // STOP PLAYING
+                mShouldOverridePlaying = false;
+            }
+                // just a playback request, so tell audio service to just continue
+                // playing (and don't store new audio data) if it was already playing
+            else
+            {
+                // ADD REQUEST TO QUEUE
+            }
+        }
+
+        public void onPausePressed()
+        {
+        }
+
+        public void onNextPressed()
+        {
+        }
+
+        public void onPreviousPressed()
+        {
+        }
+
+        public void setRepeatCount(int repeatCount)
+        {
+        }
+
+        public void onStopPressed()
+        {
         }
 
         #endregion

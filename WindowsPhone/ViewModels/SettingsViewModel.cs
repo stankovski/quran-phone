@@ -38,6 +38,21 @@ namespace QuranPhone.ViewModels
             }
         }
 
+        private string activeQari;
+        public string ActiveQari
+        {
+            get { return activeQari; }
+            set
+            {
+                if (value == activeQari)
+                    return;
+
+                activeQari = value;
+
+                base.OnPropertyChanged(() => ActiveQari);
+            }
+        }
+
         private int textSize;
         public int TextSize
         {

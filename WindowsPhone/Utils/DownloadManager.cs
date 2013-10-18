@@ -31,7 +31,7 @@ namespace QuranPhone.Utils
             }
         }
 
-        public BackgroundTransferRequest Download(string from, string to, bool allowCellular = true)
+        public BackgroundTransferRequest DownloadAsync(string from, string to, bool allowCellular = true)
         {
             var serverUri = new Uri(from, UriKind.Absolute);
             var phoneUri = new Uri(to, UriKind.Relative);
@@ -66,6 +66,22 @@ namespace QuranPhone.Utils
             {
                 return GetRequest(from);
             }            
+        }
+
+        public Task<TransferStatus> Download(string from, string to, bool allowCellular)
+        {
+            var tcs = new TaskCompletionSource<TransferStatus>();
+            var wc = DownloadAsync(from, to, allowCellular);
+            wc.TransferStatusChanged += (s, e) =>
+                {
+                    if (e.Request.TransferError != null) 
+                        tcs.TrySetException(e.Request.TransferError);
+                    else if (e.Request.TransferStatus == TransferStatus.Completed)
+                    {
+                        tcs.TrySetResult(e.Request.TransferStatus);
+                    }
+                };
+            return tcs.Task;
         }
 
         private void PersistRequestToStorage(BackgroundTransferRequest request)
