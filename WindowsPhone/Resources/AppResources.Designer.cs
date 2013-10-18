@@ -512,6 +512,15 @@ namespace QuranPhone.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to recite.
+        /// </summary>
+        public static string recite {
+            get {
+                return ResourceManager.GetString("recite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to reciters.
         /// </summary>
         public static string reciters {

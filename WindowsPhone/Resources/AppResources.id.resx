@@ -452,4 +452,7 @@ the data used in the translations and Arabic comes from
   <data name="reciters" xml:space="preserve">
     <value>reciters</value>
   </data>
+  <data name="recite" xml:space="preserve">
+    <value>ucapkanlah</value>
+  </data>
 </root>

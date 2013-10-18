@@ -461,4 +461,7 @@ the data used in the translations and Arabic comes from
   <data name="reciters" xml:space="preserve">
     <value>кари</value>
   </data>
+  <data name="recite" xml:space="preserve">
+    <value>читать</value>
+  </data>
 </root>

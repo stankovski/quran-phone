@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Xml.Linq;
@@ -76,10 +78,10 @@ namespace QuranPhone.Utils
                 mQariFilePaths = GetResources("quran_readers_path");
             }
 
-            string rootDirectory = GetAudioRootDirectory();
+            string rootDirectory = QuranFileUtils.GetQuranAudioDirectory(false);
             return rootDirectory == null
                        ? null
-                       : rootDirectory + mQariFilePaths[position];
+                       : Path.Combine(rootDirectory, mQariFilePaths[position]);
         }
 
         public static bool IsQariGapless(int position)
@@ -119,9 +121,7 @@ namespace QuranPhone.Utils
             {
                 return null;
             }
-            string overall = path + "/" +
-                             dbname + DB_EXTENSION;
-            return overall;
+            return Path.Combine(path, dbname + DB_EXTENSION);
         }
 
         public static bool ShouldDownloadGaplessDatabase(AudioRequest request)
@@ -158,7 +158,7 @@ namespace QuranPhone.Utils
             }
 
             string dbname = mQariDatabaseFiles[qariId] + ZIP_EXTENSION;
-            return QuranFileUtils.GetGaplessDatabaseRootUrl() + "/" + dbname;
+            return Path.Combine(QuranFileUtils.GetGaplessDatabaseRootUrl(), dbname);
         }
 
         public static QuranAyah GetLastAyahToPlay(QuranAyah startAyah,
@@ -246,8 +246,8 @@ namespace QuranPhone.Utils
             {
                 if (QuranFileUtils.DirectoryExists(baseDirectory))
                 {
-                    string filename = 1 + "/" + 1 + AUDIO_EXTENSION;
-                    if (QuranFileUtils.FileExists(baseDirectory + "/" + filename))
+                    string filename = string.Format("1\\1{0}", AUDIO_EXTENSION);
+                    if (QuranFileUtils.FileExists(Path.Combine(baseDirectory, filename)))
                     {
                         return false;
                     }
@@ -263,8 +263,7 @@ namespace QuranPhone.Utils
 
         public static bool HaveSuraAyahForQari(string baseDir, int sura, int ayah)
         {
-            string filename = baseDir + "/" + sura +
-                              "/" + ayah + AUDIO_EXTENSION;
+            string filename = Path.Combine(baseDir, sura + "\\" + ayah + AUDIO_EXTENSION);
             return QuranFileUtils.FileExists(filename);
         }
 
@@ -356,8 +355,8 @@ namespace QuranPhone.Utils
 
                 for (int j = firstAyah; j < lastAyah; j++)
                 {
-                    string filename = i + "/" + j + AUDIO_EXTENSION;
-                    if (!QuranFileUtils.FileExists(baseDirectory + "/" + filename))
+                    string filename = Path.Combine(i.ToString(CultureInfo.InvariantCulture), j + AUDIO_EXTENSION);
+                    if (!QuranFileUtils.FileExists(Path.Combine(baseDirectory, filename)))
                     {
                         return false;
                     }
@@ -365,12 +364,6 @@ namespace QuranPhone.Utils
             }
 
             return true;
-        }
-
-        public static string GetAudioRootDirectory()
-        {
-            string s = QuranFileUtils.GetQuranDirectory(false);
-            return (s == null) ? null : s + AUDIO_DIRECTORY + "/";
         }
     }
 }

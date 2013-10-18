@@ -268,9 +268,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Images\left.png" />
+    <Content Include="Assets\Images\recite.png" />
     <Content Include="Assets\Images\right.png" />
     <Content Include="Assets\Images\search.png" />
     <Content Include="Assets\Images\settings.png" />
+    <Content Include="Assets\Images\stop.png" />
     <Content Include="Assets\UthmanicHafs.otf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -410,6 +412,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AudioAgentWP8\AudioAgent8.csproj">
+      <Project>{8D46692B-1E68-42E9-9B42-0A89366DBFBC}</Project>
+      <Name>AudioAgent8</Name>
+    </ProjectReference>
     <ProjectReference Include="..\sqlite-net-wp8\Sqlite.vcxproj">
       <Project>{59B35F6C-E062-4F0E-88D8-13F3F82A24F3}</Project>
       <Name>Sqlite</Name>

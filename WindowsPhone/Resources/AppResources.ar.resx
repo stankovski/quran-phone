@@ -700,4 +700,7 @@
   <data name="reciters" xml:space="preserve">
     <value>qari</value>
   </data>
+  <data name="recite" xml:space="preserve">
+    <value>يقرأ</value>
+  </data>
 </root>

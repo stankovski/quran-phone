@@ -22,6 +22,7 @@ namespace QuranPhone.Utils
         public static string IMG_HOST = "http://android.quran.com/data/";
         public static string QURAN_BASE = "quran_android";
         public static string QURAN_BASE_URI = "isostore:/" + QURAN_BASE;
+        private static string AUDIO_DIRECTORY = "audio";
         private static string DATABASE_DIRECTORY = "databases";
         private static string DOWNLOADS_DIRECTORY = "downloads";
         private static string UNDELETED_FILES_DIRECTORY = "to-delete";
@@ -398,6 +399,11 @@ namespace QuranPhone.Utils
                     return false;
                 }
             }
+        }
+
+        public static string GetQuranAudioDirectory(bool asUri, bool createIfDoesntExist = false)
+        {
+            return GetSubdirectory(asUri, AUDIO_DIRECTORY, createIfDoesntExist);
         }
         
         public static string GetQuranDatabaseDirectory(bool asUri, bool createIfDoesntExist = false)

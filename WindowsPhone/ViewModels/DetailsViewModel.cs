@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using Microsoft.Phone.BackgroundAudio;
 using QuranPhone.Common;
 using QuranPhone.Data;
 using QuranPhone.Resources;
@@ -657,26 +658,6 @@ namespace QuranPhone.ViewModels
             {
                 // ADD REQUEST TO QUEUE
             }
-        }
-
-        public void onPausePressed()
-        {
-        }
-
-        public void onNextPressed()
-        {
-        }
-
-        public void onPreviousPressed()
-        {
-        }
-
-        public void setRepeatCount(int repeatCount)
-        {
-        }
-
-        public void onStopPressed()
-        {
         }
 
         #endregion

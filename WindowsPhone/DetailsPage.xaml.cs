@@ -243,6 +243,21 @@ namespace QuranPhone
             NavigationService.Navigate(new Uri("/SettingsPage.xaml", UriKind.Relative));
         }
 
+        private void Recite_Click(object sender, EventArgs e)
+        {
+            var selectedAyah = App.DetailsViewModel.SelectedAyah;
+            if (selectedAyah == null)
+            {
+                var bounds = QuranInfo.GetPageBounds(App.DetailsViewModel.CurrentPageNumber);
+                selectedAyah = new QuranAyah
+                    {
+                        Sura = bounds[0],
+                        Ayah = bounds[1]
+                    };
+            }
+            App.DetailsViewModel.PlayFromAyah(App.DetailsViewModel.CurrentPageNumber, selectedAyah.Sura, selectedAyah.Ayah);
+        }
+
         private void Search_Click(object sender, EventArgs e)
         {
             App.DetailsViewModel.IsShowMenu = false;
@@ -293,6 +308,9 @@ namespace QuranPhone
             // Set the page's ApplicationBar to a new instance of ApplicationBar.
             ApplicationBar = new ApplicationBar();
 
+            var reciteButton = new ApplicationBarIconButton(new Uri("/Assets/Images/recite.png", UriKind.Relative)) { Text = AppResources.recite };
+            reciteButton.Click += Recite_Click;
+            ApplicationBar.Buttons.Add(reciteButton);
             var searchButton = new ApplicationBarIconButton(new Uri("/Assets/Images/search.png", UriKind.Relative)) { Text = AppResources.search };
             searchButton.Click += Search_Click;
             ApplicationBar.Buttons.Add(searchButton);
