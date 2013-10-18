@@ -697,4 +697,7 @@
   <data name="copy" xml:space="preserve">
     <value>نسخة</value>
   </data>
+  <data name="reciters" xml:space="preserve">
+    <value>qari</value>
+  </data>
 </root>

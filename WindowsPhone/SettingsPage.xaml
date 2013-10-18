@@ -36,8 +36,8 @@
                         Background="{StaticResource PhoneInverseInactiveBrush}" 
                         Foreground="{StaticResource PhoneContrastForegroundBrush}" 
                         FontFamily="{StaticResource PhoneFontFamilyNormal}" Click="Translations_Click"/>
-                        <TextBlock Text="{Binding Path=LocalizedResources.change_language, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
-                        <telerikInput:RadListPicker ItemsSource="{Binding SupportedLanguages}" DisplayMemberPath="Value" SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}"/>
+                        <TextBlock Text="{Binding Path=LocalizedResources.reciters, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                        <telerikInput:RadListPicker ItemsSource="{Binding SupportedQari}" DisplayMemberPath="Value" SelectedItem="{Binding ActiveQari, Mode=TwoWay}"/>
                         <StackPanel Margin="0, 15, 0, 0" Orientation="Horizontal">
                             <TextBlock Text="{Binding Path=LocalizedResources.text_size, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
                             <TextBlock Text="{Binding TextSize}" HorizontalAlignment="Center"/>

@@ -449,4 +449,7 @@ the data used in the translations and Arabic comes from
   <data name="copy" xml:space="preserve">
     <value>Salinan</value>
   </data>
+  <data name="reciters" xml:space="preserve">
+    <value>reciters</value>
+  </data>
 </root>

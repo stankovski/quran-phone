@@ -280,9 +280,10 @@
     <None Include="..\OfflineAssets\images_800.zip">
       <Link>Assets\Offline\images_800.zip</Link>
     </None>
-    <EmbeddedResource Include="Assets\quran_readers_urls.xml">
+    <None Include="Assets\quran_readers_urls.xml">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\AppManifest.xml" />
     <None Include="Properties\WMAppManifest.xml">

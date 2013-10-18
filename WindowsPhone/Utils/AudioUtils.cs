@@ -34,7 +34,7 @@ namespace QuranPhone.Utils
                     Application.GetResourceStream(new Uri("Assets/quran_readers_urls.xml", UriKind.Relative)).Stream)
             {
                 var xmlDoc = XDocument.Load(input);
-                return xmlDoc.Descendants(name).Select(e => e.Value).ToArray();
+                return xmlDoc.Descendants(name).First().Descendants().Select(e => e.Value).ToArray();
             }
         }
 

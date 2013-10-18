@@ -33,39 +33,40 @@ namespace QuranPhone.Data
 
         // Settings Key
         [DefaultValue("")]
-        public const String PREF_CULTURE_OVERRIDE = "cultureOverride";
-        public const String PREF_USE_ARABIC_RESHAPER = "useArabicReshaper";
-        public const String PREF_LAST_PAGE = "lastPage";
-        public const String PREF_LOCK_ORIENTATION = "lockOrientation";
-        public const String PREF_LANDSCAPE_ORIENTATION = "landscapeOrientation";
+        public const string PREF_CULTURE_OVERRIDE = "cultureOverride";
+        public const string PREF_USE_ARABIC_RESHAPER = "useArabicReshaper";
+        public const string PREF_LAST_PAGE = "lastPage";
+        public const string PREF_LOCK_ORIENTATION = "lockOrientation";
+        public const string PREF_LANDSCAPE_ORIENTATION = "landscapeOrientation";
         [DefaultValue(25)]
-        public const String PREF_TRANSLATION_TEXT_SIZE = "translationTextSize";
-        public const String PREF_ACTIVE_TRANSLATION = "activeTranslation";
+        public const string PREF_TRANSLATION_TEXT_SIZE = "translationTextSize";
+        public const string PREF_ACTIVE_TRANSLATION = "activeTranslation";
         [DefaultValue(false)]
-        public const String PREF_SHOW_TRANSLATION = "showTranslation";
-        public const String PREF_RESHAPE_ARABIC = "reshapeArabic";
+        public const string PREF_SHOW_TRANSLATION = "showTranslation";
+        public const string PREF_RESHAPE_ARABIC = "reshapeArabic";
         [DefaultValue(false)]
-        public const String PREF_SHOW_ARABIC_IN_TRANSLATION = "showArabicInTranslation";
+        public const string PREF_SHOW_ARABIC_IN_TRANSLATION = "showArabicInTranslation";
         [DefaultValue(false)]
-        public const String PREF_PREVENT_SLEEP = "preventSleep";
+        public const string PREF_PREVENT_SLEEP = "preventSleep";
         [DefaultValue(false)]
-        public const String PREF_KEEP_INFO_OVERLAY = "keepInfoOverlay";
+        public const string PREF_KEEP_INFO_OVERLAY = "keepInfoOverlay";
         [DefaultValue(false)]
-        public const String PREF_NIGHT_MODE = "nightMode";
-        public const String PREF_DEFAULT_QARI = "defaultQari";
-        public const String PREF_SHOULD_FETCH_PAGES = "shouldFetchPages";
-        public const String PREF_OVERLAY_PAGE_INFO = "overlayPageInfo";
-        public const String PREF_DISPLAY_MARKER_POPUP = "displayMarkerPopup";
-        public const String PREF_AYAH_BEFORE_TRANSLATION = "ayahBeforeTranslation";
+        public const string PREF_NIGHT_MODE = "nightMode";
+        [DefaultValue("")]
+        public const string PREF_ACTIVE_QARI = "activeQari";
+        public const string PREF_SHOULD_FETCH_PAGES = "shouldFetchPages";
+        public const string PREF_OVERLAY_PAGE_INFO = "overlayPageInfo";
+        public const string PREF_DISPLAY_MARKER_POPUP = "displayMarkerPopup";
+        public const string PREF_AYAH_BEFORE_TRANSLATION = "ayahBeforeTranslation";
         [DefaultValue(false)]
-        public const String PREF_PREFER_STREAMING = "preferStreaming";
+        public const string PREF_PREFER_STREAMING = "preferStreaming";
         [DefaultValue(LookAheadAmount.PAGE)]
-        public const String PREF_DOWNLOAD_AMOUNT = "preferredDownloadAmount";
-        public const String PREF_LAST_UPDATED_TRANSLATIONS = "lastTranslationsUpdate";
-        public const String PREF_HAVE_UPDATED_TRANSLATIONS = "haveUpdatedTranslations";
-        public const String PREF_USE_NEW_BACKGROUND = "useNewBackground";
-        public const String PREF_USE_VOLUME_KEY_NAV = "volumeKeyNavigation";
+        public const string PREF_DOWNLOAD_AMOUNT = "preferredDownloadAmount";
+        public const string PREF_LAST_UPDATED_TRANSLATIONS = "lastTranslationsUpdate";
+        public const string PREF_HAVE_UPDATED_TRANSLATIONS = "haveUpdatedTranslations";
+        public const string PREF_USE_NEW_BACKGROUND = "useNewBackground";
+        public const string PREF_USE_VOLUME_KEY_NAV = "volumeKeyNavigation";
         [DefaultValue("0.0.0.0")]
-        public const String PREF_CURRENT_VERSION = "currentVersion";
+        public const string PREF_CURRENT_VERSION = "currentVersion";
     }
 }

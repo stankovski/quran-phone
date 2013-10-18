@@ -458,4 +458,7 @@ the data used in the translations and Arabic comes from
   <data name="copy" xml:space="preserve">
     <value>Скопировать</value>
   </data>
+  <data name="reciters" xml:space="preserve">
+    <value>кари</value>
+  </data>
 </root>

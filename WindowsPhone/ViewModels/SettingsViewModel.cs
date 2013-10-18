@@ -20,6 +20,16 @@ namespace QuranPhone.ViewModels
         public SettingsViewModel()
         {
             SupportedLanguages = new ObservableCollection<KeyValuePair<string, string>>(GetSupportedLanguages());
+            SupportedQari = new ObservableCollection<KeyValuePair<string, string>>(GetSupportedQari());
+        }
+
+        private IEnumerable<KeyValuePair<string, string>> GetSupportedQari()
+        {
+            var supportedQariList = new List<KeyValuePair<string, string>>();
+            var qariNames = AudioUtils.GetQariNames();
+            supportedQariList.Add(new KeyValuePair<string, string>("", "None"));
+            supportedQariList.AddRange(qariNames.Select(qari => new KeyValuePair<string, string>(qari, qari)));
+            return supportedQariList;
         }
 
         #region Properties
@@ -38,16 +48,18 @@ namespace QuranPhone.ViewModels
             }
         }
 
-        private string activeQari;
-        public string ActiveQari
+        private KeyValuePair<string, string> activeQari;
+        public KeyValuePair<string, string> ActiveQari
         {
             get { return activeQari; }
             set
             {
-                if (value == activeQari)
+                if (value.Key == activeQari.Key)
                     return;
 
                 activeQari = value;
+
+                SettingsUtils.Set(Constants.PREF_ACTIVE_QARI, value.Value);
 
                 base.OnPropertyChanged(() => ActiveQari);
             }
@@ -180,6 +192,7 @@ namespace QuranPhone.ViewModels
         }
 
         public ObservableCollection<KeyValuePair<string, string>> SupportedLanguages { get; private set; }
+        public ObservableCollection<KeyValuePair<string, string>> SupportedQari { get; private set; }
 
         RelayCommand generate;
         /// <summary>
@@ -254,6 +267,7 @@ namespace QuranPhone.ViewModels
             else
                 ActiveTranslation = "None";
 
+            ActiveQari = SupportedQari.FirstOrDefault(aq => aq.Key == SettingsUtils.Get<string>(Constants.PREF_ACTIVE_QARI));
             SelectedLanguage = SupportedLanguages.FirstOrDefault(kv => kv.Key == SettingsUtils.Get<string>(Constants.PREF_CULTURE_OVERRIDE));
             TextSize = SettingsUtils.Get<int>(Constants.PREF_TRANSLATION_TEXT_SIZE);
             ShowArabicInTranslation = SettingsUtils.Get<bool>(Constants.PREF_SHOW_ARABIC_IN_TRANSLATION);
