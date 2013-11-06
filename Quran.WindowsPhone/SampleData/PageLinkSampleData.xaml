@@ -1,0 +1,10 @@
+﻿<vm:ItemViewModel
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="clr-namespace:Quran.Core.ViewModels;assembly=Quran.Core">
+    <vm:ItemViewModel.Id>1</vm:ItemViewModel.Id>
+    <vm:ItemViewModel.ItemType>Sura</vm:ItemViewModel.ItemType>
+    <vm:ItemViewModel.PageNumber>55</vm:ItemViewModel.PageNumber>
+    <vm:ItemViewModel.Title>Al Fatiha</vm:ItemViewModel.Title>
+    <vm:ItemViewModel.Details>Page 1, Juz' 1</vm:ItemViewModel.Details>
+</vm:ItemViewModel>
