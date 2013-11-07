@@ -473,4 +473,10 @@ the data used in the translations and Arabic comes from
   <data name="loading_images" xml:space="preserve">
     <value>Загрузка изображений...</value>
   </data>
+  <data name="available_reciters" xml:space="preserve">
+    <value>Доступные чтения</value>
+  </data>
+  <data name="downloaded_reciters" xml:space="preserve">
+    <value>Загруженные чтения</value>
+  </data>
 </root>

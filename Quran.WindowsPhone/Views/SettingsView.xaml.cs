@@ -32,6 +32,11 @@ namespace Quran.WindowsPhone.Views
             NavigationService.Navigate(new Uri("/Views/TranslationListView.xaml", UriKind.Relative));
         }
 
+        private void Reciters_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/Views/RecitersListView.xaml", UriKind.Relative));
+        }
+
         private void LinkTap(object sender, RoutedEventArgs e)
         {
             var link = e.OriginalSource as Hyperlink;

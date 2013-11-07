@@ -712,4 +712,10 @@
   <data name="loading_images" xml:space="preserve">
     <value>Loading Quran images...</value>
   </data>
+  <data name="available_reciters" xml:space="preserve">
+    <value>Available reciters</value>
+  </data>
+  <data name="downloaded_reciters" xml:space="preserve">
+    <value>Downloaded reciters</value>
+  </data>
 </root>

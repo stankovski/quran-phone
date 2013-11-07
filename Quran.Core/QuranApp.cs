@@ -16,6 +16,7 @@ namespace Quran.Core
         private static SearchViewModel searchViewModel = null;
         private static DetailsViewModel detailsViewModel = null;
         private static TranslationsListViewModel translationsListViewModel = null;
+        private static RecitersListViewModel recitersListViewModel = null;
         private static SettingsViewModel settingsViewModel = null;
 
         #region View Models
@@ -87,6 +88,23 @@ namespace Quran.Core
                 return translationsListViewModel;
             }
             set { translationsListViewModel = value; }
+        }
+
+        /// <summary>
+        /// A static RecitersListViewModel used by the views to bind against.
+        /// </summary>
+        /// <returns>The RecitersListViewModel object.</returns>
+        public static RecitersListViewModel RecitersListViewModel
+        {
+            get
+            {
+                // Delay creation of the view model until necessary
+                if (recitersListViewModel == null)
+                    recitersListViewModel = new RecitersListViewModel();
+
+                return recitersListViewModel;
+            }
+            set { recitersListViewModel = value; }
         }
 
         /// <summary>

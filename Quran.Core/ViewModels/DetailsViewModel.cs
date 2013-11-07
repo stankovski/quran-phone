@@ -546,7 +546,7 @@ namespace Quran.Core.ViewModels
             {
                 mShouldOverridePlaying = true;
             }
-            int currentQari = AudioUtils.GetQariPositionByName(QuranApp.SettingsViewModel.ActiveQari.Key);
+            int currentQari = AudioUtils.GetQariPositionByName(QuranApp.SettingsViewModel.ActiveReciter);
 
             QuranAyah ayah = new QuranAyah(startSura, startAyah);
             if (SettingsUtils.Get<bool>(Constants.PREF_PREFER_STREAMING))

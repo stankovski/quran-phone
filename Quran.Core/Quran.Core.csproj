@@ -69,6 +69,7 @@
     <Compile Include="Common\Tags.cs" />
     <Compile Include="Common\TransferRequest.cs" />
     <Compile Include="Common\TransferStatus.cs" />
+    <Compile Include="Common\ReciterItem.cs" />
     <Compile Include="Common\TranslationItem.cs" />
     <Compile Include="Data\AyahInfoDatabaseHandler.cs" />
     <Compile Include="Data\AyahLimits.cs" />
@@ -114,10 +115,12 @@
     <Compile Include="ViewModels\DownloadableViewModelBase.cs" />
     <Compile Include="ViewModels\ItemViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\ObservableReciterItem.cs" />
     <Compile Include="ViewModels\ObservableTranslationItem.cs" />
     <Compile Include="ViewModels\PageViewModel.cs" />
     <Compile Include="ViewModels\SearchViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
+    <Compile Include="ViewModels\RecitersListViewModel.cs" />
     <Compile Include="ViewModels\TranslationsListViewModel.cs" />
     <Compile Include="ViewModels\VerseViewModel.cs" />
     <Compile Include="ViewModels\ViewModelWithDownload.cs" />

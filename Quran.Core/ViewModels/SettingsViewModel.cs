@@ -30,20 +30,6 @@ namespace Quran.Core.ViewModels
             {
                 SupportedLanguages.Add(lang);
             }
-            SupportedQari = new ObservableCollection<KeyValuePair<string, string>>();
-            foreach (var qari in GetSupportedQari())
-            {
-                SupportedQari.Add(qari);
-            }
-        }
-
-        private IEnumerable<KeyValuePair<string, string>> GetSupportedQari()
-        {
-            var supportedQariList = new List<KeyValuePair<string, string>>();
-            var qariNames = AudioUtils.GetQariNames();
-            supportedQariList.Add(new KeyValuePair<string, string>("", "None"));
-            supportedQariList.AddRange(qariNames.Select(qari => new KeyValuePair<string, string>(qari, qari)));
-            return supportedQariList;
         }
 
         #region Properties
@@ -62,20 +48,18 @@ namespace Quran.Core.ViewModels
             }
         }
 
-        private KeyValuePair<string, string> activeQari;
-        public KeyValuePair<string, string> ActiveQari
+        private string activeReciter;
+        public string ActiveReciter
         {
-            get { return activeQari; }
+            get { return activeReciter; }
             set
             {
-                if (value.Key == activeQari.Key)
+                if (value == activeReciter)
                     return;
 
-                activeQari = value;
+                activeReciter = value;
 
-                SettingsUtils.Set(Constants.PREF_ACTIVE_QARI, value.Value);
-
-                base.RaisePropertyChanged(() => ActiveQari);
+                base.RaisePropertyChanged(() => ActiveReciter);
             }
         }
 
@@ -206,8 +190,7 @@ namespace Quran.Core.ViewModels
         }
 
         public ObservableCollection<KeyValuePair<string, string>> SupportedLanguages { get; private set; }
-        public ObservableCollection<KeyValuePair<string, string>> SupportedQari { get; private set; }
-
+        
         MvxCommand generate;
         /// <summary>
         /// Returns an download command
@@ -274,7 +257,12 @@ namespace Quran.Core.ViewModels
             else
                 ActiveTranslation = "None";
 
-            ActiveQari = SupportedQari.FirstOrDefault(aq => aq.Key == SettingsUtils.Get<string>(Constants.PREF_ACTIVE_QARI));
+            var reciter = SettingsUtils.Get<string>(Constants.PREF_ACTIVE_QARI);
+            if (!string.IsNullOrEmpty(reciter))
+                ActiveReciter = reciter;
+            else
+                ActiveReciter = "None";
+
             SelectedLanguage = SupportedLanguages.FirstOrDefault(kv => kv.Key == SettingsUtils.Get<string>(Constants.PREF_CULTURE_OVERRIDE));
             TextSize = SettingsUtils.Get<int>(Constants.PREF_TRANSLATION_TEXT_SIZE);
             ShowArabicInTranslation = SettingsUtils.Get<bool>(Constants.PREF_SHOW_ARABIC_IN_TRANSLATION);

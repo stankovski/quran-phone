@@ -243,17 +243,26 @@ namespace Quran.WindowsPhone.Views
 
         private void Recite_Click(object sender, EventArgs e)
         {
-            var selectedAyah = QuranApp.DetailsViewModel.SelectedAyah;
-            if (selectedAyah == null)
+            var reciter = SettingsUtils.Get<string>(Constants.PREF_ACTIVE_QARI);
+            if (string.IsNullOrEmpty(reciter))
             {
-                var bounds = QuranInfo.GetPageBounds(QuranApp.DetailsViewModel.CurrentPageNumber);
-                selectedAyah = new QuranAyah
+                NavigationService.Navigate(new Uri("/Views/SettingsView.xaml", UriKind.Relative));
+            }
+            else
+            {
+                var selectedAyah = QuranApp.DetailsViewModel.SelectedAyah;
+                if (selectedAyah == null)
+                {
+                    var bounds = QuranInfo.GetPageBounds(QuranApp.DetailsViewModel.CurrentPageNumber);
+                    selectedAyah = new QuranAyah
                     {
                         Sura = bounds[0],
                         Ayah = bounds[1]
                     };
+                }
+                QuranApp.DetailsViewModel.PlayFromAyah(QuranApp.DetailsViewModel.CurrentPageNumber, selectedAyah.Sura,
+                    selectedAyah.Ayah);
             }
-            QuranApp.DetailsViewModel.PlayFromAyah(QuranApp.DetailsViewModel.CurrentPageNumber, selectedAyah.Sura, selectedAyah.Ayah);
         }
 
         private void Search_Click(object sender, EventArgs e)

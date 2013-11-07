@@ -77,7 +77,10 @@ namespace Quran.Core.Utils
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
 
-            FileStore.DeleteFolder(path, true);
+            var files = FileStore.GetFilesIn(path);
+            foreach (var file in files)
+                DeleteFile(file);
+            FileStore.DeleteFolder(path, false);
         }
 
         public static void DeleteFile(string path)

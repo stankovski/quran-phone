@@ -107,6 +107,15 @@ namespace Quran.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Available reciters.
+        /// </summary>
+        public static string available_reciters {
+            get {
+                return ResourceManager.GetString("available_reciters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Available translations.
         /// </summary>
         public static string available_translations {
@@ -220,6 +229,15 @@ namespace Quran.Core.Properties {
         public static string download_cancel_confirmation {
             get {
                 return ResourceManager.GetString("download_cancel_confirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Downloaded reciters.
+        /// </summary>
+        public static string downloaded_reciters {
+            get {
+                return ResourceManager.GetString("downloaded_reciters", resourceCulture);
             }
         }
         

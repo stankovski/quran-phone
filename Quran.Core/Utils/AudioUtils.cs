@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
@@ -29,6 +30,7 @@ namespace Quran.Core.Utils
         private static string[] mQariFilePaths = null;
         private static string[] mQariDatabaseFiles = null;
         private static string[] mQariNames = null;
+        private static ReciterItem[] mReciterItems = null;
 
         private static string[] GetResources(string name)
         {
@@ -107,13 +109,31 @@ namespace Quran.Core.Utils
             return GetQariDatabasePathIfGapless(position) != null;
         }
 
-        public static string[] GetQariNames()
+        public static ReciterItem[] GetReciterItems()
         {
+            if (mReciterItems != null)
+                return mReciterItems;
+            
             if (mQariNames == null)
             {
                 mQariNames = GetResources("quran_readers_name");
             }
-            return mQariNames;
+
+            mReciterItems = new ReciterItem[mQariNames.Length];
+            for (int i = 0; i < mQariNames.Length; i++)
+            {
+                mReciterItems[i] = new ReciterItem
+                {
+                    Id = i,
+                    Name = mQariNames[i],
+                    ServerUrl = GetQariUrl(i, true),
+                    LocalPath = GetLocalQariUrl(i),
+                    IsGapless = IsQariGapless(i),
+                    DatabaseName = GetQariDatabasePathIfGapless(i)
+                };
+            }
+
+            return mReciterItems;
         }
 
         public static string GetQariDatabasePathIfGapless(int position)

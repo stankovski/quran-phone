@@ -27,16 +27,21 @@
         <phone:Pivot>
             <phone:PivotItem Header="{Binding Path=LocalizedResources.settings, Source={StaticResource LocalizedStrings}}">
                 <ScrollViewer Background="Transparent">
-                    <StackPanel Grid.Row="0" Margin="12,17,0,28">
+                    <StackPanel Margin="12,17,0,28">
                         <TextBlock Text="{Binding Path=LocalizedResources.translations, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
-                        <Button Grid.Column="2" HorizontalContentAlignment="Left" 
+                        <Button HorizontalContentAlignment="Left" 
                         BorderThickness="0" Padding="10" Margin="0"
                         Content="{Binding ActiveTranslation}"
                         Background="{StaticResource PhoneInverseInactiveBrush}" 
                         Foreground="{StaticResource PhoneContrastForegroundBrush}" 
                         FontFamily="{StaticResource PhoneFontFamilyNormal}" Click="Translations_Click"/>
                         <TextBlock Text="{Binding Path=LocalizedResources.reciters, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
-                        <!--<telerikInput:RadListPicker ItemsSource="{Binding SupportedQari}" DisplayMemberPath="Value" SelectedItem="{Binding ActiveQari, Mode=TwoWay}"/>-->
+                        <Button HorizontalContentAlignment="Left" 
+                        BorderThickness="0" Padding="10" Margin="0"
+                        Content="{Binding ActiveReciter}"
+                        Background="{StaticResource PhoneInverseInactiveBrush}" 
+                        Foreground="{StaticResource PhoneContrastForegroundBrush}" 
+                        FontFamily="{StaticResource PhoneFontFamilyNormal}" Click="Reciters_Click"/>
                         <StackPanel Margin="0, 15, 0, 0" Orientation="Horizontal">
                             <TextBlock Text="{Binding Path=LocalizedResources.text_size, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
                             <TextBlock Text="{Binding TextSize}" HorizontalAlignment="Center"/>
