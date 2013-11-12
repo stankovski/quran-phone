@@ -13,7 +13,7 @@ namespace Quran.Core.Common
         [Column("local")]
         public string LocalPath { get; set; }
         [Column("dbname")]
-        public string DatabaseName { get; set; }
+        public string GaplessDatabasePath { get; set; }
         [Column("gapless")]
         public bool IsGapless { get; set; }
     }    

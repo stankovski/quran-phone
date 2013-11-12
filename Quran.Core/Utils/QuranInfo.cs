@@ -1,18 +1,17 @@
-﻿using System.Globalization;
-using System.Linq;
-using System.Xml.Linq;
-using Quran.Core.Properties;
-using Quran.Core.Common;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Xml;
+using System.Xml.Linq;
+using Quran.Core.Common;
 using Quran.Core.Data;
+using Quran.Core.Properties;
 
-namespace Quran.Core.Data
+namespace Quran.Core.Utils
 {
     public class QuranInfo
     {
-
         public static string GetAyahTitle()
         {
             return AppResources.quran_ayah;
@@ -77,6 +76,18 @@ namespace Quran.Core.Data
             return sura;
         }
 
+        public static int GetSuraNumberOfAyah(int surah)
+        {
+            if (surah >= Constants.SURA_FIRST && surah <= Constants.SURA_LAST)
+            {
+                return SURA_NUM_AYAHS[surah - 1];
+            }
+            else
+            {
+                return -1;
+            }
+        }
+
         public static string GetSuraNameFromPage(int page, bool wantTitle)
         {
             int sura = GetSuraNumberFromPage(page);
@@ -111,7 +122,7 @@ namespace Quran.Core.Data
             if (maxAyah == 0)
             {
                 maxSura--;
-                maxAyah = QuranInfo.GetNumAyahs(maxSura);
+                maxAyah = QuranInfo.GetSuraNumberOfAyah(maxSura);
             }
 
             string notificationTitle =
@@ -667,12 +678,6 @@ namespace Quran.Core.Data
             return values;
         }
 
-        public static int GetNumAyahs(int sura)
-        {
-            if ((sura < 1) || (sura > Constants.SURAS_COUNT)) return -1;
-            return SURA_NUM_AYAHS[sura - 1];
-        }
-
         public static string GetAyahString(int sura, int ayah)
         {
             return GetSuraName(sura, true) + " - "
@@ -682,6 +687,31 @@ namespace Quran.Core.Data
         public static string GetSuraNameString(int page)
         {
             return GetSuraTitle() + " " + GetSuraNameFromPage(page);
+        }
+
+        public static bool DoesStringContainArabic(string s)
+        {
+            if (s == null) return false;
+
+            int length = s.Length;
+            for (int i = 0; i < length; i++)
+            {
+                int current = (int)s[i];
+                // Skip space
+                if (current == 32)
+                    continue;
+                // non-reshaped arabic
+                if ((current >= 1570) && (current <= 1610))
+                    return true;
+                // re-shaped arabic
+                else if ((current >= 65133) && (current <= 65276))
+                    return true;
+                // if the value is 42, it deserves another chance :p
+                // (in reality, 42 is a * which is useful in searching sqlite)
+                else if (current != 42)
+                    return false;
+            }
+            return false;
         }
     }
 }

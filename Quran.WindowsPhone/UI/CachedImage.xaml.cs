@@ -61,13 +61,13 @@ namespace Quran.WindowsPhone.UI
             {
                 try
                 {
-                    string basePath = QuranFileUtils.GetQuranDatabaseDirectory(false, true);
+                    string basePath = FileUtils.GetQuranDatabaseDirectory(false, true);
                     if (basePath == null) return;
-                    string path = System.IO.Path.Combine(basePath, QuranFileUtils.GetAyaPositionFileName());
-                    if (QuranFileUtils.FileExists(path))
+                    string path = System.IO.Path.Combine(basePath, FileUtils.GetAyaPositionFileName());
+                    if (FileUtils.FileExists(path))
                     {
                         int offsetToScrollTo = 0;
-                        using (var dbh = new AyahInfoDatabaseHandler(QuranFileUtils.GetAyaPositionFileName()))
+                        using (var dbh = new AyahInfoDatabaseHandler(FileUtils.GetAyaPositionFileName()))
                         {
                             var bounds = dbh.GetVerseBoundsCombined(ayahInfo.Sura, ayahInfo.Ayah);
                             if (bounds == null)
@@ -170,16 +170,16 @@ namespace Quran.WindowsPhone.UI
                 }
 
                 var uriBuilder = new UriBuilder(source);
-                var localPath = PathHelper.Combine(QuranFileUtils.GetQuranDirectory(false), PathHelper.GetFileName(uriBuilder.Path));
+                var localPath = PathHelper.Combine(FileUtils.GetQuranDirectory(false), PathHelper.GetFileName(uriBuilder.Path));
                 bool downloadSuccessful = true;
 
                 if (source.Scheme == "http")
                 {
                     try
                     {
-                        if (!QuranFileUtils.FileExists(localPath))
+                        if (!FileUtils.FileExists(localPath))
                             downloadSuccessful =
-                                await QuranFileUtils.DownloadFileFromWebAsync(source.ToString(), localPath);
+                                await FileUtils.DownloadFileFromWebAsync(source.ToString(), localPath);
                     }
                     catch
                     {
@@ -202,7 +202,7 @@ namespace Quran.WindowsPhone.UI
                 catch
                 {
                     MessageBox.Show("Error loading quran page.");
-                    QuranFileUtils.DeleteFile(localPath);
+                    FileUtils.DeleteFile(localPath);
                 }
                 finally
                 {
@@ -339,13 +339,13 @@ namespace Quran.WindowsPhone.UI
             try
             {
                 var position = adjustPoint(p, width);
-                string basePath = QuranFileUtils.GetQuranDatabaseDirectory(false, true);
+                string basePath = FileUtils.GetQuranDatabaseDirectory(false, true);
                 if (basePath == null) 
                     return null;
-                string path = PathHelper.Combine(basePath, QuranFileUtils.GetAyaPositionFileName());
-                if (QuranFileUtils.FileExists(path))
+                string path = PathHelper.Combine(basePath, FileUtils.GetAyaPositionFileName());
+                if (FileUtils.FileExists(path))
                 {
-                    using (var dbh = new AyahInfoDatabaseHandler(QuranFileUtils.GetAyaPositionFileName()))
+                    using (var dbh = new AyahInfoDatabaseHandler(FileUtils.GetAyaPositionFileName()))
                     {
                         return dbh.GetVerseAtPoint(pageNumber, position.X, position.Y);
                     }

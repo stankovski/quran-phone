@@ -270,8 +270,8 @@ namespace Quran.Core.ViewModels
             KeepInfoOverlay = SettingsUtils.Get<bool>(Constants.PREF_KEEP_INFO_OVERLAY);
             NightMode = SettingsUtils.Get<bool>(Constants.PREF_NIGHT_MODE);
 
-            if (QuranFileUtils.FileExists(PathHelper.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false),
-                                                       QuranFileUtils.QURAN_ARABIC_DATABASE)))
+            if (FileUtils.FileExists(PathHelper.Combine(FileUtils.GetQuranDatabaseDirectory(false),
+                                                       FileUtils.QURAN_ARABIC_DATABASE)))
             {
                 EnableShowArabicInTranslation = true;
             }

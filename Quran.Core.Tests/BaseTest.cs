@@ -3,22 +3,32 @@
 //    Defines the BaseTest type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using System;
+using System.Reflection;
+using Cirrious.CrossCore.Core;
+using Cirrious.CrossCore.Platform;
+using Cirrious.MvvmCross.Platform;
+using Cirrious.MvvmCross.Plugins.File;
+using Cirrious.MvvmCross.Plugins.File.Wpf;
+using Cirrious.MvvmCross.Plugins.ResourceLoader.Wpf;
+using Cirrious.MvvmCross.Plugins.Sqlite;
+using Cirrious.MvvmCross.Plugins.Sqlite.Wpf;
+using Cirrious.MvvmCross.Test.Core;
+using Cirrious.MvvmCross.Views;
+using Quran.Core.Tests.Mocks;
+
 namespace Quran.Core.Tests
 {
-    using Cirrious.CrossCore.Core;
-    using Cirrious.CrossCore.Platform;
-    using Cirrious.MvvmCross.Platform;
-    using Cirrious.MvvmCross.Test.Core;
-    using Cirrious.MvvmCross.Views;
-    using Mocks;
-    using NUnit.Framework;
-
     /// <summary>
     /// Defines the BaseTest type.
     /// </summary>
-    [TestFixture]
-    public abstract class BaseTest : MvxIoCSupportingTest
+    public abstract class BaseTest : MvxIoCSupportingTest, IDisposable
     {
+        protected BaseTest()
+        {
+            SetUp();
+        }
         /// <summary>
         /// The mock dispatcher.
         /// </summary>
@@ -27,7 +37,6 @@ namespace Quran.Core.Tests
         /// <summary>
         /// Sets up.
         /// </summary>
-        [SetUp]
         public virtual void SetUp()
         {
             this.ClearAll();
@@ -38,6 +47,10 @@ namespace Quran.Core.Tests
             Ioc.RegisterSingleton<IMvxMainThreadDispatcher>(this.mockDispatcher);
             Ioc.RegisterSingleton<IMvxTrace>(new TestTrace());
             Ioc.RegisterSingleton<IMvxSettings>(new MvxSettings());
+            Ioc.RegisterSingleton<IMvxResourceLoader>(new MvxWpfResourceLoader());
+            Ioc.RegisterSingleton<IMvxFileStore>(new MvxWpfFileStore());
+            Ioc.RegisterSingleton<ISQLiteConnectionFactory>(new MvxWpfSqLiteConnectionFactory());
+            System.Windows.Application.ResourceAssembly = Assembly.GetAssembly(typeof (BaseTest));
 
             this.Initialize();
             this.CreateTestableObject();
@@ -69,10 +82,14 @@ namespace Quran.Core.Tests
         /// <summary>
         /// Tears down.
         /// </summary>
-        [TearDown]
         public virtual void TearDown()
         {
             this.Terminate();
+        }
+
+        public void Dispose()
+        {
+            TearDown();
         }
     }
 }

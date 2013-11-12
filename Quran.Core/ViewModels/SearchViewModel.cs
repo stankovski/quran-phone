@@ -52,8 +52,8 @@ namespace Quran.Core.ViewModels
         {
             // Set translation
             if ((string.IsNullOrEmpty(QuranApp.DetailsViewModel.TranslationFile)
-                || !QuranFileUtils.FileExists(PathHelper.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false), QuranApp.DetailsViewModel.TranslationFile)))
-                && !QuranFileUtils.FileExists(PathHelper.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false), QuranFileUtils.QURAN_ARABIC_DATABASE)))
+                || !FileUtils.FileExists(PathHelper.Combine(FileUtils.GetQuranDatabaseDirectory(false), QuranApp.DetailsViewModel.TranslationFile)))
+                && !FileUtils.FileExists(PathHelper.Combine(FileUtils.GetQuranDatabaseDirectory(false), FileUtils.QURAN_ARABIC_DATABASE)))
             {
                 QuranApp.NativeProvider.ShowInfoMessageBox(AppResources.no_translation_to_search);
             }
@@ -68,16 +68,16 @@ namespace Quran.Core.ViewModels
                     var taskFactory = new TaskFactory();
 
                     if (QuranApp.DetailsViewModel.TranslationFile != null &&
-                        QuranFileUtils.FileExists(PathHelper.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false), QuranApp.DetailsViewModel.TranslationFile)))
+                        FileUtils.FileExists(PathHelper.Combine(FileUtils.GetQuranDatabaseDirectory(false), QuranApp.DetailsViewModel.TranslationFile)))
                     {
                         using (var db = new DatabaseHandler<QuranAyah>(QuranApp.DetailsViewModel.TranslationFile))
                         {
                             translationVerses = await taskFactory.StartNew(() => db.Search(query));
                         }
                     }
-                    if (QuranFileUtils.FileExists(PathHelper.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false), QuranFileUtils.QURAN_ARABIC_DATABASE)))
+                    if (FileUtils.FileExists(PathHelper.Combine(FileUtils.GetQuranDatabaseDirectory(false), FileUtils.QURAN_ARABIC_DATABASE)))
                     {
-                        using (var dbArabic = new DatabaseHandler<ArabicAyah>(QuranFileUtils.QURAN_ARABIC_DATABASE))
+                        using (var dbArabic = new DatabaseHandler<ArabicAyah>(FileUtils.QURAN_ARABIC_DATABASE))
                         {
                             arabicVerses = await taskFactory.StartNew(() => dbArabic.Search(query));
                         }

@@ -63,7 +63,7 @@ namespace Quran.Core.Data
 
         // private Cursor search(string query){
         //     if (QuranUtils.doesStringContainArabic(query) &&
-        //             QuranFileUtils.hasTranslation(QURAN_ARABIC_DATABASE)){
+        //             FileUtils.hasTranslation(QURAN_ARABIC_DATABASE)){
         //         Cursor c = search(query, QURAN_ARABIC_DATABASE, true);
         //         if (c != null) return c;
         //     }
@@ -83,7 +83,7 @@ namespace Quran.Core.Data
 
         //     int numItems = 1;
         //     if (QuranUtils.doesStringContainArabic(query) &&
-        //             QuranFileUtils.hasTranslation(QURAN_ARABIC_DATABASE)){
+        //             FileUtils.hasTranslation(QURAN_ARABIC_DATABASE)){
         //         numItems = 2;
         //     }
 

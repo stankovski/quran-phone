@@ -30,7 +30,7 @@ namespace Quran.Core.Utils
                 var filePath = getCachedResponseFilePath();
                 if (FileStore.Exists(filePath))
                     FileStore.DeleteFile(filePath);
-                QuranFileUtils.MakeDirectory(PathHelper.GetDirectoryName(filePath));
+                FileUtils.MakeDirectory(PathHelper.GetDirectoryName(filePath));
                 FileStore.WriteFile(filePath, response);
             }
             catch (Exception e)
@@ -136,8 +136,8 @@ namespace Quran.Core.Utils
                         item.Name = item.Name.Substring(0, firstParen - 1);
                     }
 
-                    string databaseDir = QuranFileUtils.GetQuranDatabaseDirectory(false);
-                    item.Exists = QuranFileUtils.FileExists(QuranFileUtils.Combine(databaseDir, item.Filename));
+                    string databaseDir = FileUtils.GetQuranDatabaseDirectory(false);
+                    item.Exists = FileUtils.FileExists(FileUtils.Combine(databaseDir, item.Filename));
 
                     bool needsUpdate = false;
                     TranslationItem localItem = cachedItems.Where(ti => ti.Id == item.Id).FirstOrDefault();
@@ -201,8 +201,8 @@ namespace Quran.Core.Utils
         private static string getCachedResponseFilePath()
         {
             string fileName = CACHED_RESPONSE_FILE_NAME;
-            string dir = QuranFileUtils.GetQuranDatabaseDirectory(false, true);
-            return QuranFileUtils.Combine(dir, fileName);
+            string dir = FileUtils.GetQuranDatabaseDirectory(false, true);
+            return FileUtils.Combine(dir, fileName);
         }
     }
 }

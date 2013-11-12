@@ -3,16 +3,13 @@
 //    Defines the TestDetailsViewModel type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+using Quran.Core.ViewModels;
+
 namespace Quran.Core.Tests.ViewModels
 {
-    using Core.ViewModels;
-
-    using NUnit.Framework;
-
     /// <summary>
     /// Defines the TestDetailsViewModel type.
     /// </summary>
-    [TestFixture]
     public class TestDetailsViewModel : BaseTest
     {
         /// <summary>

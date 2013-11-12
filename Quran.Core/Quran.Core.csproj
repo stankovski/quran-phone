@@ -52,8 +52,27 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="Common\AudioState.cs" />
     <Compile Include="Common\AudioTransferEventArgs.cs" />
     <Compile Include="Common\AyahBounds.cs" />
     <Compile Include="Common\AyahLimits.cs" />
@@ -79,7 +98,7 @@
     <Compile Include="Data\DatabaseHandler.cs" />
     <Compile Include="Data\DuaGenerator.cs" />
     <Compile Include="Data\QuranDataProvider.cs" />
-    <Compile Include="Data\QuranInfo.cs" />
+    <Compile Include="Utils\QuranInfo.cs" />
     <Compile Include="Data\SuraTimingDatabaseHandler.cs" />
     <Compile Include="Data\TranslationsDBAdapter.cs" />
     <Compile Include="Entities\Message.cs" />
@@ -102,10 +121,9 @@
     <Compile Include="Interfaces\ISettingsProvider.cs" />
     <Compile Include="Interfaces\IAudioTrack.cs" />
     <Compile Include="Utils\MD5.cs" />
-    <Compile Include="Utils\Path.cs" />
-    <Compile Include="Utils\QuranFileUtils.cs" />
+    <Compile Include="Utils\PathHelper.cs" />
+    <Compile Include="Utils\FileUtils.cs" />
     <Compile Include="Utils\QuranScreenInfo.cs" />
-    <Compile Include="Utils\QuranUtils.cs" />
     <Compile Include="Utils\RepeatInfo.cs" />
     <Compile Include="Utils\SettingsUtils.cs" />
     <Compile Include="Utils\TranslationListTask.cs" />

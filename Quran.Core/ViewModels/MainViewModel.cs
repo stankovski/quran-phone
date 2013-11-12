@@ -32,8 +32,8 @@ namespace Quran.Core.ViewModels
 
             this.Tags = new ObservableCollection<ItemViewModel>();
             this.HasAskedToDownload = false;
-            this.ActiveDownload.ServerUrl = QuranFileUtils.GetZipFileUrl();
-            this.ActiveDownload.LocalUrl = QuranFileUtils.QURAN_BASE;
+            this.ActiveDownload.ServerUrl = FileUtils.GetZipFileUrl();
+            this.ActiveDownload.LocalUrl = FileUtils.QURAN_BASE;
         }
 
         #region Properties
@@ -115,7 +115,7 @@ namespace Quran.Core.ViewModels
                     await ActiveDownload.FinishDownload();
                 }
 
-                if (!QuranFileUtils.HaveAllImages() && !this.HasAskedToDownload)
+                if (!FileUtils.HaveAllImages() && !this.HasAskedToDownload)
                 {
                     this.HasAskedToDownload = true;
                     var askingToDownloadResult = QuranApp.NativeProvider.ShowQuestionMessageBox(AppResources.downloadPrompt,
@@ -320,12 +320,12 @@ namespace Quran.Core.ViewModels
                 string details = "";
 
                 if (
-                    QuranFileUtils.FileExists(PathHelper.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false),
-                                                           QuranFileUtils.QURAN_ARABIC_DATABASE)))
+                    FileUtils.FileExists(PathHelper.Combine(FileUtils.GetQuranDatabaseDirectory(false),
+                                                           FileUtils.QURAN_ARABIC_DATABASE)))
                 {
                     try
                     {
-                        using (var dbArabic = new DatabaseHandler<ArabicAyah>(QuranFileUtils.QURAN_ARABIC_DATABASE))
+                        using (var dbArabic = new DatabaseHandler<ArabicAyah>(FileUtils.QURAN_ARABIC_DATABASE))
                         {
                             var ayahSurah =
                                 await

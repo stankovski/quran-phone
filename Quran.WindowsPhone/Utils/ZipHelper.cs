@@ -10,8 +10,8 @@ namespace Quran.WindowsPhone.Utils
     {
         public static void Unzip(string zipPath, string baseFolder)
         {
-            //zipPath = QuranFileUtils.Combine(QuranApp.NativeProvider.NativePath, zipPath);
-            //baseFolder = QuranFileUtils.Combine(QuranApp.NativeProvider.NativePath, baseFolder);
+            //zipPath = FileUtils.Combine(QuranApp.NativeProvider.NativePath, zipPath);
+            //baseFolder = FileUtils.Combine(QuranApp.NativeProvider.NativePath, baseFolder);
             using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
             {
                 using (var fileStream = new IsolatedStorageFileStream(zipPath, FileMode.Open, isf))
@@ -23,7 +23,7 @@ namespace Quran.WindowsPhone.Utils
 
         public static void UnzipFromByteArray(byte[] zipData, string baseFolder)
         {
-            baseFolder = QuranFileUtils.Combine(QuranApp.NativeProvider.NativePath, baseFolder);
+            baseFolder = FileUtils.Combine(QuranApp.NativeProvider.NativePath, baseFolder);
 
             using (MemoryStream memoryStream = new MemoryStream(zipData))
             {
@@ -33,7 +33,7 @@ namespace Quran.WindowsPhone.Utils
 
         private static void UnzipFilesFromStream(Stream source, string baseFolder)
         {
-            QuranFileUtils.MakeDirectory(baseFolder);
+            FileUtils.MakeDirectory(baseFolder);
 
             using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
             {

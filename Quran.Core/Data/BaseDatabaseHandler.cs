@@ -13,9 +13,9 @@ namespace Quran.Core.Data
         {
             var factory = Mvx.Resolve<ISQLiteConnectionFactory>();
 
-            string basePath = QuranFileUtils.GetQuranDatabaseDirectory(false, true);
+            string basePath = FileUtils.GetQuranDatabaseDirectory(false, true);
             if (basePath == null) return;
-            string path = QuranFileUtils.Combine(QuranApp.NativeProvider.NativePath, basePath, databaseName);
+            string path = FileUtils.Combine(QuranApp.NativeProvider.NativePath, basePath, databaseName);
 
             dbConnection = CreateDatabase(factory, path);
         }

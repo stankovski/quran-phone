@@ -137,6 +137,7 @@
     <Compile Include="NativeProvider\WindowsPhoneAudioProvider.cs" />
     <Compile Include="NativeProvider\WindowsPhoneDownloadManager.cs" />
     <Compile Include="NativeProvider\WindowsPhoneSettingsProvider.cs" />
+    <Compile Include="NativeProvider\WindowsPhoneMultifileTransferRequest.cs" />
     <Compile Include="NativeProvider\WindowsPhoneTransferRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Setup.cs" />

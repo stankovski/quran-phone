@@ -406,8 +406,8 @@ namespace Quran.Core.ViewModels
         {
             get
             {
-                string path = PathHelper.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false, true), QuranFileUtils.GetAyaPositionFileName());
-                if (QuranFileUtils.FileExists(path))
+                string path = PathHelper.Combine(FileUtils.GetQuranDatabaseDirectory(false, true), FileUtils.GetAyaPositionFileName());
+                if (FileUtils.FileExists(path))
                     return true;
                 else
                     return false;
@@ -497,12 +497,12 @@ namespace Quran.Core.ViewModels
             }
             else
             {
-                if (QuranFileUtils.FileExists(PathHelper.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false),
-                                                           QuranFileUtils.QURAN_ARABIC_DATABASE)))
+                if (FileUtils.FileExists(PathHelper.Combine(FileUtils.GetQuranDatabaseDirectory(false),
+                                                           FileUtils.QURAN_ARABIC_DATABASE)))
                 {
                     try
                     {
-                        using (var dbArabic = new DatabaseHandler<ArabicAyah>(QuranFileUtils.QURAN_ARABIC_DATABASE))
+                        using (var dbArabic = new DatabaseHandler<ArabicAyah>(FileUtils.QURAN_ARABIC_DATABASE))
                         {
                             var ayahSurah =
                                 await new TaskFactory().StartNew(() => dbArabic.GetVerse(ayah.Sura, ayah.Ayah));
@@ -546,7 +546,9 @@ namespace Quran.Core.ViewModels
             {
                 mShouldOverridePlaying = true;
             }
-            int currentQari = AudioUtils.GetQariPositionByName(QuranApp.SettingsViewModel.ActiveReciter);
+            int currentQari = AudioUtils.GetReciterPositionByName(SettingsUtils.Get<string>(Constants.PREF_ACTIVE_QARI));
+            if (currentQari == -1)
+                return;
 
             QuranAyah ayah = new QuranAyah(startSura, startAyah);
             if (SettingsUtils.Get<bool>(Constants.PREF_PREFER_STREAMING))
@@ -561,7 +563,6 @@ namespace Quran.Core.ViewModels
 
         private void PlayStreaming(QuranAyah ayah, int page, int qari)
         {
-            string qariUrl = AudioUtils.GetQariUrl(qari, true);
             string dbFile = AudioUtils.GetQariDatabasePathIfGapless(qari);
             if (!string.IsNullOrEmpty(dbFile))
             {
@@ -570,8 +571,7 @@ namespace Quran.Core.ViewModels
                 return;
             }
 
-            var request = new AudioRequest(qariUrl, ayah);
-            request.SetGaplessDatabaseFilePath(dbFile);
+            var request = new AudioRequest(qari, ayah);
             Play(request);
 
             IsPlayingAudio = true;
@@ -582,7 +582,7 @@ namespace Quran.Core.ViewModels
             QuranAyah endAyah = AudioUtils.GetLastAyahToPlay(ayah, page,
                                                              SettingsUtils.Get<LookAheadAmount>(
                                                                  Constants.PREF_DOWNLOAD_AMOUNT));
-            string baseUri = AudioUtils.GetLocalQariUrl(qari);
+            string baseUri = AudioUtils.GetReciterItem(qari).LocalPath;
             if (endAyah == null || baseUri == null)
             {
                 return;
@@ -600,9 +600,9 @@ namespace Quran.Core.ViewModels
                           AudioUtils.AUDIO_EXTENSION;
             }
 
-            var request = new AudioRequest(fileUrl, ayah, qari, baseUri);
-            request.SetGaplessDatabaseFilePath(dbFile);
-            request.SetPlayBounds(ayah, endAyah);
+            var request = new AudioRequest(qari, ayah);
+            request.MinAyah = ayah;
+            request.MaxAyah = endAyah;
             mLastAudioDownloadRequest = request;
             PlayAudioRequest(request);
         }
@@ -618,10 +618,10 @@ namespace Quran.Core.ViewModels
             var result = true;
 
             // checking if there is aya position file
-            if (!QuranFileUtils.HaveAyaPositionFile())
+            if (!FileUtils.HaveAyaPositionFile())
             {
-                string url = QuranFileUtils.GetAyaPositionFileUrl();
-                string destination = QuranFileUtils.GetQuranDatabaseDirectory(false);
+                string url = FileUtils.GetAyaPositionFileUrl();
+                string destination = FileUtils.GetQuranDatabaseDirectory(false);
                 // start the download
                 result = await this.ActiveDownload.Download(url, destination, AppResources.loading_data);
             }
@@ -629,8 +629,8 @@ namespace Quran.Core.ViewModels
             // checking if need to download gapless database file
             if (result && AudioUtils.ShouldDownloadGaplessDatabase(request))
             {
-                string url = AudioUtils.GetGaplessDatabaseUrl(request);
-                string destination = request.GetLocalPath();
+                string url = request.Reciter.GaplessDatabasePath;
+                string destination = request.Reciter.LocalPath;
                 // start the download
                 result = await this.ActiveDownload.Download(url, destination, AppResources.loading_data);
             }
@@ -638,10 +638,13 @@ namespace Quran.Core.ViewModels
             // checking if need to download mp3
             if (result && !AudioUtils.HaveAllFiles(request))
             {
-                string url = AudioUtils.GetQariUrl(request.GetQariId(), true);
-                string destination = request.GetLocalPath();
+                string url = request.Reciter.ServerUrl;
+                string destination = request.Reciter.LocalPath;
 
-                result = await request.DownloadRange(url, destination);
+                if (request.Reciter.IsGapless)
+                    result = await AudioUtils.DownloadGaplessRange(url, destination, request.MinAyah, request.MinAyah);
+                else
+                    result = await AudioUtils.DownloadRange(url, destination, request.MinAyah, request.MinAyah);
             }
 
             // checking if need to download basmalla
@@ -649,10 +652,11 @@ namespace Quran.Core.ViewModels
             {
                 //should download basmalla...
                 QuranAyah firstAyah = new QuranAyah(1, 1);
-                string url = AudioUtils.GetQariUrl(request.GetQariId(), true);
-                string destination = request.GetLocalPath();
+                string url = request.Reciter.ServerUrl;
+                string destination = request.Reciter.LocalPath;
 
-                result = await request.DownloadRange(url, destination);
+                if (!request.Reciter.IsGapless)
+                    result = await AudioUtils.DownloadRange(url, destination, firstAyah, firstAyah);
             }
 
             if (!result)
@@ -661,7 +665,8 @@ namespace Quran.Core.ViewModels
             }
             else
             {
-                request.RemovePlayBounds();
+                request.MinAyah = null;
+                request.MaxAyah = null;
                 Play(request);
                 mLastAudioDownloadRequest = null;
             }
@@ -669,24 +674,24 @@ namespace Quran.Core.ViewModels
 
         private void Play(AudioRequest request)
         {
+            IsPlayingAudio = true;
+
+            QuranApp.NativeProvider.AudioProvider.SetTrack(null, null, null, null, null, request.ToString());
+
             // DO THE PLAYBACK
-            request.Play();
+            //while (IsPlayingAudio)
+            //{
+            //    var currentAyah = request.CurrentAyah;
+            //    var page = QuranInfo.GetPageFromSuraAyah(currentAyah.Sura, currentAyah.Ayah);
+            //    this.CurrentPageIndex = Constants.PAGES_LAST - page;
+            //    this.SelectedAyah = currentAyah;
 
-            if (mShouldOverridePlaying)
-            {
-                // force the current audio to stop and start playing new request
-                // STOP PLAYING
-                mShouldOverridePlaying = false;
-
-                // STOP
-            }
-            // just a playback request, so tell audio service to just continue
-            // playing (and don't store new audio data) if it was already playing
-            else
-            {
-                // ADD REQUEST TO QUEUE
-                request.Play();
-            }
+            //    if (request.Reciter.IsGapless)
+            //        AudioUtils.PlayGapless(request.Reciter.LocalPath, currentAyah, request.Reciter);
+            //    else
+            //        AudioUtils.PlayNonGapless(request.Reciter.LocalPath, currentAyah, request.Reciter);
+            //    request.GotoNextAyah();
+            //}
         }
 
         #endregion
@@ -703,13 +708,13 @@ namespace Quran.Core.ViewModels
         {
             var pageModel = Pages[pageIndex];
             // Set image
-            pageModel.ImageSource = QuranFileUtils.GetImageFromWeb(QuranFileUtils.GetPageFileName(pageModel.PageNumber));
+            pageModel.ImageSource = FileUtils.GetImageFromWeb(FileUtils.GetPageFileName(pageModel.PageNumber));
 
             try
             {
                 // Set translation
                 if (string.IsNullOrEmpty(this.TranslationFile) ||
-                    !QuranFileUtils.FileExists(PathHelper.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false),
+                    !FileUtils.FileExists(PathHelper.Combine(FileUtils.GetQuranDatabaseDirectory(false),
                                                             this.TranslationFile)))
                     return false;
 
@@ -723,12 +728,12 @@ namespace Quran.Core.ViewModels
                 }
 
                 List<ArabicAyah> versesArabic = null;
-                if (this.ShowArabicInTranslation && QuranFileUtils.FileExists(PathHelper.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false),
-                                                        QuranFileUtils.QURAN_ARABIC_DATABASE)))
+                if (this.ShowArabicInTranslation && FileUtils.FileExists(PathHelper.Combine(FileUtils.GetQuranDatabaseDirectory(false),
+                                                        FileUtils.QURAN_ARABIC_DATABASE)))
                 {
                     try
                     {
-                        using (var dbArabic = new DatabaseHandler<ArabicAyah>(QuranFileUtils.QURAN_ARABIC_DATABASE))
+                        using (var dbArabic = new DatabaseHandler<ArabicAyah>(FileUtils.QURAN_ARABIC_DATABASE))
                         {
                             versesArabic = await new TaskFactory().StartNew(() => dbArabic.GetVerses(pageModel.PageNumber));
                         }
@@ -779,7 +784,7 @@ namespace Quran.Core.ViewModels
                 {
                     if (e.Message.StartsWith("no such table:", StringComparison.OrdinalIgnoreCase))
                     {
-                        QuranFileUtils.DeleteFile(PathHelper.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false, false),
+                        FileUtils.DeleteFile(PathHelper.Combine(FileUtils.GetQuranDatabaseDirectory(false, false),
                                                                this.TranslationFile));
                     }
                 }

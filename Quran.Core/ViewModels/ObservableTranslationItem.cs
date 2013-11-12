@@ -24,7 +24,7 @@ namespace Quran.Core.ViewModels
             this.ServerUrl = item.Url;
             this.FileName = item.Filename;
             this.Exists = item.Exists;
-            this.LocalUrl = PathHelper.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false, true), this.FileName);
+            this.LocalUrl = PathHelper.Combine(FileUtils.GetQuranDatabaseDirectory(false, true), this.FileName);
             this.IsCompressed = item.Compressed;
         }
 
@@ -122,11 +122,11 @@ namespace Quran.Core.ViewModels
 
         public void Delete()
         {
-            if (QuranFileUtils.FileExists(this.LocalUrl))
+            if (FileUtils.FileExists(this.LocalUrl))
             {
                 try
                 {
-                    QuranFileUtils.DeleteFile(this.LocalUrl);
+                    FileUtils.DeleteFile(this.LocalUrl);
                 }
                 catch
                 {

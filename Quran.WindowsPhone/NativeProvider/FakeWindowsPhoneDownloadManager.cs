@@ -42,27 +42,32 @@ namespace Quran.WindowsPhone.NativeProvider
             }   
         }
 
+        public ITransferRequest DownloadMultipleAsync(string[] from, string to, bool allowCellular = true)
+        {
+            return null;
+        }
+
         private void PersistRequestToStorage(ITransferRequest request)
         {
             var requestUri = request.RequestUri;
             var requestUriHash = CryptoUtils.GetHash(requestUri.ToString());
-            var trackerDir = QuranFileUtils.GetDowloadTrackerDirectory(false, true);
-            QuranFileUtils.WriteFile(string.Format("{0}\\{1}", trackerDir, requestUriHash), request.RequestId);
+            var trackerDir = FileUtils.GetDowloadTrackerDirectory(false, true);
+            FileUtils.WriteFile(string.Format("{0}\\{1}", trackerDir, requestUriHash), request.RequestId);
         }
 
         private void DeleteRequestFromStorage(ITransferRequest request)
         {
             var requestUri = request.RequestUri;
             var requestUriHash = CryptoUtils.GetHash(requestUri.ToString());
-            var trackerDir = QuranFileUtils.GetDowloadTrackerDirectory(false, true);
-            QuranFileUtils.DeleteFile(string.Format("{0}\\{1}", trackerDir, requestUriHash));
+            var trackerDir = FileUtils.GetDowloadTrackerDirectory(false, true);
+            FileUtils.DeleteFile(string.Format("{0}\\{1}", trackerDir, requestUriHash));
         }
 
         public ITransferRequest GetRequest(string serverUri)
         {
             var requestUriHash = CryptoUtils.GetHash(serverUri);
-            var trackerDir = QuranFileUtils.GetDowloadTrackerDirectory(false, true);
-            var requestId = QuranFileUtils.ReadFile(string.Format("{0}\\{1}", trackerDir, requestUriHash));
+            var trackerDir = FileUtils.GetDowloadTrackerDirectory(false, true);
+            var requestId = FileUtils.ReadFile(string.Format("{0}\\{1}", trackerDir, requestUriHash));
             if (!string.IsNullOrEmpty(requestId) && transfers.ContainsKey(requestId))
                 return transfers[requestId];
             else

@@ -1,4 +1,5 @@
 ﻿using Quran.Core.Properties;
+using Quran.Core.Utils;
 
 namespace Quran.Core.Data
 {

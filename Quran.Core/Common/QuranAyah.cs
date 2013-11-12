@@ -28,6 +28,21 @@ namespace Quran.Core.Common
         {
             return string.Format("{0}:{1}", Sura, Ayah, CultureInfo.InvariantCulture);
         }
+
+        public override bool Equals(object obj)
+        {
+            var anotherAyah = obj as QuranAyah;
+
+            if (anotherAyah == null)
+                return false;
+
+            return anotherAyah.Ayah == this.Ayah && anotherAyah.Sura == this.Sura;
+        }
+
+        public override int GetHashCode()
+        {
+            return this.Ayah.GetHashCode() + this.Sura.GetHashCode();
+        }
     }
 
     [Table("arabic_text")]

@@ -1,13 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using Cirrious.CrossCore;
 using Cirrious.CrossCore.Platform;
 using Quran.Core.Data;
 using Quran.Core.Common;
 using Quran.Core.Data;
+using Quran.Core.Properties;
 
 namespace Quran.Core.Utils
 {
@@ -23,7 +26,6 @@ namespace Quran.Core.Utils
         public const string DB_EXTENSION = ".db";
         public const string AUDIO_EXTENSION = ".mp3";
         public const string ZIP_EXTENSION = ".zip";
-        private const string AUDIO_DIRECTORY = "audio";
         public const int MIN = 1;
         public const int MAX = 3;
         private static string[] mQariBaseUrls = null;
@@ -32,175 +34,97 @@ namespace Quran.Core.Utils
         private static string[] mQariNames = null;
         private static ReciterItem[] mReciterItems = null;
 
-        private static string[] GetResources(string name)
+        #region Public Methods
+
+        public static string[] ReciterNames
         {
-            var resourceLoader = Mvx.Resolve<IMvxResourceLoader>();
-            string[] returnValue = null;
-            resourceLoader.GetResourceStream("Assets/quran_readers_urls.xml", (s) =>
-                {
-                    var xmlDoc = XDocument.Load(s);
-                    returnValue = xmlDoc.Descendants(name).First().Descendants().Select(e => e.Value).ToArray();
-                });
-            return returnValue;
+            get
+            {
+                if (mQariNames == null)
+                    mQariNames = GetResources("quran_readers_name");
+                return mQariNames;
+            }
         }
 
-        public static int GetQariPositionByName(string name)
-        {
-            if (mQariNames == null || name == null)
-                return 0;
 
-            for (int i = 0; i < mQariNames.Length; i++)
+        public static int GetReciterPositionByName(string name)
+        {
+            if (name == null)
+                return -1;
+
+            for (int i = 0; i < ReciterNames.Length; i++)
             {
-                if (mQariNames[i].Equals(name, System.StringComparison.OrdinalIgnoreCase))
+                if (ReciterNames[i].Equals(name, System.StringComparison.OrdinalIgnoreCase))
                     return i;
             }
             return 0;
-        }
-
-        public static string GetQariNameByPosition(int position)
-        {
-            if (mQariNames == null || position >= mQariNames.Length || position < 0)
-                return null;
-
-            return mQariNames[position];
-        }
-
-        public static string GetQariUrl(int position, bool addPlaceHolders)
-        {
-            if (mQariBaseUrls == null)
-            {
-                mQariBaseUrls = GetResources("quran_readers_urls");
-            }
-
-            if (position >= mQariBaseUrls.Length || 0 > position)
-            {
-                return null;
-            }
-            string url = mQariBaseUrls[position];
-            if (addPlaceHolders)
-            {
-                if (IsQariGapless(position))
-                {
-                    url += "{0:000}" + AUDIO_EXTENSION;
-                }
-                else
-                {
-                    url += "{0:000}{1:000}" + AUDIO_EXTENSION;
-                }
-            }
-            return url;
-        }
-
-        public static string GetLocalQariUrl(int position)
-        {
-            if (mQariFilePaths == null)
-            {
-                mQariFilePaths = GetResources("quran_readers_path");
-            }
-
-            string rootDirectory = QuranFileUtils.GetQuranAudioDirectory(false);
-            return rootDirectory == null
-                       ? null
-                       : QuranFileUtils.Combine(rootDirectory, mQariFilePaths[position]);
-        }
-
-        public static bool IsQariGapless(int position)
-        {
-            return GetQariDatabasePathIfGapless(position) != null;
         }
 
         public static ReciterItem[] GetReciterItems()
         {
             if (mReciterItems != null)
                 return mReciterItems;
-            
-            if (mQariNames == null)
-            {
-                mQariNames = GetResources("quran_readers_name");
-            }
 
-            mReciterItems = new ReciterItem[mQariNames.Length];
-            for (int i = 0; i < mQariNames.Length; i++)
+            var reciterItems = new List<ReciterItem>();
+            for (int i = 0; i < ReciterNames.Length; i++)
             {
-                mReciterItems[i] = new ReciterItem
+                reciterItems.Add(new ReciterItem
                 {
                     Id = i,
-                    Name = mQariNames[i],
-                    ServerUrl = GetQariUrl(i, true),
-                    LocalPath = GetLocalQariUrl(i),
+                    Name = ReciterNames[i],
+                    ServerUrl = GetReciterUrl(i, true),
+                    LocalPath = GetLocalReciterUrl(i),
                     IsGapless = IsQariGapless(i),
-                    DatabaseName = GetQariDatabasePathIfGapless(i)
-                };
+                    GaplessDatabasePath = GetQariDatabasePathIfGapless(i)
+                });
             }
+            mReciterItems = reciterItems.ToArray();
 
             return mReciterItems;
         }
 
+        public static ReciterItem GetReciterItem(int position)
+        {
+            return GetReciterItems()[position];
+        }
+
         public static string GetQariDatabasePathIfGapless(int position)
         {
-            if (mQariDatabaseFiles == null)
-            {
-                mQariDatabaseFiles = GetResources("quran_readers_db_name");
-            }
-
-            if (position > mQariDatabaseFiles.Length)
+            if (position > ReciterDatabaseFiles.Length)
             {
                 return null;
             }
 
-            string dbname = mQariDatabaseFiles[position];
+            string dbname = ReciterDatabaseFiles[position];
             if (string.IsNullOrEmpty(dbname))
             {
                 return null;
             }
 
-            string path = GetLocalQariUrl(position);
+            string path = GetLocalReciterUrl(position);
             if (path == null)
             {
                 return null;
             }
-            return QuranFileUtils.Combine(path, dbname + DB_EXTENSION);
+            return FileUtils.Combine(path, dbname + DB_EXTENSION);
         }
 
         public static bool ShouldDownloadGaplessDatabase(AudioRequest request)
         {
-            if (!request.IsGapless())
+            if (!request.Reciter.IsGapless)
             {
                 return false;
             }
-            string dbPath = request.GetGaplessDatabaseFilePath();
+            string dbPath = request.Reciter.GaplessDatabasePath;
             if (string.IsNullOrEmpty(dbPath))
             {
                 return false;
             }
 
-            return !QuranFileUtils.FileExists(dbPath);
+            return !FileUtils.FileExists(dbPath);
         }
 
-        public static string GetGaplessDatabaseUrl(AudioRequest request)
-        {
-            if (!request.IsGapless())
-            {
-                return null;
-            }
-            int qariId = request.GetQariId();
-
-            if (mQariDatabaseFiles == null)
-            {
-                mQariDatabaseFiles = GetResources("quran_readers_db_name");
-            }
-
-            if (qariId > mQariDatabaseFiles.Length)
-            {
-                return null;
-            }
-
-            string dbname = mQariDatabaseFiles[qariId] + ZIP_EXTENSION;
-            return PathHelper.Combine(QuranFileUtils.GetGaplessDatabaseRootUrl(), dbname);
-        }
-
-        public static QuranAyah GetLastAyahToPlay(QuranAyah startAyah,
-                                                  int page, LookAheadAmount mode)
+        public static QuranAyah GetLastAyahToPlay(QuranAyah startAyah, int page, LookAheadAmount mode)
         {
             int pageLastSura = 114;
             int pageLastAyah = 6;
@@ -222,14 +146,14 @@ namespace Quran.Core.Utils
                     {
                         pageLastSura = 1;
                     }
-                    pageLastAyah = QuranInfo.GetNumAyahs(pageLastSura);
+                    pageLastAyah = QuranInfo.GetSuraNumberOfAyah(pageLastSura);
                 }
             }
 
             if (mode == LookAheadAmount.SURA)
             {
                 int sura = startAyah.Sura;
-                int lastAyah = QuranInfo.GetNumAyahs(sura);
+                int lastAyah = QuranInfo.GetSuraNumberOfAyah(sura);
                 if (lastAyah == -1)
                 {
                     return null;
@@ -239,7 +163,7 @@ namespace Quran.Core.Utils
                 if (pageLastSura > sura)
                 {
                     sura = pageLastSura;
-                    lastAyah = QuranInfo.GetNumAyahs(sura);
+                    lastAyah = QuranInfo.GetSuraNumberOfAyah(sura);
                 }
                 return new QuranAyah(sura, lastAyah);
             }
@@ -252,17 +176,17 @@ namespace Quran.Core.Utils
                 }
                 else if (juz >= 1 && juz < 30)
                 {
-                    int[] endJuz = QuranInfo.QUARTERS[juz*8];
+                    int[] endJuz = QuranInfo.QUARTERS[juz * 8];
                     if (pageLastSura > endJuz[0])
                     {
                         // ex between jathiya and a7qaf
-                        endJuz = QuranInfo.QUARTERS[(juz + 1)*8];
+                        endJuz = QuranInfo.QUARTERS[(juz + 1) * 8];
                     }
                     else if (pageLastSura == endJuz[0] &&
                              pageLastAyah > endJuz[1])
                     {
                         // ex surat al anfal
-                        endJuz = QuranInfo.QUARTERS[(juz + 1)*8];
+                        endJuz = QuranInfo.QUARTERS[(juz + 1) * 8];
                     }
 
                     return new QuranAyah(endJuz[0], endJuz[1]);
@@ -275,24 +199,24 @@ namespace Quran.Core.Utils
 
         public static bool ShouldDownloadBasmallah(AudioRequest request)
         {
-            if (request.IsGapless())
+            if (request.Reciter.IsGapless)
             {
                 return false;
             }
-            string baseDirectory = request.GetLocalPath();
+            string baseDirectory = request.Reciter.LocalPath;
             if (!string.IsNullOrEmpty(baseDirectory))
             {
-                if (QuranFileUtils.DirectoryExists(baseDirectory))
+                if (FileUtils.DirectoryExists(baseDirectory))
                 {
                     string filename = string.Format("1\\1{0}", AUDIO_EXTENSION);
-                    if (QuranFileUtils.FileExists(QuranFileUtils.Combine(baseDirectory, filename)))
+                    if (FileUtils.FileExists(FileUtils.Combine(baseDirectory, filename)))
                     {
                         return false;
                     }
                 }
                 else
                 {
-                    QuranFileUtils.MakeDirectory(baseDirectory);
+                    FileUtils.MakeDirectory(baseDirectory);
                 }
             }
 
@@ -301,23 +225,23 @@ namespace Quran.Core.Utils
 
         public static bool HaveSuraAyahForQari(string baseDir, int sura, int ayah)
         {
-            string filename = QuranFileUtils.Combine(baseDir, sura + "\\" + ayah + AUDIO_EXTENSION);
-            return QuranFileUtils.FileExists(filename);
+            string filename = FileUtils.Combine(baseDir, sura + "\\" + ayah + AUDIO_EXTENSION);
+            return FileUtils.FileExists(filename);
         }
 
-        private static bool DoesRequireBasmallah(AudioRequest request)
+        public static bool DoesRequireBasmallah(AudioRequest request)
         {
-            QuranAyah minAyah = request.GetMinAyah();
+            QuranAyah minAyah = request.MinAyah;
             int startSura = minAyah.Sura;
             int startAyah = minAyah.Ayah;
 
-            QuranAyah maxAyah = request.GetMaxAyah();
+            QuranAyah maxAyah = request.MaxAyah;
             int endSura = maxAyah.Sura;
             int endAyah = maxAyah.Ayah;
 
             for (int i = startSura; i <= endSura; i++)
             {
-                int lastAyah = QuranInfo.GetNumAyahs(i);
+                int lastAyah = QuranInfo.GetSuraNumberOfAyah(i);
                 if (i == endSura)
                 {
                     lastAyah = endAyah;
@@ -328,7 +252,7 @@ namespace Quran.Core.Utils
                     firstAyah = startAyah;
                 }
 
-                for (int j = firstAyah; j < lastAyah; j++)
+                for (int j = firstAyah; j <= lastAyah; j++)
                 {
                     if (j == 1 && i != 1 && i != 9)
                     {
@@ -342,30 +266,30 @@ namespace Quran.Core.Utils
 
         public static bool HaveAllFiles(AudioRequest request)
         {
-            string baseDirectory = request.GetLocalPath();
+            string baseDirectory = request.Reciter.LocalPath;
             if (string.IsNullOrEmpty(baseDirectory))
             {
                 return false;
             }
 
-            bool isGapless = request.IsGapless();
-            if (!QuranFileUtils.DirectoryExists(baseDirectory))
+            bool isGapless = request.Reciter.IsGapless;
+            if (!FileUtils.DirectoryExists(baseDirectory))
             {
-                QuranFileUtils.MakeDirectory(baseDirectory);
+                FileUtils.MakeDirectory(baseDirectory);
                 return false;
             }
 
-            QuranAyah minAyah = request.GetMinAyah();
+            QuranAyah minAyah = request.MinAyah;
             int startSura = minAyah.Sura;
             int startAyah = minAyah.Ayah;
 
-            QuranAyah maxAyah = request.GetMaxAyah();
+            QuranAyah maxAyah = request.MaxAyah;
             int endSura = maxAyah.Sura;
             int endAyah = maxAyah.Ayah;
 
             for (int i = startSura; i <= endSura; i++)
             {
-                int lastAyah = QuranInfo.GetNumAyahs(i);
+                int lastAyah = QuranInfo.GetSuraNumberOfAyah(i);
                 if (i == endSura)
                 {
                     lastAyah = endAyah;
@@ -382,9 +306,9 @@ namespace Quran.Core.Utils
                     {
                         continue;
                     }
-                    string p = request.GetBaseUrl();
+                    string p = request.Reciter.ServerUrl;
                     string fileName = string.Format(p, i);
-                    if (!QuranFileUtils.FileExists(fileName))
+                    if (!FileUtils.FileExists(fileName))
                     {
                         return false;
                     }
@@ -393,8 +317,8 @@ namespace Quran.Core.Utils
 
                 for (int j = firstAyah; j < lastAyah; j++)
                 {
-                    string filename = QuranFileUtils.Combine(i.ToString(CultureInfo.InvariantCulture), j + AUDIO_EXTENSION);
-                    if (!QuranFileUtils.FileExists(QuranFileUtils.Combine(baseDirectory, filename)))
+                    string filename = string.Format(GetFilePattern(request.Reciter.Id), i, j);
+                    if (!FileUtils.FileExists(FileUtils.Combine(baseDirectory, filename)))
                     {
                         return false;
                     }
@@ -403,5 +327,212 @@ namespace Quran.Core.Utils
 
             return true;
         }
+
+        public static async Task<bool> DownloadRange(string urlString, string destination, QuranAyah fromAyah, QuranAyah toAyah)
+        {
+            FileUtils.MakeDirectory(destination);
+
+            int totalAyahs = 0;
+
+            if (fromAyah.Sura == toAyah.Sura)
+            {
+                totalAyahs = toAyah.Ayah - fromAyah.Ayah + 1;
+            }
+            else
+            {
+                // add the number ayahs from suras in between start and end
+                for (int i = fromAyah.Sura + 1; i < toAyah.Sura; i++)
+                {
+                    totalAyahs += QuranInfo.GetSuraNumberOfAyah(i);
+                }
+
+                // add the number of ayahs from the start sura
+                totalAyahs += QuranInfo.GetSuraNumberOfAyah(fromAyah.Sura) - fromAyah.Ayah + 1;
+
+                // add the number of ayahs from the last sura
+                totalAyahs += toAyah.Ayah;
+            }
+
+            // extension and filename template don't change
+            string filename = PathHelper.GetFileName(urlString);
+            int extLocation = filename.LastIndexOf('.');
+            string extension = filename.Substring(extLocation);
+
+            bool result = true;
+            for (int i = fromAyah.Sura; i <= toAyah.Sura; i++)
+            {
+                int lastAyah = QuranInfo.GetSuraNumberOfAyah(i);
+                if (i == toAyah.Sura) { lastAyah = toAyah.Ayah; }
+                int firstAyah = 1;
+                if (i == fromAyah.Sura) { firstAyah = fromAyah.Ayah; }
+
+                // same destination directory for ayahs within the same sura
+                FileUtils.MakeDirectory(destination);
+                var filesToDownload = new List<string>();
+
+                for (int j = firstAyah; j <= lastAyah; j++)
+                {
+                    string url = string.Format(CultureInfo.InvariantCulture, urlString, i, j);
+
+                    filesToDownload.Add(url);
+                }
+                result = await QuranApp.DetailsViewModel.ActiveDownload.DownloadMultiple(filesToDownload.ToArray(), destination,
+                                AppResources.loading_audio);
+            }
+
+            if (result)
+            {
+                // attempt to download basmallah if it doesn't exist
+                string destDir = destination + "/" + 1 + "/";
+                FileUtils.MakeDirectory(destDir);
+
+                if (!FileUtils.FileExists(PathHelper.Combine(destDir, "1" + extension)))
+                {
+                    QuranApp.NativeProvider.Log("basmallah doesn't exist, downloading...");
+                    string url = string.Format(CultureInfo.InvariantCulture, urlString, 1, 1);
+                    string destFile = 1 + extension;
+
+                    result = await FileUtils.DownloadFileFromWebAsync(url, PathHelper.Combine(destDir, destFile));
+
+                    if (!result) { return false; }
+                }
+            }
+
+            return result;
+        }
+
+        public static async Task<bool> DownloadGaplessRange(string urlString, string destination, QuranAyah fromAyah, QuranAyah toAyah)
+        {
+            var result = true;
+            for (int i = fromAyah.Sura; i <= toAyah.Sura; i++)
+            {
+                string serverUrl = string.Format(CultureInfo.InvariantCulture, urlString, i);
+                var localUrl = destination + "/";
+                QuranApp.NativeProvider.Log("gapless asking to download " + serverUrl + " to " + localUrl);
+
+                result = await QuranApp.DetailsViewModel.ActiveDownload.Download(serverUrl, localUrl, AppResources.loading_audio);
+                if (!result)
+                    break;
+            }
+            return result;
+        }
+
+        //public static void PlayGapless(string localPath, QuranAyah ayah, ReciterItem reciter)
+        //{
+        //    var fileName = string.Format("{0:000}.mp3", ayah.Sura);
+        //    var fullPath = PathHelper.Combine(localPath, fileName);
+        //    var fullPathAsUri = new Uri(fullPath, UriKind.Relative);
+        //    var track = QuranApp.NativeProvider.AudioProvider.GetTrack();
+        //    var title = QuranInfo.GetSuraAyahString(ayah.Sura, ayah.Ayah);
+        //    if (track == null || track.Source != fullPathAsUri)
+        //    {
+        //        QuranApp.NativeProvider.AudioProvider.SetTrack(fullPathAsUri, title, reciter.Name, "Quran", null, null);
+        //    }
+        //    QuranApp.NativeProvider.AudioProvider.Play();
+        //}
+
+        //public static void PlayNonGapless(string localPath, QuranAyah ayah, ReciterItem reciter)
+        //{
+        //    var fileName = string.Format("{0:000}{1:000}.mp3", ayah.Sura, ayah.Ayah);
+        //    var fullPath = PathHelper.Combine(localPath, fileName);
+        //    var fullPathAsUri = new Uri(fullPath, UriKind.Relative);
+        //    var track = QuranApp.NativeProvider.AudioProvider.GetTrack();
+        //    var title = QuranInfo.GetSuraAyahString(ayah.Sura, ayah.Ayah);
+        //    if (track == null || track.Source != fullPathAsUri)
+        //    {
+        //        QuranApp.NativeProvider.AudioProvider.SetTrack(fullPathAsUri, title, reciter.Name, "Quran", null, null);
+        //    }
+        //}
+        #endregion
+
+        #region Private Methods
+        private static string[] ReciterBaseUrls
+        {
+            get
+            {
+                if (mQariBaseUrls == null)
+                    mQariBaseUrls = GetResources("quran_readers_urls");
+                return mQariBaseUrls;
+            }
+        }
+
+        private static string[] ReciterDatabaseFiles
+        {
+            get
+            {
+                if (mQariDatabaseFiles == null)
+                    mQariDatabaseFiles = GetResources("quran_readers_db_name");
+                return mQariDatabaseFiles;
+            }
+        }
+
+        private static string[] ReciterFilePaths
+        {
+            get
+            {
+                if (mQariFilePaths == null)
+                    mQariFilePaths = GetResources("quran_readers_path");
+                return mQariFilePaths;
+            }
+        }
+
+        private static string[] GetResources(string name)
+        {
+            var resourceLoader = Mvx.Resolve<IMvxResourceLoader>();
+            string[] returnValue = null;
+            resourceLoader.GetResourceStream("Assets/quran_readers_urls.xml", (s) =>
+                {
+                    var xmlDoc = XDocument.Load(s);
+                    returnValue = xmlDoc.Descendants(name).First().Descendants().Select(e => e.Value).ToArray();
+                });
+            return returnValue;
+        }
+
+        private static string GetReciterUrl(int position, bool addPlaceHolders)
+        {
+            if (position >= ReciterBaseUrls.Length || 0 > position)
+            {
+                return null;
+            }
+            string url = ReciterBaseUrls[position];
+            if (addPlaceHolders)
+            {
+                url += GetFilePattern(position);
+            }
+            return url;
+        }
+
+        private static string GetFilePattern(int position)
+        {
+            if (position >= ReciterBaseUrls.Length || 0 > position)
+            {
+                return null;
+            }
+
+            if (IsQariGapless(position))
+            {
+                return "{0:000}" + AUDIO_EXTENSION;
+            }
+            else
+            {
+                return "{0:000}{1:000}" + AUDIO_EXTENSION;
+            }
+        }
+
+        private static string GetLocalReciterUrl(int position)
+        {
+            string rootDirectory = FileUtils.GetQuranAudioDirectory(false);
+            return rootDirectory == null
+                       ? null
+                       : FileUtils.Combine(rootDirectory, ReciterFilePaths[position]);
+        }
+
+        private static bool IsQariGapless(int position)
+        {
+            return GetQariDatabasePathIfGapless(position) != null;
+        }
+
+
+        #endregion
     }
 }

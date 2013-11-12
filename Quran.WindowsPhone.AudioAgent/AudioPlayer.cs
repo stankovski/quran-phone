@@ -2,6 +2,9 @@
 using System.Diagnostics;
 using System.Windows;
 using Microsoft.Phone.BackgroundAudio;
+using Quran.Core;
+using Quran.Core.Data;
+using Quran.Core.Utils;
 
 namespace Quran.WindowsPhone.AudioAgent
 {
@@ -52,7 +55,7 @@ namespace Quran.WindowsPhone.AudioAgent
             switch (playState)
             {
                 case PlayState.TrackEnded:
-                    player.Track = GetPreviousTrack();
+                    player.Track = GetPreviousTrack(track);
                     break;
                 case PlayState.TrackReady:
                     player.Play();
@@ -122,10 +125,10 @@ namespace Quran.WindowsPhone.AudioAgent
                     player.Position = (TimeSpan)param;
                     break;
                 case UserAction.SkipNext:
-                    player.Track = GetNextTrack();
+                    player.Track = GetNextTrack(track);
                     break;
                 case UserAction.SkipPrevious:
-                    AudioTrack previousTrack = GetPreviousTrack();
+                    AudioTrack previousTrack = GetPreviousTrack(track);
                     if (previousTrack != null)
                     {
                         player.Track = previousTrack;
@@ -147,15 +150,18 @@ namespace Quran.WindowsPhone.AudioAgent
         /// (c) MediaStreamSource (null)
         /// </remarks>
         /// <returns>an instance of AudioTrack, or null if the playback is completed</returns>
-        private AudioTrack GetNextTrack()
+        private AudioTrack GetNextTrack(AudioTrack currentTrack)
         {
-            // TODO: add logic to get the next audio track
-
-            AudioTrack track = null;
-
-            // specify the track
-
-            return track;
+            if (currentTrack != null)
+            {
+                var request = new AudioRequest(currentTrack.Tag);
+                request.GotoNextAyah();
+                return GetTrackFromRequest(request);
+            }
+            else
+            {
+                return null;
+            }
         }
 
         /// <summary>
@@ -168,15 +174,28 @@ namespace Quran.WindowsPhone.AudioAgent
         /// (c) MediaStreamSource (null)
         /// </remarks>
         /// <returns>an instance of AudioTrack, or null if previous track is not allowed</returns>
-        private AudioTrack GetPreviousTrack()
+        private AudioTrack GetPreviousTrack(AudioTrack currentTrack)
         {
-            // TODO: add logic to get the previous audio track
+            if (currentTrack != null)
+            {
+                var request = new AudioRequest(currentTrack.Tag);
+                request.GotoPreviousAyah();
+                return GetTrackFromRequest(request);
+            }
+            else
+            {
+                return null;
+            }
+        }
 
-            AudioTrack track = null;
-
-            // specify the track
-
-            return track;
+        private AudioTrack GetTrackFromRequest(AudioRequest request)
+        {
+            var ayah = request.CurrentAyah;
+            var fileName = string.Format("{0:000}{1:000}.mp3", ayah.Sura, ayah.Ayah);
+            var fullPath = PathHelper.Combine(request.Reciter.LocalPath, fileName);
+            var fullPathAsUri = new Uri(fullPath, UriKind.Relative);
+            var title = QuranInfo.GetSuraAyahString(ayah.Sura, ayah.Ayah);
+            return new AudioTrack(fullPathAsUri, title, request.Reciter.Name, "Quran", null);
         }
 
         /// <summary>

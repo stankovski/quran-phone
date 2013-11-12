@@ -9,7 +9,7 @@ using Cirrious.MvvmCross.Plugins.File;
 
 namespace Quran.Core.Utils
 {
-    public static class QuranFileUtils
+    public static class FileUtils
     {
         public static bool failedToWrite = false;
         public static string IMG_HOST = "http://android.quran.com/data/";
@@ -285,14 +285,14 @@ namespace Quran.Core.Utils
             if (location == null)
                 return null;
 
-            return new Uri(QuranFileUtils.Combine(location, filename));
+            return new Uri(FileUtils.Combine(location, filename));
         }
 
         public static Uri GetImageFromWeb(string filename, bool useDriveIfExists = true)
         {
             MakeQuranDirectory();
-            string path = QuranFileUtils.Combine(GetQuranDirectory(false), filename);
-            if (useDriveIfExists && QuranFileUtils.FileExists(path))
+            string path = FileUtils.Combine(GetQuranDirectory(false), filename);
+            if (useDriveIfExists && FileUtils.FileExists(path))
             {
                 return GetImageFromSD(filename);
             }
@@ -301,7 +301,7 @@ namespace Quran.Core.Utils
                 QuranScreenInfo instance = QuranScreenInfo.Instance;
                 if (instance == null) return null;
 
-                string urlString = QuranFileUtils.Combine(IMG_HOST + "width" + instance.GetWidthParam(),
+                string urlString = FileUtils.Combine(IMG_HOST + "width" + instance.GetWidthParam(),
                                                 filename);
                 return new Uri(urlString, UriKind.Absolute);                
             }
@@ -351,11 +351,11 @@ namespace Quran.Core.Utils
 
             if (createIfDoesntExist)
             {
-                var tempPath = QuranFileUtils.Combine(QURAN_BASE, name);
+                var tempPath = FileUtils.Combine(QURAN_BASE, name);
                 MakeDirectoryRecursive(tempPath);
             }
 
-            return (baseDir == null) ? null : QuranFileUtils.Combine(baseDir, name);
+            return (baseDir == null) ? null : FileUtils.Combine(baseDir, name);
         }
 
         public static string GetQuranDirectory(bool asUri, bool createIfDoesntExist = false)
@@ -371,7 +371,7 @@ namespace Quran.Core.Utils
                 MakeDirectoryRecursive(tempPath);
             }
 
-            return (baseDir == null) ? null : QuranFileUtils.Combine(baseDir, "width" + qsi.GetWidthParam());
+            return (baseDir == null) ? null : FileUtils.Combine(baseDir, "width" + qsi.GetWidthParam());
         }
 
         public static string GetZipFileUrl()
@@ -424,14 +424,14 @@ namespace Quran.Core.Utils
 
         public static bool HaveAyaPositionFile()
         {
-            string baseDir = QuranFileUtils.GetQuranDatabaseDirectory(false);
+            string baseDir = FileUtils.GetQuranDatabaseDirectory(false);
             if (baseDir == null)
-                QuranFileUtils.MakeQuranDatabaseDirectory();
-            string filename = QuranFileUtils.GetAyaPositionFileName();
+                FileUtils.MakeQuranDatabaseDirectory();
+            string filename = FileUtils.GetAyaPositionFileName();
             if (filename != null)
             {
-                string ayaPositionDb = QuranFileUtils.Combine(baseDir, filename);
-                if (!QuranFileUtils.FileExists(ayaPositionDb))
+                string ayaPositionDb = FileUtils.Combine(baseDir, filename);
+                if (!FileUtils.FileExists(ayaPositionDb))
                 {
                     return false;
                 }
@@ -446,7 +446,7 @@ namespace Quran.Core.Utils
             string path = GetQuranDatabaseDirectory(false);
             if (path != null)
             {
-                path = QuranFileUtils.Combine(path, fileName);
+                path = FileUtils.Combine(path, fileName);
                 return FileExists(path);
             }
             return false;
@@ -457,7 +457,7 @@ namespace Quran.Core.Utils
             string path = GetQuranDatabaseDirectory(false);
             if (path != null)
             {
-                path = QuranFileUtils.Combine(path, fileName);
+                path = FileUtils.Combine(path, fileName);
 
                 if (FileStore.Exists(path))
                     FileStore.DeleteFile(path);

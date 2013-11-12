@@ -33,8 +33,8 @@ namespace Quran.WindowsPhone.Views
             QuranApp.DetailsViewModel.Orientation = PhoneUtils.PageOrientationConverter(this.Orientation);
 
             ayahContextMenu.Items.Add(new RadContextMenuItem() { Content = AppResources.bookmark_ayah });
-            if (QuranFileUtils.FileExists(Path.Combine(QuranFileUtils.GetQuranDatabaseDirectory(false),
-                                                       QuranFileUtils.QURAN_ARABIC_DATABASE)))
+            if (FileUtils.FileExists(Path.Combine(FileUtils.GetQuranDatabaseDirectory(false),
+                                                       FileUtils.QURAN_ARABIC_DATABASE)))
             {
                 ayahContextMenu.Items.Add(new RadContextMenuItem() {Content = AppResources.copy});
             }

@@ -22,9 +22,9 @@ namespace Quran.Core.ViewModels
             this.Name = item.Name;
             this.ServerUrl = item.ServerUrl;
             this.LocalUrl = item.LocalPath;
-            this.DatabaseName = item.DatabaseName;
+            this.DatabaseName = item.GaplessDatabasePath;
             this.IsGapless = item.IsGapless;
-            this.Exists = QuranFileUtils.DirectoryExists(item.LocalPath);
+            this.Exists = FileUtils.DirectoryExists(item.LocalPath);
         }
 
         private int id;
@@ -196,11 +196,11 @@ namespace Quran.Core.ViewModels
 
         public void Delete()
         {
-            if (QuranFileUtils.DirectoryExists(this.LocalUrl))
+            if (FileUtils.DirectoryExists(this.LocalUrl))
             {
                 try
                 {
-                    QuranFileUtils.DeleteFolder(this.LocalUrl);
+                    FileUtils.DeleteFolder(this.LocalUrl);
                 }
                 catch
                 {

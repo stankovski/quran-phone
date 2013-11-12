@@ -6,6 +6,7 @@ namespace Quran.Core.Interfaces
     public interface IDownloadManager
     {
         ITransferRequest DownloadAsync(string from, string to, bool allowCellular = true);
+        ITransferRequest DownloadMultipleAsync(string[] from, string to, bool allowCellular = true);
         ITransferRequest GetRequest(string serverUri);
         void Cancel(ITransferRequest request);
         void FinalizeRequest(ITransferRequest request);

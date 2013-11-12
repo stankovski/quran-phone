@@ -52,7 +52,7 @@ namespace Quran.WindowsPhone.Views
             }
             
             // Show prompt to download content if not all images exist
-            if (!QuranFileUtils.HaveAllImages())
+            if (!FileUtils.HaveAllImages())
             {
                 try
                 {

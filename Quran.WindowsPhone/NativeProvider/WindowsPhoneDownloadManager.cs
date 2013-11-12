@@ -48,27 +48,36 @@ namespace Quran.WindowsPhone.NativeProvider
             }   
         }
 
+        public ITransferRequest DownloadMultipleAsync(string[] from, string to, bool allowCellular = true)
+        {
+            var phoneUri = new Uri(to, UriKind.Relative);
+
+            var request = new WindowsPhoneMultifileTransferRequest(from, phoneUri);
+            request.Download();
+            return request; 
+        }
+
         private void PersistRequestToStorage(BackgroundTransferRequest request)
         {
             var requestUri = request.RequestUri;
             var requestUriHash = CryptoUtils.GetHash(requestUri.ToString());
-            var trackerDir = QuranFileUtils.GetDowloadTrackerDirectory(false, true);
-            QuranFileUtils.WriteFile(string.Format("{0}\\{1}", trackerDir, requestUriHash), request.RequestId);
+            var trackerDir = FileUtils.GetDowloadTrackerDirectory(false, true);
+            FileUtils.WriteFile(string.Format("{0}\\{1}", trackerDir, requestUriHash), request.RequestId);
         }
 
         private void DeleteRequestFromStorage(BackgroundTransferRequest request)
         {
             var requestUri = request.RequestUri;
             var requestUriHash = CryptoUtils.GetHash(requestUri.ToString());
-            var trackerDir = QuranFileUtils.GetDowloadTrackerDirectory(false, true);
-            QuranFileUtils.DeleteFile(string.Format("{0}\\{1}", trackerDir, requestUriHash));
+            var trackerDir = FileUtils.GetDowloadTrackerDirectory(false, true);
+            FileUtils.DeleteFile(string.Format("{0}\\{1}", trackerDir, requestUriHash));
         }
 
         public ITransferRequest GetRequest(string serverUri)
         {
             var requestUriHash = CryptoUtils.GetHash(serverUri);
-            var trackerDir = QuranFileUtils.GetDowloadTrackerDirectory(false, true);
-            var requestId = QuranFileUtils.ReadFile(string.Format("{0}\\{1}", trackerDir, requestUriHash));
+            var trackerDir = FileUtils.GetDowloadTrackerDirectory(false, true);
+            var requestId = FileUtils.ReadFile(string.Format("{0}\\{1}", trackerDir, requestUriHash));
             if (!string.IsNullOrEmpty(requestId))
             {
                 var request = BackgroundTransferService.Find(requestId);
@@ -88,7 +97,7 @@ namespace Quran.WindowsPhone.NativeProvider
 
         public void FinalizeRequest(ITransferRequest request)
         {
-            if (BackgroundTransferService.Find(request.RequestId) != null)
+            if (request.RequestId != null && BackgroundTransferService.Find(request.RequestId) != null)
             {
                 BackgroundTransferService.Remove(((WindowsPhoneTransferRequest)request).OriginalRequest);
                 DeleteRequestFromStorage(((WindowsPhoneTransferRequest)request).OriginalRequest);
