@@ -475,5 +475,21 @@ namespace Quran.Core.Utils
         {
             return IMG_HOST + DATABASE_DIRECTORY + "/" + QURAN_ARABIC_DATABASE;
         }
+
+        public static bool IsFileEmpty(string localFilePath)
+        {
+            try
+            {
+                string content;
+                if (FileStore.TryReadTextFile(localFilePath, out content))
+                    return string.IsNullOrWhiteSpace(content);
+                else
+                    return true;
+            }
+            catch
+            {
+                return true;
+            }
+        }
     }
 }

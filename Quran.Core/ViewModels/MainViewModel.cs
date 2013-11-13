@@ -135,7 +135,7 @@ namespace Quran.Core.ViewModels
             if (item != null && item.Id != null && int.TryParse(item.Id, NumberStyles.None, CultureInfo.InvariantCulture, out id))
             {
                 Bookmarks.Remove(item);
-                using (var bookmarksAdapter = new BookmarksDBAdapter())
+                using (var bookmarksAdapter = new BookmarksDatabaseHandler())
                 {
                     bookmarksAdapter.RemoveBookmark(id);
                 }
@@ -274,7 +274,7 @@ namespace Quran.Core.ViewModels
                 Bookmarks.Add(lastPageItem);
             }
 
-            using (var bookmarksAdapter = new BookmarksDBAdapter())
+            using (var bookmarksAdapter = new BookmarksDatabaseHandler())
             {
                 try
                 {
@@ -325,7 +325,7 @@ namespace Quran.Core.ViewModels
                 {
                     try
                     {
-                        using (var dbArabic = new DatabaseHandler<ArabicAyah>(FileUtils.QURAN_ARABIC_DATABASE))
+                        using (var dbArabic = new QuranDatabaseHandler<ArabicAyah>(FileUtils.QURAN_ARABIC_DATABASE))
                         {
                             var ayahSurah =
                                 await

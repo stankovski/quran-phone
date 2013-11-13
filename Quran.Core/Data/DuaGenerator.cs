@@ -33,7 +33,7 @@ namespace Quran.Core.Data
 
         public static void Generate()
         {
-            using (var adapter = new BookmarksDBAdapter())
+            using (var adapter = new BookmarksDatabaseHandler())
             {
                 var tagId = adapter.AddTag(AppResources.dua);
                 foreach (int[] dua in quran_dua)

@@ -70,14 +70,14 @@ namespace Quran.Core.ViewModels
                     if (QuranApp.DetailsViewModel.TranslationFile != null &&
                         FileUtils.FileExists(PathHelper.Combine(FileUtils.GetQuranDatabaseDirectory(false), QuranApp.DetailsViewModel.TranslationFile)))
                     {
-                        using (var db = new DatabaseHandler<QuranAyah>(QuranApp.DetailsViewModel.TranslationFile))
+                        using (var db = new QuranDatabaseHandler<QuranAyah>(QuranApp.DetailsViewModel.TranslationFile))
                         {
                             translationVerses = await taskFactory.StartNew(() => db.Search(query));
                         }
                     }
                     if (FileUtils.FileExists(PathHelper.Combine(FileUtils.GetQuranDatabaseDirectory(false), FileUtils.QURAN_ARABIC_DATABASE)))
                     {
-                        using (var dbArabic = new DatabaseHandler<ArabicAyah>(FileUtils.QURAN_ARABIC_DATABASE))
+                        using (var dbArabic = new QuranDatabaseHandler<ArabicAyah>(FileUtils.QURAN_ARABIC_DATABASE))
                         {
                             arabicVerses = await taskFactory.StartNew(() => dbArabic.Search(query));
                         }

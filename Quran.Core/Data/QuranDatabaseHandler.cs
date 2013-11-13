@@ -9,11 +9,9 @@ using Quran.Core.Utils;
 
 namespace Quran.Core.Data
 {
-    public class DatabaseHandler<T> : BaseDatabaseHandler where T: QuranAyah, new()
+    public class QuranDatabaseHandler<T> : BaseDatabaseHandler where T: QuranAyah, new()
     {
-        private string mDatabasePath = null;
-
-        public DatabaseHandler(string databaseName)
+        public QuranDatabaseHandler(string databaseName)
             : base(databaseName)
         { }
 

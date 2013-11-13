@@ -48,7 +48,7 @@ namespace Quran.Core.ViewModels
         #region Public methods
         public async void LoadData()
         {
-            var qariNames = AudioUtils.GetReciterItems();
+            var qariNames = AudioUtils.GetReciterItems().Where(r => !r.IsGapless);
 
             foreach (var item in qariNames)
             {

@@ -52,24 +52,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
     <Compile Include="Common\AudioState.cs" />
@@ -93,14 +75,15 @@
     <Compile Include="Data\AyahInfoDatabaseHandler.cs" />
     <Compile Include="Data\AyahLimits.cs" />
     <Compile Include="Data\BaseDatabaseHandler.cs" />
-    <Compile Include="Data\BookmarksDBAdapter.cs" />
+    <Compile Include="Data\BookmarksDatabaseHandler.cs" />
     <Compile Include="Data\Constants.cs" />
-    <Compile Include="Data\DatabaseHandler.cs" />
+    <Compile Include="Data\QuranDatabaseHandler.cs" />
     <Compile Include="Data\DuaGenerator.cs" />
     <Compile Include="Data\QuranDataProvider.cs" />
+    <Compile Include="Data\RecitersDatabaseHandler.cs" />
     <Compile Include="Utils\QuranInfo.cs" />
     <Compile Include="Data\SuraTimingDatabaseHandler.cs" />
-    <Compile Include="Data\TranslationsDBAdapter.cs" />
+    <Compile Include="Data\TranslationsDatabaseHandler.cs" />
     <Compile Include="Entities\Message.cs" />
     <Compile Include="Interfaces\INativeProvider.cs" />
     <Compile Include="Properties\AppResources1.Designer.cs">

@@ -24,6 +24,14 @@ namespace Quran.Core.Common
             Ayah = ayah;
         }
 
+        public QuranAyah(QuranAyah ayah)
+        {
+            Sura = ayah.Sura;
+            Ayah = ayah.Ayah;
+            Text = ayah.Text;
+            Translation = ayah.Translation;
+        }
+
         public override string ToString()
         {
             return string.Format("{0}:{1}", Sura, Ayah, CultureInfo.InvariantCulture);

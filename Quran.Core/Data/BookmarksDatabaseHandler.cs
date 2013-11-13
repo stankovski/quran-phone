@@ -15,11 +15,11 @@ namespace Quran.Core.Data
         Alphabetical = 2
     }
 
-    public class BookmarksDBAdapter : BaseDatabaseHandler
+    public class BookmarksDatabaseHandler : BaseDatabaseHandler
     {
         public static string DB_NAME = "bookmarks.db";
 
-        public BookmarksDBAdapter()
+        public BookmarksDatabaseHandler()
             : base(DB_NAME)
         { }
 

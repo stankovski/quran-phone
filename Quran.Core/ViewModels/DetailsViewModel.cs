@@ -26,6 +26,7 @@ namespace Quran.Core.ViewModels
         public DetailsViewModel()
         {
             Pages = new ObservableCollection<PageViewModel>();
+            QuranApp.NativeProvider.AudioProvider.StateChanged += AudioProvider_StateChanged;
             lightColor = "White";
             darkColor = "Black";
             BackgroundColor = "Resource:LightBackground";
@@ -466,7 +467,7 @@ namespace Quran.Core.ViewModels
         {
             try
             {
-                using (var adapter = new BookmarksDBAdapter())
+                using (var adapter = new BookmarksDatabaseHandler())
                 {
                     if (ayah == null)
                         adapter.AddBookmarkIfNotExists(null, null, CurrentPageNumber);
@@ -502,7 +503,7 @@ namespace Quran.Core.ViewModels
                 {
                     try
                     {
-                        using (var dbArabic = new DatabaseHandler<ArabicAyah>(FileUtils.QURAN_ARABIC_DATABASE))
+                        using (var dbArabic = new QuranDatabaseHandler<ArabicAyah>(FileUtils.QURAN_ARABIC_DATABASE))
                         {
                             var ayahSurah =
                                 await new TaskFactory().StartNew(() => dbArabic.GetVerse(ayah.Sura, ayah.Ayah));
@@ -531,83 +532,34 @@ namespace Quran.Core.ViewModels
 
         #region Audio
 
-        private bool mShouldOverridePlaying = false;
-        private AudioRequest mLastAudioDownloadRequest = null;
-
-        public void PlayFromAyah(int page, int sura, int ayah)
+        public void PlayFromAyah(int startSura, int startAyah)
         {
-            PlayFromAyah(page, sura, ayah, true);
-        }
-
-        private void PlayFromAyah(int page, int startSura,
-                                  int startAyah, bool force)
-        {
-            if (force)
-            {
-                mShouldOverridePlaying = true;
-            }
-            int currentQari = AudioUtils.GetReciterPositionByName(SettingsUtils.Get<string>(Constants.PREF_ACTIVE_QARI));
+            int currentQari = AudioUtils.GetReciterIdByName(SettingsUtils.Get<string>(Constants.PREF_ACTIVE_QARI));
             if (currentQari == -1)
                 return;
 
-            QuranAyah ayah = new QuranAyah(startSura, startAyah);
+            var lookaheadAmount = SettingsUtils.Get<LookAheadAmount>(Constants.PREF_DOWNLOAD_AMOUNT);
+            var ayah = new QuranAyah(startSura, startAyah);
+            var request = new AudioRequest(currentQari, ayah, lookaheadAmount);
+
             if (SettingsUtils.Get<bool>(Constants.PREF_PREFER_STREAMING))
             {
-                PlayStreaming(ayah, page, currentQari);
+                PlayStreaming(request);
             }
             else
             {
-                DownloadAndPlayAudio(ayah, page, currentQari);
+                DownloadAndPlayAudioRequest(request);
             }
         }
 
-        private void PlayStreaming(QuranAyah ayah, int page, int qari)
+        private void PlayStreaming(AudioRequest request)
         {
-            string dbFile = AudioUtils.GetQariDatabasePathIfGapless(qari);
-            if (!string.IsNullOrEmpty(dbFile))
-            {
-                // gapless audio is "download only"
-                DownloadAndPlayAudio(ayah, page, qari);
-                return;
-            }
+            //TODO: download database
 
-            var request = new AudioRequest(qari, ayah);
-            Play(request);
-
-            IsPlayingAudio = true;
+            //TODO: play audio
         }
 
-        private void DownloadAndPlayAudio(QuranAyah ayah, int page, int qari)
-        {
-            QuranAyah endAyah = AudioUtils.GetLastAyahToPlay(ayah, page,
-                                                             SettingsUtils.Get<LookAheadAmount>(
-                                                                 Constants.PREF_DOWNLOAD_AMOUNT));
-            string baseUri = AudioUtils.GetReciterItem(qari).LocalPath;
-            if (endAyah == null || baseUri == null)
-            {
-                return;
-            }
-            string dbFile = AudioUtils.GetQariDatabasePathIfGapless(qari);
-
-            string fileUrl = "";
-            if (string.IsNullOrEmpty(dbFile))
-            {
-                fileUrl = baseUri + "/{0}/{1}" + AudioUtils.AUDIO_EXTENSION;
-            }
-            else
-            {
-                fileUrl = baseUri + "/{0:000}" +
-                          AudioUtils.AUDIO_EXTENSION;
-            }
-
-            var request = new AudioRequest(qari, ayah);
-            request.MinAyah = ayah;
-            request.MaxAyah = endAyah;
-            mLastAudioDownloadRequest = request;
-            PlayAudioRequest(request);
-        }
-
-        private async void PlayAudioRequest(AudioRequest request)
+        private async void DownloadAndPlayAudioRequest(AudioRequest request)
         {
             if (request == null || this.ActiveDownload.IsDownloading)
             {
@@ -615,8 +567,24 @@ namespace Quran.Core.ViewModels
                 return;
             }
 
-            var result = true;
+            var result = await DownloadAudioRequest(request);
 
+            if (!result)
+            {
+                QuranApp.NativeProvider.ShowErrorMessageBox("Something went wrong. Unable to download audio.");
+            }
+            else
+            {
+                IsPlayingAudio = true;
+                var uri = AudioUtils.GetLocalPathForAyah(request.CurrentAyah, request.Reciter);
+                QuranApp.NativeProvider.AudioProvider.SetTrack(new Uri(uri, UriKind.Relative), null, null, null, null,
+                    request.ToString());
+            }
+        }
+
+        private async Task<bool> DownloadAudioRequest(AudioRequest request)
+        {
+            bool result = true;
             // checking if there is aya position file
             if (!FileUtils.HaveAyaPositionFile())
             {
@@ -640,58 +608,42 @@ namespace Quran.Core.ViewModels
             {
                 string url = request.Reciter.ServerUrl;
                 string destination = request.Reciter.LocalPath;
+                FileUtils.MakeDirectory(destination);
 
                 if (request.Reciter.IsGapless)
-                    result = await AudioUtils.DownloadGaplessRange(url, destination, request.MinAyah, request.MinAyah);
+                    result = await AudioUtils.DownloadGaplessRange(url, destination, request.MinAyah, request.MaxAyah);
                 else
-                    result = await AudioUtils.DownloadRange(url, destination, request.MinAyah, request.MinAyah);
+                    result = await AudioUtils.DownloadRange(request);
             }
-
-            // checking if need to download basmalla
-            if (result && AudioUtils.ShouldDownloadBasmallah(request))
-            {
-                //should download basmalla...
-                QuranAyah firstAyah = new QuranAyah(1, 1);
-                string url = request.Reciter.ServerUrl;
-                string destination = request.Reciter.LocalPath;
-
-                if (!request.Reciter.IsGapless)
-                    result = await AudioUtils.DownloadRange(url, destination, firstAyah, firstAyah);
-            }
-
-            if (!result)
-            {
-                QuranApp.NativeProvider.ShowErrorMessageBox("Something went wrong. Unable to download audio.");
-            }
-            else
-            {
-                request.MinAyah = null;
-                request.MaxAyah = null;
-                Play(request);
-                mLastAudioDownloadRequest = null;
-            }
+            return result;
         }
 
-        private void Play(AudioRequest request)
+        void AudioProvider_StateChanged(object sender, EventArgs e)
         {
-            IsPlayingAudio = true;
+            if (QuranApp.NativeProvider.AudioProvider.State == AudioPlayerPlayState.Stopped)
+            {
+                IsPlayingAudio = false;
 
-            QuranApp.NativeProvider.AudioProvider.SetTrack(null, null, null, null, null, request.ToString());
-
-            // DO THE PLAYBACK
-            //while (IsPlayingAudio)
-            //{
-            //    var currentAyah = request.CurrentAyah;
-            //    var page = QuranInfo.GetPageFromSuraAyah(currentAyah.Sura, currentAyah.Ayah);
-            //    this.CurrentPageIndex = Constants.PAGES_LAST - page;
-            //    this.SelectedAyah = currentAyah;
-
-            //    if (request.Reciter.IsGapless)
-            //        AudioUtils.PlayGapless(request.Reciter.LocalPath, currentAyah, request.Reciter);
-            //    else
-            //        AudioUtils.PlayNonGapless(request.Reciter.LocalPath, currentAyah, request.Reciter);
-            //    request.GotoNextAyah();
-            //}
+                //TODO: download next batch if needed
+            }
+            if (QuranApp.NativeProvider.AudioProvider.State == AudioPlayerPlayState.TrackReady)
+            {
+                var track = QuranApp.NativeProvider.AudioProvider.GetTrack();
+                if (track != null && track.Tag != null)
+                {
+                    try
+                    {
+                        var request = new AudioRequest(track.Tag);
+                        var pageNumber = QuranInfo.GetPageFromSuraAyah(request.CurrentAyah);
+                        CurrentPageIndex = getIndexFromPageNumber(pageNumber);
+                        SelectedAyah = request.CurrentAyah;
+                    }
+                    catch
+                    {
+                        // Bad track
+                    }
+                }
+            }
         }
 
         #endregion
@@ -722,7 +674,7 @@ namespace Quran.Core.ViewModels
                     return false;
 
                 List<QuranAyah> verses = null;
-                using (var db = new DatabaseHandler<QuranAyah>(this.TranslationFile))
+                using (var db = new QuranDatabaseHandler<QuranAyah>(this.TranslationFile))
                 {
                     verses = await new TaskFactory().StartNew(() => db.GetVerses(pageModel.PageNumber));
                 }
@@ -733,7 +685,7 @@ namespace Quran.Core.ViewModels
                 {
                     try
                     {
-                        using (var dbArabic = new DatabaseHandler<ArabicAyah>(FileUtils.QURAN_ARABIC_DATABASE))
+                        using (var dbArabic = new QuranDatabaseHandler<ArabicAyah>(FileUtils.QURAN_ARABIC_DATABASE))
                         {
                             versesArabic = await new TaskFactory().StartNew(() => dbArabic.GetVerses(pageModel.PageNumber));
                         }

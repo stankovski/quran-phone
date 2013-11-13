@@ -19,7 +19,7 @@ namespace Quran.Core.Data
         // private static UriMatcher sURIMatcher = buildUriMatcher();
 
         //private string mCurrentLanguage = null;
-        // private DatabaseHandler dbConnection = null;
+        // private QuranDatabaseHandler dbConnection = null;
 
         // //private static UriMatcher buildUriMatcher() {
         // //    UriMatcher matcher =  new UriMatcher(UriMatcher.NO_MATCH);
@@ -142,11 +142,11 @@ namespace Quran.Core.Data
         //     if (language == null) return null;
 
         //     if (dbConnection == null){
-        //         dbConnection = new DatabaseHandler(language);
+        //         dbConnection = new QuranDatabaseHandler(language);
         //   }
         //   else if (language != null && !language.equals(mCurrentLanguage)){
         //      dbConnection.closeDatabase();
-        //      dbConnection = new DatabaseHandler(language);
+        //      dbConnection = new QuranDatabaseHandler(language);
         //      mCurrentLanguage = language;
         //   }
 
@@ -165,11 +165,11 @@ namespace Quran.Core.Data
         //         Log.d("qdp", "uri part: " + s);
 
         //     if (dbConnection == null){
-        //         dbConnection = new DatabaseHandler(lang);
+        //         dbConnection = new QuranDatabaseHandler(lang);
         //   }
         //   else if (lang != null && !lang.equals(mCurrentLanguage)){
         //      dbConnection.closeDatabase();
-        //      dbConnection = new DatabaseHandler(lang);
+        //      dbConnection = new QuranDatabaseHandler(lang);
         //      mCurrentLanguage = lang;
         //   }
 

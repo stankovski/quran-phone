@@ -260,8 +260,7 @@ namespace Quran.WindowsPhone.Views
                         Ayah = bounds[1]
                     };
                 }
-                QuranApp.DetailsViewModel.PlayFromAyah(QuranApp.DetailsViewModel.CurrentPageNumber, selectedAyah.Sura,
-                    selectedAyah.Ayah);
+                QuranApp.DetailsViewModel.PlayFromAyah(selectedAyah.Sura, selectedAyah.Ayah);
             }
         }
 

@@ -113,8 +113,78 @@ namespace Quran.Core.Utils
             return string.Format(format, suraName, ayah);
         }
 
-        public static string GetNotificationTitle(QuranAyah minVerse,
-                                                  QuranAyah maxVerse)
+        public static ICollection<QuranAyah> GetAllAyah(QuranAyah fromAyah, QuranAyah toAyah)
+        {
+            var verses = new List<QuranAyah>();
+            // Add first verse
+            verses.Add(fromAyah);
+            if (!Equals(fromAyah, toAyah))
+            {
+                var nextVerse = GetNextAyah(fromAyah);
+                while (!Equals(nextVerse, toAyah))
+                {
+                    verses.Add(nextVerse);
+                    nextVerse = GetNextAyah(nextVerse);
+                }
+                // Add last verse
+                verses.Add(nextVerse);
+            }
+            return verses;
+        }
+
+        public static QuranAyah GetNextAyah(QuranAyah ayah)
+        {
+            var currentSurahPages = QuranInfo.GetSuraNumberOfAyah(ayah.Sura);
+            var newAyah = new QuranAyah(ayah.Sura, ayah.Ayah);
+
+            // Check if not the end of surah
+            if (ayah.Ayah < currentSurahPages)
+            {
+                newAyah.Ayah++;
+            }
+            else
+            {
+                // If the end of surah check if also the end of Quran
+                if (ayah.Sura < Constants.SURA_LAST)
+                {
+                    newAyah.Sura++;
+                }
+                else
+                {
+                    newAyah.Sura = Constants.SURA_FIRST;
+                }
+                newAyah.Ayah = 1;
+            }
+            return newAyah;
+        }
+
+        public static QuranAyah GetPreviousAyah(QuranAyah ayah)
+        {
+            var newAyah = new QuranAyah(ayah);
+
+            // Check if not the beginning of surah
+            if (ayah.Ayah > 1)
+            {
+                newAyah.Ayah--;
+            }
+            else
+            {
+                // If the beginning of surah check if also the beginning of Quran
+                if (ayah.Sura > Constants.SURA_FIRST)
+                {
+                    newAyah.Sura--;
+                }
+                else
+                {
+                    newAyah.Sura = Constants.SURA_LAST;
+                }
+                newAyah.Ayah = QuranInfo.GetSuraNumberOfAyah(newAyah.Sura);
+            }
+            
+            return newAyah;
+        }
+
+        public static string GetNotificationTitle(QuranAyah minVerse, QuranAyah maxVerse)
         {
             int minSura = minVerse.Sura;
             int maxSura = maxVerse.Sura;
@@ -611,6 +681,11 @@ namespace Quran.Core.Utils
                     return PAGE_RUB3_START[i];
             }
             return 0;
+        }
+
+        public static int GetPageFromSuraAyah(QuranAyah ayah)
+        {
+            return GetPageFromSuraAyah(ayah.Sura, ayah.Ayah);
         }
 
         public static int GetPageFromSuraAyah(int sura, int ayah)

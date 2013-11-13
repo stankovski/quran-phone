@@ -55,7 +55,7 @@ namespace Quran.WindowsPhone.AudioAgent
             switch (playState)
             {
                 case PlayState.TrackEnded:
-                    player.Track = GetPreviousTrack(track);
+                    player.Track = GetNextTrack(track);
                     break;
                 case PlayState.TrackReady:
                     player.Play();
@@ -106,6 +106,7 @@ namespace Quran.WindowsPhone.AudioAgent
                 case UserAction.Play:
                     if (player.PlayerState != PlayState.Playing)
                     {
+                        player.Track = UpdateCurrentTrack(track);
                         player.Play();
                     }
                     break;
@@ -188,14 +189,26 @@ namespace Quran.WindowsPhone.AudioAgent
             }
         }
 
+        private AudioTrack UpdateCurrentTrack(AudioTrack currentTrack)
+        {
+            if (currentTrack != null)
+            {
+                var request = new AudioRequest(currentTrack.Tag);
+                return GetTrackFromRequest(request);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         private AudioTrack GetTrackFromRequest(AudioRequest request)
         {
             var ayah = request.CurrentAyah;
-            var fileName = string.Format("{0:000}{1:000}.mp3", ayah.Sura, ayah.Ayah);
-            var fullPath = PathHelper.Combine(request.Reciter.LocalPath, fileName);
-            var fullPathAsUri = new Uri(fullPath, UriKind.Relative);
             var title = QuranInfo.GetSuraAyahString(ayah.Sura, ayah.Ayah);
-            return new AudioTrack(fullPathAsUri, title, request.Reciter.Name, "Quran", null);
+            var path = AudioUtils.GetLocalPathForAyah(ayah, request.Reciter);
+            return new AudioTrack(new Uri(path, UriKind.Relative), title, request.Reciter.Name, "Quran", null, 
+                request.ToString(), EnabledPlayerControls.All);
         }
 
         /// <summary>

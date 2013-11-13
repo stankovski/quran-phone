@@ -8,12 +8,12 @@ using System.Linq;
 
 namespace Quran.Core.Data
 {
-    public class TranslationsDBAdapter : BaseDatabaseHandler
+    public class TranslationsDatabaseHandler : BaseDatabaseHandler
     {
-        public static string DB_NAME = "translations.db";
+        public static string DbName = "translations.db";
 
-        public TranslationsDBAdapter()
-            : base(DB_NAME)
+        public TranslationsDatabaseHandler()
+            : base(DbName)
         { }
 
         protected override ISQLiteConnection CreateDatabase(ISQLiteConnectionFactory factory, string path)

@@ -29,16 +29,21 @@ namespace Quran.WindowsPhone.NativeProvider
         public async void Download()
         {
             int successfulDownloads = 0;
+            TransferStatus = FileTransferStatus.Transferring;
+            if (TransferStatusChanged != null)
+                TransferStatusChanged(this, new TransferEventArgs(this));
+
             foreach (var serverPath in serverUrls)
             {
                 var localFilePath = PathHelper.Combine(DownloadLocation.ToString(), PathHelper.GetFileName(serverPath));
                 if (FileUtils.FileExists(localFilePath))
-                    FileUtils.DeleteFile(localFilePath);
-
-                TransferStatus = FileTransferStatus.Transferring;
-                if (TransferStatusChanged != null)
-                    TransferStatusChanged(this, new TransferEventArgs(this));
-
+                {
+                    if (FileUtils.IsFileEmpty(localFilePath))
+                        FileUtils.DeleteFile(localFilePath);
+                    else
+                        continue;
+                }
+                
                 // Retry loop
                 for (int i = 0; i < 5; i++)
                 {
@@ -54,11 +59,11 @@ namespace Quran.WindowsPhone.NativeProvider
                         break;
                     }
                 }
-
-                TransferStatus = FileTransferStatus.Completed;
-                if (TransferStatusChanged != null)
-                    TransferStatusChanged(this, new TransferEventArgs(this));
             }
+
+            TransferStatus = FileTransferStatus.Completed;
+            if (TransferStatusChanged != null)
+                TransferStatusChanged(this, new TransferEventArgs(this));
         }
 
         public event EventHandler<TransferEventArgs> TransferStatusChanged;

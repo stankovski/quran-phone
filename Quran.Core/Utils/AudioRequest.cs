@@ -6,7 +6,7 @@ namespace Quran.Core.Utils
 {
     public class AudioRequest
     {
-        public AudioRequest(int reciterId, QuranAyah verse)
+        public AudioRequest(int reciterId, QuranAyah verse, LookAheadAmount lookAheadAmount)
         {
             if (verse == null)
                 throw new ArgumentNullException("verse");
@@ -14,9 +14,10 @@ namespace Quran.Core.Utils
             if (verse == null || verse.Sura < 1 || verse.Sura > 114)
                 throw new ArgumentException("verse");
 
-            this.Reciter = AudioUtils.GetReciterItem(reciterId);
+            this.Reciter = AudioUtils.GetReciterById(reciterId);
+            this.LookAheadAmount = lookAheadAmount;
             this.MinAyah = verse;
-            this.MaxAyah = verse;
+            this.MaxAyah = AudioUtils.GetLastAyahToPlay(verse, lookAheadAmount);
             this.CurrentAyah = verse;
             this.RepeatInfo = new RepeatInfo();
         }
@@ -24,18 +25,19 @@ namespace Quran.Core.Utils
         /// <summary>
         /// AudioRequest from a formatted string
         /// </summary>
-        /// <param name="formattedString">reciterId/surah/ayah</param>
+        /// <param name="formattedString">LookAheadAmount/reciterId/surah/ayah</param>
         public AudioRequest(string formattedString)
         {
             if (string.IsNullOrEmpty(formattedString))
                 throw new ArgumentNullException("formattedString");
 
             var splitString = formattedString.Split('/');
-            if (splitString.Length != 3)
+            if (splitString.Length != 4)
                 throw new ArgumentException("formattedString");
 
-            this.Reciter = AudioUtils.GetReciterItem(int.Parse(splitString[0]));
-            var verse = new QuranAyah(int.Parse(splitString[1]), int.Parse(splitString[2]));
+            this.LookAheadAmount = (LookAheadAmount)Enum.Parse(typeof(LookAheadAmount), splitString[0]);
+            this.Reciter = AudioUtils.GetReciterById(int.Parse(splitString[1]));
+            var verse = new QuranAyah(int.Parse(splitString[2]), int.Parse(splitString[3]));
 
             this.MinAyah = verse;
             this.MaxAyah = verse;
@@ -44,6 +46,8 @@ namespace Quran.Core.Utils
         }
 
         public ReciterItem Reciter { get; private set; }
+
+        public LookAheadAmount LookAheadAmount { get; set; }
 
         public QuranAyah CurrentAyah { get; set; }
 
@@ -55,53 +59,17 @@ namespace Quran.Core.Utils
 
         public void GotoNextAyah()
         {
-            var currentSurahPages = QuranInfo.GetSuraNumberOfAyah(CurrentAyah.Sura);
-
-            // Check if not the end of surah
-            if (CurrentAyah.Ayah < currentSurahPages)
-            {
-                CurrentAyah.Ayah++;
-            }
-            else
-            {
-                // If the end of surah check if also the end of Quran
-                if (CurrentAyah.Sura < Constants.SURA_LAST)
-                {
-                    CurrentAyah.Sura++;
-                }
-                else
-                {
-                    CurrentAyah.Sura = Constants.SURA_FIRST;
-                }
-                CurrentAyah.Ayah = 1;
-            }
+            CurrentAyah = QuranInfo.GetNextAyah(CurrentAyah);
         }
 
         public void GotoPreviousAyah()
         {
-            // Check if not the beginning of surah
-            if (CurrentAyah.Ayah > 1)
-            {
-                CurrentAyah.Ayah--;
-            }
-            else
-            {
-                // If the beginning of surah check if also the beginning of Quran
-                if (CurrentAyah.Sura > Constants.SURA_FIRST)
-                {
-                    CurrentAyah.Sura--;
-                }
-                else
-                {
-                    CurrentAyah.Sura = Constants.SURA_LAST;
-                }
-                CurrentAyah.Ayah = QuranInfo.GetSuraNumberOfAyah(CurrentAyah.Sura);
-            }
+            CurrentAyah = QuranInfo.GetPreviousAyah(CurrentAyah);
         }
 
         public override string ToString()
         {
-            return string.Format("{0}/{1}/{2}", Reciter.Id, CurrentAyah.Sura, CurrentAyah.Ayah);
+            return string.Format("{0}/{1}/{2}/{3}", LookAheadAmount, Reciter.Id, CurrentAyah.Sura, CurrentAyah.Ayah);
         }
     }
 }

@@ -365,7 +365,9 @@ namespace Quran.Core.ViewModels
             }
             var tcs = new TaskCompletionSource<bool>();
             DownloadComplete += (s, e) => tcs.TrySetResult(true);
-            return await tcs.Task;
+            var result = await tcs.Task;
+            IsDownloading = false;
+            return result;
         }
 
         private async Task<bool> DownloadOneFile()

@@ -107,7 +107,7 @@ namespace Quran.Core.Utils
                 refreshed = true;
             }
 
-            TranslationsDBAdapter adapter = new TranslationsDBAdapter();
+            TranslationsDatabaseHandler adapter = new TranslationsDatabaseHandler();
             var cachedItems = adapter.GetTranslations();
             List<TranslationItem> items = new List<TranslationItem>();
             List<TranslationItem> updates = new List<TranslationItem>();
@@ -152,7 +152,7 @@ namespace Quran.Core.Utils
                             needsUpdate = true;
                             try
                             {
-                                using (var mHandler = new DatabaseHandler<QuranAyah>(item.Filename))
+                                using (var mHandler = new QuranDatabaseHandler<QuranAyah>(item.Filename))
                                 {
                                     item.LocalVersion = mHandler.GetTextVersion();
                                 }
