@@ -35,6 +35,11 @@
                         Background="{StaticResource PhoneInverseInactiveBrush}" 
                         Foreground="{StaticResource PhoneContrastForegroundBrush}" 
                         FontFamily="{StaticResource PhoneFontFamilyNormal}" Click="Translations_Click"/>
+                        <StackPanel Margin="0, 15, 0, 0" Orientation="Horizontal">
+                            <TextBlock Text="{Binding Path=LocalizedResources.text_size, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                            <TextBlock Text="{Binding TextSize}" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                        <Slider Minimum="15" Maximum="50" Margin="0" SmallChange="1" Value="{Binding TextSize, Mode=TwoWay}"/>
                         <TextBlock Text="{Binding Path=LocalizedResources.reciters, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
                         <Button HorizontalContentAlignment="Left" 
                         BorderThickness="0" Padding="10" Margin="0"
@@ -42,12 +47,9 @@
                         Background="{StaticResource PhoneInverseInactiveBrush}" 
                         Foreground="{StaticResource PhoneContrastForegroundBrush}" 
                         FontFamily="{StaticResource PhoneFontFamilyNormal}" Click="Reciters_Click"/>
-                        <StackPanel Margin="0, 15, 0, 0" Orientation="Horizontal">
-                            <TextBlock Text="{Binding Path=LocalizedResources.text_size, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
-                            <TextBlock Text="{Binding TextSize}" HorizontalAlignment="Center"/>
-                        </StackPanel>
-                        <Slider Minimum="15" Maximum="50" Margin="0" SmallChange="1" Value="{Binding TextSize, Mode=TwoWay}"/>
                         <TextBlock Text="{Binding Path=LocalizedResources.change_language, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                        <telerikInput:RadListPicker ItemsSource="{Binding SupportedLanguages}" DisplayMemberPath="Value" SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}"/>
+                        <TextBlock Text="{Binding Path=LocalizedResources.audio_download_blocks, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
                         <telerikInput:RadListPicker ItemsSource="{Binding SupportedLanguages}" DisplayMemberPath="Value" SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}"/>
                         <TextBlock Text="{Binding Path=LocalizedResources.prefs_ayah_before_translation_summary, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
                         <telerikPrimitives:RadToggleSwitch IsChecked="{Binding ShowArabicInTranslation, Mode=TwoWay}" IsEnabled="{Binding EnableShowArabicInTranslation}" />

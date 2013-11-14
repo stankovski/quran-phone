@@ -718,4 +718,7 @@
   <data name="downloaded_reciters" xml:space="preserve">
     <value>Downloaded reciters</value>
   </data>
+  <data name="audio_download_blocks" xml:space="preserve">
+    <value>audio download blocks</value>
+  </data>
 </root>

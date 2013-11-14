@@ -17,6 +17,7 @@ namespace Quran.Core.ViewModels
     using System.Windows.Input;
 
     using Cirrious.MvvmCross.ViewModels;
+    using System;
 
     /// <summary>
     /// Define the SettingsViewModel type.
@@ -29,6 +30,11 @@ namespace Quran.Core.ViewModels
             foreach (var lang in GetSupportedLanguages())
             {
                 SupportedLanguages.Add(lang);
+            }
+            SupportedAudioBlocks = new ObservableCollection<KeyValuePair<string, string>>();
+            foreach (var enumValue in Enum.GetNames(typeof(LookAheadAmount)))
+            {
+                SupportedAudioBlocks.Add(new KeyValuePair<string, string>(enumValue, enumValue));
             }
         }
 
@@ -190,6 +196,8 @@ namespace Quran.Core.ViewModels
         }
 
         public ObservableCollection<KeyValuePair<string, string>> SupportedLanguages { get; private set; }
+
+        public ObservableCollection<KeyValuePair<string, string>> SupportedAudioBlocks { get; private set; }
         
         MvxCommand generate;
         /// <summary>

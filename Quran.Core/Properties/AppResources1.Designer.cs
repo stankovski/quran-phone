@@ -98,6 +98,15 @@ namespace Quran.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to audio download blocks.
+        /// </summary>
+        public static string audio_download_blocks {
+            get {
+                return ResourceManager.GetString("audio_download_blocks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to automatic orientation.
         /// </summary>
         public static string auto_orientation {
