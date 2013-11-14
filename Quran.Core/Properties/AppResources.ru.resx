@@ -480,6 +480,9 @@ the data used in the translations and Arabic comes from
     <value>Загруженные чтения</value>
   </data>
   <data name="audio_download_blocks" xml:space="preserve">
-    <value>размер аудио буфера</value>
+    <value>размер скачанного аудио</value>
+  </data>
+  <data name="audio" xml:space="preserve">
+    <value>аудио</value>
   </data>
 </root>

@@ -719,6 +719,9 @@
     <value>Downloaded reciters</value>
   </data>
   <data name="audio_download_blocks" xml:space="preserve">
-    <value>audio download blocks</value>
+    <value>مقدار تحميل الصوت</value>
+  </data>
+  <data name="audio" xml:space="preserve">
+    <value>الصوت</value>
   </data>
 </root>

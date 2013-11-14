@@ -120,11 +120,11 @@ namespace Quran.Core.Utils
             verses.Add(fromAyah);
             if (!Equals(fromAyah, toAyah))
             {
-                var nextVerse = GetNextAyah(fromAyah);
+                var nextVerse = GetNextAyah(fromAyah, false);
                 while (!Equals(nextVerse, toAyah))
                 {
                     verses.Add(nextVerse);
-                    nextVerse = GetNextAyah(nextVerse);
+                    nextVerse = GetNextAyah(nextVerse, false);
                 }
                 // Add last verse
                 verses.Add(nextVerse);
@@ -132,7 +132,7 @@ namespace Quran.Core.Utils
             return verses;
         }
 
-        public static QuranAyah GetNextAyah(QuranAyah ayah)
+        public static QuranAyah GetNextAyah(QuranAyah ayah, bool includeBismillah)
         {
             var currentSurahPages = QuranInfo.GetSuraNumberOfAyah(ayah.Sura);
             var newAyah = new QuranAyah(ayah.Sura, ayah.Ayah);
@@ -158,7 +158,7 @@ namespace Quran.Core.Utils
             return newAyah;
         }
 
-        public static QuranAyah GetPreviousAyah(QuranAyah ayah)
+        public static QuranAyah GetPreviousAyah(QuranAyah ayah, bool includeBismillah)
         {
             var newAyah = new QuranAyah(ayah);
 

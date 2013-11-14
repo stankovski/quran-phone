@@ -14,7 +14,7 @@ using Quran.Core.Properties;
 
 namespace Quran.Core.Utils
 {
-    public enum LookAheadAmount
+    public enum AudioDownloadAmount
     {
         Page = 1,
         Sura = 2,
@@ -61,7 +61,7 @@ namespace Quran.Core.Utils
             return !FileUtils.FileExists(dbPath);
         }
 
-        public static QuranAyah GetLastAyahToPlay(QuranAyah startAyah, LookAheadAmount mode)
+        public static QuranAyah GetLastAyahToPlay(QuranAyah startAyah, AudioDownloadAmount mode)
         {
             int pageLastSura = 114;
             int pageLastAyah = 6;
@@ -88,7 +88,7 @@ namespace Quran.Core.Utils
                 }
             }
 
-            if (mode == LookAheadAmount.Sura)
+            if (mode == AudioDownloadAmount.Sura)
             {
                 int sura = startAyah.Sura;
                 int lastAyah = QuranInfo.GetSuraNumberOfAyah(sura);
@@ -105,7 +105,7 @@ namespace Quran.Core.Utils
                 }
                 return new QuranAyah(sura, lastAyah);
             }
-            else if (mode == LookAheadAmount.Juz)
+            else if (mode == AudioDownloadAmount.Juz)
             {
                 int juz = QuranInfo.GetJuzFromPage(page);
                 if (juz == 30)
@@ -135,7 +135,7 @@ namespace Quran.Core.Utils
             return new QuranAyah(pageLastSura, pageLastAyah);
         }
 
-        public static bool ShouldDownloadBasmallah(AudioRequest request)
+        public static bool ShouldDownloadBismillah(AudioRequest request)
         {
             if (request.Reciter.IsGapless)
             {
@@ -158,7 +158,7 @@ namespace Quran.Core.Utils
                 }
             }
 
-            return DoesRequireBasmallah(request);
+            return DoesRequireBismillah(request);
         }
 
         public static bool HaveSuraAyahForQari(string baseDir, int sura, int ayah)
@@ -167,7 +167,7 @@ namespace Quran.Core.Utils
             return FileUtils.FileExists(filename);
         }
 
-        public static bool DoesRequireBasmallah(AudioRequest request)
+        public static bool DoesRequireBismillah(AudioRequest request)
         {
             QuranAyah minAyah = request.MinAyah;
             int startSura = minAyah.Sura;
@@ -261,11 +261,11 @@ namespace Quran.Core.Utils
 
             if (result)
             {
-                // attempt to download basmallah if it doesn't exist
-                var basmallaFile = GetLocalPathForAyah(new QuranAyah(1, 1), request.Reciter);
-                if (!FileUtils.FileExists(basmallaFile))
+                // attempt to download bismillah if it doesn't exist
+                var bismillaFile = GetLocalPathForAyah(new QuranAyah(1, 1), request.Reciter);
+                if (!FileUtils.FileExists(bismillaFile))
                 {
-                    QuranApp.NativeProvider.Log("basmallah doesn't exist, downloading...");
+                    QuranApp.NativeProvider.Log("bismillah doesn't exist, downloading...");
                     result = await FileUtils.DownloadFileFromWebAsync(GetServerPathForAyah(new QuranAyah(1, 1), request.Reciter), 
                         request.Reciter.LocalPath);
                 }

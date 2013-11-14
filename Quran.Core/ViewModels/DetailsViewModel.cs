@@ -524,7 +524,7 @@ namespace Quran.Core.ViewModels
             if (currentQari == -1)
                 return;
 
-            var lookaheadAmount = SettingsUtils.Get<LookAheadAmount>(Constants.PREF_DOWNLOAD_AMOUNT);
+            var lookaheadAmount = SettingsUtils.Get<AudioDownloadAmount>(Constants.PREF_DOWNLOAD_AMOUNT);
             var ayah = new QuranAyah(startSura, startAyah);
             var request = new AudioRequest(currentQari, ayah, lookaheadAmount);
 

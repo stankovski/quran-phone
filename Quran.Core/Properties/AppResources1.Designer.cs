@@ -98,7 +98,16 @@ namespace Quran.Core.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to audio download blocks.
+        ///   Looks up a localized string similar to audio.
+        /// </summary>
+        public static string audio {
+            get {
+                return ResourceManager.GetString("audio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to audio download amount.
         /// </summary>
         public static string audio_download_blocks {
             get {

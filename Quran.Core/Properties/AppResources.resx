@@ -721,6 +721,9 @@ the data used in the translations and Arabic comes from
     <value>Downloaded reciters</value>
   </data>
   <data name="audio_download_blocks" xml:space="preserve">
-    <value>audio download blocks</value>
+    <value>audio download amount</value>
+  </data>
+  <data name="audio" xml:space="preserve">
+    <value>audio</value>
   </data>
 </root>

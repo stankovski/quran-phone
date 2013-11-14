@@ -31,10 +31,10 @@ namespace Quran.Core.ViewModels
             {
                 SupportedLanguages.Add(lang);
             }
-            SupportedAudioBlocks = new ObservableCollection<KeyValuePair<string, string>>();
-            foreach (var enumValue in Enum.GetNames(typeof(LookAheadAmount)))
+            SupportedAudioBlocks = new ObservableCollection<KeyValuePair<AudioDownloadAmount, string>>();
+            foreach (var enumValue in Enum.GetNames(typeof(AudioDownloadAmount)))
             {
-                SupportedAudioBlocks.Add(new KeyValuePair<string, string>(enumValue, enumValue));
+                SupportedAudioBlocks.Add(new KeyValuePair<AudioDownloadAmount, string>((AudioDownloadAmount)Enum.Parse(typeof(AudioDownloadAmount), enumValue), enumValue));
             }
         }
 
@@ -195,9 +195,26 @@ namespace Quran.Core.ViewModels
             }
         }
 
+        private KeyValuePair<AudioDownloadAmount, string> selectedAudioBlock;
+        public KeyValuePair<AudioDownloadAmount, string> SelectedAudioBlock
+        {
+            get { return selectedAudioBlock; }
+            set
+            {
+                if (value.Key == selectedAudioBlock.Key)
+                    return;
+
+                selectedAudioBlock = value;
+
+                SettingsUtils.Set(Constants.PREF_DOWNLOAD_AMOUNT, value.Key);
+
+                base.RaisePropertyChanged(() => SelectedAudioBlock);
+            }
+        }
+
         public ObservableCollection<KeyValuePair<string, string>> SupportedLanguages { get; private set; }
 
-        public ObservableCollection<KeyValuePair<string, string>> SupportedAudioBlocks { get; private set; }
+        public ObservableCollection<KeyValuePair<AudioDownloadAmount, string>> SupportedAudioBlocks { get; private set; }
         
         MvxCommand generate;
         /// <summary>
@@ -272,6 +289,7 @@ namespace Quran.Core.ViewModels
                 ActiveReciter = "None";
 
             SelectedLanguage = SupportedLanguages.FirstOrDefault(kv => kv.Key == SettingsUtils.Get<string>(Constants.PREF_CULTURE_OVERRIDE));
+            SelectedAudioBlock = SupportedAudioBlocks.FirstOrDefault(kv => kv.Key == SettingsUtils.Get<AudioDownloadAmount>(Constants.PREF_DOWNLOAD_AMOUNT));
             TextSize = SettingsUtils.Get<int>(Constants.PREF_TRANSLATION_TEXT_SIZE);
             ShowArabicInTranslation = SettingsUtils.Get<bool>(Constants.PREF_SHOW_ARABIC_IN_TRANSLATION);
             PreventPhoneFromSleeping = SettingsUtils.Get<bool>(Constants.PREF_PREVENT_SLEEP);
