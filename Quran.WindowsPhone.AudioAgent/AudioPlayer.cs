@@ -107,10 +107,7 @@ namespace Quran.WindowsPhone.AudioAgent
             {
                 case UserAction.Play:
                     if (player.PlayerState != PlayState.Playing)
-                    {
-                        player.Track = UpdateCurrentTrack(track);
                         player.Play();
-                    }
                     break;
                 case UserAction.Stop:
                     player.Stop();
@@ -131,11 +128,7 @@ namespace Quran.WindowsPhone.AudioAgent
                     player.Track = GetNextTrack(track);
                     break;
                 case UserAction.SkipPrevious:
-                    AudioTrack previousTrack = GetPreviousTrack(track);
-                    if (previousTrack != null)
-                    {
-                        player.Track = previousTrack;
-                    }
+                    player.Track = GetPreviousTrack(track);
                     break;
             }
 

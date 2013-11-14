@@ -401,6 +401,12 @@ namespace Quran.WindowsPhone.Views
                 QuranApp.DetailsViewModel.IsShowMenu = false;
                 e.Cancel = true;
             }
+            else if (QuranApp.DetailsViewModel.AudioPlayerState != AudioState.Stopped)
+            {
+                QuranApp.DetailsViewModel.AudioPlayerState = AudioState.Stopped;
+                QuranApp.NativeProvider.AudioProvider.Stop();
+                e.Cancel = true;
+            }
             else
             {
                 base.OnBackKeyPress(e);

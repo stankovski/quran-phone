@@ -604,16 +604,11 @@ namespace Quran.Core.ViewModels
 
         private async void AudioProvider_StateChanged(object sender, EventArgs e)
         {
-            if (QuranApp.NativeProvider.AudioProvider.State == AudioPlayerPlayState.Stopped)
-            {
-                // Wait to make sure the audio is really stopped and is not being changed to a different track
-                await Task.Delay(500);
-
-                if (QuranApp.NativeProvider.AudioProvider.State == AudioPlayerPlayState.Stopped ||
+            await Task.Delay(500);
+            if (QuranApp.NativeProvider.AudioProvider.State == AudioPlayerPlayState.Stopped ||
                     QuranApp.NativeProvider.AudioProvider.State == AudioPlayerPlayState.Unknown)
-                    AudioPlayerState = AudioState.Stopped;
-
-                //TODO: download next batch if needed
+            {
+                AudioPlayerState = AudioState.Stopped;
             }
             else if (QuranApp.NativeProvider.AudioProvider.State == AudioPlayerPlayState.Paused)
             {
@@ -631,6 +626,7 @@ namespace Quran.Core.ViewModels
                         var request = new AudioRequest(track.Tag);
                         var pageNumber = QuranInfo.GetPageFromSuraAyah(request.CurrentAyah);
                         CurrentPageIndex = getIndexFromPageNumber(pageNumber);
+                        await Task.Delay(500);
                         SelectedAyah = request.CurrentAyah;
                     }
                     catch

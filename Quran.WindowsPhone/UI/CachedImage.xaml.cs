@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Quran.Core;
 using Quran.Core.Common;
 using Quran.Core.Utils;
 using Quran.WindowsPhone.Utils;
@@ -86,7 +87,14 @@ namespace Quran.WindowsPhone.UI
                         }
                         var adjustedScrollPoint = adjustPointRevert(new Point(1, offsetToScrollTo), LayoutRoot.ActualWidth);
                         LayoutRoot.ScrollToVerticalOffset(adjustedScrollPoint.Y); //Adjusting for ViewBox offset
-                        canvasStoryboard.Begin();
+                        if (QuranApp.DetailsViewModel.AudioPlayerState == AudioState.Playing)
+                        {
+                            canvasStoryboard.Seek(new TimeSpan(1));
+                        }
+                        else
+                        {
+                            canvasStoryboard.Begin();
+                        }
                     }
                 }
                 catch
