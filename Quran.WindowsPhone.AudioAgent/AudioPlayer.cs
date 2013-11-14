@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO.IsolatedStorage;
 using System.Windows;
 using Microsoft.Phone.BackgroundAudio;
+using Microsoft.Phone.Controls;
 using Quran.Core;
-using Quran.Core.Data;
 using Quran.Core.Utils;
 
 namespace Quran.WindowsPhone.AudioAgent
@@ -33,6 +34,7 @@ namespace Quran.WindowsPhone.AudioAgent
                 Debugger.Break();
             }
         }
+
 
         /// <summary>
         /// Called when the playstate changes, except for the Error state (see OnError)
@@ -153,7 +155,7 @@ namespace Quran.WindowsPhone.AudioAgent
         /// <returns>an instance of AudioTrack, or null if the playback is completed</returns>
         private AudioTrack GetNextTrack(AudioTrack currentTrack)
         {
-            if (currentTrack != null)
+            if (currentTrack != null && currentTrack.Tag != null)
             {
                 var request = new AudioRequest(currentTrack.Tag);
                 request.GotoNextAyah();
@@ -177,7 +179,7 @@ namespace Quran.WindowsPhone.AudioAgent
         /// <returns>an instance of AudioTrack, or null if previous track is not allowed</returns>
         private AudioTrack GetPreviousTrack(AudioTrack currentTrack)
         {
-            if (currentTrack != null)
+            if (currentTrack != null && currentTrack.Tag != null)
             {
                 var request = new AudioRequest(currentTrack.Tag);
                 request.GotoPreviousAyah();
@@ -191,7 +193,7 @@ namespace Quran.WindowsPhone.AudioAgent
 
         private AudioTrack UpdateCurrentTrack(AudioTrack currentTrack)
         {
-            if (currentTrack != null)
+            if (currentTrack != null && currentTrack.Tag != null)
             {
                 var request = new AudioRequest(currentTrack.Tag);
                 return GetTrackFromRequest(request);
@@ -207,8 +209,14 @@ namespace Quran.WindowsPhone.AudioAgent
             var ayah = request.CurrentAyah;
             var title = QuranInfo.GetSuraAyahString(ayah.Sura, ayah.Ayah);
             var path = AudioUtils.GetLocalPathForAyah(ayah, request.Reciter);
-            return new AudioTrack(new Uri(path, UriKind.Relative), title, request.Reciter.Name, "Quran", null, 
-                request.ToString(), EnabledPlayerControls.All);
+            using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                if (!isf.FileExists(path))
+                    return null;
+                else
+                    return new AudioTrack(new Uri(path, UriKind.Relative), title, request.Reciter.Name, "Quran", null,
+                       request.ToString(), EnabledPlayerControls.All);
+            }
         }
 
         /// <summary>

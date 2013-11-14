@@ -96,6 +96,9 @@
 
         <ui:DownloadControl DataContext="{Binding ActiveDownload}" VerticalAlignment="Top" Height="70"/>
 
+        <ui:AudioPlayerControl AudioState="{Binding AudioPlayerState}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="70" Height="70" 
+                               Foreground="{StaticResource BlueText}" Margin="30"/>
+
         <Button VerticalAlignment="Bottom" HorizontalAlignment="Right" Padding="0" Width="80" Style="{StaticResource ChromelessButtonStyle}" Name="menuToggleButton" 
                 Visibility="{Binding IsShowMenu, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}" Tap="MenuTap">
             <StackPanel Orientation="Horizontal" Background="Transparent" VerticalAlignment="Bottom" Margin="0" Height="70" Width="80">
@@ -105,23 +108,4 @@
             </StackPanel>
         </Button>
     </Grid>
-    
-    <!--<phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar>
-            <shell:ApplicationBarIconButton IconUri="/Assets/Images/search.png" 
-                                            Text="Search" Click="Search_Click"/>
-            <shell:ApplicationBarIconButton IconUri="/Assets/Images/favorite.png" 
-                                            Text="Bookmark" Click="Bookmark_Click"/>
-            <shell:ApplicationBarIconButton IconUri="/Assets/Images/appbar.globe.png" 
-                                            Text="Translate" Click="Translation_Click"/>
-            <shell:ApplicationBar.MenuItems>
-                <shell:ApplicationBarMenuItem Text="Settings" Click="Settings_Click"/>
-                <shell:ApplicationBarMenuItem Text="Contact us" Click="ContactUs_Click"/>
-            </shell:ApplicationBar.MenuItems>
-        </shell:ApplicationBar>
-    </phone:PhoneApplicationPage.ApplicationBar>-->
-
-    <!--<i:Interaction.Behaviors>
-        <abu:AppBarPropertyBinder IsVisible="{Binding IsShowMenu}" Opacity="0.9" BackgroundColor="White" ForegroundColor="#FF49A4C5" />
-    </i:Interaction.Behaviors>-->
 </views:BaseView>

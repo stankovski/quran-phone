@@ -54,7 +54,7 @@ namespace Quran.WindowsPhone.NativeProvider
         public IAudioTrack GetTrack()
         {
             var audioTrack = BackgroundAudioPlayer.Instance.Track;
-            if (windowsPhoneTrack != null && windowsPhoneTrack.OriginalTrack != audioTrack)
+            if (windowsPhoneTrack == null || windowsPhoneTrack.OriginalTrack != audioTrack)
                 windowsPhoneTrack = new WindowsPhoneAudioTrack(audioTrack);
 
             return windowsPhoneTrack;

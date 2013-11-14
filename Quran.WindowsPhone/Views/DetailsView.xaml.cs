@@ -62,6 +62,16 @@ namespace Quran.WindowsPhone.Views
                 //Update settings
                 QuranApp.DetailsViewModel.IsNightMode = SettingsUtils.Get<bool>(Constants.PREF_NIGHT_MODE);
 
+                //Monitor proprty changes
+                QuranApp.DetailsViewModel.PropertyChanged += (sender, args) =>
+                {
+                    if (args.PropertyName == "CurrentPageIndex")
+                    {
+                        if (QuranApp.DetailsViewModel.CurrentPageIndex != -1)
+                            radSlideView.SelectedItem = QuranApp.DetailsViewModel.Pages[QuranApp.DetailsViewModel.CurrentPageIndex];
+                    }
+                };
+
                 //Try extract translation from query
                 var translation = SettingsUtils.Get<string>(Constants.PREF_ACTIVE_TRANSLATION);
                 if (!string.IsNullOrEmpty(translation))
@@ -87,7 +97,6 @@ namespace Quran.WindowsPhone.Views
             QuranApp.DetailsViewModel.LoadData();
             if (DataContext == null)
                 DataContext = QuranApp.DetailsViewModel;
-            radSlideView.SelectedItem = QuranApp.DetailsViewModel.Pages[QuranApp.DetailsViewModel.CurrentPageIndex];
             radSlideView.SelectionChanged += PageFlipped;
 
             // set keepinfooverlay according to setting
@@ -105,7 +114,7 @@ namespace Quran.WindowsPhone.Views
                 QuranApp.DetailsViewModel.SelectedAyah = null;
             }
         }
-
+        
         private void PageFlipped(object sender, SelectionChangedEventArgs e)
         {
             QuranApp.DetailsViewModel.SelectedAyah = null;

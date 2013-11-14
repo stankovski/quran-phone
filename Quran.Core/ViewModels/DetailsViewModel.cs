@@ -288,17 +288,17 @@ namespace Quran.Core.ViewModels
             }
         }
 
-        private bool isPlayingAudio;
-        public bool IsPlayingAudio
+        private AudioState audioPlayerState;
+        public AudioState AudioPlayerState
         {
-            get { return isPlayingAudio; }
+            get { return audioPlayerState; }
             set
             {
-                if (value == isPlayingAudio)
+                if (value == audioPlayerState)
                     return;
 
-                isPlayingAudio = value;
-                base.RaisePropertyChanged(() => IsPlayingAudio);
+                audioPlayerState = value;
+                base.RaisePropertyChanged(() => AudioPlayerState);
             }
         }
 
@@ -327,20 +327,6 @@ namespace Quran.Core.ViewModels
 
                 audioDownloadProgress = value;
                 base.RaisePropertyChanged(() => AudioDownloadProgress);
-            }
-        }
-
-        private bool isAudioControlVisible;
-        public bool IsAudioControlVisible
-        {
-            get { return isAudioControlVisible; }
-            set
-            {
-                if (value == isAudioControlVisible)
-                    return;
-
-                isAudioControlVisible = value;
-                base.RaisePropertyChanged(() => IsAudioControlVisible);
             }
         }
 
@@ -563,7 +549,6 @@ namespace Quran.Core.ViewModels
         {
             if (request == null || this.ActiveDownload.IsDownloading)
             {
-                IsPlayingAudio = false;
                 return;
             }
 
@@ -575,7 +560,6 @@ namespace Quran.Core.ViewModels
             }
             else
             {
-                IsPlayingAudio = true;
                 var uri = AudioUtils.GetLocalPathForAyah(request.CurrentAyah, request.Reciter);
                 QuranApp.NativeProvider.AudioProvider.SetTrack(new Uri(uri, UriKind.Relative), null, null, null, null,
                     request.ToString());
@@ -618,16 +602,27 @@ namespace Quran.Core.ViewModels
             return result;
         }
 
-        void AudioProvider_StateChanged(object sender, EventArgs e)
+        private async void AudioProvider_StateChanged(object sender, EventArgs e)
         {
             if (QuranApp.NativeProvider.AudioProvider.State == AudioPlayerPlayState.Stopped)
             {
-                IsPlayingAudio = false;
+                // Wait to make sure the audio is really stopped and is not being changed to a different track
+                await Task.Delay(500);
+
+                if (QuranApp.NativeProvider.AudioProvider.State == AudioPlayerPlayState.Stopped ||
+                    QuranApp.NativeProvider.AudioProvider.State == AudioPlayerPlayState.Unknown)
+                    AudioPlayerState = AudioState.Stopped;
 
                 //TODO: download next batch if needed
             }
-            if (QuranApp.NativeProvider.AudioProvider.State == AudioPlayerPlayState.TrackReady)
+            else if (QuranApp.NativeProvider.AudioProvider.State == AudioPlayerPlayState.Paused)
             {
+                AudioPlayerState = AudioState.Paused;
+            }
+            else if (QuranApp.NativeProvider.AudioProvider.State == AudioPlayerPlayState.Playing)
+            {
+                AudioPlayerState = AudioState.Playing;
+
                 var track = QuranApp.NativeProvider.AudioProvider.GetTrack();
                 if (track != null && track.Tag != null)
                 {

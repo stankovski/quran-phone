@@ -9,6 +9,7 @@ namespace Quran.Core.Common
     public enum AudioState
     {
         Stopped,
+        Paused,
         Playing
     }
 }
