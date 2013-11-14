@@ -106,6 +106,11 @@ namespace Quran.Core.Utils
             return string.Format(description, QuranInfo.GetJuzFromPage(page));
         }
 
+        public static string GetSuraAyahString(QuranAyah ayah)
+        {
+            return GetSuraAyahString(ayah.Sura, ayah.Ayah);
+        }
+
         public static string GetSuraAyahString(int sura, int ayah)
         {
             string suraName = GetSuraName(sura, false);
@@ -153,7 +158,11 @@ namespace Quran.Core.Utils
                 {
                     newAyah.Sura = Constants.SURA_FIRST;
                 }
-                newAyah.Ayah = 1;
+                // If need to include bismillah and not surah Tawba set ayah to 0
+                if (includeBismillah && newAyah.Sura != Constants.SURA_TAWBA && newAyah.Sura != Constants.SURA_FIRST)
+                    newAyah.Ayah = 0;
+                else
+                    newAyah.Ayah = 1;
             }
             return newAyah;
         }
@@ -169,16 +178,24 @@ namespace Quran.Core.Utils
             }
             else
             {
-                // If the beginning of surah check if also the beginning of Quran
-                if (ayah.Sura > Constants.SURA_FIRST)
+                // If need to include bismillah and not surah Tawba set ayah to 0
+                if (ayah.Ayah == 1 && includeBismillah && newAyah.Sura != Constants.SURA_TAWBA && newAyah.Sura != Constants.SURA_FIRST)
                 {
-                    newAyah.Sura--;
+                    newAyah.Ayah = 0;
                 }
                 else
                 {
-                    newAyah.Sura = Constants.SURA_LAST;
+                    // If the beginning of surah check if also the beginning of Quran
+                    if (ayah.Sura > Constants.SURA_FIRST)
+                    {
+                        newAyah.Sura--;
+                    }
+                    else
+                    {
+                        newAyah.Sura = Constants.SURA_LAST;
+                    }
+                    newAyah.Ayah = QuranInfo.GetSuraNumberOfAyah(newAyah.Sura);
                 }
-                newAyah.Ayah = QuranInfo.GetSuraNumberOfAyah(newAyah.Sura);
             }
             
             return newAyah;
@@ -668,6 +685,13 @@ namespace Quran.Core.Utils
 
         public static int GetJuzFromPage(int page)
         {
+            int juz = ((page - 2) / 20) + 1;
+            return juz > 30 ? 30 : juz < 1 ? 1 : juz;
+        }
+
+        public static int GetJuzFromAyah(int sura, int ayah)
+        {
+            int page = GetPageFromSuraAyah(sura, ayah);
             int juz = ((page - 2) / 20) + 1;
             return juz > 30 ? 30 : juz < 1 ? 1 : juz;
         }

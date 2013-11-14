@@ -19,6 +19,19 @@ namespace Quran.WindowsPhone.Views
         {
             QuranApp.SettingsViewModel.LoadData();
             DataContext = QuranApp.SettingsViewModel;
+
+            string tab;
+            NavigationContext.QueryString.TryGetValue("tab", out tab);
+
+            if (!string.IsNullOrEmpty(tab))
+            {
+                if (tab == "general")
+                    this.MainPivot.SelectedItem = this.General;
+                if (tab == "audio")
+                    this.MainPivot.SelectedItem = this.Audio;
+                if (tab == "about")
+                    this.MainPivot.SelectedItem = this.About;
+            }
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)

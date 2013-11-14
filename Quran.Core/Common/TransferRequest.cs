@@ -104,6 +104,10 @@ namespace Quran.Core.Common
         /// </returns>
         long BytesSent { [SecuritySafeCritical] get; }
 
+        bool IsCancelled { get; }
+
+        void Cancel();
+
         /// <summary>
         /// Occurs when the <see cref="P:Microsoft.Phone.BackgroundTransfer.BackgroundTransferRequest.TransferStatus"/> property of a request changes.
         /// </summary>

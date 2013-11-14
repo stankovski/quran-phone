@@ -12,5 +12,6 @@
         Paused,
         Completed,
         Unknown,
+        Cancelled
     }
 }

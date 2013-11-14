@@ -68,6 +68,7 @@
                                                 <telerikPrimitives:RadContextMenu>
                                                     <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.bookmark_ayah, Source={StaticResource LocalizedStrings}}" Tapped="AyahContextMenuClick"/>
                                                     <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.copy, Source={StaticResource LocalizedStrings}}" Tapped="AyahContextMenuClick"/>
+                                                    <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.recite_ayah, Source={StaticResource LocalizedStrings}}" Tapped="AyahContextMenuClick"/>
                                                 </telerikPrimitives:RadContextMenu>
                                             </telerikPrimitives:RadContextMenu.ContextMenu>
                                             <ui:TranslationView DataContext="{Binding}" SelectedAyah="{Binding DataContext.SelectedAyah, ElementName=ThisPage}"/>

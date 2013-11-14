@@ -23,6 +23,7 @@ namespace Quran.Core.Data
         // Pages
         public const int PAGES_FIRST = 1;
         public const int PAGES_LAST = 604;
+        public const int SURA_TAWBA = 9;
         public const int SURA_FIRST = 1;
         public const int SURA_LAST = 114;
         public const int SURAS_COUNT = 114;

@@ -20,6 +20,7 @@ namespace Quran.WindowsPhone.NativeProvider
         public long TotalBytesToSend { get; set; }
         public long BytesReceived { get; set; }
         public long BytesSent { get; set; }
+        public bool IsCancelled { get; private set; }
 
         public void ChangeProgress(long bytes, FileTransferStatus status)
         {
@@ -30,6 +31,11 @@ namespace Quran.WindowsPhone.NativeProvider
                 TransferStatusChanged(this, new TransferEventArgs(this));
 
             TransferProgressChanged(this, new TransferEventArgs(this));
+        }
+
+        public void Cancel()
+        {
+            IsCancelled = true;
         }
 
         public event EventHandler<TransferEventArgs> TransferStatusChanged;

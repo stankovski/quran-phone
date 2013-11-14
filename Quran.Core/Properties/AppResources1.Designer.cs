@@ -585,6 +585,15 @@ namespace Quran.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Recite ayah.
+        /// </summary>
+        public static string recite_ayah {
+            get {
+                return ResourceManager.GetString("recite_ayah", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to reciters.
         /// </summary>
         public static string reciters {

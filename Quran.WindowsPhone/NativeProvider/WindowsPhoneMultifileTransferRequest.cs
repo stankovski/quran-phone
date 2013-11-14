@@ -26,6 +26,12 @@ namespace Quran.WindowsPhone.NativeProvider
         public long BytesReceived { get; set; }
         public long BytesSent { get; set; }
 
+        public bool IsCancelled { get; private set; }
+        public void Cancel()
+        {
+            IsCancelled = true;
+        }
+
         public async void Download()
         {
             int successfulDownloads = 0;
@@ -35,6 +41,14 @@ namespace Quran.WindowsPhone.NativeProvider
 
             foreach (var serverPath in serverUrls)
             {
+                successfulDownloads++;
+
+                if (IsCancelled)
+                {
+                    TransferStatus = FileTransferStatus.Cancelled;
+                    break;
+                }
+
                 var localFilePath = PathHelper.Combine(DownloadLocation.ToString(), PathHelper.GetFileName(serverPath));
                 if (FileUtils.FileExists(localFilePath))
                 {
@@ -50,7 +64,6 @@ namespace Quran.WindowsPhone.NativeProvider
                     var result = await FileUtils.DownloadFileFromWebAsync(serverPath, localFilePath);
                     if (result)
                     {
-                        successfulDownloads ++;
                         BytesReceived = successfulDownloads*1000;
                         if (TransferProgressChanged != null)
                         {

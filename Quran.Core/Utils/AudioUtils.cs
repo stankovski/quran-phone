@@ -63,76 +63,47 @@ namespace Quran.Core.Utils
 
         public static QuranAyah GetLastAyahToPlay(QuranAyah startAyah, AudioDownloadAmount mode)
         {
-            int pageLastSura = 114;
-            int pageLastAyah = 6;
+            switch (mode)
+            {
+                case AudioDownloadAmount.Page:
+                    return GetLastAyahToPlayForPage(startAyah);
+                case AudioDownloadAmount.Sura:
+                    return GetLastAyahToPlayForSura(startAyah);
+                case AudioDownloadAmount.Juz:
+                    return GetLastAyahToPlayForJuz(startAyah);
+                default:
+                    return GetLastAyahToPlayForPage(startAyah);
+            }
+        }
+
+        private static QuranAyah GetLastAyahToPlayForSura(QuranAyah startAyah)
+        {
+            int sura = startAyah.Sura;
+            int lastAyah = QuranInfo.GetSuraNumberOfAyah(sura);
+            return new QuranAyah(sura, lastAyah);
+        }
+
+        private static QuranAyah GetLastAyahToPlayForPage(QuranAyah startAyah)
+        {
             var page = QuranInfo.GetPageFromSuraAyah(startAyah.Sura, startAyah.Ayah);
-            if (page > 604 || page < 0)
-            {
+            if (page == -1)
                 return null;
-            }
-            if (page < 604)
-            {
-                int nextPageSura = QuranInfo.PAGE_SURA_START[page];
-                int nextPageAyah = QuranInfo.PAGE_AYAH_START[page];
 
-                pageLastSura = nextPageSura;
-                pageLastAyah = nextPageAyah - 1;
-                if (pageLastAyah < 1)
-                {
-                    pageLastSura--;
-                    if (pageLastSura < 1)
-                    {
-                        pageLastSura = 1;
-                    }
-                    pageLastAyah = QuranInfo.GetSuraNumberOfAyah(pageLastSura);
-                }
-            }
+            int[] pageBounds = QuranInfo.GetPageBounds(page);
 
-            if (mode == AudioDownloadAmount.Sura)
-            {
-                int sura = startAyah.Sura;
-                int lastAyah = QuranInfo.GetSuraNumberOfAyah(sura);
-                if (lastAyah == -1)
-                {
-                    return null;
-                }
+            return new QuranAyah(pageBounds[2], pageBounds[3]);
+        }
 
-                // if we start playback between two suras, download both suras
-                if (pageLastSura > sura)
-                {
-                    sura = pageLastSura;
-                    lastAyah = QuranInfo.GetSuraNumberOfAyah(sura);
-                }
-                return new QuranAyah(sura, lastAyah);
-            }
-            else if (mode == AudioDownloadAmount.Juz)
-            {
-                int juz = QuranInfo.GetJuzFromPage(page);
-                if (juz == 30)
-                {
-                    return new QuranAyah(114, 6);
-                }
-                else if (juz >= 1 && juz < 30)
-                {
-                    int[] endJuz = QuranInfo.QUARTERS[juz * 8];
-                    if (pageLastSura > endJuz[0])
-                    {
-                        // ex between jathiya and a7qaf
-                        endJuz = QuranInfo.QUARTERS[(juz + 1) * 8];
-                    }
-                    else if (pageLastSura == endJuz[0] &&
-                             pageLastAyah > endJuz[1])
-                    {
-                        // ex surat al anfal
-                        endJuz = QuranInfo.QUARTERS[(juz + 1) * 8];
-                    }
+        private static QuranAyah GetLastAyahToPlayForJuz(QuranAyah startAyah)
+        {
+            var juz = QuranInfo.GetJuzFromAyah(startAyah.Sura, startAyah.Ayah);
+            // If last juz - return last verse
+            if (juz == Constants.JUZ2_COUNT)
+                return new QuranAyah(Constants.SURA_LAST, 6);
 
-                    return new QuranAyah(endJuz[0], endJuz[1]);
-                }
-            }
+            int[] endJuz = QuranInfo.QUARTERS[juz * 8];
 
-            // page mode (fallback also from errors above)
-            return new QuranAyah(pageLastSura, pageLastAyah);
+            return new QuranAyah(endJuz[0], endJuz[1] - 1);
         }
 
         public static bool ShouldDownloadBismillah(AudioRequest request)
@@ -192,7 +163,7 @@ namespace Quran.Core.Utils
 
                 for (int j = firstAyah; j <= lastAyah; j++)
                 {
-                    if (j == 1 && i != 1 && i != 9)
+                    if (j == 1 && i != Constants.SURA_FIRST && i != Constants.SURA_TAWBA)
                     {
                         return true;
                     }

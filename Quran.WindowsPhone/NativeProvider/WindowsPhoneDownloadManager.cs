@@ -11,6 +11,9 @@ namespace Quran.WindowsPhone.NativeProvider
 {
     public class WindowsPhoneDownloadManager : IDownloadManager
     {
+        private Dictionary<string, WindowsPhoneMultifileTransferRequest> multifileTransferRequests =
+            new Dictionary<string, WindowsPhoneMultifileTransferRequest>();
+
         public ITransferRequest DownloadAsync(string from, string to, bool allowCellular = true)
         {
             var serverUri = new Uri(from, UriKind.Absolute);
@@ -52,8 +55,12 @@ namespace Quran.WindowsPhone.NativeProvider
         {
             var phoneUri = new Uri(to, UriKind.Relative);
 
-            var request = new WindowsPhoneMultifileTransferRequest(from, phoneUri);
+            var request = new WindowsPhoneMultifileTransferRequest(from, phoneUri)
+            {
+                RequestId = Guid.NewGuid().ToString()
+            };
             request.Download();
+            multifileTransferRequests[request.RequestId] = request;
             return request; 
         }
 
@@ -92,15 +99,24 @@ namespace Quran.WindowsPhone.NativeProvider
 
         public void Cancel(ITransferRequest request)
         {
+            request.Cancel();
             FinalizeRequest(request);
         }
 
         public void FinalizeRequest(ITransferRequest request)
         {
-            if (request.RequestId != null && BackgroundTransferService.Find(request.RequestId) != null)
+            if (request.RequestId != null)
             {
-                BackgroundTransferService.Remove(((WindowsPhoneTransferRequest)request).OriginalRequest);
-                DeleteRequestFromStorage(((WindowsPhoneTransferRequest)request).OriginalRequest);
+                if (BackgroundTransferService.Find(request.RequestId) != null)
+                {
+                    BackgroundTransferService.Remove(((WindowsPhoneTransferRequest) request).OriginalRequest);
+                    DeleteRequestFromStorage(((WindowsPhoneTransferRequest) request).OriginalRequest);
+                }
+                if (multifileTransferRequests.ContainsKey(request.RequestId))
+                {
+                    multifileTransferRequests[request.RequestId].Cancel();
+                    multifileTransferRequests.Remove(request.RequestId);
+                }
             }
         }
 

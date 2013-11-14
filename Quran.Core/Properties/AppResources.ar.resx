@@ -724,4 +724,7 @@
   <data name="audio" xml:space="preserve">
     <value>الصوت</value>
   </data>
+  <data name="recite_ayah" xml:space="preserve">
+    <value>يقرأ</value>
+  </data>
 </root>

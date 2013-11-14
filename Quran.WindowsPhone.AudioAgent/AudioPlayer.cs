@@ -5,6 +5,7 @@ using System.Windows;
 using Microsoft.Phone.BackgroundAudio;
 using Microsoft.Phone.Controls;
 using Quran.Core;
+using Quran.Core.Common;
 using Quran.Core.Utils;
 
 namespace Quran.WindowsPhone.AudioAgent
@@ -58,6 +59,7 @@ namespace Quran.WindowsPhone.AudioAgent
             {
                 case PlayState.TrackEnded:
                     player.Track = GetNextTrack(track);
+                    player.Play();
                     break;
                 case PlayState.TrackReady:
                     player.Play();
@@ -125,9 +127,11 @@ namespace Quran.WindowsPhone.AudioAgent
                     player.Position = (TimeSpan)param;
                     break;
                 case UserAction.SkipNext:
+                    player.Stop();
                     player.Track = GetNextTrack(track);
                     break;
                 case UserAction.SkipPrevious:
+                    player.Stop();
                     player.Track = GetPreviousTrack(track);
                     break;
             }
@@ -200,8 +204,9 @@ namespace Quran.WindowsPhone.AudioAgent
         private AudioTrack GetTrackFromRequest(AudioRequest request)
         {
             var ayah = request.CurrentAyah;
-            var title = QuranInfo.GetSuraAyahString(ayah.Sura, ayah.Ayah);
-            var path = AudioUtils.GetLocalPathForAyah(ayah, request.Reciter);
+            var title = ayah.Ayah == 0 ? "Bismillah" : QuranInfo.GetSuraAyahString(ayah.Sura, ayah.Ayah);
+            var path = AudioUtils.GetLocalPathForAyah(ayah.Ayah == 0 ? new QuranAyah(1, 1) : ayah, request.Reciter);
+
             using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
             {
                 if (!isf.FileExists(path))

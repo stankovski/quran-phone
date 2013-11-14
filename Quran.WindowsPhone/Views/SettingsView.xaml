@@ -24,8 +24,8 @@
 
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot">
-        <phone:Pivot>
-            <phone:PivotItem Header="{Binding Path=LocalizedResources.settings, Source={StaticResource LocalizedStrings}}">
+        <phone:Pivot x:Name="MainPivot">
+            <phone:PivotItem x:Name="General" Header="{Binding Path=LocalizedResources.settings, Source={StaticResource LocalizedStrings}}">
                 <ScrollViewer Background="Transparent">
                     <StackPanel Margin="12,17,0,28">
                         <TextBlock Text="{Binding Path=LocalizedResources.translations, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
@@ -55,7 +55,7 @@
                     </StackPanel>
                 </ScrollViewer>
             </phone:PivotItem>
-            <phone:PivotItem Header="{Binding Path=LocalizedResources.audio, Source={StaticResource LocalizedStrings}}">
+            <phone:PivotItem x:Name="Audio" Header="{Binding Path=LocalizedResources.audio, Source={StaticResource LocalizedStrings}}">
                 <ScrollViewer Background="Transparent">
                     <StackPanel Margin="12,17,0,28">
                         <TextBlock Text="{Binding Path=LocalizedResources.reciters, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
@@ -70,7 +70,7 @@
                     </StackPanel>
                 </ScrollViewer>
             </phone:PivotItem>
-            <phone:PivotItem Header="{Binding Path=LocalizedResources.about_us, Source={StaticResource LocalizedStrings}}">
+            <phone:PivotItem x:Name="About" Header="{Binding Path=LocalizedResources.about_us, Source={StaticResource LocalizedStrings}}">
                 <ScrollViewer Background="Transparent">
                     <StackPanel Orientation="Vertical">
                         <StackPanel.Resources>

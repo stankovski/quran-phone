@@ -52,7 +52,13 @@ namespace Quran.WindowsPhone.NativeProvider
 
         public FileTransferStatus TransferStatus
         {
-            get { return (FileTransferStatus)((int)request.TransferStatus); }
+            get
+            {
+                if (IsCancelled)
+                    return FileTransferStatus.Cancelled;
+                else
+                    return (FileTransferStatus)((int)request.TransferStatus);
+            }
         }
 
         public Exception TransferError
@@ -78,6 +84,13 @@ namespace Quran.WindowsPhone.NativeProvider
         public long BytesSent
         {
             get { return request.BytesSent; }
+        }
+
+        public bool IsCancelled { get; private set; }
+
+        public void Cancel()
+        {
+            IsCancelled = true;
         }
 
         public event EventHandler<TransferEventArgs> TransferStatusChanged;

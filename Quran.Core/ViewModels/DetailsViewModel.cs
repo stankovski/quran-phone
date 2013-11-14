@@ -560,8 +560,9 @@ namespace Quran.Core.ViewModels
             }
             else
             {
-                var uri = AudioUtils.GetLocalPathForAyah(request.CurrentAyah, request.Reciter);
-                QuranApp.NativeProvider.AudioProvider.SetTrack(new Uri(uri, UriKind.Relative), null, null, null, null,
+                var path = AudioUtils.GetLocalPathForAyah(request.CurrentAyah.Ayah == 0 ? new QuranAyah(1, 1) : request.CurrentAyah, request.Reciter);
+                var title = request.CurrentAyah.Ayah == 0 ? "Bismillah" : QuranInfo.GetSuraAyahString(request.CurrentAyah);
+                QuranApp.NativeProvider.AudioProvider.SetTrack(new Uri(path, UriKind.Relative), title, request.Reciter.Name, "Quran", null,
                     request.ToString());
             }
         }
@@ -606,7 +607,8 @@ namespace Quran.Core.ViewModels
         {
             await Task.Delay(500);
             if (QuranApp.NativeProvider.AudioProvider.State == AudioPlayerPlayState.Stopped ||
-                    QuranApp.NativeProvider.AudioProvider.State == AudioPlayerPlayState.Unknown)
+                    QuranApp.NativeProvider.AudioProvider.State == AudioPlayerPlayState.Unknown ||
+                QuranApp.NativeProvider.AudioProvider.State == AudioPlayerPlayState.Error)
             {
                 AudioPlayerState = AudioState.Stopped;
             }
@@ -625,8 +627,17 @@ namespace Quran.Core.ViewModels
                     {
                         var request = new AudioRequest(track.Tag);
                         var pageNumber = QuranInfo.GetPageFromSuraAyah(request.CurrentAyah);
-                        CurrentPageIndex = getIndexFromPageNumber(pageNumber);
-                        await Task.Delay(500);
+                        var oldPageIndex = CurrentPageIndex;
+                        var newPageIndex = getIndexFromPageNumber(pageNumber);
+
+                        CurrentPageIndex = newPageIndex;
+                        if (oldPageIndex != newPageIndex)
+                        {
+                            await Task.Delay(500);
+                        }
+                        // If bismillah set to first ayah
+                        if (request.CurrentAyah.Ayah == 0)
+                            request.CurrentAyah.Ayah = 1;
                         SelectedAyah = request.CurrentAyah;
                     }
                     catch

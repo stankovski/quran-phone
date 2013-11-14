@@ -38,6 +38,7 @@ namespace Quran.WindowsPhone.Views
             {
                 ayahContextMenu.Items.Add(new RadContextMenuItem() {Content = AppResources.copy});
             }
+            ayahContextMenu.Items.Add(new RadContextMenuItem() { Content = AppResources.recite_ayah });
             ayahContextMenu.ItemTapped += AyahContextMenuClick;
             ayahContextMenu.Closed += (obj, e) => QuranApp.DetailsViewModel.SelectedAyah = null;
         }
@@ -242,12 +243,16 @@ namespace Quran.WindowsPhone.Views
                 QuranApp.DetailsViewModel.CopyAyahToClipboard(QuranApp.DetailsViewModel.SelectedAyah);
                 QuranApp.DetailsViewModel.SelectedAyah = null;
             }
+            else if (menuItem == AppResources.recite_ayah)
+            {
+                Recite_Click(this, null);
+            }
         }
 
         private void Settings_Click(object sender, EventArgs e)
         {
             QuranApp.DetailsViewModel.IsShowMenu = false;
-            NavigationService.Navigate(new Uri("/Views/SettingsView.xaml", UriKind.Relative));
+            NavigationService.Navigate(new Uri("/Views/SettingsView.xaml?tab=general", UriKind.Relative));
         }
 
         private void Recite_Click(object sender, EventArgs e)
@@ -255,7 +260,7 @@ namespace Quran.WindowsPhone.Views
             var reciter = SettingsUtils.Get<string>(Constants.PREF_ACTIVE_QARI);
             if (string.IsNullOrEmpty(reciter))
             {
-                NavigationService.Navigate(new Uri("/Views/SettingsView.xaml", UriKind.Relative));
+                NavigationService.Navigate(new Uri("/Views/RecitersListView.xaml", UriKind.Relative));
             }
             else
             {
@@ -268,6 +273,11 @@ namespace Quran.WindowsPhone.Views
                         Sura = bounds[0],
                         Ayah = bounds[1]
                     };
+                    if (selectedAyah.Ayah == 1 && selectedAyah.Sura != Constants.SURA_TAWBA &&
+                        selectedAyah.Sura != Constants.SURA_FIRST)
+                    {
+                        selectedAyah.Ayah = 0;
+                    }
                 }
                 QuranApp.DetailsViewModel.PlayFromAyah(selectedAyah.Sura, selectedAyah.Ayah);
             }

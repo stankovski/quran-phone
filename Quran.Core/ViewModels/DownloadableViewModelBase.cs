@@ -304,6 +304,13 @@ namespace Quran.Core.ViewModels
                 if (DownloadComplete != null)
                     DownloadComplete(this, null);
             }
+            if (e.Request.TransferStatus == FileTransferStatus.Cancelled)
+            {
+                await FinishDownload();
+                QuranApp.NativeProvider.DownloadManager.FinalizeRequest(e.Request);
+                if (DownloadCancelled != null)
+                    DownloadCancelled(this, null);
+            }
         }
 
         protected void TransferProgressChanged(object sender, TransferEventArgs e)
@@ -365,6 +372,7 @@ namespace Quran.Core.ViewModels
             }
             var tcs = new TaskCompletionSource<bool>();
             DownloadComplete += (s, e) => tcs.TrySetResult(true);
+            DownloadCancelled += (s, e) => tcs.TrySetResult(false);
             var result = await tcs.Task;
             IsDownloading = false;
             return result;
@@ -396,6 +404,7 @@ namespace Quran.Core.ViewModels
             }
             var tcs = new TaskCompletionSource<bool>();
             DownloadComplete += (s, e) => tcs.TrySetResult(true);
+            DownloadCancelled += (s, e) => tcs.TrySetResult(false);
             return await tcs.Task;
         }
 
@@ -550,5 +559,6 @@ namespace Quran.Core.ViewModels
         }
 
         public event EventHandler DownloadComplete;
+        public event EventHandler DownloadCancelled;
     }
 }

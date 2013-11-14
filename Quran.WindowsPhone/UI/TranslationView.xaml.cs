@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
+using Quran.Core;
 using Quran.Core.Common;
 using Quran.Core.ViewModels;
 
@@ -30,11 +32,18 @@ namespace Quran.WindowsPhone.UI
             else
             {
                 var currentModel = this.DataContext as VerseViewModel;
-                if (currentModel != null && currentModel.Surah == ayahInfo.Sura && 
+                if (currentModel != null && currentModel.Surah == ayahInfo.Sura &&
                     currentModel.Ayah == ayahInfo.Ayah)
                 {
                     canvas.Opacity = 1.0;
-                    canvasStoryboard.Begin();
+                    if (QuranApp.DetailsViewModel.AudioPlayerState == AudioState.Playing)
+                        canvasStoryboard.Seek(new TimeSpan(1));
+                    else
+                        canvasStoryboard.Begin();
+                }
+                else
+                {
+                    canvas.Opacity = 0;
                 }
             }
         }
