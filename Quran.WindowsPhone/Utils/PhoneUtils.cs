@@ -1,9 +1,13 @@
 ﻿using System.IO.IsolatedStorage;
+using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Info;
 using System;
 using Microsoft.Phone.Net.NetworkInformation;
+using Microsoft.Phone.Reactive;
 using Microsoft.Phone.Shell;
 using Quran.Core.Common;
 using Quran.Core.Utils;
@@ -87,6 +91,43 @@ namespace Quran.WindowsPhone.Utils
                 return FontWeights.Bold;
             else
                 return FontWeights.Normal;
+        }
+
+        public static void PinPageToStart(int page)
+        {
+            var standardTileData = new StandardTileData();
+            standardTileData.Title = QuranInfo.GetSuraNameFromPage(page, true);
+            standardTileData.Count = page;
+            var imageUrl = PathHelper.Combine(FileUtils.GetQuranDirectory(false),
+                FileUtils.GetPageFileName(page));
+            imageUrl = ResizeAndCopyImageToShared(imageUrl, page);
+            standardTileData.BackgroundImage = new Uri(imageUrl, UriKind.Relative);
+            standardTileData.BackContent = QuranInfo.GetSuraNameFromPage(page) + " page " + page;
+            var pageUrl = string.Format("/Views/MainView.xaml?page={0}", page);
+            ShellTile tiletopin = ShellTile.ActiveTiles.FirstOrDefault(x => x.NavigationUri.ToString().Contains(pageUrl));
+            if (tiletopin == null)
+            {
+                ShellTile.Create(new Uri(pageUrl, UriKind.Relative), standardTileData);
+            }
+        }
+
+        private static string ResizeAndCopyImageToShared(string imageUrl, int page)
+        {
+            var newUrl = string.Format("/Shared/ShellContent/{0}.jpg", page);
+            using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                if (!isf.FileExists(newUrl))
+                {
+                    BitmapImage source = new BitmapImage(new Uri(imageUrl, UriKind.Relative));
+                    WriteableBitmap bitmap = new WriteableBitmap(source);
+                    bitmap.Crop(0, 0, 137, 137);
+                    using (var fileStream = isf.CreateFile(newUrl))
+                    {
+                        bitmap.SaveJpeg(fileStream, 137, 137, 0, 100);
+                    }
+                }
+            }
+            return newUrl;
         }
     }
 }

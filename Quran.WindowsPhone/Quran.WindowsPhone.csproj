@@ -123,6 +123,12 @@
     <Reference Include="Telerik.Windows.Controls.Primitives, Version=2013.2.718.2040, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL" />
     <Reference Include="Telerik.Windows.Core, Version=2013.2.718.2040, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL" />
     <Reference Include="Telerik.Windows.Data, Version=2013.2.718.2040, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL" />
+    <Reference Include="WriteableBitmapExWinPhone">
+      <HintPath>..\packages\WriteableBitmapEx.1.0.8.0\lib\WindowsPhone8\WriteableBitmapExWinPhone.dll</HintPath>
+    </Reference>
+    <Reference Include="WriteableBitmapExWinPhoneXnaDependant">
+      <HintPath>..\packages\WriteableBitmapEx.1.0.8.0\lib\WindowsPhone8\WriteableBitmapExWinPhoneXnaDependant.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
@@ -453,6 +459,9 @@
     <Content Include="Assets\Tiles\FlipCycleTileSmall.png" />
     <Content Include="Assets\Tiles\IconicTileMediumLarge.png" />
     <Content Include="Assets\Tiles\IconicTileSmall.png" />
+    <Content Include="FlipCycleTileLarge.png" />
+    <Content Include="FlipCycleTileMedium.png" />
+    <Content Include="FlipCycleTileSmall.png" />
     <Content Include="SplashScreenImage.screen-720p.jpg" />
     <Content Include="SplashScreenImage.screen-WVGA.jpg" />
     <Content Include="SplashScreenImage.screen-WXGA.jpg" />

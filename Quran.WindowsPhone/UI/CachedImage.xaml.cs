@@ -90,6 +90,7 @@ namespace Quran.WindowsPhone.UI
                         if (QuranApp.DetailsViewModel.AudioPlayerState == AudioState.Playing)
                         {
                             canvasStoryboard.Seek(new TimeSpan(1));
+                            canvasStoryboard.Stop();
                         }
                         else
                         {

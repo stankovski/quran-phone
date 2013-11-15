@@ -236,7 +236,7 @@ namespace Quran.WindowsPhone.Views
             if (menuItem == AppResources.bookmark_ayah)
             {
                 QuranApp.DetailsViewModel.AddAyahBookmark(QuranApp.DetailsViewModel.SelectedAyah);
-                QuranApp.DetailsViewModel.SelectedAyah = null;
+                QuranApp.DetailsViewModel.SelectedAyah = null;                
             } 
             else if (menuItem == AppResources.copy)
             {

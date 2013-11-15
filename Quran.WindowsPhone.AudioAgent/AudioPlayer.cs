@@ -59,10 +59,14 @@ namespace Quran.WindowsPhone.AudioAgent
             {
                 case PlayState.TrackEnded:
                     player.Track = GetNextTrack(track);
-                    player.Play();
+                    if (player.Track != null)
+                        player.Play();
+                    else
+                        player.Stop();
                     break;
                 case PlayState.TrackReady:
-                    player.Play();
+                    if (player.Track != null)
+                        player.Play();
                     break;
                 case PlayState.Shutdown:
                     // TODO: Handle the shutdown state here (e.g. save state)
@@ -108,7 +112,7 @@ namespace Quran.WindowsPhone.AudioAgent
             switch (action)
             {
                 case UserAction.Play:
-                    if (player.PlayerState != PlayState.Playing)
+                    if (player.PlayerState != PlayState.Playing && player.Track != null)
                         player.Play();
                     break;
                 case UserAction.Stop:

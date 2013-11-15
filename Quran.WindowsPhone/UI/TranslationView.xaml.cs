@@ -37,9 +37,14 @@ namespace Quran.WindowsPhone.UI
                 {
                     canvas.Opacity = 1.0;
                     if (QuranApp.DetailsViewModel.AudioPlayerState == AudioState.Playing)
+                    {
                         canvasStoryboard.Seek(new TimeSpan(1));
+                        canvasStoryboard.Stop();
+                    }
                     else
+                    {
                         canvasStoryboard.Begin();
+                    }
                 }
                 else
                 {
