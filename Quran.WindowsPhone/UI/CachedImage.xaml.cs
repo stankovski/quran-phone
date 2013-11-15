@@ -28,8 +28,8 @@ namespace Quran.WindowsPhone.UI
         {
             imageSourceBitmap = new WriteableBitmap(1, 1);
             InitializeComponent();
-            canvas.Width = QuranScreenInfo.Instance.ImageWidth;
-            canvas.Height = QuranScreenInfo.Instance.ImageHeight;
+            canvas.Width = ScreenUtils.Instance.ImageWidth;
+            canvas.Height = ScreenUtils.Instance.ImageHeight;
         }
 
         public Image Image
@@ -379,7 +379,7 @@ namespace Quran.WindowsPhone.UI
 
         private static Point adjustPoint(Point p, double width)
         {
-            var imageWidth = QuranScreenInfo.Instance.ImageWidth;
+            var imageWidth = ScreenUtils.Instance.ImageWidth;
             var actualWidth = width;
             var scale = imageWidth/actualWidth;
             return new Point(p.X*scale, p.Y*scale);
@@ -387,7 +387,7 @@ namespace Quran.WindowsPhone.UI
 
         private static Point adjustPointRevert(Point p, double width)
         {
-            var imageWidth = QuranScreenInfo.Instance.ImageWidth;
+            var imageWidth = ScreenUtils.Instance.ImageWidth;
             var actualWidth = width;
             var scale = imageWidth / actualWidth;
             return new Point(p.X / scale, p.Y / scale);

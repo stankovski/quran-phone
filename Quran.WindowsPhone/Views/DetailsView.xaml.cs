@@ -267,7 +267,7 @@ namespace Quran.WindowsPhone.Views
                 var selectedAyah = QuranApp.DetailsViewModel.SelectedAyah;
                 if (selectedAyah == null)
                 {
-                    var bounds = QuranInfo.GetPageBounds(QuranApp.DetailsViewModel.CurrentPageNumber);
+                    var bounds = QuranUtils.GetPageBounds(QuranApp.DetailsViewModel.CurrentPageNumber);
                     selectedAyah = new QuranAyah
                     {
                         Sura = bounds[0],

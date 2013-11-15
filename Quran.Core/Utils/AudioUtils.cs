@@ -79,29 +79,29 @@ namespace Quran.Core.Utils
         private static QuranAyah GetLastAyahToPlayForSura(QuranAyah startAyah)
         {
             int sura = startAyah.Sura;
-            int lastAyah = QuranInfo.GetSuraNumberOfAyah(sura);
+            int lastAyah = QuranUtils.GetSuraNumberOfAyah(sura);
             return new QuranAyah(sura, lastAyah);
         }
 
         private static QuranAyah GetLastAyahToPlayForPage(QuranAyah startAyah)
         {
-            var page = QuranInfo.GetPageFromSuraAyah(startAyah.Sura, startAyah.Ayah);
+            var page = QuranUtils.GetPageFromSuraAyah(startAyah.Sura, startAyah.Ayah);
             if (page == -1)
                 return null;
 
-            int[] pageBounds = QuranInfo.GetPageBounds(page);
+            int[] pageBounds = QuranUtils.GetPageBounds(page);
 
             return new QuranAyah(pageBounds[2], pageBounds[3]);
         }
 
         private static QuranAyah GetLastAyahToPlayForJuz(QuranAyah startAyah)
         {
-            var juz = QuranInfo.GetJuzFromAyah(startAyah.Sura, startAyah.Ayah);
+            var juz = QuranUtils.GetJuzFromAyah(startAyah.Sura, startAyah.Ayah);
             // If last juz - return last verse
             if (juz == Constants.JUZ2_COUNT)
                 return new QuranAyah(Constants.SURA_LAST, 6);
 
-            int[] endJuz = QuranInfo.QUARTERS[juz * 8];
+            int[] endJuz = QuranUtils.QUARTERS[juz * 8];
 
             return new QuranAyah(endJuz[0], endJuz[1] - 1);
         }
@@ -150,7 +150,7 @@ namespace Quran.Core.Utils
 
             for (int i = startSura; i <= endSura; i++)
             {
-                int lastAyah = QuranInfo.GetSuraNumberOfAyah(i);
+                int lastAyah = QuranUtils.GetSuraNumberOfAyah(i);
                 if (i == endSura)
                 {
                     lastAyah = endAyah;
@@ -182,7 +182,7 @@ namespace Quran.Core.Utils
             if (!FileUtils.DirectoryExists(baseDirectory))
                 return false;
 
-            foreach (var verse in QuranInfo.GetAllAyah(request.MinAyah, request.MaxAyah))
+            foreach (var verse in QuranUtils.GetAllAyah(request.MinAyah, request.MaxAyah))
             {
                 var filename = GetLocalPathForAyah(verse, request.Reciter);
                 if (!FileUtils.FileExists(filename.ToString()))
@@ -218,7 +218,7 @@ namespace Quran.Core.Utils
 
         public static async Task<bool> DownloadRange(AudioRequest request)
         {
-            var ayahToDownload = QuranInfo.GetAllAyah(request.MinAyah, request.MaxAyah);
+            var ayahToDownload = QuranUtils.GetAllAyah(request.MinAyah, request.MaxAyah);
             var filesToDownload = new List<string>();
             bool result = true;
 
@@ -267,7 +267,7 @@ namespace Quran.Core.Utils
         //    var fullPath = PathHelper.Combine(localPath, fileName);
         //    var fullPathAsUri = new Uri(fullPath, UriKind.Relative);
         //    var track = QuranApp.NativeProvider.AudioProvider.GetTrack();
-        //    var title = QuranInfo.GetSuraAyahString(ayah.Sura, ayah.Ayah);
+        //    var title = QuranUtils.GetSuraAyahString(ayah.Sura, ayah.Ayah);
         //    if (track == null || track.Source != fullPathAsUri)
         //    {
         //        QuranApp.NativeProvider.AudioProvider.SetTrack(fullPathAsUri, title, reciter.Name, "Quran", null, null);
@@ -281,7 +281,7 @@ namespace Quran.Core.Utils
         //    var fullPath = PathHelper.Combine(localPath, fileName);
         //    var fullPathAsUri = new Uri(fullPath, UriKind.Relative);
         //    var track = QuranApp.NativeProvider.AudioProvider.GetTrack();
-        //    var title = QuranInfo.GetSuraAyahString(ayah.Sura, ayah.Ayah);
+        //    var title = QuranUtils.GetSuraAyahString(ayah.Sura, ayah.Ayah);
         //    if (track == null || track.Source != fullPathAsUri)
         //    {
         //        QuranApp.NativeProvider.AudioProvider.SetTrack(fullPathAsUri, title, reciter.Name, "Quran", null, null);

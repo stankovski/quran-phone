@@ -208,7 +208,7 @@ namespace Quran.WindowsPhone.AudioAgent
         private AudioTrack GetTrackFromRequest(AudioRequest request)
         {
             var ayah = request.CurrentAyah;
-            var title = ayah.Ayah == 0 ? "Bismillah" : QuranInfo.GetSuraAyahString(ayah.Sura, ayah.Ayah);
+            var title = ayah.Ayah == 0 ? "Bismillah" : QuranUtils.GetSuraAyahString(ayah.Sura, ayah.Ayah);
             var path = AudioUtils.GetLocalPathForAyah(ayah.Ayah == 0 ? new QuranAyah(1, 1) : ayah, request.Reciter);
 
             using (var isf = IsolatedStorageFile.GetUserStoreForApplication())

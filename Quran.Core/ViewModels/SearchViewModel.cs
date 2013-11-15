@@ -126,10 +126,10 @@ namespace Quran.Core.ViewModels
                         this.SearchResults.Add(new ItemViewModel
                         {
                             Id =
-                                string.Format("{0} ({1}:{2})", QuranInfo.GetSuraName(verse.Sura, false), verse.Sura,
+                                string.Format("{0} ({1}:{2})", QuranUtils.GetSuraName(verse.Sura, false), verse.Sura,
                                               verse.Ayah),
                             Details = text,
-                            PageNumber = QuranInfo.GetPageFromSuraAyah(verse.Sura, verse.Ayah),
+                            PageNumber = QuranUtils.GetPageFromSuraAyah(verse.Sura, verse.Ayah),
                             SelectedAyah = new QuranAyah(verse.Sura, verse.Ayah)
                         });
                     }

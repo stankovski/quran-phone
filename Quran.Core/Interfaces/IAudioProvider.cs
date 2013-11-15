@@ -1,4 +1,5 @@
 ﻿using System;
+using Quran.Core.Common;
 using Quran.Core.Utils;
 
 namespace Quran.Core.Interfaces

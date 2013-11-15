@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Phone.BackgroundAudio;
+using Quran.Core.Common;
 using Quran.Core.Interfaces;
 using Quran.Core.Utils;
 

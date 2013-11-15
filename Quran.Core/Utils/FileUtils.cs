@@ -299,7 +299,7 @@ namespace Quran.Core.Utils
             }
             else
             {
-                QuranScreenInfo instance = QuranScreenInfo.Instance;
+                ScreenUtils instance = ScreenUtils.Instance;
                 if (instance == null) return null;
 
                 string urlString = FileUtils.Combine(IMG_HOST + "width" + instance.GetWidthParam(),
@@ -362,7 +362,7 @@ namespace Quran.Core.Utils
         public static string GetQuranDirectory(bool asUri, bool createIfDoesntExist = false)
         {
             string baseDir = (asUri ? QURAN_BASE_URI : QURAN_BASE);
-            QuranScreenInfo qsi = QuranScreenInfo.Instance;
+            ScreenUtils qsi = ScreenUtils.Instance;
             if (qsi == null)
                 return null;
 
@@ -378,7 +378,7 @@ namespace Quran.Core.Utils
         public static string GetZipFileUrl()
         {
             string url = IMG_HOST;
-            QuranScreenInfo qsi = QuranScreenInfo.Instance;
+            ScreenUtils qsi = ScreenUtils.Instance;
             if (qsi == null)
                 return null;
             url += "images" + qsi.GetWidthParam() + ".zip";
@@ -400,14 +400,14 @@ namespace Quran.Core.Utils
 
         public static string GetAyaPositionFileName()
         {
-            QuranScreenInfo qsi = QuranScreenInfo.Instance;
+            ScreenUtils qsi = ScreenUtils.Instance;
             if (qsi == null) return null;
             return "ayahinfo" + qsi.GetWidthParam() + ".db";
         }
 
         public static string GetAyaPositionFileUrl()
         {
-            QuranScreenInfo qsi = QuranScreenInfo.Instance;
+            ScreenUtils qsi = ScreenUtils.Instance;
             if (qsi == null)
                 return null;
             string url = IMG_HOST + "width" + qsi.GetWidthParam();
@@ -417,7 +417,7 @@ namespace Quran.Core.Utils
 
         public static string GetGaplessDatabaseRootUrl()
         {
-            QuranScreenInfo qsi = QuranScreenInfo.Instance;
+            ScreenUtils qsi = ScreenUtils.Instance;
             if (qsi == null)
                 return null;
             return IMG_HOST + "databases/audio/";

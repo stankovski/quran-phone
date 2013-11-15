@@ -76,11 +76,8 @@ namespace Quran.WindowsPhone.Views
                     @"Assalamu Aleikum,
 
 Thank you for downloading Quran Phone. Please note that this is a BETA release and is still work in progress. 
-New in Version 0.3.3:
-* Added menu to lock orientation
-* Added ability to copy verse to clipboard
-* Fixed night mode bluriness
-* Fixed Arabic support (page flipping)
+New in Version 0.4.0:
+* Added non-streaming audio recitation (work in progress so please report any issues)
 * Misc. bug fixes
 
 If you find any issues with the app or would like to provide suggestions, please use Contact Us option available via the menu. 

@@ -1,8 +1,7 @@
 ﻿using System;
-using Quran.Core.Common;
-using Quran.Core.Data;
+using Quran.Core.Utils;
 
-namespace Quran.Core.Utils
+namespace Quran.Core.Common
 {
     public class AudioRequest
     {
@@ -59,12 +58,12 @@ namespace Quran.Core.Utils
 
         public void GotoNextAyah()
         {
-            CurrentAyah = QuranInfo.GetNextAyah(CurrentAyah, true);
+            CurrentAyah = QuranUtils.GetNextAyah(CurrentAyah, true);
         }
 
         public void GotoPreviousAyah()
         {
-            CurrentAyah = QuranInfo.GetPreviousAyah(CurrentAyah, true);
+            CurrentAyah = QuranUtils.GetPreviousAyah(CurrentAyah, true);
         }
 
         public override string ToString()

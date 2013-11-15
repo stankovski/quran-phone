@@ -10,7 +10,7 @@ using Quran.Core.Properties;
 
 namespace Quran.Core.Utils
 {
-    public class QuranInfo
+    public class QuranUtils
     {
         public static string GetAyahTitle()
         {
@@ -97,13 +97,13 @@ namespace Quran.Core.Utils
         public static string GetPageSubtitle(int page)
         {
             string description = AppResources.page_description;
-            return string.Format(description, page, QuranInfo.GetJuzFromPage(page));
+            return string.Format(description, page, QuranUtils.GetJuzFromPage(page));
         }
 
         public static string GetJuzString(int page)
         {
             string description = AppResources.juz2_description;
-            return string.Format(description, QuranInfo.GetJuzFromPage(page));
+            return string.Format(description, QuranUtils.GetJuzFromPage(page));
         }
 
         public static string GetSuraAyahString(QuranAyah ayah)
@@ -139,7 +139,7 @@ namespace Quran.Core.Utils
 
         public static QuranAyah GetNextAyah(QuranAyah ayah, bool includeBismillah)
         {
-            var currentSurahPages = QuranInfo.GetSuraNumberOfAyah(ayah.Sura);
+            var currentSurahPages = QuranUtils.GetSuraNumberOfAyah(ayah.Sura);
             var newAyah = new QuranAyah(ayah.Sura, ayah.Ayah);
 
             // Check if not the end of surah
@@ -194,7 +194,7 @@ namespace Quran.Core.Utils
                     {
                         newAyah.Sura = Constants.SURA_LAST;
                     }
-                    newAyah.Ayah = QuranInfo.GetSuraNumberOfAyah(newAyah.Sura);
+                    newAyah.Ayah = QuranUtils.GetSuraNumberOfAyah(newAyah.Sura);
                 }
             }
             
@@ -209,11 +209,11 @@ namespace Quran.Core.Utils
             if (maxAyah == 0)
             {
                 maxSura--;
-                maxAyah = QuranInfo.GetSuraNumberOfAyah(maxSura);
+                maxAyah = QuranUtils.GetSuraNumberOfAyah(maxSura);
             }
 
             string notificationTitle =
-                    QuranInfo.GetSuraName(minSura, true);
+                    QuranUtils.GetSuraName(minSura, true);
             if (minSura == maxSura)
             {
                 if (minVerse.Ayah == maxAyah)
@@ -229,7 +229,7 @@ namespace Quran.Core.Utils
             else
             {
                 notificationTitle += " (" + minVerse.Ayah +
-                        ") - " + QuranInfo.GetSuraName(maxSura, true) +
+                        ") - " + QuranUtils.GetSuraName(maxSura, true) +
                         " (" + maxAyah + ")";
             }
 
@@ -239,10 +239,10 @@ namespace Quran.Core.Utils
         public static string GetSuraListMetaString(int sura)
         {
             string info = "";
-            info += QuranInfo.SURA_IS_MAKKI[sura - 1] ? AppResources.makki : AppResources.madani;
+            info += QuranUtils.SURA_IS_MAKKI[sura - 1] ? AppResources.makki : AppResources.madani;
             info += " - ";
 
-            int ayahs = QuranInfo.SURA_NUM_AYAHS[sura - 1];
+            int ayahs = QuranUtils.SURA_NUM_AYAHS[sura - 1];
             info += ayahs.ToString(" 0 ", CultureInfo.InvariantCulture);
             if (ayahs == 1)
                 info += AppResources.verse;
@@ -722,16 +722,16 @@ namespace Quran.Core.Utils
                 return -1;
 
             // what page does the sura start on?
-            int index = QuranInfo.SURA_PAGE_START[sura - 1] - 1;
+            int index = QuranUtils.SURA_PAGE_START[sura - 1] - 1;
             while (index < Constants.PAGES_LAST)
             {
                 // what's the first sura in that page?
-                int ss = QuranInfo.PAGE_SURA_START[index];
+                int ss = QuranUtils.PAGE_SURA_START[index];
 
                 // if we've passed the sura, return the previous page
                 // or, if we're at the same sura and passed the ayah
                 if (ss > sura || ((ss == sura) &&
-                     (QuranInfo.PAGE_AYAH_START[index] > ayah)))
+                     (QuranUtils.PAGE_AYAH_START[index] > ayah)))
                 {
                     break;
                 }

@@ -98,18 +98,18 @@ namespace Quran.Core.ViewModels
 
         public double ScreenWidth
         {
-            get { return QuranScreenInfo.Instance.Width - 20; }
+            get { return ScreenUtils.Instance.Width - 20; }
         }
 
-        // QuranInfo Properties
+        // QuranUtils Properties
         public String SuraName
         {
-            get { return QuranInfo.GetSuraNameFromPage(PageNumber); }
+            get { return QuranUtils.GetSuraNameFromPage(PageNumber); }
         }
 
         public String JuzName
         {
-            get { return QuranInfo.GetJuzString(PageNumber); }
+            get { return QuranUtils.GetJuzString(PageNumber); }
         }
 
         #endregion Properties

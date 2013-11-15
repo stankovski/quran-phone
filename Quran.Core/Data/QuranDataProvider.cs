@@ -113,7 +113,7 @@ namespace Quran.Core.Data
         //                 string text = suggestions.getString(2);
         //                 string foundText = context
         //                    .getString(R.string.found_in_sura) +
-        //                    " " + QuranInfo.getSuraName(context, sura, false) +
+        //                    " " + QuranUtils.getSuraName(context, sura, false) +
         //                    ", " + context.getString(R.string.quran_ayah) +
         //                    " " + ayah;
 
@@ -121,7 +121,7 @@ namespace Quran.Core.Data
         //                 MatrixCursor.RowBuilder row = mc.newRow();
         //                 int id = 0;
         //                 for (int j=1; j<sura;j++){
-        //                     id += QuranInfo.getNumAyahs(j);
+        //                     id += QuranUtils.getNumAyahs(j);
         //                 }
         //                 id += ayah;
 

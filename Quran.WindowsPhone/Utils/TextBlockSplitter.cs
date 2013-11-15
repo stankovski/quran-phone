@@ -45,7 +45,7 @@ namespace Quran.WindowsPhone.Utils
             StringReader reader = new StringReader(value);
             measureBlock.FontSize = fontSize;
             measureBlock.FontWeight = fontWeight;
-            measureBlock.Width = QuranScreenInfo.Instance.Width;
+            measureBlock.Width = ScreenUtils.Instance.Width;
             
             int maxTextCount = this.GetMaxTextSize();
 

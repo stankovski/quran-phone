@@ -81,7 +81,7 @@
     <Compile Include="Data\DuaGenerator.cs" />
     <Compile Include="Data\QuranDataProvider.cs" />
     <Compile Include="Data\RecitersDatabaseHandler.cs" />
-    <Compile Include="Utils\QuranInfo.cs" />
+    <Compile Include="Utils\QuranUtils.cs" />
     <Compile Include="Data\SuraTimingDatabaseHandler.cs" />
     <Compile Include="Data\TranslationsDatabaseHandler.cs" />
     <Compile Include="Entities\Message.cs" />
@@ -94,8 +94,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuranApp.cs" />
     <Compile Include="Utils\ArabicResharper.cs" />
-    <Compile Include="Utils\AudioPlayerPlayState.cs" />
-    <Compile Include="Utils\AudioRequest.cs" />
+    <Compile Include="Common\AudioPlayerPlayState.cs" />
+    <Compile Include="Common\AudioRequest.cs" />
     <Compile Include="Utils\AudioUtils.cs" />
     <Compile Include="Utils\CryptoUtils.cs" />
     <Compile Include="Interfaces\IAudioProvider.cs" />
@@ -106,7 +106,7 @@
     <Compile Include="Utils\MD5.cs" />
     <Compile Include="Utils\PathHelper.cs" />
     <Compile Include="Utils\FileUtils.cs" />
-    <Compile Include="Utils\QuranScreenInfo.cs" />
+    <Compile Include="Utils\ScreenUtils.cs" />
     <Compile Include="Utils\RepeatInfo.cs" />
     <Compile Include="Utils\SettingsUtils.cs" />
     <Compile Include="Utils\TranslationListTask.cs" />

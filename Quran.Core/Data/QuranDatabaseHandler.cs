@@ -78,7 +78,7 @@ namespace Quran.Core.Data
 
         public List<T> GetVerses(int page)
         {
-            int[] bound = QuranInfo.GetPageBounds(page);
+            int[] bound = QuranUtils.GetPageBounds(page);
             return GetVerses(bound[0], bound[1], bound[2], bound[3]);
         }
 

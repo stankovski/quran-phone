@@ -2,17 +2,17 @@
 
 namespace Quran.Core.Utils
 {
-    public class QuranScreenInfo
+    public class ScreenUtils
     {
 
-        private static QuranScreenInfo instance = null;
+        private static ScreenUtils instance = null;
 
         private int width;
         private int height;
         private int max_width;
         private ScreenOrientation orientation;
 
-        private QuranScreenInfo(int width, int height)
+        private ScreenUtils(int width, int height)
         {
             this.orientation = ScreenOrientation.Portrait;
             this.width = width;
@@ -20,13 +20,13 @@ namespace Quran.Core.Utils
             this.max_width = (width > height) ? width : height;
         }
 
-        public static QuranScreenInfo Instance
+        public static ScreenUtils Instance
         {
             get
             {
                 if (instance == null)
                 {
-                    instance = new QuranScreenInfo((int)QuranApp.NativeProvider.ActualWidth, (int)QuranApp.NativeProvider.ActualHeight);
+                    instance = new ScreenUtils((int)QuranApp.NativeProvider.ActualWidth, (int)QuranApp.NativeProvider.ActualHeight);
                 }
                 return instance;
             }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using Cirrious.MvvmCross.Plugins.Sqlite;
 
@@ -22,6 +23,23 @@ namespace Quran.Core.Common
         {
             Sura = sura;
             Ayah = ayah;
+        }
+
+        /// <summary>
+        /// Creates QuranAyah from string
+        /// </summary>
+        /// <param name="text">Text in the surah:ayah format</param>
+        public static QuranAyah FromString(string text)
+        {
+            try
+            {
+                var splitText = text.Split(':');
+                return new QuranAyah(int.Parse(splitText[0]), int.Parse(splitText[1]));
+            }
+            catch
+            {
+                throw new ArgumentException("text");
+            }
         }
 
         public QuranAyah(QuranAyah ayah)
