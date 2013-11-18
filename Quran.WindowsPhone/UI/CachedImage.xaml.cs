@@ -70,7 +70,7 @@ namespace Quran.WindowsPhone.UI
                         int offsetToScrollTo = 0;
                         using (var dbh = new AyahInfoDatabaseHandler(FileUtils.GetAyaPositionFileName()))
                         {
-                            var bounds = dbh.GetVerseBoundsCombined(ayahInfo.Sura, ayahInfo.Ayah);
+                            var bounds = dbh.GetVerseBoundsCombined(ayahInfo.Surah, ayahInfo.Ayah);
                             if (bounds == null)
                                 return;
 

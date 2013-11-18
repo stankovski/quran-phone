@@ -77,7 +77,7 @@ namespace Quran.WindowsPhone.Views
 
 Thank you for downloading Quran Phone. Please note that this is a BETA release and is still work in progress. 
 New in Version 0.4.0:
-* Added non-streaming audio recitation (work in progress so please report any issues)
+* Added audio recitation (work in progress so please report any issues)
 * Misc. bug fixes
 
 If you find any issues with the app or would like to provide suggestions, please use Contact Us option available via the menu. 
@@ -114,7 +114,7 @@ Quran Phone Team";
                         new Uri(
                             string.Format(CultureInfo.InvariantCulture, "/Views/DetailsView.xaml?page={0}&surah={1}&ayah={2}",
                                           selectedItem.PageNumber,
-                                          selectedItem.SelectedAyah.Sura,
+                                          selectedItem.SelectedAyah.Surah,
                                           selectedItem.SelectedAyah.Ayah), UriKind.Relative));
                 }
             }

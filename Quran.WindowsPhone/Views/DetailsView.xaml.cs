@@ -138,10 +138,15 @@ namespace Quran.WindowsPhone.Views
             QuranApp.DetailsViewModel.SelectedAyah = null;
         }
 
-        private void ImageHold(object sender, System.Windows.Input.GestureEventArgs e)
+        private async void ImageHold(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            if (QuranApp.DetailsViewModel.AyahDetailsExist && sender != null)
+            if (sender != null)
             {
+                if (!FileUtils.HaveAyaPositionFile())
+                {
+                    await QuranApp.DetailsViewModel.DownloadAyahPositionFile();
+                }
+
                 var cachedImage = sender as CachedImage;
                 if (cachedImage == null)
                     return;
@@ -156,11 +161,16 @@ namespace Quran.WindowsPhone.Views
             }
         }
 
-        private void ImageDoubleTap(object sender, System.Windows.Input.GestureEventArgs e)
+        private async void ImageDoubleTap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            if (QuranApp.DetailsViewModel.AyahDetailsExist && sender != null && 
-                !string.IsNullOrEmpty(QuranApp.DetailsViewModel.TranslationFile))
+            if (sender != null && !string.IsNullOrEmpty(QuranApp.DetailsViewModel.TranslationFile))
             {
+                if (!FileUtils.HaveAyaPositionFile())
+                {
+                    await QuranApp.DetailsViewModel.DownloadAyahPositionFile();
+                }
+
+
                 var cachedImage = sender as CachedImage;
                 if (cachedImage == null)
                     return;
@@ -178,11 +188,15 @@ namespace Quran.WindowsPhone.Views
             }
         }
 
-        private void ListBoxDoubleTap(object sender, System.Windows.Input.GestureEventArgs e)
+        private async void ListBoxDoubleTap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            if (QuranApp.DetailsViewModel.AyahDetailsExist &&
-                sender != null && sender is RadDataBoundListBox)
+            if (sender != null && sender is RadDataBoundListBox)
             {
+                if (!FileUtils.HaveAyaPositionFile())
+                {
+                    await QuranApp.DetailsViewModel.DownloadAyahPositionFile();
+                }
+
                 var selectedVerse = ((RadDataBoundListBox)sender).SelectedItem as VerseViewModel;
                 if (selectedVerse != null)
                 {
@@ -270,16 +284,16 @@ namespace Quran.WindowsPhone.Views
                     var bounds = QuranUtils.GetPageBounds(QuranApp.DetailsViewModel.CurrentPageNumber);
                     selectedAyah = new QuranAyah
                     {
-                        Sura = bounds[0],
+                        Surah = bounds[0],
                         Ayah = bounds[1]
                     };
-                    if (selectedAyah.Ayah == 1 && selectedAyah.Sura != Constants.SURA_TAWBA &&
-                        selectedAyah.Sura != Constants.SURA_FIRST)
+                    if (selectedAyah.Ayah == 1 && selectedAyah.Surah != Constants.SURA_TAWBA &&
+                        selectedAyah.Surah != Constants.SURA_FIRST)
                     {
                         selectedAyah.Ayah = 0;
                     }
                 }
-                QuranApp.DetailsViewModel.PlayFromAyah(selectedAyah.Sura, selectedAyah.Ayah);
+                QuranApp.DetailsViewModel.PlayFromAyah(selectedAyah.Surah, selectedAyah.Ayah);
             }
         }
 

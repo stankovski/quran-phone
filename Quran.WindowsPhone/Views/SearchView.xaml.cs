@@ -69,7 +69,7 @@ namespace Quran.WindowsPhone.Views
             NavigationService.Navigate(new Uri(
                 string.Format(CultureInfo.InvariantCulture, "/Views/DetailsView.xaml?page={0}&surah={1}&ayah={2}",
                                           item.PageNumber,
-                                          item.SelectedAyah.Sura,
+                                          item.SelectedAyah.Surah,
                                           item.SelectedAyah.Ayah), UriKind.Relative));
 
             // Reset selected item to null (no selection)

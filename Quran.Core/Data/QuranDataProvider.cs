@@ -108,19 +108,19 @@ namespace Quran.Core.Data
 
         //         if (suggestions.moveToFirst()){
         //             do {
-        //                 int sura = suggestions.getInt(0);
+        //                 int surah = suggestions.getInt(0);
         //                 int ayah = suggestions.getInt(1);
         //                 string text = suggestions.getString(2);
         //                 string foundText = context
         //                    .getString(R.string.found_in_sura) +
-        //                    " " + QuranUtils.getSuraName(context, sura, false) +
+        //                    " " + QuranUtils.getSuraName(context, surah, false) +
         //                    ", " + context.getString(R.string.quran_ayah) +
         //                    " " + ayah;
 
         //                 gotResults = true;
         //                 MatrixCursor.RowBuilder row = mc.newRow();
         //                 int id = 0;
-        //                 for (int j=1; j<sura;j++){
+        //                 for (int j=1; j<surah;j++){
         //                     id += QuranUtils.getNumAyahs(j);
         //                 }
         //                 id += ayah;
@@ -154,7 +154,7 @@ namespace Quran.Core.Data
         // }
 
         // private Cursor getVerse(Uri uri){
-        //     int sura = 1;
+        //     int surah = 1;
         //     int ayah = 1;
         //     string langType = getActiveTranslation();
         //     string lang = (TextUtils.isEmpty(langType))? null : langType;
@@ -173,7 +173,7 @@ namespace Quran.Core.Data
         //      mCurrentLanguage = lang;
         //   }
 
-        //     return dbConnection.getVerse(sura, ayah);
+        //     return dbConnection.getVerse(surah, ayah);
         // }
     }
 }

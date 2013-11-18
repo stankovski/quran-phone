@@ -96,13 +96,13 @@ namespace Quran.WindowsPhone.Utils
         public static void PinPageToStart(int page)
         {
             var standardTileData = new StandardTileData();
-            standardTileData.Title = QuranUtils.GetSuraNameFromPage(page, true);
+            standardTileData.Title = QuranUtils.GetSurahNameFromPage(page, true);
             standardTileData.Count = page;
             var imageUrl = PathHelper.Combine(FileUtils.GetQuranDirectory(false),
                 FileUtils.GetPageFileName(page));
             imageUrl = ResizeAndCopyImageToShared(imageUrl, page);
             standardTileData.BackgroundImage = new Uri(imageUrl, UriKind.Relative);
-            standardTileData.BackContent = QuranUtils.GetSuraNameFromPage(page) + " page " + page;
+            standardTileData.BackContent = QuranUtils.GetSurahNameFromPage(page) + " page " + page;
             var pageUrl = string.Format("/Views/MainView.xaml?page={0}", page);
             ShellTile tiletopin = ShellTile.ActiveTiles.FirstOrDefault(x => x.NavigationUri.ToString().Contains(pageUrl));
             if (tiletopin == null)

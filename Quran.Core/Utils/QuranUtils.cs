@@ -17,7 +17,7 @@ namespace Quran.Core.Utils
             return AppResources.quran_ayah;
         }
 
-        public static string GetSuraTitle()
+        public static string GetSurahTitle()
         {
             return AppResources.quran_sura_title;
         }
@@ -27,21 +27,21 @@ namespace Quran.Core.Utils
             return AppResources.quran_juz2;
         }
 
-        public static string GetSuraName(int sura,
+        public static string GetSurahName(int surah,
                                          bool wantTitle)
         {
-            if (sura < Constants.SURA_FIRST || sura > Constants.SURA_LAST) { return ""; }
+            if (surah < Constants.SURA_FIRST || surah > Constants.SURA_LAST) { return ""; }
             string title = "";
-            if (wantTitle) { title = GetSuraTitle() + " "; }
+            if (wantTitle) { title = GetSurahTitle() + " "; }
 
             using (StringReader stringReader = new StringReader(AppResources.sura_names))
             using (XmlReader reader = XmlReader.Create(stringReader)) {
                 var doc = XDocument.Load(reader);
-                return title + doc.Descendants("item").Skip(sura - 1).Take(1).Single().Value;
+                return title + doc.Descendants("item").Skip(surah - 1).Take(1).Single().Value;
             }
         }
 
-        public static string[] GetSuraQuarters()
+        public static string[] GetSurahQuarters()
         {
             List<string> results = new List<string>();
             using (StringReader stringReader = new StringReader(AppResources.quarters))
@@ -56,27 +56,27 @@ namespace Quran.Core.Utils
             return results.ToArray();
         }
 
-        public static int GetSuraNumberFromPage(int page)
+        public static int GetSurahNumberFromPage(int page)
         {
-            int sura = -1;
+            int surah = -1;
             for (int i = 0; i < Constants.SURAS_COUNT; i++)
             {
                 if (SURA_PAGE_START[i] == page)
                 {
-                    sura = i + 1;
+                    surah = i + 1;
                     break;
                 }
                 else if (SURA_PAGE_START[i] > page)
                 {
-                    sura = i;
+                    surah = i;
                     break;
                 }
             }
 
-            return sura;
+            return surah;
         }
 
-        public static int GetSuraNumberOfAyah(int surah)
+        public static int GetSurahNumberOfAyah(int surah)
         {
             if (surah >= Constants.SURA_FIRST && surah <= Constants.SURA_LAST)
             {
@@ -88,10 +88,10 @@ namespace Quran.Core.Utils
             }
         }
 
-        public static string GetSuraNameFromPage(int page, bool wantTitle)
+        public static string GetSurahNameFromPage(int page, bool wantTitle)
         {
-            int sura = GetSuraNumberFromPage(page);
-            return (sura > 0) ? GetSuraName(sura, wantTitle) : "";
+            int surah = GetSurahNumberFromPage(page);
+            return (surah > 0) ? GetSurahName(surah, wantTitle) : "";
         }
 
         public static string GetPageSubtitle(int page)
@@ -106,14 +106,14 @@ namespace Quran.Core.Utils
             return string.Format(description, QuranUtils.GetJuzFromPage(page));
         }
 
-        public static string GetSuraAyahString(QuranAyah ayah)
+        public static string GetSurahAyahString(QuranAyah ayah)
         {
-            return GetSuraAyahString(ayah.Sura, ayah.Ayah);
+            return GetSurahAyahString(ayah.Surah, ayah.Ayah);
         }
 
-        public static string GetSuraAyahString(int sura, int ayah)
+        public static string GetSurahAyahString(int surah, int ayah)
         {
-            string suraName = GetSuraName(sura, false);
+            string suraName = GetSurahName(surah, false);
             string format = AppResources.sura_ayah_notification_str;
             return string.Format(format, suraName, ayah);
         }
@@ -139,8 +139,8 @@ namespace Quran.Core.Utils
 
         public static QuranAyah GetNextAyah(QuranAyah ayah, bool includeBismillah)
         {
-            var currentSurahPages = QuranUtils.GetSuraNumberOfAyah(ayah.Sura);
-            var newAyah = new QuranAyah(ayah.Sura, ayah.Ayah);
+            var currentSurahPages = QuranUtils.GetSurahNumberOfAyah(ayah.Surah);
+            var newAyah = new QuranAyah(ayah.Surah, ayah.Ayah);
 
             // Check if not the end of surah
             if (ayah.Ayah < currentSurahPages)
@@ -150,16 +150,16 @@ namespace Quran.Core.Utils
             else
             {
                 // If the end of surah check if also the end of Quran
-                if (ayah.Sura < Constants.SURA_LAST)
+                if (ayah.Surah < Constants.SURA_LAST)
                 {
-                    newAyah.Sura++;
+                    newAyah.Surah++;
                 }
                 else
                 {
-                    newAyah.Sura = Constants.SURA_FIRST;
+                    newAyah.Surah = Constants.SURA_FIRST;
                 }
                 // If need to include bismillah and not surah Tawba set ayah to 0
-                if (includeBismillah && newAyah.Sura != Constants.SURA_TAWBA && newAyah.Sura != Constants.SURA_FIRST)
+                if (includeBismillah && newAyah.Surah != Constants.SURA_TAWBA && newAyah.Surah != Constants.SURA_FIRST)
                     newAyah.Ayah = 0;
                 else
                     newAyah.Ayah = 1;
@@ -179,22 +179,22 @@ namespace Quran.Core.Utils
             else
             {
                 // If need to include bismillah and not surah Tawba set ayah to 0
-                if (ayah.Ayah == 1 && includeBismillah && newAyah.Sura != Constants.SURA_TAWBA && newAyah.Sura != Constants.SURA_FIRST)
+                if (ayah.Ayah == 1 && includeBismillah && newAyah.Surah != Constants.SURA_TAWBA && newAyah.Surah != Constants.SURA_FIRST)
                 {
                     newAyah.Ayah = 0;
                 }
                 else
                 {
                     // If the beginning of surah check if also the beginning of Quran
-                    if (ayah.Sura > Constants.SURA_FIRST)
+                    if (ayah.Surah > Constants.SURA_FIRST)
                     {
-                        newAyah.Sura--;
+                        newAyah.Surah--;
                     }
                     else
                     {
-                        newAyah.Sura = Constants.SURA_LAST;
+                        newAyah.Surah = Constants.SURA_LAST;
                     }
-                    newAyah.Ayah = QuranUtils.GetSuraNumberOfAyah(newAyah.Sura);
+                    newAyah.Ayah = QuranUtils.GetSurahNumberOfAyah(newAyah.Surah);
                 }
             }
             
@@ -203,17 +203,17 @@ namespace Quran.Core.Utils
 
         public static string GetNotificationTitle(QuranAyah minVerse, QuranAyah maxVerse)
         {
-            int minSura = minVerse.Sura;
-            int maxSura = maxVerse.Sura;
+            int minSura = minVerse.Surah;
+            int maxSura = maxVerse.Surah;
             int maxAyah = maxVerse.Ayah;
             if (maxAyah == 0)
             {
                 maxSura--;
-                maxAyah = QuranUtils.GetSuraNumberOfAyah(maxSura);
+                maxAyah = QuranUtils.GetSurahNumberOfAyah(maxSura);
             }
 
             string notificationTitle =
-                    QuranUtils.GetSuraName(minSura, true);
+                    QuranUtils.GetSurahName(minSura, true);
             if (minSura == maxSura)
             {
                 if (minVerse.Ayah == maxAyah)
@@ -229,20 +229,20 @@ namespace Quran.Core.Utils
             else
             {
                 notificationTitle += " (" + minVerse.Ayah +
-                        ") - " + QuranUtils.GetSuraName(maxSura, true) +
+                        ") - " + QuranUtils.GetSurahName(maxSura, true) +
                         " (" + maxAyah + ")";
             }
 
             return notificationTitle;
         }
 
-        public static string GetSuraListMetaString(int sura)
+        public static string GetSuraListMetaString(int surah)
         {
             string info = "";
-            info += QuranUtils.SURA_IS_MAKKI[sura - 1] ? AppResources.makki : AppResources.madani;
+            info += QuranUtils.SURA_IS_MAKKI[surah - 1] ? AppResources.makki : AppResources.madani;
             info += " - ";
 
-            int ayahs = QuranUtils.SURA_NUM_AYAHS[sura - 1];
+            int ayahs = QuranUtils.SURA_NUM_AYAHS[surah - 1];
             info += ayahs.ToString(" 0 ", CultureInfo.InvariantCulture);
             if (ayahs == 1)
                 info += AppResources.verse;
@@ -667,17 +667,17 @@ namespace Quran.Core.Utils
             return bounds;
         }
 
-        public static string GetSuraNameFromPage(int page)
+        public static string GetSurahNameFromPage(int page)
         {
             for (int i = 0; i < Constants.SURAS_COUNT; i++)
             {
                 if (SURA_PAGE_START[i] == page)
                 {
-                    return GetSuraName(i + 1, false);
+                    return GetSurahName(i + 1, false);
                 }
                 else if (SURA_PAGE_START[i] > page)
                 {
-                    return GetSuraName(i, false);
+                    return GetSurahName(i, false);
                 }
             }
             return "";
@@ -689,9 +689,9 @@ namespace Quran.Core.Utils
             return juz > 30 ? 30 : juz < 1 ? 1 : juz;
         }
 
-        public static int GetJuzFromAyah(int sura, int ayah)
+        public static int GetJuzFromAyah(int surah, int ayah)
         {
-            int page = GetPageFromSuraAyah(sura, ayah);
+            int page = GetPageFromSurahAyah(surah, ayah);
             int juz = ((page - 2) / 20) + 1;
             return juz > 30 ? 30 : juz < 1 ? 1 : juz;
         }
@@ -707,30 +707,30 @@ namespace Quran.Core.Utils
             return 0;
         }
 
-        public static int GetPageFromSuraAyah(QuranAyah ayah)
+        public static int GetPageFromSurahAyah(QuranAyah ayah)
         {
-            return GetPageFromSuraAyah(ayah.Sura, ayah.Ayah);
+            return GetPageFromSurahAyah(ayah.Surah, ayah.Ayah);
         }
 
-        public static int GetPageFromSuraAyah(int sura, int ayah)
+        public static int GetPageFromSurahAyah(int surah, int ayah)
         {
             // basic bounds checking
             if (ayah == 0) ayah = 1;
-            if ((sura < 1) || (sura > Constants.SURAS_COUNT)
+            if ((surah < 1) || (surah > Constants.SURAS_COUNT)
                     || (ayah < Constants.AYA_MIN) ||
                    (ayah > Constants.AYA_MAX))
                 return -1;
 
-            // what page does the sura start on?
-            int index = QuranUtils.SURA_PAGE_START[sura - 1] - 1;
+            // what page does the surah start on?
+            int index = QuranUtils.SURA_PAGE_START[surah - 1] - 1;
             while (index < Constants.PAGES_LAST)
             {
-                // what's the first sura in that page?
+                // what's the first surah in that page?
                 int ss = QuranUtils.PAGE_SURA_START[index];
 
-                // if we've passed the sura, return the previous page
-                // or, if we're at the same sura and passed the ayah
-                if (ss > sura || ((ss == sura) &&
+                // if we've passed the surah, return the previous page
+                // or, if we're at the same surah and passed the ayah
+                if (ss > surah || ((ss == surah) &&
                      (QuranUtils.PAGE_AYAH_START[index] > ayah)))
                 {
                     break;
@@ -743,10 +743,10 @@ namespace Quran.Core.Utils
             return index;
         }
 
-        public static int GetAyahId(int sura, int ayah)
+        public static int GetAyahId(int surah, int ayah)
         {
             int ayahId = 0;
-            for (int i = 0; i < sura - 1; i++)
+            for (int i = 0; i < surah - 1; i++)
             {
                 ayahId += SURA_NUM_AYAHS[i];
             }
@@ -756,36 +756,36 @@ namespace Quran.Core.Utils
 
         public static int GetAyahId(int page)
         {
-            int sura = PAGE_SURA_START[page - 1];
+            int surah = PAGE_SURA_START[page - 1];
             int ayah = PAGE_AYAH_START[page - 1];
-            return GetAyahId(sura, ayah);
+            return GetAyahId(surah, ayah);
         }
 
-        public static int[] GetSuraAyahFromAyahId(int ayahId)
+        public static int[] GetSurahAyahFromAyahId(int ayahId)
         {
             int lastCount = 0;
             int ayahCount = 0;
-            int sura = 0;
+            int surah = 0;
             while (ayahCount < ayahId)
             {
                 lastCount = ayahCount;
-                ayahCount += SURA_NUM_AYAHS[sura];
-                sura++;
+                ayahCount += SURA_NUM_AYAHS[surah];
+                surah++;
             }
             int ayah = ayahId - lastCount;
-            int[] values = { sura, ayah };
+            int[] values = { surah, ayah };
             return values;
         }
 
-        public static string GetAyahString(int sura, int ayah)
+        public static string GetAyahString(int surah, int ayah)
         {
-            return GetSuraName(sura, true) + " - "
+            return GetSurahName(surah, true) + " - "
                     + GetAyahTitle() + " " + ayah;
         }
 
-        public static string GetSuraNameString(int page)
+        public static string GetSurahNameString(int page)
         {
-            return GetSuraTitle() + " " + GetSuraNameFromPage(page);
+            return GetSurahTitle() + " " + GetSurahNameFromPage(page);
         }
 
         public static bool DoesStringContainArabic(string s)

@@ -87,8 +87,8 @@ namespace Quran.Core.ViewModels
                     // Merging 2 results
                     int a = 0;
                     int t = 0;
-                    var arabicVerse = new QuranAyah { Sura = int.MaxValue, Ayah = int.MaxValue };
-                    var translationVerse = new QuranAyah { Sura = int.MaxValue, Ayah = int.MaxValue };
+                    var arabicVerse = new QuranAyah { Surah = int.MaxValue, Ayah = int.MaxValue };
+                    var translationVerse = new QuranAyah { Surah = int.MaxValue, Ayah = int.MaxValue };
                     var verseToDisplay = new QuranAyah();
                     var comparer = new AyahComparer();
 
@@ -97,12 +97,12 @@ namespace Quran.Core.ViewModels
                         if (a < arabicVerses.Count)
                             arabicVerse = arabicVerses[a];
                         else
-                            arabicVerse = new QuranAyah { Sura = int.MaxValue, Ayah = int.MaxValue };
+                            arabicVerse = new QuranAyah { Surah = int.MaxValue, Ayah = int.MaxValue };
 
                         if (t < translationVerses.Count)
                             translationVerse = translationVerses[t];
                         else
-                            translationVerse = new QuranAyah { Sura = int.MaxValue, Ayah = int.MaxValue };
+                            translationVerse = new QuranAyah { Surah = int.MaxValue, Ayah = int.MaxValue };
 
                         if (comparer.Compare(arabicVerse, translationVerse) > 0)
                         {
@@ -126,11 +126,11 @@ namespace Quran.Core.ViewModels
                         this.SearchResults.Add(new ItemViewModel
                         {
                             Id =
-                                string.Format("{0} ({1}:{2})", QuranUtils.GetSuraName(verse.Sura, false), verse.Sura,
+                                string.Format("{0} ({1}:{2})", QuranUtils.GetSurahName(verse.Surah, false), verse.Surah,
                                               verse.Ayah),
                             Details = text,
-                            PageNumber = QuranUtils.GetPageFromSuraAyah(verse.Sura, verse.Ayah),
-                            SelectedAyah = new QuranAyah(verse.Sura, verse.Ayah)
+                            PageNumber = QuranUtils.GetPageFromSurahAyah(verse.Surah, verse.Ayah),
+                            SelectedAyah = new QuranAyah(verse.Surah, verse.Ayah)
                         });
                     }
                 }

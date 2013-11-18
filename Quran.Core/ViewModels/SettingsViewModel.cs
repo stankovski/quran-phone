@@ -100,6 +100,21 @@ namespace Quran.Core.ViewModels
             }
         }
 
+        private bool altDownloadMethod;
+        public bool AltDownloadMethod
+        {
+            get { return altDownloadMethod; }
+            set
+            {
+                if (value == altDownloadMethod)
+                    return;
+
+                altDownloadMethod = value;
+                SettingsUtils.Set(Constants.PREF_ALT_DOWNLOAD, value);
+                base.RaisePropertyChanged(() => AltDownloadMethod);
+            }
+        }
+
         private bool enableShowArabicInTranslation;
         public bool EnableShowArabicInTranslation
         {
@@ -292,6 +307,7 @@ namespace Quran.Core.ViewModels
             SelectedAudioBlock = SupportedAudioBlocks.FirstOrDefault(kv => kv.Key == SettingsUtils.Get<AudioDownloadAmount>(Constants.PREF_DOWNLOAD_AMOUNT));
             TextSize = SettingsUtils.Get<int>(Constants.PREF_TRANSLATION_TEXT_SIZE);
             ShowArabicInTranslation = SettingsUtils.Get<bool>(Constants.PREF_SHOW_ARABIC_IN_TRANSLATION);
+            AltDownloadMethod = SettingsUtils.Get<bool>(Constants.PREF_ALT_DOWNLOAD);
             PreventPhoneFromSleeping = SettingsUtils.Get<bool>(Constants.PREF_PREVENT_SLEEP);
             KeepInfoOverlay = SettingsUtils.Get<bool>(Constants.PREF_KEEP_INFO_OVERLAY);
             NightMode = SettingsUtils.Get<bool>(Constants.PREF_NIGHT_MODE);

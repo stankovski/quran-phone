@@ -50,6 +50,8 @@
                         <telerikPrimitives:RadToggleSwitch IsChecked="{Binding KeepInfoOverlay, Mode=TwoWay}"/>
                         <TextBlock Text="{Binding Path=LocalizedResources.night_mode, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
                         <telerikPrimitives:RadToggleSwitch IsChecked="{Binding NightMode, Mode=TwoWay}"/>
+                        <TextBlock TextWrapping="Wrap" Text="{Binding Path=LocalizedResources.alternate_download_method, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                        <telerikPrimitives:RadToggleSwitch IsChecked="{Binding AltDownloadMethod, Mode=TwoWay}"/>
                         <TextBlock Text="{Binding Path=LocalizedResources.generate_bookmarks_for_dua, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
                         <Button Content="{Binding Path=LocalizedResources.generate, Source={StaticResource LocalizedStrings}}" Command="{Binding Generate}"></Button>
                     </StackPanel>

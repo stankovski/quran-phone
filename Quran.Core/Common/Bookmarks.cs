@@ -10,7 +10,7 @@ namespace Quran.Core.Common
         [Column("_ID"), PrimaryKey, AutoIncrement]
         public int Id { get; set; }
         [Column("sura")]
-        public int? Sura { get; set; }
+        public int? Surah { get; set; }
         [Column("ayah")]
         public int? Ayah { get; set; }
         [Column("page")]

@@ -479,4 +479,10 @@ the data used in the translations and Arabic comes from
   <data name="recite_ayah" xml:space="preserve">
     <value>Ucapkanlah ayah</value>
   </data>
+  <data name="pin_to_start" xml:space="preserve">
+    <value>Menyematkan sesuatu ke mulai</value>
+  </data>
+  <data name="alternate_download_method" xml:space="preserve">
+    <value>alternative download method (use only if WiFi is not available)</value>
+  </data>
 </root>

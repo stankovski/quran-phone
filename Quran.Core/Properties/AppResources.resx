@@ -136,7 +136,7 @@
     <value>Juz'</value>
   </data>
   <data name="quran_sura" xml:space="preserve">
-    <value>Sura</value>
+    <value>Surah</value>
   </data>
   <data name="quran_sura_title" xml:space="preserve">
     <value>Surat</value>
@@ -148,7 +148,7 @@
     <value>en-US</value>
   </data>
   <data name="sura_ayah_notification_str" xml:space="preserve">
-    <value>Sura {0}, Ayah {1}</value>
+    <value>Surah {0}, Ayah {1}</value>
   </data>
   <data name="sura_names" xml:space="preserve">
     <value>&lt;string-array name="sura_names"&gt;
@@ -531,7 +531,7 @@
     <value>juz'</value>
   </data>
   <data name="quran_sura_lower" xml:space="preserve">
-    <value>sura</value>
+    <value>surah</value>
   </data>
   <data name="quran_tags_lower" xml:space="preserve">
     <value>tags</value>
@@ -728,5 +728,11 @@ the data used in the translations and Arabic comes from
   </data>
   <data name="recite_ayah" xml:space="preserve">
     <value>Recite ayah</value>
+  </data>
+  <data name="pin_to_start" xml:space="preserve">
+    <value>Pin to start</value>
+  </data>
+  <data name="alternate_download_method" xml:space="preserve">
+    <value>alternative download method (use only if WiFi is not available)</value>
   </data>
 </root>

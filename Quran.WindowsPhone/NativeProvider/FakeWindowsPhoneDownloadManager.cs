@@ -15,7 +15,7 @@ namespace Quran.WindowsPhone.NativeProvider
     {
         private readonly Dictionary<string, ITransferRequest> transfers =
             new Dictionary<string, ITransferRequest>();
-        public ITransferRequest DownloadAsync(string from, string to, bool allowCellular = true)
+        public ITransferRequest DownloadAsync(string from, string to)
         {
             var serverUri = new Uri(from, UriKind.Absolute);
             var phoneUri = new Uri(to, UriKind.Relative);
@@ -42,7 +42,7 @@ namespace Quran.WindowsPhone.NativeProvider
             }   
         }
 
-        public ITransferRequest DownloadMultipleAsync(string[] from, string to, bool allowCellular = true)
+        public ITransferRequest DownloadMultipleAsync(string[] from, string to)
         {
             return null;
         }

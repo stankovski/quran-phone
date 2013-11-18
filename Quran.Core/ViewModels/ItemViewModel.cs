@@ -13,7 +13,7 @@ namespace Quran.Core.ViewModels
     public enum ItemViewModelType
     {
         Unknown,
-        Sura,
+        Surah,
         Juz,
         Bookmark,
         Header,

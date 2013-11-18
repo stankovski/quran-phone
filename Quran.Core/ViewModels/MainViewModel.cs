@@ -189,7 +189,7 @@ namespace Quran.Core.ViewModels
         
         private void loadSuraList()
         {
-            int sura = 1;
+            int surah = 1;
             int next = 1;
 
             for (int juz = 1; juz <= Constants.JUZ2_COUNT; juz++)
@@ -202,18 +202,18 @@ namespace Quran.Core.ViewModels
                 });
                 next = (juz == Constants.JUZ2_COUNT) ? Constants.PAGES_LAST + 1 : QuranUtils.JUZ_PAGE_START[juz];
 
-                while ((sura <= Constants.SURAS_COUNT) && (QuranUtils.SURA_PAGE_START[sura - 1] < next))
+                while ((surah <= Constants.SURAS_COUNT) && (QuranUtils.SURA_PAGE_START[surah - 1] < next))
                 {
-                    string title = QuranUtils.GetSuraName(sura, true);
+                    string title = QuranUtils.GetSurahName(surah, true);
                     Surahs.Add(new ItemViewModel
                     {
-                        Id = sura.ToString(CultureInfo.InvariantCulture),
+                        Id = surah.ToString(CultureInfo.InvariantCulture),
                         Title = title,
-                        Details = QuranUtils.GetSuraListMetaString(sura),
-                        PageNumber = QuranUtils.SURA_PAGE_START[sura - 1],
-                        ItemType = ItemViewModelType.Sura
+                        Details = QuranUtils.GetSuraListMetaString(surah),
+                        PageNumber = QuranUtils.SURA_PAGE_START[surah - 1],
+                        ItemType = ItemViewModelType.Surah
                     });
-                    sura++;
+                    surah++;
                 }
             }
         }
@@ -226,11 +226,11 @@ namespace Quran.Core.ViewModels
                 new Uri("/Assets/Images/hizb_half.png", UriKind.Relative),
                 new Uri("/Assets/Images/hizb_threequarters.png", UriKind.Relative)
             };
-            string[] quarters = QuranUtils.GetSuraQuarters();
+            string[] quarters = QuranUtils.GetSurahQuarters();
             for (int i = 0; i < (8 * Constants.JUZ2_COUNT); i++)
             {
                 int[] pos = QuranUtils.QUARTERS[i];
-                int page = QuranUtils.GetPageFromSuraAyah(pos[0], pos[1]);
+                int page = QuranUtils.GetPageFromSurahAyah(pos[0], pos[1]);
 
                 if (i % 8 == 0)
                 {
@@ -246,10 +246,10 @@ namespace Quran.Core.ViewModels
                 Juz.Add(new ItemViewModel
                 {
                     Title = quarters[i],
-                    Details = QuranUtils.GetSuraName(pos[0], true) + ", " + verseString,
+                    Details = QuranUtils.GetSurahName(pos[0], true) + ", " + verseString,
                     PageNumber = page,
                     Image = images[i % 4],
-                    ItemType = ItemViewModelType.Sura
+                    ItemType = ItemViewModelType.Surah
                 });
 
                 if (i % 4 == 0)
@@ -263,7 +263,7 @@ namespace Quran.Core.ViewModels
             if (lastPage > 0)
             {
                 var lastPageItem = new ItemViewModel();
-                lastPageItem.Title = QuranUtils.GetSuraNameFromPage(lastPage, true);
+                lastPageItem.Title = QuranUtils.GetSurahNameFromPage(lastPage, true);
                 lastPageItem.Details = string.Format("{0} {1}, {2} {3}", AppResources.quran_page, lastPage,
                                                  QuranUtils.GetJuzTitle(),
                                                  QuranUtils.GetJuzFromPage(lastPage));
@@ -314,9 +314,9 @@ namespace Quran.Core.ViewModels
             if (bookmark.Tags != null && bookmark.Tags.Count > 0)
                 group = bookmark.Tags[0].Name;
 
-            if (bookmark.Ayah != null && bookmark.Sura != null)
+            if (bookmark.Ayah != null && bookmark.Surah != null)
             {
-                string title = QuranUtils.GetSuraNameFromPage(bookmark.Page, true);
+                string title = QuranUtils.GetSurahNameFromPage(bookmark.Page, true);
                 string details = "";
 
                 if (
@@ -330,7 +330,7 @@ namespace Quran.Core.ViewModels
                             var ayahSurah =
                                 await
                                 new TaskFactory().StartNew(
-                                    () => dbArabic.GetVerse(bookmark.Sura.Value, bookmark.Ayah.Value));
+                                    () => dbArabic.GetVerse(bookmark.Surah.Value, bookmark.Ayah.Value));
                             title = ayahSurah.Text;
                         }
                     }
@@ -340,7 +340,7 @@ namespace Quran.Core.ViewModels
                     }
 
                     details = string.Format(CultureInfo.InvariantCulture, "{0} {1} {2}, {3} {4}",
-                                               QuranUtils.GetSuraName(bookmark.Sura.Value, true),
+                                               QuranUtils.GetSurahName(bookmark.Surah.Value, true),
                                                AppResources.verse,
                                                bookmark.Ayah.Value,
                                                QuranUtils.GetJuzTitle(),
@@ -374,7 +374,7 @@ namespace Quran.Core.ViewModels
                     Title = title,
                     Details = details,
                     PageNumber = bookmark.Page,
-                    SelectedAyah = new QuranAyah(bookmark.Sura.Value, bookmark.Ayah.Value),
+                    SelectedAyah = new QuranAyah(bookmark.Surah.Value, bookmark.Ayah.Value),
                     Image = new Uri("/Assets/Images/favorite.png", UriKind.Relative),
                     ItemType = ItemViewModelType.Bookmark,
                     Group = group
@@ -385,7 +385,7 @@ namespace Quran.Core.ViewModels
                 return new ItemViewModel
                 {
                     Id = bookmark.Id.ToString(CultureInfo.InvariantCulture),
-                    Title = QuranUtils.GetSuraNameFromPage(bookmark.Page, true),
+                    Title = QuranUtils.GetSurahNameFromPage(bookmark.Page, true),
                     Details = string.Format(CultureInfo.InvariantCulture, "{0} {1}, {2} {3}", AppResources.quran_page, bookmark.Page,
                                             QuranUtils.GetJuzTitle(),
                                             QuranUtils.GetJuzFromPage(bookmark.Page)),

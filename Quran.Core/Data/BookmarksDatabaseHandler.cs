@@ -37,7 +37,7 @@ namespace Quran.Core.Data
             switch (sortOrder)
             {
                 case BoomarkSortOrder.Location:
-                    bookmarks = bookmarks.OrderBy(b => b.Page).OrderBy(b => b.Sura).OrderBy(b => b.Ayah);
+                    bookmarks = bookmarks.OrderBy(b => b.Page).OrderBy(b => b.Surah).OrderBy(b => b.Ayah);
                     break;
                 default:
                     bookmarks = bookmarks.OrderByDescending(b => b.AddedDate);
@@ -98,12 +98,12 @@ namespace Quran.Core.Data
             return GetBookmarkId(null, null, page) >= 0;
         }
 
-        public int GetBookmarkId(int? sura, int? ayah, int page)
+        public int GetBookmarkId(int? surah, int? ayah, int page)
         {
             var bookmarks = dbConnection.Table<Bookmarks>().Where(b => b.Page == page);
-            if (sura != null)
+            if (surah != null)
             {
-                bookmarks = bookmarks.Where(b => b.Sura == (int)sura);
+                bookmarks = bookmarks.Where(b => b.Surah == (int)surah);
             }
             if (ayah != null)
             {
@@ -127,17 +127,17 @@ namespace Quran.Core.Data
             return AddBookmark(null, null, page);
         }
 
-        public int AddBookmarkIfNotExists(int? sura, int? ayah, int page)
+        public int AddBookmarkIfNotExists(int? surah, int? ayah, int page)
         {
-            int bookmarkId = GetBookmarkId(sura, ayah, page);
+            int bookmarkId = GetBookmarkId(surah, ayah, page);
             if (bookmarkId < 0)
-                bookmarkId = AddBookmark(sura, ayah, page);
+                bookmarkId = AddBookmark(surah, ayah, page);
             return bookmarkId;
         }
 
-        public int AddBookmark(int? sura, int? ayah, int page)
+        public int AddBookmark(int? surah, int? ayah, int page)
         {
-            var bookmark = new Bookmarks { Ayah = ayah, Sura = sura, Page = page };
+            var bookmark = new Bookmarks { Ayah = ayah, Surah = surah, Page = page };
             dbConnection.Insert(bookmark);
             return bookmark.Id;
         }

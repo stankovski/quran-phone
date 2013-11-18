@@ -89,6 +89,15 @@ namespace Quran.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to alternative download method (use only if WiFi is not available).
+        /// </summary>
+        public static string alternate_download_method {
+            get {
+                return ResourceManager.GetString("alternate_download_method", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to QURAN.
         /// </summary>
         public static string app_name {
@@ -449,6 +458,15 @@ namespace Quran.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pin to start.
+        /// </summary>
+        public static string pin_to_start {
+            get {
+                return ResourceManager.GetString("pin_to_start", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please relaunch an app for the change to take effect.
         /// </summary>
         public static string please_restart {
@@ -477,7 +495,7 @@ namespace Quran.Core.Properties {
         ///        &lt;item&gt;أَفَتَطْمَعُونَ أَن يُؤْمِنُوا لَكُمْ&lt;/item&gt;
         ///        &lt;item&gt;وَلَقَدْ جَاءَكُم مُّوسَىٰ&lt;/item&gt;
         ///        &lt;item&gt;مَا نَنسَخْ مِنْ آيَةٍ أَوْ نُنسِهَا&lt;/item&gt;
-        ///        &lt;item&gt;وَ [rest of string was truncated]&quot;;.
+        ///       [rest of string was truncated]&quot;;.
         /// </summary>
         public static string quarters {
             get {
@@ -540,7 +558,7 @@ namespace Quran.Core.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sura.
+        ///   Looks up a localized string similar to Surah.
         /// </summary>
         public static string quran_sura {
             get {
@@ -549,7 +567,7 @@ namespace Quran.Core.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to sura.
+        ///   Looks up a localized string similar to surah.
         /// </summary>
         public static string quran_sura_lower {
             get {
@@ -648,7 +666,7 @@ namespace Quran.Core.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sura {0}, Ayah {1}.
+        ///   Looks up a localized string similar to Surah {0}, Ayah {1}.
         /// </summary>
         public static string sura_ayah_notification_str {
             get {

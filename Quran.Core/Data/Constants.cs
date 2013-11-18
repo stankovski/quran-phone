@@ -61,6 +61,8 @@ namespace Quran.Core.Data
         public const string PREF_AYAH_BEFORE_TRANSLATION = "ayahBeforeTranslation";
         [DefaultValue(false)]
         public const string PREF_PREFER_STREAMING = "preferStreaming";
+        [DefaultValue(false)]
+        public const string PREF_ALT_DOWNLOAD = "altDownloadMethod";
         [DefaultValue(AudioDownloadAmount.Page)]
         public const string PREF_DOWNLOAD_AMOUNT = "preferredDownloadAmount";
         public const string PREF_LAST_UPDATED_TRANSLATIONS = "lastTranslationsUpdate";

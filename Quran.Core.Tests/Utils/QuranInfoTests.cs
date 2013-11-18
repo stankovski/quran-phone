@@ -12,15 +12,15 @@ namespace Quran.Core.Tests.Utils
         [Fact]
         public void GetSuraPagesWorksForGoodArguments()
         {
-            Assert.Equal(7, QuranUtils.GetSuraNumberOfAyah(1));
-            Assert.Equal(6, QuranUtils.GetSuraNumberOfAyah(114));
+            Assert.Equal(7, QuranUtils.GetSurahNumberOfAyah(1));
+            Assert.Equal(6, QuranUtils.GetSurahNumberOfAyah(114));
         }
 
         [Fact]
         public void GetSuraPagesWorksForBadArguments()
         {
-            Assert.Equal(-1, QuranUtils.GetSuraNumberOfAyah(0));
-            Assert.Equal(-1, QuranUtils.GetSuraNumberOfAyah(10000));
+            Assert.Equal(-1, QuranUtils.GetSurahNumberOfAyah(0));
+            Assert.Equal(-1, QuranUtils.GetSurahNumberOfAyah(10000));
         }
 
         [Theory]

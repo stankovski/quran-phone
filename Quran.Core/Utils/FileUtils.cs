@@ -66,6 +66,9 @@ namespace Quran.Core.Utils
 
         public static string GetNativePath(string path)
         {
+            if (string.IsNullOrWhiteSpace(path))
+                return string.Empty;
+
             return FileStore.NativePath(path);
         }
 
@@ -73,31 +76,34 @@ namespace Quran.Core.Utils
         /// Deletes folder even if it contains read only files
         /// </summary>
         /// <param name="path"></param>
-        public static void DeleteFolder(string path)
+        public static bool DeleteFolder(string path)
         {
-            if (string.IsNullOrEmpty(path))
-                throw new ArgumentNullException("path");
+            if (string.IsNullOrWhiteSpace(path))
+                return false;
 
             var files = FileStore.GetFilesIn(path);
             foreach (var file in files)
                 DeleteFile(file);
             FileStore.DeleteFolder(path, false);
+            return true;
         }
 
-        public static void DeleteFile(string path)
+        public static bool DeleteFile(string path)
         {
-            if (string.IsNullOrEmpty(path))
-                throw new ArgumentNullException("path");
+            if (string.IsNullOrWhiteSpace(path))
+                return false;
 
             try
             {
                 if (FileStore.Exists(path))
                     FileStore.DeleteFile(path);
+                return true;
             }
             catch
             {
                 var tempPath = GetUndeletedFilesDirectory(false, true);
                 WriteFile(Combine(tempPath, string.Format("{0}.txt", Guid.NewGuid())), path);
+                return false;
             }
         }
 
@@ -131,18 +137,25 @@ namespace Quran.Core.Utils
 
         public static bool FileExists(string path)
         {
+            if (string.IsNullOrWhiteSpace(path))
+                return false;
+
             return FileStore.Exists(path);
         }
 
         public static void MoveFile(string from, string to)
         {
-            FileStore.TryMove(from, to, true);
+            if (!string.IsNullOrWhiteSpace(from) &&
+                !string.IsNullOrWhiteSpace(to))
+            {
+                FileStore.TryMove(from, to, true);
+            }
         }
 
         public static bool DirectoryExists(string path)
         {
-            if (string.IsNullOrEmpty(path))
-                throw new ArgumentNullException("path");
+            if (string.IsNullOrWhiteSpace(path))
+                return false;
 
             return FileStore.FolderExists(path);
         }
@@ -150,7 +163,7 @@ namespace Quran.Core.Utils
         public static bool MakeDirectory(string path)
         {
             if (string.IsNullOrEmpty(path))
-                throw new ArgumentNullException("path");
+                return false;
 
             FileStore.EnsureFolderExists(path);
             return true;
@@ -197,11 +210,38 @@ namespace Quran.Core.Utils
 
         public static bool WriteFile(string path, string content)
         {
+            if (string.IsNullOrWhiteSpace(path))
+                return false;
+
             DeleteFile(path);
 
-            FileStore.WriteFile(path, content);
+            try
+            {
+                FileStore.WriteFile(path, content);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
 
-            return true;
+        public static bool WriteFile(string path, Action<Stream> writeMethod)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+                return false;
+
+            DeleteFile(path);
+
+            try
+            {
+                FileStore.WriteFile(path, writeMethod);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public static string ReadFile(string path)

@@ -104,7 +104,7 @@ namespace Quran.Core.ViewModels
         // QuranUtils Properties
         public String SuraName
         {
-            get { return QuranUtils.GetSuraNameFromPage(PageNumber); }
+            get { return QuranUtils.GetSurahNameFromPage(PageNumber); }
         }
 
         public String JuzName

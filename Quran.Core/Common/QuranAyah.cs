@@ -9,7 +9,7 @@ namespace Quran.Core.Common
     public class QuranAyah
     {
         [Column("sura")]
-        public int Sura { get; set; }
+        public int Surah { get; set; }
         [Column("ayah")]
         public int Ayah { get; set; }
         [Column("text")]
@@ -19,9 +19,9 @@ namespace Quran.Core.Common
 
         public QuranAyah() { }
 
-        public QuranAyah(int sura, int ayah)
+        public QuranAyah(int surah, int ayah)
         {
-            Sura = sura;
+            Surah = surah;
             Ayah = ayah;
         }
 
@@ -44,7 +44,7 @@ namespace Quran.Core.Common
 
         public QuranAyah(QuranAyah ayah)
         {
-            Sura = ayah.Sura;
+            Surah = ayah.Surah;
             Ayah = ayah.Ayah;
             Text = ayah.Text;
             Translation = ayah.Translation;
@@ -52,7 +52,7 @@ namespace Quran.Core.Common
 
         public override string ToString()
         {
-            return string.Format("{0}:{1}", Sura, Ayah, CultureInfo.InvariantCulture);
+            return string.Format("{0}:{1}", Surah, Ayah, CultureInfo.InvariantCulture);
         }
 
         public override bool Equals(object obj)
@@ -62,12 +62,12 @@ namespace Quran.Core.Common
             if (anotherAyah == null)
                 return false;
 
-            return anotherAyah.Ayah == this.Ayah && anotherAyah.Sura == this.Sura;
+            return anotherAyah.Ayah == this.Ayah && anotherAyah.Surah == this.Surah;
         }
 
         public override int GetHashCode()
         {
-            return this.Ayah.GetHashCode() + this.Sura.GetHashCode();
+            return this.Ayah.GetHashCode() + this.Surah.GetHashCode();
         }
     }
 
@@ -76,7 +76,7 @@ namespace Quran.Core.Common
     {
         public ArabicAyah() { }
 
-        public ArabicAyah(int sura, int ayah) : base(sura, ayah)
+        public ArabicAyah(int surah, int ayah) : base(surah, ayah)
         {}
     }
 
@@ -84,13 +84,13 @@ namespace Quran.Core.Common
     {
         public int Compare(QuranAyah x, QuranAyah y)
         {
-            if (x.Ayah == y.Ayah && x.Sura == y.Sura)
+            if (x.Ayah == y.Ayah && x.Surah == y.Surah)
                 return 0;
-            else if (x.Sura < y.Sura)
+            else if (x.Surah < y.Surah)
                 return -1;
-            else if (x.Sura > y.Sura)
+            else if (x.Surah > y.Surah)
                 return 1;
-            else if (x.Sura == y.Sura && x.Ayah < y.Ayah)
+            else if (x.Surah == y.Surah && x.Ayah < y.Ayah)
                 return -1;
             else
                 return 1;

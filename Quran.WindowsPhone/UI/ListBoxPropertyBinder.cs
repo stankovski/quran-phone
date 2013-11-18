@@ -66,7 +66,7 @@ namespace Quran.WindowsPhone.UI
 
             foreach (VerseViewModel item in listboxItems)
             {
-                if (item.Surah == ayah.Sura && item.Ayah == ayah.Ayah)
+                if (item.Surah == ayah.Surah && item.Ayah == ayah.Ayah)
                 {
                     return item;
                 }

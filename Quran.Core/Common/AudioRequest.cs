@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Quran.Core.Utils;
 
 namespace Quran.Core.Common
@@ -10,38 +11,72 @@ namespace Quran.Core.Common
             if (verse == null)
                 throw new ArgumentNullException("verse");
 
-            if (verse == null || verse.Sura < 1 || verse.Sura > 114)
+            if (verse == null || verse.Surah < 1 || verse.Surah > 114)
                 throw new ArgumentException("verse");
 
             this.Reciter = AudioUtils.GetReciterById(reciterId);
             this.AudioDownloadAmount = audioDownloadAmount;
-            this.MinAyah = verse;
-            this.MaxAyah = AudioUtils.GetLastAyahToPlay(verse, audioDownloadAmount);
+            this.FromAyah = verse;
             this.CurrentAyah = verse;
+            this.ToAyah = AudioUtils.GetLastAyahToPlay(verse, audioDownloadAmount);
             this.RepeatInfo = new RepeatInfo();
         }
 
         /// <summary>
         /// AudioRequest from a formatted string
         /// </summary>
-        /// <param name="formattedString">AudioDownloadAmount/reciterId/surah/ayah</param>
+        /// <param name="formattedString">[local|streaming]://reciterId?amount=AudioDownloadAmount&amp;currentAyah=1:2&amp;fromAyah=1:2&amp;to=2:1&amp;repeat=xxx</param>
         public AudioRequest(string formattedString)
         {
             if (string.IsNullOrEmpty(formattedString))
                 throw new ArgumentNullException("formattedString");
 
-            var splitString = formattedString.Split('/');
-            if (splitString.Length != 4)
+            try
+            {
+                Uri patternAsUri = new Uri(formattedString);
+                if (patternAsUri.Scheme.Equals("local", StringComparison.OrdinalIgnoreCase))
+                    IsStreaming = false;
+                else if (patternAsUri.Scheme.Equals("streaming", StringComparison.OrdinalIgnoreCase))
+                    IsStreaming = true;
+                else
+                    throw new ArgumentException("scheme");
+
+                this.Reciter = AudioUtils.GetReciterById(int.Parse(patternAsUri.Host));
+
+                var splitQueryString = patternAsUri.Query.Split(new char[] { '?', '&' });
+                foreach (var part in splitQueryString)
+                {
+                    var splitPart = part.Split('=');
+                    if (splitPart[0].Equals("amount", StringComparison.OrdinalIgnoreCase))
+                    {
+                        this.AudioDownloadAmount =
+                            (AudioDownloadAmount) Enum.Parse(typeof (AudioDownloadAmount), splitPart[1]);
+                    }
+                    else if (splitPart[0].Equals("currentAyah", StringComparison.OrdinalIgnoreCase))
+                    {
+                        this.CurrentAyah = QuranAyah.FromString(splitPart[1]);
+                    }
+                    else if (splitPart[0].Equals("fromAyah", StringComparison.OrdinalIgnoreCase))
+                    {
+                        this.FromAyah = QuranAyah.FromString(splitPart[1]);
+                    }
+                    else if (splitPart[0].Equals("toAyah", StringComparison.OrdinalIgnoreCase))
+                    {
+                        this.ToAyah = QuranAyah.FromString(splitPart[1]);
+                    }
+                    else if (splitPart[0].Equals("repeat", StringComparison.OrdinalIgnoreCase))
+                    {
+                        this.RepeatInfo = RepeatInfo.FromString(splitPart[1]);
+                    }
+                }
+
+                if (this.CurrentAyah == null)
+                    this.CurrentAyah = this.FromAyah;
+            }
+            catch
+            {
                 throw new ArgumentException("formattedString");
-
-            this.AudioDownloadAmount = (AudioDownloadAmount)Enum.Parse(typeof(AudioDownloadAmount), splitString[0]);
-            this.Reciter = AudioUtils.GetReciterById(int.Parse(splitString[1]));
-            var verse = new QuranAyah(int.Parse(splitString[2]), int.Parse(splitString[3]));
-
-            this.MinAyah = verse;
-            this.MaxAyah = verse;
-            this.CurrentAyah = verse;
-            this.RepeatInfo = new RepeatInfo();
+            }
         }
 
         public ReciterItem Reciter { get; private set; }
@@ -52,9 +87,11 @@ namespace Quran.Core.Common
 
         public RepeatInfo RepeatInfo { get; set; }
         
-        public QuranAyah MinAyah { get; set; }
+        public QuranAyah FromAyah { get; set; }
 
-        public QuranAyah MaxAyah { get; set; }
+        public QuranAyah ToAyah { get; set; }
+
+        public bool IsStreaming { get; set; }
 
         public void GotoNextAyah()
         {
@@ -66,9 +103,32 @@ namespace Quran.Core.Common
             CurrentAyah = QuranUtils.GetPreviousAyah(CurrentAyah, true);
         }
 
+        /// <summary>
+        /// Returns request formatted in the URI format
+        /// [local|streaming]://reciterId?amount=AudioDownloadAmount&amp;currentAyah=1:2&amp;fromAyah=1:2&amp;to=2:1&amp;repeat=xxx
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
-            return string.Format("{0}/{1}/{2}/{3}", AudioDownloadAmount, Reciter.Id, CurrentAyah.Sura, CurrentAyah.Ayah);
+            var queryBuilder = new List<string>();
+            var schema = IsStreaming ? "streaming" : "local";
+            queryBuilder.Add("amount=" + AudioDownloadAmount);
+            if (CurrentAyah != null)
+                queryBuilder.Add("currentAyah=" + CurrentAyah);
+            if (FromAyah != null)
+                queryBuilder.Add("fromAyah=" + FromAyah);
+            if (ToAyah != null)
+                queryBuilder.Add("toAyah=" + ToAyah);
+            if (RepeatInfo != null)
+                queryBuilder.Add("repeat=" + RepeatInfo);
+
+            var uriBuilder = new UriBuilder
+            {
+                Scheme = schema,
+                Host = Reciter.Id.ToString(),
+                Query = string.Join("&", queryBuilder)
+            };
+            return uriBuilder.ToString();
         }
     }
 }

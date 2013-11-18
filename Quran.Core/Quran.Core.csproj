@@ -107,7 +107,7 @@
     <Compile Include="Utils\PathHelper.cs" />
     <Compile Include="Utils\FileUtils.cs" />
     <Compile Include="Utils\ScreenUtils.cs" />
-    <Compile Include="Utils\RepeatInfo.cs" />
+    <Compile Include="Common\RepeatInfo.cs" />
     <Compile Include="Utils\SettingsUtils.cs" />
     <Compile Include="Utils\TranslationListTask.cs" />
     <Compile Include="Utils\TranslationUtils.cs" />

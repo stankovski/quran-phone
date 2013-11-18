@@ -6,25 +6,33 @@ using Microsoft.Phone.BackgroundTransfer;
 using Quran.Core.Common;
 using Quran.Core.Interfaces;
 using Quran.Core.Utils;
+using Quran.Core.Data;
 
 namespace Quran.WindowsPhone.NativeProvider
 {
     public class WindowsPhoneDownloadManager : IDownloadManager
     {
-        private Dictionary<string, WindowsPhoneMultifileTransferRequest> multifileTransferRequests =
-            new Dictionary<string, WindowsPhoneMultifileTransferRequest>();
+        private Dictionary<string, ITransferRequest> customTransferRequests =
+            new Dictionary<string, ITransferRequest>();
 
-        public ITransferRequest DownloadAsync(string from, string to, bool allowCellular = true)
+        public ITransferRequest DownloadAsync(string from, string to)
         {
             var serverUri = new Uri(from, UriKind.Absolute);
             var phoneUri = new Uri(to, UriKind.Relative);
 
+            if (SettingsUtils.Get<bool>(Constants.PREF_ALT_DOWNLOAD))
+                return DownloadAsyncViaWebClient(serverUri, phoneUri);
+            else
+                return DownloadAsyncViaBackgroundTranfer(serverUri, phoneUri);   
+        }
+
+        private ITransferRequest DownloadAsyncViaBackgroundTranfer(Uri serverUri, Uri phoneUri)
+        {
             try
             {
                 var request = new BackgroundTransferRequest(serverUri, phoneUri);
-                request.Tag = from;
-                if (allowCellular)
-                    request.TransferPreferences = TransferPreferences.AllowCellularAndBattery;
+                request.Tag = serverUri.ToString();
+                request.TransferPreferences = TransferPreferences.AllowCellularAndBattery;
 
                 int count = 0;
                 foreach (var r in BackgroundTransferService.Requests)
@@ -47,11 +55,22 @@ namespace Quran.WindowsPhone.NativeProvider
             }
             catch (InvalidOperationException)
             {
-                return GetRequest(from);
-            }   
+                return GetRequest(serverUri.ToString());
+            }
         }
 
-        public ITransferRequest DownloadMultipleAsync(string[] from, string to, bool allowCellular = true)
+        private ITransferRequest DownloadAsyncViaWebClient(Uri serverUri, Uri phoneUri)
+        {
+            var request = new WindowsPhoneWebClientTransferRequest(serverUri, phoneUri)
+            {
+                RequestId = Guid.NewGuid().ToString()
+            };
+            request.Download();
+            customTransferRequests[request.RequestId] = request;
+            return request; 
+        }
+
+        public ITransferRequest DownloadMultipleAsync(string[] from, string to)
         {
             var phoneUri = new Uri(to, UriKind.Relative);
 
@@ -60,7 +79,7 @@ namespace Quran.WindowsPhone.NativeProvider
                 RequestId = Guid.NewGuid().ToString()
             };
             request.Download();
-            multifileTransferRequests[request.RequestId] = request;
+            customTransferRequests[request.RequestId] = request;
             return request; 
         }
 
@@ -112,10 +131,10 @@ namespace Quran.WindowsPhone.NativeProvider
                     BackgroundTransferService.Remove(((WindowsPhoneTransferRequest) request).OriginalRequest);
                     DeleteRequestFromStorage(((WindowsPhoneTransferRequest) request).OriginalRequest);
                 }
-                if (multifileTransferRequests.ContainsKey(request.RequestId))
+                if (customTransferRequests.ContainsKey(request.RequestId))
                 {
-                    multifileTransferRequests[request.RequestId].Cancel();
-                    multifileTransferRequests.Remove(request.RequestId);
+                    customTransferRequests[request.RequestId].Cancel();
+                    customTransferRequests.Remove(request.RequestId);
                 }
             }
         }

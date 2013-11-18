@@ -159,6 +159,9 @@ namespace Quran.WindowsPhone.AudioAgent
             if (currentTrack != null && currentTrack.Tag != null)
             {
                 var request = new AudioRequest(currentTrack.Tag);
+                if (request.ToAyah != null && request.ToAyah.Equals(request.CurrentAyah))
+                    return null;
+
                 request.GotoNextAyah();
                 return GetTrackFromRequest(request);
             }
@@ -183,6 +186,9 @@ namespace Quran.WindowsPhone.AudioAgent
             if (currentTrack != null && currentTrack.Tag != null)
             {
                 var request = new AudioRequest(currentTrack.Tag);
+                if (request.FromAyah != null && request.FromAyah.Equals(request.CurrentAyah))
+                    return null;
+
                 request.GotoPreviousAyah();
                 return GetTrackFromRequest(request);
             }
@@ -208,7 +214,7 @@ namespace Quran.WindowsPhone.AudioAgent
         private AudioTrack GetTrackFromRequest(AudioRequest request)
         {
             var ayah = request.CurrentAyah;
-            var title = ayah.Ayah == 0 ? "Bismillah" : QuranUtils.GetSuraAyahString(ayah.Sura, ayah.Ayah);
+            var title = ayah.Ayah == 0 ? "Bismillah" : QuranUtils.GetSurahAyahString(ayah.Surah, ayah.Ayah);
             var path = AudioUtils.GetLocalPathForAyah(ayah.Ayah == 0 ? new QuranAyah(1, 1) : ayah, request.Reciter);
 
             using (var isf = IsolatedStorageFile.GetUserStoreForApplication())

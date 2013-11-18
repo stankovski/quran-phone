@@ -17,7 +17,7 @@ namespace Quran.Core.Utils
     public enum AudioDownloadAmount
     {
         Page = 1,
-        Sura = 2,
+        Surah = 2,
         Juz = 3
     }
 
@@ -67,7 +67,7 @@ namespace Quran.Core.Utils
             {
                 case AudioDownloadAmount.Page:
                     return GetLastAyahToPlayForPage(startAyah);
-                case AudioDownloadAmount.Sura:
+                case AudioDownloadAmount.Surah:
                     return GetLastAyahToPlayForSura(startAyah);
                 case AudioDownloadAmount.Juz:
                     return GetLastAyahToPlayForJuz(startAyah);
@@ -78,14 +78,14 @@ namespace Quran.Core.Utils
 
         private static QuranAyah GetLastAyahToPlayForSura(QuranAyah startAyah)
         {
-            int sura = startAyah.Sura;
-            int lastAyah = QuranUtils.GetSuraNumberOfAyah(sura);
-            return new QuranAyah(sura, lastAyah);
+            int surah = startAyah.Surah;
+            int lastAyah = QuranUtils.GetSurahNumberOfAyah(surah);
+            return new QuranAyah(surah, lastAyah);
         }
 
         private static QuranAyah GetLastAyahToPlayForPage(QuranAyah startAyah)
         {
-            var page = QuranUtils.GetPageFromSuraAyah(startAyah.Sura, startAyah.Ayah);
+            var page = QuranUtils.GetPageFromSurahAyah(startAyah.Surah, startAyah.Ayah);
             if (page == -1)
                 return null;
 
@@ -96,7 +96,7 @@ namespace Quran.Core.Utils
 
         private static QuranAyah GetLastAyahToPlayForJuz(QuranAyah startAyah)
         {
-            var juz = QuranUtils.GetJuzFromAyah(startAyah.Sura, startAyah.Ayah);
+            var juz = QuranUtils.GetJuzFromAyah(startAyah.Surah, startAyah.Ayah);
             // If last juz - return last verse
             if (juz == Constants.JUZ2_COUNT)
                 return new QuranAyah(Constants.SURA_LAST, 6);
@@ -132,25 +132,25 @@ namespace Quran.Core.Utils
             return DoesRequireBismillah(request);
         }
 
-        public static bool HaveSuraAyahForQari(string baseDir, int sura, int ayah)
+        public static bool HaveSuraAyahForQari(string baseDir, int surah, int ayah)
         {
-            string filename = FileUtils.Combine(baseDir, sura + "\\" + ayah + AudioExtension);
+            string filename = FileUtils.Combine(baseDir, surah + "\\" + ayah + AudioExtension);
             return FileUtils.FileExists(filename);
         }
 
         public static bool DoesRequireBismillah(AudioRequest request)
         {
-            QuranAyah minAyah = request.MinAyah;
-            int startSura = minAyah.Sura;
+            QuranAyah minAyah = request.FromAyah;
+            int startSura = minAyah.Surah;
             int startAyah = minAyah.Ayah;
 
-            QuranAyah maxAyah = request.MaxAyah;
-            int endSura = maxAyah.Sura;
+            QuranAyah maxAyah = request.ToAyah;
+            int endSura = maxAyah.Surah;
             int endAyah = maxAyah.Ayah;
 
             for (int i = startSura; i <= endSura; i++)
             {
-                int lastAyah = QuranUtils.GetSuraNumberOfAyah(i);
+                int lastAyah = QuranUtils.GetSurahNumberOfAyah(i);
                 if (i == endSura)
                 {
                     lastAyah = endAyah;
@@ -182,7 +182,7 @@ namespace Quran.Core.Utils
             if (!FileUtils.DirectoryExists(baseDirectory))
                 return false;
 
-            foreach (var verse in QuranUtils.GetAllAyah(request.MinAyah, request.MaxAyah))
+            foreach (var verse in QuranUtils.GetAllAyah(request.FromAyah, request.ToAyah))
             {
                 var filename = GetLocalPathForAyah(verse, request.Reciter);
                 if (!FileUtils.FileExists(filename.ToString()))
@@ -198,9 +198,9 @@ namespace Quran.Core.Utils
         {
             string fileName;
             if (reciter.IsGapless)
-                fileName = string.Format(reciter.GetFilePattern(), ayah.Sura);
+                fileName = string.Format(reciter.GetFilePattern(), ayah.Surah);
             else
-                fileName = string.Format(reciter.GetFilePattern(), ayah.Sura, ayah.Ayah);
+                fileName = string.Format(reciter.GetFilePattern(), ayah.Surah, ayah.Ayah);
 
             return PathHelper.Combine(reciter.LocalPath, fileName);
         }
@@ -209,16 +209,16 @@ namespace Quran.Core.Utils
         {
             string fileName;
             if (reciter.IsGapless)
-                fileName = string.Format(reciter.GetFilePattern(), ayah.Sura);
+                fileName = string.Format(reciter.GetFilePattern(), ayah.Surah);
             else
-                fileName = string.Format(reciter.GetFilePattern(), ayah.Sura, ayah.Ayah);
+                fileName = string.Format(reciter.GetFilePattern(), ayah.Surah, ayah.Ayah);
 
             return PathHelper.Combine(reciter.ServerUrl, fileName);
         }
 
         public static async Task<bool> DownloadRange(AudioRequest request)
         {
-            var ayahToDownload = QuranUtils.GetAllAyah(request.MinAyah, request.MaxAyah);
+            var ayahToDownload = QuranUtils.GetAllAyah(request.FromAyah, request.ToAyah);
             var filesToDownload = new List<string>();
             bool result = true;
 
@@ -248,7 +248,7 @@ namespace Quran.Core.Utils
         public static async Task<bool> DownloadGaplessRange(string urlString, string destination, QuranAyah fromAyah, QuranAyah toAyah)
         {
             var result = true;
-            for (int i = fromAyah.Sura; i <= toAyah.Sura; i++)
+            for (int i = fromAyah.Surah; i <= toAyah.Surah; i++)
             {
                 string serverUrl = string.Format(CultureInfo.InvariantCulture, urlString, i);
                 var localUrl = destination + "/";
@@ -263,11 +263,11 @@ namespace Quran.Core.Utils
 
         //public static void PlayGapless(string localPath, QuranAyah ayah, ReciterItem reciter)
         //{
-        //    var fileName = string.Format("{0:000}.mp3", ayah.Sura);
+        //    var fileName = string.Format("{0:000}.mp3", ayah.Surah);
         //    var fullPath = PathHelper.Combine(localPath, fileName);
         //    var fullPathAsUri = new Uri(fullPath, UriKind.Relative);
         //    var track = QuranApp.NativeProvider.AudioProvider.GetTrack();
-        //    var title = QuranUtils.GetSuraAyahString(ayah.Sura, ayah.Ayah);
+        //    var title = QuranUtils.GetSurahAyahString(ayah.Surah, ayah.Ayah);
         //    if (track == null || track.Source != fullPathAsUri)
         //    {
         //        QuranApp.NativeProvider.AudioProvider.SetTrack(fullPathAsUri, title, reciter.Name, "Quran", null, null);
@@ -277,11 +277,11 @@ namespace Quran.Core.Utils
 
         //public static void PlayNonGapless(string localPath, QuranAyah ayah, ReciterItem reciter)
         //{
-        //    var fileName = string.Format("{0:000}{1:000}.mp3", ayah.Sura, ayah.Ayah);
+        //    var fileName = string.Format("{0:000}{1:000}.mp3", ayah.Surah, ayah.Ayah);
         //    var fullPath = PathHelper.Combine(localPath, fileName);
         //    var fullPathAsUri = new Uri(fullPath, UriKind.Relative);
         //    var track = QuranApp.NativeProvider.AudioProvider.GetTrack();
-        //    var title = QuranUtils.GetSuraAyahString(ayah.Sura, ayah.Ayah);
+        //    var title = QuranUtils.GetSurahAyahString(ayah.Surah, ayah.Ayah);
         //    if (track == null || track.Source != fullPathAsUri)
         //    {
         //        QuranApp.NativeProvider.AudioProvider.SetTrack(fullPathAsUri, title, reciter.Name, "Quran", null, null);

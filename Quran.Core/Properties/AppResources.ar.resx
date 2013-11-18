@@ -727,4 +727,10 @@
   <data name="recite_ayah" xml:space="preserve">
     <value>يقرأ</value>
   </data>
+  <data name="pin_to_start" xml:space="preserve">
+    <value>Pin to start</value>
+  </data>
+  <data name="alternate_download_method" xml:space="preserve">
+    <value>alternative download method (use only if WiFi is not available)</value>
+  </data>
 </root>

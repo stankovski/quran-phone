@@ -17,14 +17,14 @@ namespace Quran.Core.Data
             return factory.Create(path);
         }
 
-        public IList<AyahBounds> GetVerseBounds(int sura, int ayah)
+        public IList<AyahBounds> GetVerseBounds(int surah, int ayah)
         {
-            return dbConnection.Table<AyahBounds>().Where(a => a.SurahNumber == sura && a.AyahNumber == ayah).ToList();
+            return dbConnection.Table<AyahBounds>().Where(a => a.SurahNumber == surah && a.AyahNumber == ayah).ToList();
         }
 
-        public IList<AyahBounds> GetVerseBoundsCombined(int sura, int ayah)
+        public IList<AyahBounds> GetVerseBoundsCombined(int surah, int ayah)
         {
-            var bounds = GetVerseBounds(sura, ayah);
+            var bounds = GetVerseBounds(surah, ayah);
             var lineCoords = new Dictionary<int, AyahBounds>();
             AyahBounds first = null, last = null, current = null;
             foreach(var bound in bounds)

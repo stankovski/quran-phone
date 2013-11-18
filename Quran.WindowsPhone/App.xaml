@@ -77,11 +77,11 @@
         </Style>
         <Style TargetType="TextBlock" x:Key="ItemViewStyleJuz" BasedOn="{StaticResource BlueSmallHeader}">
         </Style>
-        <Style TargetType="TextBlock" x:Key="ItemViewStyleSura" BasedOn="{StaticResource WhiteHeader}">
+        <Style TargetType="TextBlock" x:Key="ItemViewStyleSurah" BasedOn="{StaticResource WhiteHeader}">
         </Style>
         <Style TargetType="TextBlock" x:Key="ItemViewStyleBookmark" BasedOn="{StaticResource WhiteHeader}">
         </Style>
-        <Style TargetType="TextBlock" x:Key="ItemViewStyleSuraNumber">
+        <Style TargetType="TextBlock" x:Key="ItemViewStyleSurahNumber">
             <Setter Property="FontSize" Value="30"/>
         </Style>
         <Style TargetType="TextBlock" x:Key="ItemViewStyleBookmarkNumber">
@@ -95,7 +95,7 @@
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="Foreground" Value="{StaticResource BlueText}"/>
         </Style>
-        <Style TargetType="TextBlock" x:Key="ItemViewStyleSuraPageNumber">
+        <Style TargetType="TextBlock" x:Key="ItemViewStyleSurahPageNumber">
             <Setter Property="FontSize" Value="20"/>
         </Style>
         <Style TargetType="TextBlock" x:Key="ItemViewStyleBookmarkPageNumber">

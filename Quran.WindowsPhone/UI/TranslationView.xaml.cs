@@ -32,7 +32,7 @@ namespace Quran.WindowsPhone.UI
             else
             {
                 var currentModel = this.DataContext as VerseViewModel;
-                if (currentModel != null && currentModel.Surah == ayahInfo.Sura &&
+                if (currentModel != null && currentModel.Surah == ayahInfo.Surah &&
                     currentModel.Ayah == ayahInfo.Ayah)
                 {
                     canvas.Opacity = 1.0;

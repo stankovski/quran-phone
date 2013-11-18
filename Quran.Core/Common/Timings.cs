@@ -11,7 +11,7 @@ namespace Quran.Core.Common
     public class Timings
     {
         [Column("sura"), PrimaryKey]
-        public int Sura { get; set; }
+        public int Surah { get; set; }
         [Column("ayah"), PrimaryKey]
         public int Ayah { get; set; }
         [Column("time")]

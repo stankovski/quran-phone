@@ -20,9 +20,9 @@ namespace Quran.Core.Data
             return newDb;
         }
 
-        public List<Timings> GetAyahTimings(int sura)
+        public List<Timings> GetAyahTimings(int surah)
         {
-            return dbConnection.Table<Timings>().Where(t=>t.Sura == sura).ToList();
+            return dbConnection.Table<Timings>().Where(t=>t.Surah == surah).ToList();
         }
     }
 }

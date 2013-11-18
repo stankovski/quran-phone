@@ -488,4 +488,10 @@ the data used in the translations and Arabic comes from
   <data name="recite_ayah" xml:space="preserve">
     <value>Читать аят</value>
   </data>
+  <data name="pin_to_start" xml:space="preserve">
+    <value>Добавить на рабочий стол</value>
+  </data>
+  <data name="alternate_download_method" xml:space="preserve">
+    <value>альтернативный способ скачивания (в случае отсутствия WiFi)</value>
+  </data>
 </root>

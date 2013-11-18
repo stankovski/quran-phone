@@ -38,7 +38,7 @@ namespace Quran.Core.Data
                 var tagId = adapter.AddTag(AppResources.dua);
                 foreach (int[] dua in quran_dua)
                 {
-                    var p = QuranUtils.GetPageFromSuraAyah(dua[0], dua[1]);
+                    var p = QuranUtils.GetPageFromSurahAyah(dua[0], dua[1]);
                     var id = adapter.AddBookmarkIfNotExists(dua[0], dua[1], p);
                     if (!adapter.IsTagged(id))
                         adapter.TagBookmark(id, tagId);
