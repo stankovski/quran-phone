@@ -5,13 +5,11 @@ Quran Phone adalah aplikasi Quran GRATIS untuk Windows Phone, aplikasi ini terin
 Pada versi awal, Quran Phone menyediakan fitur-fitur ini:
 - Gambar halaman Quran yang sangat detail, seperti tampilan pada Quran cetak
 - Transisi halaman yang cantik dan halus
-- Mode landscape untuk tampilan halaman yang lebih besar
-- Bookmark / penanda halaman untuk memudahkan membaca Quran
-- Terjemahan ke berbagai macam bahasa
-
-Fitur-fitur berikut belum tersedia, tapi sudah direncanakan untuk ditambahkan, insyaAllah:
 - Suara bacaan Quran dar para qori'
 - Penanda ayat, tagging dan berbagi via media sosial
 - Pencarian ayat dengan bahasa Arab dan juga terjemahan
+- Mode landscape untuk tampilan halaman yang lebih besar
+- Bookmark / penanda halaman untuk memudahkan membaca Quran
+- Terjemahan ke berbagai macam bahasa
 
 Quran Phone adalah proyek open source, akan sangat mudah bagi Anda yang ingin berkontribusi dalam mengembangkan aplikasi ini. Kami sangat terbuka mendengar saran-saran Anda untuk menjadikan Quran Phone sebagai aplikasi Quran terbaik di Windows Phone Store.
