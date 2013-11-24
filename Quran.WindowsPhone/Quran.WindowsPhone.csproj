@@ -18,7 +18,7 @@
     </TargetFrameworkProfile>
     <TargetFrameworkIdentifier>WindowsPhone</TargetFrameworkIdentifier>
     <SilverlightApplication>true</SilverlightApplication>
-    <SupportedCultures>ar%3ben%3bid%3bru</SupportedCultures>
+    <SupportedCultures>ar%3bid%3bru</SupportedCultures>
     <XapOutputs>true</XapOutputs>
     <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
     <XapFilename>Quran.WindowsPhone_$(Configuration)_$(Platform).xap</XapFilename>

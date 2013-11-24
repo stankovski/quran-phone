@@ -33,8 +33,7 @@ namespace Quran.WindowsPhone.Views
             QuranApp.DetailsViewModel.Orientation = PhoneUtils.PageOrientationConverter(this.Orientation);
 
             ayahContextMenu.Items.Add(new RadContextMenuItem() { Content = AppResources.bookmark_ayah });
-            if (FileUtils.FileExists(Path.Combine(FileUtils.GetQuranDatabaseDirectory(false),
-                                                       FileUtils.QURAN_ARABIC_DATABASE)))
+            if (FileUtils.HaveArabicSearchFile())
             {
                 ayahContextMenu.Items.Add(new RadContextMenuItem() {Content = AppResources.copy});
             }
@@ -297,8 +296,9 @@ namespace Quran.WindowsPhone.Views
             }
         }
 
-        private void Search_Click(object sender, EventArgs e)
+        private async void Search_Click(object sender, EventArgs e)
         {
+            await QuranApp.DetailsViewModel.DownloadArabicSearchFile();
             QuranApp.DetailsViewModel.IsShowMenu = false;
             NavigationService.Navigate(new Uri("/Views/SearchView.xaml", UriKind.Relative));
         }

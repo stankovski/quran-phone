@@ -482,6 +482,25 @@ namespace Quran.Core.Utils
             return false;
         }
 
+        public static bool HaveArabicSearchFile()
+        {
+            string baseDir = FileUtils.GetQuranDatabaseDirectory(false);
+            if (baseDir == null)
+                FileUtils.MakeQuranDatabaseDirectory();
+            string filename = FileUtils.QURAN_ARABIC_DATABASE;
+            if (filename != null)
+            {
+                string arabicSearchDb = FileUtils.Combine(baseDir, filename);
+                if (!FileUtils.FileExists(arabicSearchDb))
+                {
+                    return false;
+                }
+                else { return true; }
+            }
+
+            return false;
+        }
+
         public static bool HasTranslation(string fileName)
         {
             string path = GetQuranDatabaseDirectory(false);
@@ -512,7 +531,7 @@ namespace Quran.Core.Utils
         //   return hasTranslation(QuranDataProvider.QURAN_ARABIC_DATABASE);
         //}
 
-        public static string GetArabicSearchDatabaseUrl()
+        public static string GetArabicSearchUrl()
         {
             return IMG_HOST + DATABASE_DIRECTORY + "/" + QURAN_ARABIC_DATABASE;
         }

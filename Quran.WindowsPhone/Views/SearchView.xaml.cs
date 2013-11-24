@@ -34,13 +34,13 @@ namespace Quran.WindowsPhone.Views
             }
         }
         
-        private void SearchKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private async void SearchKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (e.Key == System.Windows.Input.Key.Enter)
             {
                 if ((string.IsNullOrEmpty(QuranApp.DetailsViewModel.TranslationFile) || 
                     !FileUtils.FileExists(Path.Combine(FileUtils.GetQuranDatabaseDirectory(false), QuranApp.DetailsViewModel.TranslationFile))) 
-                    && !FileUtils.FileExists(Path.Combine(FileUtils.GetQuranDatabaseDirectory(false), FileUtils.QURAN_ARABIC_DATABASE)))
+                    && !FileUtils.HaveArabicSearchFile())
                 {
                     MessageBox.Show(AppResources.no_translation_to_search);
                     NavigationService.Navigate(new Uri("/Views/SettingsView.xaml?tab=general", UriKind.Relative));

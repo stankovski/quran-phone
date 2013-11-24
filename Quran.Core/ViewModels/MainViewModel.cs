@@ -319,9 +319,7 @@ namespace Quran.Core.ViewModels
                 string title = QuranUtils.GetSurahNameFromPage(bookmark.Page, true);
                 string details = "";
 
-                if (
-                    FileUtils.FileExists(PathHelper.Combine(FileUtils.GetQuranDatabaseDirectory(false),
-                                                           FileUtils.QURAN_ARABIC_DATABASE)))
+                if (FileUtils.HaveArabicSearchFile())
                 {
                     try
                     {
