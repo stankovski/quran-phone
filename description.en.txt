@@ -19,6 +19,5 @@ The following features are *not* yet available but planned for the future inshaA
 Because Quran Phone is an open source project, it makes it easy for anyone to contribute and help improve the project. We are also open to hearing your suggestions to make Quran Windows the best Quran application on the market.
 
 Change Log:
-Release 0.4.0
-* Added non-streaming audio recitation (work in progress so please report any issues)
-* Misc. bug fixes
+Release 0.4.1
+* Bug fixes related to search and error logging
