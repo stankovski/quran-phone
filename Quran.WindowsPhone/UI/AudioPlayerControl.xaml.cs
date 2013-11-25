@@ -71,7 +71,7 @@ namespace Quran.WindowsPhone.UI
             e.Handled = true;
             var velocities = e.FinalVelocities;
             if (velocities.LinearVelocity.X > 200)
-                MessageBox.Show("Swipe right");
+                PanelStoryboard.Begin();
         }
     }
 }
