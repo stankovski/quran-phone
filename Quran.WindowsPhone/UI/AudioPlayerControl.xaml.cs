@@ -2,6 +2,7 @@
 using System.Windows.Input;
 using Quran.Core;
 using Quran.Core.Common;
+using System;
 
 namespace Quran.WindowsPhone.UI
 {
@@ -70,8 +71,26 @@ namespace Quran.WindowsPhone.UI
         {
             e.Handled = true;
             var velocities = e.FinalVelocities;
-            if (velocities.LinearVelocity.X > 200)
-                PanelStoryboard.Begin();
+            if (velocities.LinearVelocity.X > 300)
+            {
+                if (GridStoryboard.GetCurrentTime() == new TimeSpan(0) &&
+                    GridStoryboardReverse.GetCurrentState() != System.Windows.Media.Animation.ClockState.Active)
+                {
+                    GridStoryboardReverse.Stop();
+                    GridStoryboardReverse.Seek(TimeSpan.Zero);
+                    GridStoryboard.Begin();
+                }
+            }
+            else if (velocities.LinearVelocity.X < 300)
+            {
+                if (GridStoryboardReverse.GetCurrentState() != System.Windows.Media.Animation.ClockState.Active &&
+                    GridStoryboard.GetCurrentTime() > new TimeSpan(0))
+                {
+                    GridStoryboard.Stop();
+                    GridStoryboard.Seek(TimeSpan.Zero);
+                    GridStoryboardReverse.Begin();
+                }
+            }    
         }
     }
 }

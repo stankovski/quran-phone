@@ -6,19 +6,32 @@
     mc:Ignorable="d" Tap="OnControlTap"
     Name="ThisControl" 
     d:DesignHeight="60" d:DesignWidth="300" ManipulationCompleted="OnControlManipulationComplete">
+    <UserControl.Resources>
+        <Storyboard x:Name="GridStoryboard">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="LayoutRoot">
+                <EasingDoubleKeyFrame KeyTime="0" Value="-150"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:1" Value="0">
+                	<EasingDoubleKeyFrame.EasingFunction>
+                		<CircleEase EasingMode="EaseOut"/>
+                	</EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Name="GridStoryboardReverse">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="LayoutRoot">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:1" Value="-150"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+    </UserControl.Resources>
 
     <Grid>
-        <Grid.Resources>
-            <Storyboard x:Name="PanelStoryboard">
-                <DoubleAnimation 
-                    Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)"
-                    Storyboard.TargetName="LayoutRoot" 
-                    From="0" To="100" Duration="0:0:2"/>
-            </Storyboard>
-        </Grid.Resources>
-        <StackPanel x:Name="LayoutRoot" Orientation="Horizontal" Background="#00FFFFFF">
-            <Viewbox Margin="0 0 30 0">
-                <Grid Background="#00FFFFFF">
+        <Viewbox x:Name="LayoutRoot">
+            <Viewbox.RenderTransform>
+                <CompositeTransform TranslateX="-150"/>
+            </Viewbox.RenderTransform>
+            <StackPanel Orientation="Horizontal" Background="#00FFFFFF">
+                <Grid Background="#00FFFFFF" Margin="0 0 20 0">
                     <Grid Name="StopButtonGrid" Width="48" Height="48" Visibility="Visible">
                         <Path Data="M50.5,4.7500001C25.232973,4.75 4.75,25.232973 4.7500001,50.5 4.75,75.767029 25.232973,96.25 50.5,96.25 75.767029,96.25 96.25,75.767029 96.25,50.5 96.25,25.232973 75.767029,4.75 50.5,4.7500001z M50.5,0C78.390381,0 101,22.609621 101,50.5 101,78.390381 78.390381,101 50.5,101 22.609621,101 0,78.390381 0,50.5 0,22.609621 22.609621,0 50.5,0z" 
                               Stretch="Fill" Fill="{Binding Foreground, ElementName=ThisControl}" />
@@ -33,11 +46,10 @@
                                 </TransformGroup>
                             </Path.RenderTransform>
                         </Path>
-                    </Grid>                
+                    </Grid>
                 </Grid>
-            </Viewbox>
-            <Viewbox Margin="0 0 30 0">
-                <Grid Background="#00FFFFFF">
+
+                <Grid Background="#00FFFFFF" Margin="0 0 20 0">
                     <Grid Name="RepeatButtonGrid" Width="48" Height="48" Visibility="Visible">
                         <Path Data="M50.5,4.7500001C25.232973,4.75 4.75,25.232973 4.7500001,50.5 4.75,75.767029 25.232973,96.25 50.5,96.25 75.767029,96.25 96.25,75.767029 96.25,50.5 96.25,25.232973 75.767029,4.75 50.5,4.7500001z M50.5,0C78.390381,0 101,22.609621 101,50.5 101,78.390381 78.390381,101 50.5,101 22.609621,101 0,78.390381 0,50.5 0,22.609621 22.609621,0 50.5,0z" 
                               Stretch="Fill" Fill="{Binding Foreground, ElementName=ThisControl}" Visibility="Visible" />
@@ -56,7 +68,7 @@
                     <Grid>
                         <Grid Name="NoRepeatButtonGrid" Width="48" Height="48" Visibility="Collapsed">
                             <Path Data="M50.5,4.7500001C25.232973,4.75 4.75,25.232973 4.7500001,50.5 4.75,75.767029 25.232973,96.25 50.5,96.25 75.767029,96.25 96.25,75.767029 96.25,50.5 96.25,25.232973 75.767029,4.75 50.5,4.7500001z M50.5,0C78.390381,0 101,22.609621 101,50.5 101,78.390381 78.390381,101 50.5,101 22.609621,101 0,78.390381 0,50.5 0,22.609621 22.609621,0 50.5,0z" 
-                                  Stretch="Fill" Fill="{Binding Foreground, ElementName=ThisControl}" Visibility="Visible" />
+                                  Stretch="Fill" Fill="{Binding Foreground, ElementName=ThisControl}" />
                             <Path Data="M59.099632,39.490017L57.250008,41.329826 60.349377,44.429512 57.250008,47.519196 59.099632,49.369011 62.189003,46.269325 65.288376,49.369011 67.127998,47.519196 64.028633,44.429512 67.127998,41.329826 65.288376,39.490017 62.189003,42.589699z M61.966061,34.529999C67.383774,34.529999 71.781998,38.930473 71.781998,44.350945 71.781998,49.771538 67.383774,54.161999 61.966061,54.161999 56.548229,54.161999 52.150002,49.771538 52.150002,44.350945 52.150002,38.930473 56.548229,34.529999 61.966061,34.529999z M68.469994,32.557003C68.469994,32.557003,68.46376,32.643044,68.447502,32.804367L68.446114,32.817642 68.294243,32.730255z M15.321654,32.397999L15.321654,42.452827 48.878105,42.452827 48.808548,42.998447C48.763264,43.442883 48.740059,43.893784 48.740059,44.350033 48.740059,47.995041 50.225052,51.302544 52.621296,53.698799L52.984734,54.045361 52.271648,54.200977C51.013889,54.448845,49.659286,54.583282,48.200455,54.583282L16.27985,54.583282 16.27985,64 0,47.719894z M52.667892,0L68.947998,16.278296 53.625992,31.599998 53.625992,21.545263 19.15218,21.545263C19.15218,21.545263 10.054477,21.864361 0.47899973,31.441099 0.47899997,31.441099 2.0755544,9.4152184 20.748381,9.4152184L52.667892,9.4152184z" 
                                   Stretch="Uniform" Fill="{Binding Foreground, ElementName=ThisControl}" Width="26" Height="26" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
                                 <Path.RenderTransform>
@@ -68,17 +80,16 @@
                                     </TransformGroup>
                                 </Path.RenderTransform>
                             </Path>
-                        </Grid>                    
+                        </Grid>
                     </Grid>
                 </Grid>
-            </Viewbox>
-            <Viewbox Margin="0 0 30 0">
-                <Grid Width="250" Height="250" Background="#00FFFFFF">
-                    <Grid Name="PlayButtonGrid" Visibility="Visible">
-                        <Path Data="M50.5,4.7500001C25.232973,4.75 4.75,25.232973 4.7500001,50.5 4.75,75.767029 25.232973,96.25 50.5,96.25 75.767029,96.25 96.25,75.767029 96.25,50.5 96.25,25.232973 75.767029,4.75 50.5,4.7500001z M50.5,0C78.390381,0 101,22.609621 101,50.5 101,78.390381 78.390381,101 50.5,101 22.609621,101 0,78.390381 0,50.5 0,22.609621 22.609621,0 50.5,0z"
-                    Stretch="Fill" Fill="{Binding Foreground, ElementName=ThisControl}" Visibility="Visible" />
-                        <Path Data="F1M-224.553,1265L-246.174,1283.52 -267.792,1302.04 -267.792,1265 -267.792,1227.97 -246.174,1246.49 -224.553,1265z"
-                  Stretch="Uniform" Fill="{Binding Foreground, ElementName=ThisControl}" Margin="20 0 0 0" Width="130" Height="130" RenderTransformOrigin="0.5,0.5">
+
+                <Grid Background="#00FFFFFF">
+                    <Grid Name="PlayButtonGrid" Width="48" Height="48" Visibility="Visible">
+                        <Path Data="M50.5,4.7500001C25.232973,4.75 4.75,25.232973 4.7500001,50.5 4.75,75.767029 25.232973,96.25 50.5,96.25 75.767029,96.25 96.25,75.767029 96.25,50.5 96.25,25.232973 75.767029,4.75 50.5,4.7500001z M50.5,0C78.390381,0 101,22.609621 101,50.5 101,78.390381 78.390381,101 50.5,101 22.609621,101 0,78.390381 0,50.5 0,22.609621 22.609621,0 50.5,0z" 
+                              Stretch="Fill" Fill="{Binding Foreground, ElementName=ThisControl}"/>
+                        <Path Data="F1M1188.2,1715.23L1169.93,1728.57 1151.66,1741.9 1151.66,1715.23 1151.66,1688.57 1169.93,1701.9 1188.2,1715.23z" 
+                              Stretch="Uniform" Fill="{Binding Foreground, ElementName=ThisControl}" Width="26" Height="26" Margin="5,0,0,0" RenderTransformOrigin="0.5,0.5">
                             <Path.RenderTransform>
                                 <TransformGroup>
                                     <TransformGroup.Children>
@@ -90,11 +101,11 @@
                         </Path>
                     </Grid>
 
-                    <Grid Name="PauseButtonGrid" Visibility="Collapsed">
+                    <Grid Name="PauseButtonGrid" Width="48" Height="48" Visibility="Collapsed">
                         <Path Data="M50.5,4.7500001C25.232973,4.75 4.75,25.232973 4.7500001,50.5 4.75,75.767029 25.232973,96.25 50.5,96.25 75.767029,96.25 96.25,75.767029 96.25,50.5 96.25,25.232973 75.767029,4.75 50.5,4.7500001z M50.5,0C78.390381,0 101,22.609621 101,50.5 101,78.390381 78.390381,101 50.5,101 22.609621,101 0,78.390381 0,50.5 0,22.609621 22.609621,0 50.5,0z" 
-                    Stretch="Fill" Fill="{Binding Foreground, ElementName=ThisControl}" Visibility="Visible" />
-                        <Path Data="M27.270001,0L44.310001,0 44.310001,48.643002 27.270001,48.643002z M0,0L17.040001,0 17.040001,48.643002 0,48.643002z"
-                  Stretch="Uniform" Fill="{Binding Foreground, ElementName=ThisControl}" Margin="0" Width="130" Height="130" RenderTransformOrigin="0.5,0.5">
+                              Stretch="Fill" Fill="{Binding Foreground, ElementName=ThisControl}" />
+                        <Path Data="M27.270001,0L44.310001,0 44.310001,48.643002 27.270001,48.643002z M0,0L17.040001,0 17.040001,48.643002 0,48.643002z" 
+                              Stretch="Uniform" Fill="{Binding Foreground, ElementName=ThisControl}" Width="20" Height="26" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
                             <Path.RenderTransform>
                                 <TransformGroup>
                                     <TransformGroup.Children>
@@ -106,7 +117,7 @@
                         </Path>
                     </Grid>
                 </Grid>
-            </Viewbox>
-        </StackPanel>
+            </StackPanel>
+        </Viewbox>
     </Grid>
 </UserControl>
