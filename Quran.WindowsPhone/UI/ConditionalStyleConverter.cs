@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
-using QuranPhone.UI;
+using Quran.WindowsPhone.UI;
 
 namespace Quran.WindowsPhone.UI
 {

@@ -3,6 +3,7 @@ using System.Windows.Input;
 using Quran.Core;
 using Quran.Core.Common;
 using System;
+using System.Windows.Media.Animation;
 
 namespace Quran.WindowsPhone.UI
 {
@@ -23,6 +24,8 @@ namespace Quran.WindowsPhone.UI
             get { return (AudioState)GetValue(AudioStateProperty); }
             set { SetValue(AudioStateProperty, value); }
         }
+
+        public bool ControlExpanded { get; private set; }
 
         public static readonly DependencyProperty AudioStateProperty = DependencyProperty.Register("AudioState",
             typeof(AudioState), typeof(AudioPlayerControl),
@@ -67,30 +70,30 @@ namespace Quran.WindowsPhone.UI
                 QuranApp.NativeProvider.AudioProvider.Play();
         }
 
-        private void OnControlManipulationComplete(object sender, ManipulationCompletedEventArgs e)
+        private async void OnControlManipulationComplete(object sender, ManipulationCompletedEventArgs e)
         {
             e.Handled = true;
             var velocities = e.FinalVelocities;
-            if (velocities.LinearVelocity.X > 300)
+            //MessageBox.Show(velocities.LinearVelocity.X.ToString());
+            //return;
+            if (velocities.LinearVelocity.X > 400 && !ControlExpanded)
             {
-                if (GridStoryboard.GetCurrentTime() == new TimeSpan(0) &&
-                    GridStoryboardReverse.GetCurrentState() != System.Windows.Media.Animation.ClockState.Active)
-                {
-                    GridStoryboardReverse.Stop();
-                    GridStoryboardReverse.Seek(TimeSpan.Zero);
-                    GridStoryboard.Begin();
-                }
+                GridStoryboardReverse.Stop();
+                ControlExpanded = true;
+                GridStoryboard.Begin();
             }
-            else if (velocities.LinearVelocity.X < 300)
+            else if (velocities.LinearVelocity.X < -300 && ControlExpanded)
             {
-                if (GridStoryboardReverse.GetCurrentState() != System.Windows.Media.Animation.ClockState.Active &&
-                    GridStoryboard.GetCurrentTime() > new TimeSpan(0))
-                {
-                    GridStoryboard.Stop();
-                    GridStoryboard.Seek(TimeSpan.Zero);
-                    GridStoryboardReverse.Begin();
-                }
+                GridStoryboard.Stop();
+                ControlExpanded = false;
+                GridStoryboardReverse.Begin();
             }    
+        }
+
+        private void AnimationCompleted(object sender, EventArgs e)
+        {
+            var storyboard = sender as Storyboard;
+            storyboard.Pause();
         }
     }
 }
