@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Quran.Core.Utils;
+using System.Globalization;
 
 namespace Quran.Core.Common
 {
@@ -125,7 +126,7 @@ namespace Quran.Core.Common
             var uriBuilder = new UriBuilder
             {
                 Scheme = schema,
-                Host = Reciter.Id.ToString(),
+                Host = Reciter.Id.ToString(CultureInfo.InvariantCulture),
                 Query = string.Join("&", queryBuilder)
             };
             return uriBuilder.ToString();

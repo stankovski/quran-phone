@@ -1881,7 +1881,7 @@ namespace SQLite
                     }
                     else
                     {
-                        SQLite3.BindText(stmt, index, ((DateTime) value).ToString("yyyy-MM-dd HH:mm:ss"), -1,
+                        SQLite3.BindText(stmt, index, ((DateTime) value).ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), -1,
                                          NegativePointer);
                     }
 #if !NETFX_CORE
