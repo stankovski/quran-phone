@@ -97,14 +97,16 @@ namespace Quran.WindowsPhone.NativeProvider
 
         void request_TransferStatusChanged(object sender, BackgroundTransferEventArgs e)
         {
-            TransferStatusChanged(sender, new TransferEventArgs(this));
+            if (TransferStatusChanged != null)
+                TransferStatusChanged(sender, new TransferEventArgs(this));
         }
 
         public event EventHandler<TransferEventArgs> TransferProgressChanged;
 
         void request_TransferProgressChanged(object sender, BackgroundTransferEventArgs e)
         {
-            TransferProgressChanged(sender, new TransferEventArgs(this));
+            if (TransferProgressChanged != null)
+                TransferProgressChanged(sender, new TransferEventArgs(this));
         }
     }
 }
