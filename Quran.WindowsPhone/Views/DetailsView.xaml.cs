@@ -292,7 +292,10 @@ namespace Quran.WindowsPhone.Views
                         selectedAyah.Ayah = 0;
                     }
                 }
-                QuranApp.DetailsViewModel.PlayFromAyah(selectedAyah.Surah, selectedAyah.Ayah);
+                if (QuranUtils.IsValid(selectedAyah))
+                {
+                    QuranApp.DetailsViewModel.PlayFromAyah(selectedAyah.Surah, selectedAyah.Ayah);
+                }
             }
         }
 

@@ -812,5 +812,14 @@ namespace Quran.Core.Utils
             }
             return false;
         }
+
+        public static bool IsValid(QuranAyah selectedAyah)
+        {
+            if (selectedAyah == null || selectedAyah.Surah < 1 || selectedAyah.Surah > 114)
+                return false;
+            if (selectedAyah.Ayah < 0 || selectedAyah.Ayah > GetSurahNumberOfAyah(selectedAyah.Surah))
+                return false;
+            return true;
+        }
     }
 }

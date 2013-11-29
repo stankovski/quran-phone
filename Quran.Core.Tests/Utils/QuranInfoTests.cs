@@ -51,5 +51,19 @@ namespace Quran.Core.Tests.Utils
             Assert.Throws<ArgumentException>(() => QuranAyah.FromString("1"));
             Assert.Throws<ArgumentException>(() => QuranAyah.FromString("a:b"));
         }
+
+        [Theory]
+        [InlineData(true, 1, 2)]
+        [InlineData(true, 2, 0)]
+        [InlineData(false, 0, 2)]
+        [InlineData(false, 1, 12)]
+        [InlineData(true, 1, 7)]
+        [InlineData(true, 1, 1)]
+        [InlineData(false, 1, 8)]
+        public void IsValidWorks(bool expectedResult, int sura, int aya)
+        {
+            var suraAyah = new QuranAyah(sura, aya);
+            Assert.Equal(expectedResult, QuranUtils.IsValid(suraAyah));
+        }
     }
 }
