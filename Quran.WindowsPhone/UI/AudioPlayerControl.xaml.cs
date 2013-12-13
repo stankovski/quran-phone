@@ -4,6 +4,7 @@ using Quran.Core;
 using Quran.Core.Common;
 using System;
 using System.Windows.Media.Animation;
+using System.Threading.Tasks;
 
 namespace Quran.WindowsPhone.UI
 {
@@ -25,11 +26,19 @@ namespace Quran.WindowsPhone.UI
             set { SetValue(AudioStateProperty, value); }
         }
 
-        public bool ControlExpanded { get; private set; }
+        public bool ControlExpanded
+        {
+            get { return (bool)GetValue(ControlExpandedProperty); }
+            set { SetValue(ControlExpandedProperty, value); }
+        }
 
         public static readonly DependencyProperty AudioStateProperty = DependencyProperty.Register("AudioState",
             typeof(AudioState), typeof(AudioPlayerControl),
             new PropertyMetadata(ChangeAudioState));
+
+        public static readonly DependencyProperty ControlExpandedProperty = DependencyProperty.Register("ControlExpanded",
+            typeof(bool), typeof(AudioPlayerControl),
+            new PropertyMetadata(ChangeControlExpanded));
 
         private static void ChangeAudioState(DependencyObject source, DependencyPropertyChangedEventArgs e)
         {
@@ -62,6 +71,10 @@ namespace Quran.WindowsPhone.UI
             }
         }
 
+        private static void ChangeControlExpanded(DependencyObject source, DependencyPropertyChangedEventArgs e)
+        {
+        }
+
         private void OnControlTap(object sender, GestureEventArgs e)
         {
             if (AudioState == AudioState.Playing)
@@ -74,26 +87,29 @@ namespace Quran.WindowsPhone.UI
         {
             e.Handled = true;
             var velocities = e.FinalVelocities;
-            //MessageBox.Show(velocities.LinearVelocity.X.ToString());
-            //return;
+
             if (velocities.LinearVelocity.X > 400 && !ControlExpanded)
             {
-                GridStoryboardReverse.Stop();
-                ControlExpanded = true;
-                GridStoryboard.Begin();
+                await ExpandCondrol();
             }
             else if (velocities.LinearVelocity.X < -300 && ControlExpanded)
             {
-                GridStoryboard.Stop();
-                ControlExpanded = false;
-                GridStoryboardReverse.Begin();
+                await CollapseCondrol();
             }    
         }
 
-        private void AnimationCompleted(object sender, EventArgs e)
+        private Task ExpandCondrol() 
         {
-            var storyboard = sender as Storyboard;
-            storyboard.Pause();
+            GridStoryboardReverse.Stop();
+            ControlExpanded = true;
+            return GridStoryboard.PlayAsync();
+        }
+
+        private Task CollapseCondrol()
+        {
+            GridStoryboard.Stop();
+            ControlExpanded = false;
+            return GridStoryboardReverse.PlayAsync();
         }
     }
 }
