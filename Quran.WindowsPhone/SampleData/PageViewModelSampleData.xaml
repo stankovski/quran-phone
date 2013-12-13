@@ -1,0 +1,8 @@
+﻿<vm:PageViewModel
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="clr-namespace:Quran.Core.ViewModels;assembly=Quran.Core">
+    <vm:PageViewModel.ImageSource>
+        http://android.quran.com/data/width_320/page055.png
+    </vm:PageViewModel.ImageSource>
+</vm:PageViewModel>

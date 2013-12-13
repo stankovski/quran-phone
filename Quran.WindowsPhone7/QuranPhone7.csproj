@@ -1,0 +1,667 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.20506</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7802956B-DA51-44EE-ABBD-3BC2DACC7EC7}</ProjectGuid>
+    <ProjectTypeGuids>{C089C8C0-30E0-4E22-80C0-CE093F111A43};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>QuranPhone</RootNamespace>
+    <AssemblyName>QuranPhone</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <TargetFrameworkProfile>WindowsPhone71</TargetFrameworkProfile>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <SilverlightApplication>true</SilverlightApplication>
+    <SupportedCultures>ru%3bru-RU%3bid%3bid-ID%3bar</SupportedCultures>
+    <XapOutputs>true</XapOutputs>
+    <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
+    <XapFilename>QuranPhone_WP7.xap</XapFilename>
+    <SilverlightManifestTemplate>Properties\AppManifest.xml</SilverlightManifestTemplate>
+    <SilverlightAppEntry>QuranPhone.App</SilverlightAppEntry>
+    <ValidateXaml>true</ValidateXaml>
+    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Bin\Debug</OutputPath>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE;WINDOWS_PHONE_7</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Bin\Release</OutputPath>
+    <DefineConstants>SILVERLIGHT;WINDOWS_PHONE;WINDOWS_PHONE_7</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AppBarUtils">
+      <HintPath>..\WindowsPhone\packages\AppBarUtils.2.3\lib\wp71\AppBarUtils.dll</HintPath>
+    </Reference>
+    <Reference Include="Community.CsharpSqlite.WinPhone">
+      <HintPath>Dependencies\Community.CsharpSqlite.WinPhone.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageTools">
+      <HintPath>..\WindowsPhone\Dependencies\ImageTools.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageTools.Controls">
+      <HintPath>..\WindowsPhone\Dependencies\ImageTools.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageTools.Filtering">
+      <HintPath>..\WindowsPhone\Dependencies\ImageTools.Filtering.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageTools.IO.Bmp">
+      <HintPath>..\WindowsPhone\Dependencies\ImageTools.IO.Bmp.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageTools.IO.Gif">
+      <HintPath>..\WindowsPhone\Dependencies\ImageTools.IO.Gif.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageTools.IO.Png">
+      <HintPath>..\WindowsPhone\Dependencies\ImageTools.IO.Png.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageTools.Utils">
+      <HintPath>..\WindowsPhone\Dependencies\ImageTools.Utils.dll</HintPath>
+    </Reference>
+    <Reference Include="JeffWilcox.PhoneThemeManager">
+      <HintPath>..\WindowsPhone\packages\PhoneThemeManager.1.3.3\lib\sl4-windowsphone71\JeffWilcox.PhoneThemeManager.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Phone" />
+    <Reference Include="Microsoft.Phone.Controls, Version=7.0.0.0, Culture=neutral, PublicKeyToken=24eec0d8c86cda1e, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Phone.Interop" />
+    <Reference Include="Microsoft.Threading.Tasks">
+      <HintPath>..\WindowsPhone\packages\Microsoft.Bcl.Async.1.0.16\lib\sl4-windowsphone71\Microsoft.Threading.Tasks.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions">
+      <HintPath>..\WindowsPhone\packages\Microsoft.Bcl.Async.1.0.16\lib\sl4-windowsphone71\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions.Phone">
+      <HintPath>..\WindowsPhone\packages\Microsoft.Bcl.Async.1.0.16\lib\sl4-windowsphone71\Microsoft.Threading.Tasks.Extensions.Phone.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\WindowsPhone\packages\Newtonsoft.Json.5.0.5\lib\portable-net40+sl4+wp7+win8\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PhoneCodeContractsAssemblies">
+      <HintPath>..\WindowsPhone\Dependencies\PhoneCodeContractsAssemblies.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpZipLib.WindowsPhone7">
+      <HintPath>..\WindowsPhone\Dependencies\SharpZipLib.WindowsPhone7.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime">
+      <HintPath>..\WindowsPhone\packages\Microsoft.Bcl.1.0.19\lib\sl4-windowsphone71\System.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks">
+      <HintPath>..\WindowsPhone\packages\Microsoft.Bcl.1.0.19\lib\sl4-windowsphone71\System.Threading.Tasks.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows" />
+    <Reference Include="system" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Windows.Interactivity, Version=3.8.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml" />
+    <Reference Include="mscorlib.extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Telerik.Windows.Behaviors, Version=2013.2.704.2040, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ignorefromhg\RadControls_for_WindowsPhone7_2013_2_0704_DEV_hotfix\Binaries\WindowsPhone\Telerik.Windows.Behaviors.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Controls.Data, Version=2013.2.704.2040, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ignorefromhg\RadControls_for_WindowsPhone7_2013_2_0704_DEV_hotfix\Binaries\WindowsPhone\Telerik.Windows.Controls.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Controls.Input, Version=2013.2.704.2040, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ignorefromhg\RadControls_for_WindowsPhone7_2013_2_0704_DEV_hotfix\Binaries\WindowsPhone\Telerik.Windows.Controls.Input.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Controls.Primitives, Version=2013.2.704.2040, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ignorefromhg\RadControls_for_WindowsPhone7_2013_2_0704_DEV_hotfix\Binaries\WindowsPhone\Telerik.Windows.Controls.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Core, Version=2013.2.704.2040, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ignorefromhg\RadControls_for_WindowsPhone7_2013_2_0704_DEV_hotfix\Binaries\WindowsPhone\Telerik.Windows.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Data, Version=2013.2.704.2040, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ignorefromhg\RadControls_for_WindowsPhone7_2013_2_0704_DEV_hotfix\Binaries\WindowsPhone\Telerik.Windows.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="WriteableBitmapExWinPhone">
+      <HintPath>..\WindowsPhone\packages\WriteableBitmapEx.1.0.8.0\lib\sl4-wp71\WriteableBitmapExWinPhone.dll</HintPath>
+    </Reference>
+    <Reference Include="WriteableBitmapExWinPhoneXnaDependant">
+      <HintPath>..\WindowsPhone\packages\WriteableBitmapEx.1.0.8.0\lib\sl4-wp71\WriteableBitmapExWinPhoneXnaDependant.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\WindowsPhone\App.xaml.cs">
+      <Link>App.xaml.cs</Link>
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Common\AyahBounds.cs">
+      <Link>Common\AyahBounds.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Common\AyahLimits.cs">
+      <Link>Common\AyahLimits.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Common\Bookmarks.cs">
+      <Link>Common\Bookmarks.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Common\BookmarkTags.cs">
+      <Link>Common\BookmarkTags.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Common\DatabaseProperties.cs">
+      <Link>Common\DatabaseProperties.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Common\QuranAyah.cs">
+      <Link>Common\QuranAyah.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Common\QuranAyahEventArgs.cs">
+      <Link>Common\QuranAyahEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Common\Tags.cs">
+      <Link>Common\Tags.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Common\TranslationItem.cs">
+      <Link>Common\TranslationItem.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Data\AyahInfoDatabaseHandler.cs">
+      <Link>Data\AyahInfoDatabaseHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Data\AyahLimits.cs">
+      <Link>Data\AyahLimits.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Data\BaseDatabaseHandler.cs">
+      <Link>Data\BaseDatabaseHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Data\BookmarksDBAdapter.cs">
+      <Link>Data\BookmarksDBAdapter.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Data\Constants.cs">
+      <Link>Data\Constants.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Data\DatabaseHandler.cs">
+      <Link>Data\DatabaseHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Data\DuaGenerator.cs">
+      <Link>Data\DuaGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Data\Mappings.cs">
+      <Link>Data\Mappings.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Data\QuranDataProvider.cs">
+      <Link>Data\QuranDataProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Data\QuranInfo.cs">
+      <Link>Data\QuranInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Data\SQLite.cs">
+      <Link>Data\SQLite.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Data\SQLiteAsync.cs">
+      <Link>Data\SQLiteAsync.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Data\SQLiteDatabase.cs">
+      <Link>Data\SQLiteDatabase.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Data\TranslationsDBAdapter.cs">
+      <Link>Data\TranslationsDBAdapter.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\DetailsPage.xaml.cs">
+      <Link>DetailsPage.xaml.cs</Link>
+      <DependentUpon>DetailsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\WindowsPhone\LocalizedStrings.cs">
+      <Link>LocalizedStrings.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\MainPage.xaml.cs">
+      <Link>MainPage.xaml.cs</Link>
+      <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Resources\AppResources.Designer.cs">
+      <Link>Resources\AppResources.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\WindowsPhone\SearchPage.xaml.cs">
+      <Link>SearchPage.xaml.cs</Link>
+      <DependentUpon>SearchPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\WindowsPhone\SettingsPage.xaml.cs">
+      <Link>SettingsPage.xaml.cs</Link>
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\WindowsPhone\TranslationListPage.xaml.cs">
+      <Link>TranslationListPage.xaml.cs</Link>
+      <DependentUpon>TranslationListPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\WindowsPhone\UI\ArabicFontSizeConverter.cs">
+      <Link>UI\ArabicFontSizeConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\UI\BooleanInversionConverter.cs">
+      <Link>UI\BooleanInversionConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\UI\BooleanToVisibilityConverter.cs">
+      <Link>UI\BooleanToVisibilityConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\UI\CachedImage.xaml.cs">
+      <Link>UI\CachedImage.xaml.cs</Link>
+      <DependentUpon>CachedImage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\WindowsPhone\UI\CommonHeader.xaml.cs">
+      <Link>UI\CommonHeader.xaml.cs</Link>
+      <DependentUpon>CommonHeader.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\WindowsPhone\UI\ConditionalStyleConverter.cs">
+      <Link>UI\ConditionalStyleConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\UI\DataTemplateSelector.cs">
+      <Link>UI\DataTemplateSelector.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\UI\ListBoxPropertyBinder.cs">
+      <Link>UI\ListBoxPropertyBinder.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\UI\ListHeader.xaml.cs">
+      <Link>UI\ListHeader.xaml.cs</Link>
+      <DependentUpon>ListHeader.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\WindowsPhone\UI\ObservableTranslationItem.cs">
+      <Link>UI\ObservableTranslationItem.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\UI\PageLink.xaml.cs">
+      <Link>UI\PageLink.xaml.cs</Link>
+      <DependentUpon>PageLink.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\WindowsPhone\UI\RelayCommand.cs">
+      <Link>UI\RelayCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\UI\SettingsRetrieverConverter.cs">
+      <Link>UI\SettingsRetrieverConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\UI\StyleConverter.cs">
+      <Link>UI\StyleConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\UI\TextFormatConverter.cs">
+      <Link>UI\TextFormatConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\UI\TiltEffect.cs">
+      <Link>UI\TiltEffect.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\UI\TranslationItemTemplateSelector.cs">
+      <Link>UI\TranslationItemTemplateSelector.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\UI\TranslationView.xaml.cs">
+      <Link>UI\TranslationView.xaml.cs</Link>
+      <DependentUpon>TranslationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\WindowsPhone\UI\UiExtensions.cs">
+      <Link>UI\UiExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Utils\ArabicResharper.cs">
+      <Link>Utils\ArabicResharper.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Utils\AudioRequest.cs">
+      <Link>Utils\AudioRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Utils\AudioUtils.cs">
+      <Link>Utils\AudioUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Utils\CryptoUtils.cs">
+      <Link>Utils\CryptoUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Utils\DownloadManager.cs">
+      <Link>Utils\DownloadManager.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Utils\HttpExtensions.cs">
+      <Link>Utils\HttpExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Utils\LittleWatson.cs">
+      <Link>Utils\LittleWatson.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Utils\PhoneUtils.cs">
+      <Link>Utils\PhoneUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Utils\QuranFileUtils.cs">
+      <Link>Utils\QuranFileUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Utils\QuranScreenInfo.cs">
+      <Link>Utils\QuranScreenInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Utils\QuranUtils.cs">
+      <Link>Utils\QuranUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Utils\RepeatInfo.cs">
+      <Link>Utils\RepeatInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Utils\SettingsUtils.cs">
+      <Link>Utils\SettingsUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Utils\TextBlockSplitter.cs">
+      <Link>Utils\TextBlockSplitter.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Utils\TranslationListTask.cs">
+      <Link>Utils\TranslationListTask.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\Utils\TranslationUtils.cs">
+      <Link>Utils\TranslationUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\ViewModels\DetailsViewModel.cs">
+      <Link>ViewModels\DetailsViewModel.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\ViewModels\DownloadableViewModelBase.cs">
+      <Link>ViewModels\DownloadableViewModelBase.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\ViewModels\ItemViewModel.cs">
+      <Link>ViewModels\ItemViewModel.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\ViewModels\MainViewModel.cs">
+      <Link>ViewModels\MainViewModel.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\ViewModels\PageViewModel.cs">
+      <Link>ViewModels\PageViewModel.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\ViewModels\SearchViewModel.cs">
+      <Link>ViewModels\SearchViewModel.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\ViewModels\SettingsViewModel.cs">
+      <Link>ViewModels\SettingsViewModel.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\ViewModels\TranslationsListViewModel.cs">
+      <Link>ViewModels\TranslationsListViewModel.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\ViewModels\VerseViewModel.cs">
+      <Link>ViewModels\VerseViewModel.cs</Link>
+    </Compile>
+    <Compile Include="..\WindowsPhone\ViewModels\ViewModelBase.cs">
+      <Link>ViewModels\ViewModelBase.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="..\WindowsPhone\App.xaml">
+      <Link>App.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\WindowsPhone\DetailsPage.xaml">
+      <Link>DetailsPage.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\WindowsPhone\MainPage.xaml">
+      <Link>MainPage.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\WindowsPhone\SampleData\MainViewModelSampleData.xaml">
+      <Link>SampleData\MainViewModelSampleData.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\WindowsPhone\SampleData\PageLinkSampleData.xaml">
+      <Link>SampleData\PageLinkSampleData.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\WindowsPhone\SampleData\PageViewModelSampleData.xaml">
+      <Link>SampleData\PageViewModelSampleData.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\WindowsPhone\SampleData\SearchViewModelSampleData.xaml">
+      <Link>SampleData\SearchViewModelSampleData.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\WindowsPhone\SampleData\SettingsViewModelSampleData.xaml">
+      <Link>SampleData\SettingsViewModelSampleData.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\WindowsPhone\SampleData\TranslationsListViewModelSampleData.xaml">
+      <Link>SampleData\TranslationsListViewModelSampleData.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\WindowsPhone\SampleData\TranslationViewModelSampleData.xaml">
+      <Link>SampleData\TranslationViewModelSampleData.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\WindowsPhone\SampleData\TranslationViewSampleData.xaml">
+      <Link>SampleData\TranslationViewSampleData.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\WindowsPhone\SearchPage.xaml">
+      <Link>SearchPage.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\WindowsPhone\SettingsPage.xaml">
+      <Link>SettingsPage.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\WindowsPhone\TranslationListPage.xaml">
+      <Link>TranslationListPage.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\WindowsPhone\UI\CachedImage.xaml">
+      <Link>UI\CachedImage.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\WindowsPhone\UI\CommonHeader.xaml">
+      <Link>UI\CommonHeader.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\WindowsPhone\UI\ListHeader.xaml">
+      <Link>UI\ListHeader.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\WindowsPhone\UI\PageLink.xaml">
+      <Link>UI\PageLink.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\WindowsPhone\UI\TranslationView.xaml">
+      <Link>UI\TranslationView.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\OfflineAssets\images_800.zip">
+      <Link>Assets\Offline\images_800.zip</Link>
+    </None>
+    <Content Include="..\WindowsPhone\Assets\Images\left.png">
+      <Link>Assets\Images\left.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Images\right.png">
+      <Link>Assets\Images\right.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Images\search.png">
+      <Link>Assets\Images\search.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\quran_readers_urls.xml">
+      <Link>Assets\quran_readers_urls.xml</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\UthmanicHafs.otf">
+      <Link>Assets\UthmanicHafs.otf</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="packages.config" />
+    <None Include="Properties\AppManifest.xml" />
+    <None Include="Properties\WMAppManifest.xml" />
+    <None Include="QuranPhone7_2013_07_31_11_49_35.sap" />
+    <None Include="QuranPhone7_2013_07_31_11_49_48.sap" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\WindowsPhone\Assets\AlignmentGrid.png">
+      <Link>Assets\AlignmentGrid.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\ApplicationIcon.png">
+      <Link>Assets\ApplicationIcon.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Images\appbar.globe.png">
+      <Link>Assets\Images\appbar.globe.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Images\bookmark_ayah.png">
+      <Link>Assets\Images\bookmark_ayah.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Images\bookmark_currentpage.png">
+      <Link>Assets\Images\bookmark_currentpage.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Images\bookmark_page.png">
+      <Link>Assets\Images\bookmark_page.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Images\favorite.png">
+      <Link>Assets\Images\favorite.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Images\hizb_full.png">
+      <Link>Assets\Images\hizb_full.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Images\hizb_half.png">
+      <Link>Assets\Images\hizb_half.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Images\hizb_quarter.png">
+      <Link>Assets\Images\hizb_quarter.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Images\hizb_threequarters.png">
+      <Link>Assets\Images\hizb_threequarters.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Images\icon.png">
+      <Link>Assets\Images\icon.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Images\ic_ab_settings.png">
+      <Link>Assets\Images\ic_ab_settings.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Images\ic_accept.png">
+      <Link>Assets\Images\ic_accept.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Images\ic_cancel.png">
+      <Link>Assets\Images\ic_cancel.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Images\ic_delete.png">
+      <Link>Assets\Images\ic_delete.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Images\ic_download.png">
+      <Link>Assets\Images\ic_download.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Images\ic_edit.png">
+      <Link>Assets\Images\ic_edit.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Images\ic_goto_quran.png">
+      <Link>Assets\Images\ic_goto_quran.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Images\ic_new.png">
+      <Link>Assets\Images\ic_new.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Images\ic_next.png">
+      <Link>Assets\Images\ic_next.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Images\ic_pause.png">
+      <Link>Assets\Images\ic_pause.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Images\ic_play.png">
+      <Link>Assets\Images\ic_play.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Images\ic_previous.png">
+      <Link>Assets\Images\ic_previous.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Images\ic_repeat.png">
+      <Link>Assets\Images\ic_repeat.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Images\ic_select_all.png">
+      <Link>Assets\Images\ic_select_all.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Images\ic_sort.png">
+      <Link>Assets\Images\ic_sort.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Images\ic_stop.png">
+      <Link>Assets\Images\ic_stop.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Images\ic_tag.png">
+      <Link>Assets\Images\ic_tag.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Images\ic_translation.png">
+      <Link>Assets\Images\ic_translation.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Images\not_favorite.png">
+      <Link>Assets\Images\not_favorite.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Images\page-small.png">
+      <Link>Assets\Images\page-small.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Images\settings.png">
+      <Link>Assets\Images\settings.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Images\sura_icon.png">
+      <Link>Assets\Images\sura_icon.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Tiles\FlipCycleTileLarge.png">
+      <Link>Assets\Tiles\FlipCycleTileLarge.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Tiles\FlipCycleTileMedium.png">
+      <Link>Assets\Tiles\FlipCycleTileMedium.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Tiles\FlipCycleTileSmall.png">
+      <Link>Assets\Tiles\FlipCycleTileSmall.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Tiles\IconicTileMediumLarge.png">
+      <Link>Assets\Tiles\IconicTileMediumLarge.png</Link>
+    </Content>
+    <Content Include="..\WindowsPhone\Assets\Tiles\IconicTileSmall.png">
+      <Link>Assets\Tiles\IconicTileSmall.png</Link>
+    </Content>
+    <Content Include="ApplicationIcon.png" />
+    <Content Include="Background.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="FlipCycleTileSmall.png" />
+    <Content Include="README_FIRST.txt" />
+    <Content Include="SplashScreenImage.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\WindowsPhone\Resources\AppResources.ar.resx">
+      <Link>Resources\AppResources.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\WindowsPhone\Resources\AppResources.id.resx">
+      <Link>Resources\AppResources.id.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\WindowsPhone\Resources\AppResources.resx">
+      <Link>Resources\AppResources.resx</Link>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\WindowsPhone\Resources\AppResources.ru.resx">
+      <Link>Resources\AppResources.ru.resx</Link>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ProjectExtensions />
+  <Import Project="..\WindowsPhone\packages\Microsoft.Bcl.Build.1.0.5\tools\Microsoft.Bcl.Build.targets" />
+</Project>
