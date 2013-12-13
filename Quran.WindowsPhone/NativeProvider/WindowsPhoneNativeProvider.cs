@@ -54,9 +54,9 @@ namespace Quran.WindowsPhone.NativeProvider
             return TextBlockSplitter.Instance.Split(value, fontSize, PhoneUtils.FontWeightsConverter(fontWeight));
         }
 
-        public void ExtractZip(string source, string destination)
+        public void ExtractZip(string source, string baseFolder)
         {
-            ZipHelper.Unzip(source, destination);
+            ZipHelper.Unzip(source, baseFolder);
         }
 
         public void CopyToClipboard(string text)

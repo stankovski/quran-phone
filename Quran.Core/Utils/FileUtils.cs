@@ -425,11 +425,11 @@ namespace Quran.Core.Utils
             return url;
         }
 
-        public static bool ExtractZipFile(string source, string destination)
+        public static bool ExtractZipFile(string source, string baseFolder)
         {
             try
             {
-                QuranApp.NativeProvider.ExtractZip(source, destination);
+                QuranApp.NativeProvider.ExtractZip(source, baseFolder);
                 return true;
             }
             catch (Exception ex)

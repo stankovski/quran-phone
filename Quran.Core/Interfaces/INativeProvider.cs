@@ -12,7 +12,7 @@ namespace Quran.Core.Interfaces
         ISettingsProvider SettingsProvider { get; }
         IAudioProvider AudioProvider { get; }
         ICollection<string> SplitLongText(string value, double fontSize, string fontWeight);
-        void ExtractZip(string source, string destination);
+        void ExtractZip(string source, string baseFolder);
         void CopyToClipboard(string text);
         void ComposeEmail(string to, string subject);
         void LaunchWebBrowser(string url);

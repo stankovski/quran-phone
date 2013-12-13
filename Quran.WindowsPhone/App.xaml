@@ -115,10 +115,10 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <ContentControl x:Name="ContentContainer" ContentTemplate="{TemplateBinding ContentTemplate}" 
-						Content="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" 
-						HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" 
-						Padding="{TemplateBinding Padding}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-						Margin="{TemplateBinding Margin}"/>
+                        Content="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" 
+                        HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                        Padding="{TemplateBinding Padding}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                        Margin="{TemplateBinding Margin}"/>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>

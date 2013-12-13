@@ -463,7 +463,14 @@ namespace Quran.Core.ViewModels
 
                 IsIndeterminate = true;
 
-                bool result = await new TaskFactory().StartNew(() => FileUtils.ExtractZipFile(TempUrl, LocalUrl));
+                var folderToExtractInto = LocalUrl;
+                // Check if LocalUrl is a file or a folder
+                if (System.IO.Path.HasExtension(LocalUrl))
+                {
+                    folderToExtractInto = System.IO.Path.GetDirectoryName(LocalUrl);
+                }
+
+                bool result = await new TaskFactory().StartNew(() => FileUtils.ExtractZipFile(TempUrl, folderToExtractInto));
 
                 if (!result)
                     return false;
