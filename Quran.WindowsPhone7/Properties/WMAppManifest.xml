@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Deployment xmlns="http://schemas.microsoft.com/windowsphone/2009/deployment" AppPlatformVersion="7.1">
+  <App xmlns="" ProductID="{7802956b-da51-44ee-abbd-3bc2dacc7ec7}" Title="Quran Phone" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="IslamWP" Description="Quran Phone for Windows Phone 7.5" Publisher="IslamWP" BitsPerPixel="32">
+    <IconPath IsRelative="true" IsResource="false">ApplicationIcon.png</IconPath>
+    <Capabilities>
+      <Capability Name="ID_CAP_NETWORKING" />
+      <Capability Name="ID_CAP_SENSORS" />
+    </Capabilities>
+    <Tasks>
+      <DefaultTask Name="_default" NavigationPage="MainPage.xaml" />
+    </Tasks>
+    <Tokens>
+      <PrimaryToken TokenID="QuranPhone7Token" TaskName="_default">
+        <TemplateType5>
+          <BackgroundImageURI IsRelative="true" IsResource="false">FlipCycleTileSmall.png</BackgroundImageURI>
+          <Count>0</Count>
+          <Title>Quran Phone</Title>
+        </TemplateType5>
+      </PrimaryToken>
+    </Tokens>
+  </App>
+</Deployment>

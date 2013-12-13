@@ -1,0 +1,30 @@
+﻿<vm:MainViewModel
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="clr-namespace:Quran.Core.ViewModels;assembly=Quran.Core">
+    <vm:MainViewModel.IsInstalling>True</vm:MainViewModel.IsInstalling>
+    <vm:MainViewModel.InstallationStep>Downloading...</vm:MainViewModel.InstallationStep>
+    <vm:MainViewModel.Surahs>
+        <vm:ItemViewModel Id="Juz' 1" PageNumber="1" ItemType="Header"/>
+        <vm:ItemViewModel Id="1" Title="Surat Al-Fatiha" Details="Makki - 7 verses" PageNumber="1" ItemType="Surah"/>
+        <vm:ItemViewModel Id="2" Title="Surat Al-Baqarah" Details="Madani - 286 verses" PageNumber="2" ItemType="Surah"/>
+        <vm:ItemViewModel Id="Juz' 2" PageNumber="22" ItemType="Header"/>
+        <vm:ItemViewModel Id="Juz' 3" PageNumber="42" ItemType="Header"/>
+        <vm:ItemViewModel Id="3" Title="Surat Al Emraan" Details="Madani - 200 verses" PageNumber="50" ItemType="Surah"/>
+        <vm:ItemViewModel Id="Juz' 4" PageNumber="62" ItemType="Header"/>
+        <vm:ItemViewModel Id="4" Title="Surat An Nisaa" Details="Madani - 176 verses" PageNumber="77" ItemType="Surah"/>
+        <vm:ItemViewModel Id="Juz' 5" PageNumber="82" ItemType="Header"/>
+    </vm:MainViewModel.Surahs>
+    <vm:MainViewModel.Juz>
+        <vm:ItemViewModel Id="Juz' 1" PageNumber="1" ItemType="Header"/>
+        <vm:ItemViewModel Id="1" Title="Bismillah" Details="Makki - 7 verses" PageNumber="1" ItemType="Surah" Image="/Assets/Images/hizb_full.png"/>
+        <vm:ItemViewModel Title="Bismillah" Details="Makki - 7 verses" PageNumber="1" ItemType="Surah" Image="/Assets/Images/hizb_quarter.png"/>
+    </vm:MainViewModel.Juz>
+    <vm:MainViewModel.Bookmarks>
+        <vm:ItemViewModel Id="1" Title="Surat Al-Fatiha" PageNumber="1" ItemType="Bookmark"/>
+        <vm:ItemViewModel Id="2" Title="Surat Al-Baqarah" PageNumber="42" ItemType="Bookmark"/>
+    </vm:MainViewModel.Bookmarks>
+    <!--<vm:MainViewModel.QuranData>
+        <vm:DownloadableViewModelBase IsDownloading="True" Progress="50"/>
+    </vm:MainViewModel.QuranData>-->
+</vm:MainViewModel>
