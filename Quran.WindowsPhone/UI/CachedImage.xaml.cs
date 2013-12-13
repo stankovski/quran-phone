@@ -406,5 +406,10 @@ namespace Quran.WindowsPhone.UI
             myPolygon.Fill = new SolidColorBrush(Color.FromArgb(50, 48, 182, 231));
             canvas.Children.Add(myPolygon);
         }
+
+        private void controlMouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            memoryUsage.Text = PhoneUtils.CurrentMemoryUsage();
+        }
     }
 }
