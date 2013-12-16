@@ -494,4 +494,10 @@ the data used in the translations and Arabic comes from
   <data name="alternate_download_method" xml:space="preserve">
     <value>альтернативный способ скачивания (в случае отсутствия WiFi)</value>
   </data>
+  <data name="none" xml:space="preserve">
+    <value>нет</value>
+  </data>
+  <data name="unlimited" xml:space="preserve">
+    <value>постоянное</value>
+  </data>
 </root>

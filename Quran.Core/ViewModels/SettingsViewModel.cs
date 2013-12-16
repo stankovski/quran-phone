@@ -36,6 +36,16 @@ namespace Quran.Core.ViewModels
             {
                 SupportedAudioBlocks.Add(new KeyValuePair<AudioDownloadAmount, string>((AudioDownloadAmount)Enum.Parse(typeof(AudioDownloadAmount), enumValue), enumValue));
             }
+            SupportedRepeatAmount = new ObservableCollection<KeyValuePair<RepeatAmount, string>>();
+            foreach (var repeatValue in GetSupportedRepeatAmounts())
+            {
+                SupportedRepeatAmount.Add(new KeyValuePair<RepeatAmount, string>(repeatValue.Key, repeatValue.Value));
+            }
+            SupportedRepeatTimes = new ObservableCollection<KeyValuePair<int, string>>();
+            foreach (var repeatValue in GetSupportedRepeatTimes())
+            {
+                SupportedRepeatTimes.Add(new KeyValuePair<int, string>(repeatValue.Key, repeatValue.Value));
+            }
         }
 
         #region Properties
@@ -227,9 +237,47 @@ namespace Quran.Core.ViewModels
             }
         }
 
+        private KeyValuePair<RepeatAmount, string> selectedRepeatAmount;
+        public KeyValuePair<RepeatAmount, string> SelectedRepeatAmount
+        {
+            get { return selectedRepeatAmount; }
+            set
+            {
+                if (value.Key == selectedRepeatAmount.Key)
+                    return;
+
+                selectedRepeatAmount = value;
+
+                SettingsUtils.Set(Constants.PREF_REPEAT_AMOUNT, value.Key);
+
+                base.RaisePropertyChanged(() => SelectedRepeatAmount);
+            }
+        }
+
+        private KeyValuePair<int, string> selectedRepeatTimes;
+        public KeyValuePair<int, string> SelectedRepeatTimes
+        {
+            get { return selectedRepeatTimes; }
+            set
+            {
+                if (value.Key == selectedRepeatTimes.Key)
+                    return;
+
+                selectedRepeatTimes = value;
+
+                SettingsUtils.Set(Constants.PREF_REPEAT_TIMES, value.Key);
+
+                base.RaisePropertyChanged(() => SelectedRepeatTimes);
+            }
+        }
+
         public ObservableCollection<KeyValuePair<string, string>> SupportedLanguages { get; private set; }
 
         public ObservableCollection<KeyValuePair<AudioDownloadAmount, string>> SupportedAudioBlocks { get; private set; }
+
+        public ObservableCollection<KeyValuePair<RepeatAmount, string>> SupportedRepeatAmount { get; private set; }
+
+        public ObservableCollection<KeyValuePair<int, string>> SupportedRepeatTimes { get; private set; }
         
         MvxCommand generate;
         /// <summary>
@@ -361,6 +409,36 @@ namespace Quran.Core.ViewModels
                     yield return new KeyValuePair<string, string>(c, cultureInfo.NativeName);
                 }
             }
+        }
+
+        private IEnumerable<KeyValuePair<AudioDownloadAmount, string>> GetSupportedDownloadAmounts()
+        {
+            yield return new KeyValuePair<AudioDownloadAmount, string>(AudioDownloadAmount.Page, AppResources.quran_page);
+            yield return new KeyValuePair<AudioDownloadAmount, string>(AudioDownloadAmount.Surah, AppResources.quran_sura_lower);
+            yield return new KeyValuePair<AudioDownloadAmount, string>(AudioDownloadAmount.Juz, AppResources.quran_juz2_lower);
+        }
+
+        private IEnumerable<KeyValuePair<int, string>> GetSupportedRepeatTimes()
+        {
+            yield return new KeyValuePair<int, string>(0, AppResources.none);
+            yield return new KeyValuePair<int, string>(1, "1");
+            yield return new KeyValuePair<int, string>(2, "2");
+            yield return new KeyValuePair<int, string>(3, "3");
+            yield return new KeyValuePair<int, string>(5, "5");
+            yield return new KeyValuePair<int, string>(10, "10");
+            yield return new KeyValuePair<int, string>(int.MaxValue, AppResources.unlimited);
+        }
+
+        private IEnumerable<KeyValuePair<RepeatAmount, string>> GetSupportedRepeatAmounts()
+        {
+            yield return new KeyValuePair<RepeatAmount, string>(RepeatAmount.None, AppResources.none);
+            yield return new KeyValuePair<RepeatAmount, string>(RepeatAmount.OneAyah, "1 " + QuranUtils.GetAyahTitle());
+            yield return new KeyValuePair<RepeatAmount, string>(RepeatAmount.ThreeAyah, "3 " + QuranUtils.GetAyahTitle());
+            yield return new KeyValuePair<RepeatAmount, string>(RepeatAmount.FiveAyah, "5 " + QuranUtils.GetAyahTitle());
+            yield return new KeyValuePair<RepeatAmount, string>(RepeatAmount.TenAyah, "10 " + QuranUtils.GetAyahTitle());
+            yield return new KeyValuePair<RepeatAmount, string>(RepeatAmount.Page, AppResources.quran_page);
+            yield return new KeyValuePair<RepeatAmount, string>(RepeatAmount.Surah, AppResources.quran_sura_lower);
+            yield return new KeyValuePair<RepeatAmount, string>(RepeatAmount.Juz, AppResources.quran_juz2_lower);
         }
     }
 }

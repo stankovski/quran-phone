@@ -733,4 +733,10 @@
   <data name="alternate_download_method" xml:space="preserve">
     <value>alternative download method (use only if WiFi is not available)</value>
   </data>
+  <data name="none" xml:space="preserve">
+    <value>none</value>
+  </data>
+  <data name="unlimited" xml:space="preserve">
+    <value>unlimited</value>
+  </data>
 </root>

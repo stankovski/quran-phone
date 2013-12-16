@@ -277,25 +277,7 @@ namespace Quran.WindowsPhone.Views
             }
             else
             {
-                var selectedAyah = QuranApp.DetailsViewModel.SelectedAyah;
-                if (selectedAyah == null)
-                {
-                    var bounds = QuranUtils.GetPageBounds(QuranApp.DetailsViewModel.CurrentPageNumber);
-                    selectedAyah = new QuranAyah
-                    {
-                        Surah = bounds[0],
-                        Ayah = bounds[1]
-                    };
-                    if (selectedAyah.Ayah == 1 && selectedAyah.Surah != Constants.SURA_TAWBA &&
-                        selectedAyah.Surah != Constants.SURA_FIRST)
-                    {
-                        selectedAyah.Ayah = 0;
-                    }
-                }
-                if (QuranUtils.IsValid(selectedAyah))
-                {
-                    QuranApp.DetailsViewModel.PlayFromAyah(selectedAyah.Surah, selectedAyah.Ayah);
-                }
+                QuranApp.DetailsViewModel.Play();
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using Quran.Core;
 using Quran.Core.Common;
@@ -26,15 +27,32 @@ namespace Quran.WindowsPhone.UI
             set { SetValue(AudioStateProperty, value); }
         }
 
+        public bool RepeatEnabled
+        {
+            get { return (bool)GetValue(AudioStateProperty); }
+            set { SetValue(AudioStateProperty, value); }
+        }
+
         public bool ControlExpanded
         {
-            get { return (bool)GetValue(ControlExpandedProperty); }
-            set { SetValue(ControlExpandedProperty, value); }
+            get { return (bool)GetValue(RepeatEnabledProperty); }
+            set { SetValue(RepeatEnabledProperty, value); }
         }
+
+        public event EventHandler PlayTapped;
+        public event EventHandler PauseTapped;
+        public event EventHandler StopTapped;
+        public event EventHandler RepeatTapped;
+        public event EventHandler NoRepeatTapped;
+        public event EventHandler SettingsTapped;
 
         public static readonly DependencyProperty AudioStateProperty = DependencyProperty.Register("AudioState",
             typeof(AudioState), typeof(AudioPlayerControl),
             new PropertyMetadata(ChangeAudioState));
+
+        public static readonly DependencyProperty RepeatEnabledProperty = DependencyProperty.Register("RepeatEnabled",
+            typeof(bool), typeof(AudioPlayerControl),
+            new PropertyMetadata(ChangeRepeatEnabled));
 
         public static readonly DependencyProperty ControlExpandedProperty = DependencyProperty.Register("ControlExpanded",
             typeof(bool), typeof(AudioPlayerControl),
@@ -51,15 +69,11 @@ namespace Quran.WindowsPhone.UI
                     case AudioState.Stopped:
                         thisControl.PlayButtonGrid.Visibility = Visibility.Collapsed;
                         thisControl.PauseButtonGrid.Visibility = Visibility.Collapsed;
-                        thisControl.RepeatButtonGrid.Visibility = Visibility.Collapsed;
-                        thisControl.NoRepeatButtonGrid.Visibility = Visibility.Collapsed;
                         thisControl.StopButtonGrid.Visibility = Visibility.Collapsed;
                         break;
                     case AudioState.Playing:
                         thisControl.PlayButtonGrid.Visibility = Visibility.Collapsed;
                         thisControl.PauseButtonGrid.Visibility = Visibility.Visible;
-                        thisControl.RepeatButtonGrid.Visibility = Visibility.Visible;
-                        thisControl.NoRepeatButtonGrid.Visibility = Visibility.Collapsed;
                         thisControl.StopButtonGrid.Visibility = Visibility.Visible;
                         break;
                     case AudioState.Paused:
@@ -71,16 +85,35 @@ namespace Quran.WindowsPhone.UI
             }
         }
 
-        private static void ChangeControlExpanded(DependencyObject source, DependencyPropertyChangedEventArgs e)
+        private static void ChangeRepeatEnabled(DependencyObject source, DependencyPropertyChangedEventArgs e)
         {
+            var thisControl = source as AudioPlayerControl;
+            var enabled = (bool)e.NewValue;
+            if (enabled)
+            {
+                thisControl.RepeatButtonGrid.Visibility = Visibility.Collapsed;
+                thisControl.NoRepeatButtonGrid.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                thisControl.RepeatButtonGrid.Visibility = Visibility.Visible;
+                thisControl.NoRepeatButtonGrid.Visibility = Visibility.Collapsed;
+            }
         }
 
-        private void OnControlTap(object sender, GestureEventArgs e)
+        private async static void ChangeControlExpanded(DependencyObject source, DependencyPropertyChangedEventArgs e)
         {
-            if (AudioState == AudioState.Playing)
-                QuranApp.NativeProvider.AudioProvider.Pause();
-            else if (AudioState == AudioState.Paused)
-                QuranApp.NativeProvider.AudioProvider.Play();
+            var thisControl = source as AudioPlayerControl;
+            var expanded = (bool)e.NewValue;
+
+            if (expanded)
+            {
+                await thisControl.ExpandCondrol();
+            }
+            else
+            {
+                await thisControl.CollapseCondrol();
+            }
         }
 
         private async void OnControlManipulationComplete(object sender, ManipulationCompletedEventArgs e)
@@ -110,6 +143,52 @@ namespace Quran.WindowsPhone.UI
             GridStoryboard.Stop();
             ControlExpanded = false;
             return GridStoryboardReverse.PlayAsync();
+        }
+
+        private void ButtonTap(object sender, GestureEventArgs e)
+        {
+            if (sender == SettingsButtonGrid)
+            {
+                if (SettingsTapped != null)
+                {
+                    SettingsTapped(this, null);
+                }
+            }
+            else if (sender == StopButtonGrid)
+            {
+                if (StopTapped != null)
+                {
+                    StopTapped(this, null);
+                }
+            }
+            else if (sender == RepeatButtonGrid)
+            {
+                if (RepeatTapped != null)
+                {
+                    RepeatTapped(this, null);
+                }
+            }
+            else if (sender == NoRepeatButtonGrid)
+            {
+                if (NoRepeatTapped != null)
+                {
+                    NoRepeatTapped(this, null);
+                }
+            }
+            else if (sender == PlayButtonGrid)
+            {
+                if (PlayTapped != null)
+                {
+                    PlayTapped(this, null);
+                }
+            }
+            else if (sender == PauseButtonGrid)
+            {
+                if (PauseTapped != null)
+                {
+                    PauseTapped(this, null);
+                }
+            }
         }
     }
 }

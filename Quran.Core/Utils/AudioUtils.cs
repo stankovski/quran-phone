@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Xml.Linq;
-using Cirrious.CrossCore;
-using Cirrious.CrossCore.Platform;
 using Quran.Core.Data;
 using Quran.Core.Common;
-using Quran.Core.Data;
 using Quran.Core.Properties;
 
 namespace Quran.Core.Utils
@@ -19,6 +12,18 @@ namespace Quran.Core.Utils
         Page = 1,
         Surah = 2,
         Juz = 3
+    }
+
+    public enum RepeatAmount
+    {
+        None,
+        OneAyah,
+        ThreeAyah,
+        FiveAyah,
+        TenAyah,
+        Page,
+        Surah,
+        Juz
     }
 
     public static class AudioUtils
