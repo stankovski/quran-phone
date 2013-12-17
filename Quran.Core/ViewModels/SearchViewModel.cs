@@ -12,7 +12,6 @@ using Quran.Core.Data;
 using Quran.Core.Properties;
 using Quran.Core.Utils;
 using Quran.Core.Common;
-using Quran.Core.Data;
 
 namespace Quran.Core.ViewModels
 {

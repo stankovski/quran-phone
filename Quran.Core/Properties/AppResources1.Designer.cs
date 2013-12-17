@@ -449,6 +449,15 @@ namespace Quran.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to none.
+        /// </summary>
+        public static string none {
+            get {
+                return ResourceManager.GetString("none", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to page {0}, Juz&apos; {1}.
         /// </summary>
         public static string page_description {
@@ -732,6 +741,15 @@ namespace Quran.Core.Properties {
         public static string translations {
             get {
                 return ResourceManager.GetString("translations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to unlimited.
+        /// </summary>
+        public static string unlimited {
+            get {
+                return ResourceManager.GetString("unlimited", resourceCulture);
             }
         }
         

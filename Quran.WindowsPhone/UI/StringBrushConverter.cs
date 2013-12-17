@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
-using QuranPhone.UI;
+using Quran.WindowsPhone.UI;
 
 namespace Quran.WindowsPhone.UI
 {

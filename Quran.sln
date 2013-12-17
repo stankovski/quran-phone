@@ -1,12 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
-MinimumVisualStudioVersion = 10.0.40219.1
+# Visual Studio 2012
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{24DC6CD0-D9F8-4962-8D21-381D1BD98911}"
-	ProjectSection(SolutionItems) = preProject
-		NinjaReadMe.txt = NinjaReadMe.txt
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quran.Core", "Quran.Core\Quran.Core.csproj", "{747706F4-ECBF-4D50-8D72-B0DDCC18395C}"
 EndProject
