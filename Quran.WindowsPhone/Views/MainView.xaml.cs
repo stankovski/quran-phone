@@ -76,8 +76,8 @@ namespace Quran.WindowsPhone.Views
                     @"Assalamu Aleikum,
 
 Thank you for downloading Quran Phone. Please note that this is a BETA release and is still work in progress. 
-New in Version 0.4.1:
-* Bug fixes related to search and error logging
+New in Version 0.4.2:
+* Bug fixes
 
 If you find any issues with the app or would like to provide suggestions, please use Contact Us option available via the menu. 
 
