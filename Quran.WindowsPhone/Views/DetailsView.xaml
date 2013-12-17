@@ -98,7 +98,7 @@
         <ui:DownloadControl DataContext="{Binding ActiveDownload}" VerticalAlignment="Top" Height="70"/>
 
         <ui:AudioPlayerControl AudioState="{Binding AudioPlayerState}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="60" 
-                               Foreground="{StaticResource BlueText}" Margin="30"/>
+                               Foreground="{StaticResource BlueText}" Margin="0 0 0 40" Width="{Binding ElementName=ThisPage, Path=ActualWidth}"/>
 
         <Button VerticalAlignment="Bottom" HorizontalAlignment="Right" Padding="0" Width="80" Style="{StaticResource ChromelessButtonStyle}" Name="menuToggleButton" 
                 Visibility="{Binding IsShowMenu, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}" Tap="MenuTap">

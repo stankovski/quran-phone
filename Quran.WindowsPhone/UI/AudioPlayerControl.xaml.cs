@@ -6,6 +6,7 @@ using Quran.Core.Common;
 using System;
 using System.Windows.Media.Animation;
 using System.Threading.Tasks;
+using System.Globalization;
 
 namespace Quran.WindowsPhone.UI
 {
@@ -19,6 +20,16 @@ namespace Quran.WindowsPhone.UI
             this.RepeatButtonGrid.Visibility = System.Windows.Visibility.Collapsed;
             this.NoRepeatButtonGrid.Visibility = System.Windows.Visibility.Collapsed;
             this.StopButtonGrid.Visibility = System.Windows.Visibility.Collapsed;
+            this.SizeChanged += AudioPlayerControl_SizeChanged;
+        }
+
+        void AudioPlayerControl_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            var converter = new AudioPlayerOffsetConverter();
+            this.GridStoryboardFrame.Value =
+                (double) converter.Convert(this.ActualWidth, typeof (double), null, CultureInfo.CurrentUICulture);
+            this.GridStoryboardReverseFrame.Value =
+                (double)converter.Convert(this.ActualWidth, typeof(double), null, CultureInfo.CurrentUICulture);
         }
 
         public AudioState AudioState

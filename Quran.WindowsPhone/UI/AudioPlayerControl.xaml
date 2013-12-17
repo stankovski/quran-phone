@@ -3,13 +3,16 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
+             xmlns:ui="clr-namespace:Quran.WindowsPhone.UI"
+             mc:Ignorable="d"
     Name="ThisControl" 
-    d:DesignHeight="60" d:DesignWidth="300" ManipulationCompleted="OnControlManipulationComplete">
+    d:DesignHeight="60" d:DesignWidth="480" ManipulationCompleted="OnControlManipulationComplete">
     <UserControl.Resources>
+        <ui:AudioPlayerOffsetConverter x:Key="AudioPlayerOffsetConverter"/>
+        
         <Storyboard x:Name="GridStoryboard">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="LayoutRoot">
-                <EasingDoubleKeyFrame KeyTime="0" Value="-240"/>
+                <EasingDoubleKeyFrame x:Name="GridStoryboardFrame" KeyTime="0" Value="-240"/>
                 <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0">
                     <EasingDoubleKeyFrame.EasingFunction>
                         <CircleEase EasingMode="EaseOut"/>
@@ -20,7 +23,7 @@
         <Storyboard x:Name="GridStoryboardReverse">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="LayoutRoot">
                 <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="-240"/>
+                <EasingDoubleKeyFrame x:Name="GridStoryboardReverseFrame" KeyTime="0:0:0.4" Value="-240"/>
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
     </UserControl.Resources>
@@ -28,10 +31,19 @@
     <Grid>
         <Viewbox x:Name="LayoutRoot">
             <Viewbox.RenderTransform>
-                <CompositeTransform TranslateX="-240"/>
+                <CompositeTransform TranslateX="{Binding ElementName=ThisControl, 
+                    Path=ActualWidth, Converter={StaticResource AudioPlayerOffsetConverter}}"/>
             </Viewbox.RenderTransform>
-            <StackPanel Orientation="Horizontal" Background="#00FFFFFF">
-                <Grid Background="#00FFFFFF" Margin="0 0 20 0">
+            <Grid Background="#00FFFFFF" Width="{Binding ElementName=ThisControl, Path=Width}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="1" Background="#00FFFFFF">
                     <Grid Name="SettingsButtonGrid" Width="48" Height="48" Visibility="Visible" Tap="ButtonTap">
                         <Path Data="M50.5,4.7500001C25.232973,4.75 4.75,25.232973 4.7500001,50.5 4.75,75.767029 25.232973,96.25 50.5,96.25 75.767029,96.25 96.25,75.767029 96.25,50.5 96.25,25.232973 75.767029,4.75 50.5,4.7500001z M50.5,0C78.390381,0 101,22.609621 101,50.5 101,78.390381 78.390381,101 50.5,101 22.609621,101 0,78.390381 0,50.5 0,22.609621 22.609621,0 50.5,0z" 
                                   Stretch="Fill" Fill="{Binding Foreground, ElementName=ThisControl}" />
@@ -48,7 +60,7 @@
                         </Path>
                     </Grid>
                 </Grid>
-                <Grid Background="#00FFFFFF" Margin="0 0 20 0">
+                <Grid Grid.Column="2" Background="#00FFFFFF">
                     <Grid Name="StopButtonGrid" Width="48" Height="48" Visibility="Visible" Tap="ButtonTap">
                         <Path Data="M50.5,4.7500001C25.232973,4.75 4.75,25.232973 4.7500001,50.5 4.75,75.767029 25.232973,96.25 50.5,96.25 75.767029,96.25 96.25,75.767029 96.25,50.5 96.25,25.232973 75.767029,4.75 50.5,4.7500001z M50.5,0C78.390381,0 101,22.609621 101,50.5 101,78.390381 78.390381,101 50.5,101 22.609621,101 0,78.390381 0,50.5 0,22.609621 22.609621,0 50.5,0z" 
                               Stretch="Fill" Fill="{Binding Foreground, ElementName=ThisControl}" />
@@ -66,7 +78,7 @@
                     </Grid>
                 </Grid>
 
-                <Grid Background="#00FFFFFF" Margin="0 0 20 0">
+                <Grid Grid.Column="3" Background="#00FFFFFF">
                     <Grid Name="RepeatButtonGrid" Width="48" Height="48" Visibility="Visible" Tap="ButtonTap">
                         <Path Data="M50.5,4.7500001C25.232973,4.75 4.75,25.232973 4.7500001,50.5 4.75,75.767029 25.232973,96.25 50.5,96.25 75.767029,96.25 96.25,75.767029 96.25,50.5 96.25,25.232973 75.767029,4.75 50.5,4.7500001z M50.5,0C78.390381,0 101,22.609621 101,50.5 101,78.390381 78.390381,101 50.5,101 22.609621,101 0,78.390381 0,50.5 0,22.609621 22.609621,0 50.5,0z" 
                               Stretch="Fill" Fill="{Binding Foreground, ElementName=ThisControl}" Visibility="Visible" />
@@ -101,7 +113,7 @@
                     </Grid>
                 </Grid>
 
-                <Grid Background="#00FFFFFF">
+                <Grid Grid.Column="4" Background="#00FFFFFF">
                     <Grid Name="PlayButtonGrid" Width="48" Height="48" Visibility="Visible" Tap="ButtonTap">
                         <Path Data="M50.5,4.7500001C25.232973,4.75 4.75,25.232973 4.7500001,50.5 4.75,75.767029 25.232973,96.25 50.5,96.25 75.767029,96.25 96.25,75.767029 96.25,50.5 96.25,25.232973 75.767029,4.75 50.5,4.7500001z M50.5,0C78.390381,0 101,22.609621 101,50.5 101,78.390381 78.390381,101 50.5,101 22.609621,101 0,78.390381 0,50.5 0,22.609621 22.609621,0 50.5,0z" 
                               Stretch="Fill" Fill="{Binding Foreground, ElementName=ThisControl}"/>
@@ -134,7 +146,7 @@
                         </Path>
                     </Grid>
                 </Grid>
-            </StackPanel>
+            </Grid>
         </Viewbox>
     </Grid>
 </UserControl>
