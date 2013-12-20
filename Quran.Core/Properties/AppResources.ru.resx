@@ -500,4 +500,13 @@ the data used in the translations and Arabic comes from
   <data name="unlimited" xml:space="preserve">
     <value>постоянное</value>
   </data>
+  <data name="number_of_ayah_to_repeat" xml:space="preserve">
+    <value>размер повторяемых аятов</value>
+  </data>
+  <data name="repeat_ayah" xml:space="preserve">
+    <value>повторять аяты</value>
+  </data>
+  <data name="times_to_repeat" xml:space="preserve">
+    <value>количество раз повторять</value>
+  </data>
 </root>

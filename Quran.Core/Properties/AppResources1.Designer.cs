@@ -458,6 +458,15 @@ namespace Quran.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to number of ayah to repeat.
+        /// </summary>
+        public static string number_of_ayah_to_repeat {
+            get {
+                return ResourceManager.GetString("number_of_ayah_to_repeat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to page {0}, Juz&apos; {1}.
         /// </summary>
         public static string page_description {
@@ -630,6 +639,15 @@ namespace Quran.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to repeat ayah.
+        /// </summary>
+        public static string repeat_ayah {
+            get {
+                return ResourceManager.GetString("repeat_ayah", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to LeftToRight.
         /// </summary>
         public static string ResourceFlowDirection {
@@ -723,6 +741,15 @@ namespace Quran.Core.Properties {
         public static string text_size {
             get {
                 return ResourceManager.GetString("text_size", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to times to repeat.
+        /// </summary>
+        public static string times_to_repeat {
+            get {
+                return ResourceManager.GetString("times_to_repeat", resourceCulture);
             }
         }
         

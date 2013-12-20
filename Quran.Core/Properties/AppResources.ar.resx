@@ -739,4 +739,13 @@
   <data name="unlimited" xml:space="preserve">
     <value>unlimited</value>
   </data>
+  <data name="number_of_ayah_to_repeat" xml:space="preserve">
+    <value>number of ayah to repeat</value>
+  </data>
+  <data name="repeat_ayah" xml:space="preserve">
+    <value>repeat ayah</value>
+  </data>
+  <data name="times_to_repeat" xml:space="preserve">
+    <value>times to repeat</value>
+  </data>
 </root>

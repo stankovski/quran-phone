@@ -98,7 +98,28 @@
         <ui:DownloadControl DataContext="{Binding ActiveDownload}" VerticalAlignment="Top" Height="70"/>
 
         <ui:AudioPlayerControl AudioState="{Binding AudioPlayerState}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="60" 
-                               Foreground="{StaticResource BlueText}" Margin="0 0 0 40" Width="{Binding ElementName=ThisPage, Path=ActualWidth}"/>
+                               Foreground="{StaticResource BlueText}" Margin="0 0 0 40" Width="{Binding ElementName=ThisPage, Path=ActualWidth}">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="StopTapped">
+                    <i:InvokeCommandAction Command="{Binding StopCommand}"/>
+                </i:EventTrigger>
+                <i:EventTrigger EventName="PauseTapped">
+                    <i:InvokeCommandAction Command="{Binding PauseCommand}"/>
+                </i:EventTrigger>
+                <i:EventTrigger EventName="PlayTapped">
+                    <i:InvokeCommandAction Command="{Binding PlayCommand}"/>
+                </i:EventTrigger>
+                <i:EventTrigger EventName="SettingsTapped">
+                    <i:InvokeCommandAction Command="{Binding SettingsCommand}"/>
+                </i:EventTrigger>
+                <i:EventTrigger EventName="NoRepeatTapped">
+                    <i:InvokeCommandAction Command="{Binding NoRepeatCommand}"/>
+                </i:EventTrigger>
+                <i:EventTrigger EventName="RepeatTapped">
+                    <i:InvokeCommandAction Command="{Binding RepeatCommand}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </ui:AudioPlayerControl>
 
         <Button VerticalAlignment="Bottom" HorizontalAlignment="Right" Padding="0" Width="80" Style="{StaticResource ChromelessButtonStyle}" Name="menuToggleButton" 
                 Visibility="{Binding IsShowMenu, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}" Tap="MenuTap">

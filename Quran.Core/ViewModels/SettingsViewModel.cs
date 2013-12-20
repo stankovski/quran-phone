@@ -197,6 +197,24 @@ namespace Quran.Core.ViewModels
             }
         }
 
+        private bool repeatAudio;
+        public bool RepeatAudio
+        {
+            get { return repeatAudio; }
+            set
+            {
+                if (value == repeatAudio)
+                    return;
+
+                repeatAudio = value;
+
+                // saving to setting utils
+                SettingsUtils.Set(Constants.PREF_AUDIO_REPEAT, value);
+
+                base.RaisePropertyChanged(() => RepeatAudio);
+            }
+        }
+
         private KeyValuePair<string, string> selectedLanguage;
         public KeyValuePair<string, string> SelectedLanguage
         {
@@ -220,7 +238,7 @@ namespace Quran.Core.ViewModels
             }
         }
 
-        private KeyValuePair<AudioDownloadAmount, string> selectedAudioBlock;
+        private KeyValuePair<AudioDownloadAmount, string> selectedAudioBlock = new KeyValuePair<AudioDownloadAmount,string>((AudioDownloadAmount)100, "");
         public KeyValuePair<AudioDownloadAmount, string> SelectedAudioBlock
         {
             get { return selectedAudioBlock; }
@@ -237,7 +255,7 @@ namespace Quran.Core.ViewModels
             }
         }
 
-        private KeyValuePair<RepeatAmount, string> selectedRepeatAmount;
+        private KeyValuePair<RepeatAmount, string> selectedRepeatAmount = new KeyValuePair<RepeatAmount,string>((RepeatAmount)100, "");
         public KeyValuePair<RepeatAmount, string> SelectedRepeatAmount
         {
             get { return selectedRepeatAmount; }
@@ -254,7 +272,7 @@ namespace Quran.Core.ViewModels
             }
         }
 
-        private KeyValuePair<int, string> selectedRepeatTimes;
+        private KeyValuePair<int, string> selectedRepeatTimes = new KeyValuePair<int,string>(-1, "");
         public KeyValuePair<int, string> SelectedRepeatTimes
         {
             get { return selectedRepeatTimes; }
@@ -351,8 +369,11 @@ namespace Quran.Core.ViewModels
             else
                 ActiveReciter = "None";
 
-            SelectedLanguage = SupportedLanguages.FirstOrDefault(kv => kv.Key == SettingsUtils.Get<string>(Constants.PREF_CULTURE_OVERRIDE));
-            SelectedAudioBlock = SupportedAudioBlocks.FirstOrDefault(kv => kv.Key == SettingsUtils.Get<AudioDownloadAmount>(Constants.PREF_DOWNLOAD_AMOUNT));
+            SelectedLanguage = SupportedLanguages.First(kv => kv.Key == SettingsUtils.Get<string>(Constants.PREF_CULTURE_OVERRIDE));
+            SelectedAudioBlock = SupportedAudioBlocks.First(kv => kv.Key == SettingsUtils.Get<AudioDownloadAmount>(Constants.PREF_DOWNLOAD_AMOUNT));
+            SelectedRepeatAmount = SupportedRepeatAmount.First(kv => kv.Key == SettingsUtils.Get<RepeatAmount>(Constants.PREF_REPEAT_AMOUNT));
+            SelectedRepeatTimes = SupportedRepeatTimes.First(kv => kv.Key == SettingsUtils.Get<int>(Constants.PREF_REPEAT_TIMES));
+            RepeatAudio = SettingsUtils.Get<bool>(Constants.PREF_AUDIO_REPEAT);
             TextSize = SettingsUtils.Get<int>(Constants.PREF_TRANSLATION_TEXT_SIZE);
             ShowArabicInTranslation = SettingsUtils.Get<bool>(Constants.PREF_SHOW_ARABIC_IN_TRANSLATION);
             AltDownloadMethod = SettingsUtils.Get<bool>(Constants.PREF_ALT_DOWNLOAD);
