@@ -17,7 +17,7 @@ namespace Quran.WindowsPhone.Views
         // When page is navigated to set data context to selected item in list
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            QuranApp.SettingsViewModel.LoadData();
+            QuranApp.SettingsViewModel.SyncViewModelWithSettings();
             DataContext = QuranApp.SettingsViewModel;
 
             string tab;
@@ -37,6 +37,7 @@ namespace Quran.WindowsPhone.Views
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             QuranApp.DetailsViewModel.ClearPages();
+            QuranApp.SyncViewModelsWithSettings();
             base.OnNavigatedFrom(e);
         }
         

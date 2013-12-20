@@ -355,7 +355,7 @@ namespace Quran.Core.ViewModels
         }
         #endregion Commands
 
-        public void LoadData()
+        public override void SyncViewModelWithSettings()
         {
             var translation = SettingsUtils.Get<string>(Constants.PREF_ACTIVE_TRANSLATION);
             if (!string.IsNullOrEmpty(translation) && translation.Contains("|"))

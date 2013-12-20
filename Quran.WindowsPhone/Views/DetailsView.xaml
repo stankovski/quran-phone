@@ -98,7 +98,8 @@
         <ui:DownloadControl DataContext="{Binding ActiveDownload}" VerticalAlignment="Top" Height="70"/>
 
         <ui:AudioPlayerControl AudioState="{Binding AudioPlayerState}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="60" 
-                               Foreground="{StaticResource BlueText}" Margin="0 0 0 40" Width="{Binding ElementName=ThisPage, Path=ActualWidth}">
+                               Foreground="{StaticResource BlueText}" Margin="0 0 0 40" Width="{Binding ElementName=ThisPage, Path=ActualWidth}"
+                               RepeatEnabled="{Binding RepeatAudio}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="StopTapped">
                     <i:InvokeCommandAction Command="{Binding StopCommand}"/>
