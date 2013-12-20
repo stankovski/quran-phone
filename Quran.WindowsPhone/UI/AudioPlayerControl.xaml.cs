@@ -78,19 +78,18 @@ namespace Quran.WindowsPhone.UI
                 switch (state)
                 {
                     case AudioState.Stopped:
-                        thisControl.PlayButtonGrid.Visibility = Visibility.Collapsed;
-                        thisControl.PauseButtonGrid.Visibility = Visibility.Collapsed;
-                        thisControl.StopButtonGrid.Visibility = Visibility.Collapsed;
+                        thisControl.Visibility = Visibility.Collapsed;
+                        thisControl.ControlExpanded = false;
                         break;
                     case AudioState.Playing:
+                        thisControl.Visibility = Visibility.Visible;
                         thisControl.PlayButtonGrid.Visibility = Visibility.Collapsed;
                         thisControl.PauseButtonGrid.Visibility = Visibility.Visible;
-                        thisControl.StopButtonGrid.Visibility = Visibility.Visible;
                         break;
                     case AudioState.Paused:
+                        thisControl.Visibility = Visibility.Visible;
                         thisControl.PlayButtonGrid.Visibility = Visibility.Visible;
                         thisControl.PauseButtonGrid.Visibility = Visibility.Collapsed;
-                        thisControl.StopButtonGrid.Visibility = Visibility.Visible;
                         break;
                 }
             }
