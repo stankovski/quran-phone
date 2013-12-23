@@ -25,28 +25,7 @@ namespace Quran.Core.ViewModels
     public class SettingsViewModel : BaseViewModel
     {
         public SettingsViewModel()
-        {
-            SupportedLanguages = new ObservableCollection<KeyValuePair<string, string>>();
-            foreach (var lang in GetSupportedLanguages())
-            {
-                SupportedLanguages.Add(lang);
-            }
-            SupportedAudioBlocks = new ObservableCollection<KeyValuePair<AudioDownloadAmount, string>>();
-            foreach (var enumValue in Enum.GetNames(typeof(AudioDownloadAmount)))
-            {
-                SupportedAudioBlocks.Add(new KeyValuePair<AudioDownloadAmount, string>((AudioDownloadAmount)Enum.Parse(typeof(AudioDownloadAmount), enumValue), enumValue));
-            }
-            SupportedRepeatAmount = new ObservableCollection<KeyValuePair<RepeatAmount, string>>();
-            foreach (var repeatValue in GetSupportedRepeatAmounts())
-            {
-                SupportedRepeatAmount.Add(new KeyValuePair<RepeatAmount, string>(repeatValue.Key, repeatValue.Value));
-            }
-            SupportedRepeatTimes = new ObservableCollection<KeyValuePair<int, string>>();
-            foreach (var repeatValue in GetSupportedRepeatTimes())
-            {
-                SupportedRepeatTimes.Add(new KeyValuePair<int, string>(repeatValue.Key, repeatValue.Value));
-            }
-        }
+        { }
 
         #region Properties
         private string activeTranslation;
@@ -357,6 +336,27 @@ namespace Quran.Core.ViewModels
 
         public override void SyncViewModelWithSettings()
         {
+            SupportedLanguages = new ObservableCollection<KeyValuePair<string, string>>();
+            foreach (var lang in GetSupportedLanguages())
+            {
+                SupportedLanguages.Add(lang);
+            }
+            SupportedAudioBlocks = new ObservableCollection<KeyValuePair<AudioDownloadAmount, string>>();
+            foreach (var enumValue in Enum.GetNames(typeof(AudioDownloadAmount)))
+            {
+                SupportedAudioBlocks.Add(new KeyValuePair<AudioDownloadAmount, string>((AudioDownloadAmount)Enum.Parse(typeof(AudioDownloadAmount), enumValue), enumValue));
+            }
+            SupportedRepeatAmount = new ObservableCollection<KeyValuePair<RepeatAmount, string>>();
+            foreach (var repeatValue in GetSupportedRepeatAmounts())
+            {
+                SupportedRepeatAmount.Add(new KeyValuePair<RepeatAmount, string>(repeatValue.Key, repeatValue.Value));
+            }
+            SupportedRepeatTimes = new ObservableCollection<KeyValuePair<int, string>>();
+            foreach (var repeatValue in GetSupportedRepeatTimes())
+            {
+                SupportedRepeatTimes.Add(new KeyValuePair<int, string>(repeatValue.Key, repeatValue.Value));
+            }
+
             var translation = SettingsUtils.Get<string>(Constants.PREF_ACTIVE_TRANSLATION);
             if (!string.IsNullOrEmpty(translation) && translation.Contains("|"))
                 ActiveTranslation = translation.Split('|')[1];

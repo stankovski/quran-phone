@@ -20,7 +20,7 @@
     
     <phone:PhoneApplicationPage.Resources>
         <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        <ui:ArabicFontSizeConverter x:Key="ArabicFontSizeConverter"/>
+        <ui:ConditionalColorConverter x:Key="ConditionalColorConverter"/>
     </phone:PhoneApplicationPage.Resources>
     <Grid Name="MainContainer" Background="{Binding BackgroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}">
         <ProgressBar Value="{Binding AudioDownloadProgress}" IsIndeterminate="False" SmallChange="1" VerticalAlignment="Top" Visibility="{Binding IsDownloadingAudio, Converter={StaticResource BooleanToVisibilityConverter}}"/>
@@ -98,8 +98,9 @@
         <ui:DownloadControl DataContext="{Binding ActiveDownload}" VerticalAlignment="Top" Height="70"/>
 
         <ui:AudioPlayerControl AudioState="{Binding AudioPlayerState}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="60" 
-                               Foreground="{StaticResource BlueText}" Margin="0 0 0 40" Width="{Binding ElementName=ThisPage, Path=ActualWidth}"
-                               RepeatEnabled="{Binding RepeatAudio}">
+                               Foreground="{StaticResource BlueText}" Margin="0 0 0 30" Width="{Binding ElementName=ThisPage, Path=ActualWidth}"
+                               RepeatEnabled="{Binding RepeatAudio, Mode=TwoWay}" 
+                               Background="{Binding IsNightMode, Converter={StaticResource ConditionalColorConverter}, ConverterParameter=CCFFFFFF}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="StopTapped">
                     <i:InvokeCommandAction Command="{Binding StopCommand}"/>
@@ -112,12 +113,6 @@
                 </i:EventTrigger>
                 <i:EventTrigger EventName="SettingsTapped">
                     <i:InvokeCommandAction Command="{Binding SettingsCommand}"/>
-                </i:EventTrigger>
-                <i:EventTrigger EventName="NoRepeatTapped">
-                    <i:InvokeCommandAction Command="{Binding NoRepeatCommand}"/>
-                </i:EventTrigger>
-                <i:EventTrigger EventName="RepeatTapped">
-                    <i:InvokeCommandAction Command="{Binding RepeatCommand}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </ui:AudioPlayerControl>

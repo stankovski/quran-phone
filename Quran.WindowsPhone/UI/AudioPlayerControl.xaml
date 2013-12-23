@@ -3,11 +3,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:ui="clr-namespace:Quran.WindowsPhone.UI"
-             mc:Ignorable="d"
+    xmlns:ui="clr-namespace:Quran.WindowsPhone.UI"
+    mc:Ignorable="d"
     Name="ThisControl" 
-    d:DesignHeight="60" d:DesignWidth="480" ManipulationCompleted="OnControlManipulationComplete">
-    <UserControl.Resources>
+    d:DesignHeight="60" d:DesignWidth="480">
+    <!--<UserControl.Resources>
         <ui:AudioPlayerOffsetConverter x:Key="AudioPlayerOffsetConverter"/>
         
         <Storyboard x:Name="GridStoryboard">
@@ -26,22 +26,18 @@
                 <EasingDoubleKeyFrame x:Name="GridStoryboardReverseFrame" KeyTime="0:0:0.4" Value="-240"/>
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
-    </UserControl.Resources>
+    </UserControl.Resources>-->
 
-    <Grid>
+    <Grid Background="{Binding ElementName=ThisControl, Path=Background}">
         <Viewbox x:Name="LayoutRoot">
-            <Viewbox.RenderTransform>
-                <CompositeTransform TranslateX="{Binding ElementName=ThisControl, 
-                    Path=ActualWidth, Converter={StaticResource AudioPlayerOffsetConverter}}"/>
-            </Viewbox.RenderTransform>
             <Grid Background="#00FFFFFF" Width="{Binding ElementName=ThisControl, Path=Width}">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.2*"/>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1.2*"/>
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Column="1" Background="#00FFFFFF">
                     <Grid Name="SettingsButtonGrid" Width="48" Height="48" Visibility="Visible" Tap="ButtonTap" Background="#10FFFFFF">

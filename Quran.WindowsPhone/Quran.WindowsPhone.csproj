@@ -154,6 +154,7 @@
       <DependentUpon>AudioPlayerControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\AudioPlayerOffsetConverter.cs" />
+    <Compile Include="UI\ConditionalColorConverter.cs" />
     <Compile Include="UI\DownloadControl.xaml.cs">
       <DependentUpon>DownloadControl.xaml</DependentUpon>
     </Compile>

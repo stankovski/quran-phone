@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using Quran.Core;
 using Quran.Core.Common;
 using System;
@@ -15,22 +16,29 @@ namespace Quran.WindowsPhone.UI
         public AudioPlayerControl()
         {
             InitializeComponent();
-            this.PlayButtonGrid.Visibility = System.Windows.Visibility.Collapsed;
+            this.PlayButtonGrid.Visibility = System.Windows.Visibility.Visible;
             this.PauseButtonGrid.Visibility = System.Windows.Visibility.Collapsed;
-            this.RepeatButtonGrid.Visibility = System.Windows.Visibility.Collapsed;
+            this.RepeatButtonGrid.Visibility = System.Windows.Visibility.Visible;
             this.NoRepeatButtonGrid.Visibility = System.Windows.Visibility.Collapsed;
-            this.StopButtonGrid.Visibility = System.Windows.Visibility.Collapsed;
-            this.SizeChanged += AudioPlayerControl_SizeChanged;
+            this.StopButtonGrid.Visibility = System.Windows.Visibility.Visible;
+            this.SettingsButtonGrid.Visibility = System.Windows.Visibility.Visible;
+            this.Visibility = System.Windows.Visibility.Collapsed;
+            //this.SizeChanged += AudioPlayerControl_SizeChanged;
         }
 
-        void AudioPlayerControl_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            var converter = new AudioPlayerOffsetConverter();
-            this.GridStoryboardFrame.Value =
-                (double) converter.Convert(this.ActualWidth, typeof (double), null, CultureInfo.CurrentUICulture);
-            this.GridStoryboardReverseFrame.Value =
-                (double)converter.Convert(this.ActualWidth, typeof(double), null, CultureInfo.CurrentUICulture);
-        }
+        //void AudioPlayerControl_SizeChanged(object sender, SizeChangedEventArgs e)
+        //{
+        //    var converter = new AudioPlayerOffsetConverter();
+        //    this.GridStoryboardFrame.Value =
+        //        (double) converter.Convert(this.ActualWidth, typeof (double), null, CultureInfo.CurrentUICulture);
+        //    this.GridStoryboardReverseFrame.Value =
+        //        (double)converter.Convert(this.ActualWidth, typeof(double), null, CultureInfo.CurrentUICulture);
+        //    var translateTransform = new TranslateTransform();
+        //    translateTransform.X = (double)converter.Convert(this.ActualWidth, typeof(double), null, CultureInfo.CurrentUICulture);
+        //    var transformGroup = new TransformGroup();
+        //    transformGroup.Children.Add(translateTransform);
+        //    this.LayoutRoot.RenderTransform = transformGroup;
+        //}
 
         public AudioState AudioState
         {
@@ -40,21 +48,19 @@ namespace Quran.WindowsPhone.UI
 
         public bool RepeatEnabled
         {
-            get { return (bool)GetValue(AudioStateProperty); }
-            set { SetValue(AudioStateProperty, value); }
-        }
-
-        public bool ControlExpanded
-        {
             get { return (bool)GetValue(RepeatEnabledProperty); }
             set { SetValue(RepeatEnabledProperty, value); }
         }
 
+        //public bool ControlExpanded
+        //{
+        //    get { return (bool)GetValue(ControlExpandedProperty); }
+        //    set { SetValue(ControlExpandedProperty, value); }
+        //}
+
         public event EventHandler PlayTapped;
         public event EventHandler PauseTapped;
         public event EventHandler StopTapped;
-        public event EventHandler RepeatTapped;
-        public event EventHandler NoRepeatTapped;
         public event EventHandler SettingsTapped;
 
         public static readonly DependencyProperty AudioStateProperty = DependencyProperty.Register("AudioState",
@@ -65,9 +71,9 @@ namespace Quran.WindowsPhone.UI
             typeof(bool), typeof(AudioPlayerControl),
             new PropertyMetadata(ChangeRepeatEnabled));
 
-        public static readonly DependencyProperty ControlExpandedProperty = DependencyProperty.Register("ControlExpanded",
-            typeof(bool), typeof(AudioPlayerControl),
-            new PropertyMetadata(ChangeControlExpanded));
+        //public static readonly DependencyProperty ControlExpandedProperty = DependencyProperty.Register("ControlExpanded",
+        //    typeof(bool), typeof(AudioPlayerControl),
+        //    new PropertyMetadata(ChangeControlExpanded));
 
         private static void ChangeAudioState(DependencyObject source, DependencyPropertyChangedEventArgs e)
         {
@@ -79,7 +85,7 @@ namespace Quran.WindowsPhone.UI
                 {
                     case AudioState.Stopped:
                         thisControl.Visibility = Visibility.Collapsed;
-                        thisControl.ControlExpanded = false;
+                        //thisControl.ControlExpanded = false;
                         break;
                     case AudioState.Playing:
                         thisControl.Visibility = Visibility.Visible;
@@ -101,59 +107,59 @@ namespace Quran.WindowsPhone.UI
             var enabled = (bool)e.NewValue;
             if (enabled)
             {
-                thisControl.RepeatButtonGrid.Visibility = Visibility.Collapsed;
-                thisControl.NoRepeatButtonGrid.Visibility = Visibility.Visible;
-            }
-            else
-            {
                 thisControl.RepeatButtonGrid.Visibility = Visibility.Visible;
                 thisControl.NoRepeatButtonGrid.Visibility = Visibility.Collapsed;
             }
-        }
-
-        private async static void ChangeControlExpanded(DependencyObject source, DependencyPropertyChangedEventArgs e)
-        {
-            var thisControl = source as AudioPlayerControl;
-            var expanded = (bool)e.NewValue;
-
-            if (expanded)
-            {
-                await thisControl.ExpandCondrol();
-            }
             else
             {
-                await thisControl.CollapseCondrol();
+                thisControl.RepeatButtonGrid.Visibility = Visibility.Collapsed;
+                thisControl.NoRepeatButtonGrid.Visibility = Visibility.Visible;
             }
         }
 
-        private async void OnControlManipulationComplete(object sender, ManipulationCompletedEventArgs e)
-        {
-            e.Handled = true;
-            var velocities = e.FinalVelocities;
+        //private async static void ChangeControlExpanded(DependencyObject source, DependencyPropertyChangedEventArgs e)
+        //{
+        //    var thisControl = source as AudioPlayerControl;
+        //    var expanded = (bool)e.NewValue;
 
-            if (velocities.LinearVelocity.X > 400 && !ControlExpanded)
-            {
-                await ExpandCondrol();
-            }
-            else if (velocities.LinearVelocity.X < -300 && ControlExpanded)
-            {
-                await CollapseCondrol();
-            }    
-        }
+        //    if (expanded)
+        //    {
+        //        await thisControl.ExpandCondrol();
+        //    }
+        //    else
+        //    {
+        //        await thisControl.CollapseCondrol();
+        //    }
+        //}
 
-        private Task ExpandCondrol() 
-        {
-            GridStoryboardReverse.Stop();
-            ControlExpanded = true;
-            return GridStoryboard.PlayAsync();
-        }
+        //private async void OnControlManipulationComplete(object sender, ManipulationCompletedEventArgs e)
+        //{
+        //    e.Handled = true;
+        //    var velocities = e.FinalVelocities;
 
-        private Task CollapseCondrol()
-        {
-            GridStoryboard.Stop();
-            ControlExpanded = false;
-            return GridStoryboardReverse.PlayAsync();
-        }
+        //    if (velocities.LinearVelocity.X > 400 && !ControlExpanded)
+        //    {
+        //        await ExpandCondrol();
+        //    }
+        //    else if (velocities.LinearVelocity.X < -300 && ControlExpanded)
+        //    {
+        //        await CollapseCondrol();
+        //    }    
+        //}
+
+        //private Task ExpandCondrol() 
+        //{
+        //    GridStoryboardReverse.Stop();
+        //    ControlExpanded = true;
+        //    return GridStoryboard.PlayAsync();
+        //}
+
+        //private Task CollapseCondrol()
+        //{
+        //    GridStoryboard.Stop();
+        //    ControlExpanded = false;
+        //    return GridStoryboardReverse.PlayAsync();
+        //}
 
         private void ButtonTap(object sender, GestureEventArgs e)
         {
@@ -171,19 +177,9 @@ namespace Quran.WindowsPhone.UI
                     StopTapped(this, null);
                 }
             }
-            else if (sender == RepeatButtonGrid)
+            else if (sender == RepeatButtonGrid || sender == NoRepeatButtonGrid)
             {
-                if (RepeatTapped != null)
-                {
-                    RepeatTapped(this, null);
-                }
-            }
-            else if (sender == NoRepeatButtonGrid)
-            {
-                if (NoRepeatTapped != null)
-                {
-                    NoRepeatTapped(this, null);
-                }
+                RepeatEnabled = !RepeatEnabled;
             }
             else if (sender == PlayButtonGrid)
             {

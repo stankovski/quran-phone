@@ -31,6 +31,7 @@ namespace Quran.WindowsPhone.Views
             BuildLocalizedApplicationBar();
 
             QuranApp.DetailsViewModel.Orientation = PhoneUtils.PageOrientationConverter(this.Orientation);
+            QuranApp.DetailsViewModel.NavigateToSettings += DetailsViewModel_NavigateToSettings;
 
             ayahContextMenu.Items.Add(new RadContextMenuItem() { Content = AppResources.bookmark_ayah });
             if (FileUtils.HaveArabicSearchFile())
@@ -113,6 +114,11 @@ namespace Quran.WindowsPhone.Views
             {
                 QuranApp.DetailsViewModel.SelectedAyah = null;
             }
+        }
+
+        void DetailsViewModel_NavigateToSettings(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/Views/SettingsView.xaml?tab=audio", UriKind.Relative));
         }
         
         private void PageFlipped(object sender, SelectionChangedEventArgs e)
