@@ -37,6 +37,21 @@ namespace Quran.WindowsPhone.UI
             get { return image; }
         }
 
+        public Visibility FooterVisibility
+        {
+            get { return (Visibility)GetValue(FooterVisibilityProperty); }
+            set { SetValue(FooterVisibilityProperty, value); }
+        }
+
+        public static readonly DependencyProperty FooterVisibilityProperty = DependencyProperty.Register("FooterVisibility",
+            typeof(Visibility), typeof(CachedImage), new PropertyMetadata(
+            new PropertyChangedCallback(changeFooterVisibility)));
+
+        private static void changeFooterVisibility(DependencyObject source, DependencyPropertyChangedEventArgs e)
+        {
+            (source as CachedImage).ExpanderGrid.Visibility = (Visibility)e.NewValue;
+        }
+
         public QuranAyah SelectedAyah
         {
             get { return (QuranAyah)GetValue(SelectedAyahProperty); }

@@ -46,14 +46,15 @@
                 <telerikPrimitives:RadSlideView.ItemTemplate>
                     <DataTemplate>
                          <Grid>
-                            <ui:CachedImage ImageSource="{Binding ImageSource}" PageNumber="{Binding PageNumber}" 
+                            <ui:CachedImage   ImageSource="{Binding ImageSource}" PageNumber="{Binding PageNumber}" 
                                               NightMode="{Binding DataContext.IsNightMode, ElementName=ThisPage}"
                                               SelectedAyah="{Binding DataContext.SelectedAyah, ElementName=ThisPage}"
                                               Hold="ImageHold" DoubleTap="ImageDoubleTap" Tap="ImageTap" Padding="0,0,0,10"
-                                              Visibility="{Binding DataContext.ShowTranslation, ElementName=ThisPage, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
+                                              Visibility="{Binding DataContext.ShowTranslation, ElementName=ThisPage, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}"
+                                              FooterVisibility="{Binding ElementName=AudioControl, Path=Visibility}">
                             </ui:CachedImage>
 
-                            <telerikPrimitives:RadDataBoundListBox x:Name="TranslationListBox" DoubleTap="ListBoxDoubleTap"
+                            <telerikPrimitives:RadDataBoundListBox x:Name="TranslationListBox" Grid.Row="0" DoubleTap="ListBoxDoubleTap"
                                                                    Visibility="{Binding DataContext.ShowTranslation, ElementName=ThisPage, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                                    ItemsSource="{Binding Translations}" IsAsyncBalanceEnabled="True">
                                 <telerikPrimitives:RadDataBoundListBox.EmptyContentTemplate>
@@ -97,25 +98,27 @@
 
         <ui:DownloadControl DataContext="{Binding ActiveDownload}" VerticalAlignment="Top" Height="70"/>
 
-        <ui:AudioPlayerControl AudioState="{Binding AudioPlayerState}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="60" 
-                               Foreground="{StaticResource BlueText}" Margin="0 0 0 30" Width="{Binding ElementName=ThisPage, Path=ActualWidth}"
-                               RepeatEnabled="{Binding RepeatAudio, Mode=TwoWay}" 
-                               Background="{Binding IsNightMode, Converter={StaticResource ConditionalColorConverter}, ConverterParameter=CCFFFFFF}">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="StopTapped">
-                    <i:InvokeCommandAction Command="{Binding StopCommand}"/>
-                </i:EventTrigger>
-                <i:EventTrigger EventName="PauseTapped">
-                    <i:InvokeCommandAction Command="{Binding PauseCommand}"/>
-                </i:EventTrigger>
-                <i:EventTrigger EventName="PlayTapped">
-                    <i:InvokeCommandAction Command="{Binding PlayCommand}"/>
-                </i:EventTrigger>
-                <i:EventTrigger EventName="SettingsTapped">
-                    <i:InvokeCommandAction Command="{Binding SettingsCommand}"/>
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-        </ui:AudioPlayerControl>
+        <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Bottom" >
+            <ui:AudioPlayerControl x:Name="AudioControl" AudioState="{Binding AudioPlayerState}" Foreground="{StaticResource BlueText}" RepeatEnabled="{Binding RepeatAudio, Mode=TwoWay}" 
+                                   Height="50" HorizontalAlignment="Stretch" Background="{Binding IsNightMode, Converter={StaticResource ConditionalColorConverter}, ConverterParameter=CCFFFFFF}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="StopTapped">
+                        <i:InvokeCommandAction Command="{Binding StopCommand}"/>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="PauseTapped">
+                        <i:InvokeCommandAction Command="{Binding PauseCommand}"/>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="PlayTapped">
+                        <i:InvokeCommandAction Command="{Binding PlayCommand}"/>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="SettingsTapped">
+                        <i:InvokeCommandAction Command="{Binding SettingsCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ui:AudioPlayerControl>
+            <Grid Height="30" Visibility="{Binding IsShowMenu, Converter={StaticResource BooleanToVisibilityConverter}}"></Grid>
+        </StackPanel>
+
 
         <Button VerticalAlignment="Bottom" HorizontalAlignment="Right" Padding="0" Width="80" Style="{StaticResource ChromelessButtonStyle}" Name="menuToggleButton" 
                 Visibility="{Binding IsShowMenu, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}" Tap="MenuTap">
