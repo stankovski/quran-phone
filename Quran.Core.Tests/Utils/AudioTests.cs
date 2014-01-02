@@ -56,6 +56,40 @@ namespace Quran.Core.Tests.Utils
         }
 
         [Theory]
+        [InlineData(RepeatAmount.None, 0, "None-2-times")]
+        [InlineData(RepeatAmount.None, 0, "blah")]
+        [InlineData(RepeatAmount.None, 0, null)]
+        [InlineData(RepeatAmount.None, 0, "")]
+        [InlineData(RepeatAmount.Juz, 1, "Juz-1-times")]
+        [InlineData(RepeatAmount.Page, 5, "Page-5-times")]
+        [InlineData(RepeatAmount.OneAyah, int.MaxValue, "OneAyah-infinite-times")]
+        public void RepeatParseFromString(RepeatAmount expAmount, int expCount, string pattern)
+        {
+            var repeat = RepeatInfo.FromString(pattern);
+            Assert.Equal(expAmount, repeat.RepeatAmount);
+            Assert.Equal(expCount, repeat.RepeatCount);
+        }
+
+        [Theory]
+        [InlineData(RepeatAmount.None, 0, "None-0-times")]
+        [InlineData(RepeatAmount.Juz, 1, "Juz-1-times")]
+        [InlineData(RepeatAmount.Page, 5, "Page-5-times")]
+        [InlineData(RepeatAmount.OneAyah, int.MaxValue, "OneAyah-infinite-times")]
+        public void RepeatToStringMatch(RepeatAmount actAmount, int actCount, string pattern)
+        {
+            var repeat = new RepeatInfo {RepeatAmount = actAmount, RepeatCount = actCount};
+            Assert.Equal(pattern, repeat.ToString());
+        }
+
+        [Fact]
+        public void AudioRequestGotoNextRepeatsAyah()
+        {
+            var request = new AudioRequest(0, new QuranAyah(1, 1), AudioDownloadAmount.Page);
+            request.GotoNextAyah();
+            Assert.Equal(new QuranAyah(1, 1), request.CurrentAyah);
+        }
+
+        [Theory]
         [InlineData(1, 3, 1, 2)]
         [InlineData(114, 5, 114, 4)]
         [InlineData(1, 1, 114, 6)]
