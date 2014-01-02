@@ -90,7 +90,7 @@ namespace Quran.Core.Utils
 
         private static QuranAyah GetLastAyahToPlayForPage(QuranAyah startAyah)
         {
-            var page = QuranUtils.GetPageFromSurahAyah(startAyah.Surah, startAyah.Ayah);
+            var page = QuranUtils.GetPageFromAyah(startAyah.Surah, startAyah.Ayah);
             if (page == -1)
                 return null;
 

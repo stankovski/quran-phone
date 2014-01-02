@@ -10,6 +10,15 @@ namespace Quran.Core.Common
 
         public int RepeatCount { get; set; }
 
+        public RepeatInfo()
+        { }
+
+        public RepeatInfo(RepeatAmount amount, int times)
+        {
+            RepeatAmount = amount;
+            RepeatCount = times;
+        }
+
         /// <summary>
         /// Parses repeat string in the format:
         /// [RepeatAmount]-[num]-times

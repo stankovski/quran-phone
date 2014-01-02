@@ -137,20 +137,20 @@ namespace Quran.Core.Utils
             return verses;
         }
 
-        public static QuranAyah GetNextAyah(QuranAyah ayah, bool includeBismillah)
+        public static QuranAyah GetNextAyah(QuranAyah currentAyah, bool includeBismillah)
         {
-            var currentSurahPages = QuranUtils.GetSurahNumberOfAyah(ayah.Surah);
-            var newAyah = new QuranAyah(ayah.Surah, ayah.Ayah);
+            var currentSurahPages = QuranUtils.GetSurahNumberOfAyah(currentAyah.Surah);
+            var newAyah = new QuranAyah(currentAyah.Surah, currentAyah.Ayah);
 
             // Check if not the end of surah
-            if (ayah.Ayah < currentSurahPages)
+            if (currentAyah.Ayah < currentSurahPages)
             {
                 newAyah.Ayah++;
             }
             else
             {
                 // If the end of surah check if also the end of Quran
-                if (ayah.Surah < Constants.SURA_LAST)
+                if (currentAyah.Surah < Constants.SURA_LAST)
                 {
                     newAyah.Surah++;
                 }
@@ -158,13 +158,27 @@ namespace Quran.Core.Utils
                 {
                     newAyah.Surah = Constants.SURA_FIRST;
                 }
-                // If need to include bismillah and not surah Tawba set ayah to 0
+                // If need to include bismillah and not surah Tawba set currentAyah to 0
                 if (includeBismillah && newAyah.Surah != Constants.SURA_TAWBA && newAyah.Surah != Constants.SURA_FIRST)
                     newAyah.Ayah = 0;
                 else
                     newAyah.Ayah = 1;
             }
             return newAyah;
+        }
+
+        public static bool IsBismillah(QuranAyah ayah)
+        {
+            if (ayah == null)
+                return false;
+            if (ayah.Surah == Constants.SURA_TAWBA)
+                return false;
+            if (ayah.Surah == Constants.SURA_FIRST && ayah.Ayah == 1)
+                return true;
+            if (ayah.Ayah == 0)
+                return true;
+            else
+                return false;
         }
 
         public static QuranAyah GetPreviousAyah(QuranAyah ayah, bool includeBismillah)
@@ -178,7 +192,7 @@ namespace Quran.Core.Utils
             }
             else
             {
-                // If need to include bismillah and not surah Tawba set ayah to 0
+                // If need to include bismillah and not surah Tawba set currentAyah to 0
                 if (ayah.Ayah == 1 && includeBismillah && newAyah.Surah != Constants.SURA_TAWBA && newAyah.Surah != Constants.SURA_FIRST)
                 {
                     newAyah.Ayah = 0;
@@ -691,7 +705,21 @@ namespace Quran.Core.Utils
 
         public static int GetJuzFromAyah(int surah, int ayah)
         {
-            int page = GetPageFromSurahAyah(surah, ayah);
+            int page = GetPageFromAyah(surah, ayah);
+            int juz = ((page - 2) / 20) + 1;
+            return juz > 30 ? 30 : juz < 1 ? 1 : juz;
+        }
+
+        public static QuranAyah GetJuzFirstAyah(int juz)
+        {
+            int page = GetPageFromAyah(surah, ayah);
+            int juz = ((page - 2) / 20) + 1;
+            return juz > 30 ? 30 : juz < 1 ? 1 : juz;
+        }
+
+        public static QuranAyah GetJuzLastAyah(int juz)
+        {
+            int page = GetPageFromAyah(surah, ayah);
             int juz = ((page - 2) / 20) + 1;
             return juz > 30 ? 30 : juz < 1 ? 1 : juz;
         }
@@ -707,12 +735,12 @@ namespace Quran.Core.Utils
             return 0;
         }
 
-        public static int GetPageFromSurahAyah(QuranAyah ayah)
+        public static int GetPageFromAyah(QuranAyah ayah)
         {
-            return GetPageFromSurahAyah(ayah.Surah, ayah.Ayah);
+            return GetPageFromAyah(ayah.Surah, ayah.Ayah);
         }
 
-        public static int GetPageFromSurahAyah(int surah, int ayah)
+        public static int GetPageFromAyah(int surah, int ayah)
         {
             // basic bounds checking
             if (ayah == 0) ayah = 1;
@@ -729,7 +757,7 @@ namespace Quran.Core.Utils
                 int ss = QuranUtils.PAGE_SURA_START[index];
 
                 // if we've passed the surah, return the previous page
-                // or, if we're at the same surah and passed the ayah
+                // or, if we're at the same surah and passed the currentAyah
                 if (ss > surah || ((ss == surah) &&
                      (QuranUtils.PAGE_AYAH_START[index] > ayah)))
                 {

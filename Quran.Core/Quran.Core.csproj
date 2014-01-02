@@ -58,6 +58,7 @@
     <Compile Include="Common\AudioTransferEventArgs.cs" />
     <Compile Include="Common\AyahBounds.cs" />
     <Compile Include="Common\AyahLimits.cs" />
+    <Compile Include="Common\RepeatManager.cs" />
     <Compile Include="Common\Rectangle.cs" />
     <Compile Include="Common\Timings.cs" />
     <Compile Include="Common\TransferEventArgs.cs" />

@@ -7,7 +7,9 @@ namespace Quran.Core.Common
 {
     public class AudioRequest
     {
-        public AudioRequest(int reciterId, QuranAyah verse, AudioDownloadAmount audioDownloadAmount)
+        private RepeatManager repeatManager;
+
+        public AudioRequest(int reciterId, QuranAyah verse, RepeatInfo repeat, AudioDownloadAmount audioDownloadAmount)
         {
             if (verse == null)
                 throw new ArgumentNullException("verse");
@@ -20,7 +22,17 @@ namespace Quran.Core.Common
             this.FromAyah = verse;
             this.CurrentAyah = verse;
             this.ToAyah = AudioUtils.GetLastAyahToPlay(verse, audioDownloadAmount);
-            this.RepeatInfo = new RepeatInfo();
+
+            if (repeat != null)
+            {
+                this.RepeatInfo = repeat;
+            }
+            else
+            {
+                this.RepeatInfo = new RepeatInfo();
+            }
+
+            this.repeatManager = new RepeatManager(this.RepeatInfo, verse);
         }
 
         /// <summary>
@@ -87,7 +99,7 @@ namespace Quran.Core.Common
         public QuranAyah CurrentAyah { get; set; }
 
         public RepeatInfo RepeatInfo { get; set; }
-        
+
         public QuranAyah FromAyah { get; set; }
 
         public QuranAyah ToAyah { get; set; }
@@ -97,11 +109,27 @@ namespace Quran.Core.Common
         public void GotoNextAyah()
         {
             CurrentAyah = QuranUtils.GetNextAyah(CurrentAyah, true);
+            if (repeatManager.ShouldRepeat())
+            {
+                if (CurrentAyah > repeatManager.LastAyah)
+                {
+                    CurrentAyah = repeatManager.FirstAyah;
+                    repeatManager.IncrementCounter();
+                }
+            }
         }
 
         public void GotoPreviousAyah()
         {
             CurrentAyah = QuranUtils.GetPreviousAyah(CurrentAyah, true);
+            if (repeatManager.ShouldRepeat() && !QuranUtils.IsBismillah(CurrentAyah))
+            {
+                if (CurrentAyah < repeatManager.FirstAyah)
+                {
+                    CurrentAyah = repeatManager.LastAyah;
+                    repeatManager.DecrementCounter();
+                }
+            }
         }
 
         /// <summary>
