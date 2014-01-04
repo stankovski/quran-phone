@@ -62,21 +62,17 @@ namespace Quran.Core.Common
                 FirstAyah = new QuranAyah(surah, 1);
                 LastAyah = new QuranAyah(surah, lastAyah);
             }
+            else if (RepeatInfo.RepeatAmount == RepeatAmount.Rub)
+            {
+                var rub = QuranUtils.GetRub3FromAyah(FirstAyah.Surah, FirstAyah.Ayah);
+                FirstAyah = QuranUtils.GetRub3FirstAyah(rub);
+                LastAyah = QuranUtils.GetRub3LastAyah(rub);
+            }
             else if (RepeatInfo.RepeatAmount == RepeatAmount.Juz)
             {
                 var juz = QuranUtils.GetJuzFromAyah(FirstAyah.Surah, FirstAyah.Ayah);
-                int[] endJuz = QuranUtils.QUARTERS[juz * 8];
-                // If last juz - return last verse
-                if (juz == Constants.JUZ2_COUNT)
-                {
-                    LastAyah = new QuranAyah(Constants.SURA_LAST, 6);
-                }
-                else
-                {
-                    LastAyah = new QuranAyah(endJuz[0], endJuz[1] - 1);
-                }
-
-                use get juz first Ayah and Last ayah
+                FirstAyah = QuranUtils.GetJuzFirstAyah(juz);
+                LastAyah = QuranUtils.GetJuzLastAyah(juz);
             }
         }
 

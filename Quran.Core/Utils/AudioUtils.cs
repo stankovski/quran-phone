@@ -23,6 +23,7 @@ namespace Quran.Core.Utils
         TenAyah,
         Page,
         Surah,
+        Rub,
         Juz
     }
 
@@ -102,13 +103,7 @@ namespace Quran.Core.Utils
         private static QuranAyah GetLastAyahToPlayForJuz(QuranAyah startAyah)
         {
             var juz = QuranUtils.GetJuzFromAyah(startAyah.Surah, startAyah.Ayah);
-            // If last juz - return last verse
-            if (juz == Constants.JUZ2_COUNT)
-                return new QuranAyah(Constants.SURA_LAST, 6);
-
-            int[] endJuz = QuranUtils.QUARTERS[juz * 8];
-
-            return new QuranAyah(endJuz[0], endJuz[1] - 1);
+            return QuranUtils.GetJuzLastAyah(juz);
         }
 
         public static bool ShouldDownloadBismillah(AudioRequest request)

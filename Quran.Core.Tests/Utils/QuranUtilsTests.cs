@@ -7,7 +7,7 @@ using Xunit.Extensions;
 
 namespace Quran.Core.Tests.Utils
 {
-    public class QuranInfoTests : BaseTest
+    public class QuranUtilsTests : BaseTest
     {
         [Fact]
         public void GetSuraPagesWorksForGoodArguments()
@@ -64,6 +64,58 @@ namespace Quran.Core.Tests.Utils
         {
             var suraAyah = new QuranAyah(sura, aya);
             Assert.Equal(expectedResult, QuranUtils.IsValid(suraAyah));
+        }
+
+        [Theory]
+        [InlineData(new[] { 1, 1, 2, 25 }, 1)]
+        [InlineData(new[] { 2, 26, 2, 43 }, 2)]
+        [InlineData(new[] { 100, 9, 114, 6 }, 240)]
+        public void GetRubBoundsWorks(int[] expectedResult, int rub)
+        {
+            var result = QuranUtils.GetRub3Bounds(rub);
+            Assert.Equal(expectedResult, result);
+        }
+
+        [Theory]
+        [InlineData(new[] { 1, 1}, 1)]
+        [InlineData(new[] { 2, 25 }, 1)]
+        [InlineData(new[] { 2, 26 }, 2)]
+        [InlineData(new[] { 100, 10 }, 240)]
+        [InlineData(new[] { 114, 6 }, 240)]
+        public void GetRubFromAyahWorks(int[] ayah, int expectedRub)
+        {
+            var result = QuranUtils.GetRub3FromAyah(ayah[0], ayah[1]);
+            Assert.Equal(expectedRub, result);
+        }
+
+        [Theory]
+        [InlineData(new[] { 1, 1, 2, 141 }, 1)]
+        [InlineData(new[] { 2, 142, 2, 252 }, 2)]
+        [InlineData(new[] { 78, 1, 114, 6 }, 30)]
+        public void GetJuzBoundsWorks(int[] expectedResult, int juz)
+        {
+            var result = QuranUtils.GetJuzBounds(juz);
+            Assert.Equal(expectedResult, result);
+        }
+
+        [Theory]
+        [InlineData(new[] { 1, 1, 2, 141 }, 1)]
+        [InlineData(new[] { 2, 142, 2, 252 }, 2)]
+        [InlineData(new[] { 78, 1, 114, 6 }, 30)]
+        public void GetJuzFirstAyahWorks(int[] expectedResult, int juz)
+        {
+            var result = QuranUtils.GetJuzFirstAyah(juz);
+            Assert.Equal(new QuranAyah(expectedResult[0], expectedResult[1]), result);
+        }
+
+        [Theory]
+        [InlineData(new[] { 1, 1, 2, 141 }, 1)]
+        [InlineData(new[] { 2, 142, 2, 252 }, 2)]
+        [InlineData(new[] { 78, 1, 114, 6 }, 30)]
+        public void GetJuzLastAyahWorks(int[] expectedResult, int juz)
+        {
+            var result = QuranUtils.GetJuzLastAyah(juz);
+            Assert.Equal(new QuranAyah(expectedResult[2], expectedResult[3]), result);
         }
     }
 }

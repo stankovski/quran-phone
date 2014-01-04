@@ -131,7 +131,7 @@
     <Compile Include="Mocks\MockDispatcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestTrace.cs" />
-    <Compile Include="Utils\QuranInfoTests.cs" />
+    <Compile Include="Utils\QuranUtilsTests.cs" />
     <Compile Include="Utils\AudioTests.cs" />
     <Compile Include="ViewModels\TestDetailsViewModel.cs" />
   </ItemGroup>

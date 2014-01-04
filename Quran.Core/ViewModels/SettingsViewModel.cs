@@ -459,6 +459,7 @@ namespace Quran.Core.ViewModels
             yield return new KeyValuePair<RepeatAmount, string>(RepeatAmount.TenAyah, "10 " + QuranUtils.GetAyahTitle());
             yield return new KeyValuePair<RepeatAmount, string>(RepeatAmount.Page, AppResources.quran_page);
             yield return new KeyValuePair<RepeatAmount, string>(RepeatAmount.Surah, AppResources.quran_sura_lower);
+            yield return new KeyValuePair<RepeatAmount, string>(RepeatAmount.Rub, AppResources.quran_rub3);
             yield return new KeyValuePair<RepeatAmount, string>(RepeatAmount.Juz, AppResources.quran_juz2_lower);
         }
     }

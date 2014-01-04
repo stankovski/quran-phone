@@ -121,6 +121,18 @@ namespace Quran.Core.Tests.Utils
             Assert.Equal(new QuranAyah(1, 1), request.CurrentAyah);
         }
 
+        [Fact]
+        public void AudioRequestGotoNextRepeatsJuz()
+        {
+            var request = new AudioRequest(0, new QuranAyah(2, 140), new RepeatInfo(RepeatAmount.Juz, 1), AudioDownloadAmount.Page);
+            request.GotoNextAyah();
+            Assert.Equal(new QuranAyah(2, 141), request.CurrentAyah);
+            request.GotoNextAyah();
+            Assert.Equal(new QuranAyah(1, 1), request.CurrentAyah);
+            request.GotoNextAyah();
+            Assert.Equal(new QuranAyah(1, 2), request.CurrentAyah);
+        }
+
         [Theory]
         [InlineData(1, 3, 1, 2)]
         [InlineData(114, 5, 114, 4)]
