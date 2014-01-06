@@ -7,20 +7,22 @@ namespace Quran.Core.Common
 {
     public class RepeatManager
     {
-        private int counter;
-
         public RepeatInfo RepeatInfo { get; private set; }
 
         public QuranAyah FirstAyah { get; private set; }
 
         public QuranAyah LastAyah { get; private set; }
 
-        public RepeatManager(RepeatInfo info, QuranAyah firstAyah)
+        public int Counter { get; private set; }
+
+        public RepeatManager(RepeatInfo info, QuranAyah firstAyah, int currentIteration)
         {
             if (firstAyah == null)
                 throw new ArgumentNullException("firstAyah");
 
             RepeatInfo = info ?? new RepeatInfo();
+
+            Counter = currentIteration;
 
             FirstAyah = firstAyah;
             GenerateLastAyah();
@@ -88,19 +90,19 @@ namespace Quran.Core.Common
 
         public void IncrementCounter()
         {
-            counter++;
+            Counter++;
         }
 
         public void DecrementCounter()
         {
-            counter++;
+            Counter--;
         }
 
         public bool ShouldRepeat()
         {
             if (RepeatInfo.RepeatAmount == RepeatAmount.None)
                 return false;
-            if (counter >= RepeatInfo.RepeatCount)
+            if (Counter >= RepeatInfo.RepeatCount)
                 return false;
             else
                 return true;
