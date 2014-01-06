@@ -77,5 +77,7 @@ namespace Quran.Core.Data
         public const string PREF_USE_VOLUME_KEY_NAV = "volumeKeyNavigation";
         [DefaultValue("0.0.0.0")]
         public const string PREF_CURRENT_VERSION = "currentVersion";
+        [DefaultValue(false)]
+        public const string SESSION_START_AUDIO = "_StartAudio";
     }
 }

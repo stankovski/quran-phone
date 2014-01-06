@@ -114,6 +114,13 @@ namespace Quran.WindowsPhone.Views
             {
                 QuranApp.DetailsViewModel.SelectedAyah = null;
             }
+
+            // Play audio if coming back from reciter selector
+            if (SettingsUtils.Get<bool>(Constants.SESSION_START_AUDIO))
+            {
+                SettingsUtils.Set(Constants.SESSION_START_AUDIO, false);
+                QuranApp.DetailsViewModel.Play();
+            }
         }
 
         void DetailsViewModel_NavigateToSettings(object sender, EventArgs e)
@@ -279,6 +286,7 @@ namespace Quran.WindowsPhone.Views
             var reciter = SettingsUtils.Get<string>(Constants.PREF_ACTIVE_QARI);
             if (string.IsNullOrEmpty(reciter))
             {
+                SettingsUtils.Set(Constants.SESSION_START_AUDIO, true);
                 NavigationService.Navigate(new Uri("/Views/RecitersListView.xaml", UriKind.Relative));
             }
             else
