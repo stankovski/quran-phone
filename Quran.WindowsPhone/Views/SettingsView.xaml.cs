@@ -36,7 +36,7 @@ namespace Quran.WindowsPhone.Views
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            QuranApp.DetailsViewModel.ClearPages();
+            QuranApp.DetailsViewModel.RefreshCurrentPage().Wait();
             QuranApp.SyncViewModelsWithSettings();
             base.OnNavigatedFrom(e);
         }
