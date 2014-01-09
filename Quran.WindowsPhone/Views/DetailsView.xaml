@@ -99,7 +99,7 @@
         <ui:DownloadControl DataContext="{Binding ActiveDownload}" VerticalAlignment="Top" Height="70"/>
 
         <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Bottom" >
-            <ui:AudioPlayerControl x:Name="AudioControl" AudioState="{Binding AudioPlayerState}" Foreground="{StaticResource BlueText}" RepeatEnabled="{Binding RepeatAudio, Mode=TwoWay}" 
+            <ui:AudioPlayerControl x:Name="AudioControl" AudioState="{Binding AudioPlayerState}" Foreground="{StaticResource BlueText}" RepeatEnabled="{Binding RepeatAudio, Mode=TwoWay}"
                                    Height="50" HorizontalAlignment="Stretch" Background="{Binding IsNightMode, Converter={StaticResource ConditionalColorConverter}, ConverterParameter=CCFFFFFF}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="StopTapped">
@@ -110,6 +110,12 @@
                     </i:EventTrigger>
                     <i:EventTrigger EventName="PlayTapped">
                         <i:InvokeCommandAction Command="{Binding PlayCommand}"/>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="NextTrackTapped">
+                        <i:InvokeCommandAction Command="{Binding NextTrackCommand}"/>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="PreviousTrackTapped">
+                        <i:InvokeCommandAction Command="{Binding PreviousTrackCommand}"/>
                     </i:EventTrigger>
                     <i:EventTrigger EventName="SettingsTapped">
                         <i:InvokeCommandAction Command="{Binding SettingsCommand}"/>

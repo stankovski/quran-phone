@@ -18,9 +18,11 @@ namespace Quran.WindowsPhone.UI
             InitializeComponent();
             this.PlayButtonGrid.Visibility = System.Windows.Visibility.Visible;
             this.PauseButtonGrid.Visibility = System.Windows.Visibility.Collapsed;
-            this.RepeatButtonGrid.Visibility = System.Windows.Visibility.Visible;
+            this.NextButtonGrid.Visibility = System.Windows.Visibility.Visible;
+            this.PreviousButtonGrid.Visibility = System.Windows.Visibility.Visible;
+            //this.StopButtonGrid.Visibility = System.Windows.Visibility.Visible;
+            this.RepeatButtonGrid.Visibility = System.Windows.Visibility.Collapsed;
             this.NoRepeatButtonGrid.Visibility = System.Windows.Visibility.Collapsed;
-            this.StopButtonGrid.Visibility = System.Windows.Visibility.Visible;
             this.SettingsButtonGrid.Visibility = System.Windows.Visibility.Visible;
             this.Visibility = System.Windows.Visibility.Collapsed;
             //this.SizeChanged += AudioPlayerControl_SizeChanged;
@@ -46,7 +48,7 @@ namespace Quran.WindowsPhone.UI
             set { SetValue(AudioStateProperty, value); }
         }
 
-        public bool RepeatEnabled
+        public bool? RepeatEnabled
         {
             get { return (bool)GetValue(RepeatEnabledProperty); }
             set { SetValue(RepeatEnabledProperty, value); }
@@ -59,8 +61,10 @@ namespace Quran.WindowsPhone.UI
         //}
 
         public event EventHandler PlayTapped;
+        public event EventHandler NextTrackTapped;
+        public event EventHandler PreviousTrackTapped;
         public event EventHandler PauseTapped;
-        public event EventHandler StopTapped;
+        //public event EventHandler StopTapped;
         public event EventHandler SettingsTapped;
 
         public static readonly DependencyProperty AudioStateProperty = DependencyProperty.Register("AudioState",
@@ -68,7 +72,7 @@ namespace Quran.WindowsPhone.UI
             new PropertyMetadata(ChangeAudioState));
 
         public static readonly DependencyProperty RepeatEnabledProperty = DependencyProperty.Register("RepeatEnabled",
-            typeof(bool), typeof(AudioPlayerControl),
+            typeof(bool?), typeof(AudioPlayerControl),
             new PropertyMetadata(ChangeRepeatEnabled));
 
         //public static readonly DependencyProperty ControlExpandedProperty = DependencyProperty.Register("ControlExpanded",
@@ -104,16 +108,19 @@ namespace Quran.WindowsPhone.UI
         private static void ChangeRepeatEnabled(DependencyObject source, DependencyPropertyChangedEventArgs e)
         {
             var thisControl = source as AudioPlayerControl;
-            var enabled = (bool)e.NewValue;
-            if (enabled)
+            var enabled = e.NewValue as bool?;
+            if (enabled != null)
             {
-                thisControl.RepeatButtonGrid.Visibility = Visibility.Visible;
-                thisControl.NoRepeatButtonGrid.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                thisControl.RepeatButtonGrid.Visibility = Visibility.Collapsed;
-                thisControl.NoRepeatButtonGrid.Visibility = Visibility.Visible;
+                if (enabled.Value)
+                {
+                    thisControl.RepeatButtonGrid.Visibility = Visibility.Visible;
+                    thisControl.NoRepeatButtonGrid.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    thisControl.RepeatButtonGrid.Visibility = Visibility.Collapsed;
+                    thisControl.NoRepeatButtonGrid.Visibility = Visibility.Visible;
+                }
             }
         }
 
@@ -170,11 +177,25 @@ namespace Quran.WindowsPhone.UI
                     SettingsTapped(this, null);
                 }
             }
-            else if (sender == StopButtonGrid)
+            //else if (sender == StopButtonGrid)
+            //{
+            //    if (StopTapped != null)
+            //    {
+            //        StopTapped(this, null);
+            //    }
+            //}
+            else if (sender == NextButtonGrid)
             {
-                if (StopTapped != null)
+                if (NextTrackTapped != null)
                 {
-                    StopTapped(this, null);
+                    NextTrackTapped(this, null);
+                }
+            }
+            else if (sender == PreviousButtonGrid)
+            {
+                if (PreviousTrackTapped != null)
+                {
+                    PreviousTrackTapped(this, null);
                 }
             }
             else if (sender == RepeatButtonGrid || sender == NoRepeatButtonGrid)
