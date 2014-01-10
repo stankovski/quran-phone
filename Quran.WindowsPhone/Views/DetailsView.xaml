@@ -17,13 +17,17 @@
     SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
     d:DataContext="{d:DesignData ../SampleData/TranslationViewModelSampleData.xaml}"
     Tap="ScreenTap" Background="{Binding BackgroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}" OrientationChanged="PageOrientationChanged">
-    
+    <telerikPrimitives:RadTransitionControl.Transition>
+        <telerikPrimitives:RadTurnstileTransition/>
+    </telerikPrimitives:RadTransitionControl.Transition>
+
     <phone:PhoneApplicationPage.Resources>
         <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <ui:ConditionalColorConverter x:Key="ConditionalColorConverter"/>
     </phone:PhoneApplicationPage.Resources>
     <Grid Name="MainContainer" Background="{Binding BackgroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}">
-        <ProgressBar Value="{Binding AudioDownloadProgress}" IsIndeterminate="False" SmallChange="1" VerticalAlignment="Top" Visibility="{Binding IsDownloadingAudio, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        <ProgressBar Value="{Binding AudioDownloadProgress}" IsIndeterminate="False" SmallChange="1" VerticalAlignment="Top" Visibility="{Binding IsDownloadingAudio, Converter={StaticResource BooleanToVisibilityConverter}}"/>     
+        
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -98,6 +102,24 @@
 
         <ui:DownloadControl DataContext="{Binding ActiveDownload}" VerticalAlignment="Top" Height="70"/>
 
+        <Grid x:Name="LoadPane" Background="{Binding IsNightMode, Converter={StaticResource ConditionalColorConverter}, ConverterParameter=CCFFFFFF}">
+            <Grid.Resources>
+                <Storyboard x:Name="LoadPaneStoryboard">
+                    <DoubleAnimation 
+                                Storyboard.TargetProperty="Opacity"
+                                Storyboard.TargetName="LoadPane" BeginTime="0:0:0.5"
+                                From="1.0" To="0.0" Duration="0:0:0.5"
+                                />
+                    <ObjectAnimationUsingKeyFrames 
+                                Storyboard.TargetName="LoadPane"
+                                Storyboard.TargetProperty="Visibility" BeginTime="0:0:0.5">
+                        <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="Visible"/>
+                        <DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="Collapsed"/>
+                    </ObjectAnimationUsingKeyFrames>
+                </Storyboard>
+            </Grid.Resources>
+        </Grid>
+        
         <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Bottom" >
             <ui:AudioPlayerControl x:Name="AudioControl" AudioState="{Binding AudioPlayerState}" Foreground="{StaticResource BlueText}" RepeatEnabled="{Binding RepeatAudio, Mode=TwoWay}"
                                    Height="50" HorizontalAlignment="Stretch" Background="{Binding IsNightMode, Converter={StaticResource ConditionalColorConverter}, ConverterParameter=CCFFFFFF}">
@@ -124,7 +146,6 @@
             </ui:AudioPlayerControl>
             <Grid Height="30" Visibility="{Binding IsShowMenu, Converter={StaticResource BooleanToVisibilityConverter}}"></Grid>
         </StackPanel>
-
 
         <Button VerticalAlignment="Bottom" HorizontalAlignment="Right" Padding="0" Width="80" Style="{StaticResource ChromelessButtonStyle}" Name="menuToggleButton" 
                 Visibility="{Binding IsShowMenu, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}" Tap="MenuTap">

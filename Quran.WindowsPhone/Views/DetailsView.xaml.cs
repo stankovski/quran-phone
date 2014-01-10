@@ -59,6 +59,9 @@ namespace Quran.WindowsPhone.Views
                 SettingsUtils.Set(Constants.SESSION_START_AUDIO, false);
                 QuranApp.DetailsViewModel.Play();
             }
+
+            // Remove white background
+            LoadPaneStoryboard.Begin();
         }
 
         private void ParseNavigationQuery()
