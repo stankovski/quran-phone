@@ -1954,7 +1954,7 @@ namespace SQLite
                     else
                     {
                         var text = SQLite3.ColumnString(stmt, index);
-                        return DateTime.Parse(text);
+                        return DateTime.Parse(text, CultureInfo.InvariantCulture);
                     }
 #if !NETFX_CORE
                 }
