@@ -44,11 +44,11 @@ namespace Quran.WindowsPhone.Views
         }
 
         // When page is navigated to set data context to selected item in list
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             ParseNavigationQuery();
             QuranApp.DetailsViewModel.SyncViewModelWithSettings();
-            QuranApp.DetailsViewModel.RefreshCurrentPage().Wait();
+            await QuranApp.DetailsViewModel.RefreshCurrentPage();
 
             if (DataContext == null)
                 DataContext = QuranApp.DetailsViewModel;
