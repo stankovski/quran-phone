@@ -16,16 +16,9 @@
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
     d:DataContext="{d:DesignData ../SampleData/TranslationViewModelSampleData.xaml}"
-    Tap="ScreenTap" Background="{Binding BackgroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}" OrientationChanged="PageOrientationChanged">
-    <telerikPrimitives:RadTransitionControl.Transition>
-        <telerikPrimitives:RadTurnstileTransition/>
-    </telerikPrimitives:RadTransitionControl.Transition>
+    Tap="ScreenTap" Background="{Binding IsNightMode, Converter={StaticResource ConditionalColorConverter}, ConverterParameter=FFFFFFFF}" OrientationChanged="PageOrientationChanged">
 
-    <phone:PhoneApplicationPage.Resources>
-        <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        <ui:ConditionalColorConverter x:Key="ConditionalColorConverter"/>
-    </phone:PhoneApplicationPage.Resources>
-    <Grid Name="MainContainer" Background="{Binding BackgroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}">
+    <Grid Name="MainContainer" Background="{Binding IsNightMode, Converter={StaticResource ConditionalColorConverter}, ConverterParameter=FFFFFFFF}">
         <ProgressBar Value="{Binding AudioDownloadProgress}" IsIndeterminate="False" SmallChange="1" VerticalAlignment="Top" Visibility="{Binding IsDownloadingAudio, Converter={StaticResource BooleanToVisibilityConverter}}"/>     
         
         <Grid>
@@ -33,15 +26,15 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Grid HorizontalAlignment="Stretch" Grid.Row="0" Background="{Binding BackgroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}" Height="33"
+            <Grid HorizontalAlignment="Stretch" Grid.Row="0" Background="{Binding IsNightMode, Converter={StaticResource ConditionalColorConverter}, ConverterParameter=FFFFFFFF}" Height="33"
               Visibility="{Binding ShowInfoOverlay, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <TextBlock Text="{Binding CurrentSurahName}" HorizontalAlignment="Left" FontSize="18" Foreground="{Binding ForegroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}" Margin="25,3,0,3"/>
+                <TextBlock Text="{Binding CurrentSurahName}" HorizontalAlignment="Left" FontSize="18" Foreground="{Binding IsNightMode, Converter={StaticResource ConditionalColorConverter}, ConverterParameter=FF000000}" Margin="25,3,0,3"/>
                 <StackPanel Margin="0,3,0,3" HorizontalAlignment="Center" Orientation="Horizontal" FlowDirection="LeftToRight">
                     <Image Source="..\Assets\Images\left.png" Height="25" Width="50"/>
-                    <TextBlock Text="{Binding CurrentPageNumber}" FontSize="18" Foreground="{Binding ForegroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}"/>
+                    <TextBlock Text="{Binding CurrentPageNumber}" FontSize="18" Foreground="{Binding IsNightMode, Converter={StaticResource ConditionalColorConverter}, ConverterParameter=FF000000}"/>
                     <Image Source="..\Assets\Images\right.png" Height="25" Width="50"/>
                 </StackPanel>
-                <TextBlock Text="{Binding CurrentJuzName}" HorizontalAlignment="Right" FontSize="18" Foreground="{Binding ForegroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}" Margin="0,3,25,3"/>
+                <TextBlock Text="{Binding CurrentJuzName}" HorizontalAlignment="Right" FontSize="18" Foreground="{Binding IsNightMode, Converter={StaticResource ConditionalColorConverter}, ConverterParameter=FF000000}" Margin="0,3,25,3"/>
             </Grid>
 
             <telerikPrimitives:RadSlideView x:Name="radSlideView" Grid.Row="1" IsFilmstripModeEnabled="True" Margin="0" 
@@ -68,7 +61,7 @@
                                 </telerikPrimitives:RadDataBoundListBox.EmptyContentTemplate>
                                 <telerikPrimitives:RadDataBoundListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <ListBoxItem HorizontalContentAlignment="Stretch" Foreground="{Binding DataContext.ForegroundColor, Mode=OneWay, ElementName=ThisPage}">
+                                        <ListBoxItem HorizontalContentAlignment="Stretch" Foreground="{Binding DataContext.IsNightMode, ElementName=ThisPage, Converter={StaticResource ConditionalColorConverter}, ConverterParameter=FF000000}">
                                             <telerikPrimitives:RadContextMenu.ContextMenu>
                                                 <telerikPrimitives:RadContextMenu>
                                                     <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.bookmark_ayah, Source={StaticResource LocalizedStrings}}" Tapped="AyahContextMenuClick"/>
