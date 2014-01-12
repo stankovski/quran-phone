@@ -156,6 +156,7 @@
     <Compile Include="Bootstrap\FilePluginBootstrap.cs" />
     <Compile Include="Bootstrap\MessengerPluginBootstrap.cs" />
     <Compile Include="Bootstrap\ResourceLoaderPluginBootstrap.cs" />
+    <Compile Include="NativeProvider\UISynchronizationContext.cs" />
     <Compile Include="NativeProvider\FakeWindowsPhoneDownloadManager.cs" />
     <Compile Include="NativeProvider\FakeWindowsPhoneTransferRequest.cs" />
     <Compile Include="NativeProvider\WindowsPhoneAudioTrack.cs" />

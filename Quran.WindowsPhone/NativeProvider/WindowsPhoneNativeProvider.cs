@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 using Windows.Storage;
 using Microsoft.Phone.Shell;
 using Microsoft.Phone.Tasks;
@@ -86,32 +88,46 @@ namespace Quran.WindowsPhone.NativeProvider
 
         public void ShowInfoMessageBox(string text)
         {
-            MessageBox.Show(text);
+            ThreadSafeAction(() => MessageBox.Show(text));
         }
 
         public void ShowInfoMessageBox(string text, string title)
         {
-            MessageBox.Show(text, title, MessageBoxButton.OK);
+            ThreadSafeAction(() => MessageBox.Show(text, title, MessageBoxButton.OK));
         }
 
         public bool ShowQuestionMessageBox(string text)
         {
-            return MessageBox.Show(text, "", MessageBoxButton.OKCancel) == MessageBoxResult.OK;
+            var result = ThreadSafeFunction(() => MessageBox.Show(text, "", MessageBoxButton.OKCancel));
+            return result == MessageBoxResult.OK;
         }
 
         public bool ShowQuestionMessageBox(string text, string title)
         {
-            return MessageBox.Show(text, title, MessageBoxButton.OKCancel) == MessageBoxResult.OK;
+            var result = ThreadSafeFunction(() => MessageBox.Show(text, title, MessageBoxButton.OKCancel));
+            return result == MessageBoxResult.OK;
         }
 
         public void ShowErrorMessageBox(string text)
         {
-            MessageBox.Show(text);
+            ThreadSafeAction(() => MessageBox.Show(text));
         }
 
         public void Log(string text)
         {
             Console.WriteLine(text);
+        }
+
+        private void ThreadSafeAction(Action action)
+        {
+            UISynchronizationContext.Instance.InvokeSynchronously(action);
+        }
+
+        private T ThreadSafeFunction<T>(Func<T> func)
+        {
+            T result = default(T);
+            UISynchronizationContext.Instance.InvokeSynchronously(() => result = func());
+            return result;
         }
 
         public string NativePath { get { return ApplicationData.Current.LocalFolder.Path; } }
