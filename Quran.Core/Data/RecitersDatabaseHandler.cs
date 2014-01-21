@@ -29,119 +29,119 @@ namespace Quran.Core.Data
             inMemoryDatabase[2] = new ReciterItem
             {
                 Name = "Abd Al-Basit",
-                ServerUrl = "http://mirrors.quranicaudio.com/everyayah/Abdul_Basit_Murattal_192kbps/",
+                ServerUrl = "http://www.everyayah.com/data/Abdul_Basit_Murattal_64kbps/",
                 IsGapless = false,
                 GaplessDatabasePath = ""
             };
             inMemoryDatabase[3] = new ReciterItem
             {
                 Name = "Abd Al-Basit Mujawwad",
-                ServerUrl = "http://mirrors.quranicaudio.com/everyayah/Abdul_Basit_Mujawwad_128kbps/",
+                ServerUrl = "http://www.everyayah.com/data/Abdul_Basit_Mujawwad_128kbps/",
                 IsGapless = false,
                 GaplessDatabasePath = ""
             }; 
             inMemoryDatabase[4] = new ReciterItem
             {
                 Name = "Abdullah Basfar",
-                ServerUrl = "http://mirrors.quranicaudio.com/everyayah/Abdullah_Basfar_192kbps/",
+                ServerUrl = "http://www.everyayah.com/data/Abdullah_Basfar_32kbps/",
                 IsGapless = false,
                 GaplessDatabasePath = ""
             };
             inMemoryDatabase[5] = new ReciterItem
             {
                 Name = "Abdurrahmaan As-Sudais",
-                ServerUrl = "http://mirrors.quranicaudio.com/everyayah/Abdurrahmaan_As-Sudais_192kbps/",
+                ServerUrl = "http://www.everyayah.com/data/Abdurrahmaan_As-Sudais_64kbps/",
                 IsGapless = false,
                 GaplessDatabasePath = ""
             };
             inMemoryDatabase[6] = new ReciterItem
             {
                 Name = "Abu Bakr Ash-Shatri",
-                ServerUrl = "http://mirrors.quranicaudio.com/everyayah/Abu_Bakr_Ash-Shaatree_128kbps/",
+                ServerUrl = "http://www.everyayah.com/data/Abu_Bakr_Ash-Shaatree_64kbps/",
                 IsGapless = false,
                 GaplessDatabasePath = ""
             };
             inMemoryDatabase[7] = new ReciterItem
             {
                 Name = "Mishary Al-Afasy",
-                ServerUrl = "http://mirrors.quranicaudio.com/everyayah/Alafasy_128kbps/",
+                ServerUrl = "http://www.everyayah.com/data/Alafasy_64kbps/",
                 IsGapless = false,
                 GaplessDatabasePath = ""
             };
             inMemoryDatabase[8] = new ReciterItem
             {
                 Name = "Saad Al-Ghamdi",
-                ServerUrl = "http://mirrors.quranicaudio.com/everyayah/Ghamadi_40kbps/",
+                ServerUrl = "http://www.everyayah.com/data/Ghamadi_40kbps/",
                 IsGapless = false,
                 GaplessDatabasePath = ""
             };
             inMemoryDatabase[9] = new ReciterItem
             {
                 Name = "Ibrahim Walk (English Trans.)",
-                ServerUrl = "http://mirrors.quranicaudio.com/everyayah/Ibrahim_Walk_192kbps_TEST/",
+                ServerUrl = "http://www.everyayah.com/data/English/Sahih_Intnl_Ibrahim_Walk_192kbps/",
                 IsGapless = false,
                 GaplessDatabasePath = ""
             };
             inMemoryDatabase[10] = new ReciterItem
             {
                 Name = "Hani Ar-Rifai",
-                ServerUrl = "http://mirrors.quranicaudio.com/everyayah/Hani_Rifai_192kbps/",
+                ServerUrl = "http://www.everyayah.com/data/Hani_Rifai_64kbps/",
                 IsGapless = false,
                 GaplessDatabasePath = ""
             };
             inMemoryDatabase[11] = new ReciterItem
             {
                 Name = "Husary Mujawwad",
-                ServerUrl = "http://mirrors.quranicaudio.com/everyayah/Husary_128kbps_Mujawwad/",
+                ServerUrl = "http://www.everyayah.com/data/Husary_Mujawwad_64kbps/",
                 IsGapless = false,
                 GaplessDatabasePath = ""
             };
             inMemoryDatabase[12] = new ReciterItem
             {
                 Name = "Ali Al-Hudhaify",
-                ServerUrl = "http://mirrors.quranicaudio.com/everyayah/Hudhaify_128kbps/",
+                ServerUrl = "http://www.everyayah.com/data/Hudhaify_128kbps/",
                 IsGapless = false,
                 GaplessDatabasePath = ""
             };
             inMemoryDatabase[13] = new ReciterItem
             {
                 Name = "Maher Al Muaiqly",
-                ServerUrl = "http://mirrors.quranicaudio.com/everyayah/Maher_AlMuaiqly_64kbps/",
+                ServerUrl = "http://www.everyayah.com/data/Maher_AlMuaiqly_64kbps/",
                 IsGapless = false,
                 GaplessDatabasePath = ""
             };
             inMemoryDatabase[14] = new ReciterItem
             {
-                Name = "Minshawy Mujawwad",
-                ServerUrl = "http://mirrors.quranicaudio.com/everyayah/Minshawy_Mujawwad_192kbps/",
+                Name = "Nasser al Qatami",
+                ServerUrl = "http://www.everyayah.com/data/Nasser_Alqatami_128kbps/",
                 IsGapless = false,
                 GaplessDatabasePath = ""
             };
             inMemoryDatabase[15] = new ReciterItem
             {
                 Name = "Mohammad al Tablaway",
-                ServerUrl = "http://mirrors.quranicaudio.com/everyayah/Mohammad_al_Tablaway_128kbps/",
+                ServerUrl = "http://www.everyayah.com/data/Mohammad_al_Tablaway_64kbps/",
                 IsGapless = false,
                 GaplessDatabasePath = ""
             };
             inMemoryDatabase[16] = new ReciterItem
             {
                 Name = "Muhammad Ayyoub",
-                ServerUrl = "http://mirrors.quranicaudio.com/everyayah/Muhammad_Ayyoub_128kbps/",
+                ServerUrl = "http://www.everyayah.com/data/Muhammad_Ayyoub_128kbps/",
                 IsGapless = false,
                 GaplessDatabasePath = ""
             };
             inMemoryDatabase[17] = new ReciterItem
             {
                 Name = "Muhammad Jibreel",
-                ServerUrl = "http://mirrors.quranicaudio.com/everyayah/Muhammad_Jibreel_128kbps/",
+                ServerUrl = "http://www.everyayah.com/data/Muhammad_Jibreel_64kbps/",
                 IsGapless = false,
                 GaplessDatabasePath = ""
             };
             inMemoryDatabase[18] = new ReciterItem
             {
                 Name = "Saood Ash-Shuraym",
-                ServerUrl = "http://mirrors.quranicaudio.com/everyayah/Saood_ash-Shuraym_128kbps/",
+                ServerUrl = "http://www.everyayah.com/data/Saood_ash-Shuraym_64kbps/",
                 IsGapless = false,
                 GaplessDatabasePath = ""
             };

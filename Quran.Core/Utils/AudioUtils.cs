@@ -11,7 +11,8 @@ namespace Quran.Core.Utils
     {
         Page = 1,
         Surah = 2,
-        Juz = 3
+        Juz = 3,
+        Quran
     }
 
     public enum RepeatAmount
@@ -77,6 +78,8 @@ namespace Quran.Core.Utils
                     return GetLastAyahToPlayForSura(startAyah);
                 case AudioDownloadAmount.Juz:
                     return GetLastAyahToPlayForJuz(startAyah);
+                case AudioDownloadAmount.Quran:
+                    return QuranUtils.GetPreviousAyah(startAyah, false);
                 default:
                     return GetLastAyahToPlayForPage(startAyah);
             }

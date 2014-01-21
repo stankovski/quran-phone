@@ -437,6 +437,7 @@ namespace Quran.Core.ViewModels
             yield return new KeyValuePair<AudioDownloadAmount, string>(AudioDownloadAmount.Page, AppResources.quran_page);
             yield return new KeyValuePair<AudioDownloadAmount, string>(AudioDownloadAmount.Surah, AppResources.quran_sura_lower);
             yield return new KeyValuePair<AudioDownloadAmount, string>(AudioDownloadAmount.Juz, AppResources.quran_juz2_lower);
+            yield return new KeyValuePair<AudioDownloadAmount, string>(AudioDownloadAmount.Quran, AppResources.app_name.ToLowerInvariant());
         }
 
         private IEnumerable<KeyValuePair<int, string>> GetSupportedRepeatTimes()
