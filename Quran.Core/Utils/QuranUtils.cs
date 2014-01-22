@@ -715,6 +715,11 @@ namespace Quran.Core.Utils
             return juz > 30 ? 30 : juz < 1 ? 1 : juz;
         }
 
+        public static int GetJuzFromAyah(QuranAyah ayah)
+        {
+            return GetJuzFromAyah(ayah.Surah, ayah.Ayah);
+        }
+
         public static int GetJuzFromAyah(int surah, int ayah)
         {
             int page = GetPageFromAyah(surah, ayah);
