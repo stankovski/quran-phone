@@ -1,3 +1,6 @@
+Quran Phone
+===========
+
 **You can download the latest build from the Windows Phone store**
 
 http://www.windowsphone.com/en-us/store/app/quran-phone/ca503de6-7cef-4ed3-8060-297578729314
