@@ -38,6 +38,7 @@ namespace Quran.WindowsPhone.Views
                 ayahContextMenu.Items.Add(new RadContextMenuItem() {Content = AppResources.copy});
             }
             ayahContextMenu.Items.Add(new RadContextMenuItem() { Content = AppResources.recite_ayah });
+            ayahContextMenu.Items.Add(new RadContextMenuItem() { Content = AppResources.share_ayah });
             ayahContextMenu.ItemTapped += AyahContextMenuClick;
             ayahContextMenu.Closed += (obj, e) => QuranApp.DetailsViewModel.SelectedAyah = null;
         }
@@ -256,12 +257,24 @@ namespace Quran.WindowsPhone.Views
                 QuranApp.DetailsViewModel.CopyAyahToClipboard(QuranApp.DetailsViewModel.SelectedAyah);
                 QuranApp.DetailsViewModel.SelectedAyah = null;
             }
+
+            else if (menuItem == AppResources.share_ayah)
+            {
+                string ayah = await QuranApp.DetailsViewModel.GetAyahString(QuranApp.DetailsViewModel.SelectedAyah);
+                ShareAyah(ayah);
+            }
             else if (menuItem == AppResources.recite_ayah)
             {
                 Recite_Click(this, null);
             }
         }
 
+        private void ShareAyah(string ayah)
+        {
+            ShareStatusTask shareTask = new ShareStatusTask();
+            shareTask.Status = ayah;
+            shareTask.Show();
+        }
         private void Settings_Click(object sender, EventArgs e)
         {
             QuranApp.DetailsViewModel.IsShowMenu = false;

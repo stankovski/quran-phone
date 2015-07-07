@@ -735,4 +735,7 @@ the data used in the translations and Arabic comes from
   <data name="alternate_download_method" xml:space="preserve">
     <value>alternative download method (use only if WiFi is not available)</value>
   </data>
+  <data name="share_ayah" xml:space="preserve">
+    <value>Share Ayah</value>
+  </data>
 </root>
