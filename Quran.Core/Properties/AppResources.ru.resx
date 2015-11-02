@@ -495,6 +495,6 @@ the data used in the translations and Arabic comes from
     <value>альтернативный способ скачивания (в случае отсутствия WiFi)</value>
   </data>
   <data name="share_ayah" xml:space="preserve">
-    <value>доля</value>
+    <value>Поделиться</value>
   </data>
 </root>
