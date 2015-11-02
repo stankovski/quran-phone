@@ -31,3 +31,12 @@ _Crystal clear Madani compliant images_
 ![Splash screen](Screenshots/splash.png)
 
 _Splash screen_
+
+# Setup
+
+1.  Make sure that you have VS with [Windows Phone 8 SDK](https://dev.windows.com/en-us/downloads) installed at least.
+2.  Make sure that sqllite extension is installed right and that the installed version matches the ones used in the project 
+[You can install it from here](https://visualstudiogallery.msdn.microsoft.com/5d97faf6-39e3-4048-a0bc-adde2af75d1b)
+3.  Build the project and try to fix any damaged references like (System.Windows.Interactivity or Telerik controls dlls) by re-referencing them.
+4.  Set Quran.WindowsPhone project as Startup Project
+
