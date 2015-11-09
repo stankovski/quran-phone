@@ -96,9 +96,8 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainPage.xaml.cs">
-      <DependentUpon>MainPage.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="NativeProvider\UniversalAudioProvider.cs" />
+    <Compile Include="NativeProvider\UniversalDownloadManager.cs" />
     <Compile Include="NativeProvider\UniversalNativeProvider.cs" />
     <Compile Include="NativeProvider\UniversalSettingsProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -185,10 +184,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="MainPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="SampleData\MainViewModelSampleData.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

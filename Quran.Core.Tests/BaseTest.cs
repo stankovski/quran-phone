@@ -12,8 +12,6 @@ using Cirrious.MvvmCross.Platform;
 using Cirrious.MvvmCross.Plugins.File;
 using Cirrious.MvvmCross.Plugins.File.Wpf;
 using Cirrious.MvvmCross.Plugins.ResourceLoader.Wpf;
-using Cirrious.MvvmCross.Plugins.Sqlite;
-using Cirrious.MvvmCross.Plugins.Sqlite.Wpf;
 using Cirrious.MvvmCross.Test.Core;
 using Cirrious.MvvmCross.Views;
 using Quran.Core.Tests.Mocks;
@@ -49,7 +47,7 @@ namespace Quran.Core.Tests
             Ioc.RegisterSingleton<IMvxSettings>(new MvxSettings());
             Ioc.RegisterSingleton<IMvxResourceLoader>(new MvxWpfResourceLoader());
             Ioc.RegisterSingleton<IMvxFileStore>(new MvxWpfFileStore());
-            Ioc.RegisterSingleton<ISQLiteConnectionFactory>(new MvxWpfSqLiteConnectionFactory());
+            //Ioc.RegisterSingleton<ISQLiteConnectionFactory>(new MvxWpfSqLiteConnectionFactory());
             System.Windows.Application.ResourceAssembly = Assembly.GetAssembly(typeof (BaseTest));
 
             this.Initialize();
