@@ -90,6 +90,7 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <PRIResource Include="Strings\en-US\Resources.resw" />
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
@@ -119,11 +120,9 @@
     <Compile Include="UI\DownloadControl.xaml.cs">
       <DependentUpon>DownloadControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\ListBoxPropertyBinder.cs" />
     <Compile Include="UI\ListHeader.xaml.cs">
       <DependentUpon>ListHeader.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\LocalizedStrings.cs" />
     <Compile Include="UI\ObservableDictionary.cs" />
     <Compile Include="UI\PageLink.xaml.cs">
       <DependentUpon>PageLink.xaml</DependentUpon>
@@ -133,7 +132,6 @@
     <Compile Include="UI\StringBrushConverter.cs" />
     <Compile Include="UI\StyleConverter.cs" />
     <Compile Include="UI\TextFormatConverter.cs" />
-    <Compile Include="UI\TiltEffect.cs" />
     <Compile Include="UI\TranslationItemTemplateSelector.cs" />
     <Compile Include="UI\TranslationView.xaml.cs">
       <DependentUpon>TranslationView.xaml</DependentUpon>

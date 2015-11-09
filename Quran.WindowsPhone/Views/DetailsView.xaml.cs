@@ -2,8 +2,8 @@
 using System.Globalization;
 using System.IO;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;

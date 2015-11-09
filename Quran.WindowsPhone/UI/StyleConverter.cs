@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Globalization;
-using System.Windows;
-using System.Windows.Data;
-using QuranPhone.UI;
+using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml;
 
 namespace Quran.WindowsPhone.UI
 {
     public class StyleConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, string language)
         {
             if (targetType != typeof(Style))
             {
@@ -23,11 +21,16 @@ namespace Quran.WindowsPhone.UI
             if (paramProperty != null)
                 styleProperty = styleProperty + paramProperty;
 
-            Style newStyle = (Style)Application.Current.TryFindResource(styleProperty);
-            return newStyle;
+            if (Application.Current.Resources.ContainsKey(styleProperty))
+            {
+                return (Style)Application.Current.Resources[styleProperty];
+            } else
+            {
+                return null;
+            }
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
             if (targetType != typeof(string))
             {
