@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Quran.Core.Common;
 
-namespace Quran.WindowsPhone.NativeProvider
+namespace Quran.UniversalApp.NativeProvider
 {
     public class FakeWindowsPhoneTransferRequest : ITransferRequest
     {

@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.IO.IsolatedStorage;
 using System.Linq;
-using Microsoft.Phone.BackgroundTransfer;
 using Quran.Core.Common;
 using Quran.Core.Interfaces;
 using Quran.Core.Utils;
 using Quran.Core.Data;
 
-namespace Quran.WindowsPhone.NativeProvider
+namespace Quran.UniversalApp.NativeProvider
 {
     public class WindowsPhoneDownloadManager : IDownloadManager
     {

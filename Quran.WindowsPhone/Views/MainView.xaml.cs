@@ -2,15 +2,11 @@
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Navigation;
 using Quran.Core;
 using Quran.Core.Data;
 using Quran.Core.Utils;
 using Quran.Core.ViewModels;
 using Quran.WindowsPhone.Utils;
-using Telerik.Windows.Controls;
 
 namespace Quran.WindowsPhone.Views
 {

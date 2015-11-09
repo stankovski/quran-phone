@@ -1,8 +1,9 @@
 ﻿using System;
 using Microsoft.Phone.BackgroundAudio;
 using Quran.Core.Interfaces;
+using Windows.Media.Core;
 
-namespace Quran.WindowsPhone.NativeProvider
+namespace Quran.UniversalApp.NativeProvider
 {
     /// <summary>
     /// Represents a single track of audio.

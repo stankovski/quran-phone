@@ -4,14 +4,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Cirrious.MvvmCross.WindowsCommon.Views;
+
 namespace Quran.WindowsPhone.Views
 {
-    using Cirrious.MvvmCross.WindowsPhone.Views;
-
     /// <summary>
     /// Defines the BaseView type.
     /// </summary>
-    public abstract class BaseView : MvxPhonePage
+    public abstract class BaseView : MvxWindowsPage
     {
     }
 }

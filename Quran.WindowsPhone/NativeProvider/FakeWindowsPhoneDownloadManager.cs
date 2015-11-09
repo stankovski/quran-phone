@@ -9,7 +9,7 @@ using Quran.Core.Common;
 using Quran.Core.Interfaces;
 using Quran.Core.Utils;
 
-namespace Quran.WindowsPhone.NativeProvider
+namespace Quran.UniversalApp.NativeProvider
 {
     public class FakeWindowsPhoneDownloadManager : IDownloadManager
     {

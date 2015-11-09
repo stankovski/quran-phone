@@ -2,7 +2,7 @@
 using Microsoft.Phone.BackgroundTransfer;
 using Quran.Core.Common;
 
-namespace Quran.WindowsPhone.NativeProvider
+namespace Quran.UniversalApp.NativeProvider
 {
     public class WindowsPhoneTransferRequest : ITransferRequest
     {

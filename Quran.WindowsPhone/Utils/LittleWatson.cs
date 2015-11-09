@@ -2,8 +2,10 @@
 using System.IO;
 using System.IO.IsolatedStorage;
 using System.Reflection;
-using System.Windows;
-using Microsoft.Phone.Tasks;
+using System.Threading.Tasks;
+using Quran.Core;
+using Quran.WindowsPhone.NativeProvider;
+using Windows.UI.Popups;
 
 namespace Quran.WindowsPhone.Utils
 {
@@ -15,22 +17,19 @@ namespace Quran.WindowsPhone.Utils
         private const string filename = "LittleWatson.txt";
 
 
-        internal static void ReportException(Exception ex, string extra)
+        internal static async Task ReportException(Exception ex, string extra)
         {
             try
             {
-                var nameHelper = new AssemblyName(Assembly.GetExecutingAssembly().FullName);
-
                 using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
                 {
                     SafeDeleteFile(store);
                     using (TextWriter output = new StreamWriter(store.CreateFile(filename)))
                     {
-                        output.WriteLine("QuranPhone Version: " + nameHelper.Version);
-                        output.WriteLine("OS Version: " + Environment.OSVersion);
+                        output.WriteLine("QuranPhone Version: " + SystemInfo.ApplicationVersion);
+                        output.WriteLine("OS Version: " + SystemInfo.SystemVersion);
                         output.WriteLine(extra);
-                        output.WriteLine(ex.Message);
-                        output.WriteLine(ex.StackTrace);
+                        output.WriteLine(ex.ToString());
                     }
                 }
             }
@@ -41,7 +40,7 @@ namespace Quran.WindowsPhone.Utils
         }
 
 
-        internal static void CheckForPreviousException()
+        internal static async Task CheckForPreviousException()
         {
             try
             {
@@ -65,17 +64,16 @@ namespace Quran.WindowsPhone.Utils
 
                 if (contents != null)
                 {
-                    if (
-                        MessageBox.Show(
-                            "A problem occurred the last time you ran this application. Would you like to send an email to report it?",
-                            "Problem Report", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                    var dialog = new MessageDialog("A problem occurred the last time you ran this application. Would you like to send an email to report it?",
+                            "Problem Report");
+                    dialog.Commands.Add(new UICommand { Label = "OK", Id = 0 });
+                    dialog.Commands.Add(new UICommand { Label = "Cancel", Id = 1 });
+                    dialog.CancelCommandIndex = 1;
+                    var result = await dialog.ShowAsync();
+                    if ((int)result.Id == 0)
                     {
-                        var email = new EmailComposeTask();
-                        email.To = "quran.phone@gmail.com";
-                        email.Subject = "QuranPhone auto-generated problem report";
-                        email.Body = contents;
+                        await QuranApp.NativeProvider.ComposeEmail("quran.phone@gmail.com", "QuranPhone auto-generated problem report");
                         SafeDeleteFile(IsolatedStorageFile.GetUserStoreForApplication());
-                        email.Show();
                     }
                 }
             }

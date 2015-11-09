@@ -5,7 +5,7 @@ using Quran.Core.Utils;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace Quran.WindowsPhone.NativeProvider
+namespace Quran.UniversalApp.NativeProvider
 {
     public class WindowsPhoneWebClientTransferRequest : ITransferRequest, IDisposable
     {

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Quran.Core.Utils;
 
 namespace Quran.Core.Interfaces
@@ -12,10 +13,10 @@ namespace Quran.Core.Interfaces
         ISettingsProvider SettingsProvider { get; }
         IAudioProvider AudioProvider { get; }
         ICollection<string> SplitLongText(string value, double fontSize, string fontWeight);
-        void ExtractZip(string source, string baseFolder);
-        void CopyToClipboard(string text);
-        void ComposeEmail(string to, string subject);
-        void LaunchWebBrowser(string url);
+        Task ExtractZip(string source, string baseFolder);
+        Task CopyToClipboard(string text);
+        Task ComposeEmail(string to, string subject, string body = null);
+        Task LaunchWebBrowser(string url);
         void ToggleDeviceSleep(bool enable);
         void ShowInfoMessageBox(string text);
         void ShowInfoMessageBox(string text, string title);
