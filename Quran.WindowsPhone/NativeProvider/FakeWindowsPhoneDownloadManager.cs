@@ -4,7 +4,6 @@ using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Phone.BackgroundTransfer;
 using Quran.Core.Common;
 using Quran.Core.Interfaces;
 using Quran.Core.Utils;

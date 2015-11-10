@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Controls;
+using Windows.UI.Xaml.Controls;
 using System.Windows.Navigation;
 using Quran.Core.Utils;
 using Quran.Core.Data;

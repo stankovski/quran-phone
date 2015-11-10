@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Globalization;
-using System.Windows;
-using System.Windows.Data;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Data;
 
 namespace Quran.WindowsPhone.UI
 {
     public class BooleanToVisibilityConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, string language)
         {
             if (targetType != typeof(Visibility))
             {
@@ -19,7 +18,7 @@ namespace Quran.WindowsPhone.UI
             if (value == null)
                 return null;
 
-            if (parameter != null && parameter.ToString().Equals("inverse", StringComparison.InvariantCultureIgnoreCase))
+            if (parameter != null && parameter.ToString().Equals("inverse", StringComparison.OrdinalIgnoreCase))
                 isInverse = true;
 
             var boolProperty = value as bool?;
@@ -30,7 +29,7 @@ namespace Quran.WindowsPhone.UI
                 return (isInverse ? Visibility.Visible : Visibility.Collapsed);
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
             if (targetType != typeof(bool))
             {

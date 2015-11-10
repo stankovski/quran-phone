@@ -4,14 +4,12 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    FontFamily="{StaticResource PhoneFontFamilyNormal}"
-    FontSize="{StaticResource PhoneFontSizeNormal}"
     d:DesignHeight="480" d:DesignWidth="480">
 
     <ScrollViewer HorizontalAlignment="Stretch" x:Name="LayoutRoot">
         <Grid VerticalAlignment="Top">
             <StackPanel Orientation="Vertical">
-                <Image Name="image" Margin="0,0,0,20" Tap="ImageTap"/>
+                <Image Name="image" Margin="0,0,0,20" Tapped="ImageTap"/>
             </StackPanel>
             <ProgressBar Name="progress" IsIndeterminate="True" VerticalAlignment="Top"
                          Margin="20,5,20,0" FlowDirection="LeftToRight"/>

@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.IO;
 using System.Windows;
-using System.Windows.Controls;
+using Windows.UI.Xaml.Controls;
 using System.Windows.Navigation;
 using Quran.Core;
 using Quran.Core.Properties;

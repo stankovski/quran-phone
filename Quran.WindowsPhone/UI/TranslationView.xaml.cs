@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Windows;
-using System.Windows.Controls;
+using Windows.UI.Xaml.Controls;
 using Quran.Core;
 using Quran.Core.Common;
 using Quran.Core.ViewModels;
+using Windows.UI.Xaml;
 
 namespace Quran.WindowsPhone.UI
 {
@@ -16,7 +16,7 @@ namespace Quran.WindowsPhone.UI
         }
 
         public static readonly DependencyProperty SelectedAyahProperty = DependencyProperty.Register("SelectedAyah",
-            typeof(QuranAyah), typeof(TranslationView), new PropertyMetadata(new PropertyChangedCallback(changeSelectedAyah)));
+            typeof(QuranAyah), typeof(TranslationView), new PropertyMetadata(null, changeSelectedAyah));
 
         private static void changeSelectedAyah(DependencyObject source, DependencyPropertyChangedEventArgs e)
         {

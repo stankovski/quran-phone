@@ -1,7 +1,7 @@
 ﻿<vm:MainViewModel
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:vm="clr-namespace:Quran.Core.ViewModels;assembly=Quran.Core">
+    xmlns:vm="using:Quran.Core.ViewModels">
     <vm:MainViewModel.IsInstalling>True</vm:MainViewModel.IsInstalling>
     <vm:MainViewModel.InstallationStep>Downloading...</vm:MainViewModel.InstallationStep>
     <vm:MainViewModel.Surahs>

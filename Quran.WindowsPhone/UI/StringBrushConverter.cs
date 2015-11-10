@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Globalization;
 using System.Reflection;
-using System.Windows;
-using System.Windows.Data;
-using System.Windows.Media;
-using QuranPhone.UI;
+using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Media;
+using Windows.UI;
 
 namespace Quran.WindowsPhone.UI
 {
     public class StringBrushConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, string language)
         {
             if (targetType != typeof(Brush))
             {
@@ -21,9 +19,10 @@ namespace Quran.WindowsPhone.UI
                 return null;
 
             var stringValue = value.ToString();
-            if (stringValue.StartsWith("Resource:"))
-                return
-                    (LinearGradientBrush) Application.Current.TryFindResource(stringValue.Substring("Resource:".Length));
+            if (stringValue.StartsWith("Resource:") && App.Current.Resources.ContainsKey(stringValue.Substring("Resource:".Length)))
+            {
+                return (LinearGradientBrush)App.Current.Resources["Resource:".Length)];
+            }                
             else
             {
                 return new SolidColorBrush(GetColorFromString(stringValue));
@@ -32,20 +31,21 @@ namespace Quran.WindowsPhone.UI
 
         public Color GetColorFromString(string colorString)
         {
-            Type colorType = (typeof (System.Windows.Media.Colors));
+            Type colorType = (typeof (Colors));
             if (colorType.GetProperty(colorString) != null)
             {
-                object o = colorType.InvokeMember(colorString, BindingFlags.GetProperty, null, null, null);
-                if (o != null)
-
+                foreach (var color in typeof(Colors).GetRuntimeProperties())
                 {
-                    return (Color) o;
+                    if (color.Name.Equals(colorString, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return (Color)color.GetValue(null);
+                    }
                 }
             }
             return Colors.Black;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
             if (targetType != typeof(bool))
             {

@@ -90,15 +90,15 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <PRIResource Include="Strings\en-US\Resources.resw" />
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainPage.xaml.cs">
-      <DependentUpon>MainPage.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="NativeProvider\UniversalAudioProvider.cs" />
+    <Compile Include="NativeProvider\UniversalDownloadManager.cs" />
     <Compile Include="NativeProvider\UniversalNativeProvider.cs" />
     <Compile Include="NativeProvider\UniversalSettingsProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -120,11 +120,9 @@
     <Compile Include="UI\DownloadControl.xaml.cs">
       <DependentUpon>DownloadControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\ListBoxPropertyBinder.cs" />
     <Compile Include="UI\ListHeader.xaml.cs">
       <DependentUpon>ListHeader.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\LocalizedStrings.cs" />
     <Compile Include="UI\ObservableDictionary.cs" />
     <Compile Include="UI\PageLink.xaml.cs">
       <DependentUpon>PageLink.xaml</DependentUpon>
@@ -134,7 +132,6 @@
     <Compile Include="UI\StringBrushConverter.cs" />
     <Compile Include="UI\StyleConverter.cs" />
     <Compile Include="UI\TextFormatConverter.cs" />
-    <Compile Include="UI\TiltEffect.cs" />
     <Compile Include="UI\TranslationItemTemplateSelector.cs" />
     <Compile Include="UI\TranslationView.xaml.cs">
       <DependentUpon>TranslationView.xaml</DependentUpon>
@@ -185,10 +182,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="MainPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="SampleData\MainViewModelSampleData.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

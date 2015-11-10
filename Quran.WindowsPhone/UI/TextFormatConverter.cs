@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Globalization;
-using System.Windows.Data;
+using Windows.UI.Xaml.Data;
 
 namespace Quran.WindowsPhone.UI
 {
     public class TextFormatConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, string language)
         {
             if (targetType != typeof(string))
             {
@@ -19,7 +19,7 @@ namespace Quran.WindowsPhone.UI
             return string.Format(CultureInfo.InvariantCulture, parameter.ToString(), value);
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
             throw new NotImplementedException();
         }

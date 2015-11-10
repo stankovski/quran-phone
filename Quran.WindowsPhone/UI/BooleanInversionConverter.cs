@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Globalization;
-using System.Windows.Data;
+using Windows.UI.Xaml.Data;
 
 namespace Quran.WindowsPhone.UI
 {
     public class BooleanInversionConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, string language)
         {
             if (targetType != typeof(bool))
             {
@@ -20,7 +19,7 @@ namespace Quran.WindowsPhone.UI
             return !boolProperty;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
             if (targetType != typeof(bool))
             {

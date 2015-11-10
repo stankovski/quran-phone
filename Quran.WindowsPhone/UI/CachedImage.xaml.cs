@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
 using System.ComponentModel;
 using System.Linq.Expressions;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using Quran.Core;
 using Quran.Core.Common;
 using Quran.Core.Utils;
@@ -13,6 +8,14 @@ using Quran.WindowsPhone.Utils;
 using Quran.Core.Data;
 using System.IO.IsolatedStorage;
 using System.IO;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media.Imaging;
+using Windows.UI.Xaml;
+using Windows.Foundation;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Shapes;
+using Windows.UI;
+using Windows.UI.Xaml.Input;
 
 namespace Quran.WindowsPhone.UI
 {
@@ -44,8 +47,7 @@ namespace Quran.WindowsPhone.UI
         }
 
         public static readonly DependencyProperty SelectedAyahProperty = DependencyProperty.Register("SelectedAyah",
-            typeof(QuranAyah), typeof(CachedImage), new PropertyMetadata(
-            new PropertyChangedCallback(changeSelectedAyah)));
+            typeof(QuranAyah), typeof(CachedImage), new PropertyMetadata(null, changeSelectedAyah));
 
         private static void changeSelectedAyah(DependencyObject source, DependencyPropertyChangedEventArgs e)
         {
@@ -112,8 +114,7 @@ namespace Quran.WindowsPhone.UI
         }
 
         public static readonly DependencyProperty NightModeProperty = DependencyProperty.Register("NightMode",
-            typeof(bool), typeof(CachedImage), new PropertyMetadata(
-            new PropertyChangedCallback(changeNightMode)));
+            typeof(bool), typeof(CachedImage), new PropertyMetadata(false, changeNightMode));
 
         private static void changeNightMode(DependencyObject source, DependencyPropertyChangedEventArgs e)
         {
@@ -135,8 +136,7 @@ namespace Quran.WindowsPhone.UI
         }
 
         public static readonly DependencyProperty ImageSourceProperty = DependencyProperty.Register("ImageSource",
-            typeof(Uri), typeof(CachedImage), new PropertyMetadata(
-            new PropertyChangedCallback(changeSource))); 
+            typeof(Uri), typeof(CachedImage), new PropertyMetadata(null, changeSource)); 
         
         private static void changeSource(DependencyObject source, DependencyPropertyChangedEventArgs e) 
         { 
@@ -161,11 +161,11 @@ namespace Quran.WindowsPhone.UI
             // Scroll to top
             LayoutRoot.ScrollToVerticalOffset(0);
 
-            progress.Visibility = System.Windows.Visibility.Visible;
+            progress.Visibility = Visibility.Visible;
             image.Source = null;
             if (source == null)
             {
-                progress.Visibility = System.Windows.Visibility.Collapsed;
+                progress.Visibility = Visibility.Collapsed;
                 progress.IsIndeterminate = false;
             }
             else
@@ -215,7 +215,7 @@ namespace Quran.WindowsPhone.UI
                 }
                 finally
                 {
-                    progress.Visibility = System.Windows.Visibility.Collapsed;
+                    progress.Visibility = Visibility.Collapsed;
                     progress.IsIndeterminate = false;
                 }
 
@@ -229,13 +229,13 @@ namespace Quran.WindowsPhone.UI
             using (var stream = isf.OpenFile(localPath, FileMode.Open))
             {
                 var bitmap = new WriteableBitmap(1, 1); // avoid creating intermediate BitmapImage
-                bitmap.SetSource(stream);
+                bitmap.SetSource(stream.AsRandomAccessStream());
                 if (nightMode)
                 {
                     invertColors(bitmap);
                 }
                 imageSourceBitmap = bitmap;
-                progress.Visibility = System.Windows.Visibility.Collapsed;
+                progress.Visibility = Visibility.Collapsed;
             }
         }
 
@@ -367,7 +367,7 @@ namespace Quran.WindowsPhone.UI
             return null;
         }
 
-        private void ImageTap(object sender, System.Windows.Input.GestureEventArgs e)
+        private void ImageTap(object sender, TappedRoutedEventArgs e)
         {
             if (AyahTapped != null)
             {
@@ -405,11 +405,6 @@ namespace Quran.WindowsPhone.UI
             myPolygon.Points = myPointCollection;
             myPolygon.Fill = new SolidColorBrush(Color.FromArgb(50, 48, 182, 231));
             canvas.Children.Add(myPolygon);
-        }
-
-        private void controlMouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            memoryUsage.Text = PhoneUtils.CurrentMemoryUsage();
         }
     }
 }

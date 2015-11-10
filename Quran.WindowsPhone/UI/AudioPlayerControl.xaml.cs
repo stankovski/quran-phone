@@ -1,11 +1,12 @@
-﻿using System.Windows;
-using System.Windows.Input;
-using Quran.Core;
+﻿using Quran.Core;
 using Quran.Core.Common;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
 
 namespace Quran.WindowsPhone.UI
 {
-    public partial class AudioPlayerControl
+    public partial class AudioPlayerControl : UserControl
     {
         public AudioPlayerControl()
         {
@@ -20,7 +21,7 @@ namespace Quran.WindowsPhone.UI
 
         public static readonly DependencyProperty AudioStateProperty = DependencyProperty.Register("AudioState",
             typeof(AudioState), typeof(AudioPlayerControl),
-            new PropertyMetadata(ChangeAudioState));
+            new PropertyMetadata(AudioState.Stopped, ChangeAudioState));
 
         private static void ChangeAudioState(DependencyObject source, DependencyPropertyChangedEventArgs e)
         {
@@ -46,7 +47,7 @@ namespace Quran.WindowsPhone.UI
             }
         }
 
-        private void OnControlTap(object sender, GestureEventArgs e)
+        private void OnControlTap(object sender, TappedRoutedEventArgs e)
         {
             if (AudioState == AudioState.Playing)
                 QuranApp.NativeProvider.AudioProvider.Pause();

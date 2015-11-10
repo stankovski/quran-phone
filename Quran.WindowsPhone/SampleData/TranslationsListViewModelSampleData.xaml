@@ -1,8 +1,8 @@
 ﻿<viewModels:TranslationsListViewModel
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:ui="clr-namespace:Quran.Core.ViewModels;assembly=Quran.Core"
-    xmlns:viewModels="clr-namespace:Quran.Core.ViewModels;assembly=Quran.Core">
+    xmlns:ui="using:Quran.Core.ViewModels"
+    xmlns:viewModels="using:Quran.Core.ViewModels">
     <viewModels:TranslationsListViewModel.AvailableTranslations>
         <ui:ObservableTranslationItem Name="Russian Translation" Translator="Porohova" Progress="20" IsDownloading="True" Exists="False"/>
         <ui:ObservableTranslationItem  Name="Albanian Translation" Translator="Someone" Exists="False"/>
