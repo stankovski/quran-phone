@@ -2,8 +2,6 @@
     x:Class="Quran.WindowsPhone.Views.RecitersListView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:phone="using:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
-    xmlns:shell="using:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:telerikPrimitives="using:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls.Primitives"
@@ -14,7 +12,7 @@
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait" Orientation="Portrait"
     mc:Ignorable="d"
-    xmlns:views="using:Quran.WindowsPhone.Views"
+    xmlns:views="using:Cirrious.MvvmCross.WindowsCommon.Views"
     xmlns:ui="using:Quran.WindowsPhone.UI"
     ui:TiltEffect.IsTiltEnabled="True"
     shell:SystemTray.IsVisible="True">

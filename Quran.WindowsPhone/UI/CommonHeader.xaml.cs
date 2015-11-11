@@ -1,17 +1,17 @@
 ﻿using System;
-using System.Windows;
 using Windows.UI.Xaml.Controls;
-using System.Windows.Navigation;
 using Quran.Core.Utils;
 using Quran.Core.Data;
+using Windows.UI.Xaml;
+using Quran.WindowsPhone.Views;
 
 namespace Quran.WindowsPhone.UI
 {
-    public partial class CommonHeader : UserControl
+    public sealed partial class CommonHeader : UserControl
     {
         public CommonHeader()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         private void OpenLastPage(object sender, RoutedEventArgs e)
@@ -20,9 +20,10 @@ namespace Quran.WindowsPhone.UI
             if (lastPage == 0)
                 lastPage = 1;
             if (NavigationRequest != null)
-                NavigationRequest(this, new NavigationEventArgs(this, new Uri("/Views/DetailsView.xaml?page=" + lastPage, UriKind.Relative)));
+                NavigationRequest(this, typeof(MainView), new object[] { lastPage });
         }
 
-        public event NavigatedEventHandler NavigationRequest;
+        public delegate void NavigationRequestHandler(object source, Type viewType, object[] parameters);
+        public event NavigationRequestHandler NavigationRequest;
     }
 }

@@ -94,7 +94,7 @@ namespace Quran.Core.ViewModels
             loadBookmarkList();
         }
 
-        public async void Download()
+        public async Task Download()
         {
             if (!this.ActiveDownload.IsDownloading)
             {
@@ -116,7 +116,7 @@ namespace Quran.Core.ViewModels
                 if (!FileUtils.HaveAllImages() && !this.HasAskedToDownload)
                 {
                     this.HasAskedToDownload = true;
-                    var askingToDownloadResult = QuranApp.NativeProvider.ShowQuestionMessageBox(AppResources.downloadPrompt,
+                    var askingToDownloadResult = await QuranApp.NativeProvider.ShowQuestionMessageBox(AppResources.downloadPrompt,
                                                                  AppResources.downloadPrompt_title);
 
                     if (askingToDownloadResult && ActiveDownload.DownloadCommand.CanExecute(null))

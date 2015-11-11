@@ -7,6 +7,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Plugins.File;
+using System.Threading;
 
 namespace Quran.Core.Utils
 {
@@ -348,7 +349,8 @@ namespace Quran.Core.Utils
             }
         }
 
-        public static async Task<bool> DownloadFileFromWebAsync(string uri, string localPath)
+        public static async Task<bool> DownloadFileFromWebAsync(string uri, string localPath, 
+            CancellationToken cancellationToken = default(CancellationToken))
         {
             try
             {

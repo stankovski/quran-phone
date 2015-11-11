@@ -1,5 +1,6 @@
 ﻿using System;
 using QuranPhone.UI;
+using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 
@@ -20,7 +21,7 @@ namespace Quran.WindowsPhone.UI
             var condition = value.ToString();
 
             var styleName = parameter as string;
-
+            
             if (condition != null &&
                 App.Current.Resources.ContainsKey(styleName) &&
                 (condition.Equals("true", StringComparison.OrdinalIgnoreCase) ||

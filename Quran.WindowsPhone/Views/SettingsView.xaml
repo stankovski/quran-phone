@@ -6,17 +6,13 @@
     xmlns:shell="using:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:telerikPrimitives="using:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls.Primitives"
-    xmlns:telerikInput="using:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls.Input"
-    xmlns:views="using:Quran.WindowsPhone.Views"
+    xmlns:views="using:Cirrious.MvvmCross.WindowsCommon.Views"
     xmlns:ui="using:Quran.WindowsPhone.UI"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     d:DataContext="{d:DesignData ../SampleData/SettingsViewModelSampleData.xaml}"
-    SupportedOrientations="Portrait" Orientation="Portrait"
-    mc:Ignorable="d"
-    shell:SystemTray.IsVisible="True">
+    mc:Ignorable="d">
 
     <phone:PhoneApplicationPage.Resources>
         <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>

@@ -21,18 +21,18 @@
                 <ColumnDefinition Width="50"/>
             </Grid.ColumnDefinitions>
             <Grid>
-                <Image Source="{Binding Image}" Width="40"/>
-                <TextBlock Text="{Binding Id}" VerticalAlignment="Center" HorizontalAlignment="Center"
-                                                        Style="{Binding Style, Mode=OneWay, Converter={StaticResource StyleConverter}, ConverterParameter=Number}"/>
+                <Image Source="{x:Bind Image}" Width="40"/>
+                <TextBlock Text="{x:Bind Id}" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                                        Style="{x:Bind Style, Mode=OneWay, Converter={StaticResource StyleConverter}, ConverterParameter=Number}"/>
             </Grid>
             <StackPanel Grid.Column="1">
-                <TextBlock Text="{Binding Title}" TextWrapping="Wrap" 
-                                                            Style="{Binding Style, Mode=OneWay, Converter={StaticResource StyleConverter}}"/>
-                <TextBlock Text="{Binding Details}" TextWrapping="Wrap" Margin="12,-6,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                <TextBlock Text="{x:Bind Title}" TextWrapping="Wrap" 
+                                                            Style="{x:Bind Style, Mode=OneWay, Converter={StaticResource StyleConverter}}"/>
+                <TextBlock Text="{x:Bind Details}" TextWrapping="Wrap" Margin="12,-6,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
             </StackPanel>
-            <TextBlock Grid.Column="2" Text="{Binding PageNumber}" TextWrapping="Wrap" 
+            <TextBlock Grid.Column="2" Text="{x:Bind PageNumber}" TextWrapping="Wrap" 
                                                         HorizontalAlignment="Right" VerticalAlignment="Center"
-                                                        Style="{Binding Style, Mode=OneWay, Converter={StaticResource StyleConverter}, ConverterParameter=PageNumber}"/>
+                                                        Style="{x:Bind Style, Mode=OneWay, Converter={StaticResource StyleConverter}, ConverterParameter=PageNumber}"/>
         </Grid>
     </Grid>
 </UserControl>

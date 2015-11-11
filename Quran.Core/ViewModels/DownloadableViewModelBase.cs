@@ -124,12 +124,12 @@ namespace Quran.Core.ViewModels
                     FinishDownload().Wait();
 
                     // Check existing downloads
-                    downloadRequest = QuranApp.NativeProvider.DownloadManager.GetRequest(this.ServerUrl);
+                    downloadRequest = QuranApp.NativeProvider.DownloadManager.GetRequest(this.ServerUrl)
+                        .ConfigureAwait(false).GetAwaiter().GetResult();
                     if (downloadRequest != null)
                     {
                         UpdateDownloadStatus(downloadRequest.TransferStatus);
                         downloadRequest.TransferProgressChanged += TransferProgressChanged;
-                        downloadRequest.TransferStatusChanged += TransferStatusChanged;
                     }
                 }
 
@@ -288,7 +288,7 @@ namespace Quran.Core.ViewModels
             {
                 if (cancelCommand == null)
                 {
-                    cancelCommand = new MvxCommand(Cancel);
+                    cancelCommand = new MvxCommand(async () => await Cancel());
                 }
                 return cancelCommand;
             }
@@ -358,13 +358,11 @@ namespace Quran.Core.ViewModels
             if (downloadRequest != null)
             {
                 downloadRequest.TransferProgressChanged -= TransferProgressChanged;
-                downloadRequest.TransferStatusChanged -= TransferStatusChanged;
             }
-            downloadRequest = QuranApp.NativeProvider.DownloadManager.DownloadMultipleAsync(serverUrls, this.LocalUrl);
+            downloadRequest = await QuranApp.NativeProvider.DownloadManager.DownloadMultipleAsync(serverUrls, this.LocalUrl);
             if (downloadRequest != null)
             {
                 downloadRequest.TransferProgressChanged += TransferProgressChanged;
-                downloadRequest.TransferStatusChanged += TransferStatusChanged;
                 if (downloadRequest.TransferStatus == FileTransferStatus.Completed)
                 {
                     TransferStatusChanged(this, new TransferEventArgs(downloadRequest));
@@ -390,13 +388,11 @@ namespace Quran.Core.ViewModels
             if (downloadRequest != null)
             {
                 downloadRequest.TransferProgressChanged -= TransferProgressChanged;
-                downloadRequest.TransferStatusChanged -= TransferStatusChanged;
             }
-            downloadRequest = QuranApp.NativeProvider.DownloadManager.DownloadAsync(this.ServerUrl, this.TempUrl);
+            downloadRequest = await QuranApp.NativeProvider.DownloadManager.DownloadAsync(this.ServerUrl, this.TempUrl);
             if (downloadRequest != null)
             {
                 downloadRequest.TransferProgressChanged += TransferProgressChanged;
-                downloadRequest.TransferStatusChanged += TransferStatusChanged;
                 if (downloadRequest.TransferStatus == FileTransferStatus.Completed)
                 {
                     TransferStatusChanged(this, new TransferEventArgs(downloadRequest));
@@ -481,11 +477,11 @@ namespace Quran.Core.ViewModels
             return true;
         }
 
-        public void Cancel()
+        public async Task Cancel()
         {
             if (downloadRequest != null)
             {
-                if (QuranApp.NativeProvider.ShowQuestionMessageBox(AppResources.download_cancel_confirmation))
+                if (await QuranApp.NativeProvider.ShowQuestionMessageBox(AppResources.download_cancel_confirmation))
                 {
                     QuranApp.NativeProvider.DownloadManager.Cancel(downloadRequest);
                     IsDownloading = false;
@@ -506,7 +502,6 @@ namespace Quran.Core.ViewModels
             if (downloadRequest != null)
             {
                 downloadRequest.TransferProgressChanged -= TransferProgressChanged;
-                downloadRequest.TransferStatusChanged -= TransferStatusChanged;
             }
             downloadRequest = null;
             IsDownloading = true;

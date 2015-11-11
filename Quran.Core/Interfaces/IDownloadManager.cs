@@ -1,17 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Quran.Core.Common;
 
 namespace Quran.Core.Interfaces
 {
-    public interface IDownloadManager
+    public interface IDownloadManager : IDisposable
     {
-        ITransferRequest DownloadAsync(string from, string to);
-        ITransferRequest DownloadMultipleAsync(string[] from, string to);
-        ITransferRequest GetRequest(string serverUri);
-        void Cancel(ITransferRequest request);
+        Task<ITransferRequest> DownloadAsync(string from, string to, CancellationToken token = default(CancellationToken));
+        Task<ITransferRequest> DownloadMultipleAsync(string[] from, string to, CancellationToken token = default(CancellationToken));
+        Task<ITransferRequest> GetRequest(string serverUri);
+        Task Cancel(ITransferRequest request);
         void FinalizeRequest(ITransferRequest request);
-        IEnumerable<ITransferRequest> GetAllRequests();
+        Task<IEnumerable<ITransferRequest>> GetAllRequests();
         IEnumerable<string> GetAllStuckFiles();
-        void Dispose();
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.IO.Compression;
 using System.IO.IsolatedStorage;
+using System.Threading.Tasks;
 using Quran.Core;
 using Quran.Core.Utils;
 
@@ -8,17 +9,20 @@ namespace Quran.WindowsPhone.Utils
 {
     public static class ZipHelper
     {
-        public static void Unzip(string zipPath, string baseFolder)
+        public static Task Unzip(string zipPath, string baseFolder)
         {
             //zipPath = FileUtils.Combine(QuranApp.NativeProvider.NativePath, zipPath);
             //baseFolder = FileUtils.Combine(QuranApp.NativeProvider.NativePath, baseFolder);
-            using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
+            return Task.Run(() =>
             {
-                using (var fileStream = new IsolatedStorageFileStream(zipPath, FileMode.Open, isf))
+                using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
                 {
-                    ZipHelper.UnzipFilesFromStream(fileStream, baseFolder);
+                    using (var fileStream = new IsolatedStorageFileStream(zipPath, FileMode.Open, isf))
+                    {
+                        UnzipFilesFromStream(fileStream, baseFolder);
+                    }
                 }
-            }
+            });
         }
 
         public static void UnzipFromByteArray(byte[] zipData, string baseFolder)
@@ -27,7 +31,7 @@ namespace Quran.WindowsPhone.Utils
 
             using (MemoryStream memoryStream = new MemoryStream(zipData))
             {
-                ZipHelper.UnzipFilesFromStream(memoryStream, baseFolder);
+                UnzipFilesFromStream(memoryStream, baseFolder);
             }
         }
 

@@ -18,31 +18,22 @@ namespace Quran.WindowsPhone.NativeProvider
         private Dictionary<string, ITransferRequest> customTransferRequests =
             new Dictionary<string, ITransferRequest>();
 
-        public async Task<ITransferRequest> DownloadAsync(string from, FolderTypes folderType, string to, CancellationToken token = default(CancellationToken))
+        public async Task<ITransferRequest> DownloadAsync(string from, string to, CancellationToken token = default(CancellationToken))
         {
             var serverUri = new Uri(from, UriKind.Absolute);
-            var localFolder = ApplicationData.Current.LocalFolder;
-            if (folderType == FolderTypes.Roaming)
-            {
-                localFolder = ApplicationData.Current.RoamingFolder;
-            } else
-            {
-                localFolder = ApplicationData.Current.TemporaryFolder;
-            }
-            var localFile = await localFolder.CreateFileAsync(to, CreationCollisionOption.ReplaceExisting);
 
             if (SettingsUtils.Get<bool>(Constants.PREF_ALT_DOWNLOAD))
-                return DownloadAsyncViaWebClient(serverUri, localFile);
+                return await DownloadAsyncViaWebClient(serverUri, to, token);
             else
-                return await DownloadAsyncViaBackgroundTranfer(serverUri, localFile, token);   
+                return await DownloadAsyncViaBackgroundTranfer(serverUri, to, token);   
         }
 
-        private async Task<ITransferRequest> DownloadAsyncViaBackgroundTranfer(Uri serverUri, IStorageFile resultFile, CancellationToken token)
+        private async Task<ITransferRequest> DownloadAsyncViaBackgroundTranfer(Uri serverUri, string resultFile, CancellationToken token)
         {
             try
             {
                 var backgroundDownloader = new BackgroundDownloader();
-                var request = backgroundDownloader.CreateDownload(serverUri, resultFile);
+                var request = backgroundDownloader.CreateDownload(serverUri, await StorageFile.GetFileFromPathAsync(resultFile).AsTask());
                 request.CostPolicy = BackgroundTransferCostPolicy.Always;
 
                 var progressCallback = new Progress<DownloadOperation>();
@@ -51,93 +42,87 @@ namespace Quran.WindowsPhone.NativeProvider
             }
             catch (InvalidOperationException)
             {
-                return GetRequest(serverUri.ToString());
+                return await GetRequest(serverUri.ToString());
             }
         }
 
-        private ITransferRequest DownloadAsyncViaWebClient(Uri serverUri, IStorageFile phoneUri)
+        private async Task<ITransferRequest> DownloadAsyncViaWebClient(Uri serverUri, string to, CancellationToken token)
         {
-            var request = new WindowsPhoneWebClientTransferRequest(serverUri, phoneUri)
+            var request = new UniversalHttpClientTransferRequest(serverUri, to)
             {
                 RequestId = Guid.NewGuid().ToString()
             };
-            request.Download();
+            await request.Download(token);
             customTransferRequests[request.RequestId] = request;
             return request; 
         }
 
-        public async Task<ITransferRequest> DownloadMultipleAsync(string[] from, string to)
+        public async Task<ITransferRequest> DownloadMultipleAsync(string[] from, string to, CancellationToken token = default(CancellationToken))
         {
-            var phoneUri = new Uri(to, UriKind.Relative);
-
-            var request = new WindowsPhoneMultifileTransferRequest(from, phoneUri)
+            var request = new UniversalMultifileTransferRequest(from, to)
             {
                 RequestId = Guid.NewGuid().ToString()
             };
-            request.Download();
+            request.Download(token);
             customTransferRequests[request.RequestId] = request;
             return request; 
         }
 
-        private void PersistRequestToStorage(BackgroundTransferRequest request)
+        private void PersistRequestToStorage(DownloadOperation request)
         {
-            var requestUri = request.RequestUri;
+            var requestUri = request.RequestedUri;
             var requestUriHash = CryptoUtils.GetHash(requestUri.ToString());
             var trackerDir = FileUtils.GetDowloadTrackerDirectory(false, true);
-            FileUtils.WriteFile(string.Format("{0}\\{1}", trackerDir, requestUriHash), request.RequestId);
+            FileUtils.WriteFile(string.Format("{0}\\{1}", trackerDir, requestUriHash), request.RequestedUri.ToString());
         }
 
-        private void DeleteRequestFromStorage(BackgroundTransferRequest request)
+        private void DeleteRequestFromStorage(DownloadOperation request)
         {
-            var requestUri = request.RequestUri;
+            var requestUri = request.RequestedUri;
             var requestUriHash = CryptoUtils.GetHash(requestUri.ToString());
             var trackerDir = FileUtils.GetDowloadTrackerDirectory(false, true);
             FileUtils.DeleteFile(string.Format("{0}\\{1}", trackerDir, requestUriHash));
         }
 
-        public ITransferRequest GetRequest(string serverUri)
+        public async Task<ITransferRequest> GetRequest(string serverUri)
         {
             var requestUriHash = CryptoUtils.GetHash(serverUri);
             var trackerDir = FileUtils.GetDowloadTrackerDirectory(false, true);
             var requestId = FileUtils.ReadFile(string.Format("{0}\\{1}", trackerDir, requestUriHash));
             if (!string.IsNullOrEmpty(requestId))
             {
-                var request = BackgroundTransferService.Find(requestId);
+                var downloads = await BackgroundDownloader.GetCurrentDownloadsAsync().AsTask();
+                var request = downloads.FirstOrDefault(d => d.Guid.ToString().Equals(requestId, StringComparison.OrdinalIgnoreCase));
                 if (request == null)
                     return null;
                 else
-                    return new UniversalTransferRequest(request);
+                    return new UniversalTransferRequest(request, null);
             }
             else
                 return null;
         }
 
-        public void Cancel(ITransferRequest request)
-        {
-            request.Cancel();
-            FinalizeRequest(request);
-        }
-
         public void FinalizeRequest(ITransferRequest request)
         {
-            if (request.RequestId != null)
-            {
-                if (BackgroundTransferService.Find(request.RequestId) != null)
-                {
-                    BackgroundTransferService.Remove(((UniversalTransferRequest) request).OriginalRequest);
-                    DeleteRequestFromStorage(((UniversalTransferRequest) request).OriginalRequest);
-                }
-                if (customTransferRequests.ContainsKey(request.RequestId))
-                {
-                    customTransferRequests[request.RequestId].Cancel();
-                    customTransferRequests.Remove(request.RequestId);
-                }
-            }
+            //if (request.RequestId != null)
+            //{
+            //    if (BackgroundTransferService.Find(request.RequestId) != null)
+            //    {
+            //        BackgroundTransferService.Remove(((UniversalTransferRequest)request).OriginalRequest);
+            //        DeleteRequestFromStorage(((UniversalTransferRequest)request).OriginalRequest);
+            //    }
+            //    if (customTransferRequests.ContainsKey(request.RequestId))
+            //    {
+            //        customTransferRequests[request.RequestId].Cancel();
+            //        customTransferRequests.Remove(request.RequestId);
+            //    }
+            //}
         }
 
-        public IEnumerable<ITransferRequest> GetAllRequests()
+        public async Task<IEnumerable<ITransferRequest>> GetAllRequests()
         {
-            return BackgroundTransferService.Requests.Select(r => new UniversalTransferRequest(r));
+            var downloads = await BackgroundDownloader.GetCurrentDownloadsAsync().AsTask();
+            return downloads.Select(r => new UniversalTransferRequest(r, null));
         }
 
         public IEnumerable<string> GetAllStuckFiles()
@@ -148,23 +133,22 @@ namespace Quran.WindowsPhone.NativeProvider
             }
         }
 
-        public void Dispose()
+        public async Task Cancel(ITransferRequest request)
         {
-            foreach (var request in BackgroundTransferService.Requests)
+            var downloads = await BackgroundDownloader.GetCurrentDownloadsAsync().AsTask();
+            var requestToCancel = downloads.FirstOrDefault(d => d.Guid.ToString().Equals(request.RequestId, StringComparison.OrdinalIgnoreCase));
+            if (requestToCancel != null)
             {
-                if (request.TransferStatus == TransferStatus.Completed)
-                    BackgroundTransferService.Remove(request);
+                requestToCancel.AttachAsync().Cancel();
             }
         }
 
-        internal void FinalizeRequests()
+        public void Dispose()
         {
-            foreach (var request in BackgroundTransferService.Requests)
+            var downloads = BackgroundDownloader.GetCurrentDownloadsAsync().AsTask().ConfigureAwait(false).GetAwaiter().GetResult();
+            foreach (var download in downloads)
             {
-                if (request.TransferStatus == TransferStatus.Completed)
-                {
-                    BackgroundTransferService.Remove(request);
-                }
+                download.AttachAsync().Cancel();
             }
         }
     }

@@ -7,11 +7,37 @@ using Windows.System;
 using Windows.ApplicationModel.Email;
 using System.Threading.Tasks;
 using Windows.UI.Popups;
+using Quran.WindowsPhone.Utils;
+using Windows.UI.ViewManagement;
 
 namespace Quran.WindowsPhone.NativeProvider
 {
     public class UniversalNativeProvider : INativeProvider
     {
+        public double ActualWidth
+        {
+            get
+            {
+                return ApplicationView.GetForCurrentView().VisibleBounds.Width;
+            }
+        }
+
+        public double ActualHeight
+        {
+            get
+            {
+                return ApplicationView.GetForCurrentView().VisibleBounds.Height;
+            }
+        }
+
+        public bool IsPortaitOrientation
+        {
+            get
+            {
+                return ApplicationView.GetForCurrentView().Orientation == ApplicationViewOrientation.Portrait;
+            }
+        }
+
         private IDownloadManager downloadManager;
         public IDownloadManager DownloadManager
         {
@@ -45,14 +71,9 @@ namespace Quran.WindowsPhone.NativeProvider
             }
         }
 
-        public ICollection<string> SplitLongText(string value, double fontSize, string fontWeight)
+        public async Task ExtractZip(string source, string baseFolder)
         {
-            return TextBlockSplitter.Instance.Split(value, fontSize, PhoneUtils.FontWeightsConverter(fontWeight));
-        }
-
-        public void ExtractZip(string source, string baseFolder)
-        {
-            ZipHelper.Unzip(source, baseFolder);
+            await ZipHelper.Unzip(source, baseFolder).ConfigureAwait(false);
         }
 
         public void CopyToClipboard(string text)
@@ -62,11 +83,12 @@ namespace Quran.WindowsPhone.NativeProvider
             Clipboard.SetContent(dp);
         }
 
-        public async Task ComposeEmail(string to, string subject)
+        public async Task ComposeEmail(string to, string subject, string body = null)
         {
             EmailMessage email = new EmailMessage();
             email.To.Add(new EmailRecipient(to));
             email.Subject = subject;
+            email.Body = body;
             await EmailManager.ShowComposeNewEmailAsync(email);
         }
 
@@ -125,6 +147,6 @@ namespace Quran.WindowsPhone.NativeProvider
             // TODO: Implement
         }
 
-        public string NativePath { get { return ApplicationData.Current.LocalFolder.Path; } }
+        public string NativePath { get { return ApplicationData.Current.LocalFolder.Path; } }        
     }
 }

@@ -1,4 +1,4 @@
-﻿<views:BaseView
+﻿<views:MvxWindowsPage
     x:Class="Quran.WindowsPhone.Views.DetailsView"
     x:Name="ThisPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -6,19 +6,18 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    xmlns:views="using:Quran.WindowsPhone.Views"
+    xmlns:views="using:Cirrious.MvvmCross.WindowsCommon.Views"
     xmlns:ui="using:Quran.WindowsPhone.UI"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
-    SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
     d:DataContext="{d:DesignData ../SampleData/TranslationViewModelSampleData.xaml}"
-    Tap="ScreenTap" Background="{Binding BackgroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}" OrientationChanged="PageOrientationChanged">
-    
-    <phone:PhoneApplicationPage.Resources>
+    Tapped="ScreenTap" Background="{Binding BackgroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}">
+
+    <views:MvxWindowsPage.Resources>
         <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <ui:ArabicFontSizeConverter x:Key="ArabicFontSizeConverter"/>
-    </phone:PhoneApplicationPage.Resources>
+    </views:MvxWindowsPage.Resources>
     <Grid Name="MainContainer" Background="{Binding BackgroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}">
         <ProgressBar Value="{Binding AudioDownloadProgress}" IsIndeterminate="False" SmallChange="1" VerticalAlignment="Top" Visibility="{Binding IsDownloadingAudio, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         <Grid>
@@ -106,4 +105,4 @@
             </StackPanel>
         </Button>
     </Grid>
-</views:BaseView>
+</views:MvxWindowsPage>

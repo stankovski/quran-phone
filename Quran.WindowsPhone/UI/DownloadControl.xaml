@@ -14,9 +14,9 @@
         <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
 
-    <Grid Background="{Binding Background, ElementName=ThisControl}" Visibility="{Binding IsDownloading, Converter={StaticResource BooleanToVisibilityConverter}}">
+    <Grid Visibility="{x:Bind IsDownloading, Converter={StaticResource BooleanToVisibilityConverter}}">
         <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-            <TextBlock HorizontalAlignment="Center" Foreground="{Binding Foreground, ElementName=ThisControl}" Text="{Binding Path=InstallationStep}"/>
+            <TextBlock HorizontalAlignment="Center" Text="{x:Bind Path=InstallationStep}"/>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="20"/>
@@ -24,15 +24,15 @@
                     <ColumnDefinition Width="50"/>
                     <ColumnDefinition Width="50"/>
                 </Grid.ColumnDefinitions>
-                <ProgressBar Grid.Column="1" Value="{Binding Progress}" IsIndeterminate="{Binding IsIndeterminate}" SmallChange="1" Foreground="White"/>
-                <StackPanel Grid.Column="2" Orientation="Horizontal" Visibility="{Binding IsIndeterminate, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=inverse}" FlowDirection="LeftToRight">
-                    <TextBlock Text="{Binding Progress}" Foreground="{Binding Foreground, ElementName=ThisControl}"/>
-                    <TextBlock Foreground="{Binding Foreground, ElementName=ThisControl}">%</TextBlock>
+                <ProgressBar Grid.Column="1" Value="{x:Bind Progress}" IsIndeterminate="{x:Bind IsIndeterminate}" SmallChange="1" Foreground="White"/>
+                <StackPanel Grid.Column="2" Orientation="Horizontal" Visibility="{x:Bind IsIndeterminate, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=inverse}" FlowDirection="LeftToRight">
+                    <TextBlock Text="{x:Bind Progress}"/>
+                    <TextBlock>%</TextBlock>
                 </StackPanel>
-                <Button Grid.Column="3" BorderThickness="0" Padding="0" Margin="0,-5,0,-5" Command="{Binding CancelCommand}" Visibility="{Binding IsIndeterminate, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=inverse}">
+                <Button Grid.Column="3" BorderThickness="0" Padding="0" Margin="0,-5,0,-5" Command="{x:Bind CancelCommand}" Visibility="{x:Bind IsIndeterminate, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=inverse}">
                     <!--<Image Source="../Assets/Images/ic_cancel.png"/>-->
                     <Grid Height="15">
-                        <Path Data="M0,0 L1,1 M0,1 L1,0" Stretch="Uniform" Stroke="{Binding Foreground, ElementName=ThisControl}"/>
+                        <Path Data="M0,0 L1,1 M0,1 L1,0" Stretch="Uniform"/>
                     </Grid>
                 </Button>
             </Grid>

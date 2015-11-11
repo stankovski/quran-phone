@@ -101,6 +101,9 @@
     <Compile Include="NativeProvider\UniversalDownloadManager.cs" />
     <Compile Include="NativeProvider\UniversalNativeProvider.cs" />
     <Compile Include="NativeProvider\UniversalSettingsProvider.cs" />
+    <Compile Include="NativeProvider\UniversalTransferRequest.cs" />
+    <Compile Include="NativeProvider\UniversalHttpClientTransferRequest.cs" />
+    <Compile Include="NativeProvider\UniversalMultifileTransferRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="UI\ArabicFontSizeConverter.cs" />
@@ -141,24 +144,8 @@
     <Compile Include="Utils\PhoneUtils.cs" />
     <Compile Include="Utils\SystemInfo.cs" />
     <Compile Include="Utils\ZipHelper.cs" />
-    <Compile Include="Views\BaseView.cs" />
-    <Compile Include="Views\DetailsView.xaml.cs">
-      <DependentUpon>DetailsView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\RecitersListView.xaml.cs">
-      <DependentUpon>RecitersListView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\SearchView.xaml.cs">
-      <DependentUpon>SearchView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\SettingsView.xaml.cs">
-      <DependentUpon>SettingsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\TranslationListView.xaml.cs">
-      <DependentUpon>TranslationListView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -168,6 +155,44 @@
     <None Include="Quran.WindowsPhone_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Images\appbar.globe.old.png" />
+    <Content Include="Assets\Images\appbar.globe.png" />
+    <Content Include="Assets\Images\bookmark_ayah.png" />
+    <Content Include="Assets\Images\bookmark_currentpage.png" />
+    <Content Include="Assets\Images\bookmark_page.png" />
+    <Content Include="Assets\Images\favorite.png" />
+    <Content Include="Assets\Images\hizb_full.png" />
+    <Content Include="Assets\Images\hizb_half.png" />
+    <Content Include="Assets\Images\hizb_quarter.png" />
+    <Content Include="Assets\Images\hizb_threequarters.png" />
+    <Content Include="Assets\Images\icon.png" />
+    <Content Include="Assets\Images\ic_ab_settings.png" />
+    <Content Include="Assets\Images\ic_accept.png" />
+    <Content Include="Assets\Images\ic_cancel.png" />
+    <Content Include="Assets\Images\ic_delete.png" />
+    <Content Include="Assets\Images\ic_download.png" />
+    <Content Include="Assets\Images\ic_edit.png" />
+    <Content Include="Assets\Images\ic_goto_quran.png" />
+    <Content Include="Assets\Images\ic_new.png" />
+    <Content Include="Assets\Images\ic_next.png" />
+    <Content Include="Assets\Images\ic_pause.png" />
+    <Content Include="Assets\Images\ic_play.png" />
+    <Content Include="Assets\Images\ic_previous.png" />
+    <Content Include="Assets\Images\ic_repeat.png" />
+    <Content Include="Assets\Images\ic_select_all.png" />
+    <Content Include="Assets\Images\ic_sort.png" />
+    <Content Include="Assets\Images\ic_stop.png" />
+    <Content Include="Assets\Images\ic_tag.png" />
+    <Content Include="Assets\Images\ic_translation.png" />
+    <Content Include="Assets\Images\left.png" />
+    <Content Include="Assets\Images\not_favorite.png" />
+    <Content Include="Assets\Images\page-small.png" />
+    <Content Include="Assets\Images\recite.png" />
+    <Content Include="Assets\Images\right.png" />
+    <Content Include="Assets\Images\search.png" />
+    <Content Include="Assets\Images\settings.png" />
+    <Content Include="Assets\Images\stop.png" />
+    <Content Include="Assets\Images\sura_icon.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -242,27 +267,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\DetailsView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\MainView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\RecitersListView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\SearchView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\SettingsView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\TranslationListView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

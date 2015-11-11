@@ -5,7 +5,7 @@ using Windows.Foundation;
 using Windows.Networking.BackgroundTransfer;
 using Windows.Storage;
 
-namespace Quran.UniversalApp.NativeProvider
+namespace Quran.WindowsPhone.NativeProvider
 {
     public class UniversalTransferRequest : ITransferRequest
     {
