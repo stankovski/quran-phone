@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Xml.Linq;
-using Cirrious.CrossCore;
-using Cirrious.CrossCore.Platform;
 using Quran.Core.Data;
 using Quran.Core.Common;
-using Quran.Core.Data;
 using Quran.Core.Properties;
 
 namespace Quran.Core.Utils
@@ -125,7 +118,7 @@ namespace Quran.Core.Utils
                 }
                 else
                 {
-                    FileUtils.MakeDirectory(baseDirectory);
+                    FileUtils.EnsureDirectoryExists(baseDirectory);
                 }
             }
 

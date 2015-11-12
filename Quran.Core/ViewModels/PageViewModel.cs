@@ -47,7 +47,7 @@ namespace Quran.Core.ViewModels
 
                 translation = value;
 
-                base.RaisePropertyChanged(() => Translation);
+                base.OnPropertyChanged(() => Translation);
             }
         }
 
@@ -62,7 +62,7 @@ namespace Quran.Core.ViewModels
 
                 pageNumber = value;
 
-                base.RaisePropertyChanged(() => PageNumber);
+                base.OnPropertyChanged(() => PageNumber);
             }
         }
 
@@ -77,7 +77,7 @@ namespace Quran.Core.ViewModels
 
                 showTranslation = value;
 
-                base.RaisePropertyChanged(() => ShowTranslation);
+                base.OnPropertyChanged(() => ShowTranslation);
             }
         }
 
@@ -92,7 +92,7 @@ namespace Quran.Core.ViewModels
 
                 imageSource = value;
 
-                base.RaisePropertyChanged(() => ImageSource);
+                base.OnPropertyChanged(() => ImageSource);
             }
         }
 

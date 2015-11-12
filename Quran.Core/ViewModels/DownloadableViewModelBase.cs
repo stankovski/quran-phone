@@ -9,12 +9,10 @@ using System.Threading.Tasks;
 using Quran.Core.Common;
 using Quran.Core.Properties;
 using Quran.Core.Utils;
+using System.Windows.Input;
 
 namespace Quran.Core.ViewModels
 {
-    using System.Windows.Input;
-
-    using Cirrious.MvvmCross.ViewModels;
 
     /// <summary>
     /// Define the DownloadableViewModelBase type.
@@ -41,7 +39,7 @@ namespace Quran.Core.ViewModels
 
                 localUrl = value;
 
-                base.RaisePropertyChanged(() => LocalUrl);
+                base.OnPropertyChanged(() => LocalUrl);
             }
         }
 
@@ -67,7 +65,7 @@ namespace Quran.Core.ViewModels
 
                 filename = value;
 
-                base.RaisePropertyChanged(() => FileName);
+                base.OnPropertyChanged(() => FileName);
             }
         }
 
@@ -82,7 +80,7 @@ namespace Quran.Core.ViewModels
 
                 description = value;
 
-                base.RaisePropertyChanged(() => Description);
+                base.OnPropertyChanged(() => Description);
             }
         }
 
@@ -97,7 +95,7 @@ namespace Quran.Core.ViewModels
 
                 isCompressed = value;
 
-                base.RaisePropertyChanged(() => IsCompressed);
+                base.OnPropertyChanged(() => IsCompressed);
             }
         }
 
@@ -133,9 +131,9 @@ namespace Quran.Core.ViewModels
                     }
                 }
 
-                base.RaisePropertyChanged(() => ServerUrl);
-                base.RaisePropertyChanged(() => FileName);
-                base.RaisePropertyChanged(() => IsCompressed);
+                base.OnPropertyChanged(() => ServerUrl);
+                base.OnPropertyChanged(() => FileName);
+                base.OnPropertyChanged(() => IsCompressed);
             }
         }
 
@@ -150,7 +148,7 @@ namespace Quran.Core.ViewModels
 
                 isDownloading = value;
 
-                base.RaisePropertyChanged(() => IsDownloading);
+                base.OnPropertyChanged(() => IsDownloading);
             }
         }
 
@@ -168,7 +166,7 @@ namespace Quran.Core.ViewModels
                 if (progress > 0)
                     IsIndeterminate = false;
 
-                base.RaisePropertyChanged(() => Progress);
+                base.OnPropertyChanged(() => Progress);
             }
         }
 
@@ -183,7 +181,7 @@ namespace Quran.Core.ViewModels
 
                 isIndeterminate = value;
 
-                base.RaisePropertyChanged(() => IsIndeterminate);
+                base.OnPropertyChanged(() => IsIndeterminate);
             }
         }
 
@@ -198,7 +196,7 @@ namespace Quran.Core.ViewModels
 
                 downloadStatus = value;
 
-                base.RaisePropertyChanged(() => DownloadStatus);
+                base.OnPropertyChanged(() => DownloadStatus);
             }
         }
 
@@ -214,7 +212,7 @@ namespace Quran.Core.ViewModels
         {
             get
             {
-                if (!IsDownloading && FileUtils.FileExists(this.TempUrl))
+                if (!IsDownloading && FileUtils.FileExists(this.TempUrl).ConfigureAwait(false).GetAwaiter().GetResult())
                     return true;
                 else
                     return false;
@@ -254,7 +252,7 @@ namespace Quran.Core.ViewModels
 
                 installationStep = value;
 
-                base.RaisePropertyChanged(() => InstallationStep);
+                base.OnPropertyChanged(() => InstallationStep);
             }
         }
 

@@ -38,7 +38,7 @@ namespace Quran.Core.ViewModels
 
                 id = value;
 
-                base.RaisePropertyChanged(() => Id);
+                base.OnPropertyChanged(() => Id);
             }
         }
 
@@ -53,7 +53,7 @@ namespace Quran.Core.ViewModels
 
                 name = value;
 
-                base.RaisePropertyChanged(() => Name);
+                base.OnPropertyChanged(() => Name);
             }
         }
 
@@ -68,7 +68,7 @@ namespace Quran.Core.ViewModels
 
                 localUrl = value;
 
-                base.RaisePropertyChanged(() => LocalUrl);
+                base.OnPropertyChanged(() => LocalUrl);
             }
         }
 
@@ -83,7 +83,7 @@ namespace Quran.Core.ViewModels
 
                 filename = value;
 
-                base.RaisePropertyChanged(() => FileName);
+                base.OnPropertyChanged(() => FileName);
             }
         }
 
@@ -98,7 +98,7 @@ namespace Quran.Core.ViewModels
 
                 isCompressed = value;
 
-                base.RaisePropertyChanged(() => IsCompressed);
+                base.OnPropertyChanged(() => IsCompressed);
             }
         }
 
@@ -113,7 +113,7 @@ namespace Quran.Core.ViewModels
 
                 isGapless = value;
 
-                base.RaisePropertyChanged(() => IsGapless);
+                base.OnPropertyChanged(() => IsGapless);
             }
         }
 
@@ -128,7 +128,7 @@ namespace Quran.Core.ViewModels
 
                 serverUrl = value;
 
-                base.RaisePropertyChanged(() => ServerUrl);
+                base.OnPropertyChanged(() => ServerUrl);
             }
         }
 
@@ -143,7 +143,7 @@ namespace Quran.Core.ViewModels
 
                 databaseName = value;
 
-                base.RaisePropertyChanged(() => DatabaseName);
+                base.OnPropertyChanged(() => DatabaseName);
             }
         }
         
@@ -158,7 +158,7 @@ namespace Quran.Core.ViewModels
 
                 exists = value;
 
-                base.RaisePropertyChanged(() => Exists);
+                base.OnPropertyChanged(() => Exists);
             }
         }
 

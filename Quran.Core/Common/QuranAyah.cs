@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Cirrious.MvvmCross.Plugins.Sqlite;
+using SQLite.Net.Attributes;
 
 namespace Quran.Core.Common
 {

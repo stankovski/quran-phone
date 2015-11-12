@@ -1,7 +1,4 @@
-﻿using Cirrious.MvvmCross.Plugins.Sqlite;
-using Quran.Core.Common;
-using Quran.Core.Common;
-using System;
+﻿using Quran.Core.Common;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,11 +8,6 @@ namespace Quran.Core.Data
     {
         public AyahInfoDatabaseHandler(string databaseName) : base(databaseName)
         { }
-
-        protected override ISQLiteConnection CreateDatabase(ISQLiteConnectionFactory factory, string path)
-        {
-            return factory.Create(path);
-        }
 
         public IList<AyahBounds> GetVerseBounds(int surah, int ayah)
         {

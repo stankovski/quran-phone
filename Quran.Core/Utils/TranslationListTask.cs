@@ -1,6 +1,4 @@
-﻿using Cirrious.CrossCore;
-using Cirrious.MvvmCross.Plugins.File;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using Quran.Core.Common;
 using Quran.Core.Data;
 using System;
@@ -18,20 +16,12 @@ namespace Quran.Core.Utils
         public const string WEB_SERVICE_URL = "http://android.quran.com/data/translations.php?v=2";
         private const string CACHED_RESPONSE_FILE_NAME = "cached-translation-list";
 
-        private static IMvxFileStore FileStore
-        {
-            get { return Mvx.Resolve<IMvxFileStore>(); }
-        }
-
-        private static void cacheResponse(string response)
+        private static async Task CacheResponse(string response)
         {
             try
             {
-                var filePath = getCachedResponseFilePath();
-                if (FileStore.Exists(filePath))
-                    FileStore.DeleteFile(filePath);
-                FileUtils.MakeDirectory(PathHelper.GetDirectoryName(filePath));
-                FileStore.WriteFile(filePath, response);
+                var filePath = await GetCachedResponseFilePath();
+                await FileUtils.WriteFile(filePath, response);
             }
             catch (Exception e)
             {
@@ -39,25 +29,10 @@ namespace Quran.Core.Utils
             }
         }
 
-        private static string loadCachedResponse()
+        private static async Task<string> LoadCachedResponse()
         {
-            string response = null;
-            try
-            {
-                var filePath = getCachedResponseFilePath();
-                if (!FileStore.Exists(filePath))
-                    return null;
-                string content = null;
-                if (FileStore.TryReadTextFile(filePath, out content))
-                    return content;
-                else
-                    return null;
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("failed reading cached response: " + e.Message);
-            }
-            return response;
+            var filePath = await GetCachedResponseFilePath();
+            return await FileUtils.ReadFile(filePath);
         }
 
         public static async Task<IEnumerable<TranslationItem>> DownloadTranslations(bool useCache, string tag)
@@ -76,7 +51,7 @@ namespace Quran.Core.Utils
             string text = null;
             if (shouldUseCache)
             {
-                text = loadCachedResponse();
+                text = await LoadCachedResponse();
             }
 
             bool refreshed = false;
@@ -92,7 +67,7 @@ namespace Quran.Core.Utils
 
                 if (string.IsNullOrEmpty(text))
                 {
-                    text = loadCachedResponse();
+                    text = await LoadCachedResponse();
                 }
 
                 if (string.IsNullOrEmpty(text))
@@ -102,7 +77,7 @@ namespace Quran.Core.Utils
 
                 if (useCache)
                 {
-                    cacheResponse(text);
+                    await CacheResponse(text);
                 }
                 refreshed = true;
             }
@@ -136,8 +111,8 @@ namespace Quran.Core.Utils
                         item.Name = item.Name.Substring(0, firstParen - 1);
                     }
 
-                    string databaseDir = FileUtils.GetQuranDatabaseDirectory(false);
-                    item.Exists = FileUtils.FileExists(FileUtils.Combine(databaseDir, item.Filename));
+                    string databaseDir = await FileUtils.GetQuranDatabaseDirectory();
+                    item.Exists = await FileUtils.FileExists(Path.Combine(databaseDir, item.Filename));
 
                     bool needsUpdate = false;
                     TranslationItem localItem = cachedItems.Where(ti => ti.Id == item.Id).FirstOrDefault();
@@ -198,11 +173,11 @@ namespace Quran.Core.Utils
             return items;
         }
 
-        private static string getCachedResponseFilePath()
+        private static async Task<string> GetCachedResponseFilePath()
         {
             string fileName = CACHED_RESPONSE_FILE_NAME;
-            string dir = FileUtils.GetQuranDatabaseDirectory(false, true);
-            return FileUtils.Combine(dir, fileName);
+            string dir = await FileUtils.GetQuranDatabaseDirectory();
+            return Path.Combine(dir, fileName);
         }
     }
 }

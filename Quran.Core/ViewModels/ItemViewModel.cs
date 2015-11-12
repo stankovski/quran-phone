@@ -37,7 +37,7 @@ namespace Quran.Core.ViewModels
 
                 id = value;
 
-                base.RaisePropertyChanged(() => Id);
+                base.OnPropertyChanged(() => Id);
             }
         }
 
@@ -53,7 +53,7 @@ namespace Quran.Core.ViewModels
 
                 title = value;
 
-                base.RaisePropertyChanged(() => Title);
+                base.OnPropertyChanged(() => Title);
             }
         }
 
@@ -68,7 +68,7 @@ namespace Quran.Core.ViewModels
 
                 details = value;
 
-                base.RaisePropertyChanged(() => Details);
+                base.OnPropertyChanged(() => Details);
             }
         }
 
@@ -83,7 +83,7 @@ namespace Quran.Core.ViewModels
 
                 pageNumber = value;
 
-                base.RaisePropertyChanged(() => PageNumber);
+                base.OnPropertyChanged(() => PageNumber);
             }
         }
 
@@ -98,7 +98,7 @@ namespace Quran.Core.ViewModels
 
                 selectedAyah = value;
 
-                base.RaisePropertyChanged(() => SelectedAyah);
+                base.OnPropertyChanged(() => SelectedAyah);
             }
         }
 
@@ -113,7 +113,7 @@ namespace Quran.Core.ViewModels
 
                 image = value;
 
-                base.RaisePropertyChanged(() => Image);
+                base.OnPropertyChanged(() => Image);
             }
         }
 
@@ -129,7 +129,7 @@ namespace Quran.Core.ViewModels
                 itemType = value;
                 Style = value.ToString();
 
-                base.RaisePropertyChanged(() => ItemType);
+                base.OnPropertyChanged(() => ItemType);
             }
         }
 
@@ -145,7 +145,7 @@ namespace Quran.Core.ViewModels
 
                 style = value;
 
-                base.RaisePropertyChanged(() => Style);
+                base.OnPropertyChanged(() => Style);
             }
         }
 
@@ -160,7 +160,7 @@ namespace Quran.Core.ViewModels
 
                 group = value;
 
-                base.RaisePropertyChanged(() => Group);
+                base.OnPropertyChanged(() => Group);
             }
         }
         #endregion Properties

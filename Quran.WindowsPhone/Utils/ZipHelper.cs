@@ -37,7 +37,7 @@ namespace Quran.WindowsPhone.Utils
 
         private static void UnzipFilesFromStream(Stream source, string baseFolder)
         {
-            FileUtils.MakeDirectory(baseFolder);
+            FileUtils.EnsureDirectoryExists(baseFolder);
 
             using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
             {

@@ -41,7 +41,7 @@ namespace Quran.Core.ViewModels
 
                 query = value;
 
-                base.RaisePropertyChanged(() => Query);
+                base.OnPropertyChanged(() => Query);
             }
         }
         #endregion Properties

@@ -41,7 +41,7 @@ namespace Quran.WindowsPhone.UI
             if (value == null)
                 return null;
 
-            if (parameter != null && parameter.ToString().Equals("inverse", StringComparison.InvariantCultureIgnoreCase))
+            if (parameter != null && parameter.ToString().Equals("inverse", StringComparison.OrdinalIgnoreCase))
                 isInverse = true;
 
             var visibilityProperty = value as Visibility?;

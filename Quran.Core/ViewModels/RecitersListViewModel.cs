@@ -39,7 +39,7 @@ namespace Quran.Core.ViewModels
 
                 isDataLoaded = value;
 
-                base.RaisePropertyChanged(() => IsDataLoaded);
+                base.OnPropertyChanged(() => IsDataLoaded);
             }
         }
 

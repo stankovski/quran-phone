@@ -210,7 +210,7 @@ namespace Quran.WindowsPhone.UI
                 }
                 catch
                 {
-                    MessageBox.Show("Error loading quran page.");
+                    await QuranApp.NativeProvider.ShowErrorMessageBox("Error loading quran page.");
                     FileUtils.DeleteFile(localPath);
                 }
                 finally
@@ -241,27 +241,28 @@ namespace Quran.WindowsPhone.UI
 
         private void invertColors(WriteableBitmap bitmap)
         {
-            int size = bitmap.Pixels.Length;
-                for (int i = 0; i < size; i++)
-                {
-                var c = bitmap.Pixels[i];
-                    var a = 0x000000FF & (c >> 24);
-                    var r = 0x000000FF & (c >> 16);
-                    var g = 0x000000FF & (c >> 8);
-                    var b = 0x000000FF & (c);
+            //TODO: Implement
+            //int size = bitmap.Pixels.Length;
+            //    for (int i = 0; i < size; i++)
+            //    {
+            //    var c = bitmap.Pixels[i];
+            //        var a = 0x000000FF & (c >> 24);
+            //        var r = 0x000000FF & (c >> 16);
+            //        var g = 0x000000FF & (c >> 8);
+            //        var b = 0x000000FF & (c);
 
-                    // Invert
-                    if (a > 0)
-                    {
-                        r = 0x000000FF & (0xFF - r);
-                        g = 0x000000FF & (0xFF - g);
-                        b = 0x000000FF & (0xFF - b);
-                    }
-                    a = 255;
+            //        // Invert
+            //        if (a > 0)
+            //        {
+            //            r = 0x000000FF & (0xFF - r);
+            //            g = 0x000000FF & (0xFF - g);
+            //            b = 0x000000FF & (0xFF - b);
+            //        }
+            //        a = 255;
 
-                    // Set result color
-                bitmap.Pixels[i] = (a << 24) | (r << 16) | (g << 8) | b;
-            }
+            //        // Set result color
+            //    bitmap.Pixels[i] = (a << 24) | (r << 16) | (g << 8) | b;
+            //}
         }
 
         public int PageNumber

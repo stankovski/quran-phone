@@ -39,7 +39,7 @@ namespace Quran.Core.ViewModels
 
                 id = value;
 
-                base.RaisePropertyChanged(() => Id);
+                base.OnPropertyChanged(() => Id);
             }
         }
 
@@ -54,7 +54,7 @@ namespace Quran.Core.ViewModels
 
                 name = value;
 
-                base.RaisePropertyChanged(() => Name);
+                base.OnPropertyChanged(() => Name);
             }
         }
 
@@ -69,7 +69,7 @@ namespace Quran.Core.ViewModels
 
                 translator = value;
 
-                base.RaisePropertyChanged(() => Translator);
+                base.OnPropertyChanged(() => Translator);
             }
         }
 
@@ -84,7 +84,7 @@ namespace Quran.Core.ViewModels
 
                 exists = value;
 
-                base.RaisePropertyChanged(() => Exists);
+                base.OnPropertyChanged(() => Exists);
             }
         }
 

@@ -50,7 +50,7 @@ namespace Quran.Core.ViewModels
 
                 activeTranslation = value;
 
-                base.RaisePropertyChanged(() => ActiveTranslation);
+                base.OnPropertyChanged(() => ActiveTranslation);
             }
         }
 
@@ -65,7 +65,7 @@ namespace Quran.Core.ViewModels
 
                 activeReciter = value;
 
-                base.RaisePropertyChanged(() => ActiveReciter);
+                base.OnPropertyChanged(() => ActiveReciter);
             }
         }
 
@@ -81,7 +81,7 @@ namespace Quran.Core.ViewModels
                 textSize = value;
                 SettingsUtils.Set(Constants.PREF_TRANSLATION_TEXT_SIZE, value);
 
-                base.RaisePropertyChanged(() => TextSize);
+                base.OnPropertyChanged(() => TextSize);
             }
         }
 
@@ -96,7 +96,7 @@ namespace Quran.Core.ViewModels
 
                 showArabicInTranslation = value;
                 SettingsUtils.Set(Constants.PREF_SHOW_ARABIC_IN_TRANSLATION, value);
-                base.RaisePropertyChanged(() => ShowArabicInTranslation);
+                base.OnPropertyChanged(() => ShowArabicInTranslation);
             }
         }
 
@@ -111,7 +111,7 @@ namespace Quran.Core.ViewModels
 
                 altDownloadMethod = value;
                 SettingsUtils.Set(Constants.PREF_ALT_DOWNLOAD, value);
-                base.RaisePropertyChanged(() => AltDownloadMethod);
+                base.OnPropertyChanged(() => AltDownloadMethod);
             }
         }
 
@@ -126,7 +126,7 @@ namespace Quran.Core.ViewModels
 
                 enableShowArabicInTranslation = value;
 
-                base.RaisePropertyChanged(() => EnableShowArabicInTranslation);
+                base.OnPropertyChanged(() => EnableShowArabicInTranslation);
             }
         }
 
@@ -147,7 +147,7 @@ namespace Quran.Core.ViewModels
                     QuranApp.NativeProvider.ToggleDeviceSleep(!value);
                 }
 
-                base.RaisePropertyChanged(() => PreventPhoneFromSleeping);
+                base.OnPropertyChanged(() => PreventPhoneFromSleeping);
             }
         }
 
@@ -165,7 +165,7 @@ namespace Quran.Core.ViewModels
                 // saving to setting utils
                 SettingsUtils.Set(Constants.PREF_NIGHT_MODE, value);
 
-                base.RaisePropertyChanged(() => NightMode);
+                base.OnPropertyChanged(() => NightMode);
             }
         }
 
@@ -183,7 +183,7 @@ namespace Quran.Core.ViewModels
                 // saving to setting utils
                 SettingsUtils.Set(Constants.PREF_KEEP_INFO_OVERLAY, value);
 
-                base.RaisePropertyChanged(() => KeepInfoOverlay);
+                base.OnPropertyChanged(() => KeepInfoOverlay);
             }
         }
 
@@ -206,7 +206,7 @@ namespace Quran.Core.ViewModels
                 // saving to setting utils
                 SettingsUtils.Set(Constants.PREF_CULTURE_OVERRIDE, value.Key);
 
-                base.RaisePropertyChanged(() => SelectedLanguage);
+                base.OnPropertyChanged(() => SelectedLanguage);
             }
         }
 
@@ -223,7 +223,7 @@ namespace Quran.Core.ViewModels
 
                 SettingsUtils.Set(Constants.PREF_DOWNLOAD_AMOUNT, value.Key);
 
-                base.RaisePropertyChanged(() => SelectedAudioBlock);
+                base.OnPropertyChanged(() => SelectedAudioBlock);
             }
         }
 

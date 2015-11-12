@@ -40,7 +40,7 @@ namespace Quran.Core.ViewModels
 
                 isDataLoaded = value;
 
-                base.RaisePropertyChanged(() => IsDataLoaded);
+                base.OnPropertyChanged(() => IsDataLoaded);
             }
         }
 
@@ -55,7 +55,7 @@ namespace Quran.Core.ViewModels
 
                 anyTranslationsDownloaded = value;
 
-                base.RaisePropertyChanged(() => AnyTranslationsDownloaded);
+                base.OnPropertyChanged(() => AnyTranslationsDownloaded);
             }
         }
         #endregion Properties

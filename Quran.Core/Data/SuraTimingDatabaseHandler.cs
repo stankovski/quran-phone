@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Cirrious.MvvmCross.Plugins.Sqlite;
 using Quran.Core.Common;
+using SQLite.Net;
 
 namespace Quran.Core.Data
 {
@@ -13,9 +10,9 @@ namespace Quran.Core.Data
         public SuraTimingDatabaseHandler(string databaseName) : base(databaseName)
         { }
 
-        protected override ISQLiteConnection CreateDatabase(ISQLiteConnectionFactory factory, string path)
+        protected override SQLiteConnection CreateDatabase(string path)
         {
-            var newDb = factory.Create(path);
+            var newDb = base.CreateDatabase(path);
             newDb.CreateTable<Timings>();
             return newDb;
         }

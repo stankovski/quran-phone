@@ -1,6 +1,4 @@
 ﻿using System.Globalization;
-using Cirrious.MvvmCross.Plugins.Sqlite;
-using Quran.Core.Data;
 using Quran.Core.Common;
 using System;
 using System.Collections.Generic;
@@ -14,11 +12,6 @@ namespace Quran.Core.Data
         public QuranDatabaseHandler(string databaseName)
             : base(databaseName)
         { }
-
-        protected override ISQLiteConnection CreateDatabase(ISQLiteConnectionFactory factory, string path)
-        {
-            return factory.Create(path);
-        }
 
         public int GetSchemaVersion()
         {
