@@ -1,22 +1,19 @@
-﻿<views:MvxWindowsPage
+﻿<Page
     x:Class="Quran.WindowsPhone.Views.MainView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    xmlns:views="using:Cirrious.MvvmCross.WindowsCommon.Views"
     xmlns:ui="using:Quran.WindowsPhone.UI"
-    d:DataContext="{d:DesignData ../SampleData/MainViewModelSampleData.xaml}"
-    FontFamily="{StaticResource PhoneFontFamilyNormal}"
-    FontSize="{StaticResource PhoneFontSizeNormal}"
-    Foreground="{StaticResource PhoneForegroundBrush}">
+    xmlns:vm="using:Quran.Core.ViewModels"
+    d:DataContext="{d:DesignData ../SampleData/MainViewModelSampleData.xaml}">
 
-    <views:MvxWindowsPage.Resources>
+    <Page.Resources>
         <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 
         <MenuFlyout x:Key="BookmarksContextMenu">
-            <MenuFlyoutItem x:Uid="delete_bookmark" Tag="&#xE10A;" Style="{StaticResource MenuFlyoutItemIconTemplate}" />
+            <MenuFlyoutItem x:Uid="delete_bookmark" Tag="&#xE10A;" Style="{StaticResource MenuFlyoutItemIconTemplate}" Click="DeleteBookmark" />
         </MenuFlyout>
 
         <Style x:Key="MenuFlyoutItemIconTemplate" TargetType="MenuFlyoutItem">
@@ -99,29 +96,26 @@
                 </Setter.Value>
             </Setter>
         </Style>
-    </views:MvxWindowsPage.Resources>
-            <!--Data context is set to sample data above and LayoutRoot contains the root grid where all other page content is placed-->
-    <Grid Background="{ThemeResource ControlPageBackgroundBrush}">
-        <Grid x:Name="LayoutRoot" Background="Transparent">
+    </Page.Resources>
+            
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <!--<Grid x:Name="LayoutRoot" Background="Transparent">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-        
-            <!--TitlePanel contains the name of the application and page title-->
             <ui:CommonHeader Grid.Row="0" Margin="12,0,0,0" x:Name="header"/>
             <Pivot Grid.Row="1" Margin="12,0,12,0">
                 <PivotItem>
                     <PivotItem.Header>
                         <TextBlock x:Uid="quran_surah_lower" />
                     </PivotItem.Header>
-                    <!--ContentPanel contains DataBoundListBox and DataBoundListBox ItemTemplate. Place additional content here-->
                     <Grid x:Name="ContentPanel">
-                        <ListView Margin="0,0,-12,0" ItemsSource="{x:Bind Surahs}" SelectionChanged="List_SelectionChanged">
+                        <ListView Margin="0,0,-12,0" ItemsSource="{x:Bind ViewModel.Surahs}" SelectionChanged="List_SelectionChanged">
                             <ListView.ItemTemplate>
-                                <DataTemplate>
+                                <DataTemplate x:DataType="vm:ItemViewModel">
                                     <ListBoxItem HorizontalContentAlignment="Stretch">
-                                        <ui:PageLink/>
+                                        <ui:PageLink ViewModel="{x:Bind}"/>
                                     </ListBoxItem>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
@@ -133,7 +127,7 @@
                         <TextBlock x:Uid="quran_juz2_lower"/>
                     </PivotItem.Header>
                     <Grid>
-                        <ListView Margin="0,0,-12,0" ItemsSource="{x:Bind Juz}" SelectionChanged="List_SelectionChanged">
+                        <ListView Margin="0,0,-12,0" ItemsSource="{x:Bind ViewModel.Juz}" SelectionChanged="List_SelectionChanged">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <ListBoxItem HorizontalContentAlignment="Stretch">
@@ -149,7 +143,7 @@
                         <TextBlock x:Uid="quran_bookmarks_lower"/>
                     </PivotItem.Header>
                     <Grid>
-                        <ListView ItemsSource="{x:Bind Bookmarks}" SelectionChanged="List_SelectionChanged">
+                        <ListView ItemsSource="{x:Bind ViewModel.Bookmarks}" SelectionChanged="List_SelectionChanged">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <ListBoxItem HorizontalContentAlignment="Stretch">
@@ -161,8 +155,8 @@
                     </Grid>
                 </PivotItem>
             </Pivot>
-        </Grid>
-        <ui:DownloadControl DataContext="{x:Bind ActiveDownload}" 
+        </Grid>-->
+        <ui:DownloadControl ViewModel="{x:Bind ViewModel.ActiveDownload}"
             Height="70" VerticalAlignment="Bottom"/>
     </Grid>
-</views:MvxWindowsPage>
+</Page>

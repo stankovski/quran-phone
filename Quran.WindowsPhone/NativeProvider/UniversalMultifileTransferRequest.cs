@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using Quran.Core.Common;
 using Quran.Core.Utils;
 
@@ -21,7 +23,7 @@ namespace Quran.WindowsPhone.NativeProvider
         public ulong TotalBytesToReceive { get; set; }
         public ulong BytesReceived { get; set; }
         
-        public async void Download(CancellationToken token)
+        public async Task Download(CancellationToken token)
         {
             int successfulDownloads = 0;
             TransferStatus = FileTransferStatus.Transferring;
@@ -38,11 +40,11 @@ namespace Quran.WindowsPhone.NativeProvider
                     break;
                 }
 
-                var localFilePath = PathHelper.Combine(DownloadLocation.ToString(), PathHelper.GetFileName(serverPath));
-                if (FileUtils.FileExists(localFilePath))
+                var localFilePath = Path.Combine(DownloadLocation.ToString(), Path.GetFileName(serverPath));
+                if (await FileUtils.FileExists(localFilePath))
                 {
-                    if (FileUtils.IsFileEmpty(localFilePath))
-                        FileUtils.DeleteFile(localFilePath);
+                    if (await FileUtils.IsFileEmpty(localFilePath))
+                        await FileUtils.DeleteFile(localFilePath);
                     else
                         continue;
                 }

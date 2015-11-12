@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using Quran.Core.ViewModels;
+using Windows.UI.Xaml;
 
 namespace Quran.WindowsPhone.UI
 {

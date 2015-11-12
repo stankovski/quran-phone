@@ -9,7 +9,6 @@ namespace Quran.WindowsPhone.NativeProvider
 {
     public class UniversalHttpClientTransferRequest : ITransferRequest, IDisposable
     {
-        private HttpClient httpClient;
         public UniversalHttpClientTransferRequest(Uri serverUrl, string downloadLocation)
         {
             this.RequestUri = serverUrl;
@@ -40,8 +39,7 @@ namespace Quran.WindowsPhone.NativeProvider
 
         public void Dispose()
         {
-            if (httpClient != null)
-                httpClient.Dispose();
+            // Do nothing
         }
     }
 }

@@ -1,10 +1,9 @@
-﻿using System.IO;
-using Cirrious.MvvmCross.Plugins.Sqlite;
-using Quran.Core.Common;
+﻿using Quran.Core.Common;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using SQLite.Net;
 
 namespace Quran.Core.Data
 {
@@ -23,9 +22,9 @@ namespace Quran.Core.Data
             : base(DB_NAME)
         { }
 
-        protected override ISQLiteConnection CreateDatabase(ISQLiteConnectionFactory factory, string path)
+        protected override SQLiteConnection CreateDatabase(string path)
         {
-            var newDb = factory.Create(path);
+            var newDb = base.CreateDatabase(path);
             newDb.CreateTable<Bookmarks>();
             newDb.CreateTable<Tags>();
             newDb.CreateTable<BookmarkTags>();

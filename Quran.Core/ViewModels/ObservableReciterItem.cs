@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Windows.Input;
-using Cirrious.MvvmCross.ViewModels;
 using Quran.Core.Utils;
 using Quran.Core.Common;
 using Quran.Core.Data;
+using System.Threading.Tasks;
 
 namespace Quran.Core.ViewModels
 {
@@ -24,7 +19,7 @@ namespace Quran.Core.ViewModels
             this.LocalUrl = item.LocalPath;
             this.DatabaseName = item.GaplessDatabasePath;
             this.IsGapless = item.IsGapless;
-            this.Exists = FileUtils.DirectoryExists(item.LocalPath);
+            this.Exists = FileUtils.DirectoryExists(item.LocalPath).AsSync();
         }
 
         private int id;
@@ -38,7 +33,7 @@ namespace Quran.Core.ViewModels
 
                 id = value;
 
-                base.RaisePropertyChanged(() => Id);
+                base.OnPropertyChanged(() => Id);
             }
         }
 
@@ -53,7 +48,7 @@ namespace Quran.Core.ViewModels
 
                 name = value;
 
-                base.RaisePropertyChanged(() => Name);
+                base.OnPropertyChanged(() => Name);
             }
         }
 
@@ -68,7 +63,7 @@ namespace Quran.Core.ViewModels
 
                 localUrl = value;
 
-                base.RaisePropertyChanged(() => LocalUrl);
+                base.OnPropertyChanged(() => LocalUrl);
             }
         }
 
@@ -83,7 +78,7 @@ namespace Quran.Core.ViewModels
 
                 filename = value;
 
-                base.RaisePropertyChanged(() => FileName);
+                base.OnPropertyChanged(() => FileName);
             }
         }
 
@@ -98,7 +93,7 @@ namespace Quran.Core.ViewModels
 
                 isCompressed = value;
 
-                base.RaisePropertyChanged(() => IsCompressed);
+                base.OnPropertyChanged(() => IsCompressed);
             }
         }
 
@@ -113,7 +108,7 @@ namespace Quran.Core.ViewModels
 
                 isGapless = value;
 
-                base.RaisePropertyChanged(() => IsGapless);
+                base.OnPropertyChanged(() => IsGapless);
             }
         }
 
@@ -128,7 +123,7 @@ namespace Quran.Core.ViewModels
 
                 serverUrl = value;
 
-                base.RaisePropertyChanged(() => ServerUrl);
+                base.OnPropertyChanged(() => ServerUrl);
             }
         }
 
@@ -143,7 +138,7 @@ namespace Quran.Core.ViewModels
 
                 databaseName = value;
 
-                base.RaisePropertyChanged(() => DatabaseName);
+                base.OnPropertyChanged(() => DatabaseName);
             }
         }
         
@@ -158,49 +153,17 @@ namespace Quran.Core.ViewModels
 
                 exists = value;
 
-                base.RaisePropertyChanged(() => Exists);
+                base.OnPropertyChanged(() => Exists);
             }
         }
-
-        MvxCommand deleteCommand;
-        /// <summary>
-        /// Returns an undo command
-        /// </summary>
-        public ICommand DeleteCommand
+        
+        public async Task Delete()
         {
-            get
-            {
-                if (deleteCommand == null)
-                {
-                    deleteCommand = new MvxCommand(Delete);
-                }
-                return deleteCommand;
-            }
-        }
-
-        MvxCommand navigateCommand;
-        /// <summary>
-        /// Returns an undo command
-        /// </summary>
-        public ICommand NavigateCommand
-        {
-            get
-            {
-                if (navigateCommand == null)
-                {
-                    navigateCommand = new MvxCommand(Navigate);
-                }
-                return navigateCommand;
-            }
-        }
-
-        public void Delete()
-        {
-            if (FileUtils.DirectoryExists(this.LocalUrl))
+            if (await FileUtils.DirectoryExists(this.LocalUrl))
             {
                 try
                 {
-                    FileUtils.DeleteFolder(this.LocalUrl);
+                    await FileUtils.DeleteFolder(this.LocalUrl);
                 }
                 catch
                 {

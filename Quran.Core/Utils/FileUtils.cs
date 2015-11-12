@@ -5,9 +5,8 @@ using System.Text;
 using System.Globalization;
 using System.Net;
 using System.Threading.Tasks;
-using Cirrious.CrossCore;
-using Cirrious.MvvmCross.Plugins.File;
 using System.Threading;
+using Windows.Storage;
 
 namespace Quran.Core.Utils
 {
@@ -16,7 +15,6 @@ namespace Quran.Core.Utils
         public static bool failedToWrite = false;
         public static string IMG_HOST = "http://android.quran.com/data/";
         public static string QURAN_BASE = "quran_android";
-        public static string QURAN_BASE_URI = "isostore:/" + QURAN_BASE;
         private static string AUDIO_DIRECTORY = "audio";
         private static string DATABASE_DIRECTORY = "databases";
         private static string DOWNLOADS_DIRECTORY = "downloads";
@@ -25,7 +23,7 @@ namespace Quran.Core.Utils
         public static string QURAN_ARABIC_DATABASE = "quran.ar.db";
 
         private static bool initialized = false;
-        private static void Initialize()
+        static FileUtils()
         {
             if (initialized)
                 return;
@@ -33,20 +31,11 @@ namespace Quran.Core.Utils
             initialized = true;
 
             // Initialize directory
-            MakeQuranDirectory();
-            MakeQuranDatabaseDirectory();
+            MakeQuranDirectory().AsSync();
+            MakeQuranDatabaseDirectory().AsSync();
 
             // Delete stuck files
-            DeleteStuckFiles();
-        }
-
-        private static IMvxFileStore FileStore
-        {
-            get
-            {
-                Initialize();
-                return Mvx.Resolve<IMvxFileStore>();
-            }
+            DeleteStuckFiles().AsSync();
         }
 
         public static bool IsSeparator(this char c)
@@ -54,75 +43,65 @@ namespace Quran.Core.Utils
             return c == '\\' || c == '/';
         }
 
-        public static string Combine(params string[] paths)
-        {
-            StringBuilder sb = new StringBuilder();
-            foreach (var path in paths)
-            {
-                sb.Append(path);
-                sb.Append("/");
-            }
-            return sb.ToString().Substring(0, sb.Length - 1);
-        }
-
-        public static string GetNativePath(string path)
-        {
-            if (string.IsNullOrWhiteSpace(path))
-                return string.Empty;
-
-            return FileStore.NativePath(path);
-        }
-
+        
         /// <summary>
         /// Deletes folder even if it contains read only files
         /// </summary>
         /// <param name="path"></param>
-        public static bool DeleteFolder(string path)
+        public async static Task<bool> DeleteFolder(string path)
         {
             if (string.IsNullOrWhiteSpace(path))
+            {
                 return false;
+            }
 
-            var files = FileStore.GetFilesIn(path);
-            foreach (var file in files)
-                DeleteFile(file);
-            FileStore.DeleteFolder(path, false);
+            var folder = await StorageFolder.GetFolderFromPathAsync(path);
+            foreach (var file in await folder.GetFilesAsync())
+            {
+                await DeleteFile(file.Path);
+            }
+            await folder.DeleteAsync();
             return true;
         }
 
-        public static bool DeleteFile(string path)
+        public async static Task<bool> DeleteFile(string path)
         {
             if (string.IsNullOrWhiteSpace(path))
+            {
                 return false;
+            }
 
             try
             {
-                if (FileStore.Exists(path))
-                    FileStore.DeleteFile(path);
-                return true;
+                var file = await StorageFile.GetFileFromPathAsync(path);
+                await file.DeleteAsync();
             }
-            catch
+            catch (FileNotFoundException)
             {
-                var tempPath = GetUndeletedFilesDirectory(false, true);
-                WriteFile(Combine(tempPath, string.Format("{0}.txt", Guid.NewGuid())), path);
+                // Ignore
+            }
+            catch (Exception)
+            { 
+                var tempPath = await GetUndeletedFilesDirectory();
+                await WriteFile(Path.Combine(tempPath, string.Format("{0}.txt", Guid.NewGuid())), path);
                 return false;
             }
+            return true;
         }
 
-        public static void DeleteStuckFiles()
+        public static async Task DeleteStuckFiles()
         {
-            var path = GetUndeletedFilesDirectory(false, true);
+            var path = await GetUndeletedFilesDirectory();
             try
             {
-                foreach (var fileName in FileStore.GetFilesIn(path))
+                var folder = await StorageFolder.GetFolderFromPathAsync(path);
+                foreach (var fileName in await folder.GetFilesAsync())
                 {
                     try
                     {
-                        var filePath = Combine(path, fileName);
-                        var badFilePath = ReadFile(filePath);
-                        if (FileStore.Exists(badFilePath))
-                            FileStore.DeleteFile(badFilePath);
-
-                        FileStore.DeleteFile(filePath);
+                        var badFilePath = await ReadFile(fileName.Path);
+                        await DeleteFile(badFilePath);
+                        await DeleteFile(fileName.Path);
                     }
                     catch
                     {
@@ -136,176 +115,164 @@ namespace Quran.Core.Utils
             }
         }
 
-        public static bool FileExists(string path)
+        public static async Task<bool> FileExists(string path)
         {
             if (string.IsNullOrWhiteSpace(path))
+            {
                 return false;
+            }
 
-            return FileStore.Exists(path);
+            try
+            {
+                await StorageFile.GetFileFromPathAsync(path);
+                return true;
+            }
+            catch (FileNotFoundException)
+            {
+                return false;
+            }
         }
 
-        public static void MoveFile(string from, string to)
+        public static async Task MoveFile(string from, string to)
         {
             if (!string.IsNullOrWhiteSpace(from) &&
                 !string.IsNullOrWhiteSpace(to))
             {
-                FileStore.TryMove(from, to, true);
+                var file = await StorageFile.GetFileFromPathAsync(from);
+                var destinationDirectory = await StorageFolder.GetFolderFromPathAsync(Path.GetDirectoryName(to));
+                await file.MoveAsync(destinationDirectory, Path.GetFileName(to), NameCollisionOption.ReplaceExisting);
             }
         }
 
-        public static bool DirectoryExists(string path)
+        public static async Task<bool> DirectoryExists(string path)
         {
             if (string.IsNullOrWhiteSpace(path))
-                return false;
-
-            return FileStore.FolderExists(path);
-        }
-
-        public static bool MakeDirectory(string path)
-        {
-            if (string.IsNullOrEmpty(path))
-                return false;
-
-            FileStore.EnsureFolderExists(path);
-            return true;
-        }
-
-        /// <summary>
-        /// Creates directory recursively and writes no-media file in it
-        /// </summary>
-        /// <returns></returns>
-        public static void MakeDirectoryRecursive(string path)
-        {
-            if (string.IsNullOrEmpty(path))
-                return;
-
-            if (!path[path.Length - 1].IsSeparator())
-                path = string.Format("{0}/",path);
-
-            for (int i = 0; i < path.Length; i++)
             {
-                if (path[i].IsSeparator())
+                return false;
+            }
+
+            try
+            {
+                await StorageFolder.GetFolderFromPathAsync(path);
+                return true;
+            }
+            catch (FileNotFoundException)
+            {
+                return false;
+            }
+        }
+
+        public static async Task EnsureDirectoryExists(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+            {
+                throw new ArgumentNullException("path");
+            }
+
+            path = path.Replace('/', '\\').TrimEnd('\\');
+            StorageFolder baseFolder = GetBaseFolder(path);
+            if (baseFolder == null)
+            {
+                throw new NotSupportedException("This method implementation doesn't support " +
+                    "parameters outside paths accessible by ApplicationData.");
+            }
+            path = path.Substring(baseFolder.Path.Length + 1);
+
+            string[] folderNames = path.Split('\\');
+            for (int i = 0; i < folderNames.Length; i++)
+            {
+                var task = await baseFolder.CreateFolderAsync(folderNames[i], CreationCollisionOption.OpenIfExists);
+                baseFolder = task;
+            }
+        }
+
+        private static StorageFolder GetBaseFolder(string path)
+        {
+            foreach (var folder in new StorageFolder[] {
+                ApplicationData.Current.LocalFolder,
+                ApplicationData.Current.RoamingFolder,
+                ApplicationData.Current.TemporaryFolder })
+            {
+                if (path.Contains(folder.Path))
                 {
-                    var folder = path.Substring(0, i);
-                    if (!string.IsNullOrEmpty(folder))
-                        MakeDirectory(folder);
+                    return folder;
                 }
             }
+            return null;
         }
 
         /// <summary>
         /// Creates Quran root directory and writes no-media file in it
         /// </summary>
         /// <returns></returns>
-        public static bool MakeQuranDirectory()
+        public static Task MakeQuranDirectory()
         {
-            string path = GetQuranDirectory(false);
-            if (path == null)
-                return false;
-
-            if (MakeDirectory(path))
-                return WriteNoMediaFile();
-            else
-                return false;
+            return GetQuranDirectory();
         }
 
-        public static bool WriteFile(string path, string content)
+        public static async Task WriteFile(string path, string content)
         {
             if (string.IsNullOrWhiteSpace(path))
-                return false;
-
-            DeleteFile(path);
-
-            try
             {
-                FileStore.WriteFile(path, content);
-                return true;
+                return;
             }
-            catch
-            {
-                return false;
-            }
+
+            var baseFolderPath = Path.GetDirectoryName(path);
+            await EnsureDirectoryExists(baseFolderPath);
+            var baseFolder = await StorageFolder.GetFolderFromPathAsync(baseFolderPath);
+            var newFile = await baseFolder.CreateFileAsync(Path.GetFileName(path),
+                CreationCollisionOption.ReplaceExisting);
+            await FileIO.WriteTextAsync(newFile, content);
         }
 
-        public static bool WriteFile(string path, Action<Stream> writeMethod)
+        public static async Task<string> ReadFile(string path)
         {
-            if (string.IsNullOrWhiteSpace(path))
-                return false;
-
-            DeleteFile(path);
-
             try
             {
-                FileStore.WriteFile(path, writeMethod);
-                return true;
+                var file = await StorageFile.GetFileFromPathAsync(path);
+                return await FileIO.ReadTextAsync(file);
             }
             catch
-            {
-                return false;
-            }
-        }
-
-        public static string ReadFile(string path)
-        {
-            if (FileExists(path))
-            {
-                string content = string.Empty;
-
-                if (FileStore.TryReadTextFile(path, out content))
-                    return content;
-                else
-                    return string.Empty;
-            }
-            else
             {
                 return string.Empty;
             }
         }
 
-        public static bool WriteNoMediaFile()
+        public static async Task WriteNoMediaFile()
         {
-            return WriteFile(GetQuranDirectory(false) + "/.nomedia", " ");
+            await WriteFile(Path.Combine(await GetQuranDirectory(), "/.nomedia"), " ");
         }
 
-        public static bool NoMediaFileExists()
+        public static async Task<bool> MediaFileExists()
         {
-            return FileExists(GetQuranDirectory(false) + "/.nomedia");
+            return await FileExists(Path.Combine(await GetQuranDirectory(), "/.nomedia"));
         }
 
-        public static void DeleteNoMediaFile()
+        public static async Task DeleteNoMediaFile()
         {
-            DeleteFile(GetQuranDirectory(false) + "/.nomedia");
+            await DeleteFile(Path.Combine(await GetQuranDirectory(), "/.nomedia"));
         }
 
         /// <summary>
         /// Creates Quran DB directory and writes no-media file in it
         /// </summary>
         /// <returns></returns>
-        public static bool MakeQuranDatabaseDirectory()
+        public static Task MakeQuranDatabaseDirectory()
         {
-            string path = GetQuranDatabaseDirectory(false);
-            if (path == null)
-                return false;
-
-            return MakeDirectory(path);
+            return GetQuranDatabaseDirectory();
         }
 
-        public static bool HaveAllImages()
+        public static async Task<bool> HaveAllImages()
         {
-            if (FileStore.FolderExists(GetQuranDirectory(false)))
+            var quranFolderPath = await GetQuranDirectory();
+            var quranFolder = await StorageFolder.GetFolderFromPathAsync(quranFolderPath);
+            var imageFiles = await quranFolder.GetFilesAsync();
+            // Should have at least 95% of pages; of more than that it's not efficient to download the ZIP
+            if (imageFiles.Count >= 600)
             {
-                int count = FileStore.GetFilesIn(GetQuranDirectory(false)).Count();
-                // Should have at least 95% of pages; of more than that it's not efficient to download the ZIP
-                if (count >= 600)
-                {
-                    // ideally, we should loop for each page and ensure
-                    // all pages are there, but this will do for now.
-                    return true;
-                }
-            }
-            else
-            {
-                MakeQuranDirectory();
+                // ideally, we should loop for each page and ensure
+                // all pages are there, but this will do for now.
+                return true;
             }
 
             return false;
@@ -321,29 +288,34 @@ namespace Quran.Core.Utils
             return "page" + p.ToString("000", CultureInfo.InvariantCulture) + ".png";
         }
 
-        public static Uri GetImageFromSD(string filename)
+        public static async Task<Uri> GetImageFromStorage(string filename)
         {
-            string location = GetQuranDirectory(true);
-            if (location == null)
+            string location = await GetQuranDirectory();
+            var quranFolder = await StorageFolder.GetFolderFromPathAsync(location);
+            var image = await quranFolder.TryGetItemAsync(filename);
+            if (image == null)
+            {
                 return null;
-
-            return new Uri(FileUtils.Combine(location, filename));
+            }
+            else
+            {
+                return new Uri(image.Path);
+            }
         }
 
-        public static Uri GetImageFromWeb(string filename, bool useDriveIfExists = true)
+        public static async Task<Uri> GetImageFromWeb(string filename)
         {
-            MakeQuranDirectory();
-            string path = FileUtils.Combine(GetQuranDirectory(false), filename);
-            if (useDriveIfExists && FileUtils.FileExists(path))
+            var localUri = await GetImageFromStorage(filename);
+            if (localUri != null)
             {
-                return GetImageFromSD(filename);
+                return localUri;
             }
             else
             {
                 ScreenUtils instance = ScreenUtils.Instance;
                 if (instance == null) return null;
 
-                string urlString = FileUtils.Combine(IMG_HOST + "width" + instance.GetWidthParam(),
+                string urlString = Path.Combine(IMG_HOST + "width" + instance.GetWidthParam(),
                                                 filename);
                 return new Uri(urlString, UriKind.Absolute);                
             }
@@ -358,7 +330,13 @@ namespace Quran.Core.Utils
                 request.Method = HttpMethod.Get;
                 var response = await request.GetResponseAsync();
 
-                FileStore.WriteFile(localPath, stream => response.GetResponseStream().CopyTo(stream));
+                await EnsureDirectoryExists(Path.GetDirectoryName(localPath));
+                var localFolder = await StorageFolder.GetFolderFromPathAsync(Path.GetDirectoryName(localPath));
+                var localFile = await localFolder.CreateFileAsync(Path.GetFileName(localPath), CreationCollisionOption.ReplaceExisting);
+                using (var writeStream = await localFile.OpenStreamForWriteAsync())
+                {
+                    response.GetResponseStream().CopyTo(writeStream);
+                }
                 
                 return true;
             }
@@ -368,53 +346,43 @@ namespace Quran.Core.Utils
             }
         }
 
-        public static string GetQuranAudioDirectory(bool asUri, bool createIfDoesntExist = false)
+        public static Task<string> GetQuranAudioDirectory()
         {
-            return GetSubdirectory(asUri, AUDIO_DIRECTORY, createIfDoesntExist);
+            return GetSubdirectory(AUDIO_DIRECTORY);
         }
         
-        public static string GetQuranDatabaseDirectory(bool asUri, bool createIfDoesntExist = false)
+        public static Task<string> GetQuranDatabaseDirectory()
         {
-            return GetSubdirectory(asUri, DATABASE_DIRECTORY, createIfDoesntExist);
+            return GetSubdirectory(DATABASE_DIRECTORY);
         }
 
-        public static string GetDowloadTrackerDirectory(bool asUri, bool createIfDoesntExist = false)
+        public static Task<string> GetDowloadTrackerDirectory()
         {
-            return GetSubdirectory(asUri, DOWNLOADS_DIRECTORY, createIfDoesntExist);
+            return GetSubdirectory(DOWNLOADS_DIRECTORY);
         }
 
-        public static string GetUndeletedFilesDirectory(bool asUri, bool createIfDoesntExist = false)
+        public static Task<string> GetUndeletedFilesDirectory()
         {
-            return GetSubdirectory(asUri, UNDELETED_FILES_DIRECTORY, createIfDoesntExist);
+            return GetSubdirectory(UNDELETED_FILES_DIRECTORY);
         }
 
-        public static string GetSubdirectory(bool asUri, string name, bool createIfDoesntExist = false)
+        public static async Task<string> GetQuranDirectory()
         {
-            string baseDir = (asUri ? QURAN_BASE_URI : QURAN_BASE);
-
-            if (createIfDoesntExist)
-            {
-                var tempPath = FileUtils.Combine(QURAN_BASE, name);
-                MakeDirectoryRecursive(tempPath);
-            }
-
-            return (baseDir == null) ? null : FileUtils.Combine(baseDir, name);
-        }
-
-        public static string GetQuranDirectory(bool asUri, bool createIfDoesntExist = false)
-        {
-            string baseDir = (asUri ? QURAN_BASE_URI : QURAN_BASE);
             ScreenUtils qsi = ScreenUtils.Instance;
+            var imageFolder = Path.Combine(QURAN_BASE, "width" + qsi.GetWidthParam());
             if (qsi == null)
-                return null;
-
-            if (createIfDoesntExist)
             {
-                var tempPath = QURAN_BASE + "width" + qsi.GetWidthParam();
-                MakeDirectoryRecursive(tempPath);
+                return null;
             }
 
-            return (baseDir == null) ? null : FileUtils.Combine(baseDir, "width" + qsi.GetWidthParam());
+            return await GetSubdirectory(imageFolder);
+        }
+
+        public static async Task<string> GetSubdirectory(string subdirectoryName)
+        {
+            var baseFolder = ApplicationData.Current.LocalFolder;
+            var subFolder = await baseFolder.CreateFolderAsync(subdirectoryName, CreationCollisionOption.OpenIfExists);
+            return subFolder.Path;
         }
 
         public static string GetZipFileUrl()
@@ -427,14 +395,14 @@ namespace Quran.Core.Utils
             return url;
         }
 
-        public static bool ExtractZipFile(string source, string baseFolder)
+        public static async Task<bool> ExtractZipFile(string source, string baseFolder)
         {
             try
             {
-                QuranApp.NativeProvider.ExtractZip(source, baseFolder);
+                await QuranApp.NativeProvider.ExtractZip(source, baseFolder);
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -465,93 +433,61 @@ namespace Quran.Core.Utils
             return IMG_HOST + "databases/audio/";
         }
 
-        public static bool HaveAyaPositionFile()
+        public static async Task<bool> HaveAyaPositionFile()
         {
-            string baseDir = FileUtils.GetQuranDatabaseDirectory(false);
-            if (baseDir == null)
-                FileUtils.MakeQuranDatabaseDirectory();
-            string filename = FileUtils.GetAyaPositionFileName();
-            if (filename != null)
-            {
-                string ayaPositionDb = FileUtils.Combine(baseDir, filename);
-                if (!FileUtils.FileExists(ayaPositionDb))
-                {
-                    return false;
-                }
-                else { return true; }
-            }
-
-            return false;
+            string baseDir = await GetQuranDatabaseDirectory();
+            string ayaPositionDb = GetAyaPositionFileName();
+            
+            return await FileExists(Path.Combine(baseDir, ayaPositionDb));
         }
 
-        public static bool HaveArabicSearchFile()
+        public static async Task<bool> HaveArabicSearchFile()
         {
-            string baseDir = FileUtils.GetQuranDatabaseDirectory(false);
-            if (baseDir == null)
-                FileUtils.MakeQuranDatabaseDirectory();
-            string filename = FileUtils.QURAN_ARABIC_DATABASE;
-            if (filename != null)
-            {
-                string arabicSearchDb = FileUtils.Combine(baseDir, filename);
-                if (!FileUtils.FileExists(arabicSearchDb))
-                {
-                    return false;
-                }
-                else { return true; }
-            }
+            string baseDir = await GetQuranDatabaseDirectory();
+            string arabicSearchDb = QURAN_ARABIC_DATABASE;
 
-            return false;
+            return await FileExists(Path.Combine(baseDir, arabicSearchDb));
         }
 
-        public static bool HasTranslation(string fileName)
+        public static async Task<bool> HasTranslation(string fileName)
         {
-            string path = GetQuranDatabaseDirectory(false);
-            if (path != null)
-            {
-                path = FileUtils.Combine(path, fileName);
-                return FileExists(path);
-            }
-            return false;
+            string baseDir = await GetQuranDatabaseDirectory();
+
+            return await FileExists(Path.Combine(baseDir, fileName));
         }
 
-        public static bool RemoveTranslation(string fileName)
+        public static async Task RemoveTranslation(string fileName)
         {
-            string path = GetQuranDatabaseDirectory(false);
-            if (path != null)
-            {
-                path = FileUtils.Combine(path, fileName);
-
-                if (FileStore.Exists(path))
-                    FileStore.DeleteFile(path);
-
-                return true;
-            }
-            return false;
+            string baseDir = await GetQuranDatabaseDirectory();
+            await DeleteFile(Path.Combine(baseDir, fileName));
         }
-
-        //public static bool hasArabicSearchDatabase(){
-        //   return hasTranslation(QuranDataProvider.QURAN_ARABIC_DATABASE);
-        //}
 
         public static string GetArabicSearchUrl()
         {
             return IMG_HOST + DATABASE_DIRECTORY + "/" + QURAN_ARABIC_DATABASE;
         }
 
-        public static bool IsFileEmpty(string localFilePath)
+        public static async Task<bool> IsFileEmpty(string localFilePath)
         {
             try
             {
-                string content;
-                if (FileStore.TryReadTextFile(localFilePath, out content))
-                    return string.IsNullOrWhiteSpace(content);
-                else
-                    return true;
+                var content = await ReadFile(localFilePath);
+                return string.IsNullOrWhiteSpace(content);
             }
             catch
             {
                 return true;
             }
+        }
+
+        public static T AsSync<T>(this Task<T> task)
+        {
+            return task.ConfigureAwait(false).GetAwaiter().GetResult();
+        }
+
+        public static void AsSync(this Task task)
+        {
+            task.ConfigureAwait(false).GetAwaiter().GetResult();
         }
     }
 }

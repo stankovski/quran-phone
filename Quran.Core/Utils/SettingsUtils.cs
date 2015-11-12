@@ -85,7 +85,6 @@ namespace Quran.Core.Utils
                 }
             }
             
-            // Find is not exist in WP7 API, change to Where -> FirstOrDefault instead
             FieldInfo info = null;
             info = constantKeys.FirstOrDefault(fi => fi.FieldType == typeof(string) && fi.GetValue(null) as string == key);
             if (info == null)

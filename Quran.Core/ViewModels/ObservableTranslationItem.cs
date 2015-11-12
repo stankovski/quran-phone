@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Windows.Input;
-using Cirrious.MvvmCross.ViewModels;
 using Quran.Core.Utils;
 using Quran.Core.Common;
 using Quran.Core.Data;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace Quran.Core.ViewModels
 {
@@ -24,7 +21,7 @@ namespace Quran.Core.ViewModels
             this.ServerUrl = item.Url;
             this.FileName = item.Filename;
             this.Exists = item.Exists;
-            this.LocalUrl = PathHelper.Combine(FileUtils.GetQuranDatabaseDirectory(false, true), this.FileName);
+            this.LocalUrl = Path.Combine(FileUtils.GetQuranDatabaseDirectory().AsSync(), this.FileName);
             this.IsCompressed = item.Compressed;
         }
 
@@ -39,7 +36,7 @@ namespace Quran.Core.ViewModels
 
                 id = value;
 
-                base.RaisePropertyChanged(() => Id);
+                base.OnPropertyChanged(() => Id);
             }
         }
 
@@ -54,7 +51,7 @@ namespace Quran.Core.ViewModels
 
                 name = value;
 
-                base.RaisePropertyChanged(() => Name);
+                base.OnPropertyChanged(() => Name);
             }
         }
 
@@ -69,7 +66,7 @@ namespace Quran.Core.ViewModels
 
                 translator = value;
 
-                base.RaisePropertyChanged(() => Translator);
+                base.OnPropertyChanged(() => Translator);
             }
         }
 
@@ -84,49 +81,17 @@ namespace Quran.Core.ViewModels
 
                 exists = value;
 
-                base.RaisePropertyChanged(() => Exists);
+                base.OnPropertyChanged(() => Exists);
             }
         }
 
-        MvxCommand deleteCommand;
-        /// <summary>
-        /// Returns an undo command
-        /// </summary>
-        public ICommand DeleteCommand
+        public async Task Delete()
         {
-            get
-            {
-                if (deleteCommand == null)
-                {
-                    deleteCommand = new MvxCommand(Delete);
-                }
-                return deleteCommand;
-            }
-        }
-
-        MvxCommand navigateCommand;
-        /// <summary>
-        /// Returns an undo command
-        /// </summary>
-        public ICommand NavigateCommand
-        {
-            get
-            {
-                if (navigateCommand == null)
-                {
-                    navigateCommand = new MvxCommand(Navigate, () => this.Exists);
-                }
-                return navigateCommand;
-            }
-        }
-
-        public void Delete()
-        {
-            if (FileUtils.FileExists(this.LocalUrl))
+            if (await FileUtils.FileExists(this.LocalUrl))
             {
                 try
                 {
-                    FileUtils.DeleteFile(this.LocalUrl);
+                    await FileUtils.DeleteFile(this.LocalUrl);
                 }
                 catch
                 {

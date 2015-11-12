@@ -1,4 +1,4 @@
-﻿using Cirrious.MvvmCross.Plugins.Sqlite;
+﻿using SQLite.Net.Attributes;
 using System;
 
 namespace Quran.Core.Common

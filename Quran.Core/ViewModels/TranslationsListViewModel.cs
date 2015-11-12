@@ -10,10 +10,6 @@ using Quran.Core.Utils;
 
 namespace Quran.Core.ViewModels
 {
-    using System.Windows.Input;
-
-    using Cirrious.MvvmCross.ViewModels;
-
     /// <summary>
     /// Define the TranslationslistViewModel type.
     /// </summary>
@@ -40,7 +36,7 @@ namespace Quran.Core.ViewModels
 
                 isDataLoaded = value;
 
-                base.RaisePropertyChanged(() => IsDataLoaded);
+                base.OnPropertyChanged(() => IsDataLoaded);
             }
         }
 
@@ -55,7 +51,7 @@ namespace Quran.Core.ViewModels
 
                 anyTranslationsDownloaded = value;
 
-                base.RaisePropertyChanged(() => AnyTranslationsDownloaded);
+                base.OnPropertyChanged(() => AnyTranslationsDownloaded);
             }
         }
         #endregion Properties

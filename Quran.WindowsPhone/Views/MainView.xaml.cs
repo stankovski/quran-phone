@@ -7,33 +7,39 @@ using Quran.Core.Data;
 using Quran.Core.Utils;
 using Quran.Core.ViewModels;
 using Quran.WindowsPhone.Utils;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Navigation;
 
 namespace Quran.WindowsPhone.Views
 {
     public partial class MainView
     {
+        public MainViewModel ViewModel { get; set; }
         // Constructor
         public MainView()
         {
             InitializeComponent();
 
-            QuranApp.MainViewModel = new MainViewModelWindowsPhone();
-            DataContext = QuranApp.MainViewModel;
-            header.NavigationRequest += header_NavigationRequest;
-            LittleWatson.CheckForPreviousException();
+            ViewModel = QuranApp.MainViewModel;
+            //header.NavigationRequest += header_NavigationRequest;
+            LittleWatson.CheckForPreviousException().ConfigureAwait(false).GetAwaiter().GetResult();
+            DataContextChanged += (s, e) => { ViewModel = DataContext as MainViewModel; };
         }
 
-        void header_NavigationRequest(object sender, NavigationEventArgs e)
+        void header_NavigationRequest(object sender, Type viewType, object[] parameters)
         {
-            NavigationService.Navigate(e.Uri);
+            Frame.Navigate(viewType, parameters);
         }
 
         // Load data for the ViewModel Items
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             // Remove all back navigation options
-            while (NavigationService.BackStack.Count() > 0)
-                NavigationService.RemoveBackEntry();
+            while (Frame.BackStack.Count() > 0)
+            {
+                Frame.BackStack.RemoveAt(Frame.BackStack.Count() - 1);
+            }
 
             // Show welcome message
             showWelcomeMessage();
@@ -48,15 +54,15 @@ namespace Quran.WindowsPhone.Views
             }
             
             // Show prompt to download content if not all images exist
-            if (!FileUtils.HaveAllImages())
+            if (!await FileUtils.HaveAllImages())
             {
                 try
                 {
-                    QuranApp.MainViewModel.Download();
+                    await QuranApp.MainViewModel.Download();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    Console.WriteLine("failed to download quran data: " + ex.Message);
+                    //Console.WriteLine("failed to download quran data: " + ex.Message);
                 }
             }
         }
@@ -64,8 +70,8 @@ namespace Quran.WindowsPhone.Views
         private void showWelcomeMessage()
         {
             var versionFromConfig = new Version(SettingsUtils.Get<string>(Constants.PREF_CURRENT_VERSION));
-            var nameHelper = new AssemblyName(Assembly.GetExecutingAssembly().FullName);
-            var versionFromAssembly = nameHelper.Version;
+            var nameHelper = SystemInfo.ApplicationName;
+            var versionFromAssembly = new Version(SystemInfo.ApplicationVersion);
             if (versionFromAssembly > versionFromConfig)
             {
                 var message =
@@ -79,7 +85,7 @@ If you find any issues with the app or would like to provide suggestions, please
 
 Jazzakum Allahu Kheiran,
 Quran Phone Team";
-                MessageBox.Show(message, "Welcome", MessageBoxButton.OK);
+                QuranApp.NativeProvider.ShowInfoMessageBox(message, "Welcome");
                 SettingsUtils.Set(Constants.PREF_CURRENT_VERSION, versionFromAssembly.ToString());
             }
         }
@@ -88,7 +94,7 @@ Quran Phone Team";
         private void List_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // If selected item is null (no selection) do nothing
-            var list = sender as RadDataBoundListBox;
+            var list = sender as ListView;
             if (list == null || list.SelectedItem == null)
                 return;
 
@@ -99,18 +105,18 @@ Quran Phone Team";
                 // Navigate to the new page
                 if (selectedItem.SelectedAyah == null)
                 {
-                    NavigationService.Navigate(
-                        new Uri("/Views/DetailsView.xaml?page=" + selectedItem.PageNumber,
-                                UriKind.Relative));
+                    //NavigationService.Navigate(
+                    //    new Uri("/Views/DetailsView.xaml?page=" + selectedItem.PageNumber,
+                    //            UriKind.Relative));
                 }
                 else
                 {
-                    NavigationService.Navigate(
-                        new Uri(
-                            string.Format(CultureInfo.InvariantCulture, "/Views/DetailsView.xaml?page={0}&surah={1}&ayah={2}",
-                                          selectedItem.PageNumber,
-                                          selectedItem.SelectedAyah.Surah,
-                                          selectedItem.SelectedAyah.Ayah), UriKind.Relative));
+                    //NavigationService.Navigate(
+                    //    new Uri(
+                    //        string.Format(CultureInfo.InvariantCulture, "/Views/DetailsView.xaml?page={0}&surah={1}&ayah={2}",
+                    //                      selectedItem.PageNumber,
+                    //                      selectedItem.SelectedAyah.Surah,
+                    //                      selectedItem.SelectedAyah.Ayah), UriKind.Relative));
                 }
             }
             catch
@@ -122,9 +128,9 @@ Quran Phone Team";
             list.SelectedItem = null;
         }
 
-        private void DeleteBookmark(object sender, ContextMenuItemSelectedEventArgs e)
+        private void DeleteBookmark(object sender, RoutedEventArgs e)
         {
-            var menuItem = sender as RadContextMenuItem;
+            var menuItem = sender as MenuFlyoutItem;
             if (menuItem != null)
             {
                 if (menuItem.DataContext != null)

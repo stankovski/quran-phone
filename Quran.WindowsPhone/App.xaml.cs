@@ -63,9 +63,6 @@ namespace Quran.WindowsPhone
                 Window.Current.Content = rootFrame;
             }
 
-            var setup = new Setup(rootFrame);
-            setup.Initialize();
-
             if (rootFrame.Content == null)
             {
                 // When the navigation stack isn't restored navigate to the first page,

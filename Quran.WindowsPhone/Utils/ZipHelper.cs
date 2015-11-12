@@ -9,35 +9,32 @@ namespace Quran.WindowsPhone.Utils
 {
     public static class ZipHelper
     {
-        public static Task Unzip(string zipPath, string baseFolder)
+        public static async Task Unzip(string zipPath, string baseFolder)
         {
             //zipPath = FileUtils.Combine(QuranApp.NativeProvider.NativePath, zipPath);
             //baseFolder = FileUtils.Combine(QuranApp.NativeProvider.NativePath, baseFolder);
-            return Task.Run(() =>
+            using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
             {
-                using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
+                using (var fileStream = new IsolatedStorageFileStream(zipPath, FileMode.Open, isf))
                 {
-                    using (var fileStream = new IsolatedStorageFileStream(zipPath, FileMode.Open, isf))
-                    {
-                        UnzipFilesFromStream(fileStream, baseFolder);
-                    }
+                    await UnzipFilesFromStream(fileStream, baseFolder);
                 }
-            });
-        }
-
-        public static void UnzipFromByteArray(byte[] zipData, string baseFolder)
-        {
-            baseFolder = FileUtils.Combine(QuranApp.NativeProvider.NativePath, baseFolder);
-
-            using (MemoryStream memoryStream = new MemoryStream(zipData))
-            {
-                UnzipFilesFromStream(memoryStream, baseFolder);
             }
         }
 
-        private static void UnzipFilesFromStream(Stream source, string baseFolder)
+        public static async Task UnzipFromByteArray(byte[] zipData, string baseFolder)
         {
-            FileUtils.MakeDirectory(baseFolder);
+            baseFolder = Path.Combine(QuranApp.NativeProvider.NativePath, baseFolder);
+
+            using (MemoryStream memoryStream = new MemoryStream(zipData))
+            {
+                await UnzipFilesFromStream(memoryStream, baseFolder);
+            }
+        }
+
+        private static async Task UnzipFilesFromStream(Stream source, string baseFolder)
+        {
+            await FileUtils.EnsureDirectoryExists(baseFolder);
 
             using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
             {
@@ -45,7 +42,7 @@ namespace Quran.WindowsPhone.Utils
                 {
                     foreach (var zipPart in package.Entries)
                     {
-                        string path = PathHelper.Combine(baseFolder, zipPart.FullName);
+                        string path = Path.Combine(baseFolder, zipPart.FullName);
 
                         if (isf.FileExists(path) || isf.DirectoryExists(path))
                             continue;

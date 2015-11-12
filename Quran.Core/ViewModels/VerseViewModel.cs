@@ -5,10 +5,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace Quran.Core.ViewModels
 {
-    using System.Windows.Input;
-
-    using Cirrious.MvvmCross.ViewModels;
-
     /// <summary>
     /// Define the VerseViewModel type.
     /// </summary>
@@ -49,7 +45,7 @@ namespace Quran.Core.ViewModels
 
                 styleName = value;
 
-                base.RaisePropertyChanged(() => StyleName);
+                base.OnPropertyChanged(() => StyleName);
             }
         }
 
@@ -64,7 +60,7 @@ namespace Quran.Core.ViewModels
 
                 text = value;
 
-                base.RaisePropertyChanged(() => Text);
+                base.OnPropertyChanged(() => Text);
             }
         }
 
@@ -79,7 +75,7 @@ namespace Quran.Core.ViewModels
 
                 surah = value;
 
-                base.RaisePropertyChanged(() => Surah);
+                base.OnPropertyChanged(() => Surah);
             }
         }
 
@@ -94,7 +90,7 @@ namespace Quran.Core.ViewModels
 
                 ayah = value;
 
-                base.RaisePropertyChanged(() => Ayah);
+                base.OnPropertyChanged(() => Ayah);
             }
         }
         #endregion Properties

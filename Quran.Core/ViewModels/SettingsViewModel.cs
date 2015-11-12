@@ -3,21 +3,20 @@
 //    Defines the SettingsViewModel type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using Quran.Core.Data;
 using Quran.Core.Properties;
 using Quran.Core.Utils;
-using Quran.Core.Data;
 
 namespace Quran.Core.ViewModels
 {
-    using System.Windows.Input;
-
-    using Cirrious.MvvmCross.ViewModels;
-    using System;
+    
 
     /// <summary>
     /// Define the SettingsViewModel type.
@@ -50,7 +49,7 @@ namespace Quran.Core.ViewModels
 
                 activeTranslation = value;
 
-                base.RaisePropertyChanged(() => ActiveTranslation);
+                base.OnPropertyChanged(() => ActiveTranslation);
             }
         }
 
@@ -65,7 +64,7 @@ namespace Quran.Core.ViewModels
 
                 activeReciter = value;
 
-                base.RaisePropertyChanged(() => ActiveReciter);
+                base.OnPropertyChanged(() => ActiveReciter);
             }
         }
 
@@ -81,7 +80,7 @@ namespace Quran.Core.ViewModels
                 textSize = value;
                 SettingsUtils.Set(Constants.PREF_TRANSLATION_TEXT_SIZE, value);
 
-                base.RaisePropertyChanged(() => TextSize);
+                base.OnPropertyChanged(() => TextSize);
             }
         }
 
@@ -96,7 +95,7 @@ namespace Quran.Core.ViewModels
 
                 showArabicInTranslation = value;
                 SettingsUtils.Set(Constants.PREF_SHOW_ARABIC_IN_TRANSLATION, value);
-                base.RaisePropertyChanged(() => ShowArabicInTranslation);
+                base.OnPropertyChanged(() => ShowArabicInTranslation);
             }
         }
 
@@ -111,7 +110,7 @@ namespace Quran.Core.ViewModels
 
                 altDownloadMethod = value;
                 SettingsUtils.Set(Constants.PREF_ALT_DOWNLOAD, value);
-                base.RaisePropertyChanged(() => AltDownloadMethod);
+                base.OnPropertyChanged(() => AltDownloadMethod);
             }
         }
 
@@ -126,7 +125,7 @@ namespace Quran.Core.ViewModels
 
                 enableShowArabicInTranslation = value;
 
-                base.RaisePropertyChanged(() => EnableShowArabicInTranslation);
+                base.OnPropertyChanged(() => EnableShowArabicInTranslation);
             }
         }
 
@@ -147,7 +146,7 @@ namespace Quran.Core.ViewModels
                     QuranApp.NativeProvider.ToggleDeviceSleep(!value);
                 }
 
-                base.RaisePropertyChanged(() => PreventPhoneFromSleeping);
+                base.OnPropertyChanged(() => PreventPhoneFromSleeping);
             }
         }
 
@@ -165,7 +164,7 @@ namespace Quran.Core.ViewModels
                 // saving to setting utils
                 SettingsUtils.Set(Constants.PREF_NIGHT_MODE, value);
 
-                base.RaisePropertyChanged(() => NightMode);
+                base.OnPropertyChanged(() => NightMode);
             }
         }
 
@@ -183,7 +182,7 @@ namespace Quran.Core.ViewModels
                 // saving to setting utils
                 SettingsUtils.Set(Constants.PREF_KEEP_INFO_OVERLAY, value);
 
-                base.RaisePropertyChanged(() => KeepInfoOverlay);
+                base.OnPropertyChanged(() => KeepInfoOverlay);
             }
         }
 
@@ -206,7 +205,7 @@ namespace Quran.Core.ViewModels
                 // saving to setting utils
                 SettingsUtils.Set(Constants.PREF_CULTURE_OVERRIDE, value.Key);
 
-                base.RaisePropertyChanged(() => SelectedLanguage);
+                base.OnPropertyChanged(() => SelectedLanguage);
             }
         }
 
@@ -223,7 +222,7 @@ namespace Quran.Core.ViewModels
 
                 SettingsUtils.Set(Constants.PREF_DOWNLOAD_AMOUNT, value.Key);
 
-                base.RaisePropertyChanged(() => SelectedAudioBlock);
+                base.OnPropertyChanged(() => SelectedAudioBlock);
             }
         }
 
@@ -231,22 +230,6 @@ namespace Quran.Core.ViewModels
 
         public ObservableCollection<KeyValuePair<AudioDownloadAmount, string>> SupportedAudioBlocks { get; private set; }
         
-        MvxCommand generate;
-        /// <summary>
-        /// Returns an download command
-        /// </summary>
-        public ICommand Generate
-        {
-            get
-            {
-                if (generate == null)
-                {
-                    generate = new MvxCommand(GenerateDua, () => this.CanGenerateDuaDownload);
-                }
-                return generate;
-            }
-        }
-
         public bool CanGenerateDuaDownload
         {
             get
@@ -256,40 +239,7 @@ namespace Quran.Core.ViewModels
         }
         #endregion Properties
 
-        #region Commands
-        MvxCommand<string> navigateCommand;
-        /// <summary>
-        /// Returns a navigate command
-        /// </summary>
-        public ICommand NavigateCommand
-        {
-            get
-            {
-                if (navigateCommand == null)
-                {
-                    navigateCommand = new MvxCommand<string>(Navigate);
-                }
-                return navigateCommand;
-            }
-        }
-        MvxCommand contactUsCommand;
-        /// <summary>
-        /// Returns a navigate command
-        /// </summary>
-        public ICommand ContactUsCommand
-        {
-            get
-            {
-                if (contactUsCommand == null)
-                {
-                    contactUsCommand = new MvxCommand(ContactUs);
-                }
-                return contactUsCommand;
-            }
-        }
-        #endregion Commands
-
-        public void LoadData()
+        public async Task LoadData()
         {
             var translation = SettingsUtils.Get<string>(Constants.PREF_ACTIVE_TRANSLATION);
             if (!string.IsNullOrEmpty(translation) && translation.Contains("|"))
@@ -312,7 +262,7 @@ namespace Quran.Core.ViewModels
             KeepInfoOverlay = SettingsUtils.Get<bool>(Constants.PREF_KEEP_INFO_OVERLAY);
             NightMode = SettingsUtils.Get<bool>(Constants.PREF_NIGHT_MODE);
 
-            if (FileUtils.FileExists(PathHelper.Combine(FileUtils.GetQuranDatabaseDirectory(false),
+            if (await FileUtils.FileExists(Path.Combine(await FileUtils.GetQuranDatabaseDirectory(),
                                                        FileUtils.QURAN_ARABIC_DATABASE)))
             {
                 EnableShowArabicInTranslation = true;

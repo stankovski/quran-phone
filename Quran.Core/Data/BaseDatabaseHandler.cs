@@ -1,26 +1,28 @@
 ﻿using System;
-using Cirrious.CrossCore;
-using Cirrious.MvvmCross.Plugins.Sqlite;
+using System.IO;
 using Quran.Core.Utils;
+using SQLite.Net;
+using SQLite.Net.Platform.WinRT;
 
 namespace Quran.Core.Data
 {
     public abstract class BaseDatabaseHandler : IDisposable
     {
-        protected ISQLiteConnection dbConnection = null;
+        protected SQLiteConnection dbConnection = null;
 
         protected BaseDatabaseHandler(string databaseName)
         {
-            var factory = Mvx.Resolve<ISQLiteConnectionFactory>();
-
-            string basePath = FileUtils.GetQuranDatabaseDirectory(false, true);
+            string basePath = FileUtils.GetQuranDatabaseDirectory().AsSync();
             if (basePath == null) return;
-            string path = FileUtils.Combine(QuranApp.NativeProvider.NativePath, basePath, databaseName);
+            string path = Path.Combine(QuranApp.NativeProvider.NativePath, basePath, databaseName);
 
-            dbConnection = CreateDatabase(factory, path);
+            dbConnection = CreateDatabase(path);
         }
-
-        protected abstract ISQLiteConnection CreateDatabase(ISQLiteConnectionFactory factory, string path);
+       
+        protected virtual SQLiteConnection CreateDatabase(string path)
+        {
+            return new SQLiteConnection(new SQLitePlatformWinRT(), path);
+        }
 
         public void Dispose()
         {

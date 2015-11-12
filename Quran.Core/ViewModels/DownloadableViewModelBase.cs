@@ -9,12 +9,11 @@ using System.Threading.Tasks;
 using Quran.Core.Common;
 using Quran.Core.Properties;
 using Quran.Core.Utils;
+using System.Windows.Input;
+using System.IO;
 
 namespace Quran.Core.ViewModels
 {
-    using System.Windows.Input;
-
-    using Cirrious.MvvmCross.ViewModels;
 
     /// <summary>
     /// Define the DownloadableViewModelBase type.
@@ -41,7 +40,7 @@ namespace Quran.Core.ViewModels
 
                 localUrl = value;
 
-                base.RaisePropertyChanged(() => LocalUrl);
+                base.OnPropertyChanged(() => LocalUrl);
             }
         }
 
@@ -67,7 +66,7 @@ namespace Quran.Core.ViewModels
 
                 filename = value;
 
-                base.RaisePropertyChanged(() => FileName);
+                base.OnPropertyChanged(() => FileName);
             }
         }
 
@@ -82,7 +81,7 @@ namespace Quran.Core.ViewModels
 
                 description = value;
 
-                base.RaisePropertyChanged(() => Description);
+                base.OnPropertyChanged(() => Description);
             }
         }
 
@@ -97,7 +96,7 @@ namespace Quran.Core.ViewModels
 
                 isCompressed = value;
 
-                base.RaisePropertyChanged(() => IsCompressed);
+                base.OnPropertyChanged(() => IsCompressed);
             }
         }
 
@@ -115,7 +114,7 @@ namespace Quran.Core.ViewModels
                 if (!string.IsNullOrEmpty(serverUrl))
                 {
                     // Set FileName
-                    FileName = PathHelper.GetFileName(serverUrl);
+                    FileName = Path.GetFileName(serverUrl);
 
                     // Set IsCompressed
                     IsCompressed = FileName != null && FileName.EndsWith(".zip");
@@ -124,8 +123,7 @@ namespace Quran.Core.ViewModels
                     FinishDownload().Wait();
 
                     // Check existing downloads
-                    downloadRequest = QuranApp.NativeProvider.DownloadManager.GetRequest(this.ServerUrl)
-                        .ConfigureAwait(false).GetAwaiter().GetResult();
+                    downloadRequest = QuranApp.NativeProvider.DownloadManager.GetRequest(this.ServerUrl).AsSync();
                     if (downloadRequest != null)
                     {
                         UpdateDownloadStatus(downloadRequest.TransferStatus);
@@ -133,9 +131,9 @@ namespace Quran.Core.ViewModels
                     }
                 }
 
-                base.RaisePropertyChanged(() => ServerUrl);
-                base.RaisePropertyChanged(() => FileName);
-                base.RaisePropertyChanged(() => IsCompressed);
+                base.OnPropertyChanged(() => ServerUrl);
+                base.OnPropertyChanged(() => FileName);
+                base.OnPropertyChanged(() => IsCompressed);
             }
         }
 
@@ -150,7 +148,7 @@ namespace Quran.Core.ViewModels
 
                 isDownloading = value;
 
-                base.RaisePropertyChanged(() => IsDownloading);
+                base.OnPropertyChanged(() => IsDownloading);
             }
         }
 
@@ -168,7 +166,7 @@ namespace Quran.Core.ViewModels
                 if (progress > 0)
                     IsIndeterminate = false;
 
-                base.RaisePropertyChanged(() => Progress);
+                base.OnPropertyChanged(() => Progress);
             }
         }
 
@@ -183,7 +181,7 @@ namespace Quran.Core.ViewModels
 
                 isIndeterminate = value;
 
-                base.RaisePropertyChanged(() => IsIndeterminate);
+                base.OnPropertyChanged(() => IsIndeterminate);
             }
         }
 
@@ -198,7 +196,7 @@ namespace Quran.Core.ViewModels
 
                 downloadStatus = value;
 
-                base.RaisePropertyChanged(() => DownloadStatus);
+                base.OnPropertyChanged(() => DownloadStatus);
             }
         }
 
@@ -214,7 +212,7 @@ namespace Quran.Core.ViewModels
         {
             get
             {
-                if (!IsDownloading && FileUtils.FileExists(this.TempUrl))
+                if (!IsDownloading && FileUtils.FileExists(this.TempUrl).AsSync())
                     return true;
                 else
                     return false;
@@ -225,7 +223,7 @@ namespace Quran.Core.ViewModels
         {
             get
             {
-                if (!IsDownloading && FileUtils.FileExists(this.LocalUrl))
+                if (!IsDownloading && FileUtils.FileExists(this.LocalUrl).AsSync())
                     return true;
                 else
                     return false;
@@ -254,45 +252,13 @@ namespace Quran.Core.ViewModels
 
                 installationStep = value;
 
-                base.RaisePropertyChanged(() => InstallationStep);
+                base.OnPropertyChanged(() => InstallationStep);
             }
         }
 
         #endregion Properties
 
         #region Event handlers and commands
-
-        MvxCommand downloadCommand;
-        /// <summary>
-        /// Returns an download command
-        /// </summary>
-        public ICommand DownloadCommand
-        {
-            get
-            {
-                if (downloadCommand == null)
-                {
-                    downloadCommand = new MvxCommand(() => Download(), ()=> this.CanDownload);
-                }
-                return downloadCommand;
-            }
-        }
-
-        MvxCommand cancelCommand;
-        /// <summary>
-        /// Returns an cancel command
-        /// </summary>
-        public ICommand CancelCommand
-        {
-            get
-            {
-                if (cancelCommand == null)
-                {
-                    cancelCommand = new MvxCommand(async () => await Cancel());
-                }
-                return cancelCommand;
-            }
-        }
 
         protected async void TransferStatusChanged(object sender, TransferEventArgs e)
         {
@@ -378,10 +344,10 @@ namespace Quran.Core.ViewModels
 
         private async Task<bool> DownloadOneFile()
         {
-            if (FileUtils.FileExists(this.LocalUrl))
+            if (await FileUtils.FileExists(this.LocalUrl))
                 return true;
-            if (FileUtils.FileExists(TempUrl))
-                FileUtils.DeleteFile(TempUrl);
+            if (await FileUtils.FileExists(TempUrl))
+                await FileUtils.DeleteFile(TempUrl);
 
             IsDownloading = true;
             InstallationStep = Description ?? AppResources.loading_message;
@@ -407,7 +373,7 @@ namespace Quran.Core.ViewModels
         public async Task<bool> FinishDownload()
         {
             if (!string.IsNullOrEmpty(this.TempUrl) && !string.IsNullOrEmpty(this.LocalUrl) &&
-                FileUtils.FileExists(this.TempUrl))
+                await FileUtils.FileExists(this.TempUrl))
             {
                 if (IsCompressed)
                 {
@@ -422,12 +388,12 @@ namespace Quran.Core.ViewModels
                 {
                     try
                     {
-                        FinalizeFile();
+                        await FinalizeFile();
                         return true;
                     }
                     catch
                     {
-                        QuranApp.NativeProvider.ShowErrorMessageBox(
+                        await QuranApp.NativeProvider.ShowErrorMessageBox(
                             "Something went wrong with the download. Please try again.");
                         return false;
                     }
@@ -441,18 +407,18 @@ namespace Quran.Core.ViewModels
             return true;
         }
 
-        private void FinalizeFile()
+        private async Task FinalizeFile()
         {
             IsDownloading = true;
             IsIndeterminate = true;
-            FileUtils.MoveFile(TempUrl, this.LocalUrl);
+            await FileUtils.MoveFile(TempUrl, this.LocalUrl);
             IsDownloading = false;
             IsIndeterminate = false;
         }
 
         public async Task<bool> ExtractZipAndFinalize()
         {
-            if (FileUtils.FileExists(TempUrl))
+            if (await FileUtils.FileExists(TempUrl))
             {
                 IsIndeterminate = true;
                 InstallationStep = AppResources.extracting_message;
@@ -461,17 +427,13 @@ namespace Quran.Core.ViewModels
 
                 var folderToExtractInto = LocalUrl;
                 // Check if LocalUrl is a file or a folder
-                if (System.IO.Path.HasExtension(LocalUrl))
+                if (Path.HasExtension(LocalUrl))
                 {
-                    folderToExtractInto = System.IO.Path.GetDirectoryName(LocalUrl);
+                    folderToExtractInto = Path.GetDirectoryName(LocalUrl);
                 }
 
-                bool result = await new TaskFactory().StartNew(() => FileUtils.ExtractZipFile(TempUrl, folderToExtractInto));
-
-                if (!result)
-                    return false;
-
-                FileUtils.DeleteFile(TempUrl);
+                await QuranApp.NativeProvider.ExtractZip(TempUrl, folderToExtractInto);
+                await FileUtils.DeleteFile(TempUrl);
                 IsIndeterminate = false;
             }
             return true;
@@ -483,11 +445,11 @@ namespace Quran.Core.ViewModels
             {
                 if (await QuranApp.NativeProvider.ShowQuestionMessageBox(AppResources.download_cancel_confirmation))
                 {
-                    QuranApp.NativeProvider.DownloadManager.Cancel(downloadRequest);
+                    await QuranApp.NativeProvider.DownloadManager.Cancel(downloadRequest);
                     IsDownloading = false;
                     try
                     {
-                        FileUtils.DeleteFile(this.TempUrl);
+                        await FileUtils.DeleteFile(this.TempUrl);
                     }
                     catch
                     {

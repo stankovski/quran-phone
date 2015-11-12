@@ -39,14 +39,14 @@ namespace Quran.Core.ViewModels
 
                 isDataLoaded = value;
 
-                base.RaisePropertyChanged(() => IsDataLoaded);
+                base.OnPropertyChanged(() => IsDataLoaded);
             }
         }
 
         #endregion Properties
 
         #region Public methods
-        public async void LoadData()
+        public void LoadData()
         {
             var qariNames = AudioUtils.GetReciterItems().Where(r => !r.IsGapless);
 

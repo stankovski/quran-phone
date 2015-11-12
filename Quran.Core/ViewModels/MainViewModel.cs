@@ -53,7 +53,7 @@ namespace Quran.Core.ViewModels
 
                 isInstalling = value;
 
-                base.RaisePropertyChanged(() => IsInstalling);
+                base.OnPropertyChanged(() => IsInstalling);
             }
         }
 
@@ -68,7 +68,7 @@ namespace Quran.Core.ViewModels
 
                 installationStep = value;
 
-                base.RaisePropertyChanged(() => InstallationStep);
+                base.OnPropertyChanged(() => InstallationStep);
             }
         }
         #endregion Properties
@@ -113,15 +113,15 @@ namespace Quran.Core.ViewModels
                     await ActiveDownload.FinishDownload();
                 }
 
-                if (!FileUtils.HaveAllImages() && !this.HasAskedToDownload)
+                if (!await FileUtils.HaveAllImages() && !this.HasAskedToDownload)
                 {
                     this.HasAskedToDownload = true;
                     var askingToDownloadResult = await QuranApp.NativeProvider.ShowQuestionMessageBox(AppResources.downloadPrompt,
                                                                  AppResources.downloadPrompt_title);
 
-                    if (askingToDownloadResult && ActiveDownload.DownloadCommand.CanExecute(null))
+                    if (askingToDownloadResult)
                     {
-                        ActiveDownload.DownloadCommand.Execute(null);
+                        await ActiveDownload.Download();
                     }
                 }
             }
@@ -317,7 +317,7 @@ namespace Quran.Core.ViewModels
                 string title = QuranUtils.GetSurahNameFromPage(bookmark.Page, true);
                 string details = "";
 
-                if (FileUtils.HaveArabicSearchFile())
+                if (await FileUtils.HaveArabicSearchFile())
                 {
                     try
                     {
