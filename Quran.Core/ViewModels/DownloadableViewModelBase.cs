@@ -123,7 +123,7 @@ namespace Quran.Core.ViewModels
                     FinishDownload().Wait();
 
                     // Check existing downloads
-                    downloadRequest = QuranApp.NativeProvider.DownloadManager.GetRequest(this.ServerUrl).AsSync();
+                    downloadRequest = FileUtils.RunSync(() => QuranApp.NativeProvider.DownloadManager.GetRequest(this.ServerUrl));
                     if (downloadRequest != null)
                     {
                         UpdateDownloadStatus(downloadRequest.TransferStatus);
@@ -212,7 +212,7 @@ namespace Quran.Core.ViewModels
         {
             get
             {
-                if (!IsDownloading && FileUtils.FileExists(this.TempUrl).AsSync())
+                if (!IsDownloading && FileUtils.RunSync(() => FileUtils.FileExists(this.TempUrl)))
                     return true;
                 else
                     return false;
@@ -223,7 +223,7 @@ namespace Quran.Core.ViewModels
         {
             get
             {
-                if (!IsDownloading && FileUtils.FileExists(this.LocalUrl).AsSync())
+                if (!IsDownloading && FileUtils.RunSync(()=> FileUtils.FileExists(this.LocalUrl)))
                     return true;
                 else
                     return false;

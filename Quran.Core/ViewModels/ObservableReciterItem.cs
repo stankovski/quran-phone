@@ -19,7 +19,7 @@ namespace Quran.Core.ViewModels
             this.LocalUrl = item.LocalPath;
             this.DatabaseName = item.GaplessDatabasePath;
             this.IsGapless = item.IsGapless;
-            this.Exists = FileUtils.DirectoryExists(item.LocalPath).AsSync();
+            this.Exists = FileUtils.RunSync(() => FileUtils.DirectoryExists(item.LocalPath));
         }
 
         private int id;

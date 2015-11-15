@@ -21,7 +21,7 @@ namespace Quran.Core.ViewModels
             this.ServerUrl = item.Url;
             this.FileName = item.Filename;
             this.Exists = item.Exists;
-            this.LocalUrl = Path.Combine(FileUtils.GetQuranDatabaseDirectory().AsSync(), this.FileName);
+            this.LocalUrl = Path.Combine(FileUtils.RunSync(() => FileUtils.GetQuranDatabaseDirectory()), this.FileName);
             this.IsCompressed = item.Compressed;
         }
 
