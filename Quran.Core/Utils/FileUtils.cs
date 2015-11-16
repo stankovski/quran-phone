@@ -128,7 +128,7 @@ namespace Quran.Core.Utils
                 await StorageFile.GetFileFromPathAsync(path);
                 return true;
             }
-            catch (FileNotFoundException)
+            catch (Exception)
             {
                 return false;
             }

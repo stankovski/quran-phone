@@ -19,12 +19,11 @@ namespace Quran.WindowsPhone.Views
         // Constructor
         public MainView()
         {
+            ViewModel = QuranApp.MainViewModel;
+
             InitializeComponent();
 
-            ViewModel = QuranApp.MainViewModel;
-            //header.NavigationRequest += header_NavigationRequest;
             LittleWatson.CheckForPreviousException().ConfigureAwait(false).GetAwaiter().GetResult();
-            DataContextChanged += (s, e) => { ViewModel = DataContext as MainViewModel; };
         }
 
         void header_NavigationRequest(object sender, Type viewType, object[] parameters)
@@ -136,6 +135,11 @@ Quran Phone Team";
                 if (menuItem.DataContext != null)
                     QuranApp.MainViewModel.DeleteBookmark(menuItem.DataContext as ItemViewModel);
             }
+        }
+
+        private void HamburgerButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.MainSplitView.DisplayMode = SplitViewDisplayMode.Overlay;
         }
     }
 }
