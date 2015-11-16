@@ -17,7 +17,7 @@ namespace Quran.WindowsPhone.Utils
         private const string filename = "LittleWatson.txt";
 
 
-        internal static async Task ReportException(Exception ex, string extra)
+        internal static void ReportException(Exception ex, string extra)
         {
             try
             {
@@ -94,7 +94,7 @@ namespace Quran.WindowsPhone.Utils
             {
                 store.DeleteFile(filename);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
         }

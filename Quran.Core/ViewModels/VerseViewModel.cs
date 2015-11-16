@@ -5,10 +5,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace Quran.Core.ViewModels
 {
-    using System.Windows.Input;
-
-    using Cirrious.MvvmCross.ViewModels;
-
     /// <summary>
     /// Define the VerseViewModel type.
     /// </summary>

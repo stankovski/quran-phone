@@ -71,6 +71,7 @@ namespace Quran.Core.ViewModels
                 base.OnPropertyChanged(() => InstallationStep);
             }
         }
+        
         #endregion Properties
 
         #region Public methods
@@ -108,7 +109,7 @@ namespace Quran.Core.ViewModels
                 prepareOfflineZip();
 #endif
                 // If downloaded offline and stuck in temp storage
-                if (this.ActiveDownload.IsInTempStorage && !this.ActiveDownload.IsDownloading)
+                if (await this.ActiveDownload.IsInTempStorage() && !this.ActiveDownload.IsDownloading)
                 {
                     await ActiveDownload.FinishDownload();
                 }
@@ -119,9 +120,9 @@ namespace Quran.Core.ViewModels
                     var askingToDownloadResult = await QuranApp.NativeProvider.ShowQuestionMessageBox(AppResources.downloadPrompt,
                                                                  AppResources.downloadPrompt_title);
 
-                    if (askingToDownloadResult && ActiveDownload.DownloadCommand.CanExecute(null))
+                    if (askingToDownloadResult)
                     {
-                        ActiveDownload.DownloadCommand.Execute(null);
+                        await ActiveDownload.Download();
                     }
                 }
             }

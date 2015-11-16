@@ -63,32 +63,32 @@ namespace Quran.WindowsPhone.NativeProvider
             {
                 RequestId = Guid.NewGuid().ToString()
             };
-            request.Download(token);
+            await request.Download(token);
             customTransferRequests[request.RequestId] = request;
             return request; 
         }
 
-        private void PersistRequestToStorage(DownloadOperation request)
+        private async Task PersistRequestToStorage(DownloadOperation request)
         {
             var requestUri = request.RequestedUri;
             var requestUriHash = CryptoUtils.GetHash(requestUri.ToString());
-            var trackerDir = FileUtils.GetDowloadTrackerDirectory(false, true);
-            FileUtils.WriteFile(string.Format("{0}\\{1}", trackerDir, requestUriHash), request.RequestedUri.ToString());
+            var trackerDir = await FileUtils.GetDowloadTrackerDirectory();
+            await FileUtils.WriteFile(string.Format("{0}\\{1}", trackerDir, requestUriHash), request.RequestedUri.ToString());
         }
 
-        private void DeleteRequestFromStorage(DownloadOperation request)
+        private async Task DeleteRequestFromStorage(DownloadOperation request)
         {
             var requestUri = request.RequestedUri;
             var requestUriHash = CryptoUtils.GetHash(requestUri.ToString());
-            var trackerDir = FileUtils.GetDowloadTrackerDirectory(false, true);
-            FileUtils.DeleteFile(string.Format("{0}\\{1}", trackerDir, requestUriHash));
+            var trackerDir = await FileUtils.GetDowloadTrackerDirectory();
+            await FileUtils.DeleteFile(string.Format("{0}\\{1}", trackerDir, requestUriHash));
         }
 
         public async Task<ITransferRequest> GetRequest(string serverUri)
         {
             var requestUriHash = CryptoUtils.GetHash(serverUri);
-            var trackerDir = FileUtils.GetDowloadTrackerDirectory(false, true);
-            var requestId = FileUtils.ReadFile(string.Format("{0}\\{1}", trackerDir, requestUriHash));
+            var trackerDir = await FileUtils.GetDowloadTrackerDirectory();
+            var requestId = await FileUtils.ReadFile(string.Format("{0}\\{1}", trackerDir, requestUriHash));
             if (!string.IsNullOrEmpty(requestId))
             {
                 var downloads = await BackgroundDownloader.GetCurrentDownloadsAsync().AsTask();

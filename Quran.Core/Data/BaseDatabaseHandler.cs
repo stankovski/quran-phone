@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Quran.Core.Utils;
 using SQLite.Net;
 using SQLite.Net.Platform.WinRT;
@@ -11,9 +12,9 @@ namespace Quran.Core.Data
 
         protected BaseDatabaseHandler(string databaseName)
         {
-            string basePath = FileUtils.GetQuranDatabaseDirectory(false, true);
+            string basePath = FileUtils.RunSync(() => FileUtils.GetQuranDatabaseDirectory());
             if (basePath == null) return;
-            string path = FileUtils.Combine(QuranApp.NativeProvider.NativePath, basePath, databaseName);
+            string path = Path.Combine(QuranApp.NativeProvider.NativePath, basePath, databaseName);
 
             dbConnection = CreateDatabase(path);
         }

@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Shapes;
 using Windows.UI;
 using Windows.UI.Xaml.Input;
+using System.Threading.Tasks;
 
 namespace Quran.WindowsPhone.UI
 {
@@ -47,14 +48,14 @@ namespace Quran.WindowsPhone.UI
         }
 
         public static readonly DependencyProperty SelectedAyahProperty = DependencyProperty.Register("SelectedAyah",
-            typeof(QuranAyah), typeof(CachedImage), new PropertyMetadata(null, changeSelectedAyah));
+            typeof(QuranAyah), typeof(CachedImage), new PropertyMetadata(null, ChangeSelectedAyah));
 
-        private static void changeSelectedAyah(DependencyObject source, DependencyPropertyChangedEventArgs e)
+        private static async void ChangeSelectedAyah(DependencyObject source, DependencyPropertyChangedEventArgs e)
         {
-            (source as CachedImage).UpdateSelectedAyah(e.NewValue as QuranAyah);
+            await (source as CachedImage).UpdateSelectedAyah(e.NewValue as QuranAyah);
         }
 
-        private void UpdateSelectedAyah(QuranAyah ayahInfo)
+        private async Task UpdateSelectedAyah(QuranAyah ayahInfo)
         {
             if (ayahInfo == null)
             {
@@ -64,10 +65,10 @@ namespace Quran.WindowsPhone.UI
             {
                 try
                 {
-                    string basePath = FileUtils.GetQuranDatabaseDirectory(false, true);
+                    string basePath = await FileUtils.GetQuranDatabaseDirectory();
                     if (basePath == null) return;
                     string path = System.IO.Path.Combine(basePath, FileUtils.GetAyaPositionFileName());
-                    if (FileUtils.FileExists(path))
+                    if (await FileUtils.FileExists(path))
                     {
                         int offsetToScrollTo = 0;
                         using (var dbh = new AyahInfoDatabaseHandler(FileUtils.GetAyaPositionFileName()))
@@ -121,12 +122,12 @@ namespace Quran.WindowsPhone.UI
             (source as CachedImage).UpdateNightMode((bool)e.NewValue);
         }
 
-        private void UpdateNightMode(bool isNightMode)
+        private async void UpdateNightMode(bool isNightMode)
         {
             if (this.nightMode != isNightMode)
             {
                 this.nightMode = isNightMode;
-                UpdateSource(imageSourceUri, true);
+                await UpdateSource(imageSourceUri, true);
             }
         }
 
@@ -138,12 +139,12 @@ namespace Quran.WindowsPhone.UI
         public static readonly DependencyProperty ImageSourceProperty = DependencyProperty.Register("ImageSource",
             typeof(Uri), typeof(CachedImage), new PropertyMetadata(null, changeSource)); 
         
-        private static void changeSource(DependencyObject source, DependencyPropertyChangedEventArgs e) 
+        private static async void changeSource(DependencyObject source, DependencyPropertyChangedEventArgs e) 
         { 
-            (source as CachedImage).UpdateSource(e.NewValue as Uri, false); 
+            await (source as CachedImage).UpdateSource(e.NewValue as Uri, false); 
         }
 
-        private async void UpdateSource(Uri source, bool force)
+        private async Task UpdateSource(Uri source, bool force)
         {
             if (imageSourceUri == source && !force)
             {
@@ -179,14 +180,14 @@ namespace Quran.WindowsPhone.UI
                 }
 
                 var uriBuilder = new UriBuilder(source);
-                var localPath = PathHelper.Combine(FileUtils.GetQuranDirectory(false), PathHelper.GetFileName(uriBuilder.Path));
+                var localPath = System.IO.Path.Combine(await FileUtils.GetQuranDirectory(), System.IO.Path.GetFileName(uriBuilder.Path));
                 bool downloadSuccessful = true;
 
                 if (source.Scheme == "http")
                 {
                     try
                     {
-                        if (!FileUtils.FileExists(localPath))
+                        if (!await FileUtils.FileExists(localPath))
                             downloadSuccessful =
                                 await FileUtils.DownloadFileFromWebAsync(source.ToString(), localPath);
                     }
@@ -211,7 +212,7 @@ namespace Quran.WindowsPhone.UI
                 catch
                 {
                     await QuranApp.NativeProvider.ShowErrorMessageBox("Error loading quran page.");
-                    FileUtils.DeleteFile(localPath);
+                    await FileUtils.DeleteFile(localPath);
                 }
                 finally
                 {
@@ -344,16 +345,16 @@ namespace Quran.WindowsPhone.UI
             ImageSource = null;
         }
 
-        public static QuranAyah GetAyahFromGesture(Point p, int pageNumber, double width)
+        public static async Task<QuranAyah> GetAyahFromGesture(Point p, int pageNumber, double width)
         {
             try
             {
                 var position = adjustPoint(p, width);
-                string basePath = FileUtils.GetQuranDatabaseDirectory(false, true);
+                string basePath = await FileUtils.GetQuranDatabaseDirectory();
                 if (basePath == null) 
                     return null;
-                string path = PathHelper.Combine(basePath, FileUtils.GetAyaPositionFileName());
-                if (FileUtils.FileExists(path))
+                string path = System.IO.Path.Combine(basePath, FileUtils.GetAyaPositionFileName());
+                if (await FileUtils.FileExists(path))
                 {
                     using (var dbh = new AyahInfoDatabaseHandler(FileUtils.GetAyaPositionFileName()))
                     {
@@ -368,11 +369,11 @@ namespace Quran.WindowsPhone.UI
             return null;
         }
 
-        private void ImageTap(object sender, TappedRoutedEventArgs e)
+        private async void ImageTap(object sender, TappedRoutedEventArgs e)
         {
             if (AyahTapped != null)
             {
-                var ayah = GetAyahFromGesture(e.GetPosition(image), PageNumber, image.ActualWidth);
+                var ayah = await GetAyahFromGesture(e.GetPosition(image), PageNumber, image.ActualWidth);
                 if (ayah != null)
                     AyahTapped(this, new QuranAyahEventArgs(ayah));
             }

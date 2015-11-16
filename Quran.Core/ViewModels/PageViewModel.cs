@@ -6,16 +6,10 @@
 
 using System;
 using System.Collections.ObjectModel;
-using Quran.Core.Data;
 using Quran.Core.Utils;
-using Quran.Core.Data;
 
 namespace Quran.Core.ViewModels
 {
-    using System.Windows.Input;
-
-    using Cirrious.MvvmCross.ViewModels;
-
     /// <summary>
     /// Define the PageViewModel type.
     /// </summary>

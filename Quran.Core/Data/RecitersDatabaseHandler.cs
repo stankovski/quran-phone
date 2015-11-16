@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Quran.Core.Common;
 using Quran.Core.Utils;
@@ -150,10 +151,10 @@ namespace Quran.Core.Data
             {
                 var reciter = inMemoryDatabase[id];
                 reciter.Id = id;
-                reciter.LocalPath = FileUtils.Combine(FileUtils.GetQuranAudioDirectory(false),
+                reciter.LocalPath = Path.Combine(FileUtils.RunSync(() => FileUtils.GetQuranAudioDirectory()),
                     reciter.Name.Replace(".", "").Replace("(", "").Replace(")", "").Replace(" ", "_"));
                 if (reciter.IsGapless)
-                    reciter.GaplessDatabasePath = FileUtils.Combine(reciter.LocalPath, reciter.GaplessDatabasePath);
+                    reciter.GaplessDatabasePath = Path.Combine(reciter.LocalPath, reciter.GaplessDatabasePath);
             }
         }
 

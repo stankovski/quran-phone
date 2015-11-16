@@ -12,7 +12,7 @@ using Quran.Core.Data;
 using Quran.Core.Properties;
 using Quran.Core.Utils;
 using Quran.Core.Common;
-using Quran.Core.Data;
+using System.IO;
 
 namespace Quran.Core.ViewModels
 {
@@ -52,10 +52,10 @@ namespace Quran.Core.ViewModels
         {
             // Set translation
             if ((string.IsNullOrEmpty(QuranApp.DetailsViewModel.TranslationFile)
-                || !FileUtils.FileExists(PathHelper.Combine(FileUtils.GetQuranDatabaseDirectory(false), QuranApp.DetailsViewModel.TranslationFile)))
-                && !FileUtils.FileExists(PathHelper.Combine(FileUtils.GetQuranDatabaseDirectory(false), FileUtils.QURAN_ARABIC_DATABASE)))
+                || !await FileUtils.FileExists(Path.Combine(await FileUtils.GetQuranDatabaseDirectory(), QuranApp.DetailsViewModel.TranslationFile)))
+                && !await FileUtils.FileExists(Path.Combine(await FileUtils.GetQuranDatabaseDirectory(), FileUtils.QURAN_ARABIC_DATABASE)))
             {
-                QuranApp.NativeProvider.ShowInfoMessageBox(AppResources.no_translation_to_search);
+                await QuranApp.NativeProvider.ShowInfoMessageBox(AppResources.no_translation_to_search);
             }
             else
             {
@@ -68,14 +68,14 @@ namespace Quran.Core.ViewModels
                     var taskFactory = new TaskFactory();
 
                     if (QuranApp.DetailsViewModel.TranslationFile != null &&
-                        FileUtils.FileExists(PathHelper.Combine(FileUtils.GetQuranDatabaseDirectory(false), QuranApp.DetailsViewModel.TranslationFile)))
+                        await FileUtils.FileExists(Path.Combine(await FileUtils.GetQuranDatabaseDirectory(), QuranApp.DetailsViewModel.TranslationFile)))
                     {
                         using (var db = new QuranDatabaseHandler<QuranAyah>(QuranApp.DetailsViewModel.TranslationFile))
                         {
                             translationVerses = await taskFactory.StartNew(() => db.Search(query));
                         }
                     }
-                    if (FileUtils.FileExists(PathHelper.Combine(FileUtils.GetQuranDatabaseDirectory(false), FileUtils.QURAN_ARABIC_DATABASE)))
+                    if (await FileUtils.FileExists(Path.Combine(await FileUtils.GetQuranDatabaseDirectory(), FileUtils.QURAN_ARABIC_DATABASE)))
                     {
                         using (var dbArabic = new QuranDatabaseHandler<ArabicAyah>(FileUtils.QURAN_ARABIC_DATABASE))
                         {
@@ -134,7 +134,7 @@ namespace Quran.Core.ViewModels
                         });
                     }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     this.SearchResults.Add(new ItemViewModel
                     {

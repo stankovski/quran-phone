@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Windows.Input;
-using Cirrious.MvvmCross.ViewModels;
 using Quran.Core.Utils;
 using Quran.Core.Common;
 using Quran.Core.Data;
+using System.Threading.Tasks;
 
 namespace Quran.Core.ViewModels
 {
@@ -24,7 +19,7 @@ namespace Quran.Core.ViewModels
             this.LocalUrl = item.LocalPath;
             this.DatabaseName = item.GaplessDatabasePath;
             this.IsGapless = item.IsGapless;
-            this.Exists = FileUtils.DirectoryExists(item.LocalPath);
+            this.Exists = FileUtils.RunSync(() => FileUtils.DirectoryExists(item.LocalPath));
         }
 
         private int id;
@@ -161,46 +156,14 @@ namespace Quran.Core.ViewModels
                 base.OnPropertyChanged(() => Exists);
             }
         }
-
-        MvxCommand deleteCommand;
-        /// <summary>
-        /// Returns an undo command
-        /// </summary>
-        public ICommand DeleteCommand
+        
+        public async Task Delete()
         {
-            get
-            {
-                if (deleteCommand == null)
-                {
-                    deleteCommand = new MvxCommand(Delete);
-                }
-                return deleteCommand;
-            }
-        }
-
-        MvxCommand navigateCommand;
-        /// <summary>
-        /// Returns an undo command
-        /// </summary>
-        public ICommand NavigateCommand
-        {
-            get
-            {
-                if (navigateCommand == null)
-                {
-                    navigateCommand = new MvxCommand(Navigate);
-                }
-                return navigateCommand;
-            }
-        }
-
-        public void Delete()
-        {
-            if (FileUtils.DirectoryExists(this.LocalUrl))
+            if (await FileUtils.DirectoryExists(this.LocalUrl))
             {
                 try
                 {
-                    FileUtils.DeleteFolder(this.LocalUrl);
+                    await FileUtils.DeleteFolder(this.LocalUrl);
                 }
                 catch
                 {

@@ -19,12 +19,11 @@ namespace Quran.WindowsPhone.Views
         // Constructor
         public MainView()
         {
+            ViewModel = QuranApp.MainViewModel;
+
             InitializeComponent();
 
-            ViewModel = QuranApp.MainViewModel;
-            //header.NavigationRequest += header_NavigationRequest;
             LittleWatson.CheckForPreviousException().ConfigureAwait(false).GetAwaiter().GetResult();
-            DataContextChanged += (s, e) => { ViewModel = DataContext as MainViewModel; };
         }
 
         void header_NavigationRequest(object sender, Type viewType, object[] parameters)
@@ -33,7 +32,7 @@ namespace Quran.WindowsPhone.Views
         }
 
         // Load data for the ViewModel Items
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             // Remove all back navigation options
             while (Frame.BackStack.Count() > 0)
@@ -54,13 +53,13 @@ namespace Quran.WindowsPhone.Views
             }
             
             // Show prompt to download content if not all images exist
-            if (!FileUtils.HaveAllImages())
+            if (!await FileUtils.HaveAllImages())
             {
                 try
                 {
-                    QuranApp.MainViewModel.Download();
+                    await QuranApp.MainViewModel.Download();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     //Console.WriteLine("failed to download quran data: " + ex.Message);
                 }
@@ -136,6 +135,11 @@ Quran Phone Team";
                 if (menuItem.DataContext != null)
                     QuranApp.MainViewModel.DeleteBookmark(menuItem.DataContext as ItemViewModel);
             }
+        }
+
+        private void HamburgerButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

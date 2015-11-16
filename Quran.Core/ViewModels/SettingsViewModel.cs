@@ -3,21 +3,20 @@
 //    Defines the SettingsViewModel type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using Quran.Core.Data;
 using Quran.Core.Properties;
 using Quran.Core.Utils;
-using Quran.Core.Data;
 
 namespace Quran.Core.ViewModels
 {
-    using System.Windows.Input;
-
-    using Cirrious.MvvmCross.ViewModels;
-    using System;
+    
 
     /// <summary>
     /// Define the SettingsViewModel type.
@@ -231,22 +230,6 @@ namespace Quran.Core.ViewModels
 
         public ObservableCollection<KeyValuePair<AudioDownloadAmount, string>> SupportedAudioBlocks { get; private set; }
         
-        MvxCommand generate;
-        /// <summary>
-        /// Returns an download command
-        /// </summary>
-        public ICommand Generate
-        {
-            get
-            {
-                if (generate == null)
-                {
-                    generate = new MvxCommand(GenerateDua, () => this.CanGenerateDuaDownload);
-                }
-                return generate;
-            }
-        }
-
         public bool CanGenerateDuaDownload
         {
             get
@@ -256,40 +239,7 @@ namespace Quran.Core.ViewModels
         }
         #endregion Properties
 
-        #region Commands
-        MvxCommand<string> navigateCommand;
-        /// <summary>
-        /// Returns a navigate command
-        /// </summary>
-        public ICommand NavigateCommand
-        {
-            get
-            {
-                if (navigateCommand == null)
-                {
-                    navigateCommand = new MvxCommand<string>(Navigate);
-                }
-                return navigateCommand;
-            }
-        }
-        MvxCommand contactUsCommand;
-        /// <summary>
-        /// Returns a navigate command
-        /// </summary>
-        public ICommand ContactUsCommand
-        {
-            get
-            {
-                if (contactUsCommand == null)
-                {
-                    contactUsCommand = new MvxCommand(ContactUs);
-                }
-                return contactUsCommand;
-            }
-        }
-        #endregion Commands
-
-        public void LoadData()
+        public async Task LoadData()
         {
             var translation = SettingsUtils.Get<string>(Constants.PREF_ACTIVE_TRANSLATION);
             if (!string.IsNullOrEmpty(translation) && translation.Contains("|"))
@@ -312,7 +262,7 @@ namespace Quran.Core.ViewModels
             KeepInfoOverlay = SettingsUtils.Get<bool>(Constants.PREF_KEEP_INFO_OVERLAY);
             NightMode = SettingsUtils.Get<bool>(Constants.PREF_NIGHT_MODE);
 
-            if (FileUtils.FileExists(PathHelper.Combine(FileUtils.GetQuranDatabaseDirectory(false),
+            if (await FileUtils.FileExists(Path.Combine(await FileUtils.GetQuranDatabaseDirectory(),
                                                        FileUtils.QURAN_ARABIC_DATABASE)))
             {
                 EnableShowArabicInTranslation = true;
