@@ -71,6 +71,7 @@ namespace Quran.Core.ViewModels
                 base.OnPropertyChanged(() => InstallationStep);
             }
         }
+        
         #endregion Properties
 
         #region Public methods
@@ -108,7 +109,7 @@ namespace Quran.Core.ViewModels
                 prepareOfflineZip();
 #endif
                 // If downloaded offline and stuck in temp storage
-                if (this.ActiveDownload.IsInTempStorage && !this.ActiveDownload.IsDownloading)
+                if (await this.ActiveDownload.IsInTempStorage() && !this.ActiveDownload.IsDownloading)
                 {
                     await ActiveDownload.FinishDownload();
                 }

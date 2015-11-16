@@ -208,15 +208,12 @@ namespace Quran.Core.ViewModels
             }
         }
 
-        public bool IsInTempStorage
+        public async Task<bool> IsInTempStorage()
         {
-            get
-            {
-                if (!IsDownloading && FileUtils.RunSync(() => FileUtils.FileExists(this.TempUrl)))
-                    return true;
-                else
-                    return false;
-            }
+            if (!IsDownloading && await FileUtils.FileExists(this.TempUrl))
+                return true;
+            else
+                return false;
         }
 
         public bool IsInLocalStorage
