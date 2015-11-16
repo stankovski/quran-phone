@@ -97,7 +97,7 @@ Quran Phone Team";
             if (list == null || list.SelectedItem == null)
                 return;
 
-            var selectedItem = (ItemViewModel)list.SelectedItem;
+            var selectedItem = (ItemViewModelBase)list.SelectedItem;
 
             try
             {
@@ -139,7 +139,7 @@ Quran Phone Team";
 
         private void HamburgerButton_Click(object sender, RoutedEventArgs e)
         {
-
+            MainSplitView.IsPaneOpen = !MainSplitView.IsPaneOpen;
         }
     }
 }

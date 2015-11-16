@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Reflection;
+using Quran.Core.Properties;
 
 namespace Quran.Core.ViewModels
 {
@@ -32,6 +33,10 @@ namespace Quran.Core.ViewModels
                 this.OnPropertyChanged(() => IsLoading);
             }
         }
+
+        private static AppResources _localizedResources = new AppResources();
+
+        public AppResources Resources { get { return _localizedResources; } }
 
         /// <summary>
         /// Raised when a property on this object has a new value.

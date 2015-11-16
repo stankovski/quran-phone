@@ -114,10 +114,8 @@
     <Compile Include="UI\CachedImage.xaml.cs">
       <DependentUpon>CachedImage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\CommonHeader.xaml.cs">
-      <DependentUpon>CommonHeader.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UI\ConditionalStyleConverter.cs" />
+    <Compile Include="UI\CustomDataTemplateSelector.cs" />
     <Compile Include="UI\DataTemplateSelector.cs" />
     <Compile Include="UI\DownloadControl.xaml.cs">
       <DependentUpon>DownloadControl.xaml</DependentUpon>
@@ -133,6 +131,9 @@
     <Compile Include="UI\SettingsRetrieverConverter.cs" />
     <Compile Include="UI\StringBrushConverter.cs" />
     <Compile Include="UI\StyleConverter.cs" />
+    <Compile Include="UI\TabHeader.xaml.cs">
+      <DependentUpon>TabHeader.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\TextFormatConverter.cs" />
     <Compile Include="UI\TranslationItemTemplateSelector.cs" />
     <Compile Include="UI\TranslationView.xaml.cs">
@@ -192,6 +193,7 @@
     <Content Include="Assets\Images\settings.png" />
     <Content Include="Assets\Images\stop.png" />
     <Content Include="Assets\Images\sura_icon.png" />
+    <Content Include="Assets\logo-large.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -246,10 +248,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UI\CommonHeader.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="UI\DownloadControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -261,6 +259,10 @@
     <Page Include="UI\PageLink.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\TabHeader.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\TranslationView.xaml">
       <Generator>MSBuild:Compile</Generator>
