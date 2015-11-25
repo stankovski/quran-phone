@@ -17,15 +17,6 @@ namespace Quran.WindowsPhone.Utils
             // TODO: Implement
         }
 
-        public static bool IsPortaitOrientation
-        {
-            get
-            {
-                // TODO: Implement
-                return true;
-            }
-        }
-
         public static bool IsOnWifiNetwork()
         {
             // TODO: Implement

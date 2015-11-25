@@ -7,6 +7,7 @@
     mc:Ignorable="d"
     xmlns:ui="using:Quran.WindowsPhone.UI"
     xmlns:vm="using:Quran.Core.ViewModels"
+    xmlns:res="using:Quran.Core.Properties"
     d:DataContext="{d:DesignData ../SampleData/MainViewModelSampleData.xaml}">
 
     <Page.Resources>
@@ -96,89 +97,132 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <DataTemplate x:DataType="vm:ItemViewModel" x:Key="ListItemTemplate">
+            <StackPanel Orientation="Vertical">
+                <Grid Visibility="{x:Bind ItemType, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Header}" 
+                    Height="45" VerticalAlignment="Center">
+                    <Grid.Background>
+                        <SolidColorBrush Color="#33343434"/>
+                    </Grid.Background>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="60"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="60"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="1" Text="{x:Bind Title}" Style="{StaticResource BaseTextBlockStyle}"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="2" Text="{x:Bind PageNumber}" HorizontalAlignment="Center" 
+                               Style="{StaticResource BaseTextBlockStyle}"
+                               VerticalAlignment="Center"/>
+                </Grid>
+                <Grid Visibility="{x:Bind ItemType, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Surah}" 
+                    Height="55" VerticalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="60"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="{x:Bind Id}" FontSize="23" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <StackPanel Grid.Column="1" Orientation="Vertical">
+                        <TextBlock Text="{x:Bind Title}" FontSize="18" VerticalAlignment="Center"/>
+                        <TextBlock Text="{x:Bind Details}" Style="{StaticResource BaseTextBlockStyle}" 
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <TextBlock Grid.Column="2" Text="{x:Bind PageNumber}" HorizontalAlignment="Center" 
+                               Style="{StaticResource BaseTextBlockStyle}"
+                               VerticalAlignment="Center"/>
+                </Grid>
+            </StackPanel>
+        </DataTemplate>
     </Page.Resources>
 
-    <SplitView Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" x:Name="MainSplitView" 
-               DisplayMode="CompactOverlay"  IsPaneOpen="False" CompactPaneLength="50" OpenPaneLength="150">
-        <SplitView.Pane>
-            <StackPanel Background="Gray">
-                <Button x:Name="HamburgerButton" FontFamily="Segoe MDL2 Assets" Content="&#xE700;"
-                    Width="40" Height="40" Background="Transparent" Click="HamburgerButton_Click" FontSize="20"/>
-            </StackPanel>
-        </SplitView.Pane>
-        <SplitView.Content>
-            <Grid x:Name="LayoutRoot" Background="Transparent">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="80"/>
-                </Grid.RowDefinitions>
-                <Grid Grid.Row="0" VerticalAlignment="Center">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="40"/>
-                        <ColumnDefinition Width="40"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="QURAN" FontWeight="Bold" Grid.Column="0" FontSize="20"/>
-                    <FontIcon Grid.Column="1" FontFamily="Segoe MDL2 Assets" Glyph="&#xE094;" FontSize="20" VerticalAlignment="Center"/>
-                    <FontIcon Grid.Column="2" FontFamily="Segoe MDL2 Assets" Glyph="&#xE82D;" FontSize="20" VerticalAlignment="Center"/>
-                </Grid>
-                <!--<Pivot Grid.Row="1" Margin="12,0,12,0">
-                    <PivotItem>
-                        <PivotItem.Header>
-                            <TextBlock x:Uid="quran_surah_lower" />
-                        </PivotItem.Header>
-                        <Grid x:Name="ContentPanel">
-                            <ListView Margin="0,0,-12,0" ItemsSource="{x:Bind ViewModel.Surahs}" SelectionChanged="List_SelectionChanged">
-                                <ListView.ItemTemplate>
-                                    <DataTemplate x:DataType="vm:ItemViewModel">
-                                        <ListBoxItem HorizontalContentAlignment="Stretch">
-                                            <ui:PageLink ViewModel="{x:Bind}"/>
-                                        </ListBoxItem>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-                        </Grid>
-                    </PivotItem>
-                    <PivotItem>
-                        <PivotItem.Header>
-                            <TextBlock x:Uid="quran_juz2_lower"/>
-                        </PivotItem.Header>
-                        <Grid>
-                            <ListView Margin="0,0,-12,0" ItemsSource="{x:Bind ViewModel.Juz}" SelectionChanged="List_SelectionChanged">
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <ListBoxItem HorizontalContentAlignment="Stretch">
-                                            <ui:PageLink/>
-                                        </ListBoxItem>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-                        </Grid>
-                    </PivotItem>
-                    <PivotItem>
-                        <PivotItem.Header>
-                            <TextBlock x:Uid="quran_bookmarks_lower"/>
-                        </PivotItem.Header>
-                        <Grid>
-                            <ListView ItemsSource="{x:Bind ViewModel.Bookmarks}" SelectionChanged="List_SelectionChanged">
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <ListBoxItem HorizontalContentAlignment="Stretch">
-                                            <ui:PageLink/>
-                                        </ListBoxItem>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-                        </Grid>
-                    </PivotItem>
-                </Pivot>-->
-                <ui:DownloadControl ViewModel="{x:Bind ViewModel.ActiveDownload, Mode=OneWay}"
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="80"/>
+        </Grid.RowDefinitions>
+        <Grid x:Name="Header" Grid.Row="0" VerticalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="40"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" x:Name="HamburgerButton" FontFamily="Segoe MDL2 Assets" Content="&#xE700;"
+                    Background="{StaticResource BlueText}" Click="HamburgerButton_Click" FontSize="20" Height="40"/>
+            <TextBlock Grid.Column="1" Text="{x:Bind ViewModel.AppNameString}" Margin="10,0,0,0" FontWeight="Bold" FontSize="20" VerticalAlignment="Center"/>
+            <FontIcon Grid.Column="2" FontFamily="Segoe MDL2 Assets" Glyph="&#xE094;" FontSize="20" VerticalAlignment="Center"/>
+            <Button Grid.Column="3" FontFamily="Segoe MDL2 Assets" Content="&#xE82D;" FontSize="20" 
+                    VerticalAlignment="Center" Background="#00000000" Click="FastNavigate_Click"/>
+        </Grid>
+        <SplitView Grid.Row="1" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" 
+                   x:Name="MainSplitView" DisplayMode="Inline"  
+                   IsPaneOpen="False" OpenPaneLength="300">
+            <SplitView.Pane>
+                <StackPanel Background="{StaticResource BlueText}">
+                    <TextBlock Text="Settings"/>
+                </StackPanel>
+            </SplitView.Pane>
+            <SplitView.Content>
+                <Grid x:Name="MainPanel">
+                    <Pivot>
+                        <PivotItem Margin="0">
+                            <PivotItem.Header>
+                                <ui:TabHeader Glyph="&#xE292;" Label="{x:Bind ViewModel.SurahHeaderString}" Width="100"/>
+                            </PivotItem.Header>
+                            <Grid x:Name="ContentPanel">
+                                <ListView ItemsSource="{x:Bind ViewModel.Surahs}" SelectionChanged="List_SelectionChanged" 
+                                          ItemTemplate="{StaticResource ListItemTemplate}">
+                                    <ListView.ItemContainerStyle>
+                                        <Style TargetType="ListViewItem">
+                                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                            <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                                            <Setter Property="Padding" Value="0" />
+                                        </Style>
+                                    </ListView.ItemContainerStyle>
+                                </ListView>
+                            </Grid>
+                        </PivotItem>
+                        <PivotItem Margin="0">
+                            <PivotItem.Header>
+                                <ui:TabHeader Glyph="&#xE1D3;" Label="{x:Bind ViewModel.JuzHeaderString}" Width="100"/>
+                            </PivotItem.Header>
+                            <Grid>
+                                <ListView ItemsSource="{x:Bind ViewModel.Juz}" SelectionChanged="List_SelectionChanged" 
+                                          ItemTemplate="{StaticResource ListItemTemplate}">
+                                    <ListView.ItemContainerStyle>
+                                        <Style TargetType="ListViewItem">
+                                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                            <Setter Property="VerticalContentAlignment" Value="Center" />
+                                        </Style>
+                                    </ListView.ItemContainerStyle>
+                                </ListView>
+                            </Grid>
+                        </PivotItem>
+                        <PivotItem Margin="0">
+                            <PivotItem.Header>
+                                <ui:TabHeader Glyph="&#xE1CF;" Label="{x:Bind ViewModel.BookmarksHeaderString}" Width="100"/>
+                            </PivotItem.Header>
+                            <Grid>
+                                <ListView ItemsSource="{x:Bind ViewModel.Bookmarks}" SelectionChanged="List_SelectionChanged">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate x:DataType="vm:ItemViewModel">
+                                            <ListBoxItem HorizontalContentAlignment="Stretch">
+                                                <TextBlock Text="{x:Bind Title}"/>
+                                            </ListBoxItem>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </Grid>
+                        </PivotItem>
+                    </Pivot>
+                    <ui:DownloadControl ViewModel="{x:Bind ViewModel.ActiveDownload, Mode=OneWay}"
                     Grid.Row="2"
                     VerticalAlignment="Bottom"/>
-            </Grid>
-        </SplitView.Content>
-    </SplitView>
-
-    
+                </Grid>
+            </SplitView.Content>
+        </SplitView>
+    </Grid>
 </Page>

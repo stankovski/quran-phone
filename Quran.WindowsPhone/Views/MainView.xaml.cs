@@ -26,9 +26,12 @@ namespace Quran.WindowsPhone.Views
             LittleWatson.CheckForPreviousException().ConfigureAwait(false).GetAwaiter().GetResult();
         }
 
-        void header_NavigationRequest(object sender, Type viewType, object[] parameters)
+        private void FastNavigate_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(viewType, parameters);
+            Frame.Navigate(typeof(DetailsView),
+                        new NavigationData {
+                            Page = SettingsUtils.Get<int>(Constants.PREF_LAST_PAGE)
+                        });
         }
 
         // Load data for the ViewModel Items
@@ -97,25 +100,24 @@ Quran Phone Team";
             if (list == null || list.SelectedItem == null)
                 return;
 
-            var selectedItem = (ItemViewModel)list.SelectedItem;
+            var selectedItem = (ItemViewModelBase)list.SelectedItem;
 
             try
             {
                 // Navigate to the new page
                 if (selectedItem.SelectedAyah == null)
                 {
-                    //NavigationService.Navigate(
-                    //    new Uri("/Views/DetailsView.xaml?page=" + selectedItem.PageNumber,
-                    //            UriKind.Relative));
+                    Frame.Navigate(typeof(DetailsView), 
+                        new NavigationData { Page = selectedItem.PageNumber });
                 }
                 else
                 {
-                    //NavigationService.Navigate(
-                    //    new Uri(
-                    //        string.Format(CultureInfo.InvariantCulture, "/Views/DetailsView.xaml?page={0}&surah={1}&ayah={2}",
-                    //                      selectedItem.PageNumber,
-                    //                      selectedItem.SelectedAyah.Surah,
-                    //                      selectedItem.SelectedAyah.Ayah), UriKind.Relative));
+                    Frame.Navigate(typeof(DetailsView),
+                        new NavigationData {
+                            Page = selectedItem.PageNumber,
+                            Surah = selectedItem.SelectedAyah.Surah,
+                            Ayah = selectedItem.SelectedAyah.Ayah
+                        });
                 }
             }
             catch
@@ -139,7 +141,7 @@ Quran Phone Team";
 
         private void HamburgerButton_Click(object sender, RoutedEventArgs e)
         {
-            this.MainSplitView.DisplayMode = SplitViewDisplayMode.Overlay;
+            MainSplitView.IsPaneOpen = !MainSplitView.IsPaneOpen;
         }
     }
 }

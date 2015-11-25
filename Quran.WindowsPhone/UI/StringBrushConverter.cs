@@ -21,7 +21,7 @@ namespace Quran.WindowsPhone.UI
             var stringValue = value.ToString();
             if (stringValue.StartsWith("Resource:") && App.Current.Resources.ContainsKey(stringValue.Substring("Resource:".Length)))
             {
-                return (LinearGradientBrush)App.Current.Resources["Resource:".Length];
+                return (LinearGradientBrush)App.Current.Resources[stringValue.Substring("Resource:".Length)];
             }                
             else
             {

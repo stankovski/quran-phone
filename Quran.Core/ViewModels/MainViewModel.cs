@@ -12,6 +12,7 @@ using Quran.Core.Common;
 using Quran.Core.Data;
 using Quran.Core.Properties;
 using Quran.Core.Utils;
+using Windows.UI.Xaml;
 
 namespace Quran.Core.ViewModels
 {
@@ -22,23 +23,28 @@ namespace Quran.Core.ViewModels
     {
         public MainViewModel()
         {
-            this.Surahs = new ObservableCollection<ItemViewModel>();
-            this.Juz = new ObservableCollection<ItemViewModel>();
-            this.Bookmarks = new ObservableCollection<ItemViewModel>();
+            this.Surahs = new ObservableCollection<ItemViewModelBase>();
+            this.Juz = new ObservableCollection<ItemViewModelBase>();
+            this.Bookmarks = new ObservableCollection<ItemViewModelBase>();
             
             this.InstallationStep = AppResources.loading_message;
 
-            this.Tags = new ObservableCollection<ItemViewModel>();
+            this.Tags = new ObservableCollection<ItemViewModelBase>();
             this.HasAskedToDownload = false;
             this.ActiveDownload.ServerUrl = FileUtils.GetZipFileUrl();
             this.ActiveDownload.LocalUrl = FileUtils.QURAN_BASE;
         }
 
         #region Properties
-        public ObservableCollection<ItemViewModel> Surahs { get; private set; }
-        public ObservableCollection<ItemViewModel> Juz { get; private set; }
-        public ObservableCollection<ItemViewModel> Bookmarks { get; private set; }
-        public ObservableCollection<ItemViewModel> Tags { get; private set; }
+        public string AppNameString { get { return AppResources.app_name; } }
+        public string SurahHeaderString { get { return AppResources.quran_sura_lower; } }
+        public string JuzHeaderString { get { return AppResources.quran_juz2_lower; } }
+        public string BookmarksHeaderString { get { return AppResources.quran_bookmarks_lower; } }
+
+        public ObservableCollection<ItemViewModelBase> Surahs { get; private set; }
+        public ObservableCollection<ItemViewModelBase> Juz { get; private set; }
+        public ObservableCollection<ItemViewModelBase> Bookmarks { get; private set; }
+        public ObservableCollection<ItemViewModelBase> Tags { get; private set; }
         public bool IsDataLoaded { get; set; }
         public bool HasAskedToDownload { get; set; }
 
@@ -71,7 +77,7 @@ namespace Quran.Core.ViewModels
                 base.OnPropertyChanged(() => InstallationStep);
             }
         }
-        
+
         #endregion Properties
 
         #region Public methods
@@ -154,14 +160,14 @@ namespace Quran.Core.ViewModels
         {
             //// TODO: still ERROR in device
 
-            //// Move images_800.zip from Assets/Offline to temporary storage
-            //Uri offlineZipUri = new Uri("Assets/Offline/images_800.zip", UriKind.Relative);
+            // Move images_800.zip from Assets/Offline to temporary storage
+            Uri offlineZipUri = new Uri("Assets/Offline/images_800.zip", UriKind.Relative);
 
-            //// Obtain the virtual store for the application.
+            // Obtain the virtual store for the application.
             //IsolatedStorageFile iso = IsolatedStorageFile.GetUserStoreForApplication();
 
-            //// Create a stream for the file in the installation folder.
-            //var streamInfo = Application.GetResourceStream(offlineZipUri);
+            // Create a stream for the file in the installation folder.
+            //var streamInfo = string.Join(",", Application.Current.Resources.Keys);
             //if (streamInfo != null)
             //{
             //    using (Stream input = streamInfo.Stream)
@@ -196,6 +202,7 @@ namespace Quran.Core.ViewModels
                 Surahs.Add(new ItemViewModel
                 {
                     Id = QuranUtils.GetJuzTitle() + " " + juz,
+                    Title = QuranUtils.GetJuzTitle() + " " + juz,
                     PageNumber = QuranUtils.JUZ_PAGE_START[juz - 1],
                     ItemType = ItemViewModelType.Header
                 });

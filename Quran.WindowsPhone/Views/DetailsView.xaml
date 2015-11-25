@@ -1,4 +1,4 @@
-﻿<views:MvxWindowsPage
+﻿<Page
     x:Class="Quran.WindowsPhone.Views.DetailsView"
     x:Name="ThisPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -6,50 +6,46 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    xmlns:views="using:Cirrious.MvvmCross.WindowsCommon.Views"
+    xmlns:vm="using:Quran.Core.ViewModels"
     xmlns:ui="using:Quran.WindowsPhone.UI"
-    FontFamily="{StaticResource PhoneFontFamilyNormal}"
-    FontSize="{StaticResource PhoneFontSizeNormal}"
-    Foreground="{StaticResource PhoneForegroundBrush}"
     d:DataContext="{d:DesignData ../SampleData/TranslationViewModelSampleData.xaml}"
-    Tapped="ScreenTap" Background="{Binding BackgroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}">
+    Tapped="ScreenTap">
 
-    <views:MvxWindowsPage.Resources>
+    <Page.Resources>
         <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <ui:ArabicFontSizeConverter x:Key="ArabicFontSizeConverter"/>
-    </views:MvxWindowsPage.Resources>
-    <Grid Name="MainContainer" Background="{Binding BackgroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}">
-        <ProgressBar Value="{Binding AudioDownloadProgress}" IsIndeterminate="False" SmallChange="1" VerticalAlignment="Top" Visibility="{Binding IsDownloadingAudio, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+    </Page.Resources>
+    <Grid Name="MainContainer">
+        <ProgressBar Value="{Binding AudioDownloadProgress}" IsIndeterminate="False" SmallChange="1" VerticalAlignment="Top" Visibility="{x:Bind ViewModel.IsDownloadingAudio, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Grid HorizontalAlignment="Stretch" Grid.Row="0" Background="{Binding BackgroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}" Height="33"
-              Visibility="{Binding ShowInfoOverlay, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <TextBlock Text="{Binding CurrentSurahName}" HorizontalAlignment="Left" FontSize="18" Foreground="{Binding ForegroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}" Margin="25,3,0,3"/>
+            <Grid HorizontalAlignment="Stretch" Grid.Row="0" Background="{x:Bind ViewModel.BackgroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}" Height="33"
+              Visibility="{x:Bind ViewModel.ShowInfoOverlay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <TextBlock Text="{x:Bind ViewModel.CurrentSurahName}" HorizontalAlignment="Left" FontSize="18" Foreground="{x:Bind ViewModel.ForegroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}" Margin="25,3,0,3"/>
                 <StackPanel Margin="0,3,0,3" HorizontalAlignment="Center" Orientation="Horizontal" FlowDirection="LeftToRight">
                     <Image Source="..\Assets\Images\left.png" Height="25" Width="50"/>
-                    <TextBlock Text="{Binding CurrentPageNumber}" FontSize="18" Foreground="{Binding ForegroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}"/>
+                    <TextBlock Text="{x:Bind ViewModel.CurrentPageNumber}" FontSize="18" Foreground="{x:Bind ViewModel.ForegroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}"/>
                     <Image Source="..\Assets\Images\right.png" Height="25" Width="50"/>
                 </StackPanel>
-                <TextBlock Text="{Binding CurrentJuzName}" HorizontalAlignment="Right" FontSize="18" Foreground="{Binding ForegroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}" Margin="0,3,25,3"/>
+                <TextBlock Text="{x:Bind ViewModel.CurrentJuzName}" HorizontalAlignment="Right" FontSize="18" Foreground="{x:Bind ViewModel.ForegroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}" Margin="0,3,25,3"/>
             </Grid>
 
-            <telerikPrimitives:RadSlideView x:Name="radSlideView" Grid.Row="1" IsFilmstripModeEnabled="True" Margin="0" 
-                                        ItemsSource="{Binding Pages}" IsLoopingEnabled="True"
-                                        ItemRealizationMode="ViewportItem" FlowDirection="LeftToRight">
-                <telerikPrimitives:RadSlideView.ItemTemplate>
-                    <DataTemplate>
+            <Pivot x:Name="radSlideView" Grid.Row="1" Margin="0" ItemsSource="{x:Bind ViewModel.Pages}"
+                   FlowDirection="LeftToRight">
+              <Pivot.ItemTemplate>
+                    <DataTemplate x:DataType="vm:PageViewModel" >
                          <Grid>
-                            <ui:CachedImage ImageSource="{Binding ImageSource}" PageNumber="{Binding PageNumber}" 
+                            <ui:CachedImage ImageSource="{x:Bind ImageSource}" PageNumber="{x:Bind PageNumber}" 
                                               NightMode="{Binding DataContext.IsNightMode, ElementName=ThisPage}"
                                               SelectedAyah="{Binding DataContext.SelectedAyah, ElementName=ThisPage}"
-                                              Hold="ImageHold" DoubleTap="ImageDoubleTap" Tap="ImageTap" Padding="0,0,0,10"
+                                              Padding="0,0,0,10"
                                               Visibility="{Binding DataContext.ShowTranslation, ElementName=ThisPage, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
                             </ui:CachedImage>
 
-                            <telerikPrimitives:RadDataBoundListBox x:Name="TranslationListBox" DoubleTap="ListBoxDoubleTap"
+                            <!--<telerikPrimitives:RadDataBoundListBox x:Name="TranslationListBox" DoubleTap="ListBoxDoubleTap"
                                                                    Visibility="{Binding DataContext.ShowTranslation, ElementName=ThisPage, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                                    ItemsSource="{Binding Translations}" IsAsyncBalanceEnabled="True">
                                 <telerikPrimitives:RadDataBoundListBox.EmptyContentTemplate>
@@ -74,30 +70,20 @@
                                 <i:Interaction.Behaviors>
                                     <ui:ListBoxPropertyBinder SelectedAyah="{Binding DataContext.SelectedAyah, ElementName=ThisPage}"/>
                                 </i:Interaction.Behaviors>
-                            </telerikPrimitives:RadDataBoundListBox>
+                            </telerikPrimitives:RadDataBoundListBox>-->
                         </Grid>
                     </DataTemplate>
-                </telerikPrimitives:RadSlideView.ItemTemplate>
-                <telerikPrimitives:RadSlideView.FilmstripModeItemTemplate>
-                    <DataTemplate>
-                        <Grid Width="80" Height="130" Margin="10">
-                            <Border BorderThickness="2" BorderBrush="{StaticResource DarkBlueText}" Padding="10">
-                                <Image Source="..\Assets/Images/page-small.png"></Image>
-                            </Border>
-                            <TextBlock Text="{Binding PageNumber}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" Foreground="{StaticResource DarkBlueText}"/>
-                        </Grid>
-                    </DataTemplate>
-                </telerikPrimitives:RadSlideView.FilmstripModeItemTemplate>
-            </telerikPrimitives:RadSlideView>
+                </Pivot.ItemTemplate>
+            </Pivot>
         </Grid>
 
-        <ui:DownloadControl DataContext="{Binding ActiveDownload}" VerticalAlignment="Top" Height="70"/>
+        <ui:DownloadControl DataContext="{x:Bind ViewModel.ActiveDownload}" VerticalAlignment="Top" Height="70"/>
 
-        <ui:AudioPlayerControl AudioState="{Binding AudioPlayerState}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="70" Height="70" 
+        <ui:AudioPlayerControl AudioState="{x:Bind ViewModel.AudioPlayerState}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="70" Height="70" 
                                Foreground="{StaticResource BlueText}" Margin="30"/>
 
         <Button VerticalAlignment="Bottom" HorizontalAlignment="Right" Padding="0" Width="80" Style="{StaticResource ChromelessButtonStyle}" Name="menuToggleButton" 
-                Visibility="{Binding IsShowMenu, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}" Tap="MenuTap">
+                Visibility="{Binding IsShowMenu, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
             <StackPanel Orientation="Horizontal" Background="Transparent" VerticalAlignment="Bottom" Margin="0" Height="70" Width="80">
                 <Ellipse Fill="{StaticResource DarkBlueText}" Width="8" Height="8" Margin="5,0,5,15" VerticalAlignment="Bottom"/>
                 <Ellipse Fill="{StaticResource DarkBlueText}" Width="8" Height="8" Margin="5,0,5,15" VerticalAlignment="Bottom"/>
@@ -105,4 +91,4 @@
             </StackPanel>
         </Button>
     </Grid>
-</views:MvxWindowsPage>
+</Page>

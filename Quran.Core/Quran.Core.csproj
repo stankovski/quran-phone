@@ -180,8 +180,11 @@
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\DetailsViewModel.cs" />
     <Compile Include="ViewModels\DownloadableViewModelBase.cs" />
+    <Compile Include="ViewModels\ItemViewModelBase.cs" />
+    <Compile Include="ViewModels\ItemViewModelBold.cs" />
     <Compile Include="ViewModels\ItemViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="Data\NavigationData.cs" />
     <Compile Include="ViewModels\ObservableReciterItem.cs" />
     <Compile Include="ViewModels\ObservableTranslationItem.cs" />
     <Compile Include="ViewModels\PageViewModel.cs" />

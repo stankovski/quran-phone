@@ -13,20 +13,36 @@ namespace Quran.WindowsPhone.UI
                 throw new InvalidOperationException("The target must be a Visibility");
             }
 
-            bool isInverse = false;
-
             if (value == null)
+            {
                 return null;
+            }
 
-            if (parameter != null && parameter.ToString().Equals("inverse", StringComparison.OrdinalIgnoreCase))
-                isInverse = true;
-
-            var boolProperty = value as bool?;
-
-            if (boolProperty == true)
-                return (isInverse ? Visibility.Collapsed : Visibility.Visible);
+            var boolProperty = false;
+            if (value is bool)
+            {
+                boolProperty = (bool)value;
+                if (parameter != null && parameter.ToString().Equals("inverse", StringComparison.OrdinalIgnoreCase))
+                {
+                    boolProperty = !boolProperty;
+                }
+            }
             else
-                return (isInverse ? Visibility.Visible : Visibility.Collapsed);
+            {
+                if (parameter != null && parameter.ToString().Equals(value.ToString(), StringComparison.OrdinalIgnoreCase))
+                {
+                    boolProperty = true;
+                }
+            }
+
+            if (boolProperty)
+            {
+                return Visibility.Visible;
+            }
+            else
+            {
+                return Visibility.Collapsed;
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
