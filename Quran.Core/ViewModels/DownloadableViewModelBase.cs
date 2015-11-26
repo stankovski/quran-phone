@@ -51,7 +51,7 @@ namespace Quran.Core.ViewModels
                 if (FileName == null)
                     return null;
                 else
-                    return string.Format("/shared/transfers/{0}", FileName);
+                    return Path.Combine(FileUtils.GetTempDirectory(), FileName);
             }
         }
 

@@ -32,7 +32,7 @@ namespace Quran.Core.ViewModels
             this.Tags = new ObservableCollection<ItemViewModelBase>();
             this.HasAskedToDownload = false;
             this.ActiveDownload.ServerUrl = FileUtils.GetZipFileUrl();
-            this.ActiveDownload.LocalUrl = FileUtils.QURAN_BASE;
+            this.ActiveDownload.LocalUrl = FileUtils.RunSync(() => FileUtils.GetQuranBaseDirectory());
         }
 
         #region Properties

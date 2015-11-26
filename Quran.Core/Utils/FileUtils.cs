@@ -38,12 +38,6 @@ namespace Quran.Core.Utils
             // Delete stuck files
             FileUtils.RunSync(() => DeleteStuckFiles());
         }
-
-        public static bool IsSeparator(this char c)
-        {
-            return c == '\\' || c == '/';
-        }
-
         
         /// <summary>
         /// Deletes folder even if it contains read only files
@@ -377,6 +371,16 @@ namespace Quran.Core.Utils
             }
 
             return await GetSubdirectory(imageFolder);
+        }
+
+        public static async Task<string> GetQuranBaseDirectory()
+        {
+            return await GetSubdirectory(QURAN_BASE);
+        }
+
+        public static string GetTempDirectory()
+        {
+            return ApplicationData.Current.TemporaryFolder.Path;
         }
 
         public static async Task<string> GetSubdirectory(string subdirectoryName)

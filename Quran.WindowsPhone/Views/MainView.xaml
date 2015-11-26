@@ -141,7 +141,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="80"/>
         </Grid.RowDefinitions>
         <Grid x:Name="Header" Grid.Row="0" VerticalAlignment="Center">
             <Grid.ColumnDefinitions>
@@ -167,7 +166,11 @@
             </SplitView.Pane>
             <SplitView.Content>
                 <Grid x:Name="MainPanel">
-                    <Pivot>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="40"/>
+                    </Grid.RowDefinitions>
+                    <Pivot Grid.Row="0">
                         <PivotItem Margin="0">
                             <PivotItem.Header>
                                 <ui:TabHeader Glyph="&#xE292;" Label="{x:Bind ViewModel.SurahHeaderString}" Width="100"/>
@@ -218,9 +221,7 @@
                             </Grid>
                         </PivotItem>
                     </Pivot>
-                    <ui:DownloadControl ViewModel="{x:Bind ViewModel.ActiveDownload, Mode=OneWay}"
-                    Grid.Row="2"
-                    VerticalAlignment="Bottom"/>
+                    <ui:DownloadControl ViewModel="{x:Bind ViewModel.ActiveDownload, Mode=OneWay}" Grid.Row="1" VerticalAlignment="Bottom"/>
                 </Grid>
             </SplitView.Content>
         </SplitView>

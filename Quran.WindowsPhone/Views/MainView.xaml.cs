@@ -62,9 +62,9 @@ namespace Quran.WindowsPhone.Views
                 {
                     await QuranApp.MainViewModel.Download();
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    //Console.WriteLine("failed to download quran data: " + ex.Message);
+                    await QuranApp.NativeProvider.ShowErrorMessageBox("Failed to download Quran Data: " + ex.Message);
                 }
             }
         }

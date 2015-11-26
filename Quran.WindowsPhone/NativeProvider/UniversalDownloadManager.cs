@@ -10,6 +10,7 @@ using Windows.Networking.BackgroundTransfer;
 using Windows.Storage;
 using System.Threading;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace Quran.WindowsPhone.NativeProvider
 {
@@ -33,7 +34,9 @@ namespace Quran.WindowsPhone.NativeProvider
             try
             {
                 var backgroundDownloader = new BackgroundDownloader();
-                var request = backgroundDownloader.CreateDownload(serverUri, await StorageFile.GetFileFromPathAsync(resultFile).AsTask());
+                var folder = await StorageFolder.GetFolderFromPathAsync(Path.GetDirectoryName(resultFile));
+                var newFile = await folder.CreateFileAsync(Path.GetFileName(resultFile), CreationCollisionOption.OpenIfExists);
+                var request = backgroundDownloader.CreateDownload(serverUri, newFile);
                 request.CostPolicy = BackgroundTransferCostPolicy.Always;
 
                 var progressCallback = new Progress<DownloadOperation>();
