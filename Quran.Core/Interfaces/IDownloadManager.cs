@@ -13,7 +13,7 @@ namespace Quran.Core.Interfaces
         Task<ITransferRequest> GetRequest(string serverUri);
         Task Cancel(ITransferRequest request);
         void FinalizeRequest(ITransferRequest request);
-        Task<IEnumerable<ITransferRequest>> GetAllRequests();
+        Task<IEnumerable<ITransferRequest>> GetAllRequests(CancellationToken token = default(CancellationToken));
         IEnumerable<string> GetAllStuckFiles();
     }
 }

@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Quran.Core.Common;
 using Quran.Core.Utils;
 
@@ -46,13 +47,20 @@ namespace Quran.Core.ViewModels
         #endregion Properties
 
         #region Public methods
-        public void LoadData()
+        public override Task Initialize()
+        {
+            return Task.FromResult(0);
+        }
+
+        public async Task LoadData()
         {
             var qariNames = AudioUtils.GetReciterItems().Where(r => !r.IsGapless);
 
             foreach (var item in qariNames)
             {
-                this.AvailableReciters.Add(new ObservableReciterItem(item));
+                var observableItem = new ObservableReciterItem(item);
+                await observableItem.Initialize();
+                this.AvailableReciters.Add(observableItem);
             }
 
             this.IsDataLoaded = true;

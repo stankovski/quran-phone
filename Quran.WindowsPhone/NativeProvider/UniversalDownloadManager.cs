@@ -122,10 +122,17 @@ namespace Quran.WindowsPhone.NativeProvider
             //}
         }
 
-        public async Task<IEnumerable<ITransferRequest>> GetAllRequests()
+        public async Task<IEnumerable<ITransferRequest>> GetAllRequests(CancellationToken token = default(CancellationToken))
         {
-            var downloads = await BackgroundDownloader.GetCurrentDownloadsAsync().AsTask();
-            return downloads.Select(r => new UniversalTransferRequest(r, null));
+            List<ITransferRequest> activeDownloads = new List<ITransferRequest>();
+            var downloads = await BackgroundDownloader.GetCurrentDownloadsAsync();
+            foreach (var download in downloads)
+            {
+                var progressCallback = new Progress<DownloadOperation>();
+                activeDownloads.Add(new UniversalTransferRequest(
+                    await download.AttachAsync().AsTask(token, progressCallback), progressCallback));
+            }
+            return activeDownloads;
         }
 
         public IEnumerable<string> GetAllStuckFiles()

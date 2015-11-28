@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Quran.Core.Interfaces;
 using Quran.Core.ViewModels;
 
@@ -26,34 +27,31 @@ namespace Quran.Core
         /// A static ViewModel used by the views to bind against.
         /// </summary>
         /// <returns>The MainViewModel object.</returns>
-        public static MainViewModel MainViewModel
+        public static async Task<MainViewModel> GetMainViewModel()
         {
-            get
+            // Delay creation of the view model until necessary
+            if (mainViewModel == null)
             {
-                // Delay creation of the view model until necessary
-                if (mainViewModel == null)
-                    mainViewModel = new MainViewModel();
-
-                return mainViewModel;
+                mainViewModel = new MainViewModel();
+                await mainViewModel.Initialize();
             }
-            set { mainViewModel = value; }
+            return mainViewModel;
         }
 
         /// <summary>
         /// A static ViewModel used by the views to bind against.
         /// </summary>
         /// <returns>The SearchViewModel object.</returns>
-        public static SearchViewModel SearchViewModel
+        public static async Task<SearchViewModel> GetSearchViewModel()
         {
-            get
+            // Delay creation of the view model until necessary
+            if (searchViewModel == null)
             {
-                // Delay creation of the view model until necessary
-                if (searchViewModel == null)
-                    searchViewModel = new SearchViewModel();
-
-                return searchViewModel;
+                searchViewModel = new SearchViewModel();
+                await searchViewModel.Initialize();
             }
-            set { searchViewModel = value; }
+
+            return searchViewModel;
         }
 
         /// <summary>

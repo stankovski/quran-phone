@@ -60,6 +60,14 @@ namespace Quran.WindowsPhone.NativeProvider
             get { return request.Progress.BytesReceived; }
         }
 
+        public bool IsCompressed
+        {
+            get
+            {
+                return request.ResultFile.Path != null && request.ResultFile.Path.EndsWith(".zip");
+            }
+        }
+
         public event EventHandler<TransferEventArgs> TransferProgressChanged;
 
         private void Request_ProgressChanged(object sender, DownloadOperation e)

@@ -47,6 +47,10 @@ namespace Quran.Core.ViewModels
         #endregion Properties
 
         #region Public methods
+        public override Task Initialize()
+        {
+            return Task.FromResult(0);
+        }
 
         public async void Load(string query)
         {

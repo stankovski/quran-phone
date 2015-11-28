@@ -10,6 +10,9 @@ namespace Quran.Core.ViewModels
 {
     public class ObservableTranslationItem : DownloadableViewModelBase
     {
+        private readonly string _serverUrl;
+        private readonly string _localPath;
+
         public ObservableTranslationItem() { }
 
         public ObservableTranslationItem(TranslationItem item)
@@ -18,11 +21,9 @@ namespace Quran.Core.ViewModels
             this.Id = item.Id;
             this.Name = item.Name;
             this.Translator = item.Translator;
-            this.ServerUrl = item.Url;
-            this.FileName = item.Filename;
             this.Exists = item.Exists;
-            this.LocalUrl = Path.Combine(FileUtils.RunSync(() => FileUtils.GetQuranDatabaseDirectory()), this.FileName);
-            this.IsCompressed = item.Compressed;
+            _serverUrl = item.Url;
+            _localPath = Path.Combine(FileUtils.RunSync(() => FileUtils.GetQuranDatabaseDirectory()), item.Filename);
         }
 
         private int id;
@@ -87,15 +88,15 @@ namespace Quran.Core.ViewModels
 
         public async Task Delete()
         {
-            if (await FileUtils.FileExists(this.LocalUrl))
+            if (await FileUtils.FileExists(_localPath))
             {
                 try
                 {
-                    await FileUtils.DeleteFile(this.LocalUrl);
+                    await FileUtils.DeleteFile(_localPath);
                 }
                 catch
                 {
-                    QuranApp.NativeProvider.Log("error deleting file " + this.LocalUrl);
+                    QuranApp.NativeProvider.Log("error deleting file " + _localPath);
                 }
             }
             else
@@ -110,7 +111,7 @@ namespace Quran.Core.ViewModels
 
             try
             {
-                if (SettingsUtils.Get<string>(Constants.PREF_ACTIVE_TRANSLATION).StartsWith(this.FileName))
+                if (SettingsUtils.Get<string>(Constants.PREF_ACTIVE_TRANSLATION).StartsWith(_localPath))
                 {
                     SettingsUtils.Set<string>(Constants.PREF_ACTIVE_TRANSLATION, string.Empty);
                 }
@@ -118,6 +119,11 @@ namespace Quran.Core.ViewModels
             catch (Exception)
             {
             }
+        }
+
+        public async Task<bool> Download()
+        {
+            return await DownloadSingleFile(_serverUrl, _localPath);
         }
 
         public void Navigate()

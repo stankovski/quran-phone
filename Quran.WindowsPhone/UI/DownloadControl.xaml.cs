@@ -11,10 +11,5 @@ namespace Quran.WindowsPhone.UI
         {
             InitializeComponent();
         }
-
-        private void Button_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-
-        }
     }
 }

@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using Quran.Core.Utils;
 
 namespace Quran.Core.ViewModels
@@ -57,6 +58,11 @@ namespace Quran.Core.ViewModels
         #endregion Properties
 
         #region Public methods
+        public override Task Initialize()
+        {
+            return Task.FromResult(0);
+        }
+
         public async void LoadData()
         {
             var list = await TranslationListTask.DownloadTranslations(true, "tag");

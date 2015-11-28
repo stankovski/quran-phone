@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
-using System.Reflection;
 using Quran.Core;
 using Quran.Core.Data;
 using Quran.Core.Utils;
@@ -16,27 +14,14 @@ namespace Quran.WindowsPhone.Views
     public partial class MainView
     {
         public MainViewModel ViewModel { get; set; }
-        // Constructor
-        public MainView()
-        {
-            ViewModel = QuranApp.MainViewModel;
-
-            InitializeComponent();
-
-            LittleWatson.CheckForPreviousException().ConfigureAwait(false).GetAwaiter().GetResult();
-        }
-
-        private void FastNavigate_Click(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(DetailsView),
-                        new NavigationData {
-                            Page = SettingsUtils.Get<int>(Constants.PREF_LAST_PAGE)
-                        });
-        }
 
         // Load data for the ViewModel Items
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
+            ViewModel = await QuranApp.GetMainViewModel();
+            InitializeComponent();
+            await LittleWatson.CheckForPreviousException();
+
             // Remove all back navigation options
             while (Frame.BackStack.Count() > 0)
             {
@@ -46,13 +31,13 @@ namespace Quran.WindowsPhone.Views
             // Show welcome message
             showWelcomeMessage();
 
-            if (!QuranApp.MainViewModel.IsDataLoaded)
+            if (!ViewModel.IsDataLoaded)
             {
-                QuranApp.MainViewModel.LoadData();
+                ViewModel.LoadData();
             }
             else
             {
-                QuranApp.MainViewModel.RefreshData();
+                ViewModel.RefreshData();
             }
             
             // Show prompt to download content if not all images exist
@@ -60,7 +45,7 @@ namespace Quran.WindowsPhone.Views
             {
                 try
                 {
-                    await QuranApp.MainViewModel.Download();
+                    await ViewModel.Download();
                 }
                 catch (Exception ex)
                 {
@@ -68,6 +53,16 @@ namespace Quran.WindowsPhone.Views
                 }
             }
         }
+
+        private void FastNavigate_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(DetailsView),
+                        new NavigationData
+                        {
+                            Page = SettingsUtils.Get<int>(Constants.PREF_LAST_PAGE)
+                        });
+        }
+
 
         private void showWelcomeMessage()
         {
@@ -100,7 +95,7 @@ Quran Phone Team";
             if (list == null || list.SelectedItem == null)
                 return;
 
-            var selectedItem = (ItemViewModelBase)list.SelectedItem;
+            var selectedItem = (ItemViewModel)list.SelectedItem;
 
             try
             {
@@ -135,7 +130,9 @@ Quran Phone Team";
             if (menuItem != null)
             {
                 if (menuItem.DataContext != null)
-                    QuranApp.MainViewModel.DeleteBookmark(menuItem.DataContext as ItemViewModel);
+                {
+                    ViewModel.DeleteBookmark(menuItem.DataContext as ItemViewModel);
+                }
             }
         }
 

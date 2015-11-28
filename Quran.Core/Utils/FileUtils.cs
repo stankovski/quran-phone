@@ -261,9 +261,9 @@ namespace Quran.Core.Utils
         {
             var quranFolderPath = await GetQuranDirectory();
             var quranFolder = await StorageFolder.GetFolderFromPathAsync(quranFolderPath);
-            var imageFiles = await quranFolder.GetFilesAsync();
+            var imageFiles = quranFolder.CreateFileQuery();
             // Should have at least 95% of pages; of more than that it's not efficient to download the ZIP
-            if (imageFiles.Count >= 600)
+            if (await imageFiles.GetItemCountAsync() >= 600)
             {
                 // ideally, we should loop for each page and ensure
                 // all pages are there, but this will do for now.

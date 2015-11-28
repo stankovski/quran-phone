@@ -248,7 +248,7 @@ namespace Quran.Core.Utils
                 var localUrl = destination + "/";
                 QuranApp.NativeProvider.Log("gapless asking to download " + serverUrl + " to " + localUrl);
 
-                result = await QuranApp.DetailsViewModel.ActiveDownload.Download(serverUrl, localUrl, AppResources.loading_audio);
+                result = await QuranApp.DetailsViewModel.ActiveDownload.DownloadSingleFile(serverUrl, localUrl, AppResources.loading_audio);
                 if (!result)
                     break;
             }

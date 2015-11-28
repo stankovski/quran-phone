@@ -238,6 +238,10 @@ namespace Quran.Core.ViewModels
             }
         }
         #endregion Properties
+        public override Task Initialize()
+        {
+            return Task.FromResult(0);
+        }
 
         public async Task LoadData()
         {

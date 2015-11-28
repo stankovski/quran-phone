@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Windows.UI.Popups;
 using Quran.WindowsPhone.Utils;
 using Windows.UI.ViewManagement;
+using System.IO.Compression;
 
 namespace Quran.WindowsPhone.NativeProvider
 {
@@ -71,9 +72,9 @@ namespace Quran.WindowsPhone.NativeProvider
             }
         }
 
-        public async Task ExtractZip(string source, string baseFolder)
+        public Task ExtractZip(string source, string baseFolder)
         {
-            await ZipHelper.Unzip(source, baseFolder).ConfigureAwait(false);
+            return Task.Run(() => ZipFile.ExtractToDirectory(source, baseFolder));
         }
 
         public void CopyToClipboard(string text)

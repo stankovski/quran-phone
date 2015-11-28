@@ -19,7 +19,11 @@ namespace Quran.Core.ViewModels
             this.LocalUrl = item.LocalPath;
             this.DatabaseName = item.GaplessDatabasePath;
             this.IsGapless = item.IsGapless;
-            this.Exists = FileUtils.RunSync(() => FileUtils.DirectoryExists(item.LocalPath));
+        }
+
+        public override async Task Initialize()
+        {
+            this.Exists = await FileUtils.DirectoryExists(LocalUrl);
         }
 
         private int id;

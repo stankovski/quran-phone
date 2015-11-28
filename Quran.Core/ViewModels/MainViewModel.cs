@@ -7,6 +7,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.IO;
 using System.Threading.Tasks;
 using Quran.Core.Common;
 using Quran.Core.Data;
@@ -21,18 +22,18 @@ namespace Quran.Core.ViewModels
     /// </summary>
     public class MainViewModel : ViewModelWithDownload
     {
+        private string _zipFileServerUrl;
+        private string _zipFileLocalPath;
         public MainViewModel()
         {
-            this.Surahs = new ObservableCollection<ItemViewModelBase>();
-            this.Juz = new ObservableCollection<ItemViewModelBase>();
-            this.Bookmarks = new ObservableCollection<ItemViewModelBase>();
+            this.Surahs = new ObservableCollection<ItemViewModel>();
+            this.Juz = new ObservableCollection<ItemViewModel>();
+            this.Bookmarks = new ObservableCollection<ItemViewModel>();
             
             this.InstallationStep = AppResources.loading_message;
 
-            this.Tags = new ObservableCollection<ItemViewModelBase>();
+            this.Tags = new ObservableCollection<ItemViewModel>();
             this.HasAskedToDownload = false;
-            this.ActiveDownload.ServerUrl = FileUtils.GetZipFileUrl();
-            this.ActiveDownload.LocalUrl = FileUtils.RunSync(() => FileUtils.GetQuranBaseDirectory());
         }
 
         #region Properties
@@ -41,10 +42,10 @@ namespace Quran.Core.ViewModels
         public string JuzHeaderString { get { return AppResources.quran_juz2_lower; } }
         public string BookmarksHeaderString { get { return AppResources.quran_bookmarks_lower; } }
 
-        public ObservableCollection<ItemViewModelBase> Surahs { get; private set; }
-        public ObservableCollection<ItemViewModelBase> Juz { get; private set; }
-        public ObservableCollection<ItemViewModelBase> Bookmarks { get; private set; }
-        public ObservableCollection<ItemViewModelBase> Tags { get; private set; }
+        public ObservableCollection<ItemViewModel> Surahs { get; private set; }
+        public ObservableCollection<ItemViewModel> Juz { get; private set; }
+        public ObservableCollection<ItemViewModel> Bookmarks { get; private set; }
+        public ObservableCollection<ItemViewModel> Tags { get; private set; }
         public bool IsDataLoaded { get; set; }
         public bool HasAskedToDownload { get; set; }
 
@@ -82,6 +83,14 @@ namespace Quran.Core.ViewModels
 
         #region Public methods
 
+        public override async Task Initialize()
+        {
+            _zipFileServerUrl = FileUtils.GetZipFileUrl();
+            _zipFileLocalPath = Path.Combine(await FileUtils.GetQuranBaseDirectory(), 
+                Path.GetFileName(_zipFileServerUrl));
+            await ActiveDownload.Initialize();
+        }
+
         /// <summary>
         /// Creates and adds a few ItemViewModel objects into the Items collection.
         /// </summary>
@@ -115,9 +124,9 @@ namespace Quran.Core.ViewModels
                 prepareOfflineZip();
 #endif
                 // If downloaded offline and stuck in temp storage
-                if (await this.ActiveDownload.IsInTempStorage() && !this.ActiveDownload.IsDownloading)
+                if (await FileUtils.FileExists(_zipFileLocalPath))
                 {
-                    await ActiveDownload.FinishDownload();
+                    await ActiveDownload.FinishDownload(_zipFileLocalPath);
                 }
 
                 if (!await FileUtils.HaveAllImages() && !this.HasAskedToDownload)
@@ -128,7 +137,7 @@ namespace Quran.Core.ViewModels
 
                     if (askingToDownloadResult)
                     {
-                        await ActiveDownload.Download();
+                        await ActiveDownload.DownloadSingleFile(_zipFileServerUrl, _zipFileLocalPath);
                     }
                 }
             }

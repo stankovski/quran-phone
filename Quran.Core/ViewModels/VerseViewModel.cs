@@ -3,6 +3,8 @@
 //    Defines the VerseViewModel type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+using System.Threading.Tasks;
+
 namespace Quran.Core.ViewModels
 {
     /// <summary>
@@ -94,5 +96,10 @@ namespace Quran.Core.ViewModels
             }
         }
         #endregion Properties
+
+        public override Task Initialize()
+        {
+            return Task.FromResult(0);
+        }
     }
 }

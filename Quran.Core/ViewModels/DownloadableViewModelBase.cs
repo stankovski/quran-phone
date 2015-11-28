@@ -9,8 +9,14 @@ using System.Threading.Tasks;
 using Quran.Core.Common;
 using Quran.Core.Properties;
 using Quran.Core.Utils;
-using System.Windows.Input;
 using System.IO;
+using System.Collections.Generic;
+using System.Threading;
+using Windows.Web;
+using Windows.Networking.BackgroundTransfer;
+using System.Linq;
+using Windows.UI.Core;
+using Windows.Storage;
 
 namespace Quran.Core.ViewModels
 {
@@ -20,54 +26,16 @@ namespace Quran.Core.ViewModels
     /// </summary>
     public class DownloadableViewModelBase : BaseViewModel
     {
-        protected ITransferRequest downloadRequest;
+        private IList<DownloadOperation> activeDownloads;
+        private CancellationTokenSource cts;
+        private readonly CoreDispatcher _dispatcher;
 
         public DownloadableViewModelBase()
         {
             IsDownloading = false;
             IsIndeterminate = true;
-        }
-
-        #region Properties
-        private string localUrl;
-        public string LocalUrl
-        {
-            get { return localUrl; }
-            set
-            {
-                if (value == localUrl)
-                    return;
-
-                localUrl = value;
-
-                base.OnPropertyChanged(() => LocalUrl);
-            }
-        }
-
-        public string TempUrl
-        {
-            get
-            {
-                if (FileName == null)
-                    return null;
-                else
-                    return Path.Combine(FileUtils.GetTempDirectory(), FileName);
-            }
-        }
-
-        private string filename;
-        public string FileName
-        {
-            get { return filename; }
-            set
-            {
-                if (value == filename)
-                    return;
-
-                filename = value;
-
-                base.OnPropertyChanged(() => FileName);
-            }
+            cts = new CancellationTokenSource();
+            _dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
         }
 
         private string description;
@@ -82,58 +50,6 @@ namespace Quran.Core.ViewModels
                 description = value;
 
                 base.OnPropertyChanged(() => Description);
-            }
-        }
-
-        private bool isCompressed;
-        public bool IsCompressed
-        {
-            get { return isCompressed; }
-            set
-            {
-                if (value == isCompressed)
-                    return;
-
-                isCompressed = value;
-
-                base.OnPropertyChanged(() => IsCompressed);
-            }
-        }
-
-        private string serverUrl;
-        public string ServerUrl
-        {
-            get { return serverUrl; }
-            set
-            {
-                if (value == serverUrl)
-                    return;
-
-                serverUrl = value;
-
-                if (!string.IsNullOrEmpty(serverUrl))
-                {
-                    // Set FileName
-                    FileName = Path.GetFileName(serverUrl);
-
-                    // Set IsCompressed
-                    IsCompressed = FileName != null && FileName.EndsWith(".zip");
-
-                    // Finish any stuck files
-                    FinishDownload().Wait();
-
-                    // Check existing downloads
-                    downloadRequest = FileUtils.RunSync(() => QuranApp.NativeProvider.DownloadManager.GetRequest(this.ServerUrl));
-                    if (downloadRequest != null)
-                    {
-                        UpdateDownloadStatus(downloadRequest.TransferStatus);
-                        downloadRequest.TransferProgressChanged += TransferProgressChanged;
-                    }
-                }
-
-                base.OnPropertyChanged(() => ServerUrl);
-                base.OnPropertyChanged(() => FileName);
-                base.OnPropertyChanged(() => IsCompressed);
             }
         }
 
@@ -164,7 +80,9 @@ namespace Quran.Core.ViewModels
                 progress = value;
 
                 if (progress > 0)
+                {
                     IsIndeterminate = false;
+                }
 
                 base.OnPropertyChanged(() => Progress);
             }
@@ -185,8 +103,8 @@ namespace Quran.Core.ViewModels
             }
         }
 
-        private FileTransferStatus downloadStatus;
-        public FileTransferStatus DownloadStatus
+        private BackgroundTransferStatus downloadStatus;
+        public BackgroundTransferStatus DownloadStatus
         {
             get { return downloadStatus; }
             set
@@ -208,36 +126,6 @@ namespace Quran.Core.ViewModels
             }
         }
 
-        public async Task<bool> IsInTempStorage()
-        {
-            if (!IsDownloading && await FileUtils.FileExists(this.TempUrl))
-                return true;
-            else
-                return false;
-        }
-
-        public bool IsInLocalStorage
-        {
-            get
-            {
-                if (!IsDownloading && FileUtils.RunSync(()=> FileUtils.FileExists(this.LocalUrl)))
-                    return true;
-                else
-                    return false;
-            }
-        }
-
-        public string DownloadId
-        {
-            get
-            {
-                if (downloadRequest != null)
-                    return downloadRequest.RequestId;
-                else
-                    return null;
-            }
-        }
-
         private string installationStep;
         public string InstallationStep
         {
@@ -252,271 +140,303 @@ namespace Quran.Core.ViewModels
                 base.OnPropertyChanged(() => InstallationStep);
             }
         }
-
-        #endregion Properties
-
-        #region Event handlers and commands
-
-        protected async void TransferStatusChanged(object sender, TransferEventArgs e)
-        {
-            UpdateDownloadStatus(e.Request.TransferStatus);
-            if (e.Request.TransferStatus == FileTransferStatus.Completed)
-            {
-                await FinishDownload();
-                QuranApp.NativeProvider.DownloadManager.FinalizeRequest(e.Request);
-                if (DownloadComplete != null)
-                    DownloadComplete(this, null);
-            }
-            if (e.Request.TransferStatus == FileTransferStatus.Cancelled)
-            {
-                await FinishDownload();
-                QuranApp.NativeProvider.DownloadManager.FinalizeRequest(e.Request);
-                if (DownloadCancelled != null)
-                    DownloadCancelled(this, null);
-            }
-        }
-
-        protected void TransferProgressChanged(object sender, TransferEventArgs e)
-        {
-            this.Progress = (int)(e.Request.BytesReceived * 100 / e.Request.TotalBytesToReceive);
-        }
-
-        #endregion Event handlers and commands
-
         #region Public methods
-        public async Task<bool> Download(string serverUrl, string localUrl)
+        /// <summary>
+        /// Initialize the view model by enumerating all existing downloads.
+        /// </summary>
+        public override async Task Initialize()
         {
-            Reset();
-            this.ServerUrl = serverUrl;
-            this.LocalUrl = localUrl;
-            return await Download();
-        }
-
-        public async Task<bool> Download(string serverUrl, string localUrl, string description)
-        {
-            Reset();
-            this.ServerUrl = serverUrl;
-            this.LocalUrl = localUrl;
-            this.Description = description;
-            return await DownloadOneFile();
-        }
-
-        public async Task<bool> DownloadMultiple(string[] serverUrls, string localUrl, string description)
-        {
-            Reset();
-            this.LocalUrl = localUrl;
-            this.Description = description;
-            return await DownloadMultipleFile(serverUrls);
-        }
-
-        public async Task<bool> Download()
-        {
-            return await DownloadOneFile();
-        }
-
-        private async Task<bool> DownloadMultipleFile(string[] serverUrls)
-        {
-            IsDownloading = true;
-            InstallationStep = Description ?? AppResources.loading_message;
-            if (downloadRequest != null)
-            {
-                downloadRequest.TransferProgressChanged -= TransferProgressChanged;
-            }
-            downloadRequest = await QuranApp.NativeProvider.DownloadManager.DownloadMultipleAsync(serverUrls, this.LocalUrl);
-            if (downloadRequest != null)
-            {
-                downloadRequest.TransferProgressChanged += TransferProgressChanged;
-                if (downloadRequest.TransferStatus == FileTransferStatus.Completed)
-                {
-                    TransferStatusChanged(this, new TransferEventArgs(downloadRequest));
-                }
-            }
-            var tcs = new TaskCompletionSource<bool>();
-            DownloadComplete += (s, e) => tcs.TrySetResult(true);
-            DownloadCancelled += (s, e) => tcs.TrySetResult(false);
-            var result = await tcs.Task;
-            IsDownloading = false;
-            return result;
-        }
-
-        private async Task<bool> DownloadOneFile()
-        {
-            if (await FileUtils.FileExists(this.LocalUrl))
-                return true;
-            if (await FileUtils.FileExists(TempUrl))
-                await FileUtils.DeleteFile(TempUrl);
-
-            IsDownloading = true;
-            InstallationStep = Description ?? AppResources.loading_message;
-            if (downloadRequest != null)
-            {
-                downloadRequest.TransferProgressChanged -= TransferProgressChanged;
-            }
-            downloadRequest = await QuranApp.NativeProvider.DownloadManager.DownloadAsync(this.ServerUrl, this.TempUrl);
-            if (downloadRequest != null)
-            {
-                downloadRequest.TransferProgressChanged += TransferProgressChanged;
-                if (downloadRequest.TransferStatus == FileTransferStatus.Completed)
-                {
-                    TransferStatusChanged(this, new TransferEventArgs(downloadRequest));
-                }
-            }
-            var tcs = new TaskCompletionSource<bool>();
-            DownloadComplete += (s, e) => tcs.TrySetResult(true);
-            DownloadCancelled += (s, e) => tcs.TrySetResult(false);
-            return await tcs.Task;
-        }
-
-        public async Task<bool> FinishDownload()
-        {
-            if (!string.IsNullOrEmpty(this.TempUrl) && !string.IsNullOrEmpty(this.LocalUrl) &&
-                await FileUtils.FileExists(this.TempUrl))
-            {
-                if (IsCompressed)
-                {
-                    IsDownloading = true;
-                    IsIndeterminate = true;
-                    var result = await ExtractZipAndFinalize();
-                    IsDownloading = false;
-                    IsIndeterminate = false;
-                    return result;
-                }
-                else
-                {
-                    try
-                    {
-                        await FinalizeFile();
-                        return true;
-                    }
-                    catch
-                    {
-                        await QuranApp.NativeProvider.ShowErrorMessageBox(
-                            "Something went wrong with the download. Please try again.");
-                        return false;
-                    }
-                    finally
-                    {
-                        IsIndeterminate = false;
-                        IsDownloading = false;
-                    }
-                }
-            }
-            return true;
-        }
-
-        private async Task FinalizeFile()
-        {
-            IsDownloading = true;
-            IsIndeterminate = true;
-            await FileUtils.MoveFile(TempUrl, this.LocalUrl);
             IsDownloading = false;
             IsIndeterminate = false;
-        }
+            Description = null;
+            InstallationStep = null;
+            activeDownloads = new List<DownloadOperation>();
 
-        public async Task<bool> ExtractZipAndFinalize()
-        {
-            if (await FileUtils.FileExists(TempUrl))
+            IEnumerable<DownloadOperation> downloads = null;
+            try
             {
-                IsIndeterminate = true;
-                InstallationStep = AppResources.extracting_message;
+                downloads = await BackgroundDownloader.GetCurrentDownloadsAsync();
+            }
+            catch (Exception ex)
+            {
+                WebErrorStatus error = BackgroundTransferError.GetStatus(ex.HResult);
+                await QuranApp.NativeProvider.ShowErrorMessageBox("Error getting active downloads: " + error.ToString());
+                return;
+            }
 
-                IsIndeterminate = true;
-
-                var folderToExtractInto = LocalUrl;
-                // Check if LocalUrl is a file or a folder
-                if (Path.HasExtension(LocalUrl))
+            if (downloads.Any())
+            {
+                List<Task> tasks = new List<Task>();
+                foreach (var download in downloads)
                 {
-                    folderToExtractInto = Path.GetDirectoryName(LocalUrl);
+                    // Attach progress and completion handlers.
+                    tasks.Add(HandleDownloadAsync(download, false));
                 }
 
-                await QuranApp.NativeProvider.ExtractZip(TempUrl, folderToExtractInto);
-                await FileUtils.DeleteFile(TempUrl);
-                IsIndeterminate = false;
+                // Don't await HandleDownloadAsync() in the foreach loop since we would attach to the second
+                // download only when the first one completed; attach to the third download when the second one
+                // completes etc. We want to attach to all downloads immediately.
+                // If there are actions that need to be taken once downloads complete, await tasks here, outside
+                // the loop.
+                await Task.WhenAll(tasks);
+            }
+        }
+        
+        public async Task<bool> DownloadSingleFile(string serverUrl, string destinationFile, string description = null)
+        {
+            Reset();
+            this.Description = description;
+            return await Download(serverUrl, destinationFile);
+        }
+
+        
+        public async Task<bool> DownloadMultiple(string[] serverUrls, string destinationFolder, string description = null)
+        {
+            Reset();
+            this.Description = description;
+            if (serverUrls == null || serverUrls.Length == 0)
+            {
+                throw new ArgumentNullException(nameof(serverUrls));
+            }
+            if (string.IsNullOrWhiteSpace(destinationFolder))
+            {
+                throw new ArgumentNullException(nameof(destinationFolder));
+            }
+            foreach (var serverUrl in serverUrls)
+            {
+                var fileName = Path.GetFileName(serverUrl);
+                await Download(serverUrl, Path.Combine(destinationFolder, fileName));
             }
             return true;
         }
+        
+        private async Task<bool> Download(string serverUrl, string destinationFilePath)
+        {
+            if (string.IsNullOrWhiteSpace(destinationFilePath))
+            {
+                throw new ArgumentNullException(nameof(description));
+            }
+            if (string.IsNullOrWhiteSpace(serverUrl))
+            {
+                throw new ArgumentNullException(nameof(serverUrl));
+            }
 
+            StorageFile destinationFile;
+            try
+            {
+                await FileUtils.EnsureDirectoryExists(Path.GetDirectoryName(destinationFilePath));
+                var destinationFolder = await StorageFolder.GetFolderFromPathAsync(Path.GetDirectoryName(destinationFilePath));
+                destinationFile = await destinationFolder.CreateFileAsync(Path.GetFileName(destinationFilePath), CreationCollisionOption.ReplaceExisting);
+            }
+            catch (FileNotFoundException ex)
+            {
+                await QuranApp.NativeProvider.
+                    ShowErrorMessageBox("Error while creating file: " + ex.Message);
+                return false;
+            }
+
+            BackgroundDownloader downloader = new BackgroundDownloader();
+            DownloadOperation download = downloader.CreateDownload(new Uri(serverUrl), destinationFile);
+
+            IsDownloading = true;
+            InstallationStep = Description ?? AppResources.loading_message;
+
+            // Attach progress and completion handlers.
+            await HandleDownloadAsync(download, true);
+            return true;
+        }
+
+        public async Task FinishActiveDownloads()
+        {
+            foreach (var download in activeDownloads)
+            {
+                if (download.Progress.Status == BackgroundTransferStatus.Completed)
+                {
+                    await FinishDownload(download.ResultFile.Path);
+                }
+            }
+        }
+
+        public async Task FinishDownload(string destinationFile)
+        {
+            if (destinationFile != null)
+            {
+                if (await FileUtils.FileExists(destinationFile))
+                {
+                    if (destinationFile.EndsWith(".zip"))
+                    {
+                        IsDownloading = true;
+                        IsIndeterminate = true;
+                        InstallationStep = AppResources.extracting_message;
+
+                        await QuranApp.NativeProvider.ExtractZip(destinationFile,
+                            Path.GetDirectoryName(destinationFile));
+                        await FileUtils.DeleteFile(destinationFile);
+                    }
+                    IsIndeterminate = false;
+                    IsDownloading = false;
+                    IsIndeterminate = false;
+                }
+            }
+        }
         public async Task Cancel()
         {
-            if (downloadRequest != null)
+            if (activeDownloads.Any())
             {
                 if (await QuranApp.NativeProvider.ShowQuestionMessageBox(AppResources.download_cancel_confirmation))
                 {
-                    await QuranApp.NativeProvider.DownloadManager.Cancel(downloadRequest);
-                    IsDownloading = false;
-                    try
-                    {
-                        await FileUtils.DeleteFile(this.TempUrl);
-                    }
-                    catch
-                    {
-                        //Ignore
-                    }
+                    Reset();
                 }
             }
         }
 
         public void Reset()
         {
-            if (downloadRequest != null)
-            {
-                downloadRequest.TransferProgressChanged -= TransferProgressChanged;
-            }
-            downloadRequest = null;
-            IsDownloading = true;
+            cts.Cancel();
+            cts.Dispose();
+            cts = new CancellationTokenSource();
+            IsDownloading = false;
             IsIndeterminate = true;
             Description = null;
-            FileName = null;
             InstallationStep = null;
-            IsCompressed = false;
-            LocalUrl = null;
-            FileName = null;
-            ServerUrl = null;
+            activeDownloads.Clear();
         }
         #endregion Public methods
-
-        private void UpdateDownloadStatus(FileTransferStatus status)
+        private async Task HandleDownloadAsync(DownloadOperation download, bool start)
         {
-            DownloadStatus = status;
-            switch (status)
+            try
             {
-                case FileTransferStatus.Paused:
-                case FileTransferStatus.Transferring:
-                case FileTransferStatus.Waiting:
-                case FileTransferStatus.WaitingForExternalPower:
-                case FileTransferStatus.WaitingForExternalPowerDueToBatterySaverMode:
-                case FileTransferStatus.WaitingForNonVoiceBlockingNetwork:
-                case FileTransferStatus.WaitingForWiFi:
-                    IsDownloading = true;
-                    break;
-                default:
-                    IsDownloading = false;
-                    break;
+                // Store the download so we can pause/resume.
+                activeDownloads.Add(download);
+
+                Progress<DownloadOperation> progressCallback = new Progress<DownloadOperation>(DownloadProgress);
+                if (start)
+                {
+                    // Start the download and attach a progress handler.
+                    await download.StartAsync().AsTask(cts.Token, progressCallback);
+                }
+                else
+                {
+                    // The download was already running when the application started, re-attach the progress handler.
+                    await download.AttachAsync().AsTask(cts.Token, progressCallback);
+                }
+
+                await FinishActiveDownloads();
             }
-            UpdateInstallationStep(status);
+            catch (TaskCanceledException)
+            {
+                InstallationStep = "Cancelled";
+            }
+            catch (Exception ex)
+            {
+                WebErrorStatus error = BackgroundTransferError.GetStatus(ex.HResult);
+                await QuranApp.NativeProvider.ShowErrorMessageBox("Error getting active downloads: " + error.ToString());
+            }
+            finally
+            {
+                activeDownloads.Remove(download);
+            }
         }
 
-        private void UpdateInstallationStep(FileTransferStatus status)
+        private void DownloadProgress(DownloadOperation download)
+        {
+            var ignore = _dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                UpdateStatus();
+            });
+        }
+
+        private void UpdateStatus()
+        {
+            var activeDownload = activeDownloads.FirstOrDefault();
+            var downloadsSnapshot = new List<DownloadOperation>(activeDownloads);
+            if (activeDownloads.Count > 0)
+            {
+                if (downloadsSnapshot.Any(o => o.Progress.Status == BackgroundTransferStatus.Running))
+                {
+                    UpdateInstallationStep(BackgroundTransferStatus.Running);
+                }
+                else if (downloadsSnapshot.All(o => o.Progress.Status == BackgroundTransferStatus.Completed))
+                {
+                    UpdateInstallationStep(BackgroundTransferStatus.Completed);
+                }
+                else
+                {
+                    UpdateInstallationStep(BackgroundTransferStatus.Idle);
+                }
+                double percent = 100;
+                var totalBytesToReceive = downloadsSnapshot.Sum(o => (long)o.Progress.TotalBytesToReceive);
+                var totalBytesReceived = downloadsSnapshot.Sum(o => (long)o.Progress.BytesReceived);
+                if (totalBytesToReceive > 0)
+                {
+                    percent = totalBytesReceived * 100 / totalBytesToReceive;
+                }
+                Progress = (int)percent;
+            }
+            else if (activeDownload != null)
+            {
+                UpdateInstallationStep(activeDownload.Progress.Status);
+                double percent = 100;
+                if (activeDownload.Progress.TotalBytesToReceive > 0)
+                {
+                    percent = activeDownload.Progress.BytesReceived * 100 / activeDownload.Progress.TotalBytesToReceive;
+                }
+                Progress = (int)percent;
+            }
+        }
+
+        private void UpdateInstallationStep(BackgroundTransferStatus status)
         {
             switch (status)
             {
-                case FileTransferStatus.Paused:
-                case FileTransferStatus.Waiting:
-                case FileTransferStatus.WaitingForNonVoiceBlockingNetwork:
+                case BackgroundTransferStatus.PausedByApplication:
+                case BackgroundTransferStatus.PausedSystemPolicy:
+                case BackgroundTransferStatus.Idle:
                     InstallationStep = AppResources.waiting;
+                    IsDownloading = true;
+                    IsIndeterminate = true;
                     break;
-                case FileTransferStatus.WaitingForExternalPower:
-                case FileTransferStatus.WaitingForExternalPowerDueToBatterySaverMode:
-                    InstallationStep = AppResources.waiting_for_power;
-                    break;
-                case FileTransferStatus.WaitingForWiFi:
+                case BackgroundTransferStatus.PausedNoNetwork:
+                case BackgroundTransferStatus.PausedCostedNetwork:
                     InstallationStep = AppResources.waiting_for_wifi;
+                    IsDownloading = true;
+                    IsIndeterminate = true;
                     break;
-                case FileTransferStatus.Completed:
-                case FileTransferStatus.Transferring:
+                case BackgroundTransferStatus.Running:
                     InstallationStep = Description ?? AppResources.loading_message;
+                    IsDownloading = true;
+                    IsIndeterminate = false;
+                    break;
+                case BackgroundTransferStatus.Completed:
+                    InstallationStep = null;
+                    IsDownloading = false;
+                    IsIndeterminate = false;
+                    if (DownloadComplete != null)
+                    {
+                        DownloadComplete(this, null);
+                    }
+                    break;
+                case BackgroundTransferStatus.Canceled:
+                    InstallationStep = null;
+                    IsDownloading = false;
+                    IsIndeterminate = false;
+                    if (DownloadCancelled != null)
+                    {
+                        DownloadCancelled(this, null);
+                    }
                     break;
             }
+        }
+
+        public override void Dispose()
+        {
+            if (cts != null)
+            {
+                cts.Dispose();
+                cts = null;
+            }
+            base.Dispose();
+            GC.SuppressFinalize(this);
         }
 
         public event EventHandler DownloadComplete;

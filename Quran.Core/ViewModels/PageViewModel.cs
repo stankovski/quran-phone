@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using Quran.Core.Utils;
 
 namespace Quran.Core.ViewModels
@@ -107,6 +108,10 @@ namespace Quran.Core.ViewModels
         }
 
         #endregion Properties
+        public override Task Initialize()
+        {
+            return Task.FromResult(0);
+        }
 
         protected override void OnDispose()
         {

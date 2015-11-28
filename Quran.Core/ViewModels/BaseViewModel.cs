@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Threading.Tasks;
 using Quran.Core.Properties;
 
 namespace Quran.Core.ViewModels
@@ -19,6 +20,8 @@ namespace Quran.Core.ViewModels
     /// </summary>
     public abstract class BaseViewModel : INotifyPropertyChanged, IDisposable
     {
+        public abstract Task Initialize();
+
         private bool isLoading;
         public bool IsLoading
         {
@@ -127,7 +130,7 @@ namespace Quran.Core.ViewModels
         /// Invoked when this object is being removed from the application
         /// and will be subject to garbage collection.
         /// </summary>
-        public void Dispose()
+        public virtual void Dispose()
         {
             this.OnDispose();
         }

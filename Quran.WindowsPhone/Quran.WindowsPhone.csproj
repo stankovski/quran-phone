@@ -146,7 +146,6 @@
     <Compile Include="Utils\LittleWatson.cs" />
     <Compile Include="Utils\PhoneUtils.cs" />
     <Compile Include="Utils\SystemInfo.cs" />
-    <Compile Include="Utils\ZipHelper.cs" />
     <Compile Include="Views\DetailsView.xaml.cs">
       <DependentUpon>DetailsView.xaml</DependentUpon>
     </Compile>
