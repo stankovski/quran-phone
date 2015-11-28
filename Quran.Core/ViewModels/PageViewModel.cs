@@ -21,13 +21,16 @@ namespace Quran.Core.ViewModels
             Translations = new ObservableCollection<VerseViewModel>();
         }
 
-        public PageViewModel(int page)
+        public PageViewModel(int page, DetailsViewModel parent)
             : this()
         {
             PageNumber = page;
+            Parent = parent;
         }
 
         #region Properties
+
+        public DetailsViewModel Parent { get; set; }
 
         public ObservableCollection<VerseViewModel> Translations { get; set; }
 

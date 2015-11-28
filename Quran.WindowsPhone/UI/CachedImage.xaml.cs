@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Shapes;
 using Windows.UI;
 using Windows.UI.Xaml.Input;
 using System.Threading.Tasks;
+using Windows.Storage;
 
 namespace Quran.WindowsPhone.UI
 {
@@ -188,11 +189,14 @@ namespace Quran.WindowsPhone.UI
                     try
                     {
                         if (!await FileUtils.FileExists(localPath))
+                        {
                             downloadSuccessful =
                                 await FileUtils.DownloadFileFromWebAsync(source.ToString(), localPath);
+                        }
                     }
-                    catch
+                    catch (Exception ex)
                     {
+                        await QuranApp.NativeProvider.ShowErrorMessageBox("Error loading quran page:" + ex.ToString());
                         downloadSuccessful = false;
                     }
 
@@ -205,7 +209,7 @@ namespace Quran.WindowsPhone.UI
                 try
                 {
                     if (downloadSuccessful)
-                        loadImageFromLocalPath(localPath);
+                        await loadImageFromLocalPath(localPath);
                     else
                         throw new Exception();
                 }
@@ -224,13 +228,13 @@ namespace Quran.WindowsPhone.UI
             }
         }
 
-        private void loadImageFromLocalPath(string localPath)
+        private async Task loadImageFromLocalPath(string localPath)
         {
-            using (var isf = IsolatedStorageFile.GetUserStoreForApplication())
-            using (var stream = isf.OpenFile(localPath, FileMode.Open))
+            var imageFile = await StorageFile.GetFileFromPathAsync(localPath);
+            using (var imageFileStream = await imageFile.OpenReadAsync())
             {
                 var bitmap = new WriteableBitmap(1, 1); // avoid creating intermediate BitmapImage
-                bitmap.SetSource(stream.AsRandomAccessStream());
+                await bitmap.SetSourceAsync(imageFileStream);
                 if (nightMode)
                 {
                     invertColors(bitmap);

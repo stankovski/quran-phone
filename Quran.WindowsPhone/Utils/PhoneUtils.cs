@@ -8,7 +8,7 @@ namespace Quran.WindowsPhone.Utils
         {
             get
             {
-                return true;
+                return Windows.ApplicationModel.DesignMode.DesignModeEnabled;
             }
         }
 

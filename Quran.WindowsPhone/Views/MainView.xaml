@@ -8,6 +8,7 @@
     xmlns:ui="using:Quran.WindowsPhone.UI"
     xmlns:vm="using:Quran.Core.ViewModels"
     xmlns:res="using:Quran.Core.Properties"
+    RequestedTheme="Dark"
     d:DataContext="{d:DesignData ../SampleData/MainViewModelSampleData.xaml}">
 
     <Page.Resources>
@@ -137,7 +138,7 @@
         </DataTemplate>
     </Page.Resources>
 
-    <Grid x:Name="LayoutRoot" Background="Transparent">
+    <Grid x:Name="LayoutRoot" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
