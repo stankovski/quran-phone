@@ -12,30 +12,33 @@ namespace Quran.Core.ViewModels
     /// </summary>
     public class VerseViewModel : BaseViewModel
     {
-        public VerseViewModel()
+        public VerseViewModel() { }
+
+        public VerseViewModel(DetailsViewModel parent)
         {
+            Parent = parent;
         }
 
-        public VerseViewModel(string text)
+        public VerseViewModel(string text, DetailsViewModel parent) : this(parent)
         {
             Text = text;
         }
 
-        public VerseViewModel(string text, string style)
+        public VerseViewModel(string text, string style, DetailsViewModel parent): this (text, parent)
         {
-            Text = text;
             StyleName = style;
         }
 
-        public VerseViewModel(string text, string style, int surah, int ayah)
+        public VerseViewModel(string text, string style, int surah, int ayah, DetailsViewModel parent)
+            : this (text, style, parent)
         {
-            Text = text;
-            StyleName = style;
             Surah = surah;
             Ayah = ayah;
         }
 
         #region Properties
+        public DetailsViewModel Parent { get; set; }
+
         private string styleName;
         public string StyleName
         {

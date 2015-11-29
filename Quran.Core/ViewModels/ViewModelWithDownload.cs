@@ -17,7 +17,7 @@ namespace Quran.Core.ViewModels
 
         public override Task Initialize()
         {
-            return Task.FromResult(0);
+            return ActiveDownload.Initialize();
         }
     }
 }

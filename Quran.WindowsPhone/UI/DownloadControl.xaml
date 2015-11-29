@@ -12,9 +12,11 @@
         <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
 
-    <Grid Visibility="{x:Bind ViewModel.IsDownloading, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+    <Grid Visibility="{x:Bind ViewModel.IsDownloading, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+          Background="{StaticResource BlueText}">
         <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-            <TextBlock HorizontalAlignment="Center" Text="{x:Bind ViewModel.InstallationStep, Mode=OneWay}"/>
+            <TextBlock HorizontalAlignment="Center"  Foreground="White"
+                       Text="{x:Bind ViewModel.InstallationStep, Mode=OneWay}"/>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="20"/>
@@ -22,17 +24,18 @@
                     <ColumnDefinition Width="50"/>
                     <ColumnDefinition Width="50"/>
                 </Grid.ColumnDefinitions>
-                <ProgressBar Grid.Column="1" Value="{x:Bind ViewModel.Progress, Mode=OneWay}" IsIndeterminate="{x:Bind ViewModel.IsIndeterminate, Mode=OneWay}" SmallChange="1" Foreground="White"/>
+                <ProgressBar Grid.Column="1" Value="{x:Bind ViewModel.Progress, Mode=OneWay}" 
+                             IsIndeterminate="{x:Bind ViewModel.IsIndeterminate, Mode=OneWay}" 
+                             SmallChange="1" Foreground="White"/>
                 <StackPanel Grid.Column="2" Orientation="Horizontal" Visibility="{x:Bind ViewModel.IsIndeterminate, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=inverse}" FlowDirection="LeftToRight">
-                    <TextBlock Text="{x:Bind ViewModel.Progress, Mode=OneWay}"/>
-                    <TextBlock>%</TextBlock>
+                    <TextBlock Foreground="White" Text="{x:Bind ViewModel.Progress, Mode=OneWay}"/>
+                    <TextBlock Foreground="White" Text="%"/>
                 </StackPanel>
-                <Button Grid.Column="3" BorderThickness="0" Padding="0" Margin="0,-5,0,-5" Click="{x:Bind ViewModel.Cancel}" Visibility="{x:Bind ViewModel.IsIndeterminate, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=inverse}">
-                    <!--<Image Source="../Assets/Images/ic_cancel.png"/>-->
-                    <Grid Height="15">
-                        <Path Data="M0,0 L1,1 M0,1 L1,0" Stretch="Uniform"/>
-                    </Grid>
-                </Button>
+                <Button Grid.Column="3" BorderThickness="0" Padding="0" FontFamily="Segoe MDL2 Assets" 
+                        Content="&#xE106;" FontSize="18" 
+                        HorizontalAlignment="Center" Foreground="White"
+                        Click="{x:Bind ViewModel.Cancel}" Background="Transparent" 
+                        Visibility="{x:Bind ViewModel.IsIndeterminate, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=inverse}"/>
             </Grid>
         </StackPanel>
     </Grid>

@@ -20,7 +20,6 @@ using Windows.Storage;
 
 namespace Quran.Core.ViewModels
 {
-
     /// <summary>
     /// Define the DownloadableViewModelBase type.
     /// </summary>
@@ -146,6 +145,11 @@ namespace Quran.Core.ViewModels
         /// </summary>
         public override async Task Initialize()
         {
+            if (activeDownloads != null)
+            {
+                return;
+            }
+
             IsDownloading = false;
             IsIndeterminate = false;
             Description = null;

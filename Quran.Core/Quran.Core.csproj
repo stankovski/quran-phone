@@ -184,6 +184,7 @@
     <Compile Include="ViewModels\ItemViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Data\NavigationData.cs" />
+    <Compile Include="ViewModels\NavigationLink.cs" />
     <Compile Include="ViewModels\ObservableReciterItem.cs" />
     <Compile Include="ViewModels\ObservableTranslationItem.cs" />
     <Compile Include="ViewModels\PageViewModel.cs" />

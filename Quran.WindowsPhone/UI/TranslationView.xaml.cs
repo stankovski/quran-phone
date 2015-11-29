@@ -9,6 +9,8 @@ namespace Quran.WindowsPhone.UI
 {
     public partial class TranslationView : UserControl
     {
+        public VerseViewModel ViewModel { get; set; }
+
         public QuranAyah SelectedAyah
         {
             get { return (QuranAyah)GetValue(SelectedAyahProperty); }

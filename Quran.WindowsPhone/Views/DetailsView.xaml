@@ -17,96 +17,81 @@
         <ui:ArabicFontSizeConverter x:Key="ArabicFontSizeConverter"/>
     </Page.Resources>
     <Grid Name="MainContainer" Background="{x:Bind ViewModel.BackgroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}">
-        <ProgressBar Value="{x:Bind ViewModel.AudioDownloadProgress, Mode=OneWay}" IsIndeterminate="False" SmallChange="1" VerticalAlignment="Top" Visibility="{x:Bind ViewModel.IsDownloadingAudio, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Grid HorizontalAlignment="Stretch" Grid.Row="0" Height="33"
-              Visibility="{x:Bind ViewModel.ShowInfoOverlay, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <TextBlock Text="{x:Bind ViewModel.CurrentSurahName, Mode=OneWay}" HorizontalAlignment="Left" FontSize="18" Foreground="{x:Bind ViewModel.ForegroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}" Margin="25,3,0,3"/>
-                <StackPanel Margin="0,3,0,3" HorizontalAlignment="Center" Orientation="Horizontal" FlowDirection="LeftToRight">
-                    <Image Source="..\Assets\Images\left.png" Height="25" Width="50"/>
-                    <TextBlock Text="{x:Bind ViewModel.CurrentPageNumber, Mode=OneWay}" FontSize="18" Foreground="{x:Bind ViewModel.ForegroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}"/>
-                    <Image Source="..\Assets\Images\right.png" Height="25" Width="50"/>
-                </StackPanel>
-                <TextBlock Text="{x:Bind ViewModel.CurrentJuzName, Mode=OneWay}" HorizontalAlignment="Right" FontSize="18" Foreground="{x:Bind ViewModel.ForegroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}" Margin="0,3,25,3"/>
-            </Grid>
-
-            <FlipView x:Name="radSlideView" Grid.Row="1" ItemsSource="{x:Bind ViewModel.Pages}" 
-                      FlowDirection="LeftToRight" SelectedIndex="{x:Bind ViewModel.CurrentPageIndex, Mode=TwoWay}">
-                <FlipView.ItemTemplate>
-                    <DataTemplate x:DataType="vm:PageViewModel">
-                        <Grid>
-                            <ui:CachedImage ImageSource="{x:Bind ImageSource, Mode=OneWay}" 
-                                            PageNumber="{x:Bind PageNumber, Mode=OneWay}" 
-                                            NightMode="{x:Bind Parent.IsNightMode, Mode=OneWay}"
-                                            SelectedAyah="{x:Bind Parent.SelectedAyah, Mode=OneWay}"
-                                            Padding="0,0,0,10"
-                                            Visibility="{x:Bind Parent.ShowTranslation, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
-                            </ui:CachedImage>
-                        </Grid>
-                    </DataTemplate>
-                </FlipView.ItemTemplate>
-            </FlipView>
-
-            <!--<Pivot x:Name="radSlideView" Grid.Row="1" Margin="0" ItemsSource="{x:Bind ViewModel.Pages}"
-                   FlowDirection="LeftToRight">
-                <Pivot.ItemTemplate>
-                    <DataTemplate x:DataType="vm:PageViewModel" >
-                        <Grid>
-                            <ui:CachedImage ImageSource="{x:Bind ImageSource}" PageNumber="{x:Bind PageNumber}" 
-                                              NightMode="{Binding DataContext.IsNightMode, ElementName=ThisPage}"
-                                              SelectedAyah="{Binding DataContext.SelectedAyah, ElementName=ThisPage}"
-                                              Padding="0,0,0,10"
-                                              Visibility="{Binding DataContext.ShowTranslation, ElementName=ThisPage, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
-                            </ui:CachedImage>
-
-                            <telerikPrimitives:RadDataBoundListBox x:Name="TranslationListBox" DoubleTap="ListBoxDoubleTap"
-                                                                   Visibility="{Binding DataContext.ShowTranslation, ElementName=ThisPage, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                                   ItemsSource="{Binding Translations}" IsAsyncBalanceEnabled="True">
-                                <telerikPrimitives:RadDataBoundListBox.EmptyContentTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=LocalizedResources.loading, Source={StaticResource LocalizedStrings}}"/>
-                                    </DataTemplate>
-                                </telerikPrimitives:RadDataBoundListBox.EmptyContentTemplate>
-                                <telerikPrimitives:RadDataBoundListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <ListBoxItem HorizontalContentAlignment="Stretch" Foreground="{Binding DataContext.ForegroundColor, Mode=OneWay, ElementName=ThisPage}">
-                                            <telerikPrimitives:RadContextMenu.ContextMenu>
-                                                <telerikPrimitives:RadContextMenu>
-                                                    <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.bookmark_ayah, Source={StaticResource LocalizedStrings}}" Tapped="AyahContextMenuClick"/>
-                                                    <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.copy, Source={StaticResource LocalizedStrings}}" Tapped="AyahContextMenuClick"/>
-                                                    <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.recite_ayah, Source={StaticResource LocalizedStrings}}" Tapped="AyahContextMenuClick"/>
-                                                </telerikPrimitives:RadContextMenu>
-                                            </telerikPrimitives:RadContextMenu.ContextMenu>
-                                            <ui:TranslationView DataContext="{Binding}" SelectedAyah="{Binding DataContext.SelectedAyah, ElementName=ThisPage}"/>
-                                        </ListBoxItem>
-                                    </DataTemplate>
-                                </telerikPrimitives:RadDataBoundListBox.ItemTemplate>
-                                <i:Interaction.Behaviors>
-                                    <ui:ListBoxPropertyBinder SelectedAyah="{Binding DataContext.SelectedAyah, ElementName=ThisPage}"/>
-                                </i:Interaction.Behaviors>
-                            </telerikPrimitives:RadDataBoundListBox>
-                        </Grid>
-                    </DataTemplate>
-                </Pivot.ItemTemplate>
-            </Pivot>-->
-        </Grid>
-
-        <ui:DownloadControl DataContext="{x:Bind ViewModel.ActiveDownload}" VerticalAlignment="Top" Height="70"/>
-
-        <ui:AudioPlayerControl AudioState="{x:Bind ViewModel.AudioPlayerState}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="70" Height="70" 
-                               Foreground="{StaticResource BlueText}" Margin="30"/>
-
-        <Button VerticalAlignment="Bottom" HorizontalAlignment="Right" Padding="0" Width="80" Style="{StaticResource ChromelessButtonStyle}" Name="menuToggleButton" 
-                Visibility="{x:Bind ViewModel.IsShowMenu, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
-            <StackPanel Orientation="Horizontal" Background="Transparent" VerticalAlignment="Bottom" Margin="0" Height="70" Width="80">
-                <Ellipse Fill="{StaticResource DarkBlueText}" Width="8" Height="8" Margin="5,0,5,15" VerticalAlignment="Bottom"/>
-                <Ellipse Fill="{StaticResource DarkBlueText}" Width="8" Height="8" Margin="5,0,5,15" VerticalAlignment="Bottom"/>
-                <Ellipse Fill="{StaticResource DarkBlueText}" Width="8" Height="8" Margin="5,0,5,15" VerticalAlignment="Bottom"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="48"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <ProgressBar Grid.Row="0" Value="{x:Bind ViewModel.AudioDownloadProgress, Mode=OneWay}"
+                     IsIndeterminate="False" SmallChange="1" VerticalAlignment="Top" 
+                     Visibility="{x:Bind ViewModel.IsDownloadingAudio, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        <Grid Grid.Row="0" HorizontalAlignment="Stretch" Height="48" Background="White"
+            Visibility="{x:Bind ViewModel.ShowInfoOverlay, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Button x:Name="HamburgerButton" Style="{StaticResource HamburgerButtonStyle}" Click="HamburgerButton_Click"/>
+            <TextBlock Text="{x:Bind ViewModel.CurrentSurahName, Mode=OneWay}" HorizontalAlignment="Left" FontSize="18" 
+                       Foreground="{x:Bind ViewModel.ForegroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}" 
+                       Margin="50,3,0,3" VerticalAlignment="Center"/>
+            <StackPanel Margin="0,3,0,3" HorizontalAlignment="Center" Orientation="Horizontal" FlowDirection="LeftToRight">
+                <Image Source="..\Assets\Images\left.png" Height="25" Width="50"/>
+                <TextBlock Text="{x:Bind ViewModel.CurrentPageNumber, Mode=OneWay}" FontSize="18" VerticalAlignment="Center" 
+                           Foreground="{x:Bind ViewModel.ForegroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}"/>
+                <Image Source="..\Assets\Images\right.png" Height="25" Width="50"/>
             </StackPanel>
-        </Button>
+            <TextBlock Text="{x:Bind ViewModel.CurrentJuzName, Mode=OneWay}" HorizontalAlignment="Right" 
+                       FontSize="18" VerticalAlignment="Center"
+                       Foreground="{x:Bind ViewModel.ForegroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}" Margin="0,3,25,3"/>
+        </Grid>
+        <SplitView Grid.Row="1" x:Name="MainSplitView" DisplayMode="Overlay" IsPaneOpen="False" OpenPaneLength="300">
+            <SplitView.Pane>
+                <StackPanel Background="{StaticResource BlueText}">
+                    <ListView x:Name="NavLinksList" Margin="0,12,0,0" SelectionMode="None" 
+                        VerticalAlignment="Stretch" Foreground="White"
+                        ItemClick="NavLinkItemClick" IsItemClickEnabled="True"
+                        ItemsSource="{x:Bind NavigationLinks}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="vm:NavigationLink">
+                                <StackPanel Orientation="Horizontal"  Margin="2,0,0,0">
+                                    <SymbolIcon Symbol="{x:Bind Symbol}" Foreground="White"/>
+                                    <TextBlock Text="{x:Bind Label}" Margin="24,0,0,0" Foreground="White"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackPanel>
+            </SplitView.Pane>
+            <SplitView.Content>
+                <FlipView x:Name="radSlideView" ItemsSource="{x:Bind ViewModel.Pages}"
+                    FlowDirection="LeftToRight" SelectedIndex="{x:Bind ViewModel.CurrentPageIndex, Mode=TwoWay}">
+                    <FlipView.ItemTemplate>
+                        <DataTemplate x:DataType="vm:PageViewModel">
+                            <Grid>
+                                <ui:CachedImage ImageSource="{x:Bind ImageSource, Mode=OneWay}" 
+                                        PageNumber="{x:Bind PageNumber, Mode=OneWay}" 
+                                        NightMode="{x:Bind Parent.IsNightMode, Mode=OneWay}"
+                                        SelectedAyah="{x:Bind Parent.SelectedAyah, Mode=OneWay}"
+                                        Padding="0,0,0,10"
+                                        Visibility="{x:Bind Parent.ShowTranslation, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
+                                </ui:CachedImage>
+                                <ListView x:Name="TranslationListBox" DoubleTapped="ListBoxDoubleTap"
+                                        Visibility="{x:Bind Parent.ShowTranslation,Converter={StaticResource BooleanToVisibilityConverter}}"
+                                        ItemsSource="{x:Bind Translations}">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate x:DataType="vm:VerseViewModel">
+                                            <ListBoxItem HorizontalContentAlignment="Stretch" Foreground="{x:Bind Parent.ForegroundColor, Mode=OneWay}">
+                                                <ui:TranslationView ViewModel="{x:Bind}" SelectedAyah="{x:Bind Parent.SelectedAyah,Mode=OneWay}"/>
+                                            </ListBoxItem>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </Grid>
+                        </DataTemplate>
+                    </FlipView.ItemTemplate>
+                </FlipView>
+            </SplitView.Content>
+        </SplitView>
+        <ui:DownloadControl Grid.Row="1" ViewModel="{x:Bind ViewModel.ActiveDownload, Mode=OneWay}" VerticalAlignment="Top" Height="70"/>
+
+        <ui:AudioPlayerControl Grid.Row="1" AudioState="{x:Bind ViewModel.AudioPlayerState, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="70" Height="70" 
+                               Foreground="{StaticResource BlueText}" Margin="30"/>
     </Grid>
 </Page>

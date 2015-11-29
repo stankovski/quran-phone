@@ -140,26 +140,25 @@
 
     <Grid x:Name="LayoutRoot" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="48"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid x:Name="Header" Grid.Row="0" VerticalAlignment="Center">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="48"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="40"/>
-                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="48"/>
+                <ColumnDefinition Width="48"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" x:Name="HamburgerButton" FontFamily="Segoe MDL2 Assets" Content="&#xE700;"
-                    Background="{StaticResource BlueText}" Click="HamburgerButton_Click" FontSize="20" Height="40"/>
-            <TextBlock Grid.Column="1" Text="{x:Bind ViewModel.AppNameString}" Margin="10,0,0,0" FontWeight="Bold" FontSize="20" VerticalAlignment="Center"/>
-            <FontIcon Grid.Column="2" FontFamily="Segoe MDL2 Assets" Glyph="&#xE094;" FontSize="20" VerticalAlignment="Center"/>
-            <Button Grid.Column="3" FontFamily="Segoe MDL2 Assets" Content="&#xE82D;" FontSize="20" 
-                    VerticalAlignment="Center" Background="#00000000" Click="FastNavigate_Click"/>
+            <Button Grid.Column="0" x:Name="HamburgerButton" Style="{StaticResource HamburgerButtonStyle}" Click="HamburgerButton_Click"/>
+            <TextBlock Grid.Column="1" Text="{x:Bind ViewModel.AppNameString}" Margin="10,0,0,0" FontWeight="SemiBold" FontSize="20" VerticalAlignment="Center"/>
+            <Button Grid.Column="2" Style="{StaticResource MenuButtonStyle}" Content="&#xE094;" 
+                    VerticalAlignment="Center"/>
+            <Button Grid.Column="3" Style="{StaticResource MenuButtonStyle}" Content="&#xE82D;"
+                    VerticalAlignment="Center" Click="FastNavigate_Click"/>
         </Grid>
         <SplitView Grid.Row="1" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" 
-                   x:Name="MainSplitView" DisplayMode="Inline"  
-                   IsPaneOpen="False" OpenPaneLength="300">
+                   x:Name="MainSplitView" DisplayMode="Overlay" IsPaneOpen="False" OpenPaneLength="300">
             <SplitView.Pane>
                 <StackPanel Background="{StaticResource BlueText}">
                     <TextBlock Text="Settings"/>

@@ -11,12 +11,14 @@ using Quran.WindowsPhone.UI;
 using Quran.WindowsPhone.Utils;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml;
+using System.Collections.ObjectModel;
 
 namespace Quran.WindowsPhone.Views
 {
     public partial class DetailsView : Page
     {
         public DetailsViewModel ViewModel { get; set; }
+        public ObservableCollection<NavigationLink> NavigationLinks = new ObservableCollection<NavigationLink>();
 
         // When page is navigated to set data context to selected item in list
         protected override async void OnNavigatedTo(NavigationEventArgs e)
@@ -24,7 +26,7 @@ namespace Quran.WindowsPhone.Views
             ViewModel = QuranApp.DetailsViewModel;
             await ViewModel.Initialize();
             InitializeComponent();
-            //BuildLocalizedApplicationBar();
+            BuildLocalizedApplicationBar();
 
             //ViewModel.Orientation = QuranApp.NativeProvider.IsPortaitOrientation ? 
             //    ScreenOrientation.Portrait : 
@@ -42,18 +44,19 @@ namespace Quran.WindowsPhone.Views
             //ayahContextMenu.ItemTapped += AyahContextMenuClick;
             //ayahContextMenu.Closed += (obj, e) => ViewModel.SelectedAyah = null;
 
-            string selectedPage = "1";
-            string selectedSurah;
-            string selectedAyah;
+            NavigationData parameters = e.Parameter as NavigationData;
+            if (parameters == null)
+            {
+                parameters = new NavigationData();
+            }
 
             //NavigationContext.QueryString.TryGetValue("page", out selectedPage);
             //NavigationContext.QueryString.TryGetValue("surah", out selectedSurah);
             //NavigationContext.QueryString.TryGetValue("ayah", out selectedAyah);
 
-            if (selectedPage != null)
+            if (parameters.Page != null)
             {
-                int page = int.Parse(selectedPage, CultureInfo.InvariantCulture);
-                ViewModel.CurrentPageNumber = page;
+                ViewModel.CurrentPageNumber = parameters.Page.Value;
                 
                 //Update settings
                 ViewModel.IsNightMode = SettingsUtils.Get<bool>(Constants.PREF_NIGHT_MODE);
@@ -97,23 +100,15 @@ namespace Quran.WindowsPhone.Views
             // set keepinfooverlay according to setting
             ViewModel.KeepInfoOverlay = SettingsUtils.Get<bool>(Constants.PREF_KEEP_INFO_OVERLAY);
 
-            ////Select ayah
-            //if (selectedSurah != null && selectedAyah != null)
-            //{
-            //    int surah = int.Parse(selectedSurah, CultureInfo.InvariantCulture);
-            //    int ayah = int.Parse(selectedAyah, CultureInfo.InvariantCulture);
-            //    ViewModel.SelectedAyah = new QuranAyah(surah, ayah);
-            //}
-            //else
-            //{
-            //    ViewModel.SelectedAyah = null;
-            //}
-        }
-        
-        private void PageFlipped(object sender, SelectionChangedEventArgs e)
-        {
-            ViewModel.SelectedAyah = null;
-            //ViewModel.CurrentPageIndex = ViewModel.Pages.IndexOf((PageViewModel)radSlideView.SelectedItem);
+            //Select ayah
+            if (parameters.Surah != null && parameters.Ayah != null)
+            {
+                ViewModel.SelectedAyah = new QuranAyah(parameters.Surah.Value, parameters.Ayah.Value);
+            }
+            else
+            {
+                ViewModel.SelectedAyah = null;
+            }
         }
 
         private void ScreenTap(object sender, RoutedEventArgs e)
@@ -350,6 +345,41 @@ namespace Quran.WindowsPhone.Views
         // Build a localized ApplicationBar
         private void BuildLocalizedApplicationBar()
         {
+            NavigationLinks.Add(new NavigationLink
+            {
+                Label = AppResources.recite,
+                Symbol = Symbol.Volume
+            });
+            NavigationLinks.Add(new NavigationLink
+            {
+                Label = AppResources.translation,
+                Symbol = Symbol.Globe
+            });
+            NavigationLinks.Add(new NavigationLink
+            {
+                Label = AppResources.search,
+                Symbol = Symbol.Find
+            });
+            NavigationLinks.Add(new NavigationLink
+            {
+                Label = AppResources.bookmark,
+                Symbol = Symbol.SolidStar
+            });
+            NavigationLinks.Add(new NavigationLink
+            {
+                Label = AppResources.contact_us,
+                Symbol = Symbol.PostUpdate
+            });
+            NavigationLinks.Add(new NavigationLink
+            {
+                Label = AppResources.keep_orientation,
+                Symbol = Symbol.Orientation
+            });
+            NavigationLinks.Add(new NavigationLink
+            {
+                Label = AppResources.settings,
+                Symbol = Symbol.Setting
+            });
             //// Set the page's ApplicationBar to a new instance of ApplicationBar.
             //ApplicationBar = new ApplicationBar();
 
@@ -414,6 +444,16 @@ namespace Quran.WindowsPhone.Views
             //}
             //ViewModel.CurrentPageIndex = -1;
             //radSlideView.SelectionChanged -= PageFlipped;            
+        }
+
+        private void HamburgerButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainSplitView.IsPaneOpen = !MainSplitView.IsPaneOpen;
+        }
+
+        private void NavLinkItemClick(object sender, ItemClickEventArgs e)
+        {
+            // Do something
         }
 
         //private void PageOrientationChanged(object sender, OrientationChangedEventArgs e)
