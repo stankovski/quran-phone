@@ -1,4 +1,6 @@
-﻿using Windows.UI.Xaml.Controls;
+﻿using System;
+using System.Threading.Tasks;
+using Windows.UI.Xaml.Controls;
 
 namespace Quran.Core.ViewModels
 {
@@ -6,5 +8,6 @@ namespace Quran.Core.ViewModels
     {
         public Symbol Symbol { get; set; }
         public string Label { get; set; }
+        public Action Action { get; set; }
     }
 }

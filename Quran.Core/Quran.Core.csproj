@@ -171,6 +171,7 @@
     <Compile Include="Utils\CryptoUtils.cs" />
     <Compile Include="Utils\FileUtils.cs" />
     <Compile Include="Utils\HttpExtensions.cs" />
+    <Compile Include="Utils\LocalizedStrings.cs" />
     <Compile Include="Utils\MD5.cs" />
     <Compile Include="Utils\QuranUtils.cs" />
     <Compile Include="Utils\ScreenUtils.cs" />

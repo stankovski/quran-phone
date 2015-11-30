@@ -1,74 +1,65 @@
-﻿<views:BaseView
+﻿<Page
     x:Class="Quran.WindowsPhone.Views.SettingsView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:phone="using:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
-    xmlns:shell="using:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:views="using:Cirrious.MvvmCross.WindowsCommon.Views"
     xmlns:ui="using:Quran.WindowsPhone.UI"
-    FontFamily="{StaticResource PhoneFontFamilyNormal}"
-    FontSize="{StaticResource PhoneFontSizeNormal}"
-    Foreground="{StaticResource PhoneForegroundBrush}"
     d:DataContext="{d:DesignData ../SampleData/SettingsViewModelSampleData.xaml}"
+    RequestedTheme="Dark"
     mc:Ignorable="d">
 
-    <phone:PhoneApplicationPage.Resources>
+    <Page.Resources>
         <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-    </phone:PhoneApplicationPage.Resources>
+    </Page.Resources>
 
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot">
-        <phone:Pivot x:Name="MainPivot">
-            <phone:PivotItem x:Name="General" Header="{Binding Path=LocalizedResources.settings, Source={StaticResource LocalizedStrings}}">
+        <Pivot x:Name="MainPivot">
+            <PivotItem x:Name="General" Header="{Binding Path=LocalizedResources.settings, Source={StaticResource LocalizedStrings}}">
                 <ScrollViewer Background="Transparent">
                     <StackPanel Margin="12,17,0,28">
                         <TextBlock Text="{Binding Path=LocalizedResources.translations, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
                         <Button HorizontalContentAlignment="Left" 
                         BorderThickness="0" Padding="10" Margin="0"
-                        Content="{Binding ActiveTranslation}"
-                        Background="{StaticResource PhoneInverseInactiveBrush}" 
-                        Foreground="{StaticResource PhoneContrastForegroundBrush}" 
+                        Content="{x:Bind ViewModel.ActiveTranslation}"
                         FontFamily="{StaticResource PhoneFontFamilyNormal}" Click="Translations_Click"/>
                         <StackPanel Margin="0, 15, 0, 0" Orientation="Horizontal">
                             <TextBlock Text="{Binding Path=LocalizedResources.text_size, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
-                            <TextBlock Text="{Binding TextSize}" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{x:Bind ViewModel.TextSize}" HorizontalAlignment="Center"/>
                         </StackPanel>
-                        <Slider Minimum="15" Maximum="50" Margin="0" SmallChange="1" Value="{Binding TextSize, Mode=TwoWay}"/>
+                        <Slider Minimum="15" Maximum="50" Margin="0" SmallChange="1" Value="{x:Bind ViewModel.TextSize, Mode=TwoWay}"/>
                         <TextBlock Text="{Binding Path=LocalizedResources.change_language, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
-                        <telerikInput:RadListPicker ItemsSource="{Binding SupportedLanguages}" DisplayMemberPath="Value" SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}"/>
+                        <ComboBox ItemsSource="{x:Bind ViewModel.SupportedLanguages}" DisplayMemberPath="Value" SelectedItem="{x:Bind ViewModel.SelectedLanguage, Mode=TwoWay}"/>
                         <TextBlock Text="{Binding Path=LocalizedResources.prefs_ayah_before_translation_summary, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
-                        <telerikPrimitives:RadToggleSwitch IsChecked="{Binding ShowArabicInTranslation, Mode=TwoWay}" IsEnabled="{Binding EnableShowArabicInTranslation}" />
+                        <ToggleSwitch IsOn="{x:Bind ViewModel.ShowArabicInTranslation, Mode=TwoWay}" IsEnabled="{x:Bind ViewModel.EnableShowArabicInTranslation}" />
                         <TextBlock Text="{Binding Path=LocalizedResources.disable_sleep, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
-                        <telerikPrimitives:RadToggleSwitch IsChecked="{Binding PreventPhoneFromSleeping, Mode=TwoWay}"/>
+                        <ToggleSwitch IsOn="{x:Bind ViewModel.PreventPhoneFromSleeping, Mode=TwoWay}"/>
                         <TextBlock Text="{Binding Path=LocalizedResources.keep_info_overlay, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
-                        <telerikPrimitives:RadToggleSwitch IsChecked="{Binding KeepInfoOverlay, Mode=TwoWay}"/>
+                        <ToggleSwitch IsOn="{x:Bind ViewModel.KeepInfoOverlay, Mode=TwoWay}"/>
                         <TextBlock Text="{Binding Path=LocalizedResources.night_mode, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
-                        <telerikPrimitives:RadToggleSwitch IsChecked="{Binding NightMode, Mode=TwoWay}"/>
+                        <ToggleSwitch IsOn="{x:Bind ViewModel.NightMode, Mode=TwoWay}"/>
                         <TextBlock TextWrapping="Wrap" Text="{Binding Path=LocalizedResources.alternate_download_method, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
-                        <telerikPrimitives:RadToggleSwitch IsChecked="{Binding AltDownloadMethod, Mode=TwoWay}"/>
+                        <ToggleSwitch IsOn="{x:Bind ViewModel.AltDownloadMethod, Mode=TwoWay}"/>
                         <TextBlock Text="{Binding Path=LocalizedResources.generate_bookmarks_for_dua, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
-                        <Button Content="{Binding Path=LocalizedResources.generate, Source={StaticResource LocalizedStrings}}" Command="{Binding Generate}"></Button>
+                        <Button Content="{Binding Path=LocalizedResources.generate, Source={StaticResource LocalizedStrings}}" Command="{x:Bind ViewModel.Generate}"></Button>
                     </StackPanel>
                 </ScrollViewer>
-            </phone:PivotItem>
-            <phone:PivotItem x:Name="Audio" Header="{Binding Path=LocalizedResources.audio, Source={StaticResource LocalizedStrings}}">
+            </PivotItem>
+            <PivotItem x:Name="Audio" Header="{Binding Path=LocalizedResources.audio, Source={StaticResource LocalizedStrings}}">
                 <ScrollViewer Background="Transparent">
                     <StackPanel Margin="12,17,0,28">
                         <TextBlock Text="{Binding Path=LocalizedResources.reciters, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
                         <Button HorizontalContentAlignment="Left" 
                         BorderThickness="0" Padding="10" Margin="0"
-                        Content="{Binding ActiveReciter}"
-                        Background="{StaticResource PhoneInverseInactiveBrush}" 
-                        Foreground="{StaticResource PhoneContrastForegroundBrush}" 
+                        Content="{x:Bind ViewModel.ActiveReciter}"
                         FontFamily="{StaticResource PhoneFontFamilyNormal}" Click="Reciters_Click"/>
                         <TextBlock Text="{Binding Path=LocalizedResources.audio_download_blocks, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
-                        <telerikInput:RadListPicker ItemsSource="{Binding SupportedAudioBlocks}" DisplayMemberPath="Value" SelectedItem="{Binding SelectedAudioBlock, Mode=TwoWay}"/>
+                        <ComboBox ItemsSource="{x:Bind ViewModel.SupportedAudioBlocks}" DisplayMemberPath="Value" SelectedItem="{x:Bind ViewModel.SelectedAudioBlock, Mode=TwoWay}"/>
                     </StackPanel>
                 </ScrollViewer>
-            </phone:PivotItem>
-            <phone:PivotItem x:Name="About" Header="{Binding Path=LocalizedResources.about_us, Source={StaticResource LocalizedStrings}}">
+            </PivotItem>
+            <PivotItem x:Name="About" Header="{Binding Path=LocalizedResources.about_us, Source={StaticResource LocalizedStrings}}">
                 <ScrollViewer Background="Transparent">
                     <StackPanel Orientation="Vertical">
                         <StackPanel.Resources>
@@ -76,15 +67,15 @@
                                 <Setter Property="Foreground" Value="White"/>
                             </Style>
                         </StackPanel.Resources>
-                        <Button Command="{Binding ContactUsCommand}" Content="{Binding Path=LocalizedResources.contact_us, Source={StaticResource LocalizedStrings}}" />
-                        <RichTextBox FontSize="22">
+                        <Button Command="{x:Bind ViewModel.ContactUsCommand}" Content="{Binding Path=LocalizedResources.contact_us, Source={StaticResource LocalizedStrings}}" />
+                        <RichTextBlock FontSize="22">
                             <Paragraph>Quran Phone is a free, open source Quran application for Windows Phone based on Quran Android project. 
                                 The images used are from the
-                                <Hyperlink Command="{Binding NavigateCommand}" CommandParameter="http://quran.com">quran.com</Hyperlink> project, the audio comes from
-                                <Hyperlink Command="{Binding NavigateCommand}" CommandParameter="http://everyayah.com">everyayah.com</Hyperlink> , the data used in the 
+                                <Hyperlink NavigateUri="http://quran.com">quran.com</Hyperlink> project, the audio comes from
+                                <Hyperlink NavigateUri="http://everyayah.com">everyayah.com</Hyperlink> , the data used in the 
                                 translations and Arabic comes from
-                                <Hyperlink Command="{Binding NavigateCommand}" CommandParameter="http://www.tanzil.net">tanzil.net</Hyperlink> and
-                                <Hyperlink Command="{Binding NavigateCommand}" CommandParameter="http://quran.ksu.edu.sa">quran.ksu.edu.sa</Hyperlink>
+                                <Hyperlink NavigateUri="http://www.tanzil.net">tanzil.net</Hyperlink> and
+                                <Hyperlink NavigateUri="http://quran.ksu.edu.sa">quran.ksu.edu.sa</Hyperlink>
                             </Paragraph>
                             <Paragraph/>
                             <Paragraph FontWeight="Bold">Quran for Windows Phone Contributors:</Paragraph>
@@ -118,11 +109,10 @@
                             <Paragraph FontWeight="Bold">Special Thanks:</Paragraph>
                             <Paragraph>Ahmed Essam (@neo_4583)</Paragraph>
                             <Paragraph>Batoul Apps (@batoulapps)</Paragraph>
-                        </RichTextBox>
+                        </RichTextBlock>
                     </StackPanel>
                 </ScrollViewer>
-            </phone:PivotItem>
-        </phone:Pivot>
+            </PivotItem>
+        </Pivot>
     </Grid>
-
-</views:BaseView>
+</Page>

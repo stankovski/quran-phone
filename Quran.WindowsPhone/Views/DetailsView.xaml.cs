@@ -1,14 +1,10 @@
-﻿using System;
-using System.Globalization;
-using Windows.UI.Xaml.Controls;
+﻿using Windows.UI.Xaml.Controls;
 using Quran.Core;
 using Quran.Core.Common;
 using Quran.Core.Data;
 using Quran.Core.Properties;
 using Quran.Core.Utils;
 using Quran.Core.ViewModels;
-using Quran.WindowsPhone.UI;
-using Quran.WindowsPhone.Utils;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml;
 using System.Collections.ObjectModel;
@@ -111,17 +107,6 @@ namespace Quran.WindowsPhone.Views
             }
         }
 
-        private void ScreenTap(object sender, RoutedEventArgs e)
-        {
-            ViewModel.IsShowMenu = false;
-        }
-
-        private void MenuTap(object sender, RoutedEventArgs e)
-        {
-            ViewModel.IsShowMenu = true;
-            //e.Handled = true;
-        }
-
         private void ImageTap(object sender, RoutedEventArgs e)
         {
             ViewModel.SelectedAyah = null;
@@ -197,8 +182,22 @@ namespace Quran.WindowsPhone.Views
         }
 
         #region Menu Events
+        private void HamburgerButtonClick(object sender, RoutedEventArgs e)
+        {
+            MainSplitView.IsPaneOpen = !MainSplitView.IsPaneOpen;
+        }
 
-        private void Translation_Click(object sender, EventArgs e)
+        private void NavLinkItemClick(object sender, ItemClickEventArgs e)
+        {
+            MainSplitView.IsPaneOpen = false;
+            var item = e.ClickedItem as NavigationLink;
+            if (item != null)
+            {
+                item.Action();
+            }
+        }
+
+        private void TranslationClick()
         {
             int pageNumber = ((DetailsViewModel)DataContext).CurrentPageNumber;
             if (!string.IsNullOrEmpty(ViewModel.TranslationFile))
@@ -206,7 +205,7 @@ namespace Quran.WindowsPhone.Views
                 //ViewModel.UpdatePages();
                 ViewModel.ShowTranslation = !ViewModel.ShowTranslation;
                 SettingsUtils.Set(Constants.PREF_SHOW_TRANSLATION, ViewModel.ShowTranslation);
-                ViewModel.IsShowMenu = false;
+                //ViewModel.IsShowMenu = false;
             }
             else
             {
@@ -214,11 +213,78 @@ namespace Quran.WindowsPhone.Views
             }
         }
 
-        private void Bookmark_Click(object sender, EventArgs e)
+        private void BookmarkClick()
         {
             ViewModel.AddPageBookmark();
-            ViewModel.IsShowMenu = false;
         }
+        
+        private async void SettingsClick()
+        {
+            //Frame.Navigate(new Uri("/Views/SettingsView.xaml?tab=general", UriKind.Relative));
+        }
+
+        private async void ReciteClick()
+        {
+            var reciter = SettingsUtils.Get<string>(Constants.PREF_ACTIVE_QARI);
+            if (string.IsNullOrEmpty(reciter))
+            {
+                //Frame.Navigate(new Uri("/Views/RecitersListView.xaml", UriKind.Relative));
+            }
+            else
+            {
+                var selectedAyah = ViewModel.SelectedAyah;
+                if (selectedAyah == null)
+                {
+                    var bounds = QuranUtils.GetPageBounds(ViewModel.CurrentPageNumber);
+                    selectedAyah = new QuranAyah
+                    {
+                        Surah = bounds[0],
+                        Ayah = bounds[1]
+                    };
+                    if (selectedAyah.Ayah == 1 && selectedAyah.Surah != Constants.SURA_TAWBA &&
+                        selectedAyah.Surah != Constants.SURA_FIRST)
+                    {
+                        selectedAyah.Ayah = 0;
+                    }
+                }
+                if (QuranUtils.IsValid(selectedAyah))
+                {
+                    await ViewModel.PlayFromAyah(selectedAyah.Surah, selectedAyah.Ayah);
+                }
+            }
+        }
+
+        private async void ContactUsClick()
+        {
+            await QuranApp.NativeProvider.ComposeEmail("quran.phone@gmail.com", "Email from QuranPhone");
+        }
+
+        private void KeepOrientationClick()
+        {
+            //var button = sender as ApplicationBarMenuItem;
+            //if (button == null)
+            //    return;
+
+            //if (this.SupportedOrientations == SupportedPageOrientation.PortraitOrLandscape)
+            //{
+            //    button.Text = AppResources.auto_orientation;
+            //    if (QuranApp.NativeProvider.IsPortaitOrientation)
+            //        this.SupportedOrientations = SupportedPageOrientation.Portrait;
+            //    else
+            //        this.SupportedOrientations = SupportedPageOrientation.Landscape;
+            //}
+            //else
+            //{
+            //    button.Text = AppResources.keep_orientation;
+            //    this.SupportedOrientations = SupportedPageOrientation.PortraitOrLandscape;
+            //}
+        }
+
+        private void AyahTapped(object sender, QuranAyahEventArgs e)
+        {
+            ViewModel.SelectedAyah = e.QuranAyah;
+        }
+
 
         private async void AyahContextMenuClick(object sender, RoutedEventArgs e)
         {
@@ -258,85 +324,11 @@ namespace Quran.WindowsPhone.Views
             //}
         }
 
-        private void ShareAyah(string ayah)
+        private void ShareClick(string ayah)
         {
             //ShareStatusTask shareTask = new ShareStatusTask();
             //shareTask.Status = ayah;
             //shareTask.Show();
-        }
-        private void Settings_Click(object sender, EventArgs e)
-        {
-            ViewModel.IsShowMenu = false;
-            //Frame.Navigate(new Uri("/Views/SettingsView.xaml?tab=general", UriKind.Relative));
-        }
-
-        private async void Recite_Click(object sender, EventArgs e)
-        {
-            var reciter = SettingsUtils.Get<string>(Constants.PREF_ACTIVE_QARI);
-            if (string.IsNullOrEmpty(reciter))
-            {
-                //Frame.Navigate(new Uri("/Views/RecitersListView.xaml", UriKind.Relative));
-            }
-            else
-            {
-                var selectedAyah = ViewModel.SelectedAyah;
-                if (selectedAyah == null)
-                {
-                    var bounds = QuranUtils.GetPageBounds(ViewModel.CurrentPageNumber);
-                    selectedAyah = new QuranAyah
-                    {
-                        Surah = bounds[0],
-                        Ayah = bounds[1]
-                    };
-                    if (selectedAyah.Ayah == 1 && selectedAyah.Surah != Constants.SURA_TAWBA &&
-                        selectedAyah.Surah != Constants.SURA_FIRST)
-                    {
-                        selectedAyah.Ayah = 0;
-                    }
-                }
-                if (QuranUtils.IsValid(selectedAyah))
-                {
-                    await ViewModel.PlayFromAyah(selectedAyah.Surah, selectedAyah.Ayah);
-                }
-            }
-        }
-
-        private async void Search_Click(object sender, EventArgs e)
-        {
-            await ViewModel.DownloadArabicSearchFile();
-            ViewModel.IsShowMenu = false;
-            //Frame.Navigate(new Uri("/Views/SearchView.xaml", UriKind.Relative));
-        }
-
-        private async void ContactUs_Click(object sender, EventArgs e)
-        {
-            await QuranApp.NativeProvider.ComposeEmail("quran.phone@gmail.com", "Email from QuranPhone");
-        }
-
-        private void KeepOrientation_Click(object sender, EventArgs e)
-        {
-            //var button = sender as ApplicationBarMenuItem;
-            //if (button == null)
-            //    return;
-
-            //if (this.SupportedOrientations == SupportedPageOrientation.PortraitOrLandscape)
-            //{
-            //    button.Text = AppResources.auto_orientation;
-            //    if (QuranApp.NativeProvider.IsPortaitOrientation)
-            //        this.SupportedOrientations = SupportedPageOrientation.Portrait;
-            //    else
-            //        this.SupportedOrientations = SupportedPageOrientation.Landscape;
-            //}
-            //else
-            //{
-            //    button.Text = AppResources.keep_orientation;
-            //    this.SupportedOrientations = SupportedPageOrientation.PortraitOrLandscape;
-            //}
-        }
-
-        private void AyahTapped(object sender, QuranAyahEventArgs e)
-        {
-            ViewModel.SelectedAyah = e.QuranAyah;
         }
 
         #endregion Menu Events
@@ -348,114 +340,53 @@ namespace Quran.WindowsPhone.Views
             NavigationLinks.Add(new NavigationLink
             {
                 Label = AppResources.recite,
-                Symbol = Symbol.Volume
+                Symbol = Symbol.Volume,
+                Action = ReciteClick
             });
             NavigationLinks.Add(new NavigationLink
             {
                 Label = AppResources.translation,
-                Symbol = Symbol.Globe
-            });
-            NavigationLinks.Add(new NavigationLink
-            {
-                Label = AppResources.search,
-                Symbol = Symbol.Find
+                Symbol = Symbol.Globe,
+                Action = TranslationClick
             });
             NavigationLinks.Add(new NavigationLink
             {
                 Label = AppResources.bookmark,
-                Symbol = Symbol.SolidStar
+                Symbol = Symbol.SolidStar,
+                Action = BookmarkClick
             });
             NavigationLinks.Add(new NavigationLink
             {
                 Label = AppResources.contact_us,
-                Symbol = Symbol.PostUpdate
+                Symbol = Symbol.MailForward,
+                Action = ContactUsClick
             });
             NavigationLinks.Add(new NavigationLink
             {
                 Label = AppResources.keep_orientation,
-                Symbol = Symbol.Orientation
+                Symbol = Symbol.Orientation,
+                Action = KeepOrientationClick
             });
             NavigationLinks.Add(new NavigationLink
             {
                 Label = AppResources.settings,
-                Symbol = Symbol.Setting
+                Symbol = Symbol.Setting,
+                Action = SettingsClick
             });
-            //// Set the page's ApplicationBar to a new instance of ApplicationBar.
-            //ApplicationBar = new ApplicationBar();
-
-            //var reciteButton = new ApplicationBarIconButton(new Uri("/Assets/Images/recite.png", UriKind.Relative)) { Text = AppResources.recite };
-            //reciteButton.Click += Recite_Click;
-            //ApplicationBar.Buttons.Add(reciteButton);
-            //var searchButton = new ApplicationBarIconButton(new Uri("/Assets/Images/search.png", UriKind.Relative)) { Text = AppResources.search };
-            //searchButton.Click += Search_Click;
-            //ApplicationBar.Buttons.Add(searchButton);
-            //var bookmarkButton = new ApplicationBarIconButton(new Uri("/Assets/Images/favorite.png", UriKind.Relative)) { Text = AppResources.bookmark };
-            //bookmarkButton.Click += Bookmark_Click;
-            //ApplicationBar.Buttons.Add(bookmarkButton);
-            //var translationButton = new ApplicationBarIconButton(new Uri("/Assets/Images/appbar.globe.png", UriKind.Relative)) { Text = AppResources.translation };
-            //translationButton.Click += Translation_Click;
-            //ApplicationBar.Buttons.Add(translationButton);
-
-            //// Create a new menu item with the localized string from AppResources.
-            //var settingsButton = new ApplicationBarMenuItem(AppResources.settings);
-            //settingsButton.Click += Settings_Click;
-            //ApplicationBar.MenuItems.Add(settingsButton);
-            //var contactButton = new ApplicationBarMenuItem(AppResources.contact_us);
-            //contactButton.Click += ContactUs_Click;
-            //ApplicationBar.MenuItems.Add(contactButton);
-            //var orientationButton = new ApplicationBarMenuItem(AppResources.keep_orientation);
-            //orientationButton.Click += KeepOrientation_Click;
-            //ApplicationBar.MenuItems.Add(orientationButton);
-
-            //// Set style
-            //ApplicationBar.Opacity = 0.9;
-            //ApplicationBar.BackgroundColor = ViewModel.IsNightMode ? Colors.Black : Colors.White;
-            //ApplicationBar.ForegroundColor = Color.FromArgb(0xFF, 0x49, 0xA4, 0xC5);
-            //ViewModel.IsShowMenu = QuranApp.NativeProvider.IsPortaitOrientation;
-
-            //ApplicationBar.Mode = ApplicationBarMode.Minimized;
-
-            //ViewModel.PropertyChanged += (sender, e) =>
-            //{
-            //    if (e.PropertyName == "IsShowMenu")
-            //    {
-            //        ApplicationBar.IsVisible = ViewModel.IsShowMenu;
-            //    }
-            //    if (e.PropertyName == "IsNightMode")
-            //    {
-            //        ApplicationBar.BackgroundColor = ViewModel.IsNightMode ? Colors.Black : Colors.White;
-            //    }
-            //    else if (e.PropertyName == "Orientation")
-            //    {
-            //        ViewModel.IsShowMenu = QuranApp.NativeProvider.IsPortaitOrientation;
-            //    }
-            //};
         }
 
         #endregion
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            //base.OnNavigatedFrom(e);
-            //NavigationContext.QueryString["page"] = SettingsUtils.Get<int>(Constants.PREF_LAST_PAGE).ToString(CultureInfo.InvariantCulture);
-            //foreach (var page in ViewModel.Pages)
-            //{
-            //    page.ImageSource = null;
-            //}
-            //ViewModel.CurrentPageIndex = -1;
-            //radSlideView.SelectionChanged -= PageFlipped;            
+            base.OnNavigatedFrom(e);
+            foreach (var page in ViewModel.Pages)
+            {
+                page.ImageSource = null;
+            }
+            ViewModel.CurrentPageIndex = -1;
         }
-
-        private void HamburgerButton_Click(object sender, RoutedEventArgs e)
-        {
-            MainSplitView.IsPaneOpen = !MainSplitView.IsPaneOpen;
-        }
-
-        private void NavLinkItemClick(object sender, ItemClickEventArgs e)
-        {
-            // Do something
-        }
-
+        
         //private void PageOrientationChanged(object sender, OrientationChangedEventArgs e)
         //{
         //    ViewModel.Orientation = PhoneUtils.PageOrientationConverter(e.Orientation);

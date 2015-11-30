@@ -151,7 +151,7 @@
                 <ColumnDefinition Width="48"/>
             </Grid.ColumnDefinitions>
             <Button Grid.Column="0" x:Name="HamburgerButton" Style="{StaticResource HamburgerButtonStyle}" Click="HamburgerButton_Click"/>
-            <TextBlock Grid.Column="1" Text="{x:Bind ViewModel.AppNameString}" Margin="10,0,0,0" FontWeight="SemiBold" FontSize="20" VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="1" Text="{Binding Path=LocalizedResources.app_name, Source={StaticResource LocalizedStrings}}" Margin="10,0,0,0" FontWeight="SemiBold" FontSize="20" VerticalAlignment="Center"/>
             <Button Grid.Column="2" Style="{StaticResource MenuButtonStyle}" Content="&#xE094;" 
                     VerticalAlignment="Center"/>
             <Button Grid.Column="3" Style="{StaticResource MenuButtonStyle}" Content="&#xE82D;"
@@ -173,7 +173,7 @@
                     <Pivot Grid.Row="0">
                         <PivotItem Margin="0">
                             <PivotItem.Header>
-                                <ui:TabHeader Glyph="&#xE292;" Label="{x:Bind ViewModel.SurahHeaderString}" Width="100"/>
+                                <ui:TabHeader Glyph="&#xE292;" Label="{Binding Path=LocalizedResources.quran_sura_lower, Source={StaticResource LocalizedStrings}}" Width="100"/>
                             </PivotItem.Header>
                             <Grid x:Name="ContentPanel">
                                 <ListView ItemsSource="{x:Bind ViewModel.Surahs}" SelectionChanged="List_SelectionChanged" 
@@ -190,7 +190,7 @@
                         </PivotItem>
                         <PivotItem Margin="0">
                             <PivotItem.Header>
-                                <ui:TabHeader Glyph="&#xE1D3;" Label="{x:Bind ViewModel.JuzHeaderString}" Width="100"/>
+                                <ui:TabHeader Glyph="&#xE1D3;" Label="{Binding Path=LocalizedResources.quran_juz2_lower, Source={StaticResource LocalizedStrings}}" Width="100"/>
                             </PivotItem.Header>
                             <Grid>
                                 <ListView ItemsSource="{x:Bind ViewModel.Juz}" SelectionChanged="List_SelectionChanged" 
@@ -206,7 +206,7 @@
                         </PivotItem>
                         <PivotItem Margin="0">
                             <PivotItem.Header>
-                                <ui:TabHeader Glyph="&#xE1CF;" Label="{x:Bind ViewModel.BookmarksHeaderString}" Width="100"/>
+                                <ui:TabHeader Glyph="&#xE1CF;" Label="{Binding Path=LocalizedResources.quran_bookmarks_lower, Source={StaticResource LocalizedStrings}}" Width="100"/>
                             </PivotItem.Header>
                             <Grid>
                                 <ListView ItemsSource="{x:Bind ViewModel.Bookmarks}" SelectionChanged="List_SelectionChanged">

@@ -37,11 +37,6 @@ namespace Quran.Core.ViewModels
         }
 
         #region Properties
-        public string AppNameString { get { return AppResources.app_name; } }
-        public string SurahHeaderString { get { return AppResources.quran_sura_lower; } }
-        public string JuzHeaderString { get { return AppResources.quran_juz2_lower; } }
-        public string BookmarksHeaderString { get { return AppResources.quran_bookmarks_lower; } }
-
         public ObservableCollection<ItemViewModel> Surahs { get; private set; }
         public ObservableCollection<ItemViewModel> Juz { get; private set; }
         public ObservableCollection<ItemViewModel> Bookmarks { get; private set; }

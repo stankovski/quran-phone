@@ -9,8 +9,7 @@
     xmlns:vm="using:Quran.Core.ViewModels"
     xmlns:ui="using:Quran.WindowsPhone.UI"
     RequestedTheme="Light"
-    d:DataContext="{d:DesignData ../SampleData/TranslationViewModelSampleData.xaml}"
-    Tapped="ScreenTap">
+    d:DataContext="{d:DesignData ../SampleData/TranslationViewModelSampleData.xaml}">
 
     <Page.Resources>
         <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
@@ -26,7 +25,7 @@
                      Visibility="{x:Bind ViewModel.IsDownloadingAudio, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         <Grid Grid.Row="0" HorizontalAlignment="Stretch" Height="48" Background="White"
             Visibility="{x:Bind ViewModel.ShowInfoOverlay, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <Button x:Name="HamburgerButton" Style="{StaticResource HamburgerButtonStyle}" Click="HamburgerButton_Click"/>
+            <Button x:Name="HamburgerButton" Style="{StaticResource HamburgerButtonStyle}" Click="HamburgerButtonClick"/>
             <TextBlock Text="{x:Bind ViewModel.CurrentSurahName, Mode=OneWay}" HorizontalAlignment="Left" FontSize="18" 
                        Foreground="{x:Bind ViewModel.ForegroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}" 
                        Margin="50,3,0,3" VerticalAlignment="Center"/>

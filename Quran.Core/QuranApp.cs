@@ -109,17 +109,15 @@ namespace Quran.Core
         /// A static SettingsViewModel used by the views to bind against.
         /// </summary>
         /// <returns>The SettingsViewModel object.</returns>
-        public static SettingsViewModel SettingsViewModel
+        public static async Task<SettingsViewModel> GetSettingsViewModel()
         {
-            get
+            // Delay creation of the view model until necessary
+            if (settingsViewModel == null)
             {
-                // Delay creation of the view model until necessary
-                if (settingsViewModel == null)
-                    settingsViewModel = new SettingsViewModel();
-
-                return settingsViewModel;
+                settingsViewModel = new SettingsViewModel();
+                await settingsViewModel.Initialize();
             }
-            set { settingsViewModel = value; }
+            return settingsViewModel;
         }
         #endregion
     }

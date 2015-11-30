@@ -1,27 +1,28 @@
 ﻿using System;
-using System.Windows;
-using System.Windows.Documents;
-using System.Windows.Navigation;
-using Microsoft.Phone.Tasks;
 using Quran.Core;
+using Quran.Core.ViewModels;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Navigation;
 
 namespace Quran.WindowsPhone.Views
 {
-    public partial class SettingsView
+    public partial class SettingsView : Page
     {
+        public SettingsViewModel ViewModel { get; set; }
+
         public SettingsView()
         {
-            InitializeComponent();
         }
 
         // When page is navigated to set data context to selected item in list
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            QuranApp.SettingsViewModel.LoadData();
-            DataContext = QuranApp.SettingsViewModel;
+            ViewModel = await QuranApp.GetSettingsViewModel();
+            await ViewModel.LoadData();
+            InitializeComponent();
 
-            string tab;
-            NavigationContext.QueryString.TryGetValue("tab", out tab);
+            string tab = e.Parameter as string;
 
             if (!string.IsNullOrEmpty(tab))
             {
@@ -42,22 +43,22 @@ namespace Quran.WindowsPhone.Views
         
         private void Translations_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/Views/TranslationListView.xaml", UriKind.Relative));
+            //NavigationService.Navigate(new Uri("/Views/TranslationListView.xaml", UriKind.Relative));
         }
 
         private void Reciters_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/Views/RecitersListView.xaml", UriKind.Relative));
+            //NavigationService.Navigate(new Uri("/Views/RecitersListView.xaml", UriKind.Relative));
         }
 
         private void LinkTap(object sender, RoutedEventArgs e)
         {
-            var link = e.OriginalSource as Hyperlink;
-            if (link != null)
-            {
-                var task = new WebBrowserTask() {Uri = link.NavigateUri};
-                task.Show();
-            }
+            //var link = e.OriginalSource as Hyperlink;
+            //if (link != null)
+            //{
+            //    var task = new WebBrowserTask() {Uri = link.NavigateUri};
+            //    task.Show();
+            //}
         }
     }
 }
