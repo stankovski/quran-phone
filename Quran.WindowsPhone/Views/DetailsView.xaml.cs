@@ -31,6 +31,7 @@ namespace Quran.WindowsPhone.Views
             BuildLocalizedApplicationBar();
 
             QuranApp.DetailsViewModel.Orientation = PhoneUtils.PageOrientationConverter(this.Orientation);
+            QuranApp.DetailsViewModel.NavigateToSettings += DetailsViewModel_NavigateToSettings;
 
             ayahContextMenu.Items.Add(new RadContextMenuItem() { Content = AppResources.bookmark_ayah });
             if (FileUtils.HaveArabicSearchFile())
@@ -38,70 +39,46 @@ namespace Quran.WindowsPhone.Views
                 ayahContextMenu.Items.Add(new RadContextMenuItem() {Content = AppResources.copy});
             }
             ayahContextMenu.Items.Add(new RadContextMenuItem() { Content = AppResources.recite_ayah });
-            ayahContextMenu.Items.Add(new RadContextMenuItem() { Content = AppResources.share_ayah });
             ayahContextMenu.ItemTapped += AyahContextMenuClick;
             ayahContextMenu.Closed += (obj, e) => QuranApp.DetailsViewModel.SelectedAyah = null;
         }
 
         // When page is navigated to set data context to selected item in list
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        {
+            ParseNavigationQuery();
+            QuranApp.DetailsViewModel.SyncViewModelWithSettings();
+            await QuranApp.DetailsViewModel.RefreshCurrentPage();
+
+            if (DataContext == null)
+                DataContext = QuranApp.DetailsViewModel;
+
+            // Play audio if coming back from reciter selector
+            if (SettingsUtils.Get<bool>(Constants.SESSION_START_AUDIO))
+            {
+                SettingsUtils.Set(Constants.SESSION_START_AUDIO, false);
+                QuranApp.DetailsViewModel.Play();
+            }
+
+            // Remove white background
+            LoadPaneStoryboard.Begin();
+        }
+
+        private void ParseNavigationQuery()
         {
             string selectedPage;
             string selectedSurah;
             string selectedAyah;
-            DataContext = null;
-
             NavigationContext.QueryString.TryGetValue("page", out selectedPage);
             NavigationContext.QueryString.TryGetValue("surah", out selectedSurah);
             NavigationContext.QueryString.TryGetValue("ayah", out selectedAyah);
 
             if (selectedPage != null)
             {
+                //Update page and page index
                 int page = int.Parse(selectedPage, CultureInfo.InvariantCulture);
                 QuranApp.DetailsViewModel.CurrentPageNumber = page;
-                
-                //Update settings
-                QuranApp.DetailsViewModel.IsNightMode = SettingsUtils.Get<bool>(Constants.PREF_NIGHT_MODE);
-
-                //Monitor proprty changes
-                QuranApp.DetailsViewModel.PropertyChanged += (sender, args) =>
-                {
-                    if (args.PropertyName == "CurrentPageIndex")
-                    {
-                        if (QuranApp.DetailsViewModel.CurrentPageIndex != -1)
-                            radSlideView.SelectedItem = QuranApp.DetailsViewModel.Pages[QuranApp.DetailsViewModel.CurrentPageIndex];
-                    }
-                };
-
-                //Try extract translation from query
-                var translation = SettingsUtils.Get<string>(Constants.PREF_ACTIVE_TRANSLATION);
-                if (!string.IsNullOrEmpty(translation))
-                {
-                    if (QuranApp.DetailsViewModel.TranslationFile != translation.Split('|')[0] ||
-                        QuranApp.DetailsViewModel.ShowTranslation != SettingsUtils.Get<bool>(Constants.PREF_SHOW_TRANSLATION) ||
-                        QuranApp.DetailsViewModel.ShowArabicInTranslation != SettingsUtils.Get<bool>(Constants.PREF_SHOW_ARABIC_IN_TRANSLATION))
-                    {
-                        QuranApp.DetailsViewModel.Pages.Clear();
-                    }
-                    QuranApp.DetailsViewModel.TranslationFile = translation.Split('|')[0];
-                    QuranApp.DetailsViewModel.ShowTranslation = SettingsUtils.Get<bool>(Constants.PREF_SHOW_TRANSLATION);
-                    QuranApp.DetailsViewModel.ShowArabicInTranslation = SettingsUtils.Get<bool>(Constants.PREF_SHOW_ARABIC_IN_TRANSLATION);
-                }
-                else
-                {
-                    QuranApp.DetailsViewModel.TranslationFile = null;
-                    QuranApp.DetailsViewModel.ShowTranslation = false;
-                    QuranApp.DetailsViewModel.ShowArabicInTranslation = false;
-                }
             }
-
-            QuranApp.DetailsViewModel.LoadData();
-            if (DataContext == null)
-                DataContext = QuranApp.DetailsViewModel;
-            radSlideView.SelectionChanged += PageFlipped;
-
-            // set keepinfooverlay according to setting
-            QuranApp.DetailsViewModel.KeepInfoOverlay = SettingsUtils.Get<bool>(Constants.PREF_KEEP_INFO_OVERLAY);
 
             //Select ayah
             if (selectedSurah != null && selectedAyah != null)
@@ -115,13 +92,12 @@ namespace Quran.WindowsPhone.Views
                 QuranApp.DetailsViewModel.SelectedAyah = null;
             }
         }
-        
-        private void PageFlipped(object sender, SelectionChangedEventArgs e)
-        {
-            QuranApp.DetailsViewModel.SelectedAyah = null;
-            QuranApp.DetailsViewModel.CurrentPageIndex = QuranApp.DetailsViewModel.Pages.IndexOf((PageViewModel)radSlideView.SelectedItem);
-        }
 
+        void DetailsViewModel_NavigateToSettings(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/Views/SettingsView.xaml?tab=audio", UriKind.Relative));
+        }
+        
         private void ScreenTap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             QuranApp.DetailsViewModel.IsShowMenu = false;
@@ -214,7 +190,7 @@ namespace Quran.WindowsPhone.Views
             int pageNumber = ((DetailsViewModel)DataContext).CurrentPageNumber;
             if (!string.IsNullOrEmpty(QuranApp.DetailsViewModel.TranslationFile))
             {
-                //QuranApp.DetailsViewModel.UpdatePages();
+                //QuranApp.DetailsViewModel.RefreshCurrentPage();
                 QuranApp.DetailsViewModel.ShowTranslation = !QuranApp.DetailsViewModel.ShowTranslation;
                 SettingsUtils.Set(Constants.PREF_SHOW_TRANSLATION, QuranApp.DetailsViewModel.ShowTranslation);
                 QuranApp.DetailsViewModel.IsShowMenu = false;
@@ -275,6 +251,7 @@ namespace Quran.WindowsPhone.Views
             shareTask.Status = ayah;
             shareTask.Show();
         }
+
         private void Settings_Click(object sender, EventArgs e)
         {
             QuranApp.DetailsViewModel.IsShowMenu = false;
@@ -286,29 +263,12 @@ namespace Quran.WindowsPhone.Views
             var reciter = SettingsUtils.Get<string>(Constants.PREF_ACTIVE_QARI);
             if (string.IsNullOrEmpty(reciter))
             {
+                SettingsUtils.Set(Constants.SESSION_START_AUDIO, true);
                 NavigationService.Navigate(new Uri("/Views/RecitersListView.xaml", UriKind.Relative));
             }
             else
             {
-                var selectedAyah = QuranApp.DetailsViewModel.SelectedAyah;
-                if (selectedAyah == null)
-                {
-                    var bounds = QuranUtils.GetPageBounds(QuranApp.DetailsViewModel.CurrentPageNumber);
-                    selectedAyah = new QuranAyah
-                    {
-                        Surah = bounds[0],
-                        Ayah = bounds[1]
-                    };
-                    if (selectedAyah.Ayah == 1 && selectedAyah.Surah != Constants.SURA_TAWBA &&
-                        selectedAyah.Surah != Constants.SURA_FIRST)
-                    {
-                        selectedAyah.Ayah = 0;
-                    }
-                }
-                if (QuranUtils.IsValid(selectedAyah))
-                {
-                    QuranApp.DetailsViewModel.PlayFromAyah(selectedAyah.Surah, selectedAyah.Ayah);
-                }
+                QuranApp.DetailsViewModel.Play();
             }
         }
 
@@ -418,12 +378,7 @@ namespace Quran.WindowsPhone.Views
         {
             base.OnNavigatedFrom(e);
             NavigationContext.QueryString["page"] = SettingsUtils.Get<int>(Constants.PREF_LAST_PAGE).ToString(CultureInfo.InvariantCulture);
-            foreach (var page in QuranApp.DetailsViewModel.Pages)
-            {
-                page.ImageSource = null;
-            }
-            QuranApp.DetailsViewModel.CurrentPageIndex = -1;
-            radSlideView.SelectionChanged -= PageFlipped;            
+            QuranApp.DetailsViewModel.ClearPages();
         }
 
         private void PageOrientationChanged(object sender, OrientationChangedEventArgs e)

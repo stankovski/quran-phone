@@ -14,20 +14,21 @@ namespace Quran.Core.Tests.Utils
         [Fact]
         public void TestAudioRequestProperties()
         {
-            var request = new AudioRequest(0, new QuranAyah(1, 2), AudioDownloadAmount.Page);
+            var request = new AudioRequest(0, new QuranAyah(1, 2), new RepeatInfo(RepeatAmount.Juz, 2), 0, AudioDownloadAmount.Page);
             Assert.Equal("Minshawi Murattal (gapless)", request.Reciter.Name);
             Assert.Equal(new QuranAyah(1, 2), request.CurrentAyah);
+            Assert.Equal(RepeatAmount.Juz, request.RepeatInfo.RepeatAmount);
         }
 
         [Fact]
         public void AudioRequestThrowsArgumentNullException()
         {
             Assert.Throws(typeof(ArgumentNullException), () => new AudioRequest(null));
-            Assert.Throws(typeof(ArgumentNullException), () => new AudioRequest(1, null, AudioDownloadAmount.Page));
+            Assert.Throws(typeof(ArgumentNullException), () => new AudioRequest(1, null, null, 0, AudioDownloadAmount.Page));
             Assert.Throws(typeof(ArgumentException), () => new AudioRequest("local://0/?amount=Page&fromAyah=a"));
             Assert.Throws(typeof(ArgumentException), () => new AudioRequest("aaa://0?amount=Page&fromAyah=1:2"));
             Assert.Throws(typeof(ArgumentException), () => new AudioRequest("local://aaa/?amount=Page&fromAyah=1:2"));
-            Assert.Throws(typeof(ArgumentException), () => new AudioRequest(1, new QuranAyah(0, 0), AudioDownloadAmount.Page));
+            Assert.Throws(typeof(ArgumentException), () => new AudioRequest(1, new QuranAyah(0, 0), null, 0, AudioDownloadAmount.Page));
         }
 
         [Fact]
@@ -42,7 +43,7 @@ namespace Quran.Core.Tests.Utils
         [Fact]
         public void AudioRequestToStringEqualsConstructor()
         {
-            var pattern = "local://0/?amount=Surah&currentAyah=1:2&fromAyah=2:2";
+            var pattern = "local://0/?amount=Surah&currentAyah=1:2&fromAyah=2:2&currentRepeat=0";
             var request = new AudioRequest(pattern);
             Assert.Equal(pattern, request.ToString());
         }
@@ -50,9 +51,86 @@ namespace Quran.Core.Tests.Utils
         [Fact]
         public void AudioRequestToStringEqualsConstructorWithAllParameters()
         {
-            var pattern = "local://0/?amount=Juz&currentAyah=1:2&fromAyah=1:2&toAyah=2:2";
+            var pattern = "local://0/?amount=Juz&currentAyah=1:2&fromAyah=1:2&toAyah=2:2&repeat=Page-2-times&currentRepeat=2";
             var request = new AudioRequest(pattern);
             Assert.Equal(pattern, request.ToString());
+        }
+
+        [Theory]
+        [InlineData(RepeatAmount.None, 0, "None-2-times")]
+        [InlineData(RepeatAmount.None, 0, "blah")]
+        [InlineData(RepeatAmount.None, 0, null)]
+        [InlineData(RepeatAmount.None, 0, "")]
+        [InlineData(RepeatAmount.Juz, 1, "Juz-1-times")]
+        [InlineData(RepeatAmount.Page, 5, "Page-5-times")]
+        [InlineData(RepeatAmount.OneAyah, int.MaxValue, "OneAyah-infinite-times")]
+        public void RepeatParseFromString(RepeatAmount expAmount, int expCount, string pattern)
+        {
+            var repeat = RepeatInfo.FromString(pattern);
+            Assert.Equal(expAmount, repeat.RepeatAmount);
+            Assert.Equal(expCount, repeat.RepeatCount);
+        }
+
+        [Theory]
+        [InlineData(RepeatAmount.None, 0, "None-0-times")]
+        [InlineData(RepeatAmount.Juz, 1, "Juz-1-times")]
+        [InlineData(RepeatAmount.Page, 5, "Page-5-times")]
+        [InlineData(RepeatAmount.OneAyah, int.MaxValue, "OneAyah-infinite-times")]
+        public void RepeatToStringMatch(RepeatAmount actAmount, int actCount, string pattern)
+        {
+            var repeat = new RepeatInfo {RepeatAmount = actAmount, RepeatCount = actCount};
+            Assert.Equal(pattern, repeat.ToString());
+        }
+
+        [Fact]
+        public void EmptyRepeatProducesNoneString()
+        {
+            var repeat = new RepeatInfo();
+            Assert.Equal("None-0-times", repeat.ToString());
+        }
+
+        [Fact]
+        public void AudioRequestGotoNextRepeatsAyah()
+        {
+            var request = new AudioRequest(0, new QuranAyah(1, 1), new RepeatInfo(RepeatAmount.OneAyah, 1), 0, AudioDownloadAmount.Page);
+            request.GotoNextAyah();
+            Assert.Equal(new QuranAyah(1, 1), request.CurrentAyah);
+            request.GotoNextAyah();
+            Assert.Equal(new QuranAyah(1, 2), request.CurrentAyah);
+        }
+
+        [Fact]
+        public void AudioRequestGotoNextRepeatsPage()
+        {
+            var request = new AudioRequest(0, new QuranAyah(2, 15), new RepeatInfo(RepeatAmount.Page, 1), 0, AudioDownloadAmount.Page);
+            request.GotoNextAyah();
+            Assert.Equal(new QuranAyah(2, 16), request.CurrentAyah);
+            request.GotoNextAyah();
+            Assert.Equal(new QuranAyah(2, 6), request.CurrentAyah);
+        }
+
+        [Fact]
+        public void AudioRequestGotoNextRepeatsThreeAyah()
+        {
+            var request = new AudioRequest(0, new QuranAyah(1, 1), new RepeatInfo(RepeatAmount.ThreeAyah, 1), 0, AudioDownloadAmount.Page);
+            request.GotoNextAyah();
+            Assert.Equal(new QuranAyah(1, 2), request.CurrentAyah);
+            request.GotoNextAyah();
+            Assert.Equal(new QuranAyah(1, 3), request.CurrentAyah);
+            request.GotoNextAyah();
+            Assert.Equal(new QuranAyah(1, 1), request.CurrentAyah);
+        }
+
+        [Fact]
+        public void AudioRequestGotoNextRepeatsJuz()
+        {
+            var request = new AudioRequest(0, new QuranAyah(2, 140), new RepeatInfo(RepeatAmount.Juz, 1), 0, AudioDownloadAmount.Page);
+            request.GotoNextAyah();
+            Assert.Equal(new QuranAyah(2, 141), request.CurrentAyah);
+            request.GotoNextAyah();
+            Assert.Equal(new QuranAyah(1, 1), request.CurrentAyah);
+            request.GotoNextAyah();
+            Assert.Equal(new QuranAyah(1, 2), request.CurrentAyah);
         }
 
         [Theory]
@@ -62,7 +140,7 @@ namespace Quran.Core.Tests.Utils
         [InlineData(2, 1, 2, 0)]
         public void AudioRequestGotoNextIncrementsAyah(int expSura, int expAya, int currSura, int currAya)
         {
-            var request = new AudioRequest(0, new QuranAyah(currSura, currAya), AudioDownloadAmount.Page);
+            var request = new AudioRequest(0, new QuranAyah(currSura, currAya), null, 0, AudioDownloadAmount.Page);
             request.GotoNextAyah();
             Assert.Equal(new QuranAyah(expSura, expAya), request.CurrentAyah);
         }
@@ -72,7 +150,7 @@ namespace Quran.Core.Tests.Utils
         [InlineData(1, 1, 114, 6)]
         public void AudioRequestGotoNextReturnsBismillah(int expSura, int expAya, int currSura, int currAya)
         {
-            var request = new AudioRequest(0, new QuranAyah(currSura, currAya), AudioDownloadAmount.Page);
+            var request = new AudioRequest(0, new QuranAyah(currSura, currAya), null, 0, AudioDownloadAmount.Page);
             request.GotoNextAyah();
             Assert.Equal(new QuranAyah(expSura, expAya), request.CurrentAyah);
         }
@@ -80,7 +158,7 @@ namespace Quran.Core.Tests.Utils
         [Fact]
         public void AudioRequestGotoNextDoesntReturnBismillahForTawba()
         {
-            var request = new AudioRequest(0, new QuranAyah(8, 75), AudioDownloadAmount.Page);
+            var request = new AudioRequest(0, new QuranAyah(8, 75), null, 0, AudioDownloadAmount.Page);
             request.GotoNextAyah();
             Assert.Equal(new QuranAyah(9, 1), request.CurrentAyah);
         }
@@ -92,7 +170,7 @@ namespace Quran.Core.Tests.Utils
         [InlineData(1, 7, 2, 0)]
         public void AudioRequestGotoPreviousDecrementsAyah(int expSura, int expAya, int currSura, int currAya)
         {
-            var request = new AudioRequest(0, new QuranAyah(currSura, currAya), AudioDownloadAmount.Page);
+            var request = new AudioRequest(0, new QuranAyah(currSura, currAya), null, 0, AudioDownloadAmount.Page);
             request.GotoPreviousAyah();
             Assert.Equal(new QuranAyah(expSura, expAya), request.CurrentAyah);
         }
@@ -102,7 +180,7 @@ namespace Quran.Core.Tests.Utils
         [InlineData(2, 0, 2, 1)]
         public void AudioRequestGotoPreviousReturnBismillah(int expSura, int expAya, int currSura, int currAya)
         {
-            var request = new AudioRequest(0, new QuranAyah(currSura, currAya), AudioDownloadAmount.Page);
+            var request = new AudioRequest(0, new QuranAyah(currSura, currAya), null, 0, AudioDownloadAmount.Page);
             request.GotoPreviousAyah();
             Assert.Equal(new QuranAyah(expSura, expAya), request.CurrentAyah);
         }
@@ -110,9 +188,27 @@ namespace Quran.Core.Tests.Utils
         [Fact]
         public void AudioRequestGotoPreviousDoesntReturnBismillahForTawba()
         {
-            var request = new AudioRequest(0, new QuranAyah(9, 1), AudioDownloadAmount.Page);
+            var request = new AudioRequest(0, new QuranAyah(9, 1), null, 0, AudioDownloadAmount.Page);
             request.GotoPreviousAyah();
             Assert.Equal(new QuranAyah(8, 75), request.CurrentAyah);
+        }
+
+        [Fact]
+        public void AudioRequestGotoNextRepeatsUpToMaxAmount()
+        {
+            var request = new AudioRequest(0, new QuranAyah(1, 1), new RepeatInfo(RepeatAmount.OneAyah, 2), 1, AudioDownloadAmount.Page);
+            request.GotoNextAyah();
+            Assert.Equal(new QuranAyah(1, 1), request.CurrentAyah);
+            request.GotoNextAyah();
+            Assert.Equal(new QuranAyah(1, 2), request.CurrentAyah);
+        }
+
+        [Fact]
+        public void AudioRequestGotoNextDoesntRepeat()
+        {
+            var request = new AudioRequest(0, new QuranAyah(1, 1), new RepeatInfo(RepeatAmount.OneAyah, 2), 2, AudioDownloadAmount.Page);
+            request.GotoNextAyah();
+            Assert.Equal(new QuranAyah(1, 2), request.CurrentAyah);
         }
 
         [Theory]
@@ -123,14 +219,14 @@ namespace Quran.Core.Tests.Utils
         [InlineData(true, 2, 200, 3, 5)]
         public void DoesRequireBismillahWorks(bool result, int startSura, int startAya, int endSura, int endAya)
         {
-            var requires = AudioUtils.DoesRequireBismillah(new AudioRequest(5, new QuranAyah(startSura, startAya), AudioDownloadAmount.Page) { ToAyah = new QuranAyah(endSura, endAya) });
+            var requires = AudioUtils.DoesRequireBismillah(new AudioRequest(5, new QuranAyah(startSura, startAya), null, 0, AudioDownloadAmount.Page) { ToAyah = new QuranAyah(endSura, endAya) });
             Assert.Equal(result, requires);
         }
 
         [Fact]
         public void DoesRequireBismillahWorksWithoutMaxAyah()
         {
-            var requires = AudioUtils.DoesRequireBismillah(new AudioRequest(5, new QuranAyah(2, 1), AudioDownloadAmount.Page));
+            var requires = AudioUtils.DoesRequireBismillah(new AudioRequest(5, new QuranAyah(2, 1), null, 0, AudioDownloadAmount.Page));
             Assert.True(requires);
         }
 

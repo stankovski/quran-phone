@@ -124,5 +124,15 @@ namespace Quran.Core
             set { settingsViewModel = value; }
         }
         #endregion
+
+        public static void SyncViewModelsWithSettings()
+        {
+            MainViewModel.SyncViewModelWithSettings();
+            SearchViewModel.SyncViewModelWithSettings();
+            DetailsViewModel.SyncViewModelWithSettings();
+            TranslationsListViewModel.SyncViewModelWithSettings();
+            RecitersListViewModel.SyncViewModelWithSettings();
+            SettingsViewModel.SyncViewModelWithSettings();
+        }
     }
 }

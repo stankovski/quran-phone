@@ -12,13 +12,14 @@
         <Grid VerticalAlignment="Top">
             <StackPanel Orientation="Vertical">
                 <Image Name="image" Margin="0,0,0,20" Tap="ImageTap"/>
+                <Grid Grid.Row="1" x:Name="ExpanderGrid" Height="50"></Grid>
             </StackPanel>
             <ProgressBar Name="progress" IsIndeterminate="True" VerticalAlignment="Top"
                          Margin="20,5,20,0" FlowDirection="LeftToRight"/>
             <TextBlock Name="memoryUsage" FontSize="20" 
                        Foreground="#FF444444" VerticalAlignment="Top"
                        HorizontalAlignment="Center" Margin="0,0,0,0"/>
-            <Viewbox Margin="0,-20,0,0">
+            <Viewbox VerticalAlignment="Top">
                 <Canvas Name="canvas">
                     <Canvas.Resources>
                         <Storyboard x:Name="canvasStoryboard">

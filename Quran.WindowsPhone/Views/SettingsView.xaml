@@ -69,6 +69,12 @@
                         FontFamily="{StaticResource PhoneFontFamilyNormal}" Click="Reciters_Click"/>
                         <TextBlock Text="{Binding Path=LocalizedResources.audio_download_blocks, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
                         <telerikInput:RadListPicker ItemsSource="{Binding SupportedAudioBlocks}" DisplayMemberPath="Value" SelectedItem="{Binding SelectedAudioBlock, Mode=TwoWay}"/>
+                        <TextBlock Text="{Binding Path=LocalizedResources.repeat_ayah, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                        <telerikPrimitives:RadToggleSwitch IsChecked="{Binding RepeatAudio, Mode=TwoWay}" />
+                        <TextBlock Text="{Binding Path=LocalizedResources.number_of_ayah_to_repeat, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                        <telerikInput:RadListPicker ItemsSource="{Binding SupportedRepeatAmount}" DisplayMemberPath="Value" SelectedItem="{Binding SelectedRepeatAmount, Mode=TwoWay}"/>
+                        <TextBlock Text="{Binding Path=LocalizedResources.times_to_repeat, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                        <telerikInput:RadListPicker ItemsSource="{Binding SupportedRepeatTimes}" DisplayMemberPath="Value" SelectedItem="{Binding SelectedRepeatTimes, Mode=TwoWay}"/>
                     </StackPanel>
                 </ScrollViewer>
             </phone:PivotItem>

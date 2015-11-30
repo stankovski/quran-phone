@@ -12,8 +12,6 @@ using Quran.Core.Common;
 using Quran.Core.Data;
 using Quran.Core.Properties;
 using Quran.Core.Utils;
-using Quran.Core.Common;
-using Quran.Core.Data;
 
 namespace Quran.Core.ViewModels
 {
@@ -230,7 +228,7 @@ namespace Quran.Core.ViewModels
             for (int i = 0; i < (8 * Constants.JUZ2_COUNT); i++)
             {
                 int[] pos = QuranUtils.QUARTERS[i];
-                int page = QuranUtils.GetPageFromSurahAyah(pos[0], pos[1]);
+                int page = QuranUtils.GetPageFromAyah(pos[0], pos[1]);
 
                 if (i % 8 == 0)
                 {

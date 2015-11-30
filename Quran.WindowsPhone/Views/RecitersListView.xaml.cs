@@ -73,7 +73,7 @@ namespace Quran.WindowsPhone.Views
         protected override void OnNavigatedFrom(System.Windows.Navigation.NavigationEventArgs e)
         {
             base.OnNavigatedFrom(e);
-            QuranApp.TranslationsListViewModel.NavigateRequested -= viewModel_NavigateRequested;
+            QuranApp.RecitersListViewModel.NavigateRequested -= viewModel_NavigateRequested;
         }
     }
 }

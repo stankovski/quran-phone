@@ -46,7 +46,7 @@ namespace Quran.Core.ViewModels
         #endregion Properties
 
         #region Public methods
-        public async void LoadData()
+        public void LoadData()
         {
             var qariNames = AudioUtils.GetReciterItems().Where(r => !r.IsGapless);
 

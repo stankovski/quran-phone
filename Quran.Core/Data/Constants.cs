@@ -53,6 +53,12 @@ namespace Quran.Core.Data
         public const string PREF_KEEP_INFO_OVERLAY = "keepInfoOverlay";
         [DefaultValue(false)]
         public const string PREF_NIGHT_MODE = "nightMode";
+        [DefaultValue(false)]
+        public const string PREF_AUDIO_REPEAT = "audioRepeat";
+        [DefaultValue(RepeatAmount.OneAyah)]
+        public const string PREF_REPEAT_AMOUNT = "preferredRepeatAmount";
+        [DefaultValue(0)]
+        public const string PREF_REPEAT_TIMES = "preferredRepeatTimes";
         [DefaultValue("")]
         public const string PREF_ACTIVE_QARI = "activeQari";
         public const string PREF_SHOULD_FETCH_PAGES = "shouldFetchPages";
@@ -71,5 +77,7 @@ namespace Quran.Core.Data
         public const string PREF_USE_VOLUME_KEY_NAV = "volumeKeyNavigation";
         [DefaultValue("0.0.0.0")]
         public const string PREF_CURRENT_VERSION = "currentVersion";
+        [DefaultValue(false)]
+        public const string SESSION_START_AUDIO = "_StartAudio";
     }
 }

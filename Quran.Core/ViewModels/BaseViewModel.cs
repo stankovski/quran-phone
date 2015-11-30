@@ -18,7 +18,9 @@ namespace Quran.Core.ViewModels
     public abstract class BaseViewModel : MvxViewModel, IDisposable
     {
         protected BaseViewModel()
-        { }
+        {
+            SyncViewModelWithSettings();
+        }
         /// <summary>
         /// Gets the service.
         /// </summary>
@@ -42,6 +44,11 @@ namespace Quran.Core.ViewModels
 
                 this.RaisePropertyChanged(() => IsLoading);
             }
+        }
+
+        public virtual void SyncViewModelWithSettings()
+        {
+            // Override to sync properties with settings
         }
 
         #region IDisposable Members

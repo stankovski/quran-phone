@@ -16,44 +16,42 @@
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
     d:DataContext="{d:DesignData ../SampleData/TranslationViewModelSampleData.xaml}"
-    Tap="ScreenTap" Background="{Binding BackgroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}" OrientationChanged="PageOrientationChanged">
-    
-    <phone:PhoneApplicationPage.Resources>
-        <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        <ui:ArabicFontSizeConverter x:Key="ArabicFontSizeConverter"/>
-    </phone:PhoneApplicationPage.Resources>
-    <Grid Name="MainContainer" Background="{Binding BackgroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}">
-        <ProgressBar Value="{Binding AudioDownloadProgress}" IsIndeterminate="False" SmallChange="1" VerticalAlignment="Top" Visibility="{Binding IsDownloadingAudio, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+    Tap="ScreenTap" Background="{Binding IsNightMode, Converter={StaticResource ConditionalColorConverter}, ConverterParameter=FFFFFFFF}" OrientationChanged="PageOrientationChanged">
+
+    <Grid Name="MainContainer" Background="{Binding IsNightMode, Converter={StaticResource ConditionalColorConverter}, ConverterParameter=FFFFFFFF}">
+        <ProgressBar Value="{Binding AudioDownloadProgress}" IsIndeterminate="False" SmallChange="1" VerticalAlignment="Top" Visibility="{Binding IsDownloadingAudio, Converter={StaticResource BooleanToVisibilityConverter}}"/>     
+        
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Grid HorizontalAlignment="Stretch" Grid.Row="0" Background="{Binding BackgroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}" Height="33"
+            <Grid HorizontalAlignment="Stretch" Grid.Row="0" Background="{Binding IsNightMode, Converter={StaticResource ConditionalColorConverter}, ConverterParameter=FFFFFFFF}" Height="33"
               Visibility="{Binding ShowInfoOverlay, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <TextBlock Text="{Binding CurrentSurahName}" HorizontalAlignment="Left" FontSize="18" Foreground="{Binding ForegroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}" Margin="25,3,0,3"/>
+                <TextBlock Text="{Binding CurrentSurahName}" HorizontalAlignment="Left" FontSize="18" Foreground="{Binding IsNightMode, Converter={StaticResource ConditionalColorConverter}, ConverterParameter=FF000000}" Margin="25,3,0,3"/>
                 <StackPanel Margin="0,3,0,3" HorizontalAlignment="Center" Orientation="Horizontal" FlowDirection="LeftToRight">
                     <Image Source="..\Assets\Images\left.png" Height="25" Width="50"/>
-                    <TextBlock Text="{Binding CurrentPageNumber}" FontSize="18" Foreground="{Binding ForegroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}"/>
+                    <TextBlock Text="{Binding CurrentPageNumber}" FontSize="18" Foreground="{Binding IsNightMode, Converter={StaticResource ConditionalColorConverter}, ConverterParameter=FF000000}"/>
                     <Image Source="..\Assets\Images\right.png" Height="25" Width="50"/>
                 </StackPanel>
-                <TextBlock Text="{Binding CurrentJuzName}" HorizontalAlignment="Right" FontSize="18" Foreground="{Binding ForegroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}" Margin="0,3,25,3"/>
+                <TextBlock Text="{Binding CurrentJuzName}" HorizontalAlignment="Right" FontSize="18" Foreground="{Binding IsNightMode, Converter={StaticResource ConditionalColorConverter}, ConverterParameter=FF000000}" Margin="0,3,25,3"/>
             </Grid>
 
             <telerikPrimitives:RadSlideView x:Name="radSlideView" Grid.Row="1" IsFilmstripModeEnabled="True" Margin="0" 
-                                        ItemsSource="{Binding Pages}" IsLoopingEnabled="True"
+                                        ItemsSource="{Binding Pages}" IsLoopingEnabled="True" SelectedItem="{Binding CurrentPage, Mode=TwoWay}"
                                         ItemRealizationMode="ViewportItem" FlowDirection="LeftToRight">
                 <telerikPrimitives:RadSlideView.ItemTemplate>
                     <DataTemplate>
                          <Grid>
-                            <ui:CachedImage ImageSource="{Binding ImageSource}" PageNumber="{Binding PageNumber}" 
+                            <ui:CachedImage   ImageSource="{Binding ImageSource}" PageNumber="{Binding PageNumber}" 
                                               NightMode="{Binding DataContext.IsNightMode, ElementName=ThisPage}"
                                               SelectedAyah="{Binding DataContext.SelectedAyah, ElementName=ThisPage}"
                                               Hold="ImageHold" DoubleTap="ImageDoubleTap" Tap="ImageTap" Padding="0,0,0,10"
-                                              Visibility="{Binding DataContext.ShowTranslation, ElementName=ThisPage, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
+                                              Visibility="{Binding DataContext.ShowTranslation, ElementName=ThisPage, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}"
+                                              FooterVisibility="{Binding ElementName=AudioControl, Path=Visibility}">
                             </ui:CachedImage>
 
-                            <telerikPrimitives:RadDataBoundListBox x:Name="TranslationListBox" DoubleTap="ListBoxDoubleTap"
+                            <telerikPrimitives:RadDataBoundListBox x:Name="TranslationListBox" Grid.Row="0" DoubleTap="ListBoxDoubleTap"
                                                                    Visibility="{Binding DataContext.ShowTranslation, ElementName=ThisPage, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                                    ItemsSource="{Binding Translations}" IsAsyncBalanceEnabled="True">
                                 <telerikPrimitives:RadDataBoundListBox.EmptyContentTemplate>
@@ -63,7 +61,7 @@
                                 </telerikPrimitives:RadDataBoundListBox.EmptyContentTemplate>
                                 <telerikPrimitives:RadDataBoundListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <ListBoxItem HorizontalContentAlignment="Stretch" Foreground="{Binding DataContext.ForegroundColor, Mode=OneWay, ElementName=ThisPage}">
+                                        <ListBoxItem HorizontalContentAlignment="Stretch" Foreground="{Binding DataContext.IsNightMode, ElementName=ThisPage, Converter={StaticResource ConditionalColorConverter}, ConverterParameter=FF000000}">
                                             <telerikPrimitives:RadContextMenu.ContextMenu>
                                                 <telerikPrimitives:RadContextMenu>
                                                     <telerikPrimitives:RadContextMenuItem Content="{Binding Path=LocalizedResources.bookmark_ayah, Source={StaticResource LocalizedStrings}}" Tapped="AyahContextMenuClick"/>
@@ -97,8 +95,50 @@
 
         <ui:DownloadControl DataContext="{Binding ActiveDownload}" VerticalAlignment="Top" Height="70"/>
 
-        <ui:AudioPlayerControl AudioState="{Binding AudioPlayerState}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="70" Height="70" 
-                               Foreground="{StaticResource BlueText}" Margin="30"/>
+        <Grid x:Name="LoadPane" Background="{Binding IsNightMode, Converter={StaticResource ConditionalColorConverter}, ConverterParameter=CCFFFFFF}">
+            <Grid.Resources>
+                <Storyboard x:Name="LoadPaneStoryboard">
+                    <DoubleAnimation 
+                                Storyboard.TargetProperty="Opacity"
+                                Storyboard.TargetName="LoadPane" BeginTime="0:0:0.5"
+                                From="1.0" To="0.0" Duration="0:0:0.5"
+                                />
+                    <ObjectAnimationUsingKeyFrames 
+                                Storyboard.TargetName="LoadPane"
+                                Storyboard.TargetProperty="Visibility" BeginTime="0:0:0.5">
+                        <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="Visible"/>
+                        <DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="Collapsed"/>
+                    </ObjectAnimationUsingKeyFrames>
+                </Storyboard>
+            </Grid.Resources>
+        </Grid>
+        
+        <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Bottom" >
+            <ui:AudioPlayerControl x:Name="AudioControl" AudioState="{Binding AudioPlayerState}" Foreground="{StaticResource BlueText}" RepeatEnabled="{Binding RepeatAudio, Mode=TwoWay}"
+                                   Height="50" HorizontalAlignment="Stretch" Background="{Binding IsNightMode, Converter={StaticResource ConditionalColorConverter}, ConverterParameter=CCFFFFFF}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="StopTapped">
+                        <i:InvokeCommandAction Command="{Binding StopCommand}"/>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="PauseTapped">
+                        <i:InvokeCommandAction Command="{Binding PauseCommand}"/>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="PlayTapped">
+                        <i:InvokeCommandAction Command="{Binding PlayCommand}"/>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="NextTrackTapped">
+                        <i:InvokeCommandAction Command="{Binding NextTrackCommand}"/>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="PreviousTrackTapped">
+                        <i:InvokeCommandAction Command="{Binding PreviousTrackCommand}"/>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="SettingsTapped">
+                        <i:InvokeCommandAction Command="{Binding SettingsCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ui:AudioPlayerControl>
+            <Grid Height="30" Visibility="{Binding IsShowMenu, Converter={StaticResource BooleanToVisibilityConverter}}"></Grid>
+        </StackPanel>
 
         <Button VerticalAlignment="Bottom" HorizontalAlignment="Right" Padding="0" Width="80" Style="{StaticResource ChromelessButtonStyle}" Name="menuToggleButton" 
                 Visibility="{Binding IsShowMenu, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}" Tap="MenuTap">

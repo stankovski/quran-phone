@@ -37,6 +37,21 @@ namespace Quran.WindowsPhone.UI
             get { return image; }
         }
 
+        public Visibility FooterVisibility
+        {
+            get { return (Visibility)GetValue(FooterVisibilityProperty); }
+            set { SetValue(FooterVisibilityProperty, value); }
+        }
+
+        public static readonly DependencyProperty FooterVisibilityProperty = DependencyProperty.Register("FooterVisibility",
+            typeof(Visibility), typeof(CachedImage), new PropertyMetadata(
+            new PropertyChangedCallback(changeFooterVisibility)));
+
+        private static void changeFooterVisibility(DependencyObject source, DependencyPropertyChangedEventArgs e)
+        {
+            (source as CachedImage).ExpanderGrid.Visibility = (Visibility)e.NewValue;
+        }
+
         public QuranAyah SelectedAyah
         {
             get { return (QuranAyah)GetValue(SelectedAyahProperty); }
@@ -335,14 +350,6 @@ namespace Quran.WindowsPhone.UI
 
         #endregion // INotifyPropertyChanged Members
 
-        public void Dispose()
-        {
-            if (image != null)
-                image.Source = null;
-            imageSourceBitmap = null;
-            ImageSource = null;
-        }
-
         public static QuranAyah GetAyahFromGesture(Point p, int pageNumber, double width)
         {
             try
@@ -411,5 +418,28 @@ namespace Quran.WindowsPhone.UI
         {
             memoryUsage.Text = PhoneUtils.CurrentMemoryUsage();
         }
+
+        public void Dispose()
+        {
+            if (image != null)
+                image.Source = null;
+            imageSourceBitmap = null;
+            ImageSource = null;
+            #if DEBUG
+            string msg = string.Format("{0} ({1}) Disposed", this.GetType().Name, this.GetHashCode());
+            System.Diagnostics.Debug.WriteLine(msg);
+            #endif
+        }
+
+        #if DEBUG
+        /// <summary>
+        /// Useful for ensuring that ViewModel objects are properly garbage collected.
+        /// </summary>
+        ~CachedImage()
+        {
+            string msg = string.Format("{0} ({1}) Finalized", this.GetType().Name, this.GetHashCode());
+            System.Diagnostics.Debug.WriteLine(msg);
+        }
+        #endif
     }
 }

@@ -25,6 +25,42 @@ namespace Quran.Core.Common
             Ayah = ayah;
         }
 
+        public static bool operator >(QuranAyah a1, QuranAyah a2)
+        {
+            if (a1.Surah > a2.Surah)
+                return true;
+            else if (a1.Surah == a2.Surah && a1.Ayah > a2.Ayah)
+                return true;
+            else
+                return false;
+        }
+
+        public static bool operator >=(QuranAyah a1, QuranAyah a2)
+        {
+            if (a1 > a2 || a1.Equals(a2))
+                return true;
+            else
+                return false;
+        }
+
+        public static bool operator <(QuranAyah a1, QuranAyah a2)
+        {
+            if (a1.Surah < a2.Surah)
+                return true;
+            else if (a1.Surah == a2.Surah && a1.Ayah < a2.Ayah)
+                return true;
+            else
+                return false;
+        }
+
+        public static bool operator <=(QuranAyah a1, QuranAyah a2)
+        {
+            if (a1 < a2 || a1.Equals(a2))
+                return true;
+            else
+                return false;
+        }
+
         /// <summary>
         /// Creates QuranAyah from string
         /// </summary>
@@ -68,6 +104,16 @@ namespace Quran.Core.Common
         public override int GetHashCode()
         {
             return this.Ayah.GetHashCode() + this.Surah.GetHashCode();
+        }
+
+        public QuranAyah Clone()
+        {
+            QuranAyah ayah = new QuranAyah();
+            ayah.Ayah = this.Ayah;
+            ayah.Surah = this.Surah;
+            ayah.Text = this.Text;
+            ayah.Translation = this.Translation;
+            return ayah;
         }
     }
 

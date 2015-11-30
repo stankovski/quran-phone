@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Xml.Linq;
-using Cirrious.CrossCore;
-using Cirrious.CrossCore.Platform;
 using Quran.Core.Data;
 using Quran.Core.Common;
-using Quran.Core.Data;
 using Quran.Core.Properties;
 
 namespace Quran.Core.Utils
@@ -19,6 +12,19 @@ namespace Quran.Core.Utils
         Page = 1,
         Surah = 2,
         Juz = 3
+    }
+
+    public enum RepeatAmount
+    {
+        None,
+        OneAyah,
+        ThreeAyah,
+        FiveAyah,
+        TenAyah,
+        Page,
+        Surah,
+        Rub,
+        Juz
     }
 
     public static class AudioUtils
@@ -85,7 +91,7 @@ namespace Quran.Core.Utils
 
         private static QuranAyah GetLastAyahToPlayForPage(QuranAyah startAyah)
         {
-            var page = QuranUtils.GetPageFromSurahAyah(startAyah.Surah, startAyah.Ayah);
+            var page = QuranUtils.GetPageFromAyah(startAyah.Surah, startAyah.Ayah);
             if (page == -1)
                 return null;
 
@@ -97,13 +103,7 @@ namespace Quran.Core.Utils
         private static QuranAyah GetLastAyahToPlayForJuz(QuranAyah startAyah)
         {
             var juz = QuranUtils.GetJuzFromAyah(startAyah.Surah, startAyah.Ayah);
-            // If last juz - return last verse
-            if (juz == Constants.JUZ2_COUNT)
-                return new QuranAyah(Constants.SURA_LAST, 6);
-
-            int[] endJuz = QuranUtils.QUARTERS[juz * 8];
-
-            return new QuranAyah(endJuz[0], endJuz[1] - 1);
+            return QuranUtils.GetJuzLastAyah(juz);
         }
 
         public static bool ShouldDownloadBismillah(AudioRequest request)
