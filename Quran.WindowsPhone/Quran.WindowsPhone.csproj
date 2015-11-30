@@ -117,6 +117,7 @@
     <Compile Include="UI\CachedImage.xaml.cs">
       <DependentUpon>CachedImage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\ConditionalColorConverter.cs" />
     <Compile Include="UI\ConditionalStyleConverter.cs" />
     <Compile Include="UI\CustomDataTemplateSelector.cs" />
     <Compile Include="UI\DataTemplateSelector.cs" />

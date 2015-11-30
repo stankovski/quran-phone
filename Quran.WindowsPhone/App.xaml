@@ -9,7 +9,9 @@
     <Application.Resources>
         <ui:LocalizedStrings x:Key="LocalizedStrings"/>
         <ui:StringBrushConverter x:Key="BrushConverter"/>
-
+        <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <ui:ConditionalColorConverter x:Key="ConditionalColorConverter"/>
+        
         <Brush x:Key="BlueText">#30B6E7</Brush>
         <SolidColorBrush x:Key="DarkBlueText" Color="#FF49A4C5"/>
         <LinearGradientBrush x:Key="LightBackground" EndPoint="0,0.5" StartPoint="1,0.5">

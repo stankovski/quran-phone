@@ -1,5 +1,5 @@
 ﻿using System;
-using QuranPhone.UI;
+using Quran.WindowsPhone.UI;
 using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;

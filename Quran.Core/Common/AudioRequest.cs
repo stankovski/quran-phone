@@ -7,7 +7,9 @@ namespace Quran.Core.Common
 {
     public class AudioRequest
     {
-        public AudioRequest(int reciterId, QuranAyah verse, AudioDownloadAmount audioDownloadAmount)
+        private readonly RepeatManager repeatManager;
+
+        public AudioRequest(int reciterId, QuranAyah verse, RepeatInfo repeat, int currentRepeatIteration, AudioDownloadAmount audioDownloadAmount)
         {
             if (verse == null)
                 throw new ArgumentNullException("verse");
@@ -20,13 +22,23 @@ namespace Quran.Core.Common
             this.FromAyah = verse;
             this.CurrentAyah = verse;
             this.ToAyah = AudioUtils.GetLastAyahToPlay(verse, audioDownloadAmount);
-            this.RepeatInfo = new RepeatInfo();
+
+            if (repeat != null)
+            {
+                this.RepeatInfo = repeat;
+            }
+            else
+            {
+                this.RepeatInfo = new RepeatInfo();
+            }
+
+            this.repeatManager = new RepeatManager(this.RepeatInfo, verse, currentRepeatIteration);
         }
 
         /// <summary>
         /// AudioRequest from a formatted string
         /// </summary>
-        /// <param name="formattedString">[local|streaming]://reciterId?amount=AudioDownloadAmount&amp;currentAyah=1:2&amp;fromAyah=1:2&amp;to=2:1&amp;repeat=xxx</param>
+        /// <param name="formattedString">[local|streaming]://reciterId?amount=AudioDownloadAmount&amp;currentAyah=1:2&amp;fromAyah=1:2&amp;to=2:1&amp;repeat=xxx;currentRepeat=2</param>
         public AudioRequest(string formattedString)
         {
             if (string.IsNullOrEmpty(formattedString))
@@ -45,6 +57,9 @@ namespace Quran.Core.Common
                 this.Reciter = AudioUtils.GetReciterById(int.Parse(patternAsUri.Host));
 
                 var splitQueryString = patternAsUri.Query.Split(new char[] { '?', '&' });
+
+                int currentRepeatIteration = 0;
+
                 foreach (var part in splitQueryString)
                 {
                     var splitPart = part.Split('=');
@@ -69,10 +84,16 @@ namespace Quran.Core.Common
                     {
                         this.RepeatInfo = RepeatInfo.FromString(splitPart[1]);
                     }
+                    else if (splitPart[0].Equals("currentRepeat", StringComparison.OrdinalIgnoreCase))
+                    {
+                        int.TryParse(splitPart[1], out currentRepeatIteration);
+                    }
                 }
 
                 if (this.CurrentAyah == null)
                     this.CurrentAyah = this.FromAyah;
+
+                this.repeatManager = new RepeatManager(this.RepeatInfo, this.FromAyah, currentRepeatIteration);
             }
             catch
             {
@@ -87,7 +108,7 @@ namespace Quran.Core.Common
         public QuranAyah CurrentAyah { get; set; }
 
         public RepeatInfo RepeatInfo { get; set; }
-        
+
         public QuranAyah FromAyah { get; set; }
 
         public QuranAyah ToAyah { get; set; }
@@ -97,16 +118,32 @@ namespace Quran.Core.Common
         public void GotoNextAyah()
         {
             CurrentAyah = QuranUtils.GetNextAyah(CurrentAyah, true);
+            if (repeatManager.ShouldRepeat())
+            {
+                if (CurrentAyah > repeatManager.LastAyah)
+                {
+                    CurrentAyah = repeatManager.FirstAyah;
+                    repeatManager.IncrementCounter();
+                }
+            }
         }
 
         public void GotoPreviousAyah()
         {
             CurrentAyah = QuranUtils.GetPreviousAyah(CurrentAyah, true);
+            if (repeatManager.ShouldRepeat() && !QuranUtils.IsBismillah(CurrentAyah))
+            {
+                if (CurrentAyah < repeatManager.FirstAyah)
+                {
+                    CurrentAyah = repeatManager.LastAyah;
+                    repeatManager.DecrementCounter();
+                }
+            }
         }
 
         /// <summary>
         /// Returns request formatted in the URI format
-        /// [local|streaming]://reciterId?amount=AudioDownloadAmount&amp;currentAyah=1:2&amp;fromAyah=1:2&amp;to=2:1&amp;repeat=xxx
+        /// [local|streaming]://reciterId?amount=AudioDownloadAmount&amp;currentAyah=1:2&amp;fromAyah=1:2&amp;to=2:1&amp;repeat=xxx;currentRepeat=2
         /// </summary>
         /// <returns></returns>
         public override string ToString()
@@ -122,6 +159,7 @@ namespace Quran.Core.Common
                 queryBuilder.Add("toAyah=" + ToAyah);
             if (RepeatInfo != null)
                 queryBuilder.Add("repeat=" + RepeatInfo);
+            queryBuilder.Add("currentRepeat=" + repeatManager.Counter);
 
             var uriBuilder = new UriBuilder
             {

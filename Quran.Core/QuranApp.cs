@@ -38,6 +38,11 @@ namespace Quran.Core
             return mainViewModel;
         }
 
+        public static void SyncViewModelsWithSettings()
+        {
+            // TODO: Implement
+        }
+
         /// <summary>
         /// A static ViewModel used by the views to bind against.
         /// </summary>

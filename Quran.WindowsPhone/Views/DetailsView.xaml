@@ -15,7 +15,7 @@
         <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <ui:ArabicFontSizeConverter x:Key="ArabicFontSizeConverter"/>
     </Page.Resources>
-    <Grid Name="MainContainer" Background="{x:Bind ViewModel.BackgroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}">
+    <Grid Name="MainContainer" Background="{x:Bind ViewModel.IsNightMode, Converter={StaticResource ConditionalColorConverter}, ConverterParameter=CCFFFFFF, Mode=OneWay}">
         <Grid.RowDefinitions>
             <RowDefinition Height="48"/>
             <RowDefinition Height="*"/>
@@ -27,17 +27,17 @@
             Visibility="{x:Bind ViewModel.ShowInfoOverlay, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Button x:Name="HamburgerButton" Style="{StaticResource HamburgerButtonStyle}" Click="HamburgerButtonClick"/>
             <TextBlock Text="{x:Bind ViewModel.CurrentSurahName, Mode=OneWay}" HorizontalAlignment="Left" FontSize="18" 
-                       Foreground="{x:Bind ViewModel.ForegroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}" 
+                       Foreground="{x:Bind ViewModel.IsNightMode, Converter={StaticResource ConditionalColorConverter}, ConverterParameter=FF000000, Mode=OneWay}" 
                        Margin="50,3,0,3" VerticalAlignment="Center"/>
             <StackPanel Margin="0,3,0,3" HorizontalAlignment="Center" Orientation="Horizontal" FlowDirection="LeftToRight">
                 <Image Source="..\Assets\Images\left.png" Height="25" Width="50"/>
                 <TextBlock Text="{x:Bind ViewModel.CurrentPageNumber, Mode=OneWay}" FontSize="18" VerticalAlignment="Center" 
-                           Foreground="{x:Bind ViewModel.ForegroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}"/>
+                           Foreground="{x:Bind ViewModel.IsNightMode, Converter={StaticResource ConditionalColorConverter}, ConverterParameter=FF000000, Mode=OneWay}"/>
                 <Image Source="..\Assets\Images\right.png" Height="25" Width="50"/>
             </StackPanel>
             <TextBlock Text="{x:Bind ViewModel.CurrentJuzName, Mode=OneWay}" HorizontalAlignment="Right" 
                        FontSize="18" VerticalAlignment="Center"
-                       Foreground="{x:Bind ViewModel.ForegroundColor, Converter={StaticResource BrushConverter}, Mode=OneWay}" Margin="0,3,25,3"/>
+                       Foreground="{x:Bind ViewModel.IsNightMode, Converter={StaticResource ConditionalColorConverter}, ConverterParameter=FF000000, Mode=OneWay}" Margin="0,3,25,3"/>
         </Grid>
         <SplitView Grid.Row="1" x:Name="MainSplitView" DisplayMode="Overlay" IsPaneOpen="False" OpenPaneLength="300">
             <SplitView.Pane>
@@ -76,8 +76,8 @@
                                         ItemsSource="{x:Bind Translations}">
                                     <ListView.ItemTemplate>
                                         <DataTemplate x:DataType="vm:VerseViewModel">
-                                            <ListBoxItem HorizontalContentAlignment="Stretch" Foreground="{x:Bind Parent.ForegroundColor, Mode=OneWay}">
-                                                <ui:TranslationView ViewModel="{x:Bind}" SelectedAyah="{x:Bind Parent.SelectedAyah,Mode=OneWay}"/>
+                                            <ListBoxItem HorizontalContentAlignment="Stretch" Foreground="{x:Bind Parent.IsNightMode, Converter={StaticResource ConditionalColorConverter}, ConverterParameter=FF000000, Mode=OneWay}">
+                                                <ui:TranslationView ViewModel="{x:Bind}" SelectedAyah="{x:Bind Parent.SelectedAyah, Mode=OneWay}"/>
                                             </ListBoxItem>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>

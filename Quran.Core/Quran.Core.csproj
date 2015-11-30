@@ -121,6 +121,7 @@
     <Compile Include="Common\ReciterItem.cs" />
     <Compile Include="Common\Rectangle.cs" />
     <Compile Include="Common\RepeatInfo.cs" />
+    <Compile Include="Common\RepeatManager.cs" />
     <Compile Include="Common\ScreenOrientation.cs" />
     <Compile Include="Common\Tags.cs" />
     <Compile Include="Common\Timings.cs" />
@@ -179,6 +180,9 @@
     <Compile Include="Utils\TranslationListTask.cs" />
     <Compile Include="Utils\TranslationUtils.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\DetailsViewModel.Audio.cs">
+      <DependentUpon>DetailsViewModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\DetailsViewModel.cs" />
     <Compile Include="ViewModels\DownloadableViewModelBase.cs" />
     <Compile Include="ViewModels\DownloadableViewModelBaseOld.cs" />

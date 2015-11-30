@@ -10,11 +10,9 @@ namespace Quran.Core.Utils
         private int width;
         private int height;
         private int max_width;
-        private ScreenOrientation orientation;
 
         private ScreenUtils(int width, int height)
         {
-            this.orientation = ScreenOrientation.Portrait;
             this.width = width;
             this.height = height;
             this.max_width = (width > height) ? width : height;

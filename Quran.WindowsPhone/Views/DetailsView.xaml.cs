@@ -91,8 +91,6 @@ namespace Quran.WindowsPhone.Views
                 }
             }
 
-            ViewModel.LoadData();
-            
             // set keepinfooverlay according to setting
             ViewModel.KeepInfoOverlay = SettingsUtils.Get<bool>(Constants.PREF_KEEP_INFO_OVERLAY);
 

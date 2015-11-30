@@ -1,6 +1,8 @@
-﻿using Windows.UI.Xaml;
+﻿using System.Threading.Tasks;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media.Animation;
 
-namespace QuranPhone.UI
+namespace Quran.WindowsPhone.UI
 {
     public static class UiExtensions
     {
@@ -25,6 +27,14 @@ namespace QuranPhone.UI
         public static object TryFindResource(this Application application, object resourceKey)
         {
             return Application.Current.Resources[resourceKey];
+        }
+
+        public static Task<bool> PlayAsync(this Storyboard storyboard)
+        {
+            var taskComplete = new TaskCompletionSource<bool>();
+            storyboard.Completed += (sender, args) => { taskComplete.TrySetResult(true); };
+            storyboard.Begin();
+            return taskComplete.Task;
         }
     }
 }

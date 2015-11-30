@@ -133,7 +133,7 @@ namespace Quran.Core.ViewModels
                                 string.Format("{0} ({1}:{2})", QuranUtils.GetSurahName(verse.Surah, false), verse.Surah,
                                               verse.Ayah),
                             Details = text,
-                            PageNumber = QuranUtils.GetPageFromSurahAyah(verse.Surah, verse.Ayah),
+                            PageNumber = QuranUtils.GetPageFromAyah(verse.Surah, verse.Ayah),
                             SelectedAyah = new QuranAyah(verse.Surah, verse.Ayah)
                         });
                     }
