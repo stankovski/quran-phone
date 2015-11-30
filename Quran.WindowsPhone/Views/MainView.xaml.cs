@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Quran.Core;
 using Quran.Core.Data;
+using Quran.Core.Properties;
 using Quran.Core.Utils;
 using Quran.Core.ViewModels;
 using Quran.WindowsPhone.Utils;
@@ -14,12 +16,14 @@ namespace Quran.WindowsPhone.Views
     public partial class MainView
     {
         public MainViewModel ViewModel { get; set; }
+        public ObservableCollection<NavigationLink> NavigationLinks = new ObservableCollection<NavigationLink>();
 
         // Load data for the ViewModel Items
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             ViewModel = await QuranApp.GetMainViewModel();
             InitializeComponent();
+            BuildLocalizedApplicationBar();
             await LittleWatson.CheckForPreviousException();
 
             // Remove all back navigation options
@@ -136,9 +140,30 @@ Quran Phone Team";
             }
         }
 
-        private void HamburgerButton_Click(object sender, RoutedEventArgs e)
+        private void HamburgerButtonClick(object sender, RoutedEventArgs e)
         {
             MainSplitView.IsPaneOpen = !MainSplitView.IsPaneOpen;
+        }
+
+        private void NavLinkItemClick(object sender, ItemClickEventArgs e)
+        {
+            MainSplitView.IsPaneOpen = false;
+            var item = e.ClickedItem as NavigationLink;
+            if (item != null)
+            {
+                item.Action();
+            }
+        }
+
+        // Build a localized ApplicationBar
+        private void BuildLocalizedApplicationBar()
+        {
+            NavigationLinks.Add(new NavigationLink
+            {
+                Label = AppResources.settings,
+                Symbol = Symbol.Setting,
+                Action = () => { Frame.Navigate(typeof(SettingsView), "general"); }
+            });
         }
     }
 }

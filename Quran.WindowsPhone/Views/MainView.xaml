@@ -150,7 +150,7 @@
                 <ColumnDefinition Width="48"/>
                 <ColumnDefinition Width="48"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" x:Name="HamburgerButton" Style="{StaticResource HamburgerButtonStyle}" Click="HamburgerButton_Click"/>
+            <Button Grid.Column="0" x:Name="HamburgerButton" Style="{StaticResource HamburgerButtonStyle}" Click="HamburgerButtonClick"/>
             <TextBlock Grid.Column="1" Text="{Binding Path=LocalizedResources.app_name, Source={StaticResource LocalizedStrings}}" Margin="10,0,0,0" FontWeight="SemiBold" FontSize="20" VerticalAlignment="Center"/>
             <Button Grid.Column="2" Style="{StaticResource MenuButtonStyle}" Content="&#xE094;" 
                     VerticalAlignment="Center"/>
@@ -160,9 +160,21 @@
         <SplitView Grid.Row="1" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" 
                    x:Name="MainSplitView" DisplayMode="Overlay" IsPaneOpen="False" OpenPaneLength="300">
             <SplitView.Pane>
-                <StackPanel Background="{StaticResource BlueText}">
-                    <TextBlock Text="Settings"/>
-                </StackPanel>
+                <ListView x:Name="NavLinksList" Margin="0" SelectionMode="None" 
+                        VerticalAlignment="Stretch" Foreground="White"
+                        ItemClick="NavLinkItemClick" IsItemClickEnabled="True"
+                        Background="{StaticResource BlueText}"
+                        ItemsSource="{x:Bind NavigationLinks}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="vm:NavigationLink">
+                            <StackPanel Orientation="Horizontal"  Margin="2,0,0,0">
+                                <SymbolIcon Symbol="{x:Bind Symbol}" Foreground="White"/>
+                                <TextBlock Text="{x:Bind Label}" Margin="24,0,0,0" Foreground="White"
+                                               VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
             </SplitView.Pane>
             <SplitView.Content>
                 <Grid x:Name="MainPanel">
@@ -171,10 +183,7 @@
                         <RowDefinition Height="40"/>
                     </Grid.RowDefinitions>
                     <Pivot Grid.Row="0">
-                        <PivotItem Margin="0">
-                            <PivotItem.Header>
-                                <ui:TabHeader Glyph="&#xE292;" Label="{Binding Path=LocalizedResources.quran_sura_lower, Source={StaticResource LocalizedStrings}}" Width="100"/>
-                            </PivotItem.Header>
+                        <PivotItem Margin="0" Header="{Binding Path=LocalizedResources.quran_sura_lower, Source={StaticResource LocalizedStrings}}">
                             <Grid x:Name="ContentPanel">
                                 <ListView ItemsSource="{x:Bind ViewModel.Surahs}" SelectionChanged="List_SelectionChanged" 
                                           ItemTemplate="{StaticResource ListItemTemplate}">
@@ -188,10 +197,7 @@
                                 </ListView>
                             </Grid>
                         </PivotItem>
-                        <PivotItem Margin="0">
-                            <PivotItem.Header>
-                                <ui:TabHeader Glyph="&#xE1D3;" Label="{Binding Path=LocalizedResources.quran_juz2_lower, Source={StaticResource LocalizedStrings}}" Width="100"/>
-                            </PivotItem.Header>
+                        <PivotItem Margin="0" Header="{Binding Path=LocalizedResources.quran_juz2_lower, Source={StaticResource LocalizedStrings}}">
                             <Grid>
                                 <ListView ItemsSource="{x:Bind ViewModel.Juz}" SelectionChanged="List_SelectionChanged" 
                                           ItemTemplate="{StaticResource ListItemTemplate}">
@@ -204,10 +210,7 @@
                                 </ListView>
                             </Grid>
                         </PivotItem>
-                        <PivotItem Margin="0">
-                            <PivotItem.Header>
-                                <ui:TabHeader Glyph="&#xE1CF;" Label="{Binding Path=LocalizedResources.quran_bookmarks_lower, Source={StaticResource LocalizedStrings}}" Width="100"/>
-                            </PivotItem.Header>
+                        <PivotItem Margin="0" Header="{Binding Path=LocalizedResources.quran_bookmarks_lower, Source={StaticResource LocalizedStrings}}">
                             <Grid>
                                 <ListView ItemsSource="{x:Bind ViewModel.Bookmarks}" SelectionChanged="List_SelectionChanged">
                                     <ListView.ItemTemplate>

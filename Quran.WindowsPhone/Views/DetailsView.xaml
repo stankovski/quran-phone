@@ -41,22 +41,21 @@
         </Grid>
         <SplitView Grid.Row="1" x:Name="MainSplitView" DisplayMode="Overlay" IsPaneOpen="False" OpenPaneLength="300">
             <SplitView.Pane>
-                <StackPanel Background="{StaticResource BlueText}">
-                    <ListView x:Name="NavLinksList" Margin="0,12,0,0" SelectionMode="None" 
-                        VerticalAlignment="Stretch" Foreground="White"
-                        ItemClick="NavLinkItemClick" IsItemClickEnabled="True"
-                        ItemsSource="{x:Bind NavigationLinks}">
-                        <ListView.ItemTemplate>
-                            <DataTemplate x:DataType="vm:NavigationLink">
-                                <StackPanel Orientation="Horizontal"  Margin="2,0,0,0">
-                                    <SymbolIcon Symbol="{x:Bind Symbol}" Foreground="White"/>
-                                    <TextBlock Text="{x:Bind Label}" Margin="24,0,0,0" Foreground="White"
-                                               VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                </StackPanel>
+                <ListView x:Name="NavLinksList" Margin="0" SelectionMode="None" 
+                    Background="{StaticResource BlueText}"
+                    VerticalAlignment="Stretch" Foreground="White"
+                    ItemClick="NavLinkItemClick" IsItemClickEnabled="True"
+                    ItemsSource="{x:Bind NavigationLinks}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="vm:NavigationLink">
+                            <StackPanel Orientation="Horizontal"  Margin="2,0,0,0">
+                                <SymbolIcon Symbol="{x:Bind Symbol}" Foreground="White"/>
+                                <TextBlock Text="{x:Bind Label}" Margin="24,0,0,0" Foreground="White"
+                                            VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
             </SplitView.Pane>
             <SplitView.Content>
                 <FlipView x:Name="radSlideView" ItemsSource="{x:Bind ViewModel.Pages}"

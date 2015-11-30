@@ -216,11 +216,6 @@ namespace Quran.WindowsPhone.Views
             ViewModel.AddPageBookmark();
         }
         
-        private async void SettingsClick()
-        {
-            //Frame.Navigate(new Uri("/Views/SettingsView.xaml?tab=general", UriKind.Relative));
-        }
-
         private async void ReciteClick()
         {
             var reciter = SettingsUtils.Get<string>(Constants.PREF_ACTIVE_QARI);
@@ -331,7 +326,6 @@ namespace Quran.WindowsPhone.Views
 
         #endregion Menu Events
 
-        #region AppBar creation
         // Build a localized ApplicationBar
         private void BuildLocalizedApplicationBar()
         {
@@ -369,11 +363,9 @@ namespace Quran.WindowsPhone.Views
             {
                 Label = AppResources.settings,
                 Symbol = Symbol.Setting,
-                Action = SettingsClick
+                Action = () => { Frame.Navigate(typeof(SettingsView), "general"); }
             });
         }
-
-        #endregion
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {

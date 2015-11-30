@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using Quran.Core;
+using Quran.Core.Properties;
 using Quran.Core.ViewModels;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -10,6 +12,7 @@ namespace Quran.WindowsPhone.Views
     public partial class SettingsView : Page
     {
         public SettingsViewModel ViewModel { get; set; }
+        public ObservableCollection<NavigationLink> NavigationLinks = new ObservableCollection<NavigationLink>();
 
         public SettingsView()
         {
@@ -21,6 +24,7 @@ namespace Quran.WindowsPhone.Views
             ViewModel = await QuranApp.GetSettingsViewModel();
             await ViewModel.LoadData();
             InitializeComponent();
+            BuildLocalizedApplicationBar();
 
             string tab = e.Parameter as string;
 
@@ -60,6 +64,32 @@ namespace Quran.WindowsPhone.Views
             //    var task = new WebBrowserTask() {Uri = link.NavigateUri};
             //    task.Show();
             //}
+        }
+
+        private void HamburgerButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainSplitView.IsPaneOpen = !MainSplitView.IsPaneOpen;
+        }
+
+        private void NavLinkItemClick(object sender, ItemClickEventArgs e)
+        {
+            MainSplitView.IsPaneOpen = false;
+            var item = e.ClickedItem as NavigationLink;
+            if (item != null)
+            {
+                item.Action();
+            }
+        }
+
+        // Build a localized ApplicationBar
+        private void BuildLocalizedApplicationBar()
+        {
+            NavigationLinks.Add(new NavigationLink
+            {
+                Label = "Home",
+                Symbol = Symbol.Home,
+                Action = () => { Frame.Navigate(typeof(MainView)); }
+            });
         }
     }
 }
