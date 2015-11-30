@@ -237,7 +237,8 @@ namespace Quran.Core.Utils
                 if (!FileUtils.FileExists(bismillaFile))
                 {
                     QuranApp.NativeProvider.Log("bismillah doesn't exist, downloading...");
-                    result = await FileUtils.DownloadFileFromWebAsync(GetServerPathForAyah(new QuranAyah(1, 1), request.Reciter), 
+                    result = await QuranApp.DetailsViewModel.ActiveDownload.Download(
+                        GetServerPathForAyah(new QuranAyah(1, 1), request.Reciter), 
                         request.Reciter.LocalPath);
                 }
             }
