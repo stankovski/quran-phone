@@ -18,11 +18,16 @@ namespace Quran.WindowsPhone.Views
         public MainViewModel ViewModel { get; set; }
         public ObservableCollection<NavigationLink> NavigationLinks = new ObservableCollection<NavigationLink>();
 
+        public MainView()
+        {
+            ViewModel = QuranApp.MainViewModel;
+            InitializeComponent();
+        }
+
         // Load data for the ViewModel Items
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            ViewModel = await QuranApp.GetMainViewModel();
-            InitializeComponent();
+            await ViewModel.Initialize();
             BuildLocalizedApplicationBar();
             await LittleWatson.CheckForPreviousException();
 
@@ -34,15 +39,6 @@ namespace Quran.WindowsPhone.Views
 
             // Show welcome message
             showWelcomeMessage();
-
-            if (!ViewModel.IsDataLoaded)
-            {
-                ViewModel.LoadData();
-            }
-            else
-            {
-                ViewModel.RefreshData();
-            }
             
             // Show prompt to download content if not all images exist
             if (!await FileUtils.HaveAllImages())

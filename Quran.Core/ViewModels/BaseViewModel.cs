@@ -22,6 +22,8 @@ namespace Quran.Core.ViewModels
     {
         public abstract Task Initialize();
 
+        public abstract Task Refresh();
+
         private bool isLoading;
         public bool IsLoading
         {
@@ -36,10 +38,6 @@ namespace Quran.Core.ViewModels
                 this.OnPropertyChanged(() => IsLoading);
             }
         }
-
-        private static AppResources _localizedResources = new AppResources();
-
-        public AppResources Resources { get { return _localizedResources; } }
 
         /// <summary>
         /// Raised when a property on this object has a new value.

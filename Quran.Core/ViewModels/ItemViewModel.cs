@@ -149,6 +149,11 @@ namespace Quran.Core.ViewModels
 
         public override Task Initialize()
         {
+            return Refresh();
+        }
+
+        public override Task Refresh()
+        {
             return Task.FromResult(0);
         }
         #endregion Properties

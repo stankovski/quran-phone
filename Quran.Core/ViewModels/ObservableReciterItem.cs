@@ -21,7 +21,12 @@ namespace Quran.Core.ViewModels
             this.IsGapless = item.IsGapless;
         }
 
-        public override async Task Initialize()
+        public override Task Initialize()
+        {
+            return Refresh();
+        }
+
+        public override async Task Refresh()
         {
             this.Exists = await FileUtils.DirectoryExists(LocalUrl);
         }

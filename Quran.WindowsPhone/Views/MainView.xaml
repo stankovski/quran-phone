@@ -12,8 +12,6 @@
     d:DataContext="{d:DesignData ../SampleData/MainViewModelSampleData.xaml}">
 
     <Page.Resources>
-        <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-
         <MenuFlyout x:Key="BookmarksContextMenu">
             <MenuFlyoutItem x:Uid="delete_bookmark" Tag="&#xE10A;" Style="{StaticResource MenuFlyoutItemIconTemplate}" Click="DeleteBookmark" />
         </MenuFlyout>

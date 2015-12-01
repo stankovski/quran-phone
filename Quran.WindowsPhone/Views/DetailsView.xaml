@@ -12,7 +12,6 @@
     d:DataContext="{d:DesignData ../SampleData/TranslationViewModelSampleData.xaml}">
 
     <Page.Resources>
-        <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <ui:ArabicFontSizeConverter x:Key="ArabicFontSizeConverter"/>
     </Page.Resources>
     <Grid Name="MainContainer" Background="{x:Bind ViewModel.IsNightMode, Converter={StaticResource ConditionalColorConverter}, ConverterParameter=CCFFFFFF, Mode=OneWay}">

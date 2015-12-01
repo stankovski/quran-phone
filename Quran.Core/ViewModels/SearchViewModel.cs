@@ -49,6 +49,11 @@ namespace Quran.Core.ViewModels
         #region Public methods
         public override Task Initialize()
         {
+            return Refresh();
+        }
+
+        public override Task Refresh()
+        {
             return Task.FromResult(0);
         }
 

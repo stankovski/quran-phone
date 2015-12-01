@@ -185,7 +185,12 @@ namespace Quran.Core.ViewModels
                 await Task.WhenAll(tasks);
             }
         }
-        
+
+        public override Task Refresh()
+        {
+            return Task.FromResult(0);
+        }
+
         public async Task<bool> DownloadSingleFile(string serverUrl, string destinationFile, string description = null)
         {
             Reset();
@@ -256,6 +261,7 @@ namespace Quran.Core.ViewModels
             {
                 if (download.Progress.Status == BackgroundTransferStatus.Completed)
                 {
+                    DownloadProgress(download);
                     await FinishDownload(download.ResultFile.Path);
                 }
             }

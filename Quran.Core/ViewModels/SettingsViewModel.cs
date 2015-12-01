@@ -67,12 +67,11 @@ namespace Quran.Core.ViewModels
                     return;
 
                 textSize = value;
-                SettingsUtils.Set(Constants.PREF_TRANSLATION_TEXT_SIZE, value);
 
                 base.OnPropertyChanged(() => TextSize);
             }
         }
-
+        
         private bool showArabicInTranslation;
         public bool ShowArabicInTranslation
         {
@@ -83,7 +82,6 @@ namespace Quran.Core.ViewModels
                     return;
 
                 showArabicInTranslation = value;
-                SettingsUtils.Set(Constants.PREF_SHOW_ARABIC_IN_TRANSLATION, value);
                 base.OnPropertyChanged(() => ShowArabicInTranslation);
             }
         }
@@ -98,11 +96,10 @@ namespace Quran.Core.ViewModels
                     return;
 
                 altDownloadMethod = value;
-                SettingsUtils.Set(Constants.PREF_ALT_DOWNLOAD, value);
                 base.OnPropertyChanged(() => AltDownloadMethod);
             }
         }
-
+        
         private bool enableShowArabicInTranslation;
         public bool EnableShowArabicInTranslation
         {
@@ -129,7 +126,6 @@ namespace Quran.Core.ViewModels
 
                 preventPhoneFromSleeping = value;
                 var oldValue = SettingsUtils.Get<bool>(Constants.PREF_PREVENT_SLEEP);
-                SettingsUtils.Set(Constants.PREF_PREVENT_SLEEP, value);
                 if (oldValue != value)
                 {
                     QuranApp.NativeProvider.ToggleDeviceSleep(!value);
@@ -138,7 +134,7 @@ namespace Quran.Core.ViewModels
                 base.OnPropertyChanged(() => PreventPhoneFromSleeping);
             }
         }
-
+        
         private bool nightMode;
         public bool NightMode
         {
@@ -151,7 +147,6 @@ namespace Quran.Core.ViewModels
                 nightMode = value;
 
                 // saving to setting utils
-                SettingsUtils.Set(Constants.PREF_NIGHT_MODE, value);
 
                 base.OnPropertyChanged(() => NightMode);
             }
@@ -169,7 +164,6 @@ namespace Quran.Core.ViewModels
                 keepInfoOverlay = value;
 
                 // saving to setting utils
-                SettingsUtils.Set(Constants.PREF_KEEP_INFO_OVERLAY, value);
 
                 base.OnPropertyChanged(() => KeepInfoOverlay);
             }
@@ -187,35 +181,31 @@ namespace Quran.Core.ViewModels
                 repeatAudio = value;
 
                 // saving to setting utils
-                SettingsUtils.Set(Constants.PREF_AUDIO_REPEAT, value);
 
                 base.OnPropertyChanged(() => RepeatAudio);
             }
         }
-
-        private KeyValuePair<string, string> selectedLanguage;
-        public KeyValuePair<string, string> SelectedLanguage
+        
+        private string selectedLanguage;
+        public string SelectedLanguage
         {
             get { return selectedLanguage; }
             set
             {
-                if (value.Key == selectedLanguage.Key)
+                if (value == selectedLanguage)
                     return;
 
                 selectedLanguage = value;
 
-                if (SettingsUtils.Get<string>(Constants.PREF_CULTURE_OVERRIDE) != value.Key)
+                if (SettingsUtils.Get<string>(Constants.PREF_CULTURE_OVERRIDE) != value)
                 {
                     QuranApp.NativeProvider.ShowInfoMessageBox(AppResources.please_restart);
                 }
 
-                // saving to setting utils
-                SettingsUtils.Set(Constants.PREF_CULTURE_OVERRIDE, value.Key);
-
                 base.OnPropertyChanged(() => SelectedLanguage);
             }
         }
-
+        
         private KeyValuePair<AudioDownloadAmount, string> selectedAudioBlock = new KeyValuePair<AudioDownloadAmount,string>((AudioDownloadAmount)100, "");
         public KeyValuePair<AudioDownloadAmount, string> SelectedAudioBlock
         {
@@ -226,8 +216,6 @@ namespace Quran.Core.ViewModels
                     return;
 
                 selectedAudioBlock = value;
-
-                SettingsUtils.Set(Constants.PREF_DOWNLOAD_AMOUNT, value.Key);
 
                 base.OnPropertyChanged(() => SelectedAudioBlock);
             }
@@ -244,8 +232,6 @@ namespace Quran.Core.ViewModels
 
                 selectedRepeatAmount = value;
 
-                SettingsUtils.Set(Constants.PREF_REPEAT_AMOUNT, value.Key);
-
                 base.OnPropertyChanged(() => SelectedRepeatAmount);
             }
         }
@@ -261,12 +247,10 @@ namespace Quran.Core.ViewModels
 
                 selectedRepeatTimes = value;
 
-                SettingsUtils.Set(Constants.PREF_REPEAT_TIMES, value.Key);
-
                 base.OnPropertyChanged(() => SelectedRepeatTimes);
             }
         }
-
+        
         public ObservableCollection<KeyValuePair<string, string>> SupportedLanguages { get; private set; }
 
         public ObservableCollection<KeyValuePair<AudioDownloadAmount, string>> SupportedAudioBlocks { get; private set; }
@@ -285,10 +269,10 @@ namespace Quran.Core.ViewModels
         #endregion Properties
         public override Task Initialize()
         {
-            return Task.FromResult(0);
+            return Refresh();
         }
 
-        public async Task LoadData()
+        public override async Task Refresh()
         {
             SupportedLanguages = new ObservableCollection<KeyValuePair<string, string>>();
             foreach (var lang in GetSupportedLanguages())
@@ -323,7 +307,7 @@ namespace Quran.Core.ViewModels
             else
                 ActiveReciter = "None";
 
-            SelectedLanguage = SupportedLanguages.First(kv => kv.Key == SettingsUtils.Get<string>(Constants.PREF_CULTURE_OVERRIDE));
+            SelectedLanguage = SettingsUtils.Get<string>(Constants.PREF_CULTURE_OVERRIDE);
             SelectedAudioBlock = SupportedAudioBlocks.First(kv => kv.Key == SettingsUtils.Get<AudioDownloadAmount>(Constants.PREF_DOWNLOAD_AMOUNT));
             SelectedRepeatAmount = SupportedRepeatAmount.First(kv => kv.Key == SettingsUtils.Get<RepeatAmount>(Constants.PREF_REPEAT_AMOUNT));
             SelectedRepeatTimes = SupportedRepeatTimes.First(kv => kv.Key == SettingsUtils.Get<int>(Constants.PREF_REPEAT_TIMES));
@@ -345,6 +329,22 @@ namespace Quran.Core.ViewModels
                 EnableShowArabicInTranslation = false;
             }
         }
+
+        public void SaveSettings()
+        {
+            SettingsUtils.Set(Constants.PREF_REPEAT_TIMES, SelectedRepeatTimes.Key);
+            SettingsUtils.Set(Constants.PREF_REPEAT_AMOUNT, SelectedRepeatAmount.Key);
+            SettingsUtils.Set(Constants.PREF_DOWNLOAD_AMOUNT, SelectedAudioBlock.Key);
+            SettingsUtils.Set(Constants.PREF_CULTURE_OVERRIDE, SelectedLanguage);
+            SettingsUtils.Set(Constants.PREF_AUDIO_REPEAT, RepeatAudio);
+            SettingsUtils.Set(Constants.PREF_KEEP_INFO_OVERLAY, KeepInfoOverlay);
+            SettingsUtils.Set(Constants.PREF_NIGHT_MODE, NightMode);
+            SettingsUtils.Set(Constants.PREF_PREVENT_SLEEP, PreventPhoneFromSleeping);
+            SettingsUtils.Set(Constants.PREF_SHOW_ARABIC_IN_TRANSLATION, ShowArabicInTranslation);
+            SettingsUtils.Set(Constants.PREF_ALT_DOWNLOAD, AltDownloadMethod);
+            SettingsUtils.Set(Constants.PREF_TRANSLATION_TEXT_SIZE, TextSize);
+        }
+
 
         public void GenerateDua()
         {

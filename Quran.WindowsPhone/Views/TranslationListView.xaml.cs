@@ -1,82 +1,55 @@
 ﻿using System;
-using System.Windows.Navigation;
 using Quran.Core;
 using Quran.Core.Properties;
 using Quran.Core.Utils;
 using Quran.Core.ViewModels;
-using Quran.WindowsPhone.UI;
 using Quran.Core.Data;
-using Telerik.Windows.Data;
+using Windows.UI.Xaml.Navigation;
+using Windows.UI.Xaml.Controls;
+using System.IO;
 
 namespace Quran.WindowsPhone.Views
 {
-    public partial class TranslationListView
+    public partial class TranslationListView : Page
     {
+        public TranslationsListViewModel ViewModel { get; set; }
+
         public TranslationListView()
         {
-            InitializeComponent();
-
-            GenericGroupDescriptor<ObservableTranslationItem, string> grouping 
-                = new GenericGroupDescriptor<ObservableTranslationItem, string>((item) =>
-            {
-                if (item.Exists)
-                {
-                    return AppResources.downloaded_translations;
-                }
-                else
-                {
-                    return AppResources.available_translations;
-                }
-            });
-            grouping.SortMode = ListSortMode.Descending;
-
-            GenericSortDescriptor<ObservableTranslationItem, string> sorting
-                = new GenericSortDescriptor<ObservableTranslationItem, string>(item => item.Name.Substring(0, 1));
-
-            jmpTranslation.GroupDescriptors.Add(grouping);
-            jmpTranslation.SortDescriptors.Add(sorting);
+            ViewModel = QuranApp.TranslationsListViewModel;
+            InitializeComponent();            
         }
 
         // When page is navigated to set data context to selected item in list
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (DataContext == null)
-            {
-                DataContext = QuranApp.TranslationsListViewModel;                
-            }
-
-            if (!QuranApp.TranslationsListViewModel.IsDataLoaded)
-                QuranApp.TranslationsListViewModel.LoadData();
-            
-            QuranApp.TranslationsListViewModel.NavigateRequested += viewModel_NavigateRequested;
-            QuranApp.TranslationsListViewModel.AvailableTranslations.CollectionChanged += AvailableTranslations_CollectionChanged;
+            await ViewModel.Initialize();            
         }
 
-        void AvailableTranslations_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove ||
-                e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace ||
-                e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Reset)
-            {
-                jmpTranslation.RefreshData();
-            }
-        }
-
-        void viewModel_NavigateRequested(object sender, EventArgs e)
-        {
-            var translation = sender as ObservableTranslationItem;
-            if (translation == null)
-                return;
-
-            SettingsUtils.Set(Constants.PREF_ACTIVE_TRANSLATION, string.Join("|", translation.FileName, translation.Name));
-            SettingsUtils.Set(Constants.PREF_SHOW_TRANSLATION, true);
-            NavigationService.GoBack();
-        }
-
-        protected override void OnNavigatedFrom(System.Windows.Navigation.NavigationEventArgs e)
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             base.OnNavigatedFrom(e);
-            QuranApp.TranslationsListViewModel.NavigateRequested -= viewModel_NavigateRequested;
+        }
+
+        private void NavigationRequested(object sender, SelectionChangedEventArgs e)
+        {
+            var list = sender as ListView;
+            if (list == null || list.SelectedItem == null)
+                return;
+
+            var translation = (ObservableTranslationItem)list.SelectedItem;
+            if (translation == null)
+            {
+                return;
+            }
+
+            if (translation.Exists)
+            {
+                SettingsUtils.Set(Constants.PREF_ACTIVE_TRANSLATION, string.Join("|",
+                    Path.GetFileName(translation.LocalPath), translation.Name));
+                SettingsUtils.Set(Constants.PREF_SHOW_TRANSLATION, true);
+                Frame.GoBack();
+            }
         }
     }
 }

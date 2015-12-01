@@ -83,26 +83,23 @@ namespace Quran.Core.ViewModels
             _zipFileServerUrl = FileUtils.GetZipFileUrl();
             _zipFileLocalPath = Path.Combine(await FileUtils.GetQuranBaseDirectory(), 
                 Path.GetFileName(_zipFileServerUrl));
+
+            if (!this.IsDataLoaded)
+            {
+                loadSuraList();
+                loadJuz2List();
+                loadBookmarkList();
+                this.IsDataLoaded = true;
+            }
+
             await ActiveDownload.Initialize();
         }
 
-        /// <summary>
-        /// Creates and adds a few ItemViewModel objects into the Items collection.
-        /// </summary>
-        public void LoadData()
-        {
-            // Sample data; replace with real data
-            loadSuraList();
-            loadJuz2List();
-            loadBookmarkList();
-
-            this.IsDataLoaded = true;
-        }
-
-        public void RefreshData()
+        public override Task Refresh()
         {
             this.Bookmarks.Clear();
             loadBookmarkList();
+            return base.Refresh();
         }
 
         public async Task Download()

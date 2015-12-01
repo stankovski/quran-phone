@@ -5,41 +5,45 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using Quran.Core.Properties;
 using Quran.Core.Utils;
 
 namespace Quran.Core.ViewModels
 {
+    public class TranslationsItemGroup
+    {
+        public TranslationsItemGroup(string title)
+        {
+            Title = title;
+            Translations = new ObservableCollection<ObservableTranslationItem>();
+        }
+
+        public string Title { get; set; }
+
+        public ObservableCollection<ObservableTranslationItem> Translations { get; private set; }
+    }
     /// <summary>
     /// Define the TranslationslistViewModel type.
     /// </summary>
     public class TranslationsListViewModel : BaseViewModel
     {
+        private TranslationsItemGroup _downloadedGroup = new TranslationsItemGroup(AppResources.downloaded_translations);
+        private TranslationsItemGroup _availableGroup = new TranslationsItemGroup(AppResources.available_translations);
+
         public TranslationsListViewModel()
         {
-            this.IsDataLoaded = false;
-            this.AvailableTranslations = new ObservableCollection<ObservableTranslationItem>();
-            this.AvailableTranslations.CollectionChanged += AvailableTranslationsCollectionChanged;
+            _downloadedGroup.Translations.CollectionChanged += AvailableTranslationsCollectionChanged;
+            _availableGroup.Translations.CollectionChanged += AvailableTranslationsCollectionChanged;
+            Groups = new ObservableCollection<TranslationsItemGroup>();
+            Groups.Add(_downloadedGroup);
+            Groups.Add(_availableGroup);
         }
 
         #region Properties
-        public ObservableCollection<ObservableTranslationItem> AvailableTranslations { get; private set; }
-
-        private bool isDataLoaded;
-        public bool IsDataLoaded
-        {
-            get { return isDataLoaded; }
-            set
-            {
-                if (value == isDataLoaded)
-                    return;
-
-                isDataLoaded = value;
-
-                base.OnPropertyChanged(() => IsDataLoaded);
-            }
-        }
+        public ObservableCollection<TranslationsItemGroup> Groups { get; private set; }
 
         private bool anyTranslationsDownloaded;
         public bool AnyTranslationsDownloaded
@@ -58,24 +62,38 @@ namespace Quran.Core.ViewModels
         #endregion Properties
 
         #region Public methods
-        public override Task Initialize()
+        public override async Task Initialize()
         {
-            return Task.FromResult(0);
+            await Refresh();
         }
 
-        public async void LoadData()
+        public override async Task Refresh()
         {
+            this.IsLoading = true;
+
             var list = await TranslationListTask.DownloadTranslations(true, "tag");
             if (list == null)
                 return;
 
+            _availableGroup.Translations.Clear();
+            _downloadedGroup.Translations.Clear();
             foreach (var item in list)
             {
-                this.AvailableTranslations.Add(new ObservableTranslationItem(item));
+                var translationItem = new ObservableTranslationItem(item);
+                await translationItem.Initialize();
+                if (!translationItem.Exists)
+                {
+                    _availableGroup.Translations.Add(translationItem);
+                }
+                else
+                {
+                    _downloadedGroup.Translations.Add(translationItem);
+                }
             }
 
-            this.IsDataLoaded = true;
+            this.IsLoading = false;
         }
+
         #endregion Public methods
 
         #region Event handlers
@@ -88,18 +106,19 @@ namespace Quran.Core.ViewModels
                 {
                     item.DownloadComplete += TranslationDownloadComplete;
                     item.DeleteComplete += TranslationDeleteComplete;
-                    item.NavigateRequested += TranslationNavigateRequested;
                 }
             }
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove ||
                 e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace ||
                 e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Reset)
             {
-                foreach (ObservableTranslationItem item in e.OldItems)
+                if (e.OldItems != null)
                 {
-                    item.DownloadComplete -= TranslationDownloadComplete;
-                    item.DeleteComplete -= TranslationDeleteComplete;
-                    item.NavigateRequested -= TranslationNavigateRequested;
+                    foreach (ObservableTranslationItem item in e.OldItems)
+                    {
+                        item.DownloadComplete -= TranslationDownloadComplete;
+                        item.DeleteComplete -= TranslationDeleteComplete;
+                    }
                 }
             }            
         }
@@ -110,10 +129,12 @@ namespace Quran.Core.ViewModels
             if (translation == null)
                 return;
             translation.Exists = true;
-
-            // Hack to update list after download / delete completed
-            AvailableTranslations.Remove(translation);
-            AvailableTranslations.Add(translation);
+            
+            if (_availableGroup.Translations.Contains(translation))
+            {
+                _availableGroup.Translations.Remove(translation);
+                _downloadedGroup.Translations.Add(translation);
+            }
         }
 
         private void TranslationDeleteComplete(object sender, EventArgs e)
@@ -123,21 +144,12 @@ namespace Quran.Core.ViewModels
                 return;
             translation.Exists = false;
 
-            // Hack to update list after download / delete completed
-            AvailableTranslations.Remove(translation);
-            AvailableTranslations.Add(translation);
-        }
-
-        private void TranslationNavigateRequested(object sender, EventArgs e)
-        {
-            var translation = sender as ObservableTranslationItem;
-            if (translation == null)
-                return;
-            if (NavigateRequested != null)
-                NavigateRequested(sender, e);
-        }
+            if (_downloadedGroup.Translations.Contains(translation))
+            {
+                _downloadedGroup.Translations.Remove(translation);
+                _availableGroup.Translations.Add(translation);
+            }
+        }        
         #endregion
-
-        public event EventHandler NavigateRequested;
     }
 }

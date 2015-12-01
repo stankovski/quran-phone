@@ -38,25 +38,58 @@ namespace Quran.Core
             return mainViewModel;
         }
 
-        public static void SyncViewModelsWithSettings()
+        public static async Task SyncViewModelsWithSettings()
         {
-            // TODO: Implement
+            if (mainViewModel != null)
+            {
+                await mainViewModel.Refresh();
+            }
+            if (searchViewModel != null)
+            {
+                await searchViewModel.Refresh();
+            }
+            if (detailsViewModel != null)
+            {
+                await detailsViewModel.Refresh();
+            }
+            if (settingsViewModel != null)
+            {
+                await settingsViewModel.Refresh();
+            }
+        }
+
+        /// <summary>
+        /// A static ViewModel used by the views to bind against.
+        /// </summary>
+        /// <returns>The MainViewModel object.</returns>
+        public static MainViewModel MainViewModel
+        {
+            get
+            {
+                // Delay creation of the view model until necessary
+                if (mainViewModel == null)
+                    mainViewModel = new MainViewModel();
+
+                return mainViewModel;
+            }
+            set { mainViewModel = value; }
         }
 
         /// <summary>
         /// A static ViewModel used by the views to bind against.
         /// </summary>
         /// <returns>The SearchViewModel object.</returns>
-        public static async Task<SearchViewModel> GetSearchViewModel()
+        public static SearchViewModel SearchViewModel
         {
-            // Delay creation of the view model until necessary
-            if (searchViewModel == null)
+            get
             {
-                searchViewModel = new SearchViewModel();
-                await searchViewModel.Initialize();
-            }
+                // Delay creation of the view model until necessary
+                if (searchViewModel == null)
+                    searchViewModel = new SearchViewModel();
 
-            return searchViewModel;
+                return searchViewModel;
+            }
+            set { searchViewModel = value; }
         }
 
         /// <summary>
@@ -114,15 +147,17 @@ namespace Quran.Core
         /// A static SettingsViewModel used by the views to bind against.
         /// </summary>
         /// <returns>The SettingsViewModel object.</returns>
-        public static async Task<SettingsViewModel> GetSettingsViewModel()
+        public static SettingsViewModel SettingsViewModel
         {
-            // Delay creation of the view model until necessary
-            if (settingsViewModel == null)
+            get
             {
-                settingsViewModel = new SettingsViewModel();
-                await settingsViewModel.Initialize();
+                // Delay creation of the view model until necessary
+                if (settingsViewModel == null)
+                    settingsViewModel = new SettingsViewModel();
+
+                return settingsViewModel;
             }
-            return settingsViewModel;
+            set { settingsViewModel = value; }
         }
         #endregion
     }

@@ -19,5 +19,10 @@ namespace Quran.Core.ViewModels
         {
             return ActiveDownload.Initialize();
         }
+
+        public override Task Refresh()
+        {
+            return ActiveDownload.Refresh();
+        }
     }
 }

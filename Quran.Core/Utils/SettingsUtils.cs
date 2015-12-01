@@ -4,6 +4,9 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using Quran.Core.Interfaces;
+using System;
+using Newtonsoft.Json;
+using System.Linq.Expressions;
 
 namespace Quran.Core.Utils
 {
@@ -18,7 +21,7 @@ namespace Quran.Core.Utils
         /// <typeparam name="T">Type of object to deserialize from</typeparam>
         /// <param name="key">Key</param>
         /// <returns></returns>
-        public static T Get<T>(string key)
+        public static T Get<T>(string key) where T : IConvertible
         {
             if (provider == null)
                 provider = QuranApp.NativeProvider.SettingsProvider;
@@ -38,7 +41,14 @@ namespace Quran.Core.Utils
             object value = null;
             if (provider.Contains(key))
             {
-                value = provider[key];
+                if (NeedsToStringSerialization<T>())
+                {
+                    value = ConvertToType<T>(provider[key]);
+                }
+                else
+                {
+                    value = provider[key];
+                }                
             }
 
             if (value == null)
@@ -56,6 +66,28 @@ namespace Quran.Core.Utils
                 cache[key] = getDefaultValue<T>(key);
                 return getDefaultValue<T>(key);
             }
+        }
+
+        private static T ConvertToType<T>(object v) where T : IConvertible
+        {
+            if (v is T)
+            {
+                return (T)v;
+            }
+
+            if (typeof(T).GetTypeInfo().IsEnum)
+            {
+                if (v is int)
+                {
+                    return CastTo<T>.From((int)v);
+                }
+                if (v is string)
+                {
+                    return (T)Enum.Parse(typeof(T), v.ToString());
+                }
+            }
+
+            return (T)Convert.ChangeType(v, typeof(T));
         }
 
         public static bool Contains(string key)
@@ -103,23 +135,37 @@ namespace Quran.Core.Utils
         /// <typeparam name="T">Type of object to serialize into</typeparam>
         /// <param name="key"></param>
         /// <param name="value"></param>
-        public static void Set<T>(string key, T value)
+        public static void Set<T>(string key, T value) where T : IConvertible
         {
             if (provider == null)
                 provider = QuranApp.NativeProvider.SettingsProvider;
 
             if (value == null)
+            {
                 return;
+            }
 
-            bool keyExists = provider.Contains(key);
-
-            if (!keyExists)
-                provider.Add(key, value);
+            if (NeedsToStringSerialization<T>())
+            {
+                provider[key] = Convert.ChangeType(value, typeof(string));
+            }
             else
+            {
                 provider[key] = value;
+            }
 
             cache[key] = value;
             Save();
+        }
+
+        private static bool NeedsToStringSerialization<T>()
+        {
+            T value = default(T);
+            if (value is int || value is double || value is byte || value is string || value is bool)
+            {
+                return false;
+            }
+            return true;
         }
 
         public static void Save()
@@ -128,6 +174,36 @@ namespace Quran.Core.Utils
                 provider = QuranApp.NativeProvider.SettingsProvider;
 
             provider.Save();
+        }
+    }
+
+    /// <summary>
+    /// Class to cast to type <see cref="T"/>
+    /// </summary>
+    /// <typeparam name="T">Target type</typeparam>
+    public static class CastTo<T>
+    {
+        /// <summary>
+        /// Casts <see cref="S"/> to <see cref="T"/>. 
+        /// This does not cause boxing for value types. 
+        /// Useful in generic methods
+        /// </summary>
+        /// <typeparam name="S">Source type to cast from. Usually a generic type.</typeparam>
+        public static T From<S>(S s)
+        {
+            return Cache<S>.caster(s);
+        }
+
+        static class Cache<S>
+        {
+            internal static readonly Func<S, T> caster = Get();
+
+            static Func<S, T> Get()
+            {
+                var p = Expression.Parameter(typeof(S));
+                var c = Expression.ConvertChecked(p, typeof(T));
+                return Expression.Lambda<Func<S, T>>(c, p).Compile();
+            }
         }
     }
 }

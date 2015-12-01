@@ -5,26 +5,27 @@ using Quran.Core.Common;
 using Quran.Core.Data;
 using System.IO;
 using System.Threading.Tasks;
+using Quran.Core.Properties;
 
 namespace Quran.Core.ViewModels
 {
     public class ObservableTranslationItem : DownloadableViewModelBase
     {
         private readonly string _serverUrl;
-        private readonly string _localPath;
 
         public ObservableTranslationItem() { }
 
         public ObservableTranslationItem(TranslationItem item)
-            : base()
         {
             this.Id = item.Id;
             this.Name = item.Name;
             this.Translator = item.Translator;
             this.Exists = item.Exists;
+            LocalPath = Path.Combine(FileUtils.RunSync(() => FileUtils.GetQuranDatabaseDirectory()), item.Filename);
             _serverUrl = item.Url;
-            _localPath = Path.Combine(FileUtils.RunSync(() => FileUtils.GetQuranDatabaseDirectory()), item.Filename);
         }
+
+        public string LocalPath { get; set; }
 
         private int id;
         public int Id
@@ -86,24 +87,55 @@ namespace Quran.Core.ViewModels
             }
         }
 
-        public async Task Delete()
+        ICommand deleteCommand;
+        /// <summary>
+        /// Returns an delete command
+        /// </summary>
+        public ICommand DeleteCommand
         {
-            if (await FileUtils.FileExists(_localPath))
+            get
+            {
+                if (deleteCommand == null)
+                {
+                    deleteCommand = new RelayCommand(Delete);
+                }
+                return deleteCommand;
+            }
+        }
+        
+        ICommand downloadCommand;
+        /// <summary>
+        /// Returns an download command
+        /// </summary>
+        public ICommand DownloadCommand
+        {
+            get
+            {
+                if (downloadCommand == null)
+                {
+                    downloadCommand = new RelayCommand(Download, () => !Exists);
+                }
+                return downloadCommand;
+            }
+        }
+
+        public async void Delete()
+        {
+            if (await FileUtils.FileExists(LocalPath))
             {
                 try
                 {
-                    await FileUtils.DeleteFile(_localPath);
+                    await FileUtils.DeleteFile(LocalPath);
                 }
                 catch
                 {
-                    QuranApp.NativeProvider.Log("error deleting file " + _localPath);
+                    QuranApp.NativeProvider.Log("error deleting file " + LocalPath);
                 }
             }
             else
             {
                 // Sometimes downloaded translation is kind of corrupted, need a way to delete this
                 // corrupted item.
-
             }
 
             if (DeleteComplete != null)
@@ -111,28 +143,23 @@ namespace Quran.Core.ViewModels
 
             try
             {
-                if (SettingsUtils.Get<string>(Constants.PREF_ACTIVE_TRANSLATION).StartsWith(_localPath))
+                if (SettingsUtils.Get<string>(Constants.PREF_ACTIVE_TRANSLATION).StartsWith(Path.GetFileName(LocalPath), 
+                    StringComparison.Ordinal))
                 {
                     SettingsUtils.Set<string>(Constants.PREF_ACTIVE_TRANSLATION, string.Empty);
                 }
             }
-            catch (Exception)
+            catch
             {
+                // Ignore
             }
         }
 
-        public async Task<bool> Download()
+        public async void Download()
         {
-            return await DownloadSingleFile(_serverUrl, _localPath);
+            await DownloadSingleFile(_serverUrl, LocalPath);
         }
-
-        public void Navigate()
-        {
-            if (NavigateRequested != null)
-                NavigateRequested(this, null);
-        }
-
+        
         public event EventHandler DeleteComplete;
-        public event EventHandler NavigateRequested;
     }
 }

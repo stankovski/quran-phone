@@ -10,6 +10,7 @@
         <ui:LocalizedStrings x:Key="LocalizedStrings"/>
         <ui:StringBrushConverter x:Key="BrushConverter"/>
         <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <ui:BooleanInversionConverter x:Key="BooleanInversionConverter"/>
         <ui:ConditionalColorConverter x:Key="ConditionalColorConverter"/>
         
         <Brush x:Key="BlueText">#30B6E7</Brush>

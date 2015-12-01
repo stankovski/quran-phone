@@ -16,12 +16,16 @@ namespace Quran.WindowsPhone.Views
         public DetailsViewModel ViewModel { get; set; }
         public ObservableCollection<NavigationLink> NavigationLinks = new ObservableCollection<NavigationLink>();
 
+        public DetailsView()
+        {
+            ViewModel = QuranApp.DetailsViewModel;
+            InitializeComponent();
+        }
+
         // When page is navigated to set data context to selected item in list
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            ViewModel = QuranApp.DetailsViewModel;
             await ViewModel.Initialize();
-            InitializeComponent();
             BuildLocalizedApplicationBar();
 
             //ViewModel.Orientation = QuranApp.NativeProvider.IsPortaitOrientation ? 

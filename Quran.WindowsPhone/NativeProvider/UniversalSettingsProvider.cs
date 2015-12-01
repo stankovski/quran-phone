@@ -17,11 +17,6 @@ namespace Quran.WindowsPhone.NativeProvider
             // Do nothing
         }
 
-        public void Add(string key, object value)
-        {
-            ApplicationData.Current.RoamingSettings.Values[key] = value;
-        }
-
         public object this[string key]
         {
             get { return ApplicationData.Current.RoamingSettings.Values[key]; }

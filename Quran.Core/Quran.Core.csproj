@@ -120,6 +120,7 @@
     <Compile Include="Common\QuranAyahEventArgs.cs" />
     <Compile Include="Common\ReciterItem.cs" />
     <Compile Include="Common\Rectangle.cs" />
+    <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\RepeatInfo.cs" />
     <Compile Include="Common\RepeatManager.cs" />
     <Compile Include="Common\ScreenOrientation.cs" />
@@ -185,7 +186,6 @@
     </Compile>
     <Compile Include="ViewModels\DetailsViewModel.cs" />
     <Compile Include="ViewModels\DownloadableViewModelBase.cs" />
-    <Compile Include="ViewModels\DownloadableViewModelBaseOld.cs" />
     <Compile Include="ViewModels\ItemViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Data\NavigationData.cs" />

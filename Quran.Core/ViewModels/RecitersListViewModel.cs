@@ -49,10 +49,10 @@ namespace Quran.Core.ViewModels
         #region Public methods
         public override Task Initialize()
         {
-            return Task.FromResult(0);
+            return Refresh();
         }
 
-        public async Task LoadData()
+        public override async Task Refresh()
         {
             var qariNames = AudioUtils.GetReciterItems().Where(r => !r.IsGapless);
 

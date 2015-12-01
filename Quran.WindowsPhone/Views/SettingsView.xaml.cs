@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.ObjectModel;
 using Quran.Core;
 using Quran.Core.Properties;
@@ -6,6 +7,7 @@ using Quran.Core.ViewModels;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI.Xaml.Media.Animation;
 
 namespace Quran.WindowsPhone.Views
 {
@@ -16,14 +18,14 @@ namespace Quran.WindowsPhone.Views
 
         public SettingsView()
         {
+            ViewModel = QuranApp.SettingsViewModel;
+            InitializeComponent();
         }
 
         // When page is navigated to set data context to selected item in list
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            ViewModel = await QuranApp.GetSettingsViewModel();
-            await ViewModel.LoadData();
-            InitializeComponent();
+            await ViewModel.Initialize();
             BuildLocalizedApplicationBar();
 
             string tab = e.Parameter as string;
@@ -41,8 +43,8 @@ namespace Quran.WindowsPhone.Views
 
         protected override async void OnNavigatedFrom(NavigationEventArgs e)
         {
-            QuranApp.SyncViewModelsWithSettings();
-            await QuranApp.DetailsViewModel.RefreshCurrentPage();
+            ViewModel.SaveSettings();
+            await QuranApp.SyncViewModelsWithSettings();
             base.OnNavigatedFrom(e);
         }
         
@@ -90,6 +92,11 @@ namespace Quran.WindowsPhone.Views
                 Symbol = Symbol.Home,
                 Action = () => { Frame.Navigate(typeof(MainView)); }
             });
+        }
+
+        private void ShowTranslations(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(TranslationListView), null, new DrillInNavigationTransitionInfo());
         }
     }
 }

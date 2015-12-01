@@ -133,7 +133,6 @@
       <DependentUpon>PageLink.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\RecitationItemTemplateSelector.cs" />
-    <Compile Include="UI\SettingsRetrieverConverter.cs" />
     <Compile Include="UI\StringBrushConverter.cs" />
     <Compile Include="UI\StyleConverter.cs" />
     <Compile Include="UI\TextFormatConverter.cs" />
@@ -153,6 +152,9 @@
     </Compile>
     <Compile Include="Views\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TranslationListView.xaml.cs">
+      <DependentUpon>TranslationListView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -235,10 +237,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="SampleData\TranslationsListViewModelSampleData.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="SampleData\TranslationViewModelSampleData.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -282,6 +280,10 @@
     <Page Include="Views\SettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TranslationListView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
