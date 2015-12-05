@@ -9,7 +9,17 @@ namespace Quran.WindowsPhone.UI
 {
     public partial class TranslationView : UserControl
     {
-        public VerseViewModel ViewModel { get; set; }
+        public VerseViewModel ViewModel {
+            get
+            {
+                return DataContext as VerseViewModel;
+            }
+        }
+
+        public TranslationView()
+        {
+            InitializeComponent();
+        }
 
         public QuranAyah SelectedAyah
         {
@@ -53,11 +63,6 @@ namespace Quran.WindowsPhone.UI
                     canvas.Opacity = 0;
                 }
             }
-        }
-
-        public TranslationView()
-        {
-            InitializeComponent();
         }
     }
 }

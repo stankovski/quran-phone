@@ -81,7 +81,7 @@
                                     <ListView.ItemTemplate>
                                         <DataTemplate x:DataType="vm:VerseViewModel">
                                             <ListBoxItem HorizontalContentAlignment="Stretch">
-                                                <ui:TranslationView ViewModel="{x:Bind}" SelectedAyah="{x:Bind Parent.SelectedAyah, Mode=OneWay}"/>
+                                                <ui:TranslationView DataContext="{x:Bind}" SelectedAyah="{x:Bind Parent.SelectedAyah, Mode=OneWay}"/>
                                             </ListBoxItem>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>

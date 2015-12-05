@@ -24,8 +24,9 @@
                 </Storyboard>
             </Border.Resources>
         </Border>
-        <TextBlock Margin="22, 0" TextWrapping="Wrap" Text="{Binding Text}"
-                   FontSize="{x:Bind ViewModel.StyleName, Mode=OneWay, Converter={StaticResource ArabicFontSizeConverter}}"
-                   Style="{Binding ViewModel.StyleName, Mode=OneWay, Converter={StaticResource StyleConverter}}"/>
+        <TextBlock Margin="22, 0" TextWrapping="Wrap" 
+                   Text="{Binding Text, Mode=OneWay}"
+                   FontSize="{Binding StyleName, Mode=OneWay, Converter={StaticResource ArabicFontSizeConverter}}"
+                   Style="{Binding StyleName, Mode=OneWay, Converter={StaticResource StyleConverter}}"/>
     </Grid>
 </UserControl>
