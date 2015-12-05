@@ -82,10 +82,7 @@ namespace Quran.Core.Utils
                 refreshed = true;
             }
 
-            TranslationsDatabaseHandler adapter = new TranslationsDatabaseHandler();
-            var cachedItems = adapter.GetTranslations();
             List<TranslationItem> items = new List<TranslationItem>();
-            List<TranslationItem> updates = new List<TranslationItem>();
             
             try
             {
@@ -114,55 +111,12 @@ namespace Quran.Core.Utils
                     string databaseDir = await FileUtils.GetQuranDatabaseDirectory();
                     item.Exists = await FileUtils.FileExists(Path.Combine(databaseDir, item.Filename));
 
-                    bool needsUpdate = false;
-                    TranslationItem localItem = cachedItems.Where(ti => ti.Id == item.Id).FirstOrDefault();
-                    if (item.Exists)
-                    {
-                        if (localItem != null)
-                        {
-                            item.LocalVersion = localItem.LocalVersion;
-                        }
-                        else if (item.LatestVersion > -1)
-                        {
-                            needsUpdate = true;
-                            try
-                            {
-                                using (var mHandler = new QuranDatabaseHandler<QuranAyah>(item.Filename))
-                                {
-                                    item.LocalVersion = mHandler.GetTextVersion();
-                                }
-                            }
-                            catch
-                            {
-                                Debug.WriteLine("exception opening database: " + item.Filename);
-                            }
-                        }
-                        else 
-                        { 
-                            needsUpdate = true; 
-                        }
-                    }
-                    else if (localItem != null)
-                    {
-                        needsUpdate = true;
-                    }
-
-                    if (needsUpdate)
-                    {
-                        updates.Add(item);
-                    }
-
                     items.Add(item);
                 }
 
                 if (refreshed)
                 {
                     SettingsUtils.Set<DateTime>(Constants.PREF_LAST_UPDATED_TRANSLATIONS, DateTime.Now);
-                }
-
-                if (updates.Count() > 0)
-                {
-                    adapter.WriteTranslationUpdates(updates);
                 }
             }
             catch (Exception je)

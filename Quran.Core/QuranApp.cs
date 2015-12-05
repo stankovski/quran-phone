@@ -52,10 +52,6 @@ namespace Quran.Core
             {
                 await detailsViewModel.Refresh();
             }
-            if (settingsViewModel != null)
-            {
-                await settingsViewModel.Refresh();
-            }
         }
 
         /// <summary>

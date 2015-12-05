@@ -153,7 +153,7 @@
             <Button Grid.Column="2" Style="{StaticResource MenuButtonStyle}" Content="&#xE094;" 
                     VerticalAlignment="Center"/>
             <Button Grid.Column="3" Style="{StaticResource MenuButtonStyle}" Content="&#xE82D;"
-                    VerticalAlignment="Center" Click="FastNavigate_Click"/>
+                    VerticalAlignment="Center" Click="NavigateToLastPage"/>
         </Grid>
         <SplitView Grid.Row="1" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" 
                    x:Name="MainSplitView" DisplayMode="Overlay" IsPaneOpen="False" OpenPaneLength="300">

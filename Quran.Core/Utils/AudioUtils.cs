@@ -252,7 +252,7 @@ namespace Quran.Core.Utils
             for (int i = fromAyah.Surah; i <= toAyah.Surah; i++)
             {
                 string serverUrl = string.Format(CultureInfo.InvariantCulture, urlString, i);
-                var localUrl = destination + "/";
+                var localUrl = Path.Combine(destination, Path.GetFileName(urlString));
                 QuranApp.NativeProvider.Log("gapless asking to download " + serverUrl + " to " + localUrl);
 
                 result = await QuranApp.DetailsViewModel.ActiveDownload.DownloadSingleFile(serverUrl, localUrl, AppResources.loading_audio);

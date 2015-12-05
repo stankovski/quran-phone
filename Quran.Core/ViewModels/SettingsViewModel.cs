@@ -312,7 +312,7 @@ namespace Quran.Core.ViewModels
             SelectedRepeatAmount = SupportedRepeatAmount.First(kv => kv.Key == SettingsUtils.Get<RepeatAmount>(Constants.PREF_REPEAT_AMOUNT));
             SelectedRepeatTimes = SupportedRepeatTimes.First(kv => kv.Key == SettingsUtils.Get<int>(Constants.PREF_REPEAT_TIMES));
             RepeatAudio = SettingsUtils.Get<bool>(Constants.PREF_AUDIO_REPEAT);
-            TextSize = SettingsUtils.Get<int>(Constants.PREF_TRANSLATION_TEXT_SIZE);
+            TextSize = SettingsUtils.Get<double>(Constants.PREF_TRANSLATION_TEXT_SIZE);
             ShowArabicInTranslation = SettingsUtils.Get<bool>(Constants.PREF_SHOW_ARABIC_IN_TRANSLATION);
             AltDownloadMethod = SettingsUtils.Get<bool>(Constants.PREF_ALT_DOWNLOAD);
             PreventPhoneFromSleeping = SettingsUtils.Get<bool>(Constants.PREF_PREVENT_SLEEP);

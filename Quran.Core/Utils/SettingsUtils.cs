@@ -41,14 +41,14 @@ namespace Quran.Core.Utils
             object value = null;
             if (provider.Contains(key))
             {
-                if (NeedsToStringSerialization<T>())
+                try
                 {
-                    value = ConvertToType<T>(provider[key]);
+                    value = JsonConvert.DeserializeObject<T>(provider[key].ToString());
                 }
-                else
+                catch
                 {
-                    value = provider[key];
-                }                
+                    //Ignore
+                }
             }
 
             if (value == null)
@@ -66,39 +66,6 @@ namespace Quran.Core.Utils
                 cache[key] = getDefaultValue<T>(key);
                 return getDefaultValue<T>(key);
             }
-        }
-
-        private static T ConvertToType<T>(object v) where T : IConvertible
-        {
-            if (v is T)
-            {
-                return (T)v;
-            }
-
-            if (typeof(T).GetTypeInfo().IsEnum)
-            {
-                if (v is int)
-                {
-                    return CastTo<T>.From((int)v);
-                }
-                if (v is string)
-                {
-                    return (T)Enum.Parse(typeof(T), v.ToString());
-                }
-            }
-
-            return (T)Convert.ChangeType(v, typeof(T));
-        }
-
-        public static bool Contains(string key)
-        {
-            if (provider == null)
-                provider = QuranApp.NativeProvider.SettingsProvider;
-
-            if (cache.ContainsKey(key))
-                return true;
-            else
-                return provider.Contains(key);
         }
 
         private static List<FieldInfo> constantKeys;
@@ -145,65 +112,8 @@ namespace Quran.Core.Utils
                 return;
             }
 
-            if (NeedsToStringSerialization<T>())
-            {
-                provider[key] = Convert.ChangeType(value, typeof(string));
-            }
-            else
-            {
-                provider[key] = value;
-            }
-
+            provider[key] = JsonConvert.SerializeObject(value);
             cache[key] = value;
-            Save();
-        }
-
-        private static bool NeedsToStringSerialization<T>()
-        {
-            T value = default(T);
-            if (value is int || value is double || value is byte || value is string || value is bool)
-            {
-                return false;
-            }
-            return true;
-        }
-
-        public static void Save()
-        {
-            if (provider == null)
-                provider = QuranApp.NativeProvider.SettingsProvider;
-
-            provider.Save();
-        }
-    }
-
-    /// <summary>
-    /// Class to cast to type <see cref="T"/>
-    /// </summary>
-    /// <typeparam name="T">Target type</typeparam>
-    public static class CastTo<T>
-    {
-        /// <summary>
-        /// Casts <see cref="S"/> to <see cref="T"/>. 
-        /// This does not cause boxing for value types. 
-        /// Useful in generic methods
-        /// </summary>
-        /// <typeparam name="S">Source type to cast from. Usually a generic type.</typeparam>
-        public static T From<S>(S s)
-        {
-            return Cache<S>.caster(s);
-        }
-
-        static class Cache<S>
-        {
-            internal static readonly Func<S, T> caster = Get();
-
-            static Func<S, T> Get()
-            {
-                var p = Expression.Parameter(typeof(S));
-                var c = Expression.ConvertChecked(p, typeof(T));
-                return Expression.Lambda<Func<S, T>>(c, p).Compile();
-            }
         }
     }
 }

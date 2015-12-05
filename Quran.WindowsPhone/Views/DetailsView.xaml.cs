@@ -8,6 +8,9 @@ using Quran.Core.ViewModels;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml;
 using System.Collections.ObjectModel;
+using Windows.UI.Xaml.Input;
+using Quran.WindowsPhone.UI;
+using Windows.UI.Xaml.Media.Animation;
 
 namespace Quran.WindowsPhone.Views
 {
@@ -137,50 +140,49 @@ namespace Quran.WindowsPhone.Views
             //}
         }
 
-        private async void ImageDoubleTap(object sender, RoutedEventArgs e)
+        private async void ImageDoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {
-            //if (sender != null && !string.IsNullOrEmpty(ViewModel.TranslationFile))
-            //{
-            //    if (!await FileUtils.HaveAyaPositionFile())
-            //    {
-            //        await ViewModel.DownloadAyahPositionFile();
-            //    }
+            if (sender != null && !string.IsNullOrEmpty(ViewModel.TranslationFile))
+            {
+                if (!await FileUtils.HaveAyaPositionFile())
+                {
+                    await ViewModel.DownloadAyahPositionFile();
+                }
 
+                var cachedImage = sender as CachedImage;
+                if (cachedImage == null)
+                    return;
 
-            //    var cachedImage = sender as CachedImage;
-            //    if (cachedImage == null)
-            //        return;
-
-            //    var ayah = await CachedImage.GetAyahFromGesture(e.GetPosition(cachedImage.Image),
-            //                                              ViewModel.CurrentPageNumber,
-            //                                              radSlideView.ActualWidth);
-            //    var currentPage = ViewModel.CurrentPage;
-            //    if (currentPage != null)
-            //    {
-            //        ViewModel.SelectedAyah = ayah;
-            //        ViewModel.ShowTranslation = !ViewModel.ShowTranslation;
-            //        SettingsUtils.Set(Constants.PREF_SHOW_TRANSLATION, ViewModel.ShowTranslation);
-            //    }
-            //}
+                var ayah = await CachedImage.GetAyahFromGesture(e.GetPosition(cachedImage.Image),
+                                                          ViewModel.CurrentPageNumber,
+                                                          radSlideView.ActualWidth);
+                var currentPage = ViewModel.CurrentPage;
+                if (currentPage != null)
+                {
+                    ViewModel.SelectedAyah = ayah;
+                    ViewModel.ShowTranslation = !ViewModel.ShowTranslation;
+                    SettingsUtils.Set(Constants.PREF_SHOW_TRANSLATION, ViewModel.ShowTranslation);
+                }
+            }
         }
 
-        private async void ListBoxDoubleTap(object sender, RoutedEventArgs e)
+        private async void ListViewDoubleTap(object sender, RoutedEventArgs e)
         {
-            //if (sender != null && sender is RadDataBoundListBox)
-            //{
-            //    if (!await FileUtils.HaveAyaPositionFile())
-            //    {
-            //        await ViewModel.DownloadAyahPositionFile();
-            //    }
+            if (e.OriginalSource != null && e.OriginalSource is FrameworkElement)
+            {
+                if (!await FileUtils.HaveAyaPositionFile())
+                {
+                    await ViewModel.DownloadAyahPositionFile();
+                }
 
-            //    var selectedVerse = ((RadDataBoundListBox)sender).SelectedItem as VerseViewModel;
-            //    if (selectedVerse != null)
-            //    {
-            //        ViewModel.SelectedAyah = new QuranAyah(selectedVerse.Surah, selectedVerse.Ayah);
-            //    }
-            //    ViewModel.ShowTranslation = !ViewModel.ShowTranslation;
-            //    SettingsUtils.Set(Constants.PREF_SHOW_TRANSLATION, ViewModel.ShowTranslation);
-            //}
+                var selectedVerse = ((FrameworkElement)e.OriginalSource).DataContext as VerseViewModel;
+                if (selectedVerse != null)
+                {
+                    ViewModel.SelectedAyah = new QuranAyah(selectedVerse.Surah, selectedVerse.Ayah);
+                }
+                ViewModel.ShowTranslation = !ViewModel.ShowTranslation;
+                SettingsUtils.Set(Constants.PREF_SHOW_TRANSLATION, ViewModel.ShowTranslation);
+            }
         }
 
         #region Menu Events
@@ -201,7 +203,7 @@ namespace Quran.WindowsPhone.Views
 
         private void TranslationClick()
         {
-            int pageNumber = ((DetailsViewModel)DataContext).CurrentPageNumber;
+            int pageNumber = ViewModel.CurrentPageNumber;
             if (!string.IsNullOrEmpty(ViewModel.TranslationFile))
             {
                 //ViewModel.UpdatePages();
@@ -211,7 +213,7 @@ namespace Quran.WindowsPhone.Views
             }
             else
             {
-                //Frame.Navigate(new Uri("/Views/TranslationListView.xaml", UriKind.Relative));
+                Frame.Navigate(typeof(TranslationListView), null, new DrillInNavigationTransitionInfo());
             }
         }
 
@@ -277,9 +279,9 @@ namespace Quran.WindowsPhone.Views
             //}
         }
 
-        private void AyahTapped(object sender, QuranAyahEventArgs e)
+        private void ImageTapped(object sender, TappedRoutedEventArgs e)
         {
-            ViewModel.SelectedAyah = e.QuranAyah;
+            ViewModel.SelectedAyah = null;
         }
 
 
@@ -371,16 +373,7 @@ namespace Quran.WindowsPhone.Views
             });
         }
 
-        protected override void OnNavigatedFrom(NavigationEventArgs e)
-        {
-            base.OnNavigatedFrom(e);
-            foreach (var page in ViewModel.Pages)
-            {
-                page.ImageSource = null;
-            }
-            ViewModel.CurrentPageIndex = -1;
-        }
-        
+
         //private void PageOrientationChanged(object sender, OrientationChangedEventArgs e)
         //{
         //    ViewModel.Orientation = PhoneUtils.PageOrientationConverter(e.Orientation);

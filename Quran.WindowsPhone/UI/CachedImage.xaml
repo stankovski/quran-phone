@@ -4,6 +4,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    Background="Transparent"
     d:DesignHeight="480" d:DesignWidth="480">
 
     <ScrollViewer HorizontalAlignment="Stretch" x:Name="LayoutRoot">
@@ -14,11 +15,8 @@
             </StackPanel>
             <ProgressBar Name="progress" IsIndeterminate="True" VerticalAlignment="Top"
                          Margin="20,5,20,0" FlowDirection="LeftToRight"/>
-            <TextBlock Name="memoryUsage" FontSize="20" 
-                       Foreground="#FF444444" VerticalAlignment="Top"
-                       HorizontalAlignment="Center" Margin="0,0,0,0"/>
             <Viewbox VerticalAlignment="Top">
-                <Canvas Name="canvas">
+                <Canvas Name="canvas" Background="Transparent">
                     <Canvas.Resources>
                         <Storyboard x:Name="canvasStoryboard">
                             <DoubleAnimation 

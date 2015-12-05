@@ -14,7 +14,7 @@
     <Page.Resources>
         <ui:ArabicFontSizeConverter x:Key="ArabicFontSizeConverter"/>
     </Page.Resources>
-    <Grid Name="MainContainer" Background="{x:Bind ViewModel.IsNightMode, Converter={StaticResource ConditionalColorConverter}, ConverterParameter=CCFFFFFF, Mode=OneWay}">
+    <Grid Name="MainContainer" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="48"/>
             <RowDefinition Height="*"/>
@@ -38,7 +38,8 @@
                        FontSize="18" VerticalAlignment="Center"
                        Foreground="{x:Bind ViewModel.IsNightMode, Converter={StaticResource ConditionalColorConverter}, ConverterParameter=FF000000, Mode=OneWay}" Margin="0,3,25,3"/>
         </Grid>
-        <SplitView Grid.Row="1" x:Name="MainSplitView" DisplayMode="Overlay" IsPaneOpen="False" OpenPaneLength="300">
+        <SplitView Grid.Row="1" x:Name="MainSplitView" DisplayMode="Overlay" IsPaneOpen="False" 
+                   OpenPaneLength="300">
             <SplitView.Pane>
                 <ListView x:Name="NavLinksList" Margin="0" SelectionMode="None" 
                     Background="{StaticResource BlueText}"
@@ -58,7 +59,9 @@
             </SplitView.Pane>
             <SplitView.Content>
                 <FlipView x:Name="radSlideView" ItemsSource="{x:Bind ViewModel.Pages}"
-                    FlowDirection="LeftToRight" SelectedIndex="{x:Bind ViewModel.CurrentPageIndex, Mode=TwoWay}">
+                    FlowDirection="LeftToRight" 
+                    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+                    SelectedIndex="{x:Bind ViewModel.CurrentPageIndex, Mode=TwoWay}">
                     <FlipView.ItemTemplate>
                         <DataTemplate x:DataType="vm:PageViewModel">
                             <Grid>
@@ -67,14 +70,17 @@
                                         NightMode="{x:Bind Parent.IsNightMode, Mode=OneWay}"
                                         SelectedAyah="{x:Bind Parent.SelectedAyah, Mode=OneWay}"
                                         Padding="0,0,0,10"
+                                        DoubleTapped="ImageDoubleTapped"
+                                        Tapped="ImageTapped"
                                         Visibility="{x:Bind Parent.ShowTranslation, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
                                 </ui:CachedImage>
-                                <ListView x:Name="TranslationListBox" DoubleTapped="ListBoxDoubleTap"
-                                        Visibility="{x:Bind Parent.ShowTranslation,Converter={StaticResource BooleanToVisibilityConverter}}"
-                                        ItemsSource="{x:Bind Translations}">
+                                <ListView x:Name="TranslationListBox" 
+                                        DoubleTapped="ListViewDoubleTap"
+                                        Visibility="{x:Bind Parent.ShowTranslation, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                        ItemsSource="{x:Bind Translations}" SelectionMode="None">
                                     <ListView.ItemTemplate>
                                         <DataTemplate x:DataType="vm:VerseViewModel">
-                                            <ListBoxItem HorizontalContentAlignment="Stretch" Foreground="{x:Bind Parent.IsNightMode, Converter={StaticResource ConditionalColorConverter}, ConverterParameter=FF000000, Mode=OneWay}">
+                                            <ListBoxItem HorizontalContentAlignment="Stretch">
                                                 <ui:TranslationView ViewModel="{x:Bind}" SelectedAyah="{x:Bind Parent.SelectedAyah, Mode=OneWay}"/>
                                             </ListBoxItem>
                                         </DataTemplate>

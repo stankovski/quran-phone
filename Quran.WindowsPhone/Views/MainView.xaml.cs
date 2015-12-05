@@ -54,7 +54,7 @@ namespace Quran.WindowsPhone.Views
             }
         }
 
-        private void FastNavigate_Click(object sender, RoutedEventArgs e)
+        private void NavigateToLastPage(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(DetailsView),
                         new NavigationData

@@ -1,12 +1,12 @@
-﻿using System;
-using Quran.Core;
-using Quran.Core.Properties;
+﻿using Quran.Core;
 using Quran.Core.Utils;
 using Quran.Core.ViewModels;
 using Quran.Core.Data;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Controls;
 using System.IO;
+using System.Collections.Generic;
+using Windows.UI.Xaml;
 
 namespace Quran.WindowsPhone.Views
 {
@@ -23,7 +23,8 @@ namespace Quran.WindowsPhone.Views
         // When page is navigated to set data context to selected item in list
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            await ViewModel.Initialize();            
+            await ViewModel.Initialize();
+            TranslationViewSource.Source = ViewModel.Groups;
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -38,6 +39,27 @@ namespace Quran.WindowsPhone.Views
                 return;
 
             var translation = (ObservableTranslationItem)list.SelectedItem;
+            if (translation == null)
+            {
+                return;
+            }
+
+            if (translation.Exists)
+            {
+                SettingsUtils.Set(Constants.PREF_ACTIVE_TRANSLATION, string.Join("|",
+                    Path.GetFileName(translation.LocalPath), translation.Name));
+                SettingsUtils.Set(Constants.PREF_SHOW_TRANSLATION, true);
+                Frame.GoBack();
+            }
+        }
+
+        private void NavigationRequested(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        {
+            var list = sender as FrameworkElement;
+            if (list == null || list.DataContext == null)
+                return;
+
+            var translation = (ObservableTranslationItem)list.DataContext;
             if (translation == null)
             {
                 return;

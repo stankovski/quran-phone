@@ -164,11 +164,6 @@
     <None Include="Quran.WindowsPhone_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\Images\appbar.globe.old.png" />
-    <Content Include="Assets\Images\appbar.globe.png" />
-    <Content Include="Assets\Images\bookmark_ayah.png" />
-    <Content Include="Assets\Images\bookmark_currentpage.png" />
-    <Content Include="Assets\Images\bookmark_page.png" />
     <Content Include="Assets\Images\favorite.png" />
     <Content Include="Assets\Images\hizb_full.png" />
     <Content Include="Assets\Images\hizb_half.png" />

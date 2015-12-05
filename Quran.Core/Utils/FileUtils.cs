@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using Windows.Storage;
 using System.Collections.Generic;
+using Windows.Storage.Search;
 
 namespace Quran.Core.Utils
 {
@@ -119,8 +120,10 @@ namespace Quran.Core.Utils
 
             try
             {
-                await StorageFile.GetFileFromPathAsync(path);
-                return true;
+                var dirName = Path.GetDirectoryName(path);
+                var folder = await StorageFolder.GetFolderFromPathAsync(dirName);
+                var file = await folder.TryGetItemAsync(Path.GetFileName(path));
+                return file != null;
             }
             catch (Exception)
             {
@@ -171,6 +174,12 @@ namespace Quran.Core.Utils
                 throw new NotSupportedException("This method implementation doesn't support " +
                     "parameters outside paths accessible by ApplicationData.");
             }
+
+            if (baseFolder.Path.Length <= path.Length)
+            {
+                return;
+            }
+
             path = path.Substring(baseFolder.Path.Length + 1);
 
             string[] folderNames = path.Split('\\');
