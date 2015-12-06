@@ -129,17 +129,14 @@
         <!-- End hanmburger menu style -->
 
         <!-- Styles of DetailsPage -->
-        <Style TargetType="TextBlock" x:Key="TranslationViewHeader" BasedOn="{StaticResource PhoneTextTitle2Style}">
-            <Setter Property="Margin" Value="20, 10"/>
+        <Style TargetType="TextBlock" x:Key="TranslationViewHeader" BasedOn="{StaticResource SubtitleTextBlockStyle}">
             <Setter Property="FontSize" Value="40"/>
             <Setter Property="Foreground" Value="{StaticResource BlueText}"/>
         </Style>
         <Style TargetType="TextBlock" x:Key="BoldText">
-            <Setter Property="Margin" Value="20, 10"/>
             <Setter Property="FontWeight" Value="Bold"/>
         </Style>
         <Style TargetType="TextBlock" x:Key="ArabicText">
-            <Setter Property="Margin" Value="20, 0"/>
             <Setter Property="FontFamily" Value="/Assets/UthmanicHafs.otf#KFGQPC Uthmanic Script HAFS"/>
             <Setter Property="FlowDirection" Value="RightToLeft"/>
         </Style>

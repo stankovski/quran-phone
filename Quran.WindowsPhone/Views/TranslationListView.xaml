@@ -62,7 +62,8 @@
             </DataTemplate>
 
             <DataTemplate x:Key="ZoomedInGroupHeaderTemplate">
-                <TextBlock Text="{Binding Title}" Foreground="{ThemeResource ApplicationForegroundThemeBrush}" Style="{StaticResource SubtitleTextBlockStyle}"/>
+                <TextBlock Text="{Binding Title}" Foreground="{ThemeResource ApplicationForegroundThemeBrush}" 
+                           Style="{StaticResource SubtitleTextBlockStyle}"/>
             </DataTemplate>
         </Grid.Resources>
 

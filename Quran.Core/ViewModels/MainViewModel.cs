@@ -14,6 +14,7 @@ using Quran.Core.Data;
 using Quran.Core.Properties;
 using Quran.Core.Utils;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace Quran.Core.ViewModels
 {
@@ -228,39 +229,32 @@ namespace Quran.Core.ViewModels
         private void loadJuz2List()
         {
             Uri[] images = new Uri[] {
-                new Uri("/Assets/Images/hizb_full.png", UriKind.Relative),
-                new Uri("/Assets/Images/hizb_quarter.png", UriKind.Relative),
-                new Uri("/Assets/Images/hizb_half.png", UriKind.Relative),
-                new Uri("/Assets/Images/hizb_threequarters.png", UriKind.Relative)
+                new Uri("ms-appx:///Assets/Images/hizb_full.png"),
+                new Uri("ms-appx:///Assets/Images/hizb_quarter.png"),
+                new Uri("ms-appx:///Assets/Images/hizb_half.png"),
+                new Uri("ms-appx:///Assets/Images/hizb_threequarters.png")
             };
             string[] quarters = QuranUtils.GetSurahQuarters();
+            int juz = 0;
             for (int i = 0; i < (8 * Constants.JUZ2_COUNT); i++)
             {
-                int[] pos = QuranUtils.QUARTERS[i];
-                int page = QuranUtils.GetPageFromAyah(pos[0], pos[1]);
-
                 if (i % 8 == 0)
                 {
-                    int juz = 1 + (i / 8);
-                    Juz.Add(new ItemViewModel
-                    {
-                        Id = QuranUtils.GetJuzTitle() + " " + juz,
-                        PageNumber = QuranUtils.JUZ_PAGE_START[juz - 1],
-                        ItemType = ItemViewModelType.Header
-                    });
+                    juz++;
                 }
+
+                int[] pos = QuranUtils.QUARTERS[i];
+                int page = QuranUtils.GetPageFromAyah(pos[0], pos[1]);
                 string verseString = AppResources.quran_ayah + " " + pos[1];
                 Juz.Add(new ItemViewModel
                 {
+                    Id = juz.ToString(CultureInfo.InvariantCulture),
                     Title = quarters[i],
                     Details = QuranUtils.GetSurahName(pos[0], true) + ", " + verseString,
                     PageNumber = page,
-                    Image = images[i % 4],
+                    Image = new BitmapImage(images[i % 4]),
                     ItemType = ItemViewModelType.Surah
                 });
-
-                if (i % 4 == 0)
-                    Juz[Juz.Count - 1].Id = (1 + (i / 4)).ToString("0", CultureInfo.InvariantCulture);
             }
         }
 
@@ -275,7 +269,7 @@ namespace Quran.Core.ViewModels
                                                  QuranUtils.GetJuzTitle(),
                                                  QuranUtils.GetJuzFromPage(lastPage));
                 lastPageItem.PageNumber = lastPage;
-                lastPageItem.Image = new Uri("/Assets/Images/favorite.png", UriKind.Relative);
+                lastPageItem.Image = new BitmapImage(new Uri("ms-appx:///Assets/Images/favorite.png"));
                 lastPageItem.ItemType = ItemViewModelType.Bookmark;
                 lastPageItem.Group = AppResources.bookmarks_current_page;
                 Bookmarks.Add(lastPageItem);
@@ -380,7 +374,7 @@ namespace Quran.Core.ViewModels
                     Details = details,
                     PageNumber = bookmark.Page,
                     SelectedAyah = new QuranAyah(bookmark.Surah.Value, bookmark.Ayah.Value),
-                    Image = new Uri("/Assets/Images/favorite.png", UriKind.Relative),
+                    Image = new BitmapImage(new Uri("ms-appx:///Assets/Images/favorite.png")),
                     ItemType = ItemViewModelType.Bookmark,
                     Group = group
                 };
@@ -395,7 +389,7 @@ namespace Quran.Core.ViewModels
                                             QuranUtils.GetJuzTitle(),
                                             QuranUtils.GetJuzFromPage(bookmark.Page)),
                     PageNumber = bookmark.Page,
-                    Image = new Uri("/Assets/Images/favorite.png", UriKind.Relative),
+                    Image = new BitmapImage(new Uri("ms-appx:///Assets/Images/favorite.png")),
                     ItemType = ItemViewModelType.Bookmark,
                     Group = group
                 };

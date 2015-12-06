@@ -7,6 +7,7 @@
     mc:Ignorable="d"
     xmlns:ui="using:Quran.WindowsPhone.UI"
     xmlns:vm="using:Quran.Core.ViewModels"
+    xmlns:wuxdata="using:Windows.UI.Xaml.Data"
     xmlns:res="using:Quran.Core.Properties"
     RequestedTheme="Dark"
     d:DataContext="{d:DesignData ../SampleData/MainViewModelSampleData.xaml}">
@@ -122,6 +123,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="60"/>
                     </Grid.ColumnDefinitions>
+                    <Image Grid.Column="0" Source="{x:Bind Image}"/>
                     <TextBlock Grid.Column="0" Text="{x:Bind Id}" FontSize="23" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <StackPanel Grid.Column="1" Orientation="Vertical">
                         <TextBlock Text="{x:Bind Title}" FontSize="18" VerticalAlignment="Center"/>
@@ -183,7 +185,7 @@
                     <Pivot Grid.Row="0">
                         <PivotItem Margin="0" Header="{Binding Path=LocalizedResources.quran_sura_lower, Source={StaticResource LocalizedStrings}}">
                             <Grid x:Name="ContentPanel">
-                                <ListView ItemsSource="{x:Bind ViewModel.Surahs}" SelectionChanged="List_SelectionChanged" 
+                                <ListView ItemsSource="{x:Bind ViewModel.Surahs}" Tapped="NavigateLink" 
                                           ItemTemplate="{StaticResource ListItemTemplate}">
                                     <ListView.ItemContainerStyle>
                                         <Style TargetType="ListViewItem">
@@ -197,15 +199,60 @@
                         </PivotItem>
                         <PivotItem Margin="0" Header="{Binding Path=LocalizedResources.quran_juz2_lower, Source={StaticResource LocalizedStrings}}">
                             <Grid>
-                                <ListView ItemsSource="{x:Bind ViewModel.Juz}" SelectionChanged="List_SelectionChanged" 
-                                          ItemTemplate="{StaticResource ListItemTemplate}">
-                                    <ListView.ItemContainerStyle>
-                                        <Style TargetType="ListViewItem">
-                                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                            <Setter Property="VerticalContentAlignment" Value="Center" />
-                                        </Style>
-                                    </ListView.ItemContainerStyle>
-                                </ListView>
+                                <Grid.Resources>
+                                    <CollectionViewSource x:Name="JuzViewSource" IsSourceGrouped="True"/>
+                                    <DataTemplate x:Key="ZoomedInGroupHeaderTemplate">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Margin="0,0,10,0" Text="{Binding Path=LocalizedResources.quran_juz2_lower, Source={StaticResource LocalizedStrings}}"/>
+                                            <TextBlock Text="{Binding Key}" Style="{StaticResource SubtitleTextBlockStyle}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                    <DataTemplate x:Key="ZoomedOutTemplate">
+                                        <TextBlock Margin="10" Text="{Binding Group.Key}" Style="{StaticResource SubtitleTextBlockStyle}"/>
+                                    </DataTemplate>
+                                </Grid.Resources>
+                                <SemanticZoom>
+                                    <SemanticZoom.ZoomedInView>
+                                        <ListView ItemsSource="{Binding Source={StaticResource JuzViewSource}}" 
+                                          Tapped="NavigateLink">
+                                            <ListView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid Height="55" VerticalAlignment="Center">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="80"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="60"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <Image Grid.Column="0" Source="{Binding Image}" Height="30"/>
+                                                        <StackPanel Grid.Column="1" Orientation="Vertical">
+                                                            <TextBlock Text="{Binding Title}" FontSize="18" VerticalAlignment="Center"/>
+                                                            <TextBlock Text="{Binding Details}" Style="{StaticResource BaseTextBlockStyle}" 
+                                                        VerticalAlignment="Center"/>
+                                                        </StackPanel>
+                                                        <TextBlock Grid.Column="2" Text="{Binding PageNumber}" HorizontalAlignment="Center" 
+                                                        Style="{StaticResource BaseTextBlockStyle}"
+                                                        VerticalAlignment="Center"/>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ListView.ItemTemplate>
+                                            <ListView.GroupStyle>
+                                                <GroupStyle HeaderTemplate="{StaticResource ZoomedInGroupHeaderTemplate}" />
+                                            </ListView.GroupStyle>
+                                            <ListView.ItemContainerStyle>
+                                                <Style TargetType="ListViewItem">
+                                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                                                </Style>
+                                            </ListView.ItemContainerStyle>
+                                        </ListView>
+                                    </SemanticZoom.ZoomedInView>
+                                    <SemanticZoom.ZoomedOutView>
+                                        <GridView ItemsSource="{Binding Source={StaticResource JuzViewSource}, Path=CollectionGroups}"
+                                                  SelectionMode="None" Margin="30"
+                                                  ItemTemplate="{StaticResource ZoomedOutTemplate}">
+                                        </GridView>
+                                    </SemanticZoom.ZoomedOutView>
+                                </SemanticZoom>                                
                             </Grid>
                         </PivotItem>
                         <PivotItem Margin="0" Header="{Binding Path=LocalizedResources.quran_bookmarks_lower, Source={StaticResource LocalizedStrings}}">

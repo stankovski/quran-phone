@@ -24,9 +24,13 @@
                 </Storyboard>
             </Border.Resources>
         </Border>
-        <TextBlock Margin="22, 0" TextWrapping="Wrap" 
-                   Text="{Binding Text, Mode=OneWay}"
-                   FontSize="{Binding StyleName, Mode=OneWay, Converter={StaticResource ArabicFontSizeConverter}}"
-                   Style="{Binding StyleName, Mode=OneWay, Converter={StaticResource StyleConverter}}"/>
+        <StackPanel Orientation="Vertical" Visibility="{Binding IsHeader, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <TextBlock TextWrapping="Wrap" Text="{Binding Text}" Style="{StaticResource TranslationViewHeader}"/>
+        </StackPanel>
+        <StackPanel Orientation="Vertical" Visibility="{Binding IsHeader, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
+            <TextBlock Text="{Binding AyahName}" Style="{StaticResource BoldText}"/>
+            <TextBlock TextWrapping="Wrap" Text="{Binding ArabicText}" Style="{StaticResource ArabicText}"/>
+            <TextBlock TextWrapping="Wrap" Text="{Binding Text}"/>
+        </StackPanel>
     </Grid>
 </UserControl>

@@ -9,6 +9,7 @@ using Quran.Core.ViewModels;
 using Quran.WindowsPhone.Utils;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
 
 namespace Quran.WindowsPhone.Views
@@ -28,6 +29,9 @@ namespace Quran.WindowsPhone.Views
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             await ViewModel.Initialize();
+            JuzViewSource.Source =  from j in ViewModel.Juz
+                                    group j by j.Id into g
+                                    select g;
             BuildLocalizedApplicationBar();
             await LittleWatson.CheckForPreviousException();
 
@@ -87,28 +91,30 @@ Quran Phone Team";
             }
         }
 
-        // Handle selection changed on LongListSelector
-        private void List_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void NavigateLink(object sender, TappedRoutedEventArgs e)
         {
             // If selected item is null (no selection) do nothing
             var list = sender as ListView;
-            if (list == null || list.SelectedItem == null)
+            if (e.OriginalSource == null || !(e.OriginalSource is FrameworkElement))
+            {
                 return;
+            }
 
-            var selectedItem = (ItemViewModel)list.SelectedItem;
+            var selectedItem = ((FrameworkElement)e.OriginalSource).DataContext as ItemViewModel;
 
             try
             {
                 // Navigate to the new page
                 if (selectedItem.SelectedAyah == null)
                 {
-                    Frame.Navigate(typeof(DetailsView), 
+                    Frame.Navigate(typeof(DetailsView),
                         new NavigationData { Page = selectedItem.PageNumber });
                 }
                 else
                 {
                     Frame.Navigate(typeof(DetailsView),
-                        new NavigationData {
+                        new NavigationData
+                        {
                             Page = selectedItem.PageNumber,
                             Surah = selectedItem.SelectedAyah.Surah,
                             Ayah = selectedItem.SelectedAyah.Ayah
@@ -122,6 +128,11 @@ Quran Phone Team";
 
             // Reset selected item to null (no selection)
             list.SelectedItem = null;
+        }
+        // Handle selection changed on LongListSelector
+        private void List_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            
         }
 
         private void DeleteBookmark(object sender, RoutedEventArgs e)

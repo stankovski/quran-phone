@@ -7,6 +7,7 @@
 using System;
 using System.Threading.Tasks;
 using Quran.Core.Common;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace Quran.Core.ViewModels
 {
@@ -40,8 +41,7 @@ namespace Quran.Core.ViewModels
                 base.OnPropertyChanged(() => Id);
             }
         }
-
-
+        
         private string title;
         public string Title
         {
@@ -102,8 +102,8 @@ namespace Quran.Core.ViewModels
             }
         }
 
-        private Uri image;
-        public Uri Image
+        private BitmapImage image;
+        public BitmapImage Image
         {
             get { return image; }
             set

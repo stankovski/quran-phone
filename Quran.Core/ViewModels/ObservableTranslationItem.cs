@@ -12,6 +12,7 @@ namespace Quran.Core.ViewModels
     public class ObservableTranslationItem : DownloadableViewModelBase
     {
         private readonly string _serverUrl;
+        private readonly bool _isCompressed;
 
         public ObservableTranslationItem() { }
 
@@ -21,7 +22,8 @@ namespace Quran.Core.ViewModels
             this.Name = item.Name;
             this.Translator = item.Translator;
             this.Exists = item.Exists;
-            LocalPath = Path.Combine(FileUtils.RunSync(() => FileUtils.GetQuranDatabaseDirectory()), item.Filename);
+            this.LocalPath = Path.Combine(FileUtils.RunSync(() => FileUtils.GetQuranDatabaseDirectory()), item.Filename);
+            _isCompressed = item.Compressed;
             _serverUrl = item.Url;
         }
 
@@ -157,7 +159,7 @@ namespace Quran.Core.ViewModels
 
         public async void Download()
         {
-            await DownloadSingleFile(_serverUrl, LocalPath);
+            await DownloadSingleFile(_serverUrl, _isCompressed ? LocalPath + ".zip" : LocalPath);
         }
         
         public event EventHandler DeleteComplete;
