@@ -87,20 +87,20 @@ namespace Quran.Core.ViewModels
 
             if (!this.IsDataLoaded)
             {
-                loadSuraList();
-                loadJuz2List();
-                loadBookmarkList();
+                LoadSuraList();
+                LoadJuz2List();
                 this.IsDataLoaded = true;
             }
 
+            await LoadBookmarkList();
             await ActiveDownload.Initialize();
         }
 
-        public override Task Refresh()
+        public override async Task Refresh()
         {
             this.Bookmarks.Clear();
-            loadBookmarkList();
-            return base.Refresh();
+            await LoadBookmarkList();
+            await base.Refresh();
         }
 
         public async Task Download()
@@ -194,7 +194,7 @@ namespace Quran.Core.ViewModels
         }
 
         
-        private void loadSuraList()
+        private void LoadSuraList()
         {
             int surah = 1;
             int next = 1;
@@ -226,7 +226,7 @@ namespace Quran.Core.ViewModels
             }
         }
 
-        private void loadJuz2List()
+        private void LoadJuz2List()
         {
             Uri[] images = new Uri[] {
                 new Uri("ms-appx:///Assets/Images/hizb_full.png"),
@@ -249,6 +249,7 @@ namespace Quran.Core.ViewModels
                 Juz.Add(new ItemViewModel
                 {
                     Id = juz.ToString(CultureInfo.InvariantCulture),
+                    Group = string.Format("{0} {1}", AppResources.quran_juz2, juz),
                     Title = quarters[i],
                     Details = QuranUtils.GetSurahName(pos[0], true) + ", " + verseString,
                     PageNumber = page,
@@ -258,8 +259,9 @@ namespace Quran.Core.ViewModels
             }
         }
 
-        private async void loadBookmarkList()
+        private async Task LoadBookmarkList()
         {
+            Bookmarks.Clear();
             var lastPage = SettingsUtils.Get<int>(Constants.PREF_LAST_PAGE);
             if (lastPage > 0)
             {
@@ -272,6 +274,7 @@ namespace Quran.Core.ViewModels
                 lastPageItem.Image = new BitmapImage(new Uri("ms-appx:///Assets/Images/favorite.png"));
                 lastPageItem.ItemType = ItemViewModelType.Bookmark;
                 lastPageItem.Group = AppResources.bookmarks_current_page;
+                lastPageItem.Id = lastPageItem.Group;
                 Bookmarks.Add(lastPageItem);
             }
 
@@ -287,7 +290,7 @@ namespace Quran.Core.ViewModels
                         {
                             if (bookmark.Tags == null)
                             {
-                                Bookmarks.Add(await createBookmarkModel(bookmark));
+                                Bookmarks.Add(await CreateBookmarkModel(bookmark));
                             }
                         }
 
@@ -296,7 +299,7 @@ namespace Quran.Core.ViewModels
                         {
                             if (bookmark.Tags != null)
                             {
-                                Bookmarks.Add(await createBookmarkModel(bookmark));
+                                Bookmarks.Add(await CreateBookmarkModel(bookmark));
                             }
                         }
                     }
@@ -309,7 +312,7 @@ namespace Quran.Core.ViewModels
         }
 
         private const int maxBookmarkTitle = 40;
-        private static async Task<ItemViewModel> createBookmarkModel(Bookmarks bookmark)
+        private static async Task<ItemViewModel> CreateBookmarkModel(Bookmarks bookmark)
         {
             var group = AppResources.bookmarks;
             if (bookmark.Tags != null && bookmark.Tags.Count > 0)

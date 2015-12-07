@@ -8,8 +8,7 @@
     mc:Ignorable="d"
     xmlns:vm="using:Quran.Core.ViewModels"
     xmlns:ui="using:Quran.WindowsPhone.UI"
-    RequestedTheme="Light"
-    d:DataContext="{d:DesignData ../SampleData/TranslationViewModelSampleData.xaml}">
+    RequestedTheme="Light">
 
     <Page.Resources>
         <ui:ArabicFontSizeConverter x:Key="ArabicFontSizeConverter"/>

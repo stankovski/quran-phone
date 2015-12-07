@@ -6,8 +6,6 @@ using Quran.Core.Common;
 using Quran.Core.Utils;
 using Quran.WindowsPhone.Utils;
 using Quran.Core.Data;
-using System.IO.IsolatedStorage;
-using System.IO;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml;
@@ -262,27 +260,29 @@ namespace Quran.WindowsPhone.UI
         private void invertColors(WriteableBitmap bitmap)
         {
             //TODO: Implement
-            //int size = bitmap.Pixels.Length;
-            //    for (int i = 0; i < size; i++)
-            //    {
-            //    var c = bitmap.Pixels[i];
-            //        var a = 0x000000FF & (c >> 24);
-            //        var r = 0x000000FF & (c >> 16);
-            //        var g = 0x000000FF & (c >> 8);
-            //        var b = 0x000000FF & (c);
+            
 
-            //        // Invert
-            //        if (a > 0)
-            //        {
-            //            r = 0x000000FF & (0xFF - r);
-            //            g = 0x000000FF & (0xFF - g);
-            //            b = 0x000000FF & (0xFF - b);
-            //        }
-            //        a = 255;
+            int size = bitmap.Pixels.Length;
+            for (int i = 0; i < size; i++)
+            {
+                var c = bitmap.Pixels[i];
+                var a = 0x000000FF & (c >> 24);
+                var r = 0x000000FF & (c >> 16);
+                var g = 0x000000FF & (c >> 8);
+                var b = 0x000000FF & (c);
 
-            //        // Set result color
-            //    bitmap.Pixels[i] = (a << 24) | (r << 16) | (g << 8) | b;
-            //}
+                // Invert
+                if (a > 0)
+                {
+                    r = 0x000000FF & (0xFF - r);
+                    g = 0x000000FF & (0xFF - g);
+                    b = 0x000000FF & (0xFF - b);
+                }
+                a = 255;
+
+                // Set result color
+                bitmap.Pixels[i] = (a << 24) | (r << 16) | (g << 8) | b;
+            }
         }
 
         public int PageNumber

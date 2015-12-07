@@ -19,7 +19,7 @@ namespace Quran.Core.ViewModels
     /// <summary>
     /// Define the SearchViewModel type.
     /// </summary>
-    public class SearchViewModel : BaseViewModel
+    public class SearchViewModel : ViewModelWithDownload
     {
         private const int MaxPreviewCharacter = 200;
         public SearchViewModel()
@@ -59,34 +59,29 @@ namespace Quran.Core.ViewModels
 
         public async void Load(string query)
         {
-            // Set translation
-            if ((string.IsNullOrEmpty(QuranApp.DetailsViewModel.TranslationFile)
-                || !await FileUtils.FileExists(Path.Combine(await FileUtils.GetQuranDatabaseDirectory(), QuranApp.DetailsViewModel.TranslationFile)))
-                && !await FileUtils.FileExists(Path.Combine(await FileUtils.GetQuranDatabaseDirectory(), FileUtils.QURAN_ARABIC_DATABASE)))
+            await DownloadArabicSearchFile();
+            var translation = SettingsUtils.Get<string>(Constants.PREF_ACTIVE_TRANSLATION);
+            if (!string.IsNullOrEmpty(translation))
             {
-                await QuranApp.NativeProvider.ShowInfoMessageBox(AppResources.no_translation_to_search);
-            }
-            else
-            {
+                var translationFile = translation.Split('|')[0];
+
                 IsLoading = true;
                 try
                 {
                     var translationVerses = new List<QuranAyah>();
                     var arabicVerses = new List<ArabicAyah>();
-                    var tasks = new List<Task>();
                     var taskFactory = new TaskFactory();
 
-                    if (QuranApp.DetailsViewModel.TranslationFile != null &&
-                        await FileUtils.FileExists(Path.Combine(await FileUtils.GetQuranDatabaseDirectory(), QuranApp.DetailsViewModel.TranslationFile)))
+                    if (await FileUtils.FileExists(Path.Combine(await FileUtils.GetQuranDatabaseDirectory(), translationFile)))
                     {
-                        using (var db = new QuranDatabaseHandler<QuranAyah>(QuranApp.DetailsViewModel.TranslationFile))
+                        using (var db = new QuranDatabaseHandler<QuranAyah>(Path.Combine(await FileUtils.GetQuranDatabaseDirectory(), translationFile)))
                         {
                             translationVerses = await taskFactory.StartNew(() => db.Search(query));
                         }
                     }
-                    if (await FileUtils.FileExists(Path.Combine(await FileUtils.GetQuranDatabaseDirectory(), FileUtils.QURAN_ARABIC_DATABASE)))
+                    if (await FileUtils.HaveArabicSearchFile())
                     {
-                        using (var dbArabic = new QuranDatabaseHandler<ArabicAyah>(FileUtils.QURAN_ARABIC_DATABASE))
+                        using (var dbArabic = new QuranDatabaseHandler<ArabicAyah>(Path.Combine(await FileUtils.GetQuranDatabaseDirectory(), FileUtils.QURAN_ARABIC_DATABASE)))
                         {
                             arabicVerses = await taskFactory.StartNew(() => dbArabic.Search(query));
                         }
@@ -142,6 +137,7 @@ namespace Quran.Core.ViewModels
                             SelectedAyah = new QuranAyah(verse.Surah, verse.Ayah)
                         });
                     }
+                    return;
                 }
                 catch (Exception)
                 {
@@ -153,8 +149,27 @@ namespace Quran.Core.ViewModels
                         SelectedAyah = new QuranAyah()
                     });
                 }
+                finally
+                {
+                    IsLoading = false;
+                }
+                await QuranApp.NativeProvider.ShowInfoMessageBox(AppResources.no_translation_to_search);
+            }
+        }
 
-                IsLoading = false;
+        public async Task<bool> DownloadArabicSearchFile()
+        {
+            if (!await FileUtils.HaveArabicSearchFile())
+            {
+                string url = FileUtils.GetArabicSearchUrl();
+                string destination = await FileUtils.GetQuranDatabaseDirectory();
+                destination = Path.Combine(destination, Path.GetFileName(url));
+                // start the download
+                return await this.ActiveDownload.DownloadSingleFile(url, destination, AppResources.loading_data);
+            }
+            else
+            {
+                return true;
             }
         }
 

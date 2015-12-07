@@ -84,12 +84,15 @@ namespace Quran.WindowsPhone.NativeProvider
             Clipboard.SetContent(dp);
         }
 
-        public async Task ComposeEmail(string to, string subject, string body = null)
+        public async Task ComposeEmail(string to, string subject, string body = "")
         {
             EmailMessage email = new EmailMessage();
             email.To.Add(new EmailRecipient(to));
             email.Subject = subject;
-            email.Body = body;
+            if (body != null)
+            {
+                email.Body = body;
+            }
             await EmailManager.ShowComposeNewEmailAsync(email);
         }
 

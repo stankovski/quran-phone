@@ -17,11 +17,13 @@ namespace Quran.WindowsPhone.Views
     public partial class MainView
     {
         public MainViewModel ViewModel { get; set; }
+        public SearchViewModel SearchViewModel { get; set; }
         public ObservableCollection<NavigationLink> NavigationLinks = new ObservableCollection<NavigationLink>();
 
         public MainView()
         {
             ViewModel = QuranApp.MainViewModel;
+            SearchViewModel = QuranApp.SearchViewModel;
             InitializeComponent();
         }
 
@@ -29,8 +31,12 @@ namespace Quran.WindowsPhone.Views
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             await ViewModel.Initialize();
+            await SearchViewModel.Initialize();
             JuzViewSource.Source =  from j in ViewModel.Juz
-                                    group j by j.Id into g
+                                    group j by new { j.Id, j.Group } into g
+                                    select g;
+            BookmarksViewSource.Source = from b in ViewModel.Bookmarks
+                                    group b by new { Id = b.Group, b.Group } into g
                                     select g;
             BuildLocalizedApplicationBar();
             await LittleWatson.CheckForPreviousException();
@@ -129,11 +135,6 @@ Quran Phone Team";
             // Reset selected item to null (no selection)
             list.SelectedItem = null;
         }
-        // Handle selection changed on LongListSelector
-        private void List_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            
-        }
 
         private void DeleteBookmark(object sender, RoutedEventArgs e)
         {
@@ -171,6 +172,11 @@ Quran Phone Team";
                 Symbol = Symbol.Setting,
                 Action = () => { Frame.Navigate(typeof(SettingsView), "general"); }
             });
+        }
+
+        private void SearchQuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            SearchViewModel.Load(QuranSearchBox.Text);
         }
     }
 }
