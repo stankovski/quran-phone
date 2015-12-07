@@ -94,6 +94,7 @@
     <EmbeddedResource Include="..\OfflineAssets\images_800.zip">
       <Link>Assets\Offline\images_800.zip</Link>
     </EmbeddedResource>
+    <Content Include="Assets\UthmanicHafs.otf" />
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
@@ -164,6 +165,11 @@
     <None Include="Quran.WindowsPhone_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\ApplicationIcon.png" />
+    <Content Include="Assets\BadgeLogo.png" />
+    <Content Include="Assets\FlipCycleTileLarge.png" />
+    <Content Include="Assets\FlipCycleTileMedium.png" />
+    <Content Include="Assets\FlipCycleTileSmall.png" />
     <Content Include="Assets\Images\favorite.png" />
     <Content Include="Assets\Images\hizb_full.png" />
     <Content Include="Assets\Images\hizb_half.png" />
@@ -197,49 +203,49 @@
     <Content Include="Assets\Images\settings.png" />
     <Content Include="Assets\Images\stop.png" />
     <Content Include="Assets\Images\sura_icon.png" />
+    <Content Include="Assets\logo-300.png" />
     <Content Include="Assets\logo-large.png" />
+    <Content Include="Assets\Logo.png" />
+    <Content Include="Assets\quran_readers_urls.xml" />
+    <Content Include="Assets\SplashScreen.png" />
+    <Content Include="Assets\SplashScreen.scale-100.png" />
+    <Content Include="Assets\SplashScreen.scale-140.png" />
+    <Content Include="Assets\SplashScreen.scale-180.png" />
+    <Content Include="Assets\Square150.scale-100.png" />
+    <Content Include="Assets\Square150.scale-140.png" />
+    <Content Include="Assets\Square150.scale-180.png" />
+    <Content Include="Assets\Square150.scale-80.png" />
+    <Content Include="Assets\Square30.scale-100.png" />
+    <Content Include="Assets\Square30.scale-140.png" />
+    <Content Include="Assets\Square30.scale-180.png" />
+    <Content Include="Assets\Square30.scale-80.png" />
+    <Content Include="Assets\Square310.scale-100.png" />
+    <Content Include="Assets\Square310.scale-140.png" />
+    <Content Include="Assets\Square310.scale-180.png" />
+    <Content Include="Assets\Square310.scale-80.png" />
+    <Content Include="Assets\Square70.scale-100.png" />
+    <Content Include="Assets\Square70.scale-140.png" />
+    <Content Include="Assets\Square70.scale-180.png" />
+    <Content Include="Assets\Square70.scale-80.png" />
+    <Content Include="Assets\SquareTile150x150.png" />
+    <Content Include="Assets\SquareTile71x71.png" />
+    <Content Include="Assets\StoreIcon.png" />
+    <Content Include="Assets\Storelogo.scale-100.png" />
+    <Content Include="Assets\Storelogo.scale-140.png" />
+    <Content Include="Assets\Storelogo.scale-180.png" />
+    <Content Include="Assets\WideLogo.png" />
+    <Content Include="Assets\WideLogo150.scale-100.png" />
+    <Content Include="Assets\WideLogo150.scale-140.png" />
+    <Content Include="Assets\WideLogo150.scale-180.png" />
+    <Content Include="Assets\WideLogo150.scale-80.png" />
     <Content Include="Properties\Default.rd.xml" />
-    <Content Include="Assets\LockScreenLogo.scale-200.png" />
-    <Content Include="Assets\SplashScreen.scale-200.png" />
-    <Content Include="Assets\Square150x150Logo.scale-200.png" />
-    <Content Include="Assets\Square44x44Logo.scale-200.png" />
-    <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
     <Content Include="Assets\StoreLogo.png" />
-    <Content Include="Assets\Wide310x150Logo.scale-200.png" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="SampleData\MainViewModelSampleData.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="SampleData\PageLinkSampleData.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="SampleData\PageViewModelSampleData.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="SampleData\SearchViewModelSampleData.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="SampleData\SettingsViewModelSampleData.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="SampleData\TranslationViewModelSampleData.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="SampleData\TranslationViewSampleData.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="UI\AudioPlayerControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

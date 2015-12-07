@@ -16,6 +16,7 @@ using Windows.UI;
 using Windows.UI.Xaml.Input;
 using System.Threading.Tasks;
 using Windows.Storage;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace Quran.WindowsPhone.UI
 {
@@ -250,39 +251,53 @@ namespace Quran.WindowsPhone.UI
                 await bitmap.SetSourceAsync(imageFileStream);
                 if (nightMode)
                 {
-                    invertColors(bitmap);
+                    try
+                    {
+                        await InvertColors(bitmap);
+                    }
+                    catch (Exception e)
+                    {
+                        throw e;
+                    }
                 }
                 imageSourceBitmap = bitmap;
                 progress.Visibility = Visibility.Collapsed;
             }
         }
 
-        private void invertColors(WriteableBitmap bitmap)
+        private async Task InvertColors(WriteableBitmap bitmap)
         {
-            //TODO: Implement
-            
-
-            int size = bitmap.Pixels.Length;
-            for (int i = 0; i < size; i++)
+            byte[] imageArray = new byte[bitmap.PixelHeight * bitmap.PixelWidth * 4];
+            using (var stream = bitmap.PixelBuffer.AsStream())
             {
-                var c = bitmap.Pixels[i];
-                var a = 0x000000FF & (c >> 24);
-                var r = 0x000000FF & (c >> 16);
-                var g = 0x000000FF & (c >> 8);
-                var b = 0x000000FF & (c);
-
-                // Invert
-                if (a > 0)
+                await stream.ReadAsync(imageArray, 0, imageArray.Length);
+                for (int i = 0; i < imageArray.Length; i += 4)
                 {
-                    r = 0x000000FF & (0xFF - r);
-                    g = 0x000000FF & (0xFF - g);
-                    b = 0x000000FF & (0xFF - b);
-                }
-                a = 255;
+                    var a = imageArray[i + 3]; // alpha
+                    var r = imageArray[i + 2]; // red
+                    var g = imageArray[i + 1]; // green
+                    var b = imageArray[i]; // blue
 
-                // Set result color
-                bitmap.Pixels[i] = (a << 24) | (r << 16) | (g << 8) | b;
-            }
+                    // Invert
+                    //r = 0x000000FF & (0xFF - r);
+                    //g = 0x000000FF & (0xFF - g);
+                    //b = 0x000000FF & (0xFF - b);
+                    if (a > 0)
+                    {
+                        r = (byte)(0xFF - r);
+                        g = (byte)(0xFF - g);
+                        b = (byte)(0xFF - b);
+                    }
+
+                    // Set result color
+                    imageArray[i] = b;
+                    imageArray[i + 1] = g;
+                    imageArray[i + 2] = r;
+                    imageArray[i + 3] = 255;
+                }
+                stream.Position = 0;
+                await stream.WriteAsync(imageArray, 0, imageArray.Length);
+            }            
         }
 
         public int PageNumber
