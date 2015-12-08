@@ -61,9 +61,6 @@ namespace Quran.WindowsPhone.Views
             {
                 ViewModel.CurrentPageNumber = parameters.Page.Value;
                 
-                //Update settings
-                ViewModel.IsNightMode = SettingsUtils.Get<bool>(Constants.PREF_NIGHT_MODE);
-
                 //Monitor proprty changes
                 ViewModel.PropertyChanged += (sender, args) =>
                 {

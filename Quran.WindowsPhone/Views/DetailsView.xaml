@@ -8,7 +8,7 @@
     mc:Ignorable="d"
     xmlns:vm="using:Quran.Core.ViewModels"
     xmlns:ui="using:Quran.WindowsPhone.UI"
-    RequestedTheme="Light">
+    RequestedTheme="{x:Bind ViewModel.Theme, Mode=OneWay}">
 
     <Page.Resources>
         <ui:ArabicFontSizeConverter x:Key="ArabicFontSizeConverter"/>
@@ -25,17 +25,14 @@
             Visibility="{x:Bind ViewModel.ShowInfoOverlay, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Button x:Name="HamburgerButton" Style="{StaticResource HamburgerButtonStyle}" Click="HamburgerButtonClick"/>
             <TextBlock Text="{x:Bind ViewModel.CurrentSurahName, Mode=OneWay}" HorizontalAlignment="Left" FontSize="18" 
-                       Foreground="{x:Bind ViewModel.IsNightMode, Converter={StaticResource ConditionalColorConverter}, ConverterParameter=FF000000, Mode=OneWay}" 
                        Margin="50,3,0,3" VerticalAlignment="Center"/>
             <StackPanel Margin="0,3,0,3" HorizontalAlignment="Center" Orientation="Horizontal" FlowDirection="LeftToRight">
                 <Image Source="..\Assets\Images\left.png" Height="25" Width="50"/>
-                <TextBlock Text="{x:Bind ViewModel.CurrentPageNumber, Mode=OneWay}" FontSize="18" VerticalAlignment="Center" 
-                           Foreground="{x:Bind ViewModel.IsNightMode, Converter={StaticResource ConditionalColorConverter}, ConverterParameter=FF000000, Mode=OneWay}"/>
+                <TextBlock Text="{x:Bind ViewModel.CurrentPageNumber, Mode=OneWay}" FontSize="18" VerticalAlignment="Center" />
                 <Image Source="..\Assets\Images\right.png" Height="25" Width="50"/>
             </StackPanel>
             <TextBlock Text="{x:Bind ViewModel.CurrentJuzName, Mode=OneWay}" HorizontalAlignment="Right" 
-                       FontSize="18" VerticalAlignment="Center"
-                       Foreground="{x:Bind ViewModel.IsNightMode, Converter={StaticResource ConditionalColorConverter}, ConverterParameter=FF000000, Mode=OneWay}" Margin="0,3,25,3"/>
+                       FontSize="18" VerticalAlignment="Center" Margin="0,3,25,3"/>
         </Grid>
         <SplitView Grid.Row="1" x:Name="MainSplitView" DisplayMode="Overlay" IsPaneOpen="False" 
                    OpenPaneLength="300">
@@ -66,11 +63,11 @@
                             <Grid>
                                 <ui:CachedImage ImageSource="{x:Bind ImageSource, Mode=OneWay}" 
                                         PageNumber="{x:Bind PageNumber, Mode=OneWay}" 
-                                        NightMode="{x:Bind Parent.IsNightMode, Mode=OneWay}"
                                         SelectedAyah="{x:Bind Parent.SelectedAyah, Mode=OneWay}"
                                         Padding="0,0,0,10"
                                         DoubleTapped="ImageDoubleTapped"
                                         Tapped="ImageTapped"
+                                        RequestedTheme="{x:Bind Parent.Theme, Mode=OneWay}"
                                         Visibility="{x:Bind Parent.ShowTranslation, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
                                 </ui:CachedImage>
                                 <ListView x:Name="TranslationListBox" 

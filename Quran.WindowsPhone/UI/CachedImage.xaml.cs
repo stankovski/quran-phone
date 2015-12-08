@@ -123,18 +123,18 @@ namespace Quran.WindowsPhone.UI
             }
         }
 
-        public bool NightMode
+        private ElementTheme currentTheme;
+        public ElementTheme CurrentTheme
         {
-            get { return (bool)GetValue(NightModeProperty); }
-            set { SetValue(NightModeProperty, value); }
-        }
+            get { return currentTheme; }
+            set
+            {
+                if (value == currentTheme)
+                    return;
 
-        public static readonly DependencyProperty NightModeProperty = DependencyProperty.Register("NightMode",
-            typeof(bool), typeof(CachedImage), new PropertyMetadata(false, changeNightMode));
-
-        private static void changeNightMode(DependencyObject source, DependencyPropertyChangedEventArgs e)
-        {
-            (source as CachedImage).UpdateNightMode((bool)e.NewValue);
+                currentTheme = value;
+                UpdateNightMode(currentTheme == ElementTheme.Dark);
+            }
         }
 
         private async void UpdateNightMode(bool isNightMode)

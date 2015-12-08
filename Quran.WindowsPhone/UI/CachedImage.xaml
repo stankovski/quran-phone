@@ -5,6 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="Transparent"
+    RequestedTheme="{x:Bind CurrentTheme, Mode=TwoWay}"
     d:DesignHeight="480" d:DesignWidth="480">
 
     <ScrollViewer HorizontalAlignment="Stretch" x:Name="LayoutRoot">
