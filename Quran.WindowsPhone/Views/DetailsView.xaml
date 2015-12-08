@@ -24,16 +24,16 @@
         <Grid Grid.Row="0" HorizontalAlignment="Stretch" Height="48" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
             Visibility="{x:Bind ViewModel.ShowInfoOverlay, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Button x:Name="HamburgerButton" Style="{StaticResource HamburgerButtonStyle}" Click="HamburgerButtonClick"/>
-            <TextBlock Text="{x:Bind ViewModel.CurrentSurahName, Mode=OneWay}" HorizontalAlignment="Left" FontSize="18" 
+            <TextBlock Text="{x:Bind ViewModel.CurrentSurahName, Mode=OneWay}" HorizontalAlignment="Left" FontSize="15" 
                        Margin="50,3,0,3" VerticalAlignment="Center"/>
+            <TextBlock Text="{x:Bind ViewModel.CurrentJuzName, Mode=OneWay}" 
+                       HorizontalAlignment="Right"
+                       FontSize="15" VerticalAlignment="Center" Margin="0,3,25,3"/>
             <StackPanel Margin="0,3,0,3" HorizontalAlignment="Center" Orientation="Horizontal" FlowDirection="LeftToRight">
                 <Image Source="..\Assets\Images\left.png" Height="25" Width="50"/>
-                <TextBlock Text="{x:Bind ViewModel.CurrentPageNumber, Mode=OneWay}" FontSize="18" VerticalAlignment="Center" />
+                <TextBlock Text="{x:Bind ViewModel.CurrentPageNumber, Mode=OneWay}" FontSize="15" VerticalAlignment="Center" />
                 <Image Source="..\Assets\Images\right.png" Height="25" Width="50"/>
             </StackPanel>
-            <TextBlock Text="{x:Bind ViewModel.CurrentJuzName, Mode=OneWay}" 
-                       HorizontalAlignment="Right" 
-                       FontSize="18" VerticalAlignment="Center" Margin="0,3,25,3"/>
         </Grid>
         <SplitView Grid.Row="1" x:Name="MainSplitView" DisplayMode="Overlay" IsPaneOpen="False" 
                    OpenPaneLength="300">
