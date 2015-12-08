@@ -33,22 +33,7 @@ namespace Quran.Core.ViewModels
         public DetailsViewModel Parent { get; set; }
 
         public ObservableCollection<VerseViewModel> Translations { get; set; }
-
-        private string translation;
-        public string Translation
-        {
-            get { return translation; }
-            set
-            {
-                if (value == translation)
-                    return;
-
-                translation = value;
-
-                base.OnPropertyChanged(() => Translation);
-            }
-        }
-
+        
         private int pageNumber;
         public int PageNumber
         {

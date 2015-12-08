@@ -18,42 +18,22 @@ namespace Quran.Core.ViewModels
         {
             Parent = parent;
         }
-
-        public VerseViewModel(string text, DetailsViewModel parent) : this(parent)
-        {
-            Text = text;
-        }
-
-        public VerseViewModel(string text, string style, DetailsViewModel parent): this (text, parent)
-        {
-            StyleName = style;
-        }
-
-        public VerseViewModel(string text, string style, int surah, int ayah, DetailsViewModel parent)
-            : this (text, style, parent)
-        {
-            Surah = surah;
-            Ayah = ayah;
-        }
-
+        
         #region Properties
         public DetailsViewModel Parent { get; set; }
 
-        private string styleName;
-        public string StyleName
-        {
-            get { return styleName; }
-            set
+        public string ArabicText { get; set; }
+        public bool ContainsArabicText {
+            get
             {
-                if (value == styleName)
-                    return;
-
-                styleName = value;
-
-                base.OnPropertyChanged(() => StyleName);
+                return ArabicText != null;
             }
         }
-
+        public string AyahName { get
+            {
+                return string.Format("{0}:{1}", Surah, Ayah);
+            }
+        }
         private string text;
         public string Text
         {
@@ -96,6 +76,21 @@ namespace Quran.Core.ViewModels
                 ayah = value;
 
                 base.OnPropertyChanged(() => Ayah);
+            }
+        }
+
+        private bool isHeader;
+        public bool IsHeader
+        {
+            get { return isHeader; }
+            set
+            {
+                if (value == isHeader)
+                    return;
+
+                isHeader = value;
+
+                base.OnPropertyChanged(() => IsHeader);
             }
         }
         #endregion Properties
