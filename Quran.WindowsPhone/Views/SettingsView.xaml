@@ -60,7 +60,8 @@
                                 <ComboBox ItemsSource="{x:Bind ViewModel.SupportedLanguages}" DisplayMemberPath="Value" 
                                           SelectedValue="{x:Bind ViewModel.SelectedLanguage, Mode=TwoWay}" SelectedValuePath="Key"/>
                                     <TextBlock Text="{Binding Path=LocalizedResources.prefs_ayah_before_translation_summary, Source={StaticResource LocalizedStrings}}"/>
-                                <ToggleSwitch IsOn="{x:Bind ViewModel.ShowArabicInTranslation, Mode=TwoWay}" IsEnabled="{x:Bind ViewModel.EnableShowArabicInTranslation}" />
+                                <ToggleSwitch IsOn="{x:Bind ViewModel.ShowArabicInTranslation, Mode=TwoWay}" 
+                                              IsEnabled="{x:Bind ViewModel.EnableShowArabicInTranslation, Mode=OneWay}" />
                                 <TextBlock Text="{Binding Path=LocalizedResources.disable_sleep, Source={StaticResource LocalizedStrings}}"/>
                                 <ToggleSwitch IsOn="{x:Bind ViewModel.PreventPhoneFromSleeping, Mode=TwoWay}"/>
                                 <TextBlock Text="{Binding Path=LocalizedResources.keep_info_overlay, Source={StaticResource LocalizedStrings}}"/>

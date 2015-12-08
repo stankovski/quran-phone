@@ -229,7 +229,7 @@ namespace Quran.Core.Utils
             }
 
             result = await QuranApp.DetailsViewModel.ActiveDownload.DownloadMultiple(filesToDownload.ToArray(),
-                        request.Reciter.LocalPath, AppResources.loading_audio);
+                        request.Reciter.LocalPath, Resources.loading_audio);
 
             if (result)
             {
@@ -255,7 +255,7 @@ namespace Quran.Core.Utils
                 var localUrl = Path.Combine(destination, Path.GetFileName(urlString));
                 QuranApp.NativeProvider.Log("gapless asking to download " + serverUrl + " to " + localUrl);
 
-                result = await QuranApp.DetailsViewModel.ActiveDownload.DownloadSingleFile(serverUrl, localUrl, AppResources.loading_audio);
+                result = await QuranApp.DetailsViewModel.ActiveDownload.DownloadSingleFile(serverUrl, localUrl, Resources.loading_audio);
                 if (!result)
                     break;
             }

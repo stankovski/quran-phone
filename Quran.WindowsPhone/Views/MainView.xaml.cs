@@ -9,6 +9,7 @@ using Quran.Core.ViewModels;
 using Quran.WindowsPhone.Utils;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
 
@@ -32,12 +33,8 @@ namespace Quran.WindowsPhone.Views
         {
             await ViewModel.Initialize();
             await SearchViewModel.Initialize();
-            JuzViewSource.Source =  from j in ViewModel.Juz
-                                    group j by new { j.Id, j.Group } into g
-                                    select g;
-            BookmarksViewSource.Source = from b in ViewModel.Bookmarks
-                                    group b by new { Id = b.Group, b.Group } into g
-                                    select g;
+            JuzViewSource.Source = ViewModel.GetGrouppedJuzItems();
+            BookmarksViewSource.Source = ViewModel.GetGrouppedBookmarks();
             BuildLocalizedApplicationBar();
             await LittleWatson.CheckForPreviousException();
 
@@ -66,11 +63,7 @@ namespace Quran.WindowsPhone.Views
 
         private void NavigateToLastPage(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(DetailsView),
-                        new NavigationData
-                        {
-                            Page = SettingsUtils.Get<int>(Constants.PREF_LAST_PAGE)
-                        });
+            Frame.Navigate(typeof(DetailsView));
         }
 
 
@@ -110,18 +103,18 @@ Quran Phone Team";
 
             try
             {
+                SettingsUtils.Set<int>(Constants.PREF_LAST_PAGE, selectedItem.PageNumber);
+
                 // Navigate to the new page
                 if (selectedItem.SelectedAyah == null)
                 {
-                    Frame.Navigate(typeof(DetailsView),
-                        new NavigationData { Page = selectedItem.PageNumber });
+                    Frame.Navigate(typeof(DetailsView));
                 }
                 else
                 {
                     Frame.Navigate(typeof(DetailsView),
                         new NavigationData
                         {
-                            Page = selectedItem.PageNumber,
                             Surah = selectedItem.SelectedAyah.Surah,
                             Ayah = selectedItem.SelectedAyah.Ayah
                         });
@@ -146,6 +139,7 @@ Quran Phone Team";
                     ViewModel.DeleteBookmark(menuItem.DataContext as ItemViewModel);
                 }
             }
+            BookmarksViewSource.Source = ViewModel.GetGrouppedBookmarks();
         }
 
         private void HamburgerButtonClick(object sender, RoutedEventArgs e)
@@ -163,20 +157,32 @@ Quran Phone Team";
             }
         }
 
+
+
         // Build a localized ApplicationBar
         private void BuildLocalizedApplicationBar()
         {
             NavigationLinks.Add(new NavigationLink
             {
-                Label = AppResources.settings,
-                Symbol = Symbol.Setting,
-                Action = () => { Frame.Navigate(typeof(SettingsView), "general"); }
+                Label = Quran.Core.Properties.Resources.search,
+                Symbol = Symbol.Find,
+                Action = () => { MainPivot.SelectedItem = SearchPivotItem; }
             });
         }
 
         private void SearchQuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             SearchViewModel.Load(QuranSearchBox.Text);
+        }
+
+        private void GoToSettings(object sender, TappedRoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(SettingsView), "general");
+        }
+
+        private void BookmarkRightTapped(object sender, RightTappedRoutedEventArgs e)
+        {
+            FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
         }
     }
 }

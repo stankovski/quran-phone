@@ -27,10 +27,13 @@
         <StackPanel Orientation="Vertical" Visibility="{Binding IsHeader, Converter={StaticResource BooleanToVisibilityConverter}}">
             <TextBlock TextWrapping="Wrap" Text="{Binding Text}" Style="{StaticResource TranslationViewHeader}"/>
         </StackPanel>
-        <StackPanel Orientation="Vertical" Visibility="{Binding IsHeader, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
-            <TextBlock Text="{Binding AyahName}" Style="{StaticResource BoldText}"/>
-            <TextBlock TextWrapping="Wrap" Text="{Binding ArabicText}" Style="{StaticResource ArabicText}"/>
-            <TextBlock TextWrapping="Wrap" Text="{Binding Text}"/>
+        <StackPanel Orientation="Vertical" 
+                       Visibility="{Binding IsHeader, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
+            <TextBlock Text="{Binding AyahName}" Style="{StaticResource BoldText}" FontSize="{Binding FontSize}"/>
+            <TextBlock TextWrapping="Wrap" Text="{Binding ArabicText}" Style="{StaticResource ArabicText}" 
+                       FontSize="{Binding ArabicFontSize}"
+                       Visibility="{Binding ContainsArabicText, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <TextBlock TextWrapping="Wrap" Text="{Binding Text}"  FontSize="{Binding FontSize}"/>
         </StackPanel>
     </Grid>
 </UserControl>

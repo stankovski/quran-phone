@@ -14,17 +14,17 @@ namespace Quran.Core.Utils
     {
         public static string GetAyahTitle()
         {
-            return AppResources.quran_ayah;
+            return Resources.quran_ayah;
         }
 
         public static string GetSurahTitle()
         {
-            return AppResources.quran_sura_title;
+            return Resources.quran_sura_title;
         }
 
         public static string GetJuzTitle()
         {
-            return AppResources.quran_juz2;
+            return Resources.quran_juz2;
         }
 
         public static string GetSurahName(int surah,
@@ -34,7 +34,7 @@ namespace Quran.Core.Utils
             string title = "";
             if (wantTitle) { title = GetSurahTitle() + " "; }
 
-            using (StringReader stringReader = new StringReader(AppResources.sura_names))
+            using (StringReader stringReader = new StringReader(Resources.sura_names))
             using (XmlReader reader = XmlReader.Create(stringReader)) {
                 var doc = XDocument.Load(reader);
                 return title + doc.Descendants("item").Skip(surah - 1).Take(1).Single().Value;
@@ -44,7 +44,7 @@ namespace Quran.Core.Utils
         public static string[] GetSurahQuarters()
         {
             List<string> results = new List<string>();
-            using (StringReader stringReader = new StringReader(AppResources.quarters))
+            using (StringReader stringReader = new StringReader(Resources.quarters))
             using (XmlReader reader = XmlReader.Create(stringReader))
             {
                 var doc = XDocument.Load(reader);
@@ -96,13 +96,13 @@ namespace Quran.Core.Utils
 
         public static string GetPageSubtitle(int page)
         {
-            string description = AppResources.page_description;
+            string description = Resources.page_description;
             return string.Format(description, page, QuranUtils.GetJuzFromPage(page));
         }
 
         public static string GetJuzString(int page)
         {
-            string description = AppResources.juz2_description;
+            string description = Resources.juz2_description;
             return string.Format(description, QuranUtils.GetJuzFromPage(page));
         }
 
@@ -114,7 +114,7 @@ namespace Quran.Core.Utils
         public static string GetSurahAyahString(int surah, int ayah)
         {
             string suraName = GetSurahName(surah, false);
-            string format = AppResources.sura_ayah_notification_str;
+            string format = Resources.sura_ayah_notification_str;
             return string.Format(format, suraName, ayah);
         }
 
@@ -265,15 +265,15 @@ namespace Quran.Core.Utils
         public static string GetSuraListMetaString(int surah)
         {
             string info = "";
-            info += QuranUtils.SURA_IS_MAKKI[surah - 1] ? AppResources.makki : AppResources.madani;
+            info += QuranUtils.SURA_IS_MAKKI[surah - 1] ? Resources.makki : Resources.madani;
             info += " - ";
 
             int ayahs = QuranUtils.SURA_NUM_AYAHS[surah - 1];
             info += ayahs.ToString(" 0 ", CultureInfo.InvariantCulture);
             if (ayahs == 1)
-                info += AppResources.verse;
+                info += Resources.verse;
             else
-                info += AppResources.verses;  
+                info += Resources.verses;  
             return info;
         }
 

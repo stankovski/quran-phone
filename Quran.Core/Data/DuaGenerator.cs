@@ -35,7 +35,7 @@ namespace Quran.Core.Data
         {
             using (var adapter = new BookmarksDatabaseHandler())
             {
-                var tagId = adapter.AddTag(AppResources.dua);
+                var tagId = adapter.AddTag(Resources.dua);
                 foreach (int[] dua in quran_dua)
                 {
                     var p = QuranUtils.GetPageFromAyah(dua[0], dua[1]);

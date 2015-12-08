@@ -248,7 +248,7 @@ namespace Quran.Core.ViewModels
             DownloadOperation download = downloader.CreateDownload(new Uri(serverUrl), destinationFile);
 
             IsDownloading = true;
-            InstallationStep = Description ?? AppResources.loading_message;
+            InstallationStep = Description ?? Resources.loading_message;
 
             // Attach progress and completion handlers.
             await HandleDownloadAsync(download, true);
@@ -277,7 +277,7 @@ namespace Quran.Core.ViewModels
                     {
                         IsDownloading = true;
                         IsIndeterminate = true;
-                        InstallationStep = AppResources.extracting_message;
+                        InstallationStep = Resources.extracting_message;
 
                         await QuranApp.NativeProvider.ExtractZip(destinationFile,
                             Path.GetDirectoryName(destinationFile));
@@ -293,7 +293,7 @@ namespace Quran.Core.ViewModels
         {
             if (activeDownloads.Any())
             {
-                if (await QuranApp.NativeProvider.ShowQuestionMessageBox(AppResources.download_cancel_confirmation))
+                if (await QuranApp.NativeProvider.ShowQuestionMessageBox(Resources.download_cancel_confirmation))
                 {
                     Reset();
                 }
@@ -402,18 +402,18 @@ namespace Quran.Core.ViewModels
                 case BackgroundTransferStatus.PausedByApplication:
                 case BackgroundTransferStatus.PausedSystemPolicy:
                 case BackgroundTransferStatus.Idle:
-                    InstallationStep = AppResources.waiting;
+                    InstallationStep = Resources.waiting;
                     IsDownloading = true;
                     IsIndeterminate = true;
                     break;
                 case BackgroundTransferStatus.PausedNoNetwork:
                 case BackgroundTransferStatus.PausedCostedNetwork:
-                    InstallationStep = AppResources.waiting_for_wifi;
+                    InstallationStep = Resources.waiting_for_wifi;
                     IsDownloading = true;
                     IsIndeterminate = true;
                     break;
                 case BackgroundTransferStatus.Running:
-                    InstallationStep = Description ?? AppResources.loading_message;
+                    InstallationStep = Description ?? Resources.loading_message;
                     IsDownloading = true;
                     IsIndeterminate = false;
                     break;

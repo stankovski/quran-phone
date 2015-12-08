@@ -146,34 +146,18 @@
     <Compile Include="Interfaces\IDownloadManager.cs" />
     <Compile Include="Interfaces\INativeProvider.cs" />
     <Compile Include="Interfaces\ISettingsProvider.cs" />
-    <Compile Include="Properties\AppResources.ar.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AppResources.ar.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\AppResources.id.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AppResources.id.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\AppResources.ru.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AppResources.ru.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\AppResources1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AppResources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuranApp.cs" />
+    <Compile Include="Strings\en\Resources.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resw</DependentUpon>
+    </Compile>
     <Compile Include="Utils\ArabicResharper.cs" />
     <Compile Include="Utils\AudioUtils.cs" />
     <Compile Include="Utils\CryptoUtils.cs" />
     <Compile Include="Utils\FileUtils.cs" />
     <Compile Include="Utils\HttpExtensions.cs" />
-    <Compile Include="Utils\LocalizedStrings.cs" />
     <Compile Include="Utils\MD5.cs" />
     <Compile Include="Utils\QuranUtils.cs" />
     <Compile Include="Utils\ScreenUtils.cs" />
@@ -210,22 +194,14 @@
     </SDKReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\AppResources.ar.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>AppResources.ar.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\AppResources.id.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>AppResources.id.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\AppResources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>AppResources1.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\AppResources.ru.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>AppResources.ru.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <PRIResource Include="Strings\ar\Resources.resw" />
+    <PRIResource Include="Strings\id\Resources.resw" />
+    <PRIResource Include="Strings\en\Resources.resw">
+      <Generator>ReswFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.cs</LastGenOutput>
+      <CustomToolNamespace>Quran.Core.Properties</CustomToolNamespace>
+    </PRIResource>
+    <PRIResource Include="Strings\ru\Resources.resw" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

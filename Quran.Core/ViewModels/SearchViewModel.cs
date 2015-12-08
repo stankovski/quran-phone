@@ -153,8 +153,8 @@ namespace Quran.Core.ViewModels
                 {
                     IsLoading = false;
                 }
-                await QuranApp.NativeProvider.ShowInfoMessageBox(AppResources.no_translation_to_search);
             }
+            await QuranApp.NativeProvider.ShowInfoMessageBox(Resources.no_translation_to_search);
         }
 
         public async Task<bool> DownloadArabicSearchFile()
@@ -165,7 +165,7 @@ namespace Quran.Core.ViewModels
                 string destination = await FileUtils.GetQuranDatabaseDirectory();
                 destination = Path.Combine(destination, Path.GetFileName(url));
                 // start the download
-                return await this.ActiveDownload.DownloadSingleFile(url, destination, AppResources.loading_data);
+                return await this.ActiveDownload.DownloadSingleFile(url, destination, Resources.loading_data);
             }
             else
             {

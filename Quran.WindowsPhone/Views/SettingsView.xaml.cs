@@ -41,10 +41,9 @@ namespace Quran.WindowsPhone.Views
             }
         }
 
-        protected override async void OnNavigatedFrom(NavigationEventArgs e)
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             ViewModel.SaveSettings();
-            await QuranApp.SyncViewModelsWithSettings();
             base.OnNavigatedFrom(e);
         }
         

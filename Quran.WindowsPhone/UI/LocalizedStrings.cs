@@ -7,8 +7,8 @@ namespace Quran.WindowsPhone.UI
     /// </summary>
     public class LocalizedStrings
     {
-        private static AppResources _localizedResources = new AppResources();
+        private static Resources _localizedResources = new Resources();
 
-        public AppResources LocalizedResources { get { return _localizedResources; } }
+        public Resources LocalizedResources { get { return _localizedResources; } }
     }
 }

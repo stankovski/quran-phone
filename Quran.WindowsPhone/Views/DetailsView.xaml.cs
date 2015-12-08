@@ -2,7 +2,6 @@
 using Quran.Core;
 using Quran.Core.Common;
 using Quran.Core.Data;
-using Quran.Core.Properties;
 using Quran.Core.Utils;
 using Quran.Core.ViewModels;
 using Windows.UI.Xaml.Navigation;
@@ -37,13 +36,13 @@ namespace Quran.WindowsPhone.Views
 
             //DataContext = ViewModel;
 
-            //ayahContextMenu.Items.Add(new RadContextMenuItem() { Content = AppResources.bookmark_ayah });
+            //ayahContextMenu.Items.Add(new RadContextMenuItem() { Content = Resources.bookmark_ayah });
             //if (FileUtils.HaveArabicSearchFile())
             //{
-            //    ayahContextMenu.Items.Add(new RadContextMenuItem() {Content = AppResources.copy});
+            //    ayahContextMenu.Items.Add(new RadContextMenuItem() {Content = Resources.copy});
             //}
-            //ayahContextMenu.Items.Add(new RadContextMenuItem() { Content = AppResources.recite_ayah });
-            //ayahContextMenu.Items.Add(new RadContextMenuItem() { Content = AppResources.share_ayah });
+            //ayahContextMenu.Items.Add(new RadContextMenuItem() { Content = Resources.recite_ayah });
+            //ayahContextMenu.Items.Add(new RadContextMenuItem() { Content = Resources.share_ayah });
             //ayahContextMenu.ItemTapped += AyahContextMenuClick;
             //ayahContextMenu.Closed += (obj, e) => ViewModel.SelectedAyah = null;
 
@@ -52,47 +51,40 @@ namespace Quran.WindowsPhone.Views
             {
                 parameters = new NavigationData();
             }
-
-            //NavigationContext.QueryString.TryGetValue("page", out selectedPage);
-            //NavigationContext.QueryString.TryGetValue("surah", out selectedSurah);
-            //NavigationContext.QueryString.TryGetValue("ayah", out selectedAyah);
-
-            if (parameters.Page != null)
-            {
-                ViewModel.CurrentPageNumber = parameters.Page.Value;
+            
+            ViewModel.CurrentPageNumber = SettingsUtils.Get<int>(Constants.PREF_LAST_PAGE);
                 
-                //Monitor proprty changes
-                ViewModel.PropertyChanged += (sender, args) =>
+            //Monitor proprty changes
+            ViewModel.PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName == "CurrentPageIndex")
                 {
-                    if (args.PropertyName == "CurrentPageIndex")
+                    if (ViewModel.CurrentPageIndex != -1)
                     {
-                        if (ViewModel.CurrentPageIndex != -1)
-                        {
-                            radSlideView.SelectedItem = ViewModel.Pages[ViewModel.CurrentPageIndex];
-                        }
+                        radSlideView.SelectedItem = ViewModel.Pages[ViewModel.CurrentPageIndex];
                     }
-                };
+                }
+            };
 
-                //Try extract translation from query
-                var translation = SettingsUtils.Get<string>(Constants.PREF_ACTIVE_TRANSLATION);
-                if (!string.IsNullOrEmpty(translation))
+            //Try extract translation from query
+            var translation = SettingsUtils.Get<string>(Constants.PREF_ACTIVE_TRANSLATION);
+            if (!string.IsNullOrEmpty(translation))
+            {
+                if (ViewModel.TranslationFile != translation.Split('|')[0] ||
+                    ViewModel.ShowTranslation != SettingsUtils.Get<bool>(Constants.PREF_SHOW_TRANSLATION) ||
+                    ViewModel.ShowArabicInTranslation != SettingsUtils.Get<bool>(Constants.PREF_SHOW_ARABIC_IN_TRANSLATION))
                 {
-                    if (ViewModel.TranslationFile != translation.Split('|')[0] ||
-                        ViewModel.ShowTranslation != SettingsUtils.Get<bool>(Constants.PREF_SHOW_TRANSLATION) ||
-                        ViewModel.ShowArabicInTranslation != SettingsUtils.Get<bool>(Constants.PREF_SHOW_ARABIC_IN_TRANSLATION))
-                    {
-                        ViewModel.Pages.Clear();
-                    }
-                    ViewModel.TranslationFile = translation.Split('|')[0];
-                    ViewModel.ShowTranslation = SettingsUtils.Get<bool>(Constants.PREF_SHOW_TRANSLATION);
-                    ViewModel.ShowArabicInTranslation = SettingsUtils.Get<bool>(Constants.PREF_SHOW_ARABIC_IN_TRANSLATION);
+                    ViewModel.Pages.Clear();
                 }
-                else
-                {
-                    ViewModel.TranslationFile = null;
-                    ViewModel.ShowTranslation = false;
-                    ViewModel.ShowArabicInTranslation = false;
-                }
+                ViewModel.TranslationFile = translation.Split('|')[0];
+                ViewModel.ShowTranslation = SettingsUtils.Get<bool>(Constants.PREF_SHOW_TRANSLATION);
+                ViewModel.ShowArabicInTranslation = SettingsUtils.Get<bool>(Constants.PREF_SHOW_ARABIC_IN_TRANSLATION);
+            }
+            else
+            {
+                ViewModel.TranslationFile = null;
+                ViewModel.ShowTranslation = false;
+                ViewModel.ShowArabicInTranslation = false;
             }
 
             // set keepinfooverlay according to setting
@@ -263,7 +255,7 @@ namespace Quran.WindowsPhone.Views
 
             //if (this.SupportedOrientations == SupportedPageOrientation.PortraitOrLandscape)
             //{
-            //    button.Text = AppResources.auto_orientation;
+            //    button.Text = Resources.auto_orientation;
             //    if (QuranApp.NativeProvider.IsPortaitOrientation)
             //        this.SupportedOrientations = SupportedPageOrientation.Portrait;
             //    else
@@ -271,7 +263,7 @@ namespace Quran.WindowsPhone.Views
             //}
             //else
             //{
-            //    button.Text = AppResources.keep_orientation;
+            //    button.Text = Resources.keep_orientation;
             //    this.SupportedOrientations = SupportedPageOrientation.PortraitOrLandscape;
             //}
         }
@@ -298,23 +290,23 @@ namespace Quran.WindowsPhone.Views
             //    }
             //}
 
-            //if (menuItem == AppResources.bookmark_ayah)
+            //if (menuItem == Resources.bookmark_ayah)
             //{
             //    ViewModel.AddAyahBookmark(ViewModel.SelectedAyah);
             //    ViewModel.SelectedAyah = null;                
             //} 
-            //else if (menuItem == AppResources.copy)
+            //else if (menuItem == Resources.copy)
             //{
             //    ViewModel.CopyAyahToClipboard(ViewModel.SelectedAyah);
             //    ViewModel.SelectedAyah = null;
             //}
 
-            //else if (menuItem == AppResources.share_ayah)
+            //else if (menuItem == Resources.share_ayah)
             //{
             //    string ayah = await ViewModel.GetAyahString(ViewModel.SelectedAyah);
             //    ShareAyah(ayah);
             //}
-            //else if (menuItem == AppResources.recite_ayah)
+            //else if (menuItem == Resources.recite_ayah)
             //{
             //    Recite_Click(this, null);
             //}
@@ -334,40 +326,39 @@ namespace Quran.WindowsPhone.Views
         {
             NavigationLinks.Add(new NavigationLink
             {
-                Label = AppResources.recite,
+                Label = Quran.Core.Properties.Resources.recite,
                 Symbol = Symbol.Volume,
                 Action = ReciteClick
             });
             NavigationLinks.Add(new NavigationLink
             {
-                Label = AppResources.translation,
+                Label = Quran.Core.Properties.Resources.translation,
                 Symbol = Symbol.Globe,
                 Action = TranslationClick
             });
             NavigationLinks.Add(new NavigationLink
             {
-                Label = AppResources.bookmark,
+                Label = Quran.Core.Properties.Resources.bookmark,
                 Symbol = Symbol.SolidStar,
                 Action = BookmarkClick
             });
             NavigationLinks.Add(new NavigationLink
             {
-                Label = AppResources.contact_us,
+                Label = Quran.Core.Properties.Resources.contact_us,
                 Symbol = Symbol.MailForward,
                 Action = ContactUsClick
             });
             NavigationLinks.Add(new NavigationLink
             {
-                Label = AppResources.keep_orientation,
+                Label = Quran.Core.Properties.Resources.keep_orientation,
                 Symbol = Symbol.Orientation,
                 Action = KeepOrientationClick
             });
-            NavigationLinks.Add(new NavigationLink
-            {
-                Label = AppResources.settings,
-                Symbol = Symbol.Setting,
-                Action = () => { Frame.Navigate(typeof(SettingsView), "general"); }
-            });
+        }
+
+        private void GoToSettings(object sender, TappedRoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(SettingsView), "general");
         }
 
 

@@ -21,7 +21,7 @@
         <ProgressBar Grid.Row="0" Value="{x:Bind ViewModel.AudioDownloadProgress, Mode=OneWay}"
                      IsIndeterminate="False" SmallChange="1" VerticalAlignment="Top" 
                      Visibility="{x:Bind ViewModel.IsDownloadingAudio, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-        <Grid Grid.Row="0" HorizontalAlignment="Stretch" Height="48" Background="White"
+        <Grid Grid.Row="0" HorizontalAlignment="Stretch" Height="48" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
             Visibility="{x:Bind ViewModel.ShowInfoOverlay, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Button x:Name="HamburgerButton" Style="{StaticResource HamburgerButtonStyle}" Click="HamburgerButtonClick"/>
             <TextBlock Text="{x:Bind ViewModel.CurrentSurahName, Mode=OneWay}" HorizontalAlignment="Left" FontSize="18" 
@@ -31,27 +31,37 @@
                 <TextBlock Text="{x:Bind ViewModel.CurrentPageNumber, Mode=OneWay}" FontSize="18" VerticalAlignment="Center" />
                 <Image Source="..\Assets\Images\right.png" Height="25" Width="50"/>
             </StackPanel>
-            <TextBlock Text="{x:Bind ViewModel.CurrentJuzName, Mode=OneWay}" HorizontalAlignment="Right" 
+            <TextBlock Text="{x:Bind ViewModel.CurrentJuzName, Mode=OneWay}" 
+                       HorizontalAlignment="Right" 
                        FontSize="18" VerticalAlignment="Center" Margin="0,3,25,3"/>
         </Grid>
         <SplitView Grid.Row="1" x:Name="MainSplitView" DisplayMode="Overlay" IsPaneOpen="False" 
                    OpenPaneLength="300">
             <SplitView.Pane>
-                <ListView x:Name="NavLinksList" Margin="0" SelectionMode="None" 
-                    Background="{StaticResource BlueText}"
-                    VerticalAlignment="Stretch" Foreground="White"
-                    ItemClick="NavLinkItemClick" IsItemClickEnabled="True"
-                    ItemsSource="{x:Bind NavigationLinks}">
-                    <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="vm:NavigationLink">
-                            <StackPanel Orientation="Horizontal"  Margin="2,0,0,0">
-                                <SymbolIcon Symbol="{x:Bind Symbol}" Foreground="White"/>
-                                <TextBlock Text="{x:Bind Label}" Margin="24,0,0,0" Foreground="White"
-                                            VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                <Grid>
+                    <ListView x:Name="NavLinksList" Margin="0" SelectionMode="None" 
+                        Background="{StaticResource BlueText}"
+                        VerticalAlignment="Stretch" Foreground="White"
+                        ItemClick="NavLinkItemClick" IsItemClickEnabled="True"
+                        ItemsSource="{x:Bind NavigationLinks}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="vm:NavigationLink">
+                                <StackPanel Orientation="Horizontal"  Margin="2,0,0,0">
+                                    <SymbolIcon Symbol="{x:Bind Symbol}" Foreground="White"/>
+                                    <TextBlock Text="{x:Bind Label}" Margin="24,0,0,0" Foreground="White"
+                                                VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <ListViewItem VerticalAlignment="Bottom" Tapped="GoToSettings">
+                        <StackPanel Orientation="Horizontal" Margin="2,0,0,0">
+                            <SymbolIcon Symbol="Setting" Foreground="White"/>
+                            <TextBlock Text="{Binding Path=LocalizedResources.settings, Source={StaticResource LocalizedStrings}}" 
+                                           Margin="24,0,0,0" Foreground="White" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </ListViewItem>
+                </Grid>
             </SplitView.Pane>
             <SplitView.Content>
                 <FlipView x:Name="radSlideView" ItemsSource="{x:Bind ViewModel.Pages}"
@@ -67,7 +77,6 @@
                                         Padding="0,0,0,10"
                                         DoubleTapped="ImageDoubleTapped"
                                         Tapped="ImageTapped"
-                                        RequestedTheme="{x:Bind Parent.Theme, Mode=OneWay}"
                                         Visibility="{x:Bind Parent.ShowTranslation, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
                                 </ui:CachedImage>
                                 <ListView x:Name="TranslationListBox" 

@@ -90,7 +90,6 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <PRIResource Include="Strings\en-US\Resources.resw" />
     <EmbeddedResource Include="..\OfflineAssets\images_800.zip">
       <Link>Assets\Offline\images_800.zip</Link>
     </EmbeddedResource>

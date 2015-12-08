@@ -199,7 +199,7 @@ namespace Quran.Core.ViewModels
 
                 if (SettingsUtils.Get<string>(Constants.PREF_CULTURE_OVERRIDE) != value)
                 {
-                    QuranApp.NativeProvider.ShowInfoMessageBox(AppResources.please_restart);
+                    QuranApp.NativeProvider.ShowInfoMessageBox(Resources.please_restart);
                 }
 
                 base.OnPropertyChanged(() => SelectedLanguage);
@@ -319,8 +319,7 @@ namespace Quran.Core.ViewModels
             KeepInfoOverlay = SettingsUtils.Get<bool>(Constants.PREF_KEEP_INFO_OVERLAY);
             NightMode = SettingsUtils.Get<bool>(Constants.PREF_NIGHT_MODE);
 
-            if (await FileUtils.FileExists(Path.Combine(await FileUtils.GetQuranDatabaseDirectory(),
-                                                       FileUtils.QURAN_ARABIC_DATABASE)))
+            if (await FileUtils.HaveArabicSearchFile())
             {
                 EnableShowArabicInTranslation = true;
             }
@@ -388,33 +387,33 @@ namespace Quran.Core.ViewModels
 
         private IEnumerable<KeyValuePair<AudioDownloadAmount, string>> GetSupportedDownloadAmounts()
         {
-            yield return new KeyValuePair<AudioDownloadAmount, string>(AudioDownloadAmount.Page, AppResources.quran_page);
-            yield return new KeyValuePair<AudioDownloadAmount, string>(AudioDownloadAmount.Surah, AppResources.quran_sura_lower);
-            yield return new KeyValuePair<AudioDownloadAmount, string>(AudioDownloadAmount.Juz, AppResources.quran_juz2_lower);
+            yield return new KeyValuePair<AudioDownloadAmount, string>(AudioDownloadAmount.Page, Resources.quran_page);
+            yield return new KeyValuePair<AudioDownloadAmount, string>(AudioDownloadAmount.Surah, Resources.quran_sura_lower);
+            yield return new KeyValuePair<AudioDownloadAmount, string>(AudioDownloadAmount.Juz, Resources.quran_juz2_lower);
         }
 
         private IEnumerable<KeyValuePair<int, string>> GetSupportedRepeatTimes()
         {
-            yield return new KeyValuePair<int, string>(0, AppResources.none);
+            yield return new KeyValuePair<int, string>(0, Resources.none);
             yield return new KeyValuePair<int, string>(1, "1");
             yield return new KeyValuePair<int, string>(2, "2");
             yield return new KeyValuePair<int, string>(3, "3");
             yield return new KeyValuePair<int, string>(5, "5");
             yield return new KeyValuePair<int, string>(10, "10");
-            yield return new KeyValuePair<int, string>(int.MaxValue, AppResources.unlimited);
+            yield return new KeyValuePair<int, string>(int.MaxValue, Resources.unlimited);
         }
 
         private IEnumerable<KeyValuePair<RepeatAmount, string>> GetSupportedRepeatAmounts()
         {
-            yield return new KeyValuePair<RepeatAmount, string>(RepeatAmount.None, AppResources.none);
+            yield return new KeyValuePair<RepeatAmount, string>(RepeatAmount.None, Resources.none);
             yield return new KeyValuePair<RepeatAmount, string>(RepeatAmount.OneAyah, "1 " + QuranUtils.GetAyahTitle());
             yield return new KeyValuePair<RepeatAmount, string>(RepeatAmount.ThreeAyah, "3 " + QuranUtils.GetAyahTitle());
             yield return new KeyValuePair<RepeatAmount, string>(RepeatAmount.FiveAyah, "5 " + QuranUtils.GetAyahTitle());
             yield return new KeyValuePair<RepeatAmount, string>(RepeatAmount.TenAyah, "10 " + QuranUtils.GetAyahTitle());
-            yield return new KeyValuePair<RepeatAmount, string>(RepeatAmount.Page, AppResources.quran_page);
-            yield return new KeyValuePair<RepeatAmount, string>(RepeatAmount.Surah, AppResources.quran_sura_lower);
-            yield return new KeyValuePair<RepeatAmount, string>(RepeatAmount.Rub, AppResources.quran_rub3);
-            yield return new KeyValuePair<RepeatAmount, string>(RepeatAmount.Juz, AppResources.quran_juz2_lower);
+            yield return new KeyValuePair<RepeatAmount, string>(RepeatAmount.Page, Resources.quran_page);
+            yield return new KeyValuePair<RepeatAmount, string>(RepeatAmount.Surah, Resources.quran_sura_lower);
+            yield return new KeyValuePair<RepeatAmount, string>(RepeatAmount.Rub, Resources.quran_rub3);
+            yield return new KeyValuePair<RepeatAmount, string>(RepeatAmount.Juz, Resources.quran_juz2_lower);
         }
     }
 }

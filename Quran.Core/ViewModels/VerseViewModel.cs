@@ -4,6 +4,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 using System.Threading.Tasks;
+using Quran.Core.Data;
+using Quran.Core.Utils;
 
 namespace Quran.Core.ViewModels
 {
@@ -12,23 +14,26 @@ namespace Quran.Core.ViewModels
     /// </summary>
     public class VerseViewModel : BaseViewModel
     {
-        public VerseViewModel() { }
-
         public VerseViewModel(DetailsViewModel parent)
         {
             Parent = parent;
+            FontSize = SettingsUtils.Get<double>(Constants.PREF_TRANSLATION_TEXT_SIZE);
+            ArabicFontSize = FontSize * Constants.ARABIC_FONT_SCALE_RELATIVE_TO_TRANSLATION;
         }
         
         #region Properties
         public DetailsViewModel Parent { get; set; }
 
-        public string ArabicText { get; set; }
         public bool ContainsArabicText {
             get
             {
                 return ArabicText != null;
             }
         }
+
+        public double FontSize { get; set; }
+        public double ArabicFontSize { get; set; }
+
         public string AyahName { get
             {
                 return string.Format("{0}:{1}", Surah, Ayah);
@@ -46,6 +51,21 @@ namespace Quran.Core.ViewModels
                 text = value;
 
                 base.OnPropertyChanged(() => Text);
+            }
+        }
+
+        private string arabicText;
+        public string ArabicText
+        {
+            get { return arabicText; }
+            set
+            {
+                if (value == arabicText)
+                    return;
+
+                arabicText = value;
+
+                base.OnPropertyChanged(() => ArabicText);
             }
         }
 

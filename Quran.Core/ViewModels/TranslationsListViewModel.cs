@@ -30,8 +30,8 @@ namespace Quran.Core.ViewModels
     /// </summary>
     public class TranslationsListViewModel : BaseViewModel
     {
-        private TranslationsItemGroup _downloadedGroup = new TranslationsItemGroup(AppResources.downloaded_translations);
-        private TranslationsItemGroup _availableGroup = new TranslationsItemGroup(AppResources.available_translations);
+        private TranslationsItemGroup _downloadedGroup = new TranslationsItemGroup(Resources.downloaded_translations);
+        private TranslationsItemGroup _availableGroup = new TranslationsItemGroup(Resources.available_translations);
 
         public TranslationsListViewModel()
         {

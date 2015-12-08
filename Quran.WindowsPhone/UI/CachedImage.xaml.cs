@@ -26,7 +26,6 @@ namespace Quran.WindowsPhone.UI
 
         private WriteableBitmap imageSourceBitmap;
         private Uri imageSourceUri;
-        private bool nightMode;
 
         public CachedImage()
         {
@@ -120,29 +119,6 @@ namespace Quran.WindowsPhone.UI
                 {
                     //Ignore
                 }
-            }
-        }
-
-        private ElementTheme currentTheme;
-        public ElementTheme CurrentTheme
-        {
-            get { return currentTheme; }
-            set
-            {
-                if (value == currentTheme)
-                    return;
-
-                currentTheme = value;
-                UpdateNightMode(currentTheme == ElementTheme.Dark);
-            }
-        }
-
-        private async void UpdateNightMode(bool isNightMode)
-        {
-            if (this.nightMode != isNightMode)
-            {
-                this.nightMode = isNightMode;
-                await UpdateSource(imageSourceUri, true);
             }
         }
 
@@ -249,7 +225,7 @@ namespace Quran.WindowsPhone.UI
             {
                 var bitmap = new WriteableBitmap(1, 1); // avoid creating intermediate BitmapImage
                 await bitmap.SetSourceAsync(imageFileStream);
-                if (nightMode)
+                if (SettingsUtils.Get<bool>(Constants.PREF_NIGHT_MODE))
                 {
                     try
                     {

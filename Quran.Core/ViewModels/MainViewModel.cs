@@ -5,9 +5,11 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Quran.Core.Common;
 using Quran.Core.Data;
@@ -31,7 +33,7 @@ namespace Quran.Core.ViewModels
             this.Juz = new ObservableCollection<ItemViewModel>();
             this.Bookmarks = new ObservableCollection<ItemViewModel>();
             
-            this.InstallationStep = AppResources.loading_message;
+            this.InstallationStep = Resources.loading_message;
 
             this.Tags = new ObservableCollection<ItemViewModel>();
             this.HasAskedToDownload = false;
@@ -103,6 +105,20 @@ namespace Quran.Core.ViewModels
             await base.Refresh();
         }
 
+        public IEnumerable<IGrouping<KeyValuePair<string, string>, ItemViewModel>> GetGrouppedBookmarks()
+        {
+            return  from b in Bookmarks
+                    group b by new KeyValuePair<string, string>(b.Group, b.Group) into g
+                    select g;
+        }
+
+        public IEnumerable<IGrouping<KeyValuePair<string, string>, ItemViewModel>> GetGrouppedJuzItems()
+        {
+            return from b in Juz
+                   group b by new KeyValuePair<string, string>(b.Id, b.Group) into g
+                   select g;
+        }
+
         public async Task Download()
         {
             if (!this.ActiveDownload.IsDownloading)
@@ -125,8 +141,8 @@ namespace Quran.Core.ViewModels
                 if (!await FileUtils.HaveAllImages() && !this.HasAskedToDownload)
                 {
                     this.HasAskedToDownload = true;
-                    var askingToDownloadResult = await QuranApp.NativeProvider.ShowQuestionMessageBox(AppResources.downloadPrompt,
-                                                                 AppResources.downloadPrompt_title);
+                    var askingToDownloadResult = await QuranApp.NativeProvider.ShowQuestionMessageBox(Resources.downloadPrompt,
+                                                                 Resources.downloadPrompt_title);
 
                     if (askingToDownloadResult)
                     {
@@ -245,11 +261,11 @@ namespace Quran.Core.ViewModels
 
                 int[] pos = QuranUtils.QUARTERS[i];
                 int page = QuranUtils.GetPageFromAyah(pos[0], pos[1]);
-                string verseString = AppResources.quran_ayah + " " + pos[1];
+                string verseString = Resources.quran_ayah + " " + pos[1];
                 Juz.Add(new ItemViewModel
                 {
                     Id = juz.ToString(CultureInfo.InvariantCulture),
-                    Group = string.Format("{0} {1}", AppResources.quran_juz2, juz),
+                    Group = string.Format("{0} {1}", Resources.quran_juz2, juz),
                     Title = quarters[i],
                     Details = QuranUtils.GetSurahName(pos[0], true) + ", " + verseString,
                     PageNumber = page,
@@ -267,13 +283,13 @@ namespace Quran.Core.ViewModels
             {
                 var lastPageItem = new ItemViewModel();
                 lastPageItem.Title = QuranUtils.GetSurahNameFromPage(lastPage, true);
-                lastPageItem.Details = string.Format("{0} {1}, {2} {3}", AppResources.quran_page, lastPage,
+                lastPageItem.Details = string.Format("{0} {1}, {2} {3}", Resources.quran_page, lastPage,
                                                  QuranUtils.GetJuzTitle(),
                                                  QuranUtils.GetJuzFromPage(lastPage));
                 lastPageItem.PageNumber = lastPage;
                 lastPageItem.Image = new BitmapImage(new Uri("ms-appx:///Assets/Images/favorite.png"));
                 lastPageItem.ItemType = ItemViewModelType.Bookmark;
-                lastPageItem.Group = AppResources.bookmarks_current_page;
+                lastPageItem.Group = Resources.bookmarks_current_page;
                 lastPageItem.Id = lastPageItem.Group;
                 Bookmarks.Add(lastPageItem);
             }
@@ -314,7 +330,7 @@ namespace Quran.Core.ViewModels
         private const int maxBookmarkTitle = 40;
         private static async Task<ItemViewModel> CreateBookmarkModel(Bookmarks bookmark)
         {
-            var group = AppResources.bookmarks;
+            var group = Resources.bookmarks;
             if (bookmark.Tags != null && bookmark.Tags.Count > 0)
                 group = bookmark.Tags[0].Name;
 
@@ -343,7 +359,7 @@ namespace Quran.Core.ViewModels
 
                     details = string.Format(CultureInfo.InvariantCulture, "{0} {1} {2}, {3} {4}",
                                                QuranUtils.GetSurahName(bookmark.Surah.Value, true),
-                                               AppResources.verse,
+                                               Resources.verse,
                                                bookmark.Ayah.Value,
                                                QuranUtils.GetJuzTitle(),
                                                QuranUtils.GetJuzFromPage(bookmark.Page));
@@ -351,8 +367,8 @@ namespace Quran.Core.ViewModels
                 else
                 {
                     details = string.Format(CultureInfo.InvariantCulture, "{0} {1}, {2} {3}, {4} {5}",
-                                               AppResources.quran_page, bookmark.Page,
-                                               AppResources.verse,
+                                               Resources.quran_page, bookmark.Page,
+                                               Resources.verse,
                                                bookmark.Ayah.Value,
                                                QuranUtils.GetJuzTitle(),
                                                QuranUtils.GetJuzFromPage(bookmark.Page));
@@ -388,7 +404,7 @@ namespace Quran.Core.ViewModels
                 {
                     Id = bookmark.Id.ToString(CultureInfo.InvariantCulture),
                     Title = QuranUtils.GetSurahNameFromPage(bookmark.Page, true),
-                    Details = string.Format(CultureInfo.InvariantCulture, "{0} {1}, {2} {3}", AppResources.quran_page, bookmark.Page,
+                    Details = string.Format(CultureInfo.InvariantCulture, "{0} {1}, {2} {3}", Resources.quran_page, bookmark.Page,
                                             QuranUtils.GetJuzTitle(),
                                             QuranUtils.GetJuzFromPage(bookmark.Page)),
                     PageNumber = bookmark.Page,
