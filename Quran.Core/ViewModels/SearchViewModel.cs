@@ -59,13 +59,18 @@ namespace Quran.Core.ViewModels
 
         public async void Load(string query)
         {
+            if (this.IsLoading)
+            {
+                return;
+            }
+
+            this.IsLoading = true;
             await DownloadArabicSearchFile();
             var translation = SettingsUtils.Get<string>(Constants.PREF_ACTIVE_TRANSLATION);
             if (!string.IsNullOrEmpty(translation))
             {
                 var translationFile = translation.Split('|')[0];
 
-                IsLoading = true;
                 try
                 {
                     var translationVerses = new List<QuranAyah>();

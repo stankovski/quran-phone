@@ -24,44 +24,10 @@
                        VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </Grid>
         </DataTemplate>
-        
-        <DataTemplate x:DataType="vm:ItemViewModel" x:Key="ListItemTemplate">
-            <StackPanel Orientation="Vertical">
-                <Grid Visibility="{x:Bind ItemType, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Header}" 
-                    Height="45" VerticalAlignment="Center">
-                    <Grid.Background>
-                        <SolidColorBrush Color="#33343434"/>
-                    </Grid.Background>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="60"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="60"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="1" Text="{x:Bind Title}" Style="{StaticResource BaseTextBlockStyle}"
-                               VerticalAlignment="Center"/>
-                    <TextBlock Grid.Column="2" Text="{x:Bind PageNumber}" HorizontalAlignment="Center" 
-                               Style="{StaticResource BaseTextBlockStyle}"
-                               VerticalAlignment="Center"/>
-                </Grid>
-                <Grid Visibility="{x:Bind ItemType, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Surah}" 
-                    Height="55" VerticalAlignment="Center">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="80"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="60"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="{x:Bind Id}" FontSize="23" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <StackPanel Grid.Column="1" Orientation="Vertical">
-                        <TextBlock Text="{x:Bind Title}" FontSize="18" VerticalAlignment="Center"/>
-                        <TextBlock Text="{x:Bind Details}" Style="{StaticResource BaseTextBlockStyle}" 
-                                   VerticalAlignment="Center"/>
-                    </StackPanel>
-                    <TextBlock Grid.Column="2" Text="{x:Bind PageNumber}" HorizontalAlignment="Center" 
-                               Style="{StaticResource BaseTextBlockStyle}"
-                               VerticalAlignment="Center"/>
-                </Grid>
-            </StackPanel>
-        </DataTemplate>
+        <SolidColorBrush x:Key="PivotPaneColor" Color="#FF151515"/>
+        <Style TargetType="PivotHeaderItem">
+            <Setter Property="MinWidth" Value="80"/>
+        </Style>
     </Page.Resources>
 
     <Grid x:Name="LayoutRoot" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -112,22 +78,72 @@
             <SplitView.Content>
                 <Grid x:Name="MainPanel">
                     <Pivot x:Name="MainPivot">
-                        <PivotItem Margin="0" Header="{Binding Path=LocalizedResources.quran_sura_lower, Source={StaticResource LocalizedStrings}}">
-                            <Grid x:Name="ContentPanel">
-                                <ListView ItemsSource="{x:Bind ViewModel.Surahs}" Tapped="NavigateLink" 
-                                          ItemTemplate="{StaticResource ListItemTemplate}">
-                                    <ListView.ItemContainerStyle>
-                                        <Style TargetType="ListViewItem">
-                                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                            <Setter Property="VerticalContentAlignment" Value="Stretch" />
-                                            <Setter Property="Padding" Value="0" />
-                                        </Style>
-                                    </ListView.ItemContainerStyle>
-                                </ListView>
+                        <PivotItem Margin="0">
+                            <PivotItem.Header>
+                                <StackPanel>
+                                    <SymbolIcon Symbol="List"/>
+                                    <TextBlock Text="{Binding Path=LocalizedResources.quran_sura_lower, Source={StaticResource LocalizedStrings}}"
+                                               Style="{StaticResource BaseTextBlockStyle}" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </PivotItem.Header>
+                            <Grid x:Name="ContentPanel" Background="{StaticResource PivotPaneColor}">
+                                <Grid.Resources>
+                                    <CollectionViewSource x:Name="SurahViewSource" IsSourceGrouped="True"/>
+                                </Grid.Resources>
+                                <SemanticZoom>
+                                    <SemanticZoom.ZoomedInView>
+                                        <ListView ItemsSource="{Binding Source={StaticResource SurahViewSource}}" 
+                                          Tapped="NavigateLink">
+                                            <ListView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid Height="55" VerticalAlignment="Center">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="80"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="60"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <TextBlock Grid.Column="0" Text="{Binding Id}" FontSize="23" 
+                                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        <StackPanel Grid.Column="1" Orientation="Vertical">
+                                                            <TextBlock Text="{Binding Title}" FontSize="18" VerticalAlignment="Center"/>
+                                                            <TextBlock Text="{Binding Details}" Style="{StaticResource BaseTextBlockStyle}" 
+                                                        VerticalAlignment="Center"/>
+                                                        </StackPanel>
+                                                        <TextBlock Grid.Column="2" Text="{Binding PageNumber}" HorizontalAlignment="Center" 
+                                                        Style="{StaticResource BaseTextBlockStyle}"
+                                                        VerticalAlignment="Center"/>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ListView.ItemTemplate>
+                                            <ListView.GroupStyle>
+                                                <GroupStyle HeaderTemplate="{StaticResource ZoomedInGroupHeaderTemplate}" />
+                                            </ListView.GroupStyle>
+                                            <ListView.ItemContainerStyle>
+                                                <Style TargetType="ListViewItem">
+                                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                                                </Style>
+                                            </ListView.ItemContainerStyle>
+                                        </ListView>
+                                    </SemanticZoom.ZoomedInView>
+                                    <SemanticZoom.ZoomedOutView>
+                                        <GridView ItemsSource="{Binding Source={StaticResource SurahViewSource}, Path=CollectionGroups}"
+                                                  SelectionMode="None" Margin="30"
+                                                  ItemTemplate="{StaticResource ZoomedOutTemplate}">
+                                        </GridView>
+                                    </SemanticZoom.ZoomedOutView>
+                                </SemanticZoom>
                             </Grid>
                         </PivotItem>
-                        <PivotItem Margin="0" Header="{Binding Path=LocalizedResources.quran_juz2_lower, Source={StaticResource LocalizedStrings}}">
-                            <Grid>
+                        <PivotItem Margin="0">
+                            <PivotItem.Header>
+                                <StackPanel>
+                                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE82D;" />
+                                    <TextBlock Text="{Binding Path=LocalizedResources.quran_juz2_lower, Source={StaticResource LocalizedStrings}}"
+                                               Style="{StaticResource BaseTextBlockStyle}" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </PivotItem.Header>
+                            <Grid Background="{StaticResource PivotPaneColor}">
                                 <Grid.Resources>
                                     <CollectionViewSource x:Name="JuzViewSource" IsSourceGrouped="True"/>
                                 </Grid.Resources>
@@ -175,8 +191,15 @@
                                 </SemanticZoom>                                
                             </Grid>
                         </PivotItem>
-                        <PivotItem Margin="0" Header="{Binding Path=LocalizedResources.quran_bookmarks_lower, Source={StaticResource LocalizedStrings}}">
-                            <Grid>
+                        <PivotItem Margin="0">
+                            <PivotItem.Header>
+                                <StackPanel>
+                                    <SymbolIcon Symbol="Favorite"/>
+                                    <TextBlock Text="{Binding Path=LocalizedResources.quran_bookmarks_lower, Source={StaticResource LocalizedStrings}}"
+                                               Style="{StaticResource BaseTextBlockStyle}" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </PivotItem.Header>
+                            <Grid Background="{StaticResource PivotPaneColor}">
                                 <Grid.Resources>
                                     <CollectionViewSource x:Name="BookmarksViewSource" IsSourceGrouped="True"/>
                                 </Grid.Resources>
@@ -231,8 +254,15 @@
                                 </SemanticZoom>
                             </Grid>
                         </PivotItem>
-                        <PivotItem Margin="0" x:Name="SearchPivotItem" Header="{Binding Path=LocalizedResources.search, Source={StaticResource LocalizedStrings}}">
-                            <Grid>
+                        <PivotItem Margin="0" x:Name="SearchPivotItem">
+                            <PivotItem.Header>
+                                <StackPanel>
+                                    <SymbolIcon Symbol="Find"/>
+                                    <TextBlock Text="{Binding Path=LocalizedResources.search, Source={StaticResource LocalizedStrings}}"
+                                               Style="{StaticResource BaseTextBlockStyle}" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </PivotItem.Header>
+                            <Grid Background="{StaticResource PivotPaneColor}">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="*"/>
@@ -257,7 +287,7 @@
                             </Grid>
                         </PivotItem>
                     </Pivot>
-                    <ui:DownloadControl ViewModel="{x:Bind ViewModel.ActiveDownload, Mode=OneWay}" VerticalAlignment="Bottom"/>
+                    <ui:DownloadControl ViewModel="{x:Bind ViewModel.ActiveDownload, Mode=OneWay}" Height="70" VerticalAlignment="Bottom"/>
                 </Grid>
             </SplitView.Content>
         </SplitView>

@@ -10,6 +10,8 @@ using System.Collections.ObjectModel;
 using Windows.UI.Xaml.Input;
 using Quran.Windows.UI;
 using Windows.UI.Xaml.Media.Animation;
+using Windows.Graphics.Display;
+using Windows.UI.ViewManagement;
 
 namespace Quran.Windows.Views
 {
@@ -189,27 +191,6 @@ namespace Quran.Windows.Views
                 item.Action();
             }
         }
-
-        private void TranslationClick()
-        {
-            int pageNumber = ViewModel.CurrentPageNumber;
-            if (!string.IsNullOrEmpty(ViewModel.TranslationFile))
-            {
-                //ViewModel.UpdatePages();
-                ViewModel.ShowTranslation = !ViewModel.ShowTranslation;
-                SettingsUtils.Set(Constants.PREF_SHOW_TRANSLATION, ViewModel.ShowTranslation);
-                //ViewModel.IsShowMenu = false;
-            }
-            else
-            {
-                Frame.Navigate(typeof(TranslationListView), null, new DrillInNavigationTransitionInfo());
-            }
-        }
-
-        private void BookmarkClick()
-        {
-            ViewModel.AddPageBookmark();
-        }
         
         private async void ReciteClick()
         {
@@ -240,32 +221,6 @@ namespace Quran.Windows.Views
                     await ViewModel.PlayFromAyah(selectedAyah.Surah, selectedAyah.Ayah);
                 }
             }
-        }
-
-        private async void ContactUsClick()
-        {
-            await QuranApp.NativeProvider.ComposeEmail("quran.phone@gmail.com", "Email from QuranPhone");
-        }
-
-        private void KeepOrientationClick()
-        {
-            //var button = sender as ApplicationBarMenuItem;
-            //if (button == null)
-            //    return;
-
-            //if (this.SupportedOrientations == SupportedPageOrientation.PortraitOrLandscape)
-            //{
-            //    button.Text = Resources.auto_orientation;
-            //    if (QuranApp.NativeProvider.IsPortaitOrientation)
-            //        this.SupportedOrientations = SupportedPageOrientation.Portrait;
-            //    else
-            //        this.SupportedOrientations = SupportedPageOrientation.Landscape;
-            //}
-            //else
-            //{
-            //    button.Text = Resources.keep_orientation;
-            //    this.SupportedOrientations = SupportedPageOrientation.PortraitOrLandscape;
-            //}
         }
 
         private void ImageTapped(object sender, TappedRoutedEventArgs e)
@@ -326,10 +281,16 @@ namespace Quran.Windows.Views
         {
             NavigationLinks.Add(new NavigationLink
             {
-                Label = Quran.Core.Properties.Resources.recite,
-                Symbol = Symbol.Volume,
-                Action = ReciteClick
+                Label = Quran.Core.Properties.Resources.home,
+                Symbol = Symbol.Home,
+                Action = () => { Frame.Navigate(typeof(MainView)); }
             });
+            //NavigationLinks.Add(new NavigationLink
+            //{
+            //    Label = Quran.Core.Properties.Resources.recite,
+            //    Symbol = Symbol.Volume,
+            //    Action = ReciteClick
+            //});
             NavigationLinks.Add(new NavigationLink
             {
                 Label = Quran.Core.Properties.Resources.translation,
@@ -340,20 +301,35 @@ namespace Quran.Windows.Views
             {
                 Label = Quran.Core.Properties.Resources.bookmark,
                 Symbol = Symbol.SolidStar,
-                Action = BookmarkClick
+                Action = () => { ViewModel.AddPageBookmark(); }
             });
             NavigationLinks.Add(new NavigationLink
             {
                 Label = Quran.Core.Properties.Resources.contact_us,
                 Symbol = Symbol.MailForward,
-                Action = ContactUsClick
+                Action = () => { QuranApp.NativeProvider.ComposeEmail("quran.phone@gmail.com", "Email from QuranPhone"); }
             });
-            NavigationLinks.Add(new NavigationLink
+            var keepOrientationLink = new NavigationLink
             {
                 Label = Quran.Core.Properties.Resources.keep_orientation,
                 Symbol = Symbol.Orientation,
-                Action = KeepOrientationClick
-            });
+            };
+            keepOrientationLink.Action = () => { KeepOrientationClick(keepOrientationLink); };
+            NavigationLinks.Add(keepOrientationLink);
+        }
+
+        private void TranslationClick()
+        {
+            int pageNumber = ViewModel.CurrentPageNumber;
+            if (!string.IsNullOrEmpty(ViewModel.TranslationFile))
+            {
+                ViewModel.ShowTranslation = !ViewModel.ShowTranslation;
+                SettingsUtils.Set(Constants.PREF_SHOW_TRANSLATION, ViewModel.ShowTranslation);
+            }
+            else
+            {
+                Frame.Navigate(typeof(TranslationListView), null, new DrillInNavigationTransitionInfo());
+            }
         }
 
         private void GoToSettings(object sender, TappedRoutedEventArgs e)
@@ -361,32 +337,25 @@ namespace Quran.Windows.Views
             Frame.Navigate(typeof(SettingsView), "general");
         }
 
-
-        //private void PageOrientationChanged(object sender, OrientationChangedEventArgs e)
-        //{
-        //    ViewModel.Orientation = PhoneUtils.PageOrientationConverter(e.Orientation);
-        //}
-
-        //protected override void OnBackKeyPress(System.ComponentModel.CancelEventArgs e)
-        //{
-        //    // if back key pressed when menu is visible, hide the menu
-        //    // somehow, I (kemasdimas) frequently expect "back" key to hide menu,
-        //    // instead of going back to previous page.
-        //    if (ViewModel.IsShowMenu && !QuranApp.NativeProvider.IsPortaitOrientation)
-        //    {
-        //        ViewModel.IsShowMenu = false;
-        //        e.Cancel = true;
-        //    }
-        //    else if (ViewModel.AudioPlayerState != AudioState.Stopped)
-        //    {
-        //        ViewModel.AudioPlayerState = AudioState.Stopped;
-        //        QuranApp.NativeProvider.AudioProvider.Stop();
-        //        e.Cancel = true;
-        //    }
-        //    else
-        //    {
-        //        base.OnBackKeyPress(e);
-        //    }
-        //}
+        private void KeepOrientationClick(NavigationLink link)
+        {
+            if (DisplayInformation.AutoRotationPreferences == DisplayOrientations.None)
+            {
+                link.Label = Quran.Core.Properties.Resources.auto_orientation;
+                if (QuranApp.NativeProvider.IsPortaitOrientation)
+                {
+                    DisplayInformation.AutoRotationPreferences = DisplayOrientations.Portrait | DisplayOrientations.PortraitFlipped;
+                }
+                else
+                {
+                    DisplayInformation.AutoRotationPreferences = DisplayOrientations.Landscape | DisplayOrientations.LandscapeFlipped;
+                }
+            }
+            else
+            {
+                link.Label = Quran.Core.Properties.Resources.keep_orientation;
+                DisplayInformation.AutoRotationPreferences = DisplayOrientations.None;
+            }
+        }        
     }
 }

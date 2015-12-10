@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Globalization;
 using Quran.Core;
+using Quran.Core.Data;
+using Quran.Core.Utils;
 using Quran.Windows.NativeProvider;
+using Quran.Windows.Utils;
 using Quran.Windows.Views;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
@@ -24,6 +28,7 @@ namespace Quran.Windows
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+            this.UnhandledException += App_UnhandledException;
         }
 
         /// <summary>
@@ -45,6 +50,9 @@ namespace Quran.Windows
 
             // Create NativeProvider
             QuranApp.NativeProvider = new UniversalNativeProvider();
+
+            // Restore settings
+            RestoreSettings();
 
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
@@ -85,6 +93,30 @@ namespace Quran.Windows
             Window.Current.Activate();
         }
 
+        private void RestoreSettings()
+        {
+            var preventSleep = SettingsUtils.Get<bool>(Constants.PREF_PREVENT_SLEEP);
+            if (preventSleep)
+            {
+                QuranApp.NativeProvider.ToggleDeviceSleep(false);
+            }
+
+            // Set the current thread culture
+            var cultureOverride = SettingsUtils.Get<string>(Constants.PREF_CULTURE_OVERRIDE);
+            if (cultureOverride != "")
+            {
+                try
+                {
+                    CultureInfo.CurrentCulture = new CultureInfo(cultureOverride);
+                    CultureInfo.CurrentUICulture = new CultureInfo(cultureOverride);
+                }
+                catch
+                {
+                    //Ignore
+                }
+            }
+        }
+
         /// <summary>
         /// Invoked when Navigation to a certain page fails
         /// </summary>
@@ -92,7 +124,23 @@ namespace Quran.Windows
         /// <param name="e">Details about the navigation failure</param>
         void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
         {
-            throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
+            QuranApp.NativeProvider.ShowErrorMessageBox("Failed to load Page " + e.SourcePageType.FullName);
+            LittleWatson.ReportException(e.Exception, "Navigation Failed");
+            if (System.Diagnostics.Debugger.IsAttached)
+            {
+                // A navigation has failed; break into the debugger
+                System.Diagnostics.Debugger.Break();
+            }
+        }
+
+        private void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            LittleWatson.ReportException(e.Exception, "Unhandled Exception");
+            if (System.Diagnostics.Debugger.IsAttached)
+            {
+                // An unhandled exception has occurred; break into the debugger
+                System.Diagnostics.Debugger.Break();
+            }
         }
 
         private void OnNavigated(object sender, NavigationEventArgs e)

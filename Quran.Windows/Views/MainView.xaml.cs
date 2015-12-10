@@ -7,6 +7,7 @@ using Quran.Core.Properties;
 using Quran.Core.Utils;
 using Quran.Core.ViewModels;
 using Quran.Windows.Utils;
+using Windows.Graphics.Display;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -23,6 +24,7 @@ namespace Quran.Windows.Views
 
         public MainView()
         {
+            DisplayInformation.AutoRotationPreferences = DisplayOrientations.None;
             ViewModel = QuranApp.MainViewModel;
             SearchViewModel = QuranApp.SearchViewModel;
             InitializeComponent();
@@ -33,6 +35,7 @@ namespace Quran.Windows.Views
         {
             await ViewModel.Initialize();
             await SearchViewModel.Initialize();
+            SurahViewSource.Source = ViewModel.GetGrouppedSurahItems();
             JuzViewSource.Source = ViewModel.GetGrouppedJuzItems();
             BookmarksViewSource.Source = ViewModel.GetGrouppedBookmarks();
             BuildLocalizedApplicationBar();

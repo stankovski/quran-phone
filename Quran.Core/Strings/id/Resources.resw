@@ -503,4 +503,7 @@ the data used in the translations and Arabic comes from
   <data name="share_ayah" xml:space="preserve">
     <value>Share</value>
   </data>
+  <data name="home" xml:space="preserve">
+    <value>Home</value>
+  </data>
 </root>

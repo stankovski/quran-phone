@@ -506,4 +506,7 @@ the data used in the translations and Arabic comes from
   <data name="share_ayah" xml:space="preserve">
     <value>Поделиться</value>
   </data>
+  <data name="home" xml:space="preserve">
+    <value>Главная страница</value>
+  </data>
 </root>

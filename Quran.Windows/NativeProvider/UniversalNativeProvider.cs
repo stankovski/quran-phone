@@ -10,11 +10,14 @@ using Windows.UI.Popups;
 using Quran.Windows.Utils;
 using Windows.UI.ViewManagement;
 using System.IO.Compression;
+using Windows.System.Display;
 
 namespace Quran.Windows.NativeProvider
 {
     public class UniversalNativeProvider : INativeProvider
     {
+        DisplayRequest _keepScreenOnRequest = null;
+
         public double ActualWidth
         {
             get
@@ -101,9 +104,21 @@ namespace Quran.Windows.NativeProvider
             await Launcher.LaunchUriAsync(new Uri(url));
         }
 
-        public async Task ToggleDeviceSleep(bool enable)
+        public void ToggleDeviceSleep(bool enable)
         {
-            throw new NotImplementedException();
+            if (!enable)
+            {
+                _keepScreenOnRequest = new DisplayRequest();
+                _keepScreenOnRequest.RequestActive();
+            }
+            else
+            {
+                if (_keepScreenOnRequest != null)
+                {
+                    _keepScreenOnRequest.RequestRelease();
+                    _keepScreenOnRequest = null;
+                }
+            }
         }
 
         public async Task ShowInfoMessageBox(string text)

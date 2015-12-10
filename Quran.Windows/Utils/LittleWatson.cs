@@ -33,7 +33,6 @@ namespace Quran.Windows.Utils
                     }
                 }
             }
-
             catch (Exception)
             {
             }

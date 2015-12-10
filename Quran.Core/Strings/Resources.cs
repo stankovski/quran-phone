@@ -438,5 +438,10 @@ namespace Quran.Core.Properties
         {
             get { return resourceLoader.GetString("share_ayah"); }
         }
+
+        public static string home 
+        {
+            get { return resourceLoader.GetString("home"); }
+        }
     }
 }

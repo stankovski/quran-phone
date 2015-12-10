@@ -751,4 +751,7 @@
   <data name="share_ayah" xml:space="preserve">
     <value>مشاركة الاية</value>
   </data>
+  <data name="home" xml:space="preserve">
+    <value>الصفحة الرئيسية</value>
+  </data>
 </root>

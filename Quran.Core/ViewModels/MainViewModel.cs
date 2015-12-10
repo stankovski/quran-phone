@@ -104,6 +104,12 @@ namespace Quran.Core.ViewModels
             await LoadBookmarkList();
             await base.Refresh();
         }
+        public IEnumerable<IGrouping<KeyValuePair<string, string>, ItemViewModel>> GetGrouppedSurahItems()
+        {
+            return from b in Surahs
+                   group b by new KeyValuePair<string, string>(b.Group.Substring(QuranUtils.GetJuzTitle().Length + 1), b.Group) into g
+                   select g;
+        }
 
         public IEnumerable<IGrouping<KeyValuePair<string, string>, ItemViewModel>> GetGrouppedBookmarks()
         {
@@ -212,34 +218,47 @@ namespace Quran.Core.ViewModels
         
         private void LoadSuraList()
         {
-            int surah = 1;
-            int next = 1;
-
-            for (int juz = 1; juz <= Constants.JUZ2_COUNT; juz++)
+            for (int surah = 1; surah <= Constants.SURAS_COUNT; surah++)
             {
+                string title = QuranUtils.GetSurahName(surah, true);
                 Surahs.Add(new ItemViewModel
                 {
-                    Id = QuranUtils.GetJuzTitle() + " " + juz,
-                    Title = QuranUtils.GetJuzTitle() + " " + juz,
-                    PageNumber = QuranUtils.JUZ_PAGE_START[juz - 1],
-                    ItemType = ItemViewModelType.Header
+                    Id = surah.ToString(CultureInfo.InvariantCulture),
+                    Title = title,
+                    Details = QuranUtils.GetSuraListMetaString(surah),
+                    PageNumber = QuranUtils.SURA_PAGE_START[surah - 1],
+                    ItemType = ItemViewModelType.Surah,
+                    Group = QuranUtils.GetJuzTitle() + " " + QuranUtils.GetJuzFromAyah(surah, 1)
                 });
-                next = (juz == Constants.JUZ2_COUNT) ? Constants.PAGES_LAST + 1 : QuranUtils.JUZ_PAGE_START[juz];
-
-                while ((surah <= Constants.SURAS_COUNT) && (QuranUtils.SURA_PAGE_START[surah - 1] < next))
-                {
-                    string title = QuranUtils.GetSurahName(surah, true);
-                    Surahs.Add(new ItemViewModel
-                    {
-                        Id = surah.ToString(CultureInfo.InvariantCulture),
-                        Title = title,
-                        Details = QuranUtils.GetSuraListMetaString(surah),
-                        PageNumber = QuranUtils.SURA_PAGE_START[surah - 1],
-                        ItemType = ItemViewModelType.Surah
-                    });
-                    surah++;
-                }
             }
+
+            //int surah = 1;
+            //int next = 1;
+            //for (int juz = 1; juz <= Constants.JUZ2_COUNT; juz++)
+            //{
+            //    Surahs.Add(new ItemViewModel
+            //    {
+            //        Id = QuranUtils.GetJuzTitle() + " " + juz,
+            //        Title = QuranUtils.GetJuzTitle() + " " + juz,
+            //        PageNumber = QuranUtils.JUZ_PAGE_START[juz - 1],
+            //        ItemType = ItemViewModelType.Header
+            //    });
+            //    next = (juz == Constants.JUZ2_COUNT) ? Constants.PAGES_LAST + 1 : QuranUtils.JUZ_PAGE_START[juz];
+
+            //    while ((surah <= Constants.SURAS_COUNT) && (QuranUtils.SURA_PAGE_START[surah - 1] < next))
+            //    {
+            //        string title = QuranUtils.GetSurahName(surah, true);
+            //        Surahs.Add(new ItemViewModel
+            //        {
+            //            Id = surah.ToString(CultureInfo.InvariantCulture),
+            //            Title = title,
+            //            Details = QuranUtils.GetSuraListMetaString(surah),
+            //            PageNumber = QuranUtils.SURA_PAGE_START[surah - 1],
+            //            ItemType = ItemViewModelType.Surah
+            //        });
+            //        surah++;
+            //    }
+            //}
         }
 
         private void LoadJuz2List()

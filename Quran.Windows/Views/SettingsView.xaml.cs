@@ -8,6 +8,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Media.Animation;
+using Windows.Graphics.Display;
 
 namespace Quran.Windows.Views
 {
@@ -18,6 +19,7 @@ namespace Quran.Windows.Views
 
         public SettingsView()
         {
+            DisplayInformation.AutoRotationPreferences = DisplayOrientations.None;
             ViewModel = QuranApp.SettingsViewModel;
             InitializeComponent();
         }
@@ -87,7 +89,7 @@ namespace Quran.Windows.Views
         {
             NavigationLinks.Add(new NavigationLink
             {
-                Label = "Home",
+                Label = Quran.Core.Properties.Resources.home,
                 Symbol = Symbol.Home,
                 Action = () => { Frame.Navigate(typeof(MainView)); }
             });

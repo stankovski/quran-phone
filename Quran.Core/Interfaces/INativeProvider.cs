@@ -16,7 +16,7 @@ namespace Quran.Core.Interfaces
         void CopyToClipboard(string text);
         Task ComposeEmail(string to, string subject, string body = null);
         Task LaunchWebBrowser(string url);
-        Task ToggleDeviceSleep(bool enable);
+        void ToggleDeviceSleep(bool enable);
         Task ShowInfoMessageBox(string text);
         Task ShowInfoMessageBox(string text, string title);
         Task<bool> ShowQuestionMessageBox(string text);

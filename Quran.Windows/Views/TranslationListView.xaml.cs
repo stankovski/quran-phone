@@ -8,6 +8,7 @@ using System.IO;
 using System.Collections.Generic;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Input;
+using Windows.Graphics.Display;
 
 namespace Quran.Windows.Views
 {
@@ -17,6 +18,7 @@ namespace Quran.Windows.Views
 
         public TranslationListView()
         {
+            DisplayInformation.AutoRotationPreferences = DisplayOrientations.None;
             ViewModel = QuranApp.TranslationsListViewModel;
             InitializeComponent();            
         }
