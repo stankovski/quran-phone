@@ -1,0 +1,189 @@
+﻿<UserControl x:Class="Quran.Windows.UI.AudioPlayerControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="clr-namespace:Quran.Windows.UI"
+    mc:Ignorable="d"
+    Name="ThisControl" 
+    d:DesignHeight="50" d:DesignWidth="480">
+    <UserControl.Resources>
+        <Style TargetType="Grid" x:Key="ControlButton">
+            <Setter Property="Width" Value="48"/>
+            <Setter Property="Height" Value="48"/>
+            <Setter Property="Background" Value="#00FFFFFF"/>
+            <Setter Property="Margin" Value="10 0 10 0"/>
+        </Style>
+        
+        <!--<Storyboard x:Name="GridStoryboard">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="LayoutRoot">
+                <EasingDoubleKeyFrame x:Name="GridStoryboardFrame" KeyTime="0" Value="-240"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <CircleEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Name="GridStoryboardReverse">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="LayoutRoot">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame x:Name="GridStoryboardReverseFrame" KeyTime="0:0:0.4" Value="-240"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>-->
+    </UserControl.Resources>
+
+    <Grid Background="{Binding ElementName=ThisControl, Path=Background}">
+        <Viewbox x:Name="LayoutRoot">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal" Grid.Column="1">
+                    <Grid>
+                        <Grid Name="SettingsButtonGrid" Visibility="Visible" Tapped="ButtonTap" Style="{StaticResource ControlButton}">
+                            <Path Data="M50.5,4.7500001C25.232973,4.75 4.75,25.232973 4.7500001,50.5 4.75,75.767029 25.232973,96.25 50.5,96.25 75.767029,96.25 96.25,75.767029 96.25,50.5 96.25,25.232973 75.767029,4.75 50.5,4.7500001z M50.5,0C78.390381,0 101,22.609621 101,50.5 101,78.390381 78.390381,101 50.5,101 22.609621,101 0,78.390381 0,50.5 0,22.609621 22.609621,0 50.5,0z" 
+                                  Stretch="Fill" Fill="{Binding Foreground, ElementName=ThisControl}" />
+                            <Path Data="M31.679651,15.723C22.841078,15.723 15.677,22.887022 15.677,31.724249 15.677,40.562878 22.841078,47.727002 31.679651,47.727002 40.518124,47.727002 47.682003,40.562878 47.682003,31.724249 47.682003,22.887022 40.518124,15.723 31.679651,15.723z M25.174641,0L30.947304,8.1649995 30.977009,8.163671C31.891628,8.1361193,32.811726,8.1617675,33.732849,8.2423577L34.116646,8.2807278 40.096367,0.5289996 49.181995,4.5158782 47.510448,14.236901 47.626137,14.339919C48.479649,15.11912,49.268909,15.955267,49.990528,16.839653L50.234638,17.14785 60.403648,15.836 64.007996,25.079203 55.322643,31.217757 55.324234,31.258986C55.34618,32.174153,55.314838,33.094563,55.22847,34.015755L55.226952,34.030385 63.345997,40.294331 59.359104,49.380002 49.249798,47.645153 49.143776,47.764214C48.695721,48.255009,48.228832,48.72456,47.744774,49.172226L47.324875,49.549786 48.723995,60.394425 39.48156,64 33.403603,55.403061 33.023663,55.43042C32.149929,55.481137,31.270197,55.483376,30.38839,55.435608L29.679308,55.383191 23.130268,63.875 14.041999,59.886834 15.844025,49.393521 15.71986,49.282948C15.207753,48.815411,14.718776,48.32737,14.253661,47.820706L13.803129,47.315312 3.612031,48.630002 0.0080004195,39.385499 8.0905037,33.673707 8.0481892,33.048829C7.9875851,31.908507,8.0095654,30.758269,8.1175261,29.606822L8.1191311,29.59272 0,23.328246 3.9867127,14.242 14.093521,15.978928 14.104487,15.966273C15.033746,14.935561,16.045525,13.997155,17.124784,13.156928L17.159048,13.131042 15.929999,3.6040602z" 
+                                  Stretch="Uniform" Fill="{Binding Foreground, ElementName=ThisControl}" Width="26" Height="26" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+                                <Path.RenderTransform>
+                                    <TransformGroup>
+                                        <TransformGroup.Children>
+                                            <RotateTransform Angle="0" />
+                                            <ScaleTransform ScaleX="1" ScaleY="1" />
+                                        </TransformGroup.Children>
+                                    </TransformGroup>
+                                </Path.RenderTransform>
+                            </Path>
+                        </Grid>
+                    </Grid>
+
+                    <Grid>
+                        <Grid Name="PreviousButtonGrid" Tapped="ButtonTap" Style="{StaticResource ControlButton}">
+                            <Path Data="M50.5,4.7500001C25.232973,4.75 4.75,25.232973 4.7500001,50.5 4.75,75.767029 25.232973,96.25 50.5,96.25 75.767029,96.25 96.25,75.767029 96.25,50.5 96.25,25.232973 75.767029,4.75 50.5,4.7500001z M50.5,0C78.390381,0 101,22.609621 101,50.5 101,78.390381 78.390381,101 50.5,101 22.609621,101 0,78.390381 0,50.5 0,22.609621 22.609621,0 50.5,0z" 
+                              Stretch="Fill" Fill="{Binding Foreground, ElementName=ThisControl}"/>
+                            <Path Data="F1M1914.87,1166.52L1914.87,1185.06 1923.04,1180.35 1937.85,1171.8 1937.85,1182.85 1942.18,1180.35 1956.99,1171.8 1956.99,1205.99 1942.18,1197.44 1937.85,1194.94 1937.85,1205.99 1923.04,1197.44 1914.87,1192.73 1914.87,1211.27 1903.62,1211.27 1903.62,1166.52 1914.87,1166.52z" 
+                              Stretch="Uniform" Fill="{Binding Foreground, ElementName=ThisControl}" Width="26" Height="26" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+                                <Path.RenderTransform>
+                                    <TransformGroup>
+                                        <TransformGroup.Children>
+                                            <RotateTransform Angle="0" />
+                                            <ScaleTransform ScaleX="1" ScaleY="1" />
+                                        </TransformGroup.Children>
+                                    </TransformGroup>
+                                </Path.RenderTransform>
+                            </Path>
+                        </Grid>
+                    </Grid>
+
+                    <!--<Grid>
+                        <Grid Name="StopButtonGrid" Visibility="Visible" Tap="ButtonTap" Style="{StaticResource ControlButton}">
+                            <Path Data="M50.5,4.7500001C25.232973,4.75 4.75,25.232973 4.7500001,50.5 4.75,75.767029 25.232973,96.25 50.5,96.25 75.767029,96.25 96.25,75.767029 96.25,50.5 96.25,25.232973 75.767029,4.75 50.5,4.7500001z M50.5,0C78.390381,0 101,22.609621 101,50.5 101,78.390381 78.390381,101 50.5,101 22.609621,101 0,78.390381 0,50.5 0,22.609621 22.609621,0 50.5,0z" 
+                              Stretch="Fill" Fill="{Binding Foreground, ElementName=ThisControl}" />
+                            <Path Data="M0,0L64.992,0 64.992,64.992 0,64.992z" 
+                          Stretch="Uniform" Fill="{Binding Foreground, ElementName=ThisControl}" Width="20" Height="20" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+                                <Path.RenderTransform>
+                                    <TransformGroup>
+                                        <TransformGroup.Children>
+                                            <RotateTransform Angle="0" />
+                                            <ScaleTransform ScaleX="1" ScaleY="1" />
+                                        </TransformGroup.Children>
+                                    </TransformGroup>
+                                </Path.RenderTransform>
+                            </Path>
+                        </Grid>
+                    </Grid>-->
+
+                    <Grid>
+                        <Grid Name="RepeatButtonGrid" Visibility="Visible" Tapped="ButtonTap" Style="{StaticResource ControlButton}">
+                            <Path Data="M50.5,4.7500001C25.232973,4.75 4.75,25.232973 4.7500001,50.5 4.75,75.767029 25.232973,96.25 50.5,96.25 75.767029,96.25 96.25,75.767029 96.25,50.5 96.25,25.232973 75.767029,4.75 50.5,4.7500001z M50.5,0C78.390381,0 101,22.609621 101,50.5 101,78.390381 78.390381,101 50.5,101 22.609621,101 0,78.390381 0,50.5 0,22.609621 22.609621,0 50.5,0z" 
+                              Stretch="Fill" Fill="{Binding Foreground, ElementName=ThisControl}" Visibility="Visible" />
+                            <Path Data="M15.321655,32.398L15.321655,42.452826 49.796757,42.452826C49.796757,42.452826 58.892929,42.133821 68.470001,32.557003 68.470001,32.557002 66.873604,54.583282 48.200459,54.583282L16.279953,54.583282 16.279953,64 0,47.719894z M52.667866,0L68.948006,16.278296 53.626068,31.599998 53.626068,21.545262 19.152094,21.545262C19.152094,21.545262 10.054473,21.86436 0.479,31.441099 0.479,31.441099 2.0753155,9.4152184 20.748596,9.4152184L52.667866,9.4152184z" 
+                          Stretch="Uniform" Fill="{Binding Foreground, ElementName=ThisControl}" Width="26" Height="26" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+                                <Path.RenderTransform>
+                                    <TransformGroup>
+                                        <TransformGroup.Children>
+                                            <RotateTransform Angle="0" />
+                                            <ScaleTransform ScaleX="1" ScaleY="1" />
+                                        </TransformGroup.Children>
+                                    </TransformGroup>
+                                </Path.RenderTransform>
+                            </Path>
+                        </Grid>
+                        <Grid>
+                            <Grid Name="NoRepeatButtonGrid" Visibility="Collapsed" Tapped="ButtonTap" Style="{StaticResource ControlButton}">
+                                <Path Data="M50.5,4.7500001C25.232973,4.75 4.75,25.232973 4.7500001,50.5 4.75,75.767029 25.232973,96.25 50.5,96.25 75.767029,96.25 96.25,75.767029 96.25,50.5 96.25,25.232973 75.767029,4.75 50.5,4.7500001z M50.5,0C78.390381,0 101,22.609621 101,50.5 101,78.390381 78.390381,101 50.5,101 22.609621,101 0,78.390381 0,50.5 0,22.609621 22.609621,0 50.5,0z" 
+                                  Stretch="Fill" Fill="{Binding Foreground, ElementName=ThisControl}" />
+                                <Path Data="M59.099632,39.490017L57.250008,41.329826 60.349377,44.429512 57.250008,47.519196 59.099632,49.369011 62.189003,46.269325 65.288376,49.369011 67.127998,47.519196 64.028633,44.429512 67.127998,41.329826 65.288376,39.490017 62.189003,42.589699z M61.966061,34.529999C67.383774,34.529999 71.781998,38.930473 71.781998,44.350945 71.781998,49.771538 67.383774,54.161999 61.966061,54.161999 56.548229,54.161999 52.150002,49.771538 52.150002,44.350945 52.150002,38.930473 56.548229,34.529999 61.966061,34.529999z M68.469994,32.557003C68.469994,32.557003,68.46376,32.643044,68.447502,32.804367L68.446114,32.817642 68.294243,32.730255z M15.321654,32.397999L15.321654,42.452827 48.878105,42.452827 48.808548,42.998447C48.763264,43.442883 48.740059,43.893784 48.740059,44.350033 48.740059,47.995041 50.225052,51.302544 52.621296,53.698799L52.984734,54.045361 52.271648,54.200977C51.013889,54.448845,49.659286,54.583282,48.200455,54.583282L16.27985,54.583282 16.27985,64 0,47.719894z M52.667892,0L68.947998,16.278296 53.625992,31.599998 53.625992,21.545263 19.15218,21.545263C19.15218,21.545263 10.054477,21.864361 0.47899973,31.441099 0.47899997,31.441099 2.0755544,9.4152184 20.748381,9.4152184L52.667892,9.4152184z" 
+                                  Stretch="Uniform" Fill="{Binding Foreground, ElementName=ThisControl}" Width="26" Height="26" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+                                    <Path.RenderTransform>
+                                        <TransformGroup>
+                                            <TransformGroup.Children>
+                                                <RotateTransform Angle="0" />
+                                                <ScaleTransform ScaleX="1" ScaleY="1" />
+                                            </TransformGroup.Children>
+                                        </TransformGroup>
+                                    </Path.RenderTransform>
+                                </Path>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+
+                    <Grid>
+                        <Grid Name="PlayButtonGrid" Visibility="Visible" Tapped="ButtonTap" Style="{StaticResource ControlButton}">
+                            <Path Data="M50.5,4.7500001C25.232973,4.75 4.75,25.232973 4.7500001,50.5 4.75,75.767029 25.232973,96.25 50.5,96.25 75.767029,96.25 96.25,75.767029 96.25,50.5 96.25,25.232973 75.767029,4.75 50.5,4.7500001z M50.5,0C78.390381,0 101,22.609621 101,50.5 101,78.390381 78.390381,101 50.5,101 22.609621,101 0,78.390381 0,50.5 0,22.609621 22.609621,0 50.5,0z" 
+                              Stretch="Fill" Fill="{Binding Foreground, ElementName=ThisControl}"/>
+                            <Path Data="F1M1188.2,1715.23L1169.93,1728.57 1151.66,1741.9 1151.66,1715.23 1151.66,1688.57 1169.93,1701.9 1188.2,1715.23z" 
+                              Stretch="Uniform" Fill="{Binding Foreground, ElementName=ThisControl}" Width="26" Height="26" Margin="5,0,0,0" RenderTransformOrigin="0.5,0.5">
+                                <Path.RenderTransform>
+                                    <TransformGroup>
+                                        <TransformGroup.Children>
+                                            <RotateTransform Angle="0" />
+                                            <ScaleTransform ScaleX="1" ScaleY="1" />
+                                        </TransformGroup.Children>
+                                    </TransformGroup>
+                                </Path.RenderTransform>
+                            </Path>
+                        </Grid>
+
+                        <Grid Name="PauseButtonGrid" Visibility="Collapsed" Tapped="ButtonTap" Style="{StaticResource ControlButton}">
+                            <Path Data="M50.5,4.7500001C25.232973,4.75 4.75,25.232973 4.7500001,50.5 4.75,75.767029 25.232973,96.25 50.5,96.25 75.767029,96.25 96.25,75.767029 96.25,50.5 96.25,25.232973 75.767029,4.75 50.5,4.7500001z M50.5,0C78.390381,0 101,22.609621 101,50.5 101,78.390381 78.390381,101 50.5,101 22.609621,101 0,78.390381 0,50.5 0,22.609621 22.609621,0 50.5,0z" 
+                              Stretch="Fill" Fill="{Binding Foreground, ElementName=ThisControl}" />
+                            <Path Data="M27.270001,0L44.310001,0 44.310001,48.643002 27.270001,48.643002z M0,0L17.040001,0 17.040001,48.643002 0,48.643002z" 
+                              Stretch="Uniform" Fill="{Binding Foreground, ElementName=ThisControl}" Width="20" Height="26" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+                                <Path.RenderTransform>
+                                    <TransformGroup>
+                                        <TransformGroup.Children>
+                                            <RotateTransform Angle="0" />
+                                            <ScaleTransform ScaleX="1" ScaleY="1" />
+                                        </TransformGroup.Children>
+                                    </TransformGroup>
+                                </Path.RenderTransform>
+                            </Path>
+                        </Grid>
+                    </Grid>
+
+                    <Grid>
+                        <Grid Name="NextButtonGrid" Tapped="ButtonTap" Style="{StaticResource ControlButton}">
+                            <Path Data="M50.5,4.7500001C25.232973,4.75 4.75,25.232973 4.7500001,50.5 4.75,75.767029 25.232973,96.25 50.5,96.25 75.767029,96.25 96.25,75.767029 96.25,50.5 96.25,25.232973 75.767029,4.75 50.5,4.7500001z M50.5,0C78.390381,0 101,22.609621 101,50.5 101,78.390381 78.390381,101 50.5,101 22.609621,101 0,78.390381 0,50.5 0,22.609621 22.609621,0 50.5,0z" 
+                              Stretch="Fill" Fill="{Binding Foreground, ElementName=ThisControl}"/>
+                            <Path Data="M51.123999,0L63.451998,0 63.451998,53.695001 51.123999,53.695001 51.123999,31.916129 41.651199,37.180778 23.059999,47.514001 23.059999,34.696918 18.590899,37.180778 0,47.514001 0,26.847556 0,6.1810005 18.590899,16.514234 23.059999,18.998118 23.059999,6.1810005 41.651199,16.514234 51.123999,21.778933z" Stretch="Uniform" 
+                              Fill="{Binding Foreground, ElementName=ThisControl}" Width="26" Height="26" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+                                <Path.RenderTransform>
+                                    <TransformGroup>
+                                        <TransformGroup.Children>
+                                            <RotateTransform Angle="0" />
+                                            <ScaleTransform ScaleX="1" ScaleY="1" />
+                                        </TransformGroup.Children>
+                                    </TransformGroup>
+                                </Path.RenderTransform>
+                            </Path>
+                        </Grid>
+                    </Grid>
+                </StackPanel>
+            </Grid>
+        </Viewbox>
+    </Grid>
+</UserControl>

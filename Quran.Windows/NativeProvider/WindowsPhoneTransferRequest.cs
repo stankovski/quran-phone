@@ -1,0 +1,112 @@
+﻿using System;
+using Microsoft.Phone.BackgroundTransfer;
+using Quran.Core.Common;
+
+namespace Quran.UniversalApp.NativeProvider
+{
+    public class WindowsTransferRequest : ITransferRequest
+    {
+        private readonly BackgroundTransferRequest request;
+        public WindowsTransferRequest(BackgroundTransferRequest request)
+        {
+            this.request = request;
+            if (this.request != null)
+            {
+                this.request.TransferProgressChanged += request_TransferProgressChanged;
+                this.request.TransferStatusChanged += request_TransferStatusChanged;
+            }
+        }
+
+        public BackgroundTransferRequest OriginalRequest
+        {
+            get { return request; }
+        }
+
+        public string RequestId
+        {
+            get { return request.RequestId; }
+        }
+
+        public Uri RequestUri
+        {
+            get { return request.RequestUri; }
+        }
+
+        public string Tag
+        {
+            get { return request.Tag; }
+            set { request.Tag = value; }
+        }
+
+        public Uri DownloadLocation
+        {
+            get { return request.DownloadLocation; }
+            set { request.DownloadLocation = value; }
+        }
+
+        public Uri UploadLocation
+        {
+            get { return request.UploadLocation; }
+            set { request.UploadLocation = value; }
+        }
+
+        public FileTransferStatus TransferStatus
+        {
+            get
+            {
+                if (IsCancelled)
+                    return FileTransferStatus.Cancelled;
+                else
+                    return (FileTransferStatus)((int)request.TransferStatus);
+            }
+        }
+
+        public Exception TransferError
+        {
+            get { return request.TransferError; }
+        }
+
+        public long TotalBytesToReceive
+        {
+            get { return request.TotalBytesToReceive; }
+        }
+
+        public long TotalBytesToSend
+        {
+            get { return request.TotalBytesToSend; }
+        }
+
+        public long BytesReceived
+        {
+            get { return request.BytesReceived; }
+        }
+
+        public long BytesSent
+        {
+            get { return request.BytesSent; }
+        }
+
+        public bool IsCancelled { get; private set; }
+
+        public void Cancel()
+        {
+            IsCancelled = true;
+        }
+
+        public event EventHandler<TransferEventArgs> TransferStatusChanged;
+
+        void request_TransferStatusChanged(object sender, BackgroundTransferEventArgs e)
+        {
+            if (TransferStatusChanged != null)
+                TransferStatusChanged(sender, new TransferEventArgs(this));
+        }
+
+        public event EventHandler<TransferEventArgs> TransferProgressChanged;
+
+        void request_TransferProgressChanged(object sender, BackgroundTransferEventArgs e)
+        {
+            if (TransferProgressChanged != null)
+                TransferProgressChanged(sender, new TransferEventArgs(this));
+        }
+    }
+}

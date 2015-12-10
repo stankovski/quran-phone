@@ -1,0 +1,306 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{C15BA72B-D865-46F7-B161-6F2D6D99209B}</ProjectGuid>
+    <OutputType>AppContainerExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Quran.Windows</RootNamespace>
+    <AssemblyName>Quran.Windows</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
+    <TargetPlatformVersion>10.0.10240.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.10240.0</TargetPlatformMinVersion>
+    <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
+    <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <PackageCertificateKeyFile>Quran.Windows_TemporaryKey.pfx</PackageCertificateKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ARM\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
+    <OutputPath>bin\ARM\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <EmbeddedResource Include="..\OfflineAssets\images_800.zip">
+      <Link>Assets\Offline\images_800.zip</Link>
+    </EmbeddedResource>
+    <Content Include="Assets\UthmanicHafs.otf" />
+    <None Include="project.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="NativeProvider\UniversalAudioProvider.cs" />
+    <Compile Include="NativeProvider\UniversalDownloadManager.cs" />
+    <Compile Include="NativeProvider\UniversalNativeProvider.cs" />
+    <Compile Include="NativeProvider\UniversalSettingsProvider.cs" />
+    <Compile Include="NativeProvider\UniversalTransferRequest.cs" />
+    <Compile Include="NativeProvider\UniversalHttpClientTransferRequest.cs" />
+    <Compile Include="NativeProvider\UniversalMultifileTransferRequest.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\ArabicFontSizeConverter.cs" />
+    <Compile Include="UI\AudioPlayerControl.xaml.cs">
+      <DependentUpon>AudioPlayerControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\BooleanInversionConverter.cs" />
+    <Compile Include="UI\BooleanToVisibilityConverter.cs" />
+    <Compile Include="UI\CachedImage.xaml.cs">
+      <DependentUpon>CachedImage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ConditionalColorConverter.cs" />
+    <Compile Include="UI\ConditionalStyleConverter.cs" />
+    <Compile Include="UI\CustomDataTemplateSelector.cs" />
+    <Compile Include="UI\DataTemplateSelector.cs" />
+    <Compile Include="UI\DownloadControl.xaml.cs">
+      <DependentUpon>DownloadControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ListHeader.xaml.cs">
+      <DependentUpon>ListHeader.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\LocalizedStrings.cs" />
+    <Compile Include="UI\ObservableDictionary.cs" />
+    <Compile Include="UI\PageLink.xaml.cs">
+      <DependentUpon>PageLink.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\RecitationItemTemplateSelector.cs" />
+    <Compile Include="UI\StringBrushConverter.cs" />
+    <Compile Include="UI\StyleConverter.cs" />
+    <Compile Include="UI\TextFormatConverter.cs" />
+    <Compile Include="UI\TranslationItemTemplateSelector.cs" />
+    <Compile Include="UI\TranslationView.xaml.cs">
+      <DependentUpon>TranslationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\UiExtensions.cs" />
+    <Compile Include="Utils\LittleWatson.cs" />
+    <Compile Include="Utils\PhoneUtils.cs" />
+    <Compile Include="Utils\SystemInfo.cs" />
+    <Compile Include="Views\DetailsView.xaml.cs">
+      <DependentUpon>DetailsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainView.xaml.cs">
+      <DependentUpon>MainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SettingsView.xaml.cs">
+      <DependentUpon>SettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TranslationListView.xaml.cs">
+      <DependentUpon>TranslationListView.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <AppxManifest Include="Package.appxmanifest">
+      <SubType>Designer</SubType>
+    </AppxManifest>
+    <None Include="Quran.Windows_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\ApplicationIcon.png" />
+    <Content Include="Assets\BadgeLogo.png" />
+    <Content Include="Assets\FlipCycleTileLarge.png" />
+    <Content Include="Assets\FlipCycleTileMedium.png" />
+    <Content Include="Assets\FlipCycleTileSmall.png" />
+    <Content Include="Assets\Images\favorite.png" />
+    <Content Include="Assets\Images\hizb_full.png" />
+    <Content Include="Assets\Images\hizb_half.png" />
+    <Content Include="Assets\Images\hizb_quarter.png" />
+    <Content Include="Assets\Images\hizb_threequarters.png" />
+    <Content Include="Assets\Images\icon.png" />
+    <Content Include="Assets\Images\ic_ab_settings.png" />
+    <Content Include="Assets\Images\ic_accept.png" />
+    <Content Include="Assets\Images\ic_cancel.png" />
+    <Content Include="Assets\Images\ic_delete.png" />
+    <Content Include="Assets\Images\ic_download.png" />
+    <Content Include="Assets\Images\ic_edit.png" />
+    <Content Include="Assets\Images\ic_goto_quran.png" />
+    <Content Include="Assets\Images\ic_new.png" />
+    <Content Include="Assets\Images\ic_next.png" />
+    <Content Include="Assets\Images\ic_pause.png" />
+    <Content Include="Assets\Images\ic_play.png" />
+    <Content Include="Assets\Images\ic_previous.png" />
+    <Content Include="Assets\Images\ic_repeat.png" />
+    <Content Include="Assets\Images\ic_select_all.png" />
+    <Content Include="Assets\Images\ic_sort.png" />
+    <Content Include="Assets\Images\ic_stop.png" />
+    <Content Include="Assets\Images\ic_tag.png" />
+    <Content Include="Assets\Images\ic_translation.png" />
+    <Content Include="Assets\Images\left.png" />
+    <Content Include="Assets\Images\not_favorite.png" />
+    <Content Include="Assets\Images\page-small.png" />
+    <Content Include="Assets\Images\recite.png" />
+    <Content Include="Assets\Images\right.png" />
+    <Content Include="Assets\Images\search.png" />
+    <Content Include="Assets\Images\settings.png" />
+    <Content Include="Assets\Images\stop.png" />
+    <Content Include="Assets\Images\sura_icon.png" />
+    <Content Include="Assets\logo-300.png" />
+    <Content Include="Assets\logo-large.png" />
+    <Content Include="Assets\Logo.png" />
+    <Content Include="Assets\quran_readers_urls.xml" />
+    <Content Include="Assets\SplashScreen.png" />
+    <Content Include="Assets\SplashScreen.scale-100.png" />
+    <Content Include="Assets\SplashScreen.scale-140.png" />
+    <Content Include="Assets\SplashScreen.scale-180.png" />
+    <Content Include="Assets\Square150.scale-100.png" />
+    <Content Include="Assets\Square150.scale-140.png" />
+    <Content Include="Assets\Square150.scale-180.png" />
+    <Content Include="Assets\Square150.scale-80.png" />
+    <Content Include="Assets\Square30.scale-100.png" />
+    <Content Include="Assets\Square30.scale-140.png" />
+    <Content Include="Assets\Square30.scale-180.png" />
+    <Content Include="Assets\Square30.scale-80.png" />
+    <Content Include="Assets\Square310.scale-100.png" />
+    <Content Include="Assets\Square310.scale-140.png" />
+    <Content Include="Assets\Square310.scale-180.png" />
+    <Content Include="Assets\Square310.scale-80.png" />
+    <Content Include="Assets\Square70.scale-100.png" />
+    <Content Include="Assets\Square70.scale-140.png" />
+    <Content Include="Assets\Square70.scale-180.png" />
+    <Content Include="Assets\Square70.scale-80.png" />
+    <Content Include="Assets\SquareTile150x150.png" />
+    <Content Include="Assets\SquareTile71x71.png" />
+    <Content Include="Assets\StoreIcon.png" />
+    <Content Include="Assets\Storelogo.scale-100.png" />
+    <Content Include="Assets\Storelogo.scale-140.png" />
+    <Content Include="Assets\Storelogo.scale-180.png" />
+    <Content Include="Assets\WideLogo.png" />
+    <Content Include="Assets\WideLogo150.scale-100.png" />
+    <Content Include="Assets\WideLogo150.scale-140.png" />
+    <Content Include="Assets\WideLogo150.scale-180.png" />
+    <Content Include="Assets\WideLogo150.scale-80.png" />
+    <Content Include="Properties\Default.rd.xml" />
+    <Content Include="Assets\StoreLogo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Page Include="UI\AudioPlayerControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\CachedImage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\DownloadControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\ListHeader.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\PageLink.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\TranslationView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\DetailsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TranslationListView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Quran.Core\Quran.Core.csproj">
+      <Project>{747706f4-ecbf-4d50-8d72-b0ddcc18395c}</Project>
+      <Name>Quran.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
+    <VisualStudioVersion>14.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

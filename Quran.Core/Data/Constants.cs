@@ -39,7 +39,7 @@ namespace Quran.Core.Data
         public const string PREF_LAST_PAGE = "lastPage";
         public const string PREF_LOCK_ORIENTATION = "lockOrientation";
         public const string PREF_LANDSCAPE_ORIENTATION = "landscapeOrientation";
-        [DefaultValue(25)]
+        [DefaultValue(18.0)]
         public const string PREF_TRANSLATION_TEXT_SIZE = "translationTextSize";
         public const string PREF_ACTIVE_TRANSLATION = "activeTranslation";
         [DefaultValue(false)]

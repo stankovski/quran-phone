@@ -7,9 +7,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quran.Core", "Quran.Core\Qu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quran.Core.Tests", "Quran.Core.Tests\Quran.Core.Tests.csproj", "{79E792BB-351D-4CC8-B43E-CF8BF02F6F36}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quran.WindowsPhone.AudioAgent", "Quran.WindowsPhone.AudioAgent\Quran.WindowsPhone.AudioAgent.csproj", "{4B1EA3F8-EE82-4DA1-9278-EACE4F3EC27F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quran.Windows.AudioAgent", "Quran.Windows.AudioAgent\Quran.Windows.AudioAgent.csproj", "{4B1EA3F8-EE82-4DA1-9278-EACE4F3EC27F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quran.WindowsPhone", "Quran.WindowsPhone\Quran.WindowsPhone.csproj", "{C15BA72B-D865-46F7-B161-6F2D6D99209B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quran.Windows", "Quran.Windows\Quran.Windows.csproj", "{C15BA72B-D865-46F7-B161-6F2D6D99209B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

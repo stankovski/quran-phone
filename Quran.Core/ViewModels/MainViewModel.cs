@@ -172,7 +172,7 @@ namespace Quran.Core.ViewModels
         /// Prepare offline zip for debugging purpose, this function will only be called
         /// on debug configuration.
         /// 
-        /// Reference: http://msdn.microsoft.com/en-us/library/windowsphone/develop/hh286411%28v=vs.105%29.aspx
+        /// Reference: http://msdn.microsoft.com/en-us/library/Windows/develop/hh286411%28v=vs.105%29.aspx
         /// </summary>
         private void prepareOfflineZip()
         {

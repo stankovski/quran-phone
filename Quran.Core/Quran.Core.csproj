@@ -148,10 +148,10 @@
     <Compile Include="Interfaces\ISettingsProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuranApp.cs" />
-    <Compile Include="Strings\en\Resources.cs">
+    <Compile Include="Strings\Resources.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resw</DependentUpon>
+      <DependentUpon>Resources.tt</DependentUpon>
     </Compile>
     <Compile Include="Utils\ArabicResharper.cs" />
     <Compile Include="Utils\AudioUtils.cs" />
@@ -184,6 +184,10 @@
     <Compile Include="ViewModels\VerseViewModel.cs" />
     <Compile Include="ViewModels\ViewModelWithDownload.cs" />
     <Content Include="Properties\Quran.Core2.rd.xml" />
+    <Content Include="Strings\Resources.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Resources.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <SDKReference Include="Microsoft.VCLibs, Version=14.0">
@@ -196,12 +200,11 @@
   <ItemGroup>
     <PRIResource Include="Strings\ar\Resources.resw" />
     <PRIResource Include="Strings\id\Resources.resw" />
-    <PRIResource Include="Strings\en\Resources.resw">
-      <Generator>ReswFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.cs</LastGenOutput>
-      <CustomToolNamespace>Quran.Core.Properties</CustomToolNamespace>
-    </PRIResource>
+    <PRIResource Include="Strings\en-US\Resources.resw" />
     <PRIResource Include="Strings\ru\Resources.resw" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
