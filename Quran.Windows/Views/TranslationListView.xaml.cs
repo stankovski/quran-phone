@@ -29,33 +29,7 @@ namespace Quran.Windows.Views
             await ViewModel.Initialize();
             TranslationViewSource.Source = ViewModel.Groups;
         }
-
-        protected override void OnNavigatedFrom(NavigationEventArgs e)
-        {
-            base.OnNavigatedFrom(e);
-        }
-
-        private void NavigationRequested(object sender, SelectionChangedEventArgs e)
-        {
-            var list = sender as ListView;
-            if (list == null || list.SelectedItem == null)
-                return;
-
-            var translation = (ObservableTranslationItem)list.SelectedItem;
-            if (translation == null)
-            {
-                return;
-            }
-
-            if (translation.Exists)
-            {
-                SettingsUtils.Set(Constants.PREF_ACTIVE_TRANSLATION, string.Join("|",
-                    Path.GetFileName(translation.LocalPath), translation.Name));
-                SettingsUtils.Set(Constants.PREF_SHOW_TRANSLATION, true);
-                Frame.GoBack();
-            }
-        }
-
+        
         private void NavigationRequested(object sender, TappedRoutedEventArgs e)
         {
             var list = sender as FrameworkElement;

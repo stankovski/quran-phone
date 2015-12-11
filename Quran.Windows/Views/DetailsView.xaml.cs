@@ -342,20 +342,18 @@ namespace Quran.Windows.Views
             if (DisplayInformation.AutoRotationPreferences == DisplayOrientations.None)
             {
                 link.Label = Quran.Core.Properties.Resources.auto_orientation;
-                if (QuranApp.NativeProvider.IsPortaitOrientation)
-                {
-                    DisplayInformation.AutoRotationPreferences = DisplayOrientations.Portrait | DisplayOrientations.PortraitFlipped;
-                }
-                else
-                {
-                    DisplayInformation.AutoRotationPreferences = DisplayOrientations.Landscape | DisplayOrientations.LandscapeFlipped;
-                }
+                DisplayInformation.AutoRotationPreferences = DisplayInformation.GetForCurrentView().CurrentOrientation;                
             }
             else
             {
                 link.Label = Quran.Core.Properties.Resources.keep_orientation;
                 DisplayInformation.AutoRotationPreferences = DisplayOrientations.None;
             }
-        }        
+        }
+
+        private void WindowsSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            ViewModel.Orientation = DisplayInformation.GetForCurrentView().CurrentOrientation;
+        }
     }
 }

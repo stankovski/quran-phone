@@ -123,7 +123,6 @@
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\RepeatInfo.cs" />
     <Compile Include="Common\RepeatManager.cs" />
-    <Compile Include="Common\ScreenOrientation.cs" />
     <Compile Include="Common\Tags.cs" />
     <Compile Include="Common\Timings.cs" />
     <Compile Include="Common\TransferEventArgs.cs" />

@@ -11,6 +11,10 @@ using Quran.Windows.Utils;
 using Windows.UI.ViewManagement;
 using System.IO.Compression;
 using Windows.System.Display;
+using Windows.Graphics.Display;
+using Windows.Storage.Streams;
+using System.IO;
+using Quran.Core.Utils;
 
 namespace Quran.Windows.NativeProvider
 {
@@ -34,11 +38,11 @@ namespace Quran.Windows.NativeProvider
             }
         }
 
-        public bool IsPortaitOrientation
+        public double ScaleFactor
         {
             get
             {
-                return ApplicationView.GetForCurrentView().Orientation == ApplicationViewOrientation.Portrait;
+                return DisplayInformation.GetForCurrentView().RawPixelsPerViewPixel;
             }
         }
 
@@ -77,7 +81,27 @@ namespace Quran.Windows.NativeProvider
 
         public Task ExtractZip(string source, string baseFolder)
         {
-            return Task.Run(() => ZipFile.ExtractToDirectory(source, baseFolder));
+            return Task.Run(() =>
+            {
+                //ZipFile.ExtractToDirectory(source, baseFolder);
+                using (var fileStream = File.OpenRead(source))
+                {
+                    ZipArchive archive = new ZipArchive(File.OpenRead(source));
+                    foreach (ZipArchiveEntry file in archive.Entries)
+                    {
+                        string completeFileName = Path.Combine(baseFolder, file.FullName);
+
+                        if (file.Name == "")
+                        {
+                            // Assuming Empty for Directory
+                            Directory.CreateDirectory(Path.GetDirectoryName(completeFileName));
+                            continue;
+                        }
+
+                        file.ExtractToFile(completeFileName, true);
+                    }
+                }
+            });
         }
 
         public void CopyToClipboard(string text)

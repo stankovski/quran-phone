@@ -69,6 +69,7 @@
 
         <!--ContentPanel - place additional content here-->
         <ListView x:Name="jmpTranslation" Grid.Row="1"
+                  SelectionMode="None"
                   ItemsSource="{Binding Source={StaticResource TranslationViewSource}}"
                   ItemTemplate="{StaticResource ZoomedInTemplate}">
             <ListView.GroupStyle>

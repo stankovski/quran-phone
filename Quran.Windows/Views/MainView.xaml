@@ -93,7 +93,7 @@
                                 <SemanticZoom>
                                     <SemanticZoom.ZoomedInView>
                                         <ListView ItemsSource="{Binding Source={StaticResource SurahViewSource}}" 
-                                          Tapped="NavigateLink">
+                                                  SelectionMode="None" Tapped="NavigateLink">
                                             <ListView.ItemTemplate>
                                                 <DataTemplate>
                                                     <Grid Height="55" VerticalAlignment="Center">
@@ -150,7 +150,7 @@
                                 <SemanticZoom>
                                     <SemanticZoom.ZoomedInView>
                                         <ListView ItemsSource="{Binding Source={StaticResource JuzViewSource}}" 
-                                          Tapped="NavigateLink">
+                                                  SelectionMode="None" Tapped="NavigateLink">
                                             <ListView.ItemTemplate>
                                                 <DataTemplate>
                                                     <Grid Height="55" VerticalAlignment="Center">
@@ -206,7 +206,7 @@
                                 <SemanticZoom>
                                     <SemanticZoom.ZoomedInView>
                                         <ListView ItemsSource="{Binding Source={StaticResource BookmarksViewSource}}" 
-                                          Tapped="NavigateLink">
+                                                  Tapped="NavigateLink" SelectionMode="None">
                                             <ListView.ItemTemplate>
                                                 <DataTemplate>
                                                     <Grid Height="55" VerticalAlignment="Center" RightTapped="BookmarkRightTapped">
@@ -287,7 +287,7 @@
                             </Grid>
                         </PivotItem>
                     </Pivot>
-                    <ui:DownloadControl ViewModel="{x:Bind ViewModel.ActiveDownload, Mode=OneWay}" Height="70" VerticalAlignment="Bottom"/>
+                    <ui:DownloadControl ViewModel="{x:Bind ViewModel.ActiveDownload, Mode=OneWay}" Height="60" VerticalAlignment="Bottom"/>
                 </Grid>
             </SplitView.Content>
         </SplitView>

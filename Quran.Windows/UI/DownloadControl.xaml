@@ -5,6 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="using:Quran.Windows.UI"
     mc:Ignorable="d"
+    Visibility="{x:Bind ViewModel.IsDownloading, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
     Name="ThisControl" Background="{StaticResource BlueText}" Foreground="White"
     d:DesignHeight="70" d:DesignWidth="480">
 
@@ -12,8 +13,7 @@
         <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
 
-    <Grid Visibility="{x:Bind ViewModel.IsDownloading, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
-          Background="{StaticResource BlueText}">
+    <Grid Background="{StaticResource BlueText}">
         <StackPanel Orientation="Vertical" VerticalAlignment="Center">
             <TextBlock HorizontalAlignment="Center"  Foreground="White"
                        Text="{x:Bind ViewModel.InstallationStep, Mode=OneWay}"/>

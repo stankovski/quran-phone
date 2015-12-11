@@ -8,7 +8,7 @@ namespace Quran.Core.Interfaces
     {
         double ActualWidth { get; }
         double ActualHeight { get; }
-        bool IsPortaitOrientation { get; }
+        double ScaleFactor { get; }
         IDownloadManager DownloadManager { get; }
         ISettingsProvider SettingsProvider { get; }
         IAudioProvider AudioProvider { get; }

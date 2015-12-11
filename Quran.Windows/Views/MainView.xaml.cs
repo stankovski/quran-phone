@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Quran.Core;
 using Quran.Core.Data;
 using Quran.Core.Properties;
@@ -48,7 +49,7 @@ namespace Quran.Windows.Views
             }
 
             // Show welcome message
-            showWelcomeMessage();
+            await ShowWelcomeMessage();
             
             // Show prompt to download content if not all images exist
             if (!await FileUtils.HaveAllImages())
@@ -70,7 +71,7 @@ namespace Quran.Windows.Views
         }
 
 
-        private void showWelcomeMessage()
+        private async Task ShowWelcomeMessage()
         {
             var versionFromConfig = new Version(SettingsUtils.Get<string>(Constants.PREF_CURRENT_VERSION));
             var nameHelper = SystemInfo.ApplicationName;
@@ -88,7 +89,7 @@ If you find any issues with the app or would like to provide suggestions, please
 
 Jazzakum Allahu Kheiran,
 Quran Phone Team";
-                QuranApp.NativeProvider.ShowInfoMessageBox(message, "Welcome");
+                await QuranApp.NativeProvider.ShowInfoMessageBox(message, "Welcome");
                 SettingsUtils.Set(Constants.PREF_CURRENT_VERSION, versionFromAssembly.ToString());
             }
         }
