@@ -509,4 +509,10 @@ the data used in the translations and Arabic comes from
   <data name="home" xml:space="preserve">
     <value>Главная страница</value>
   </data>
+  <data name="cancel" xml:space="preserve">
+    <value>Отменить</value>
+  </data>
+  <data name="select" xml:space="preserve">
+    <value>Выбрать</value>
+  </data>
 </root>

@@ -294,11 +294,11 @@
     </Grid>
     <Page.BottomAppBar>
         <CommandBar IsOpen="False">
-            <AppBarButton Label="Select" 
+            <AppBarButton Label="{Binding Path=LocalizedResources.select, Source={StaticResource LocalizedStrings}}" 
                           Icon="List" Click="SelectBookmarkItems" x:Name="SelectAppBarBtn"/>
             <AppBarButton Label="{Binding Path=LocalizedResources.delete_bookmark, Source={StaticResource LocalizedStrings}}" 
                           Icon="Delete" Click="RemoveBookmarkItem" x:Name="RemoveItemAppBarBtn"/>
-            <AppBarButton Label="Cancel" 
+            <AppBarButton Label="{Binding Path=LocalizedResources.cancel, Source={StaticResource LocalizedStrings}}" 
                           Icon="Cancel" Click="CancelBookmarkSelection" x:Name="CancelSelectionAppBarBtn"/>            
         </CommandBar>
     </Page.BottomAppBar>

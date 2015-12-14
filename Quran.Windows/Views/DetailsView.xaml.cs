@@ -12,6 +12,9 @@ using Quran.Windows.UI;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.Graphics.Display;
 using Windows.UI.ViewManagement;
+using System.Threading.Tasks;
+using Windows.UI.Input;
+using Windows.Foundation;
 
 namespace Quran.Windows.Views
 {
@@ -31,31 +34,16 @@ namespace Quran.Windows.Views
         {
             await ViewModel.Initialize();
             BuildLocalizedApplicationBar();
-
-            //ViewModel.Orientation = QuranApp.NativeProvider.IsPortaitOrientation ? 
-            //    ScreenOrientation.Portrait : 
-            //    ScreenOrientation.Landscape;
-
-            //DataContext = ViewModel;
-
-            //ayahContextMenu.Items.Add(new RadContextMenuItem() { Content = Resources.bookmark_ayah });
-            //if (FileUtils.HaveArabicSearchFile())
-            //{
-            //    ayahContextMenu.Items.Add(new RadContextMenuItem() {Content = Resources.copy});
-            //}
-            //ayahContextMenu.Items.Add(new RadContextMenuItem() { Content = Resources.recite_ayah });
-            //ayahContextMenu.Items.Add(new RadContextMenuItem() { Content = Resources.share_ayah });
-            //ayahContextMenu.ItemTapped += AyahContextMenuClick;
-            //ayahContextMenu.Closed += (obj, e) => ViewModel.SelectedAyah = null;
+            await BuildContextMenu();
 
             NavigationData parameters = e.Parameter as NavigationData;
             if (parameters == null)
             {
                 parameters = new NavigationData();
             }
-            
+
             ViewModel.CurrentPageNumber = SettingsUtils.Get<int>(Constants.PREF_LAST_PAGE);
-                
+
             //Monitor proprty changes
             ViewModel.PropertyChanged += (sender, args) =>
             {
@@ -103,32 +91,22 @@ namespace Quran.Windows.Views
             }
         }
 
+        private async Task BuildContextMenu()
+        {
+            var ayahContextMenu = this.Resources["AyahContextMenu"] as MenuFlyout;
+            ayahContextMenu.Items.Add(new MenuFlyoutItem() { Text = Core.Properties.Resources.bookmark_ayah });
+            if (await FileUtils.HaveArabicSearchFile())
+            {
+                ayahContextMenu.Items.Add(new MenuFlyoutItem() { Text = Core.Properties.Resources.copy });
+            }
+            ayahContextMenu.Items.Add(new MenuFlyoutItem() { Text = Core.Properties.Resources.recite_ayah });
+            ayahContextMenu.Items.Add(new MenuFlyoutItem() { Text = Core.Properties.Resources.share_ayah });
+            ayahContextMenu.Closed += (obj, ev) => ViewModel.SelectedAyah = null;
+        }
+
         private void ImageTap(object sender, RoutedEventArgs e)
         {
             ViewModel.SelectedAyah = null;
-        }
-
-        private async void ImageHold(object sender, RoutedEventArgs e)
-        {
-            //if (sender != null)
-            //{
-            //    if (!await FileUtils.HaveAyaPositionFile())
-            //    {
-            //        await ViewModel.DownloadAyahPositionFile();
-            //    }
-
-            //    var cachedImage = sender as CachedImage;
-            //    if (cachedImage == null)
-            //        return;
-
-            //    var ayah = await CachedImage.GetAyahFromGesture(e.GetPosition(cachedImage.Image),
-            //                                              ViewModel.CurrentPageNumber,
-            //                                              radSlideView.ActualWidth);
-            //    ViewModel.SelectedAyah = ayah;
-
-            //    //ayahContextMenu.RegionOfInterest = new Rect(e.GetPosition(ThisPage), new Size(50, 50));
-            //    //ayahContextMenu.IsOpen = true;
-            //}
         }
 
         private async void ImageDoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
@@ -275,6 +253,87 @@ namespace Quran.Windows.Views
         }
 
         #endregion Menu Events
+
+        #region Context menu events
+        private bool _IsPointerPressed = false;
+        private async void ImageHolding(object sender, HoldingRoutedEventArgs e)
+        {
+            if (sender != null)
+            {
+                if (!await FileUtils.HaveAyaPositionFile())
+                {
+                    await ViewModel.DownloadAyahPositionFile();
+                }
+
+                var cachedImage = sender as CachedImage;
+                if (cachedImage == null)
+                    return;
+
+                QuranAyah ayah = await CachedImage.GetAyahFromGesture(e.GetPosition(cachedImage.Image),
+                                                          ViewModel.CurrentPageNumber,
+                                                          radSlideView.ActualWidth);
+                ViewModel.SelectedAyah = ayah;
+
+                ShowContextMenu(ayah, null, e.GetPosition(ThisPage));
+            }
+        }
+        //private void TranslationItemHolding(object sender, HoldingRoutedEventArgs e)
+        //{
+        //    // Responding to HoldingState.Started will show a context menu while your finger is still down, while 
+        //    // HoldingState.Completed will wait until the user has removed their finger. 
+        //    if (e.HoldingState == HoldingState.Completed)
+        //    {
+        //        var PointerPosition = e.GetPosition(null);
+
+        //        var MyObject = (e.OriginalSource as FrameworkElement).DataContext as SampleDataModel;
+        //        ShowContextMenu(MyObject, null, PointerPosition);
+        //        e.Handled = true;
+
+        //        // This, combined with a check in OnRightTapped prevents the firing of RightTapped from
+        //        // launching another context menu
+        //        _IsPointerPressed = false;
+
+        //        // This prevents any scrollviewers from continuing to pan once the context menu is displayed.  
+        //        // Ideally, you should find the ListViewItem itself and only CancelDirectMinpulations on that item.  
+        //        var ItemsToCancel = VisualTreeHelper.FindElementsInHostCoordinates(PointerPosition, ItemListView);
+        //        foreach (var Item in ItemsToCancel)
+        //        {
+        //            var Result = Item.CancelDirectManipulations();
+        //        }
+        //    }
+
+        //    base.OnHolding(e);
+        //}
+
+        private async void ImageRightTapped(object sender, RightTappedRoutedEventArgs e)
+        {
+            if (sender != null)
+            {
+                if (!await FileUtils.HaveAyaPositionFile())
+                {
+                    await ViewModel.DownloadAyahPositionFile();
+                }
+
+                var cachedImage = sender as CachedImage;
+                if (cachedImage == null)
+                    return;
+
+                QuranAyah ayah = await CachedImage.GetAyahFromGesture(e.GetPosition(cachedImage.Image),
+                                                          ViewModel.CurrentPageNumber,
+                                                          radSlideView.ActualWidth);
+                ViewModel.SelectedAyah = ayah;
+
+                ShowContextMenu(ayah, null, e.GetPosition(ThisPage));
+            }
+        }
+
+        private void ShowContextMenu(QuranAyah data, UIElement target, Point offset)
+        {
+            var contextMenu = this.Resources["AyahContextMenu"] as MenuFlyout;
+
+            contextMenu.ShowAt(target, offset);
+        }
+        #endregion
 
         // Build a localized ApplicationBar
         private void BuildLocalizedApplicationBar()

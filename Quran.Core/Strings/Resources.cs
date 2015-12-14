@@ -443,5 +443,15 @@ namespace Quran.Core.Properties
         {
             get { return resourceLoader.GetString("home"); }
         }
+
+        public static string cancel 
+        {
+            get { return resourceLoader.GetString("cancel"); }
+        }
+
+        public static string select 
+        {
+            get { return resourceLoader.GetString("select"); }
+        }
     }
 }

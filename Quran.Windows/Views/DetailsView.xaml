@@ -13,6 +13,8 @@
 
     <Page.Resources>
         <ui:ArabicFontSizeConverter x:Key="ArabicFontSizeConverter"/>
+        <MenuFlyout x:Key="AyahContextMenu">
+        </MenuFlyout>
     </Page.Resources>
     <Grid Name="MainContainer" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <ProgressBar Value="{x:Bind ViewModel.AudioDownloadProgress, Mode=OneWay}"
@@ -102,7 +104,9 @@
                                             SelectedAyah="{x:Bind Parent.SelectedAyah, Mode=OneWay}"
                                             Padding="0,0,0,10"
                                             DoubleTapped="ImageDoubleTapped"
+                                            RightTapped="ImageRightTapped"
                                             Tapped="ImageTapped"
+                                            Holding="ImageHolding"
                                             Visibility="{x:Bind Parent.ShowTranslation, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
                                         </ui:CachedImage>
                                         <ListView x:Name="TranslationListBox" 

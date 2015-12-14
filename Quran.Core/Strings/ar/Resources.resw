@@ -754,4 +754,10 @@
   <data name="home" xml:space="preserve">
     <value>الصفحة الرئيسية</value>
   </data>
+  <data name="cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="select" xml:space="preserve">
+    <value>Select</value>
+  </data>
 </root>

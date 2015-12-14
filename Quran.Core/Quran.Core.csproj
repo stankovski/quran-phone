@@ -148,9 +148,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuranApp.cs" />
     <Compile Include="Strings\Resources.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
       <DependentUpon>Resources.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="Utils\ArabicResharper.cs" />
     <Compile Include="Utils\AudioUtils.cs" />
