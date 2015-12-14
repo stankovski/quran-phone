@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,12 +8,17 @@ using Quran.Core.Data;
 using Quran.Core.Properties;
 using Quran.Core.Utils;
 using Quran.Core.ViewModels;
+using Quran.Windows.UI;
 using Quran.Windows.Utils;
+using Windows.Foundation;
 using Windows.Graphics.Display;
+using Windows.UI.Core;
+using Windows.UI.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 namespace Quran.Windows.Views
@@ -29,6 +35,7 @@ namespace Quran.Windows.Views
             ViewModel = QuranApp.MainViewModel;
             SearchViewModel = QuranApp.SearchViewModel;
             InitializeComponent();
+            SystemNavigationManager.GetForCurrentView().BackRequested += OnBackRequested;
         }
 
         // Load data for the ViewModel Items
@@ -41,6 +48,9 @@ namespace Quran.Windows.Views
             BookmarksViewSource.Source = ViewModel.GetGrouppedBookmarks();
             BuildLocalizedApplicationBar();
             await LittleWatson.CheckForPreviousException();
+
+            // We set the state of the commands on the appbar
+            SetCommandsVisibility(BookmarksListView);
 
             // Remove all back navigation options
             while (Frame.BackStack.Count() > 0)
@@ -133,19 +143,6 @@ Quran Phone Team";
             list.SelectedItem = null;
         }
 
-        private void DeleteBookmark(object sender, RoutedEventArgs e)
-        {
-            var menuItem = sender as MenuFlyoutItem;
-            if (menuItem != null)
-            {
-                if (menuItem.DataContext != null)
-                {
-                    ViewModel.DeleteBookmark(menuItem.DataContext as ItemViewModel);
-                }
-            }
-            BookmarksViewSource.Source = ViewModel.GetGrouppedBookmarks();
-        }
-
         private void HamburgerButtonClick(object sender, RoutedEventArgs e)
         {
             MainSplitView.IsPaneOpen = !MainSplitView.IsPaneOpen;
@@ -160,8 +157,6 @@ Quran Phone Team";
                 item.Action();
             }
         }
-
-
 
         // Build a localized ApplicationBar
         private void BuildLocalizedApplicationBar()
@@ -184,9 +179,131 @@ Quran Phone Team";
             Frame.Navigate(typeof(SettingsView), "general");
         }
 
-        private void BookmarkRightTapped(object sender, RightTappedRoutedEventArgs e)
+        #region Context menu
+        private bool _isEnablingMultiselect = false;
+        private void PivotItemChanged(object sender, SelectionChangedEventArgs e)
         {
-            FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
+            if (MainPivot.SelectedItem == BookmarksPivotItem)
+            {
+                BottomAppBar.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                BottomAppBar.Visibility = Visibility.Collapsed;
+            }
         }
+
+        private void OnBookmarkListEdgeTapped(ListView sender, ListViewEdgeTappedEventArgs e)
+        {
+            _isEnablingMultiselect = true;
+            // When user releases the pointer after pessing on the left edge of the item,
+            // the ListView will switch to Multiple Selection 
+            BookmarksListView.SelectionMode = ListViewSelectionMode.Multiple;
+            // Also, we want the Left Edge Tap funcionality will be no longer enable. 
+            BookmarksListView.IsItemLeftEdgeTapEnabled = false;
+            // It's desirable that the Appbar shows the actions available for multiselect
+            SetCommandsVisibility(BookmarksListView);
+            _isEnablingMultiselect = false;
+        }
+
+        private void OnBookmarkListSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!_isEnablingMultiselect)
+            {
+                // When there are no selected items, the list returns to None selection mode.
+                if (BookmarksListView.SelectedItems.Count == 0)
+                {
+                    BookmarksListView.SelectionMode = ListViewSelectionMode.None;
+                    BookmarksListView.IsItemLeftEdgeTapEnabled = true;
+                    SetCommandsVisibility(BookmarksListView);
+                }
+            }
+        }
+
+        private void OnBackRequested(object sender, BackRequestedEventArgs e)
+        {
+            // We want to exit from the multiselect mode when pressing back button
+            if (BookmarksListView.SelectionMode == ListViewSelectionMode.Multiple)
+            {
+                BookmarksListView.SelectedItems.Clear();
+                BookmarksListView.SelectionMode = ListViewSelectionMode.None;
+                e.Handled = true;
+            }
+        }
+        private void SetCommandsVisibility(ListView listView)
+        {
+            if (listView.SelectionMode == ListViewSelectionMode.Multiple || listView.SelectedItems.Count > 1)
+            {
+                SelectAppBarBtn.Visibility = Visibility.Collapsed;
+                CancelSelectionAppBarBtn.Visibility = Visibility.Visible;
+                RemoveItemAppBarBtn.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                SelectAppBarBtn.Visibility = Visibility.Visible;
+                CancelSelectionAppBarBtn.Visibility = Visibility.Collapsed;
+                RemoveItemAppBarBtn.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void SelectBookmarkItems(object sender, RoutedEventArgs e)
+        {
+            _isEnablingMultiselect = true;
+            BookmarksListView.SelectionMode = ListViewSelectionMode.Multiple;
+            BookmarksListView.IsItemLeftEdgeTapEnabled = false;
+            SetCommandsVisibility(BookmarksListView);
+            _isEnablingMultiselect = false;
+        }
+
+        private void NavigateBookmarkLink(object sender, TappedRoutedEventArgs e)
+        {
+            if (BookmarksListView.SelectionMode == ListViewSelectionMode.None &&
+                BookmarksListView.SelectedItems.Count == 0)
+            {
+                NavigateLink(sender, e);
+                e.Handled = true;
+            }
+        }
+
+        private void CancelBookmarkSelection(object sender, RoutedEventArgs e)
+        {
+            if (!_isEnablingMultiselect)
+            {
+                // If the list is multiple selection mode but there is no items selected, 
+                // then the list should return to the initial selection mode.
+                if (BookmarksListView.SelectedItems.Count == 0)
+                {
+                    BookmarksListView.SelectionMode = ListViewSelectionMode.None;
+                    BookmarksListView.IsItemLeftEdgeTapEnabled = true;
+                    SetCommandsVisibility(BookmarksListView);
+                }
+                else
+                {
+                    BookmarksListView.SelectedItems.Clear();
+                }
+            }
+        }
+
+        private void RemoveBookmarkItem(object sender, RoutedEventArgs e)
+        {
+            if (BookmarksListView.SelectedIndex != -1)
+            {
+                // When an item is removed from the underlying collection, the Listview is updated, 
+                // hence the this.SelectedItems is updated as well. 
+                // It's needed to copy the selected items collection to iterate over other collection that 
+                // is not updated.
+                List<ItemViewModel> selectedItems = new List<ItemViewModel>();
+                foreach (ItemViewModel item in BookmarksListView.SelectedItems)
+                {
+                    selectedItems.Add(item);
+                }
+                foreach (ItemViewModel item in selectedItems)
+                {
+                    ViewModel.DeleteBookmark(item);
+                }
+                BookmarksViewSource.Source = ViewModel.GetGrouppedBookmarks();
+            }
+        }
+        #endregion
     }
 }

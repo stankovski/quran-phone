@@ -124,6 +124,7 @@
     <Compile Include="UI\DownloadControl.xaml.cs">
       <DependentUpon>DownloadControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\EdgeTappedListView.cs" />
     <Compile Include="UI\ListHeader.xaml.cs">
       <DependentUpon>ListHeader.xaml</DependentUpon>
     </Compile>

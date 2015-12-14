@@ -77,7 +77,7 @@
             </SplitView.Pane>
             <SplitView.Content>
                 <Grid x:Name="MainPanel">
-                    <Pivot x:Name="MainPivot">
+                    <Pivot x:Name="MainPivot" SelectionChanged="PivotItemChanged">
                         <PivotItem Margin="0">
                             <PivotItem.Header>
                                 <StackPanel>
@@ -191,7 +191,7 @@
                                 </SemanticZoom>                                
                             </Grid>
                         </PivotItem>
-                        <PivotItem Margin="0">
+                        <PivotItem Margin="0" x:Name="BookmarksPivotItem">
                             <PivotItem.Header>
                                 <StackPanel>
                                     <SymbolIcon Symbol="Favorite"/>
@@ -205,17 +205,17 @@
                                 </Grid.Resources>
                                 <SemanticZoom>
                                     <SemanticZoom.ZoomedInView>
-                                        <ListView ItemsSource="{Binding Source={StaticResource BookmarksViewSource}}" 
-                                                  Tapped="NavigateLink" SelectionMode="None">
-                                            <ListView.ItemTemplate>
+                                        <ui:EdgeTappedListView  x:Name="BookmarksListView"
+                                                   ItemsSource="{Binding Source={StaticResource BookmarksViewSource}}" 
+                                                   LeftEdgeBrush="{StaticResource BlueText}"
+                                                   ItemLeftEdgeTapped="OnBookmarkListEdgeTapped" 
+                                                   SelectionChanged="OnBookmarkListSelectionChanged"
+                                                   Tapped="NavigateBookmarkLink"
+                                                   IsItemLeftEdgeTapEnabled="True"
+                                                   SelectionMode="None">
+                                            <ui:EdgeTappedListView.ItemTemplate>
                                                 <DataTemplate>
-                                                    <Grid Height="55" VerticalAlignment="Center" RightTapped="BookmarkRightTapped">
-                                                        <FlyoutBase.AttachedFlyout>
-                                                            <MenuFlyout>
-                                                                <MenuFlyoutItem Text="{Binding Path=LocalizedResources.delete_bookmark, Source={StaticResource LocalizedStrings}}" 
-                                                                                Tag="Delete" Click="DeleteBookmark" />
-                                                            </MenuFlyout>
-                                                        </FlyoutBase.AttachedFlyout>
+                                                    <Grid Height="55" VerticalAlignment="Center">
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="80"/>
                                                             <ColumnDefinition Width="*"/>
@@ -233,17 +233,17 @@
                                                         VerticalAlignment="Center"/>
                                                     </Grid>
                                                 </DataTemplate>
-                                            </ListView.ItemTemplate>
-                                            <ListView.GroupStyle>
+                                            </ui:EdgeTappedListView.ItemTemplate>
+                                            <ui:EdgeTappedListView.GroupStyle>
                                                 <GroupStyle HeaderTemplate="{StaticResource ZoomedInGroupHeaderTemplate}" />
-                                            </ListView.GroupStyle>
-                                            <ListView.ItemContainerStyle>
+                                            </ui:EdgeTappedListView.GroupStyle>
+                                            <ui:EdgeTappedListView.ItemContainerStyle>
                                                 <Style TargetType="ListViewItem">
                                                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                                                     <Setter Property="VerticalContentAlignment" Value="Center" />
                                                 </Style>
-                                            </ListView.ItemContainerStyle>
-                                        </ListView>
+                                            </ui:EdgeTappedListView.ItemContainerStyle>
+                                        </ui:EdgeTappedListView>
                                     </SemanticZoom.ZoomedInView>
                                     <SemanticZoom.ZoomedOutView>
                                         <ListView ItemsSource="{Binding Source={StaticResource BookmarksViewSource}, Path=CollectionGroups}"
@@ -292,4 +292,14 @@
             </SplitView.Content>
         </SplitView>
     </Grid>
+    <Page.BottomAppBar>
+        <CommandBar IsOpen="False">
+            <AppBarButton Label="Select" 
+                          Icon="List" Click="SelectBookmarkItems" x:Name="SelectAppBarBtn"/>
+            <AppBarButton Label="{Binding Path=LocalizedResources.delete_bookmark, Source={StaticResource LocalizedStrings}}" 
+                          Icon="Delete" Click="RemoveBookmarkItem" x:Name="RemoveItemAppBarBtn"/>
+            <AppBarButton Label="Cancel" 
+                          Icon="Cancel" Click="CancelBookmarkSelection" x:Name="CancelSelectionAppBarBtn"/>            
+        </CommandBar>
+    </Page.BottomAppBar>
 </Page>
