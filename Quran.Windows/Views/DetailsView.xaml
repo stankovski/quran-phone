@@ -82,11 +82,15 @@
                     </Grid>
                 </SplitView.Pane>
                 <SplitView.Content>
-                    <StackPanel>
-                        <ui:DownloadControl ViewModel="{x:Bind ViewModel.ActiveDownload, Mode=OneWay}" 
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <ui:DownloadControl Grid.Row="0" ViewModel="{x:Bind ViewModel.ActiveDownload, Mode=OneWay}" 
                                             Visibility="{x:Bind ViewModel.ActiveDownload.IsDownloading, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
                                             VerticalAlignment="Top" Height="60"/>
-                        <FlipView x:Name="radSlideView" ItemsSource="{x:Bind ViewModel.Pages}"
+                        <FlipView Grid.Row="1" x:Name="radSlideView" ItemsSource="{x:Bind ViewModel.Pages}"
                             FlowDirection="LeftToRight"
                             Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
                             SelectedIndex="{x:Bind ViewModel.CurrentPageIndex, Mode=TwoWay}">
@@ -117,7 +121,7 @@
                                 </DataTemplate>
                             </FlipView.ItemTemplate>
                         </FlipView>
-                    </StackPanel>                    
+                    </Grid>                    
                 </SplitView.Content>
             </SplitView>
         </Grid>
