@@ -111,6 +111,8 @@
                                         </ui:CachedImage>
                                         <ListView x:Name="TranslationListBox" 
                                             DoubleTapped="ListViewDoubleTap"
+                                            Holding="TranslationItemHolding"
+                                            RightTapped="TranslationItemRightTapped"
                                             Visibility="{x:Bind Parent.ShowTranslation, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
                                             ItemsSource="{x:Bind Translations}" SelectionMode="None">
                                             <ListView.ItemTemplate>

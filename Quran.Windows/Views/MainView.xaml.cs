@@ -46,7 +46,7 @@ namespace Quran.Windows.Views
             SurahViewSource.Source = ViewModel.GetGrouppedSurahItems();
             JuzViewSource.Source = ViewModel.GetGrouppedJuzItems();
             BookmarksViewSource.Source = ViewModel.GetGrouppedBookmarks();
-            BuildLocalizedApplicationBar();
+            BuildLocalizedMenu();
             await LittleWatson.CheckForPreviousException();
 
             // We set the state of the commands on the appbar
@@ -159,7 +159,7 @@ Quran Phone Team";
         }
 
         // Build a localized ApplicationBar
-        private void BuildLocalizedApplicationBar()
+        private void BuildLocalizedMenu()
         {
             NavigationLinks.Add(new NavigationLink
             {
