@@ -211,11 +211,19 @@ Quran Phone Team";
             if (!_isEnablingMultiselect)
             {
                 // When there are no selected items, the list returns to None selection mode.
-                if (BookmarksListView.SelectedItems.Count == 0)
+                if (BookmarksListView.SelectedItems.Count == 0 &&
+                    BookmarksListView.SelectionMode == ListViewSelectionMode.Multiple)
                 {
                     BookmarksListView.SelectionMode = ListViewSelectionMode.None;
                     BookmarksListView.IsItemLeftEdgeTapEnabled = true;
                     SetCommandsVisibility(BookmarksListView);
+                }
+
+
+                if (BookmarksListView.SelectedItems.Count > 0 &&
+                    BookmarksListView.SelectionMode == ListViewSelectionMode.None)
+                {
+                    BookmarksListView.SelectedItem = null;
                 }
             }
         }

@@ -261,18 +261,31 @@ namespace Quran.Windows.Views
             {
                 item.Click += AyahContextMenuClick;
             }
-            ayahContextMenu.Closed += (obj, ev) => ViewModel.SelectedAyah = null;
+            ayahContextMenu.Closed += (obj, ev) =>
+            {
+                _isShowingContextMenu = false;
+                ViewModel.SelectedAyah = null;
+            };
         }
 
         #region Context menu events
+        private bool _isShowingContextMenu = false;
         private async void ImageHolding(object sender, HoldingRoutedEventArgs e)
         {
-            await ImageHoldingOrRightTapped(sender, (ui) => { return e.GetPosition(ui); });
+            if (!_isShowingContextMenu)
+            {
+                _isShowingContextMenu = true;
+                await ImageHoldingOrRightTapped(sender, (ui) => { return e.GetPosition(ui); });
+            }
         }
 
         private async void ImageRightTapped(object sender, RightTappedRoutedEventArgs e)
         {
-            await ImageHoldingOrRightTapped(sender, (ui) => { return e.GetPosition(ui); });
+            if (!_isShowingContextMenu)
+            {
+                _isShowingContextMenu = true;
+                await ImageHoldingOrRightTapped(sender, (ui) => { return e.GetPosition(ui); });
+            }
         }
 
         private async Task ImageHoldingOrRightTapped(object sender, Func<UIElement, Point> getPosition)
@@ -297,12 +310,20 @@ namespace Quran.Windows.Views
 
         private void TranslationItemHolding(object sender, HoldingRoutedEventArgs e)
         {
-            TranslationItemHoldingOrRightTapped(sender, e.GetPosition(null), e.OriginalSource);
+            if (!_isShowingContextMenu)
+            {
+                _isShowingContextMenu = true;
+                TranslationItemHoldingOrRightTapped(sender, e.GetPosition(null), e.OriginalSource);
+            }
         }
 
         private void TranslationItemRightTapped(object sender, RightTappedRoutedEventArgs e)
         {
-            TranslationItemHoldingOrRightTapped(sender, e.GetPosition(null), e.OriginalSource);
+            if (!_isShowingContextMenu)
+            {
+                _isShowingContextMenu = true;
+                TranslationItemHoldingOrRightTapped(sender, e.GetPosition(null), e.OriginalSource);
+            }
         }
 
         private void TranslationItemHoldingOrRightTapped(object sender, Point pointerPosition, object originalSource)
