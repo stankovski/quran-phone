@@ -79,7 +79,7 @@ namespace Quran.Windows.UI
             {
                 try
                 {
-                    string basePath = await FileUtils.GetQuranDatabaseDirectory();
+                    string basePath = FileUtils.GetQuranDatabaseDirectory();
                     if (basePath == null) return;
                     string path = System.IO.Path.Combine(basePath, FileUtils.GetAyaPositionFileName());
                     if (await FileUtils.FileExists(path))
@@ -171,7 +171,7 @@ namespace Quran.Windows.UI
                 }
 
                 var uriBuilder = new UriBuilder(source);
-                var localPath = System.IO.Path.Combine(await FileUtils.GetQuranDirectory(), System.IO.Path.GetFileName(uriBuilder.Path));
+                var localPath = System.IO.Path.Combine(FileUtils.GetQuranDirectory(), System.IO.Path.GetFileName(uriBuilder.Path));
                 bool downloadSuccessful = true;
 
                 if (source.Scheme == "http")
@@ -352,7 +352,7 @@ namespace Quran.Windows.UI
             try
             {
                 var position = adjustPoint(p, width);
-                string basePath = await FileUtils.GetQuranDatabaseDirectory();
+                string basePath = FileUtils.GetQuranDatabaseDirectory();
                 if (basePath == null) 
                     return null;
                 string path = System.IO.Path.Combine(basePath, FileUtils.GetAyaPositionFileName());

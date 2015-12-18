@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Quran.Core.Tests.Database
 {
-    public class ReciterTests
+    public class ReciterTests : BaseTest
     {
         [Fact]
         public void RecitersDatabaseHandlerContainsReciters()

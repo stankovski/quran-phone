@@ -151,7 +151,7 @@ namespace Quran.Core.Data
             {
                 var reciter = inMemoryDatabase[id];
                 reciter.Id = id;
-                reciter.LocalPath = Path.Combine(FileUtils.RunSync(() => FileUtils.GetQuranAudioDirectory()),
+                reciter.LocalPath = Path.Combine(FileUtils.GetQuranAudioDirectory(),
                     reciter.Name.Replace(".", "").Replace("(", "").Replace(")", "").Replace(" ", "_"));
                 if (reciter.IsGapless)
                     reciter.GaplessDatabasePath = Path.Combine(reciter.LocalPath, reciter.GaplessDatabasePath);

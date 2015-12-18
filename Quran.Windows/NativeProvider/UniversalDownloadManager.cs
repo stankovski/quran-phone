@@ -75,7 +75,7 @@ namespace Quran.Windows.NativeProvider
         {
             var requestUri = request.RequestedUri;
             var requestUriHash = CryptoUtils.GetHash(requestUri.ToString());
-            var trackerDir = await FileUtils.GetDowloadTrackerDirectory();
+            var trackerDir = FileUtils.GetDowloadTrackerDirectory();
             await FileUtils.WriteFile(string.Format("{0}\\{1}", trackerDir, requestUriHash), request.RequestedUri.ToString());
         }
 
@@ -83,14 +83,14 @@ namespace Quran.Windows.NativeProvider
         {
             var requestUri = request.RequestedUri;
             var requestUriHash = CryptoUtils.GetHash(requestUri.ToString());
-            var trackerDir = await FileUtils.GetDowloadTrackerDirectory();
+            var trackerDir = FileUtils.GetDowloadTrackerDirectory();
             await FileUtils.DeleteFile(string.Format("{0}\\{1}", trackerDir, requestUriHash));
         }
 
         public async Task<ITransferRequest> GetRequest(string serverUri)
         {
             var requestUriHash = CryptoUtils.GetHash(serverUri);
-            var trackerDir = await FileUtils.GetDowloadTrackerDirectory();
+            var trackerDir = FileUtils.GetDowloadTrackerDirectory();
             var requestId = await FileUtils.ReadFile(string.Format("{0}\\{1}", trackerDir, requestUriHash));
             if (!string.IsNullOrEmpty(requestId))
             {

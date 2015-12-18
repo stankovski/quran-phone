@@ -107,6 +107,13 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BackgroundTask\MessageService.cs" />
+    <Compile Include="BackgroundTask\SkipNextMessage.cs" />
+    <Compile Include="BackgroundTask\SkipPreviousMessage.cs" />
+    <Compile Include="BackgroundTask\SongModel.cs" />
+    <Compile Include="BackgroundTask\StartPlaybackMessage.cs" />
+    <Compile Include="BackgroundTask\TrackChangedMessage.cs" />
+    <Compile Include="BackgroundTask\UpdatePlaylistMessage.cs" />
     <Compile Include="Common\AudioPlayerPlayState.cs" />
     <Compile Include="Common\AudioRequest.cs" />
     <Compile Include="Common\AudioState.cs" />

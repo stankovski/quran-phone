@@ -12,7 +12,7 @@ namespace Quran.Core.Data
 
         protected BaseDatabaseHandler(string databaseName)
         {
-            string basePath = FileUtils.RunSync(() => FileUtils.GetQuranDatabaseDirectory());
+            string basePath = FileUtils.GetQuranDatabaseDirectory();
             if (basePath == null) return;
             string path = Path.Combine(QuranApp.NativeProvider.NativePath, basePath, databaseName);
 

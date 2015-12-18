@@ -22,7 +22,7 @@ namespace Quran.Core.ViewModels
             this.Name = item.Name;
             this.Translator = item.Translator;
             this.Exists = item.Exists;
-            this.LocalPath = Path.Combine(FileUtils.RunSync(() => FileUtils.GetQuranDatabaseDirectory()), item.Filename);
+            this.LocalPath = Path.Combine(FileUtils.GetQuranDatabaseDirectory(), item.Filename);
             _isCompressed = item.Compressed;
             _serverUrl = item.Url;
         }

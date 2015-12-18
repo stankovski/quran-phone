@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using FluentAssertions;
 using Quran.Core.Common;
 using Quran.Core.Data;
 using Quran.Core.Utils;
@@ -236,7 +235,7 @@ namespace Quran.Core.Tests.Utils
             var database = new RecitersDatabaseHandler();
             var reciter = database.GetGaplessReciters().First(r => r.LocalPath.Contains("Minshawi_Murattal_gapless"));
             var fileName = AudioUtils.GetLocalPathForAyah(new QuranAyah(2, 1), reciter);
-            Assert.Equal("quran_android/audio/Minshawi_Murattal_gapless/002.mp3", fileName);
+            Assert.True(fileName.EndsWith("audio\\Minshawi_Murattal_gapless\\002.mp3", StringComparison.Ordinal));
         }
 
         [Fact]
@@ -245,7 +244,7 @@ namespace Quran.Core.Tests.Utils
             var database = new RecitersDatabaseHandler();
             var reciter = database.GetNonGaplessReciters().First(r => r.LocalPath.Contains("Abd_Al-Basit"));
             var fileName = AudioUtils.GetLocalPathForAyah(new QuranAyah(2, 1), reciter);
-            Assert.Equal("quran_android/audio/Abd_Al-Basit/002001.mp3", fileName);
+            Assert.True(fileName.EndsWith("audio\\Abd_Al-Basit\\002001.mp3", StringComparison.Ordinal));
         }
 
         [Theory]

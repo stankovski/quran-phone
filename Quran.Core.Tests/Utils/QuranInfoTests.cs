@@ -1,5 +1,4 @@
 ﻿using System;
-using FluentAssertions;
 using Quran.Core.Common;
 using Quran.Core.Utils;
 using Xunit;

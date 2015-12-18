@@ -84,7 +84,7 @@ namespace Quran.Core.ViewModels
         public override async Task Initialize()
         {
             _zipFileServerUrl = FileUtils.GetZipFileUrl();
-            _zipFileLocalPath = Path.Combine(await FileUtils.GetQuranBaseDirectory(), 
+            _zipFileLocalPath = Path.Combine(FileUtils.GetQuranBaseDirectory(), 
                 Path.GetFileName(_zipFileServerUrl));
 
             if (!this.IsDataLoaded)

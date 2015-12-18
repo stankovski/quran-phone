@@ -33,11 +33,11 @@ namespace Quran.Core.Utils
             initialized = true;
 
             // Initialize directory
-            FileUtils.RunSync(() => MakeQuranDirectory());
-            FileUtils.RunSync(() => MakeQuranDatabaseDirectory());
+            MakeQuranDirectory();
+            MakeQuranDatabaseDirectory();
 
             // Delete stuck files
-            FileUtils.RunSync(() => DeleteStuckFiles());
+            DeleteStuckFiles();
         }
         
         /// <summary>
@@ -78,7 +78,7 @@ namespace Quran.Core.Utils
             }
             catch (Exception)
             { 
-                var tempPath = await GetUndeletedFilesDirectory();
+                var tempPath = GetUndeletedFilesDirectory();
                 await WriteFile(Path.Combine(tempPath, string.Format("{0}.txt", Guid.NewGuid())), path);
                 return false;
             }
@@ -87,7 +87,7 @@ namespace Quran.Core.Utils
 
         public static async Task DeleteStuckFiles()
         {
-            var path = await GetUndeletedFilesDirectory();
+            var path = GetUndeletedFilesDirectory();
             try
             {
                 var folder = await StorageFolder.GetFolderFromPathAsync(path);
@@ -209,9 +209,9 @@ namespace Quran.Core.Utils
         /// Creates Quran root directory and writes no-media file in it
         /// </summary>
         /// <returns></returns>
-        public static Task MakeQuranDirectory()
+        public static void MakeQuranDirectory()
         {
-            return GetQuranDirectory();
+            GetQuranDirectory();
         }
 
         public static async Task WriteFile(string path, string content)
@@ -244,31 +244,31 @@ namespace Quran.Core.Utils
 
         public static async Task WriteNoMediaFile()
         {
-            await WriteFile(Path.Combine(await GetQuranDirectory(), "/.nomedia"), " ");
+            await WriteFile(Path.Combine(GetQuranDirectory(), "/.nomedia"), " ");
         }
 
         public static async Task<bool> MediaFileExists()
         {
-            return await FileExists(Path.Combine(await GetQuranDirectory(), "/.nomedia"));
+            return await FileExists(Path.Combine(GetQuranDirectory(), "/.nomedia"));
         }
 
         public static async Task DeleteNoMediaFile()
         {
-            await DeleteFile(Path.Combine(await GetQuranDirectory(), "/.nomedia"));
+            await DeleteFile(Path.Combine(GetQuranDirectory(), "/.nomedia"));
         }
 
         /// <summary>
         /// Creates Quran DB directory and writes no-media file in it
         /// </summary>
         /// <returns></returns>
-        public static Task MakeQuranDatabaseDirectory()
+        public static void MakeQuranDatabaseDirectory()
         {
-            return GetQuranDatabaseDirectory();
+            GetQuranDatabaseDirectory();
         }
 
         public static async Task<bool> HaveAllImages()
         {
-            var quranFolderPath = await GetQuranDirectory();
+            var quranFolderPath = GetQuranDirectory();
             var quranFolder = await StorageFolder.GetFolderFromPathAsync(quranFolderPath);
             var imageFiles = quranFolder.CreateFileQuery();
             // Should have at least 95% of pages; of more than that it's not efficient to download the ZIP
@@ -294,7 +294,7 @@ namespace Quran.Core.Utils
 
         public static async Task<Uri> GetImageFromStorage(string filename)
         {
-            string location = await GetQuranDirectory();
+            string location = GetQuranDirectory();
             var quranFolder = await StorageFolder.GetFolderFromPathAsync(location);
             var image = await quranFolder.TryGetItemAsync(filename);
             if (image == null)
@@ -350,27 +350,27 @@ namespace Quran.Core.Utils
             }
         }
 
-        public static Task<string> GetQuranAudioDirectory()
+        public static string GetQuranAudioDirectory()
         {
             return GetSubdirectory(AUDIO_DIRECTORY);
         }
         
-        public static Task<string> GetQuranDatabaseDirectory()
+        public static string GetQuranDatabaseDirectory()
         {
             return GetSubdirectory(DATABASE_DIRECTORY);
         }
 
-        public static Task<string> GetDowloadTrackerDirectory()
+        public static string GetDowloadTrackerDirectory()
         {
             return GetSubdirectory(DOWNLOADS_DIRECTORY);
         }
 
-        public static Task<string> GetUndeletedFilesDirectory()
+        public static string GetUndeletedFilesDirectory()
         {
             return GetSubdirectory(UNDELETED_FILES_DIRECTORY);
         }
 
-        public static async Task<string> GetQuranDirectory()
+        public static string GetQuranDirectory()
         {
             ScreenUtils qsi = ScreenUtils.Instance;
             var imageFolder = Path.Combine(QURAN_BASE, "width" + qsi.GetWidthParam());
@@ -379,12 +379,12 @@ namespace Quran.Core.Utils
                 return null;
             }
 
-            return await GetSubdirectory(imageFolder);
+            return GetSubdirectory(imageFolder);
         }
 
-        public static async Task<string> GetQuranBaseDirectory()
+        public static string GetQuranBaseDirectory()
         {
-            return await GetSubdirectory(QURAN_BASE);
+            return GetSubdirectory(QURAN_BASE);
         }
 
         public static string GetTempDirectory()
@@ -392,11 +392,12 @@ namespace Quran.Core.Utils
             return ApplicationData.Current.TemporaryFolder.Path;
         }
 
-        public static async Task<string> GetSubdirectory(string subdirectoryName)
+        public static string GetSubdirectory(string subdirectoryName)
         {
             var baseFolder = ApplicationData.Current.LocalFolder;
-            var subFolder = await baseFolder.CreateFolderAsync(subdirectoryName, CreationCollisionOption.OpenIfExists);
-            return subFolder.Path;
+            var subdirectoryPath = Path.Combine(baseFolder.Path, subdirectoryName);
+            Directory.CreateDirectory(subdirectoryPath);
+            return subdirectoryPath;
         }
 
         public static string GetZipFileUrl()
@@ -449,7 +450,7 @@ namespace Quran.Core.Utils
 
         public static async Task<bool> HaveAyaPositionFile()
         {
-            string baseDir = await GetQuranDatabaseDirectory();
+            string baseDir = GetQuranDatabaseDirectory();
             string ayaPositionDb = GetAyaPositionFileName();
             
             return await FileExists(Path.Combine(baseDir, ayaPositionDb));
@@ -457,7 +458,7 @@ namespace Quran.Core.Utils
 
         public static async Task<bool> HaveArabicSearchFile()
         {
-            string baseDir = await GetQuranDatabaseDirectory();
+            string baseDir = GetQuranDatabaseDirectory();
             string arabicSearchDb = QURAN_ARABIC_DATABASE;
 
             return await FileExists(Path.Combine(baseDir, arabicSearchDb));
@@ -465,14 +466,14 @@ namespace Quran.Core.Utils
 
         public static async Task<bool> HasTranslation(string fileName)
         {
-            string baseDir = await GetQuranDatabaseDirectory();
+            string baseDir = GetQuranDatabaseDirectory();
 
             return await FileExists(Path.Combine(baseDir, fileName));
         }
 
         public static async Task RemoveTranslation(string fileName)
         {
-            string baseDir = await GetQuranDatabaseDirectory();
+            string baseDir = GetQuranDatabaseDirectory();
             await DeleteFile(Path.Combine(baseDir, fileName));
         }
 
@@ -494,68 +495,68 @@ namespace Quran.Core.Utils
             }
         }
 
-        /// <summary>
-        /// Execute's an async Task<T> method which has a void return value synchronously
-        /// </summary>
-        /// <param name="task">Task<T> method to execute</param>
-        public static void RunSync(Func<Task> task)
-        {
-            var oldContext = SynchronizationContext.Current;
-            var synch = new ExclusiveSynchronizationContext();
-            SynchronizationContext.SetSynchronizationContext(synch);
-            synch.Post(async _ =>
-            {
-                try
-                {
-                    await task();
-                }
-                catch (Exception e)
-                {
-                    synch.InnerException = e;
-                    throw;
-                }
-                finally
-                {
-                    synch.EndMessageLoop();
-                }
-            }, null);
-            synch.BeginMessageLoop();
+        ///// <summary>
+        ///// Execute's an async Task<T> method which has a void return value synchronously
+        ///// </summary>
+        ///// <param name="task">Task<T> method to execute</param>
+        //public static void RunSync(Func<Task> task)
+        //{
+        //    var oldContext = SynchronizationContext.Current;
+        //    var synch = new ExclusiveSynchronizationContext();
+        //    SynchronizationContext.SetSynchronizationContext(synch);
+        //    synch.Post(async _ =>
+        //    {
+        //        try
+        //        {
+        //            await task();
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            synch.InnerException = e;
+        //            throw;
+        //        }
+        //        finally
+        //        {
+        //            synch.EndMessageLoop();
+        //        }
+        //    }, null);
+        //    synch.BeginMessageLoop();
 
-            SynchronizationContext.SetSynchronizationContext(oldContext);
-        }
+        //    SynchronizationContext.SetSynchronizationContext(oldContext);
+        //}
 
-        /// <summary>
-        /// Execute's an async Task<T> method which has a T return type synchronously
-        /// </summary>
-        /// <typeparam name="T">Return Type</typeparam>
-        /// <param name="task">Task<T> method to execute</param>
-        /// <returns></returns>
-        public static T RunSync<T>(Func<Task<T>> task)
-        {
-            var oldContext = SynchronizationContext.Current;
-            var synch = new ExclusiveSynchronizationContext();
-            SynchronizationContext.SetSynchronizationContext(synch);
-            T ret = default(T);
-            synch.Post(async _ =>
-            {
-                try
-                {
-                    ret = await task();
-                }
-                catch (Exception e)
-                {
-                    synch.InnerException = e;
-                    throw;
-                }
-                finally
-                {
-                    synch.EndMessageLoop();
-                }
-            }, null);
-            synch.BeginMessageLoop();
-            SynchronizationContext.SetSynchronizationContext(oldContext);
-            return ret;
-        }
+        ///// <summary>
+        ///// Execute's an async Task<T> method which has a T return type synchronously
+        ///// </summary>
+        ///// <typeparam name="T">Return Type</typeparam>
+        ///// <param name="task">Task<T> method to execute</param>
+        ///// <returns></returns>
+        //public static T RunSync<T>(Func<Task<T>> task)
+        //{
+        //    var oldContext = SynchronizationContext.Current;
+        //    var synch = new ExclusiveSynchronizationContext();
+        //    SynchronizationContext.SetSynchronizationContext(synch);
+        //    T ret = default(T);
+        //    synch.Post(async _ =>
+        //    {
+        //        try
+        //        {
+        //            ret = await task();
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            synch.InnerException = e;
+        //            throw;
+        //        }
+        //        finally
+        //        {
+        //            synch.EndMessageLoop();
+        //        }
+        //    }, null);
+        //    synch.BeginMessageLoop();
+        //    SynchronizationContext.SetSynchronizationContext(oldContext);
+        //    return ret;
+        //}
 
         private class ExclusiveSynchronizationContext : SynchronizationContext
         {

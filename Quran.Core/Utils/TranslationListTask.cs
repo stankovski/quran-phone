@@ -108,7 +108,7 @@ namespace Quran.Core.Utils
                         item.Name = item.Name.Substring(0, firstParen - 1);
                     }
 
-                    string databaseDir = await FileUtils.GetQuranDatabaseDirectory();
+                    string databaseDir = FileUtils.GetQuranDatabaseDirectory();
                     item.Exists = await FileUtils.FileExists(Path.Combine(databaseDir, item.Filename));
 
                     items.Add(item);
@@ -130,7 +130,7 @@ namespace Quran.Core.Utils
         private static async Task<string> GetCachedResponseFilePath()
         {
             string fileName = CACHED_RESPONSE_FILE_NAME;
-            string dir = await FileUtils.GetQuranDatabaseDirectory();
+            string dir = FileUtils.GetQuranDatabaseDirectory();
             return Path.Combine(dir, fileName);
         }
     }

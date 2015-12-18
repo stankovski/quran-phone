@@ -77,16 +77,16 @@ namespace Quran.Core.ViewModels
                     var arabicVerses = new List<ArabicAyah>();
                     var taskFactory = new TaskFactory();
 
-                    if (await FileUtils.FileExists(Path.Combine(await FileUtils.GetQuranDatabaseDirectory(), translationFile)))
+                    if (await FileUtils.FileExists(Path.Combine(FileUtils.GetQuranDatabaseDirectory(), translationFile)))
                     {
-                        using (var db = new QuranDatabaseHandler<QuranAyah>(Path.Combine(await FileUtils.GetQuranDatabaseDirectory(), translationFile)))
+                        using (var db = new QuranDatabaseHandler<QuranAyah>(Path.Combine(FileUtils.GetQuranDatabaseDirectory(), translationFile)))
                         {
                             translationVerses = await taskFactory.StartNew(() => db.Search(query));
                         }
                     }
                     if (await FileUtils.HaveArabicSearchFile())
                     {
-                        using (var dbArabic = new QuranDatabaseHandler<ArabicAyah>(Path.Combine(await FileUtils.GetQuranDatabaseDirectory(), FileUtils.QURAN_ARABIC_DATABASE)))
+                        using (var dbArabic = new QuranDatabaseHandler<ArabicAyah>(Path.Combine(FileUtils.GetQuranDatabaseDirectory(), FileUtils.QURAN_ARABIC_DATABASE)))
                         {
                             arabicVerses = await taskFactory.StartNew(() => dbArabic.Search(query));
                         }
@@ -167,7 +167,7 @@ namespace Quran.Core.ViewModels
             if (!await FileUtils.HaveArabicSearchFile())
             {
                 string url = FileUtils.GetArabicSearchUrl();
-                string destination = await FileUtils.GetQuranDatabaseDirectory();
+                string destination = FileUtils.GetQuranDatabaseDirectory();
                 destination = Path.Combine(destination, Path.GetFileName(url));
                 // start the download
                 return await this.ActiveDownload.DownloadSingleFile(url, destination, Resources.loading_data);
