@@ -424,5 +424,28 @@ namespace Quran.Windows.Views
         {
             ViewModel.Orientation = DisplayInformation.GetForCurrentView().CurrentOrientation;
         }
+
+        #region Audio controls
+
+        private async void AudioSetRepeat(object sender, RoutedEventArgs e)
+        {
+            // TODO: Implement
+        }
+
+        private async void AudioSkipBackward(object sender, RoutedEventArgs e)
+        {
+            await ViewModel.PreviousTrack();
+        }
+
+        private async void AudioPlay(object sender, RoutedEventArgs e)
+        {
+            await ViewModel.Play();
+        }
+
+        private async void AudioSkipForward(object sender, RoutedEventArgs e)
+        {
+            await ViewModel.NextTrack();
+        }
+        #endregion
     }
 }

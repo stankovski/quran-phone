@@ -140,4 +140,12 @@
                                VerticalAlignment="Bottom" Width="70" Height="70" 
                                Foreground="{StaticResource BlueText}" Margin="30"/>
     </Grid>
+    <Page.BottomAppBar>
+        <CommandBar IsOpen="True">
+            <AppBarButton Icon="RepeatAll" Click="AudioSetRepeat" x:Name="AudioSetRepeatButton"/>
+            <AppBarButton Icon="Previous" Click="AudioSkipBackward" x:Name="AudioSkipBackwardButton"/>
+            <AppBarButton Icon="Play" Click="AudioPlay" x:Name="AudioPlayButton"/>
+            <AppBarButton Icon="Next" Click="AudioSkipForward" x:Name="AudioSkipForwardButton"/>
+        </CommandBar>
+    </Page.BottomAppBar>
 </Page>
