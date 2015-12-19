@@ -49,7 +49,7 @@ namespace Quran.Core.Data
         public const string PREF_SHOW_ARABIC_IN_TRANSLATION = "showArabicInTranslation";
         [DefaultValue(false)]
         public const string PREF_PREVENT_SLEEP = "preventSleep";
-        [DefaultValue(false)]
+        [DefaultValue(true)]
         public const string PREF_KEEP_INFO_OVERLAY = "keepInfoOverlay";
         [DefaultValue(false)]
         public const string PREF_NIGHT_MODE = "nightMode";
