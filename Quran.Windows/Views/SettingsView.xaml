@@ -79,10 +79,7 @@
                         <ScrollViewer Background="Transparent">
                             <StackPanel Margin="12,17,0,28">
                                 <TextBlock Text="{Binding Path=LocalizedResources.reciters, Source={StaticResource LocalizedStrings}}"/>
-                                <Button HorizontalContentAlignment="Left" 
-                                    BorderThickness="0" Padding="10" Margin="0"
-                                    Content="{x:Bind ViewModel.ActiveReciter}"
-                                    FontFamily="{StaticResource PhoneFontFamilyNormal}" Click="Reciters_Click"/>
+                                <Button Content="{x:Bind ViewModel.ActiveReciter}" Click="ShowReciters"/>
                                 <TextBlock Text="{Binding Path=LocalizedResources.audio_download_blocks, Source={StaticResource LocalizedStrings}}"/>
                                 <!--<ComboBox ItemsSource="{x:Bind ViewModel.SupportedAudioBlocks}" DisplayMemberPath="Value" SelectedItem="{x:Bind ViewModel.SelectedAudioBlock, Mode=TwoWay}"/>-->
                                 <TextBlock Text="{Binding Path=LocalizedResources.repeat_ayah, Source={StaticResource LocalizedStrings}}"/>

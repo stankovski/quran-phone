@@ -1,97 +1,88 @@
-﻿<views:BaseView
+﻿<Page
     x:Class="Quran.Windows.Views.RecitersListView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:telerikPrimitives="using:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls.Primitives"
-    xmlns:telerikCore="using:Telerik.Windows.Controls;assembly=Telerik.Windows.Core"
-    xmlns:telerikData="using:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls.Data"
-    FontFamily="{StaticResource PhoneFontFamilyNormal}"
-    FontSize="{StaticResource PhoneFontSizeNormal}"
-    Foreground="{StaticResource PhoneForegroundBrush}"
-    SupportedOrientations="Portrait" Orientation="Portrait"
-    mc:Ignorable="d"
-    xmlns:views="using:Cirrious.MvvmCross.WindowsCommon.Views"
-    xmlns:ui="using:Quran.Windows.UI"
-    ui:TiltEffect.IsTiltEnabled="True"
-    shell:SystemTray.IsVisible="True">
-    
-    <phone:PhoneApplicationPage.Resources>
-        <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        <ui:BooleanInversionConverter x:Key="BooleanInversionConverter"/>
-    </phone:PhoneApplicationPage.Resources>
-    
-    <!--LayoutRoot is the root grid where all page content is placed-->
-    <Grid x:Name="LayoutRoot" Background="Transparent">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+    RequestedTheme="Dark"
+    xmlns:vm="using:Quran.Core.ViewModels"
+    xmlns:ui="using:Quran.Windows.UI">
 
-        <!--TitlePanel contains the name of the application and page title-->
-        <StackPanel Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock Text="{Binding Path=LocalizedResources.reciters, Source={StaticResource LocalizedStrings}}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+  <!--LayoutRoot is the root grid where all page content is placed-->
+  <Grid x:Name="LayoutRoot" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid.Resources>
+      <CollectionViewSource x:Name="ReciterViewSource" IsSourceGrouped="True" ItemsPath="Reciters"/>
+
+      <DataTemplate x:Key="ZoomedInTemplate">
+        <StackPanel>
+          <Grid Visibility="{Binding Exists, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="70"/>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="60"/>
+            </Grid.ColumnDefinitions>
+            <FontIcon Grid.Column="0" Glyph="&#xE128;" FontSize="35" Tapped="NavigationRequested" FontFamily="{ThemeResource SymbolThemeFontFamily}"/>
+            <StackPanel Grid.Column="1" Padding="0" Margin="0" VerticalAlignment="Center" Tapped="NavigationRequested">
+              <TextBlock Text="{Binding Name}" TextWrapping="NoWrap" Style="{StaticResource BaseTextBlockStyle}"/>
+              <TextBlock Text="{Binding Reciter}" TextWrapping="Wrap"/>
+            </StackPanel>
+            <Button Grid.Column="2" VerticalAlignment="Center"
+                    Style="{StaticResource MenuButtonStyle}"
+                    Content="&#xE107;"
+                    Command="{Binding DeleteCommand}"/>
+          </Grid>
+          <Grid Visibility="{Binding Exists, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="70"/>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="60"/>
+            </Grid.ColumnDefinitions>
+            <FontIcon Grid.Column="0" Glyph="&#xE128;" FontSize="35" FontFamily="{ThemeResource SymbolThemeFontFamily}"/>
+            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+              <TextBlock Text="{Binding Name}" TextWrapping="NoWrap" Style="{StaticResource BaseTextBlockStyle}"/>
+              <TextBlock Text="{Binding Reciter}" TextWrapping="Wrap"/>
+              <Grid Visibility="{Binding IsDownloading, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="50"/>
+                </Grid.ColumnDefinitions>
+                <ProgressBar Grid.Column="0" Value="{Binding Progress, Mode=OneWay}" SmallChange="1"/>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" FlowDirection="LeftToRight">
+                  <TextBlock Text="{Binding Progress, Mode=OneWay}"/>
+                  <TextBlock>%</TextBlock>
+                </StackPanel>
+              </Grid>
+            </StackPanel>
+            <Button Command="{Binding DownloadCommand}" Grid.Column="2" VerticalAlignment="Center"
+                   Style="{StaticResource MenuButtonStyle}"
+                   Content="&#xE118;"/>
+          </Grid>
         </StackPanel>
-        <ProgressBar Grid.Row="0" VerticalAlignment="Top" Visibility="{Binding IsDataLoaded, Converter={StaticResource BooleanToVisibilityConverter}, 
-                ConverterParameter=Inverse}" IsIndeterminate="{Binding IsDataLoaded, Converter={StaticResource BooleanInversionConverter}}"/>
+      </DataTemplate>
 
-        <!--ContentPanel - place additional content here-->
+      <DataTemplate x:Key="ZoomedInGroupHeaderTemplate">
+        <TextBlock Text="{Binding Title}" Foreground="{ThemeResource ApplicationForegroundThemeBrush}"
+                   Style="{StaticResource SubtitleTextBlockStyle}"/>
+      </DataTemplate>
+    </Grid.Resources>
 
-        <telerikData:RadJumpList x:Name="jmpRecitations" Grid.Row="1" ItemsSource="{Binding AvailableReciters}"
-                                 IsAsyncBalanceEnabled="True">
-            <telerikPrimitives:RadDataBoundListBox.ItemAddedAnimation>
-                <telerikCore:RadFadeAnimation />
-            </telerikPrimitives:RadDataBoundListBox.ItemAddedAnimation>
-            <telerikData:RadJumpList.GroupHeaderTemplate>
-                <DataTemplate>
-                    <Border Grid.Row="1" BorderBrush="{StaticResource BlueText}" BorderThickness="0,1,0,2">
-                        <TextBlock Style="{StaticResource BlueHeader}" Name="textBlock" Text="{Binding}"/>
-                    </Border>
-                </DataTemplate>
-            </telerikData:RadJumpList.GroupHeaderTemplate>
-            <telerikPrimitives:RadDataBoundListBox.ItemTemplate>
-                <DataTemplate>
-                    <ui:RecitationItemTemplateSelector Content="{Binding}" HorizontalContentAlignment="Stretch" HorizontalAlignment="Stretch">
-                        <ui:RecitationItemTemplateSelector.ItemDownloadedTemplate>
-                            <DataTemplate>
-                                <Grid HorizontalAlignment="Stretch">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="70"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="60"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Image Grid.Column="0" Source="/Assets/Images/ic_translation.png"/>
-                                    <Button Grid.Column="1" Padding="0" Margin="0" Command="{Binding NavigateCommand}"
-                                        Style="{StaticResource ChromelessButtonStyle}" HorizontalContentAlignment="Left">
-                                        <StackPanel>
-                                            <TextBlock Text="{Binding Name}" Style="{StaticResource PhoneTextLargeStyle}" TextWrapping="NoWrap"/>
-                                        </StackPanel>
-                                    </Button>
-                                    <Button Grid.Column="2" BorderThickness="0" Padding="0" Margin="-10,0,0,0" Command="{Binding DeleteCommand}">
-                                        <Image Grid.Column="2" Source="/Assets/Images/ic_delete.png"/>
-                                    </Button>
-                                </Grid>
-                            </DataTemplate>
-                        </ui:RecitationItemTemplateSelector.ItemDownloadedTemplate>
-                        <ui:RecitationItemTemplateSelector.ItemAvailableTemplate>
-                            <DataTemplate>
-                                <Grid HorizontalAlignment="Stretch">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="70"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Image Grid.Column="0" Source="/Assets/Images/ic_translation.png"/>
-                                    <Button Grid.Column="1" Padding="0" Margin="0" Command="{Binding NavigateCommand}"
-                                        Style="{StaticResource ChromelessButtonStyle}" HorizontalContentAlignment="Left">
-                                        <TextBlock Text="{Binding Name}" Style="{StaticResource PhoneTextLargeStyle}" TextWrapping="NoWrap"/>
-                                    </Button>
-                                </Grid>
-                            </DataTemplate>
-                        </ui:RecitationItemTemplateSelector.ItemAvailableTemplate>
-                    </ui:RecitationItemTemplateSelector>
-                </DataTemplate>
-            </telerikPrimitives:RadDataBoundListBox.ItemTemplate>
-        </telerikData:RadJumpList>
-    </Grid>
-</views:BaseView>
+    <!--ContentPanel - place additional content here-->
+    <ListView x:Name="jmpReciter" Grid.Row="1"
+              SelectionMode="None"
+              ItemsSource="{Binding Source={StaticResource ReciterViewSource}}"
+              ItemTemplate="{StaticResource ZoomedInTemplate}">
+      <ListView.GroupStyle>
+        <GroupStyle HeaderTemplate="{StaticResource ZoomedInGroupHeaderTemplate}" />
+      </ListView.GroupStyle>
+      <ListView.ItemContainerStyle>
+        <Style TargetType="ListViewItem">
+          <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+          <Setter Property="VerticalContentAlignment" Value="Stretch" />
+          <Setter Property="Padding" Value="0" />
+        </Style>
+      </ListView.ItemContainerStyle>
+    </ListView>
+    <ProgressRing IsActive="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
+       HorizontalAlignment="Center" VerticalAlignment="Center" Height="60" Width="60" />
+  </Grid>
+</Page>

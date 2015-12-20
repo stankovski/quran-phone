@@ -49,16 +49,6 @@ namespace Quran.Windows.Views
             base.OnNavigatedFrom(e);
         }
         
-        private void Translations_Click(object sender, RoutedEventArgs e)
-        {
-            //NavigationService.Navigate(new Uri("/Views/TranslationListView.xaml", UriKind.Relative));
-        }
-
-        private void Reciters_Click(object sender, RoutedEventArgs e)
-        {
-            //NavigationService.Navigate(new Uri("/Views/RecitersListView.xaml", UriKind.Relative));
-        }
-
         private void LinkTap(object sender, RoutedEventArgs e)
         {
             //var link = e.OriginalSource as Hyperlink;
@@ -99,5 +89,11 @@ namespace Quran.Windows.Views
         {
             Frame.Navigate(typeof(TranslationListView), null, new DrillInNavigationTransitionInfo());
         }
+        
+        private void ShowReciters(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(RecitersListView), null, new DrillInNavigationTransitionInfo());
+        }
+
     }
 }

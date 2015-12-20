@@ -1,6 +1,7 @@
 ﻿using System;
 using Quran.Core.Common;
 using Quran.Core.Interfaces;
+using Windows.Foundation;
 
 namespace Quran.Core.Tests
 {
@@ -11,7 +12,8 @@ namespace Quran.Core.Tests
             //BackgroundAudioPlayer.Instance.PlayStateChanged += Instance_PlayStateChanged;
         }
 
-        public event EventHandler StateChanged; 
+        public event TypedEventHandler<IAudioProvider, AudioRequest> TrackChanged;
+        public event TypedEventHandler<IAudioProvider, AudioPlayerPlayState> StateChanged;
 
         public void Play()
         {
@@ -43,7 +45,7 @@ namespace Quran.Core.Tests
             get; set;
         }
 
-        public IAudioTrack GetTrack()
+        public AudioRequest GetTrack()
         {
             //var audioTrack = BackgroundAudioPlayer.Instance.Track;
             //if (WindowsTrack == null || WindowsTrack.OriginalTrack != audioTrack)
@@ -53,7 +55,7 @@ namespace Quran.Core.Tests
             throw new NotImplementedException();
         }
 
-        public void SetTrack(Uri source, string title, string artist, string album, Uri albumArt, string tag)
+        public void SetTrack(AudioRequest request)
         {
             //BackgroundAudioPlayer.Instance.Track = new AudioTrack(source, title, artist, album, albumArt, tag,
             //    EnabledPlayerControls.All);

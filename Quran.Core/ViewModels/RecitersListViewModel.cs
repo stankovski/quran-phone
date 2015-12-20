@@ -10,60 +10,79 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Quran.Core.Common;
+using Quran.Core.Properties;
 using Quran.Core.Utils;
 
 namespace Quran.Core.ViewModels
 {
+    public class ReciterItemGroup
+    {
+        public ReciterItemGroup(string title)
+        {
+            Title = title;
+            Reciters = new ObservableCollection<ObservableReciterItem>();
+        }
+
+        public string Title { get; set; }
+
+        public ObservableCollection<ObservableReciterItem> Reciters { get; private set; }
+    }
+
     /// <summary>
     /// Define the TranslationslistViewModel type.
     /// </summary>
     public class RecitersListViewModel : BaseViewModel
     {
+        private ReciterItemGroup _downloadedGroup = new ReciterItemGroup(Resources.downloaded_reciters);
+        private ReciterItemGroup _availableGroup = new ReciterItemGroup(Resources.available_reciters);
+
         public RecitersListViewModel()
         {
-            this.IsDataLoaded = false;
-            this.AvailableReciters = new ObservableCollection<ObservableReciterItem>();
-            this.AvailableReciters.CollectionChanged += AvailableTranslationsCollectionChanged;
+            _downloadedGroup.Reciters.CollectionChanged += AvailableTranslationsCollectionChanged;
+            _availableGroup.Reciters.CollectionChanged += AvailableTranslationsCollectionChanged;
+            Groups = new ObservableCollection<ReciterItemGroup>();
+            Groups.Add(_downloadedGroup);
+            Groups.Add(_availableGroup);
         }
 
         #region Properties
-        public ObservableCollection<ObservableReciterItem> AvailableReciters { get; private set; }
-
-        private bool isDataLoaded;
-        public bool IsDataLoaded
-        {
-            get { return isDataLoaded; }
-            set
-            {
-                if (value == isDataLoaded)
-                    return;
-
-                isDataLoaded = value;
-
-                base.OnPropertyChanged(() => IsDataLoaded);
-            }
-        }
-
+        public ObservableCollection<ReciterItemGroup> Groups { get; private set; }
         #endregion Properties
 
         #region Public methods
-        public override Task Initialize()
+        public override async Task Initialize()
         {
-            return Refresh();
+            if (_downloadedGroup.Reciters.Count == 0 && _availableGroup.Reciters.Count == 0)
+            {
+                await Refresh();
+            }
         }
 
         public override async Task Refresh()
         {
-            var qariNames = AudioUtils.GetReciterItems().Where(r => !r.IsGapless);
+            this.IsLoading = true;
+
+            var qariNames = AudioUtils.GetReciterItems()
+                .Where(r => !r.IsGapless);
+
+            _availableGroup.Reciters.Clear();
+            _downloadedGroup.Reciters.Clear();
 
             foreach (var item in qariNames)
             {
-                var observableItem = new ObservableReciterItem(item);
-                await observableItem.Initialize();
-                this.AvailableReciters.Add(observableItem);
+                var translationItem = new ObservableReciterItem(item);
+                await translationItem.Initialize();
+                if (!translationItem.Exists)
+                {
+                    _availableGroup.Reciters.Add(translationItem);
+                }
+                else
+                {
+                    _downloadedGroup.Reciters.Add(translationItem);
+                }
             }
 
-            this.IsDataLoaded = true;
+            this.IsLoading = true;
         }
         #endregion Public methods
 
@@ -75,8 +94,7 @@ namespace Quran.Core.ViewModels
             {
                 foreach (ObservableReciterItem item in e.NewItems)
                 {
-                    item.DeleteComplete += TranslationDeleteComplete;
-                    item.NavigateRequested += TranslationNavigateRequested;
+                    item.DeleteComplete += RecitationDeleteComplete;
                 }
             }
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove ||
@@ -85,34 +103,24 @@ namespace Quran.Core.ViewModels
             {
                 foreach (ObservableReciterItem item in e.OldItems)
                 {
-                    item.DeleteComplete -= TranslationDeleteComplete;
-                    item.NavigateRequested -= TranslationNavigateRequested;
+                    item.DeleteComplete -= RecitationDeleteComplete;
                 }
             }
         }
 
-        private void TranslationDeleteComplete(object sender, EventArgs e)
+        private void RecitationDeleteComplete(object sender, EventArgs e)
         {
-            var translation = sender as ObservableReciterItem;
-            if (translation == null)
+            var recitation = sender as ObservableReciterItem;
+            if (recitation == null)
                 return;
-            translation.Exists = false;
+            recitation.Exists = false;
 
-            // Hack to update list after download / delete completed
-            AvailableReciters.Remove(translation);
-            AvailableReciters.Add(translation);
+            if (_downloadedGroup.Reciters.Contains(recitation))
+            {
+                _downloadedGroup.Reciters.Remove(recitation);
+                _availableGroup.Reciters.Add(recitation);
+            }
         }
-
-        private void TranslationNavigateRequested(object sender, EventArgs e)
-        {
-            var translation = sender as ObservableReciterItem;
-            if (translation == null)
-                return;
-            if (NavigateRequested != null)
-                NavigateRequested(sender, e);
-        }
-        #endregion
-
-        public event EventHandler NavigateRequested;
+        #endregion Event handlers
     }
 }

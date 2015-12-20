@@ -15,6 +15,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using Quran.Core.Common;
 
 namespace Quran.Core
 {
@@ -25,12 +26,12 @@ namespace Quran.Core
         {
         }
 
-        public TrackChangedMessage(Uri trackId)
+        public TrackChangedMessage(string request)
         {
-            this.TrackId = trackId;
+            this.AudioRequest = request;
         }
 
         [DataMember]
-        public Uri TrackId;
+        public string AudioRequest;
     }
 }

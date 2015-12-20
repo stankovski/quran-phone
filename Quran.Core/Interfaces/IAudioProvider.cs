@@ -1,12 +1,14 @@
 ﻿using System;
 using Quran.Core.Common;
 using Quran.Core.Utils;
+using Windows.Foundation;
 
 namespace Quran.Core.Interfaces
 {
     public interface IAudioProvider
     {
-        event EventHandler StateChanged; 
+        event TypedEventHandler<IAudioProvider, AudioPlayerPlayState> StateChanged;
+        event TypedEventHandler<IAudioProvider, AudioRequest> TrackChanged;
 
         /// <summary>
         /// Plays or resumes the current <see cref="T:Microsoft.Phone.BackgroundAudio.AudioTrack"/> at its current position.
@@ -38,12 +40,12 @@ namespace Quran.Core.Interfaces
         /// <summary>
         /// Gets the current track for this application, whether the application is currently playing or not.
         /// </summary>
-        IAudioTrack GetTrack();
+        AudioRequest GetTrack();
 
         /// <summary>
         /// Sets the current track for this application, whether the application is currently playing or not.
         /// </summary>
-        void SetTrack(Uri source, string title, string artist, string album, Uri albumArt, string tag);
+        void SetTrack(AudioRequest request);
 
         /// <summary>
         /// Gets or sets the current position within the current <see cref="P:Microsoft.Phone.BackgroundAudio.BackgroundAudioPlayer.Track"/>.

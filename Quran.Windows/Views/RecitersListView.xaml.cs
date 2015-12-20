@@ -1,79 +1,51 @@
 ﻿using System;
-using System.Windows.Navigation;
 using Quran.Core;
-using Quran.Core.Properties;
 using Quran.Core.Utils;
 using Quran.Core.ViewModels;
-using Quran.Windows.UI;
 using Quran.Core.Data;
-using Telerik.Windows.Data;
+using Windows.UI.Xaml.Navigation;
+using Windows.Graphics.Display;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml;
 
 namespace Quran.Windows.Views
 {
-    public partial class RecitersListView
+    public partial class RecitersListView : Page
     {
+        public RecitersListViewModel ViewModel { get; set; }
+
         public RecitersListView()
         {
+            DisplayInformation.AutoRotationPreferences = DisplayOrientations.None;
+            ViewModel = QuranApp.RecitersListViewModel;
             InitializeComponent();
-
-            var grouping = new GenericGroupDescriptor<ObservableReciterItem, string>((item) =>
-            {
-                if (item.Exists)
-                {
-                    return AppResources.downloaded_reciters;
-                }
-                else
-                {
-                    return AppResources.available_reciters;
-                }
-            });
-            grouping.SortMode = ListSortMode.Descending;
-
-            var sorting = new GenericSortDescriptor<ObservableReciterItem, string>(item => item.Name.Substring(0, 1));
-
-            jmpRecitations.GroupDescriptors.Add(grouping);
-            jmpRecitations.SortDescriptors.Add(sorting);
         }
 
         // When page is navigated to set data context to selected item in list
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (DataContext == null)
-            {
-                DataContext = QuranApp.RecitersListViewModel;                
-            }
-
-            if (!QuranApp.RecitersListViewModel.IsDataLoaded)
-                QuranApp.RecitersListViewModel.LoadData();
-
-            QuranApp.RecitersListViewModel.NavigateRequested += viewModel_NavigateRequested;
-            QuranApp.RecitersListViewModel.AvailableReciters.CollectionChanged += AvailableTranslations_CollectionChanged;
+            await ViewModel.Initialize();
+            ReciterViewSource.Source = ViewModel.Groups;
         }
 
-        void AvailableTranslations_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void NavigationRequested(object sender, TappedRoutedEventArgs e)
         {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove ||
-                e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace ||
-                e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Reset)
-            {
-                jmpRecitations.RefreshData();
-            }
-        }
-
-        void viewModel_NavigateRequested(object sender, EventArgs e)
-        {
-            var qari = sender as ObservableReciterItem;
-            if (qari == null)
+            var list = sender as FrameworkElement;
+            if (list == null || list.DataContext == null)
                 return;
 
-            SettingsUtils.Set(Constants.PREF_ACTIVE_QARI, qari.Name);
-            NavigationService.GoBack();
-        }
+            var qari = (ObservableReciterItem)list.DataContext;
+            if (qari == null)
+            {
+                return;
+            }
 
-        protected override void OnNavigatedFrom(System.Windows.Navigation.NavigationEventArgs e)
-        {
-            base.OnNavigatedFrom(e);
-            QuranApp.RecitersListViewModel.NavigateRequested -= viewModel_NavigateRequested;
+            if (qari.Exists)
+            {
+                SettingsUtils.Set(Constants.PREF_ACTIVE_QARI, qari.Name);
+                Frame.GoBack();
+            }
         }
     }
 }

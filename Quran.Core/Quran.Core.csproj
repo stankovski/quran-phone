@@ -107,6 +107,7 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BackgroundTask\BackgroundAudioTaskStartedMessage.cs" />
     <Compile Include="BackgroundTask\MessageService.cs" />
     <Compile Include="BackgroundTask\SkipNextMessage.cs" />
     <Compile Include="BackgroundTask\SkipPreviousMessage.cs" />
