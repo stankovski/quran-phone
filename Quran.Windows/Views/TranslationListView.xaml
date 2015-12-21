@@ -8,7 +8,7 @@
     RequestedTheme="Dark"
     xmlns:vm="using:Quran.Core.ViewModels"
     xmlns:ui="using:Quran.Windows.UI">
-    
+
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.Resources>
@@ -62,7 +62,7 @@
             </DataTemplate>
 
             <DataTemplate x:Key="ZoomedInGroupHeaderTemplate">
-                <TextBlock Text="{Binding Title}" Foreground="{ThemeResource ApplicationForegroundThemeBrush}" 
+                <TextBlock Text="{Binding Title}" Foreground="{ThemeResource ApplicationForegroundThemeBrush}"
                            Style="{StaticResource SubtitleTextBlockStyle}"/>
             </DataTemplate>
         </Grid.Resources>
@@ -83,7 +83,7 @@
                 </Style>
             </ListView.ItemContainerStyle>
         </ListView>
-        <ProgressRing IsActive="{x:Bind ViewModel.IsLoading, Mode=OneWay}" 
+        <ProgressRing IsActive="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
            HorizontalAlignment="Center" VerticalAlignment="Center" Height="60" Width="60" />
     </Grid>
 </Page>

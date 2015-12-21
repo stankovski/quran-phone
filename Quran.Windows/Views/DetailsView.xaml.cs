@@ -39,6 +39,7 @@ namespace Quran.Windows.Views
             await ViewModel.Initialize();
             BuildLocalizedMenu();
             BuildContextMenu();
+            UpdateAudioControls(ViewModel.AudioPlayerState);
 
             NavigationData parameters = e.Parameter as NavigationData;
             if (parameters == null)
@@ -57,6 +58,10 @@ namespace Quran.Windows.Views
                     {
                         radSlideView.SelectedItem = ViewModel.Pages[ViewModel.CurrentPageIndex];
                     }
+                }
+                if (args.PropertyName == "AudioPlayerState")
+                {
+                    UpdateAudioControls(ViewModel.AudioPlayerState);
                 }
             };
 
@@ -426,6 +431,30 @@ namespace Quran.Windows.Views
         }
 
         #region Audio controls
+        private void UpdateAudioControls(AudioState state)
+        {
+            if (state == AudioState.Playing)
+            {
+                BottomAppBar.ClosedDisplayMode = AppBarClosedDisplayMode.Compact;
+                AudioPlayButton.Visibility = Visibility.Collapsed;
+                AudioStopButton.Visibility = Visibility.Visible;
+                AudioPauseButton.Visibility = Visibility.Visible;
+            }
+            else if (state == AudioState.Paused)
+            {
+                BottomAppBar.ClosedDisplayMode = AppBarClosedDisplayMode.Compact;
+                AudioPlayButton.Visibility = Visibility.Visible;
+                AudioStopButton.Visibility = Visibility.Visible;
+                AudioPauseButton.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                BottomAppBar.ClosedDisplayMode = AppBarClosedDisplayMode.Minimal;
+                AudioPlayButton.Visibility = Visibility.Visible;
+                AudioStopButton.Visibility = Visibility.Collapsed;
+                AudioPauseButton.Visibility = Visibility.Collapsed;
+            }
+        }
 
         private async void AudioSetRepeat(object sender, RoutedEventArgs e)
         {
@@ -437,9 +466,22 @@ namespace Quran.Windows.Views
             await ViewModel.PreviousTrack();
         }
 
+        private async void AudioStop(object sender, RoutedEventArgs e)
+        {
+            await ViewModel.Stop();
+            UpdateAudioControls(AudioState.Stopped);
+        }
+
         private async void AudioPlay(object sender, RoutedEventArgs e)
         {
             await ViewModel.Play();
+            UpdateAudioControls(AudioState.Playing);
+        }
+
+        private void AudioPause(object sender, RoutedEventArgs e)
+        {
+            ViewModel.Pause();
+            UpdateAudioControls(AudioState.Paused);
         }
 
         private async void AudioSkipForward(object sender, RoutedEventArgs e)

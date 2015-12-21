@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Quran.Core.Interfaces;
+using Quran.Core.Utils;
 using Quran.Core.ViewModels;
 
 namespace Quran.Core
@@ -22,6 +23,11 @@ namespace Quran.Core
 
         #region View Models
         public static INativeProvider NativeProvider { get; set; }
+
+        public static async Task Initialize()
+        {
+            await FileUtils.Initialize(false);
+        }
 
         /// <summary>
         /// A static ViewModel used by the views to bind against.

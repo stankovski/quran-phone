@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using Quran.Core;
 using Quran.Core.Common;
 using Quran.Core.Interfaces;
@@ -10,7 +11,7 @@ using Windows.UI.Core;
 
 namespace Quran.Windows.NativeProvider
 {
-    public class UniversalAudioProvider : IAudioProvider
+    public class UniversalAudioProvider : IAudioProvider, IDisposable
     {
         const int RPC_S_SERVER_UNAVAILABLE = -2147023174; // 0x800706BA
         private AutoResetEvent backgroundAudioTaskStarted;
@@ -55,9 +56,17 @@ namespace Quran.Windows.NativeProvider
             CurrentPlayer.Pause();
         }
 
-        public void Stop()
+        public Task Stop()
         {
             CurrentPlayer.Pause();
+            CurrentPlayer.CurrentStateChanged -= this.MediaPlayerCurrentStateChanged;
+            ResetAfterLostBackground();
+            State = AudioPlayerPlayState.Closed;
+            if (StateChanged != null)
+            {
+                StateChanged(this, AudioPlayerPlayState.Closed);
+            }
+            return Task.FromResult(0);
         }
 
         public void Next()
@@ -88,7 +97,7 @@ namespace Quran.Windows.NativeProvider
         public void SetTrack(AudioRequest request)
         {
             _currentRequest = request;
-            throw new NotImplementedException();
+            Play();
         }
 
         public TimeSpan Position
@@ -152,6 +161,7 @@ namespace Quran.Windows.NativeProvider
 
             try
             {
+                BackgroundMediaPlayer.MessageReceivedFromBackground -= BackgroundPlayerMessageReceivedFromBackground;
                 BackgroundMediaPlayer.MessageReceivedFromBackground += BackgroundPlayerMessageReceivedFromBackground;
             }
             catch (Exception ex)
@@ -230,6 +240,29 @@ namespace Quran.Windows.NativeProvider
         }
 
         /// <summary>
+        /// Unsubscribes to MediaPlayer events. Should run only on suspend
+        /// </summary>
+        private void RemoveMediaPlayerEventHandlers()
+        {
+            CurrentPlayer.CurrentStateChanged -= this.MediaPlayerCurrentStateChanged;
+            try
+            {
+                BackgroundMediaPlayer.MessageReceivedFromBackground -= BackgroundPlayerMessageReceivedFromBackground;
+            }
+            catch (Exception ex)
+            {
+                if (ex.HResult == RPC_S_SERVER_UNAVAILABLE)
+                {
+                    // do nothing
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
+        /// <summary>
         /// Subscribes to MediaPlayer events
         /// </summary>
         private void AddMediaPlayerEventHandlers()
@@ -271,6 +304,12 @@ namespace Quran.Windows.NativeProvider
                     StateChanged(this, this.State );
                 }
             });
+        }
+
+        public void Dispose()
+        {
+            GC.WaitForPendingFinalizers();
+            RemoveMediaPlayerEventHandlers();
         }
     }
 }

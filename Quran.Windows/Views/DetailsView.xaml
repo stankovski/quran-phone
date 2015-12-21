@@ -135,17 +135,15 @@
         <Button x:Name="HamburgerButton" Style="{StaticResource HamburgerButtonStyle}" 
                 VerticalAlignment="Top" Opacity="{x:Bind ViewModel.ManuButtonOpacity, Mode=OneWay}"
                 Click="HamburgerButtonClick"/>
-
-        <ui:AudioPlayerControl AudioState="{x:Bind ViewModel.AudioPlayerState, Mode=OneWay}" HorizontalAlignment="Left" 
-                               VerticalAlignment="Bottom" Width="70" Height="70" 
-                               Foreground="{StaticResource BlueText}" Margin="30"/>
     </Grid>
     <Page.BottomAppBar>
-        <CommandBar IsOpen="True">
-            <AppBarButton Icon="RepeatAll" Click="AudioSetRepeat" x:Name="AudioSetRepeatButton"/>
-            <AppBarButton Icon="Previous" Click="AudioSkipBackward" x:Name="AudioSkipBackwardButton"/>
-            <AppBarButton Icon="Play" Click="AudioPlay" x:Name="AudioPlayButton"/>
-            <AppBarButton Icon="Next" Click="AudioSkipForward" x:Name="AudioSkipForwardButton"/>
+        <CommandBar IsOpen="False" ClosedDisplayMode="Compact">
+            <AppBarButton Icon="RepeatAll" Click="AudioSetRepeat" x:Name="AudioSetRepeatButton" Label="{Binding Path=LocalizedResources.repeat_ayah, Source={StaticResource LocalizedStrings}}"/>
+            <AppBarButton Icon="Previous" Click="AudioSkipBackward" x:Name="AudioSkipBackwardButton" Label="{Binding Path=LocalizedResources.previous, Source={StaticResource LocalizedStrings}}"/>
+            <AppBarButton Icon="Stop" Click="AudioStop" x:Name="AudioStopButton" Label="{Binding Path=LocalizedResources.cancel, Source={StaticResource LocalizedStrings}}"/>
+            <AppBarButton Icon="Play" Click="AudioPlay" x:Name="AudioPlayButton" Label="{Binding Path=LocalizedResources.recite, Source={StaticResource LocalizedStrings}}"/>
+            <AppBarButton Icon="Pause" Click="AudioPause" x:Name="AudioPauseButton" Label="{Binding Path=LocalizedResources.pause, Source={StaticResource LocalizedStrings}}"/>
+            <AppBarButton Icon="Next" Click="AudioSkipForward" x:Name="AudioSkipForwardButton"  Label="{Binding Path=LocalizedResources.next, Source={StaticResource LocalizedStrings}}"/>
         </CommandBar>
     </Page.BottomAppBar>
 </Page>

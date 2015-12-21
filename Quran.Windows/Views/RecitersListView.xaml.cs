@@ -28,7 +28,7 @@ namespace Quran.Windows.Views
             await ViewModel.Initialize();
             ReciterViewSource.Source = ViewModel.Groups;
         }
-
+        
         private void NavigationRequested(object sender, TappedRoutedEventArgs e)
         {
             var list = sender as FrameworkElement;
@@ -41,11 +41,8 @@ namespace Quran.Windows.Views
                 return;
             }
 
-            if (qari.Exists)
-            {
-                SettingsUtils.Set(Constants.PREF_ACTIVE_QARI, qari.Name);
-                Frame.GoBack();
-            }
+            SettingsUtils.Set(Constants.PREF_ACTIVE_QARI, qari.Name);
+            Frame.GoBack();
         }
     }
 }

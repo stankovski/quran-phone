@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -50,6 +51,9 @@ namespace Quran.Windows.Audio
 
             // Initialize message channel 
             BackgroundMediaPlayer.MessageReceivedFromForeground += MessageReceivedFromForeground;
+
+            // Send information to foreground that background task has been started if app is active
+            MessageService.SendMessageToForeground(new BackgroundAudioTaskStartedMessage());
 
             deferral = taskInstance.GetDeferral(); // This must be retrieved prior to subscribing to events below which use it
 
@@ -142,8 +146,11 @@ namespace Quran.Windows.Audio
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void MessageReceivedFromForeground(object sender, MediaPlayerDataReceivedEventArgs e)
+        async void MessageReceivedFromForeground(object sender, MediaPlayerDataReceivedEventArgs e)
         {
+            // Initializing FileUtils
+            await FileUtils.Initialize(true);
+
             StartPlaybackMessage startPlaybackMessage;
             if (MessageService.TryParseMessage(e.Data, out startPlaybackMessage))
             {
@@ -232,7 +239,7 @@ namespace Quran.Windows.Audio
 
         }
 
-        private const int PLAYLIST_SIZE = 1000;
+        private const int PLAYLIST_SIZE = 100;
         /// <summary>
         /// Create a playback list from the list of songs received from the foreground app.
         /// </summary>
@@ -251,6 +258,7 @@ namespace Quran.Windows.Audio
             for (int i = 0; i < PLAYLIST_SIZE; i++)
             {
                 var source = await GetTrackFromRequest(request);
+                request.GotoNextAyah();
                 if (source == null)
                 {
                     break;
@@ -274,7 +282,7 @@ namespace Quran.Windows.Audio
             var title = ayah.Ayah == 0 ? "Bismillah" : QuranUtils.GetSurahAyahString(ayah.Surah, ayah.Ayah);
             var path = AudioUtils.GetLocalPathForAyah(ayah.Ayah == 0 ? new QuranAyah(1, 1) : ayah, request.Reciter);
 
-            if (!await FileUtils.FileExists(path))
+            if (!File.Exists(path))
             {
                 return null;
             }
@@ -299,7 +307,6 @@ namespace Quran.Windows.Audio
         {
             // Get the new item
             var item = args.NewItem;
-            Debug.WriteLine("PlaybackList_CurrentItemChanged: " + (item == null ? "null" : GetTrackId(item).ToString()));
 
             // Update the system view
             UpdateUVCOnNewTrack(item);
@@ -337,11 +344,12 @@ namespace Quran.Windows.Audio
             smtc.DisplayUpdater.Type = MediaPlaybackType.Music;
             smtc.DisplayUpdater.MusicProperties.Title = item.Source.CustomProperties[TitleKey] as string;
 
-            var albumArtUri = item.Source.CustomProperties[AlbumArtKey] as Uri;
-            if (albumArtUri != null)
-                smtc.DisplayUpdater.Thumbnail = RandomAccessStreamReference.CreateFromUri(albumArtUri);
-            else
-                smtc.DisplayUpdater.Thumbnail = null;
+            // TODO: Add image
+            //var albumArtUri = item.Source.CustomProperties[AlbumArtKey] as Uri;
+            //if (albumArtUri != null)
+            //    smtc.DisplayUpdater.Thumbnail = RandomAccessStreamReference.CreateFromUri(albumArtUri);
+            //else
+            //    smtc.DisplayUpdater.Thumbnail = null;
 
             smtc.DisplayUpdater.Update();
         }
@@ -376,6 +384,9 @@ namespace Quran.Windows.Audio
                     playbackList.CurrentItemChanged -= PlaybackListCurrentItemChanged;
                     playbackList = null;
                 }
+
+                // remove handlers for MediaPlayer
+                BackgroundMediaPlayer.Current.CurrentStateChanged -= MediaPlayerStateChanged;
 
                 // unsubscribe event handlers
                 BackgroundMediaPlayer.MessageReceivedFromForeground -= MessageReceivedFromForeground;

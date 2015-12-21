@@ -20,7 +20,7 @@ namespace Quran.Windows.Views
         {
             DisplayInformation.AutoRotationPreferences = DisplayOrientations.None;
             ViewModel = QuranApp.TranslationsListViewModel;
-            InitializeComponent();            
+            InitializeComponent();
         }
 
         // When page is navigated to set data context to selected item in list

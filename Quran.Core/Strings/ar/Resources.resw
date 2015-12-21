@@ -743,7 +743,7 @@
     <value>number of ayah to repeat</value>
   </data>
   <data name="repeat_ayah" xml:space="preserve">
-    <value>repeat ayah</value>
+    <value>Repeat ayah</value>
   </data>
   <data name="times_to_repeat" xml:space="preserve">
     <value>times to repeat</value>
@@ -759,5 +759,14 @@
   </data>
   <data name="select" xml:space="preserve">
     <value>Select</value>
+  </data>
+  <data name="next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="pause" xml:space="preserve">
+    <value>Pause</value>
+  </data>
+  <data name="previous" xml:space="preserve">
+    <value>Previous</value>
   </data>
 </root>

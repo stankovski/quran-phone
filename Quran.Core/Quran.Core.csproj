@@ -190,7 +190,7 @@
     <Compile Include="ViewModels\TranslationsListViewModel.cs" />
     <Compile Include="ViewModels\VerseViewModel.cs" />
     <Compile Include="ViewModels\ViewModelWithDownload.cs" />
-    <Content Include="Properties\Quran.Core2.rd.xml" />
+    <Content Include="Properties\Quran.Core.rd.xml" />
     <Content Include="Strings\Resources.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Resources.cs</LastGenOutput>

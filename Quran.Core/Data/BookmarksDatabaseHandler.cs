@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using SQLite.Net;
+using Windows.Storage;
 
 namespace Quran.Core.Data
 {
@@ -19,7 +20,7 @@ namespace Quran.Core.Data
         public static string DB_NAME = "bookmarks.db";
 
         public BookmarksDatabaseHandler()
-            : base(DB_NAME)
+            : base(ApplicationData.Current.RoamingFolder.Path, DB_NAME)
         { }
 
         protected override SQLiteConnection CreateDatabase(string path)
@@ -30,6 +31,7 @@ namespace Quran.Core.Data
             newDb.CreateTable<BookmarkTags>();
             return newDb;
         }
+
         public List<Bookmarks> GetBookmarks(bool loadTags, BoomarkSortOrder sortOrder)
         {
             var bookmarks = dbConnection.Table<Bookmarks>();

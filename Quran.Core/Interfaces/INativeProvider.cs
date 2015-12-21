@@ -23,6 +23,5 @@ namespace Quran.Core.Interfaces
         Task<bool> ShowQuestionMessageBox(string text, string title);
         Task ShowErrorMessageBox(string text);
         void Log(string text);
-        string NativePath { get; }
     }
 }

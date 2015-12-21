@@ -10,15 +10,25 @@ namespace Quran.Core.Data
     {
         protected SQLiteConnection dbConnection = null;
 
-        protected BaseDatabaseHandler(string databaseName)
+        protected BaseDatabaseHandler(string databaseName) : 
+            this(FileUtils.GetQuranDatabaseDirectory(), databaseName)
+        { }
+
+        protected BaseDatabaseHandler(string basePath, string databaseName)
         {
-            string basePath = FileUtils.GetQuranDatabaseDirectory();
-            if (basePath == null) return;
-            string path = Path.Combine(QuranApp.NativeProvider.NativePath, basePath, databaseName);
+            if (basePath == null)
+            {
+                throw new ArgumentNullException(nameof(basePath));
+            }
+            if (databaseName == null)
+            {
+                throw new ArgumentNullException(nameof(databaseName));
+            }
+            string path = Path.Combine(basePath, databaseName);
 
             dbConnection = CreateDatabase(path);
         }
-       
+
         protected virtual SQLiteConnection CreateDatabase(string path)
         {
             return new SQLiteConnection(new SQLitePlatformWinRT(), path);

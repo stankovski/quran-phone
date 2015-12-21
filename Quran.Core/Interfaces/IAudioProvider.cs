@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Quran.Core.Common;
 using Quran.Core.Utils;
 using Windows.Foundation;
@@ -23,7 +24,7 @@ namespace Quran.Core.Interfaces
         /// <summary>
         /// Stops and resets media to be played from the beginning.
         /// </summary>
-        void Stop();
+        Task Stop();
 
         /// <summary>
         /// Starts fast-forwarding through the current <see cref="T:Microsoft.Phone.BackgroundAudio.AudioTrack"/>.

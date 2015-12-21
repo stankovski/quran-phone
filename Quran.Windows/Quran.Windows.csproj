@@ -299,6 +299,10 @@
       <Project>{747706f4-ecbf-4d50-8d72-b0ddcc18395c}</Project>
       <Name>Quran.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Quran.Windows.Audio\Quran.Windows.Audio.csproj">
+      <Project>{8a827bb8-5251-429c-a7bd-fa88d7fc6ac2}</Project>
+      <Name>Quran.Windows.Audio</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

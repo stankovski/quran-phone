@@ -16,6 +16,7 @@ namespace Quran.Core.Tests
         protected BaseTest()
         {
             QuranApp.NativeProvider = new TestNativeProvider();
+            QuranApp.Initialize();
         }        
     }
 }

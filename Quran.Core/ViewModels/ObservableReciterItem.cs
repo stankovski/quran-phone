@@ -3,6 +3,7 @@ using Quran.Core.Utils;
 using Quran.Core.Common;
 using Quran.Core.Data;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Quran.Core.ViewModels
 {
@@ -165,8 +166,24 @@ namespace Quran.Core.ViewModels
                 base.OnPropertyChanged(() => Exists);
             }
         }
-        
-        public async Task Delete()
+
+        ICommand deleteCommand;
+        /// <summary>
+        /// Returns an delete command
+        /// </summary>
+        public ICommand DeleteCommand
+        {
+            get
+            {
+                if (deleteCommand == null)
+                {
+                    deleteCommand = new RelayCommand(Delete);
+                }
+                return deleteCommand;
+            }
+        }
+
+        public async void Delete()
         {
             if (await FileUtils.DirectoryExists(this.LocalUrl))
             {
@@ -201,13 +218,6 @@ namespace Quran.Core.ViewModels
             }
         }
 
-        public void Navigate()
-        {
-            if (NavigateRequested != null)
-                NavigateRequested(this, null);
-        }
-
         public event EventHandler DeleteComplete;
-        public event EventHandler NavigateRequested;
     }
 }

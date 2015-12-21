@@ -8,24 +8,18 @@ namespace Quran.Core.Properties
 
         static Resources() 
         {
-            
-            string executingAssemblyName;
-            executingAssemblyName = Windows.UI.Xaml.Application.Current.GetType().AssemblyQualifiedName;
-            string[] executingAssemblySplit;
-            executingAssemblySplit = executingAssemblyName.Split(',');
-            executingAssemblyName = executingAssemblySplit[1];
             string currentAssemblyName;
             currentAssemblyName = typeof(Resources).AssemblyQualifiedName;
             string[] currentAssemblySplit;
             currentAssemblySplit = currentAssemblyName.Split(',');
             currentAssemblyName = currentAssemblySplit[1];
-            if (executingAssemblyName.Equals(currentAssemblyName))
-            {
-                resourceLoader = ResourceLoader.GetForCurrentView("Resources");
-            }
-            else
+            try
             {
                 resourceLoader = ResourceLoader.GetForCurrentView(currentAssemblyName + "/Resources");
+            }
+            catch
+            {
+                resourceLoader = ResourceLoader.GetForViewIndependentUse(currentAssemblyName + "/Resources");
             }
         }
 
@@ -452,6 +446,21 @@ namespace Quran.Core.Properties
         public static string select 
         {
             get { return resourceLoader.GetString("select"); }
+        }
+
+        public static string next 
+        {
+            get { return resourceLoader.GetString("next"); }
+        }
+
+        public static string pause 
+        {
+            get { return resourceLoader.GetString("pause"); }
+        }
+
+        public static string previous 
+        {
+            get { return resourceLoader.GetString("previous"); }
         }
     }
 }

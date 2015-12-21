@@ -22,7 +22,7 @@ namespace Quran.Core.Utils
         {
             get
             {
-                if (instance == null)
+                if (instance == null && QuranApp.NativeProvider != null)
                 {
                     instance = new ScreenUtils(QuranApp.NativeProvider.ActualWidth, 
                         QuranApp.NativeProvider.ActualHeight, QuranApp.NativeProvider.ScaleFactor);

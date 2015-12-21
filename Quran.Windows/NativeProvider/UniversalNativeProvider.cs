@@ -188,8 +188,6 @@ namespace Quran.Windows.NativeProvider
         public void Log(string text)
         {
             // TODO: Implement
-        }
-
-        public string NativePath { get { return ApplicationData.Current.LocalFolder.Path; } }        
+        }    
     }
 }

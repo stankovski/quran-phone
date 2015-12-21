@@ -82,7 +82,7 @@ namespace Quran.Core.ViewModels
                 }
             }
 
-            this.IsLoading = true;
+            this.IsLoading = false;
         }
         #endregion Public methods
 
@@ -101,9 +101,12 @@ namespace Quran.Core.ViewModels
                 e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace ||
                 e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Reset)
             {
-                foreach (ObservableReciterItem item in e.OldItems)
+                if (e.OldItems != null)
                 {
-                    item.DeleteComplete -= RecitationDeleteComplete;
+                    foreach (ObservableReciterItem item in e.OldItems)
+                    {
+                        item.DeleteComplete -= RecitationDeleteComplete;
+                    }
                 }
             }
         }

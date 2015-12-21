@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Quran.Core.Common;
 using Quran.Core.Interfaces;
 using Windows.Foundation;
@@ -25,7 +26,7 @@ namespace Quran.Core.Tests
             //BackgroundAudioPlayer.Instance.Pause();
         }
 
-        public void Stop()
+        public async Task Stop()
         {
             //BackgroundAudioPlayer.Instance.Stop();
         }

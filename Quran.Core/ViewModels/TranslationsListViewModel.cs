@@ -25,6 +25,7 @@ namespace Quran.Core.ViewModels
 
         public ObservableCollection<ObservableTranslationItem> Translations { get; private set; }
     }
+
     /// <summary>
     /// Define the TranslationslistViewModel type.
     /// </summary>
@@ -96,7 +97,6 @@ namespace Quran.Core.ViewModels
 
             this.IsLoading = false;
         }
-
         #endregion Public methods
 
         #region Event handlers
