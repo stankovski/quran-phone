@@ -435,23 +435,20 @@ namespace Quran.Windows.Views
         {
             if (state == AudioState.Playing)
             {
-                BottomAppBar.ClosedDisplayMode = AppBarClosedDisplayMode.Compact;
+                //BottomAppBar.ClosedDisplayMode = AppBarClosedDisplayMode.Compact;
                 AudioPlayButton.Visibility = Visibility.Collapsed;
-                AudioStopButton.Visibility = Visibility.Visible;
                 AudioPauseButton.Visibility = Visibility.Visible;
             }
             else if (state == AudioState.Paused)
             {
-                BottomAppBar.ClosedDisplayMode = AppBarClosedDisplayMode.Compact;
+                //BottomAppBar.ClosedDisplayMode = AppBarClosedDisplayMode.Compact;
                 AudioPlayButton.Visibility = Visibility.Visible;
-                AudioStopButton.Visibility = Visibility.Visible;
                 AudioPauseButton.Visibility = Visibility.Collapsed;
             }
             else
             {
-                BottomAppBar.ClosedDisplayMode = AppBarClosedDisplayMode.Minimal;
+                //BottomAppBar.ClosedDisplayMode = AppBarClosedDisplayMode.Minimal;
                 AudioPlayButton.Visibility = Visibility.Visible;
-                AudioStopButton.Visibility = Visibility.Collapsed;
                 AudioPauseButton.Visibility = Visibility.Collapsed;
             }
         }
@@ -464,12 +461,6 @@ namespace Quran.Windows.Views
         private async void AudioSkipBackward(object sender, RoutedEventArgs e)
         {
             await ViewModel.PreviousTrack();
-        }
-
-        private async void AudioStop(object sender, RoutedEventArgs e)
-        {
-            await ViewModel.Stop();
-            UpdateAudioControls(AudioState.Stopped);
         }
 
         private async void AudioPlay(object sender, RoutedEventArgs e)

@@ -59,7 +59,7 @@
                                 <TextBlock Text="{Binding Path=LocalizedResources.change_language, Source={StaticResource LocalizedStrings}}"/>
                                 <ComboBox ItemsSource="{x:Bind ViewModel.SupportedLanguages}" DisplayMemberPath="Value" 
                                           SelectedValue="{x:Bind ViewModel.SelectedLanguage, Mode=TwoWay}" SelectedValuePath="Key"/>
-                                    <TextBlock Text="{Binding Path=LocalizedResources.prefs_ayah_before_translation_summary, Source={StaticResource LocalizedStrings}}"/>
+                                <TextBlock Text="{Binding Path=LocalizedResources.prefs_ayah_before_translation_summary, Source={StaticResource LocalizedStrings}}"/>
                                 <ToggleSwitch IsOn="{x:Bind ViewModel.ShowArabicInTranslation, Mode=TwoWay}" 
                                               IsEnabled="{x:Bind ViewModel.EnableShowArabicInTranslation, Mode=OneWay}" />
                                 <TextBlock Text="{Binding Path=LocalizedResources.disable_sleep, Source={StaticResource LocalizedStrings}}"/>
@@ -81,13 +81,14 @@
                                 <TextBlock Text="{Binding Path=LocalizedResources.reciters, Source={StaticResource LocalizedStrings}}"/>
                                 <Button Content="{x:Bind ViewModel.ActiveReciter}" Click="ShowReciters"/>
                                 <TextBlock Text="{Binding Path=LocalizedResources.audio_download_blocks, Source={StaticResource LocalizedStrings}}"/>
-                                <!--<ComboBox ItemsSource="{x:Bind ViewModel.SupportedAudioBlocks}" DisplayMemberPath="Value" SelectedItem="{x:Bind ViewModel.SelectedAudioBlock, Mode=TwoWay}"/>-->
-                                <TextBlock Text="{Binding Path=LocalizedResources.repeat_ayah, Source={StaticResource LocalizedStrings}}"/>
+                                <ComboBox ItemsSource="{x:Bind ViewModel.SupportedAudioBlocks}" DisplayMemberPath="Value" 
+                                          SelectedValue="{x:Bind ViewModel.SelectedAudioBlock, Mode=TwoWay}" SelectedValuePath="Key"/>
+                                <!--<TextBlock Text="{Binding Path=LocalizedResources.repeat_ayah, Source={StaticResource LocalizedStrings}}"/>
                                 <ToggleSwitch IsOn="{Binding RepeatAudio, Mode=TwoWay}" />
                                 <TextBlock Text="{Binding Path=LocalizedResources.number_of_ayah_to_repeat, Source={StaticResource LocalizedStrings}}"/>
                                 <ComboBox ItemsSource="{Binding SupportedRepeatAmount}" DisplayMemberPath="Value" SelectedItem="{Binding SelectedRepeatAmount, Mode=TwoWay}"/>
                                 <TextBlock Text="{Binding Path=LocalizedResources.times_to_repeat, Source={StaticResource LocalizedStrings}}"/>
-                                <ComboBox ItemsSource="{Binding SupportedRepeatTimes}" DisplayMemberPath="Value" SelectedItem="{Binding SelectedRepeatTimes, Mode=TwoWay}"/>
+                                <ComboBox ItemsSource="{Binding SupportedRepeatTimes}" DisplayMemberPath="Value" SelectedItem="{Binding SelectedRepeatTimes, Mode=TwoWay}"/>-->
                             </StackPanel>
                         </ScrollViewer>
                     </PivotItem>

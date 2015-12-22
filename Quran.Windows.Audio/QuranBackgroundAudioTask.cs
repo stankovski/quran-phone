@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -22,8 +23,8 @@ namespace Quran.Windows.Audio
     {
         private const string TrackIdKey = "trackid";
         private const string TitleKey = "title";
+        private const string AyahKey = "ayah";
         private const string AlbumArtKey = "albumart";
-        private const string RequestString = "requestString";
 
         private SystemMediaTransportControls smtc;
         private MediaPlaybackList playbackList = new MediaPlaybackList();
@@ -146,11 +147,8 @@ namespace Quran.Windows.Audio
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        async void MessageReceivedFromForeground(object sender, MediaPlayerDataReceivedEventArgs e)
+        void MessageReceivedFromForeground(object sender, MediaPlayerDataReceivedEventArgs e)
         {
-            // Initializing FileUtils
-            await FileUtils.Initialize(true);
-
             StartPlaybackMessage startPlaybackMessage;
             if (MessageService.TryParseMessage(e.Data, out startPlaybackMessage))
             {
@@ -181,12 +179,15 @@ namespace Quran.Windows.Audio
             TrackChangedMessage trackChangedMessage;
             if (MessageService.TryParseMessage(e.Data, out trackChangedMessage))
             {
-                //var index = playbackList.Items.ToList().FindIndex(i => (Uri)i.Source.CustomProperties[TrackIdKey] == trackChangedMessage.TrackId);
-                //Debug.WriteLine("Skipping to track " + index);
-                //smtc.PlaybackStatus = MediaPlaybackStatus.Changing;
-                //playbackList.MoveTo((uint)index);
-                // TODO: Work around playlist bug that doesn't continue playing after a switch; remove later
-                CreatePlaybackList(new AudioRequest(trackChangedMessage.AudioRequest));
+                var ayah = string.Format(CultureInfo.InvariantCulture, "{0}:{1}", trackChangedMessage.Ayah.Key, trackChangedMessage.Ayah.Value);
+                var index = playbackList.Items.ToList().FindIndex(i => (string)i.Source.CustomProperties[AyahKey] == ayah);
+                smtc.PlaybackStatus = MediaPlaybackStatus.Changing;
+                if (playbackList.CurrentItemIndex != (uint)index)
+                {
+                    playbackList.MoveTo((uint)index);
+                }
+
+                //TODO: Work around playlist bug that doesn't continue playing after a switch; remove later
                 BackgroundMediaPlayer.Current.Play();
                 return;
             }
@@ -194,7 +195,12 @@ namespace Quran.Windows.Audio
             UpdatePlaylistMessage updatePlaylistMessage;
             if (MessageService.TryParseMessage(e.Data, out updatePlaylistMessage))
             {
-                CreatePlaybackList(new AudioRequest(updatePlaylistMessage.AudioRequest));
+                CreatePlaybackList(updatePlaylistMessage.Tracks);
+
+                if (updatePlaylistMessage.CurrentTrack != null)
+                {
+                    MessageService.SendMessageToBackground(new TrackChangedMessage(updatePlaylistMessage.CurrentTrack.Ayah));
+                }
                 return;
             }
         }
@@ -244,7 +250,7 @@ namespace Quran.Windows.Audio
         /// Create a playback list from the list of songs received from the foreground app.
         /// </summary>
         /// <param name="songs"></param>
-        async void CreatePlaybackList(AudioRequest request)
+        void CreatePlaybackList(List<AudioTrackModel> tracks)
         {
             // Make a new list and disable looping
             if (playbackList != null)
@@ -252,17 +258,15 @@ namespace Quran.Windows.Audio
                 playbackList.CurrentItemChanged -= PlaybackListCurrentItemChanged;
             }
             playbackList = new MediaPlaybackList();
-            playbackList.AutoRepeatEnabled = false;
+            playbackList.AutoRepeatEnabled = true;
 
             // Add playback items to the list
-            for (int i = 0; i < PLAYLIST_SIZE; i++)
+            foreach (var track in tracks)
             {
-                var source = await GetTrackFromRequest(request);
-                request.GotoNextAyah();
-                if (source == null)
-                {
-                    break;
-                }
+                var source = MediaSource.CreateFromStream(File.OpenRead(track.Path).AsRandomAccessStream(), "audio/mpeg");
+                source.CustomProperties[TrackIdKey] = track.Path;
+                source.CustomProperties[AyahKey] = string.Format(CultureInfo.InvariantCulture, "{0}:{1}", track.Ayah.Key, track.Ayah.Value);
+                source.CustomProperties[TitleKey] = track.Title;
                 playbackList.Items.Add(new MediaPlaybackItem(source));
             }
 
@@ -275,29 +279,7 @@ namespace Quran.Windows.Audio
             // Add handler for future playlist item changes
             playbackList.CurrentItemChanged += PlaybackListCurrentItemChanged;
         }
-
-        private async Task<MediaSource> GetTrackFromRequest(AudioRequest request)
-        {
-            var ayah = request.CurrentAyah;
-            var title = ayah.Ayah == 0 ? "Bismillah" : QuranUtils.GetSurahAyahString(ayah.Surah, ayah.Ayah);
-            var path = AudioUtils.GetLocalPathForAyah(ayah.Ayah == 0 ? new QuranAyah(1, 1) : ayah, request.Reciter);
-
-            if (!File.Exists(path))
-            {
-                return null;
-            }
-            else
-            {
-                var source = MediaSource.CreateFromStorageFile(await StorageFile.GetFileFromPathAsync(path));
-                source.CustomProperties[TrackIdKey] = path;
-                source.CustomProperties[TitleKey] = title;
-                source.CustomProperties[RequestString] = request.ToString();
-                return source;
-                //return new AudioTrack(new Uri(path, UriKind.Relative), title, request.Reciter.Name, "Quran", null,
-                //    request.ToString(), EnabledPlayerControls.All);
-            }
-        }
-
+        
         /// <summary>
         /// Raised when playlist changes to a new track
         /// </summary>
@@ -312,9 +294,9 @@ namespace Quran.Windows.Audio
             UpdateUVCOnNewTrack(item);
 
             // Get the current track
-            if (item != null && item.Source.CustomProperties.ContainsKey(RequestString))
+            if (item != null && item.Source.CustomProperties.ContainsKey(AyahKey))
             {
-                var request = item.Source.CustomProperties[RequestString] as string;
+                var request = item.Source.CustomProperties[AyahKey] as string;
                 MessageService.SendMessageToForeground(new TrackChangedMessage(request));
             }      
         }

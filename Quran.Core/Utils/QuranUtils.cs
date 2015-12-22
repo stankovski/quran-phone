@@ -227,6 +227,14 @@ namespace Quran.Core.Utils
                 return false;
         }
 
+        public static bool HasBismillah(int surah)
+        {
+            if (surah == Constants.SURA_TAWBA)
+                return false;
+            else
+                return false;
+        }
+
         public static string GetNotificationTitle(QuranAyah minVerse, QuranAyah maxVerse)
         {
             int minSura = minVerse.Surah;

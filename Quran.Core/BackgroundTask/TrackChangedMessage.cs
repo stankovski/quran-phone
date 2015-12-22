@@ -11,6 +11,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -26,12 +27,25 @@ namespace Quran.Core
         {
         }
 
-        public TrackChangedMessage(string request)
+        public TrackChangedMessage(KeyValuePair<int, int> ayah)
         {
-            this.AudioRequest = request;
+            this.Ayah = ayah;
+        }
+
+        public TrackChangedMessage(string ayah)
+        {
+            if (string.IsNullOrEmpty(ayah))
+            {
+                throw new ArgumentNullException(nameof(ayah));
+            }
+
+            var splitString = ayah.Split(':');
+            this.Ayah = new KeyValuePair<int, int>(
+                int.Parse(splitString[0], CultureInfo.InvariantCulture), 
+                int.Parse(splitString[1], CultureInfo.InvariantCulture));
         }
 
         [DataMember]
-        public string AudioRequest;
+        public KeyValuePair<int, int> Ayah;
     }
 }

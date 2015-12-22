@@ -205,14 +205,14 @@ namespace Quran.Core.ViewModels
                 base.OnPropertyChanged(() => SelectedLanguage);
             }
         }
-        
-        private KeyValuePair<AudioDownloadAmount, string> selectedAudioBlock = new KeyValuePair<AudioDownloadAmount,string>((AudioDownloadAmount)100, "");
-        public KeyValuePair<AudioDownloadAmount, string> SelectedAudioBlock
+
+        private string selectedAudioBlock = "Page";
+        public string SelectedAudioBlock
         {
             get { return selectedAudioBlock; }
             set
             {
-                if (value.Key == selectedAudioBlock.Key)
+                if (value == selectedAudioBlock)
                     return;
 
                 selectedAudioBlock = value;
@@ -253,7 +253,7 @@ namespace Quran.Core.ViewModels
         
         public ObservableCollection<KeyValuePair<string, string>> SupportedLanguages { get; private set; }
 
-        public ObservableCollection<KeyValuePair<AudioDownloadAmount, string>> SupportedAudioBlocks { get; private set; }
+        public ObservableCollection<KeyValuePair<string, string>> SupportedAudioBlocks { get; private set; }
 
         public ObservableCollection<KeyValuePair<RepeatAmount, string>> SupportedRepeatAmount { get; private set; }
 
@@ -279,10 +279,10 @@ namespace Quran.Core.ViewModels
             {
                 SupportedLanguages.Add(lang);
             }
-            SupportedAudioBlocks = new ObservableCollection<KeyValuePair<AudioDownloadAmount, string>>();
+            SupportedAudioBlocks = new ObservableCollection<KeyValuePair<string, string>>();
             foreach (var enumValue in Enum.GetNames(typeof(AudioDownloadAmount)))
             {
-                SupportedAudioBlocks.Add(new KeyValuePair<AudioDownloadAmount, string>((AudioDownloadAmount)Enum.Parse(typeof(AudioDownloadAmount), enumValue), enumValue));
+                SupportedAudioBlocks.Add(new KeyValuePair<string, string>(enumValue, enumValue));
             }
             SupportedRepeatAmount = new ObservableCollection<KeyValuePair<RepeatAmount, string>>();
             foreach (var repeatValue in GetSupportedRepeatAmounts())
@@ -308,7 +308,7 @@ namespace Quran.Core.ViewModels
                 ActiveReciter = "None";
 
             SelectedLanguage = SettingsUtils.Get<string>(Constants.PREF_CULTURE_OVERRIDE);
-            SelectedAudioBlock = SupportedAudioBlocks.First(kv => kv.Key == SettingsUtils.Get<AudioDownloadAmount>(Constants.PREF_DOWNLOAD_AMOUNT));
+            SelectedAudioBlock = SettingsUtils.Get<AudioDownloadAmount>(Constants.PREF_DOWNLOAD_AMOUNT).ToString();
             SelectedRepeatAmount = SupportedRepeatAmount.First(kv => kv.Key == SettingsUtils.Get<RepeatAmount>(Constants.PREF_REPEAT_AMOUNT));
             SelectedRepeatTimes = SupportedRepeatTimes.First(kv => kv.Key == SettingsUtils.Get<int>(Constants.PREF_REPEAT_TIMES));
             RepeatAudio = SettingsUtils.Get<bool>(Constants.PREF_AUDIO_REPEAT);
@@ -333,7 +333,7 @@ namespace Quran.Core.ViewModels
         {
             SettingsUtils.Set(Constants.PREF_REPEAT_TIMES, SelectedRepeatTimes.Key);
             SettingsUtils.Set(Constants.PREF_REPEAT_AMOUNT, SelectedRepeatAmount.Key);
-            SettingsUtils.Set(Constants.PREF_DOWNLOAD_AMOUNT, SelectedAudioBlock.Key);
+            SettingsUtils.Set(Constants.PREF_DOWNLOAD_AMOUNT, (AudioDownloadAmount)Enum.Parse(typeof(AudioDownloadAmount), SelectedAudioBlock, true));
             SettingsUtils.Set(Constants.PREF_CULTURE_OVERRIDE, SelectedLanguage);
             SettingsUtils.Set(Constants.PREF_AUDIO_REPEAT, RepeatAudio);
             SettingsUtils.Set(Constants.PREF_KEEP_INFO_OVERLAY, KeepInfoOverlay);
@@ -383,13 +383,6 @@ namespace Quran.Core.ViewModels
                     yield return new KeyValuePair<string, string>(c, cultureInfo.NativeName);
                 }
             }
-        }
-
-        private IEnumerable<KeyValuePair<AudioDownloadAmount, string>> GetSupportedDownloadAmounts()
-        {
-            yield return new KeyValuePair<AudioDownloadAmount, string>(AudioDownloadAmount.Page, Resources.quran_page);
-            yield return new KeyValuePair<AudioDownloadAmount, string>(AudioDownloadAmount.Surah, Resources.quran_sura_lower);
-            yield return new KeyValuePair<AudioDownloadAmount, string>(AudioDownloadAmount.Juz, Resources.quran_juz2_lower);
         }
 
         private IEnumerable<KeyValuePair<int, string>> GetSupportedRepeatTimes()

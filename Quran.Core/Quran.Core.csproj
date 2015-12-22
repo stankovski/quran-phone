@@ -111,7 +111,7 @@
     <Compile Include="BackgroundTask\MessageService.cs" />
     <Compile Include="BackgroundTask\SkipNextMessage.cs" />
     <Compile Include="BackgroundTask\SkipPreviousMessage.cs" />
-    <Compile Include="BackgroundTask\SongModel.cs" />
+    <Compile Include="BackgroundTask\AudioTrackModel.cs" />
     <Compile Include="BackgroundTask\StartPlaybackMessage.cs" />
     <Compile Include="BackgroundTask\TrackChangedMessage.cs" />
     <Compile Include="BackgroundTask\UpdatePlaylistMessage.cs" />
@@ -149,7 +149,6 @@
     <Compile Include="Data\SuraTimingDatabaseHandler.cs" />
     <Compile Include="Data\TranslationsDatabaseHandler.cs" />
     <Compile Include="Interfaces\IAudioProvider.cs" />
-    <Compile Include="Interfaces\IAudioTrack.cs" />
     <Compile Include="Interfaces\IDownloadManager.cs" />
     <Compile Include="Interfaces\INativeProvider.cs" />
     <Compile Include="Interfaces\ISettingsProvider.cs" />

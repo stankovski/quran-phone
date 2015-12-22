@@ -13,8 +13,8 @@ namespace Quran.Core.Tests
             //BackgroundAudioPlayer.Instance.PlayStateChanged += Instance_PlayStateChanged;
         }
 
-        public event TypedEventHandler<IAudioProvider, AudioRequest> TrackChanged;
         public event TypedEventHandler<IAudioProvider, AudioPlayerPlayState> StateChanged;
+        public event TypedEventHandler<IAudioProvider, AudioTrackModel> TrackChanged;
 
         public void Play()
         {
@@ -46,7 +46,7 @@ namespace Quran.Core.Tests
             get; set;
         }
 
-        public AudioRequest GetTrack()
+        public AudioTrackModel GetTrack()
         {
             //var audioTrack = BackgroundAudioPlayer.Instance.Track;
             //if (WindowsTrack == null || WindowsTrack.OriginalTrack != audioTrack)

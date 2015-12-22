@@ -9,7 +9,7 @@ namespace Quran.Core.Interfaces
     public interface IAudioProvider
     {
         event TypedEventHandler<IAudioProvider, AudioPlayerPlayState> StateChanged;
-        event TypedEventHandler<IAudioProvider, AudioRequest> TrackChanged;
+        event TypedEventHandler<IAudioProvider, AudioTrackModel> TrackChanged;
 
         /// <summary>
         /// Plays or resumes the current <see cref="T:Microsoft.Phone.BackgroundAudio.AudioTrack"/> at its current position.
@@ -20,12 +20,7 @@ namespace Quran.Core.Interfaces
         /// Pauses playback at the current position.
         /// </summary>
         void Pause();
-
-        /// <summary>
-        /// Stops and resets media to be played from the beginning.
-        /// </summary>
-        Task Stop();
-
+        
         /// <summary>
         /// Starts fast-forwarding through the current <see cref="T:Microsoft.Phone.BackgroundAudio.AudioTrack"/>.
         /// </summary>
@@ -41,7 +36,7 @@ namespace Quran.Core.Interfaces
         /// <summary>
         /// Gets the current track for this application, whether the application is currently playing or not.
         /// </summary>
-        AudioRequest GetTrack();
+        AudioTrackModel GetTrack();
 
         /// <summary>
         /// Sets the current track for this application, whether the application is currently playing or not.

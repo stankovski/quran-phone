@@ -21,12 +21,22 @@ namespace Quran.Core
     [DataContract]
     public class UpdatePlaylistMessage
     {
-        public UpdatePlaylistMessage(string request)
+        public UpdatePlaylistMessage()
+        { }
+
+        public UpdatePlaylistMessage(List<AudioTrackModel> tracks) : this(tracks, null)
+        { }
+
+        public UpdatePlaylistMessage(List<AudioTrackModel> tracks, AudioTrackModel currentTrack)
         {
-            this.AudioRequest = request;
+            this.Tracks = tracks;
+            this.CurrentTrack = currentTrack;
         }
 
         [DataMember]
-        public string AudioRequest;
+        public List<AudioTrackModel> Tracks { get; set; }
+
+        [DataMember]
+        public AudioTrackModel CurrentTrack { get; set; }
     }
 }
