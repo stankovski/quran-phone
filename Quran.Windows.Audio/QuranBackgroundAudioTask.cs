@@ -25,11 +25,14 @@ namespace Quran.Windows.Audio
         private const string TitleKey = "title";
         private const string AyahKey = "ayah";
         private const string AlbumArtKey = "albumart";
+        const uint RPC_S_SERVER_UNAVAILABLE = 0x800706BA;
+        const uint E_ABORT = 0x80004004;
 
         private SystemMediaTransportControls smtc;
         private MediaPlaybackList playbackList = new MediaPlaybackList();
         private ManualResetEvent backgroundTaskStarted = new ManualResetEvent(false);
         private BackgroundTaskDeferral deferral; // Used to keep task alive
+
 
         public void Run(IBackgroundTaskInstance taskInstance)
         {
@@ -128,17 +131,31 @@ namespace Quran.Windows.Audio
 
         void MediaPlayerStateChanged(MediaPlayer sender, object args)
         {
-            if (sender.CurrentState == MediaPlayerState.Playing)
+            try
             {
-                smtc.PlaybackStatus = MediaPlaybackStatus.Playing;
+                if (sender.CurrentState == MediaPlayerState.Playing)
+                {
+                    smtc.PlaybackStatus = MediaPlaybackStatus.Playing;
+                }
+                else if (sender.CurrentState == MediaPlayerState.Paused)
+                {
+                    smtc.PlaybackStatus = MediaPlaybackStatus.Paused;
+                }
+                else if (sender.CurrentState == MediaPlayerState.Closed)
+                {
+                    smtc.PlaybackStatus = MediaPlaybackStatus.Closed;
+                }
             }
-            else if (sender.CurrentState == MediaPlayerState.Paused)
+            catch (Exception ex)
             {
-                smtc.PlaybackStatus = MediaPlaybackStatus.Paused;
-            }
-            else if (sender.CurrentState == MediaPlayerState.Closed)
-            {
-                smtc.PlaybackStatus = MediaPlaybackStatus.Closed;
+                if ((uint)ex.HResult == E_ABORT)
+                {
+                    // do nothing
+                }
+                else
+                {
+                    throw;
+                }
             }
         }
 
@@ -245,13 +262,12 @@ namespace Quran.Windows.Audio
         /// <param name="songs"></param>
         async Task CreatePlaybackList(List<AudioTrackModel> tracks)
         {
-            // Make a new list and disable looping
+            // Make a new list
             if (playbackList != null)
             {
                 playbackList.CurrentItemChanged -= PlaybackListCurrentItemChanged;
             }
             playbackList = new MediaPlaybackList();
-            playbackList.AutoRepeatEnabled = true;
 
             // Add playback items to the list
             foreach (var track in tracks)

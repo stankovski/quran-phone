@@ -19,6 +19,7 @@ namespace Quran.Windows.NativeProvider
 {
     public class UniversalAudioProvider : IAudioProvider, IDisposable
     {
+        const uint E_ABORT = 0x80004004;
         const int RPC_S_SERVER_UNAVAILABLE = -2147023174; // 0x800706BA
         private AutoResetEvent backgroundAudioTaskStarted;
         private readonly CoreDispatcher _dispatcher;
@@ -37,31 +38,36 @@ namespace Quran.Windows.NativeProvider
 
         public void Play()
         {
-            if (_currentTrack != null && _playlist != null)
+            if (MediaPlayerState.Paused == CurrentPlayer.CurrentState)
             {
-                // Start the background task if it wasn't running
-                if (MediaPlayerState.Closed == CurrentPlayer.CurrentState)
-                {
-                    // Start task
-                    StartBackgroundAudioTask();
-                }
-                else
-                {
-                    // Switch to the selected track
-                    MessageService.SendMessageToBackground(new TrackChangedMessage(string.Format(CultureInfo.InvariantCulture,
-                        "{0}:{1}", _currentTrack.Ayah.Key, _currentTrack.Ayah.Value)));
-                }
-
-                if (MediaPlayerState.Paused == CurrentPlayer.CurrentState)
-                {
-                    CurrentPlayer.Play();
-                }
+                CurrentPlayer.Play();
             }
         }
 
         public void Pause()
         {
             CurrentPlayer.Pause();
+        }
+
+
+        public void Stop()
+        {
+            if (CurrentPlayer.CurrentState == MediaPlayerState.Playing)
+            {
+                CurrentPlayer.Pause();
+            }
+
+            if (CurrentPlayer.CurrentState != MediaPlayerState.Stopped)
+            {
+                _playlist = null;
+                _currentTrack = null;
+                MessageService.SendMessageToBackground(new UpdatePlaylistMessage(new List<AudioTrackModel>()));
+                State = AudioPlayerPlayState.Stopped;
+                if (StateChanged != null)
+                {
+                    StateChanged(this, this.State);
+                }
+            }
         }
 
         public void Next()
@@ -115,6 +121,21 @@ namespace Quran.Windows.NativeProvider
             }
 
             _currentTrack = _playlist.FirstOrDefault(t => t.Ayah.Key == currentAyah.Surah && t.Ayah.Value == currentAyah.Ayah);
+
+            if (MediaPlayerState.Closed == CurrentPlayer.CurrentState)
+            {
+                // Start task
+                StartBackgroundAudioTask();                
+            }
+
+            if (_currentTrack != null)
+            {
+                MessageService.SendMessageToBackground(new UpdatePlaylistMessage(_playlist, _currentTrack));
+            }
+            else
+            {
+                MessageService.SendMessageToBackground(new UpdatePlaylistMessage(_playlist));
+            }
 
             Play();
         }
@@ -190,6 +211,11 @@ namespace Quran.Windows.NativeProvider
             }
         }
 
+        public bool Repeat
+        {
+            get; set;
+        }
+
         /// <summary>
         /// The background task did exist, but it has disappeared. Put the foreground back into an initial state. Unfortunately,
         /// any attempts to unregister things on BackgroundMediaPlayer.Current will fail with the RPC error once the background task has been lost.
@@ -229,7 +255,7 @@ namespace Quran.Windows.NativeProvider
                 await _dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
                     var currentAyah = trackChangedMessage.Ayah;
-                    _currentTrack = _playlist.FirstOrDefault(t => t.Ayah.Key == currentAyah.Key && t.Ayah.Value == currentAyah.Value);
+                    _currentTrack = _playlist?.FirstOrDefault(t => t.Ayah.Key == currentAyah.Key && t.Ayah.Value == currentAyah.Value);
                     if (TrackChanged != null)
                     {
                         TrackChanged(this, _currentTrack);
@@ -255,26 +281,12 @@ namespace Quran.Windows.NativeProvider
         {
             AddMediaPlayerEventHandlers();
 
-            var startResult = _dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            bool result = backgroundAudioTaskStarted.WaitOne(10000);
+            //Send message to initiate playback
+            if (result != true)
             {
-                bool result = backgroundAudioTaskStarted.WaitOne(10000);
-                //Send message to initiate playback
-                if (result == true)
-                {
-                    if (_playlist != null && _currentTrack != null)
-                    {
-                        MessageService.SendMessageToBackground(new UpdatePlaylistMessage(_playlist, _currentTrack));
-                    }
-                    else if (_playlist != null)
-                    {
-                        MessageService.SendMessageToBackground(new UpdatePlaylistMessage(_playlist));
-                    }
-                }
-                else
-                {
-                    throw new Exception("Background Audio Task didn't start in expected time");
-                }
-            });
+                throw new Exception("Background Audio Task didn't start in expected time");
+            }
         }
 
         /// <summary>
@@ -333,13 +345,33 @@ namespace Quran.Windows.NativeProvider
         /// <param name="args"></param>
         private async void MediaPlayerCurrentStateChanged(MediaPlayer sender, object args)
         {
-            var currentState = sender.CurrentState; // cache outside of completion or you might get a different value
+            MediaPlayerState currentState = MediaPlayerState.Stopped;
+            try
+            {
+                currentState = sender.CurrentState; // cache outside of completion or you might get a different value
+            }
+            catch (Exception ex)
+            {
+                if ((uint)ex.HResult == E_ABORT || ex.HResult == RPC_S_SERVER_UNAVAILABLE)
+                {
+                    // do nothing
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
             await _dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                this.State = (AudioPlayerPlayState)(int)currentState;
+                var appstate = (AudioPlayerPlayState)(int)currentState;
+                if (!(this.State == AudioPlayerPlayState.Stopped && appstate == AudioPlayerPlayState.Paused))
+                {
+                    this.State = appstate;
+                }
                 if (StateChanged != null)
                 {
-                    StateChanged(this, this.State );
+                    StateChanged(this, appstate);
                 }
             });
         }

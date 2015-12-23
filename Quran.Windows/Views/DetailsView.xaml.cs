@@ -207,7 +207,7 @@ namespace Quran.Windows.Views
         }
 
 
-        private void AyahContextMenuClick(object sender, RoutedEventArgs e)
+        private async void AyahContextMenuClick(object sender, RoutedEventArgs e)
         {
             var menuFlyoutItem = sender as MenuFlyoutItem;
             if (menuFlyoutItem == null)
@@ -236,6 +236,10 @@ namespace Quran.Windows.Views
                 _ayahToShare = selectedAyah;
                 DataTransferManager.ShowShareUI();
             }
+            else if (menuItem == Core.Properties.Resources.recite_ayah)
+            {
+                await ViewModel.PlayFromAyah(selectedAyah.Surah, selectedAyah.Ayah);
+            }
 
             ViewModel.SelectedAyah = null;
 
@@ -260,7 +264,7 @@ namespace Quran.Windows.Views
             var ayahContextMenu = this.Resources["AyahContextMenu"] as MenuFlyout;
             ayahContextMenu.Items.Add(new MenuFlyoutItem() { Text = Core.Properties.Resources.bookmark_ayah });
             ayahContextMenu.Items.Add(new MenuFlyoutItem() { Text = Core.Properties.Resources.copy });
-            //ayahContextMenu.Items.Add(new MenuFlyoutItem() { Text = Core.Properties.Resources.recite_ayah });
+            ayahContextMenu.Items.Add(new MenuFlyoutItem() { Text = Core.Properties.Resources.recite_ayah });
             ayahContextMenu.Items.Add(new MenuFlyoutItem() { Text = Core.Properties.Resources.share_ayah });
             foreach (MenuFlyoutItem item in ayahContextMenu.Items)
             {
@@ -436,31 +440,30 @@ namespace Quran.Windows.Views
             if (state == AudioState.Playing)
             {
                 //BottomAppBar.ClosedDisplayMode = AppBarClosedDisplayMode.Compact;
+                BottomAppBar.IsOpen = true;
                 AudioPlayButton.Visibility = Visibility.Collapsed;
+                AudioStopButton.Visibility = Visibility.Visible;
                 AudioPauseButton.Visibility = Visibility.Visible;
             }
             else if (state == AudioState.Paused)
             {
-                //BottomAppBar.ClosedDisplayMode = AppBarClosedDisplayMode.Compact;
+                //BottomAppBar.ClosedDisplayMode = AppBarClosedDisplayMode.Minimal;
                 AudioPlayButton.Visibility = Visibility.Visible;
+                AudioStopButton.Visibility = Visibility.Visible;
                 AudioPauseButton.Visibility = Visibility.Collapsed;
             }
             else
             {
                 //BottomAppBar.ClosedDisplayMode = AppBarClosedDisplayMode.Minimal;
                 AudioPlayButton.Visibility = Visibility.Visible;
+                AudioStopButton.Visibility = Visibility.Collapsed;
                 AudioPauseButton.Visibility = Visibility.Collapsed;
             }
         }
 
-        private async void AudioSetRepeat(object sender, RoutedEventArgs e)
+        private void AudioSkipBackward(object sender, RoutedEventArgs e)
         {
-            // TODO: Implement
-        }
-
-        private async void AudioSkipBackward(object sender, RoutedEventArgs e)
-        {
-            await ViewModel.PreviousTrack();
+            ViewModel.PreviousTrack();
         }
 
         private async void AudioPlay(object sender, RoutedEventArgs e)
@@ -475,9 +478,15 @@ namespace Quran.Windows.Views
             UpdateAudioControls(AudioState.Paused);
         }
 
-        private async void AudioSkipForward(object sender, RoutedEventArgs e)
+        private void AudioStop(object sender, RoutedEventArgs e)
         {
-            await ViewModel.NextTrack();
+            ViewModel.Stop();
+            UpdateAudioControls(AudioState.Stopped);
+        }
+
+        private void AudioSkipForward(object sender, RoutedEventArgs e)
+        {
+            ViewModel.NextTrack();
         }
         #endregion
     }

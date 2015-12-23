@@ -63,7 +63,17 @@ namespace Quran.Core.Tests
             throw new NotImplementedException();
         }
 
+        void IAudioProvider.Stop()
+        {
+            // Do thing
+        }
+
         public TimeSpan Position
+        {
+            get; set;
+        }
+
+        public bool Repeat
         {
             get; set;
         }

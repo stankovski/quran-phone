@@ -31,6 +31,19 @@ namespace Quran.Core.Interfaces
         /// </summary>
         void Previous();
 
+        /// <summary>
+        /// Stops the playback.
+        /// </summary>
+        void Stop();
+
+        /// <summary>
+        /// Gets or sets repeat loop.
+        /// </summary>
+        bool Repeat
+        {
+            get; set;
+        }
+
         AudioPlayerPlayState State { get; }
 
         /// <summary>
