@@ -147,7 +147,7 @@ namespace Quran.Windows.Audio
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void MessageReceivedFromForeground(object sender, MediaPlayerDataReceivedEventArgs e)
+        async void MessageReceivedFromForeground(object sender, MediaPlayerDataReceivedEventArgs e)
         {
             StartPlaybackMessage startPlaybackMessage;
             if (MessageService.TryParseMessage(e.Data, out startPlaybackMessage))
@@ -195,7 +195,7 @@ namespace Quran.Windows.Audio
             UpdatePlaylistMessage updatePlaylistMessage;
             if (MessageService.TryParseMessage(e.Data, out updatePlaylistMessage))
             {
-                CreatePlaybackList(updatePlaylistMessage.Tracks);
+                await CreatePlaybackList(updatePlaylistMessage.Tracks);
 
                 if (updatePlaylistMessage.CurrentTrack != null)
                 {
@@ -227,9 +227,6 @@ namespace Quran.Windows.Audio
         {
             smtc.PlaybackStatus = MediaPlaybackStatus.Changing;
             playbackList.MovePrevious();
-
-            // TODO: Work around playlist bug that doesn't continue playing after a switch; remove later
-            BackgroundMediaPlayer.Current.Play();
         }
 
         /// <summary>
@@ -239,10 +236,6 @@ namespace Quran.Windows.Audio
         {
             smtc.PlaybackStatus = MediaPlaybackStatus.Changing;
             playbackList.MoveNext();
-
-            // TODO: Work around playlist bug that doesn't continue playing after a switch; remove later
-            BackgroundMediaPlayer.Current.Play();
-
         }
 
         private const int PLAYLIST_SIZE = 100;
@@ -250,7 +243,7 @@ namespace Quran.Windows.Audio
         /// Create a playback list from the list of songs received from the foreground app.
         /// </summary>
         /// <param name="songs"></param>
-        void CreatePlaybackList(List<AudioTrackModel> tracks)
+        async Task CreatePlaybackList(List<AudioTrackModel> tracks)
         {
             // Make a new list and disable looping
             if (playbackList != null)
@@ -263,7 +256,7 @@ namespace Quran.Windows.Audio
             // Add playback items to the list
             foreach (var track in tracks)
             {
-                var source = MediaSource.CreateFromStream(File.OpenRead(track.Path).AsRandomAccessStream(), "audio/mpeg");
+                var source = MediaSource.CreateFromStorageFile(await StorageFile.GetFileFromPathAsync(track.Path));
                 source.CustomProperties[TrackIdKey] = track.Path;
                 source.CustomProperties[AyahKey] = string.Format(CultureInfo.InvariantCulture, "{0}:{1}", track.Ayah.Key, track.Ayah.Value);
                 source.CustomProperties[TitleKey] = track.Title;
