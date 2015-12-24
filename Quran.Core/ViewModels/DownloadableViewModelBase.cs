@@ -25,15 +25,16 @@ namespace Quran.Core.ViewModels
     /// </summary>
     public class DownloadableViewModelBase : BaseViewModel
     {
-        private IList<DownloadOperation> activeDownloads;
-        private CancellationTokenSource cts;
+        private IList<DownloadOperation> _activeDownloads;
+        private CancellationTokenSource _cts;
         private readonly CoreDispatcher _dispatcher;
+        public const string DownloadExtension = ".download";
 
         public DownloadableViewModelBase()
         {
             IsDownloading = false;
             IsIndeterminate = true;
-            cts = new CancellationTokenSource();
+            _cts = new CancellationTokenSource();
             _dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
         }
 
@@ -145,7 +146,7 @@ namespace Quran.Core.ViewModels
         /// </summary>
         public override async Task Initialize()
         {
-            if (activeDownloads != null)
+            if (_activeDownloads != null)
             {
                 return;
             }
@@ -154,7 +155,7 @@ namespace Quran.Core.ViewModels
             IsIndeterminate = false;
             Description = null;
             InstallationStep = null;
-            activeDownloads = new List<DownloadOperation>();
+            _activeDownloads = new List<DownloadOperation>();
 
             IEnumerable<DownloadOperation> downloads = null;
             try
@@ -170,19 +171,7 @@ namespace Quran.Core.ViewModels
 
             if (downloads.Any())
             {
-                List<Task> tasks = new List<Task>();
-                foreach (var download in downloads)
-                {
-                    // Attach progress and completion handlers.
-                    tasks.Add(HandleDownloadAsync(download, false));
-                }
-
-                // Don't await HandleDownloadAsync() in the foreach loop since we would attach to the second
-                // download only when the first one completed; attach to the third download when the second one
-                // completes etc. We want to attach to all downloads immediately.
-                // If there are actions that need to be taken once downloads complete, await tasks here, outside
-                // the loop.
-                await Task.WhenAll(tasks);
+                await HandleDownloadsAsync(downloads.ToList(), false);
             }
         }
 
@@ -194,15 +183,24 @@ namespace Quran.Core.ViewModels
         public async Task<bool> DownloadSingleFile(string serverUrl, string destinationFile, string description = null)
         {
             Reset();
-            this.Description = description;
-            return await Download(serverUrl, destinationFile);
+            Description = description;
+            IsDownloading = true;
+            InstallationStep = description ?? Resources.loading_message;
+
+            var download = await GetDownloadOperation(serverUrl, destinationFile);
+            // Attach progress and completion handlers.
+            await HandleDownloadsAsync(new[] { download }.ToList(), true);
+            return true;
         }
 
         
         public async Task<bool> DownloadMultiple(string[] serverUrls, string destinationFolder, string description = null)
         {
             Reset();
-            this.Description = description;
+            Description = description;
+            IsDownloading = true;
+            InstallationStep = description ?? Resources.loading_message;
+
             if (serverUrls == null || serverUrls.Length == 0)
             {
                 throw new ArgumentNullException(nameof(serverUrls));
@@ -211,15 +209,18 @@ namespace Quran.Core.ViewModels
             {
                 throw new ArgumentNullException(nameof(destinationFolder));
             }
+            List<DownloadOperation> downloads = new List<DownloadOperation>();
             foreach (var serverUrl in serverUrls)
             {
                 var fileName = Path.GetFileName(serverUrl);
-                await Download(serverUrl, Path.Combine(destinationFolder, fileName));
+                downloads.Add(await GetDownloadOperation(serverUrl, Path.Combine(destinationFolder, fileName)));
             }
+            // Attach progress and completion handlers.
+            await HandleDownloadsAsync(downloads, true);
             return true;
         }
         
-        private async Task<bool> Download(string serverUrl, string destinationFilePath)
+        private async Task<DownloadOperation> GetDownloadOperation(string serverUrl, string destinationFilePath)
         {
             if (string.IsNullOrWhiteSpace(destinationFilePath))
             {
@@ -230,34 +231,32 @@ namespace Quran.Core.ViewModels
                 throw new ArgumentNullException(nameof(serverUrl));
             }
 
+            destinationFilePath = destinationFilePath + DownloadExtension;
+
             StorageFile destinationFile;
             try
             {
                 await FileUtils.EnsureDirectoryExists(Path.GetDirectoryName(destinationFilePath));
                 var destinationFolder = await StorageFolder.GetFolderFromPathAsync(Path.GetDirectoryName(destinationFilePath));
-                destinationFile = await destinationFolder.CreateFileAsync(Path.GetFileName(destinationFilePath), CreationCollisionOption.ReplaceExisting);
+                destinationFile = await destinationFolder.CreateFileAsync(Path.GetFileName(destinationFilePath), 
+                    CreationCollisionOption.ReplaceExisting);
             }
             catch (FileNotFoundException ex)
             {
                 await QuranApp.NativeProvider.
                     ShowErrorMessageBox("Error while creating file: " + ex.Message);
-                return false;
+                return null;
             }
 
             BackgroundDownloader downloader = new BackgroundDownloader();
             DownloadOperation download = downloader.CreateDownload(new Uri(serverUrl), destinationFile);
-
-            IsDownloading = true;
-            InstallationStep = Description ?? Resources.loading_message;
-
-            // Attach progress and completion handlers.
-            await HandleDownloadAsync(download, true);
-            return true;
+            
+            return download;
         }
 
         public async Task FinishActiveDownloads()
         {
-            foreach (var download in activeDownloads)
+            foreach (var download in _activeDownloads)
             {
                 if (download.Progress.Status == BackgroundTransferStatus.Completed)
                 {
@@ -269,29 +268,38 @@ namespace Quran.Core.ViewModels
 
         public async Task FinishDownload(string destinationFile)
         {
-            if (destinationFile != null)
+            if (string.IsNullOrEmpty(destinationFile))
             {
-                if (await FileUtils.FileExists(destinationFile))
-                {
-                    if (destinationFile.EndsWith(".zip"))
-                    {
-                        IsDownloading = true;
-                        IsIndeterminate = true;
-                        InstallationStep = Resources.extracting_message;
+                throw new ArgumentNullException(nameof(destinationFile));
+            }
 
-                        await QuranApp.NativeProvider.ExtractZip(destinationFile,
-                            Path.GetDirectoryName(destinationFile));
-                        await FileUtils.DeleteFile(destinationFile);
-                    }
-                    IsIndeterminate = false;
-                    IsDownloading = false;
-                    IsIndeterminate = false;
+            if (await FileUtils.FileExists(destinationFile))
+            {
+                if (destinationFile.EndsWith(DownloadExtension, StringComparison.OrdinalIgnoreCase))
+                {
+                    var realDestinationFile = destinationFile.Substring(0, 
+                        destinationFile.IndexOf(DownloadExtension, StringComparison.OrdinalIgnoreCase));
+                    await FileUtils.MoveFile(destinationFile, realDestinationFile);
+                    destinationFile = realDestinationFile;
                 }
+                if (destinationFile.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
+                {
+                    IsDownloading = true;
+                    IsIndeterminate = true;
+                    InstallationStep = Resources.extracting_message;
+
+                    await QuranApp.NativeProvider.ExtractZip(destinationFile,
+                        Path.GetDirectoryName(destinationFile));
+                    await FileUtils.SafeFileDelete(destinationFile);
+                }
+                IsIndeterminate = false;
+                IsDownloading = false;
+                IsIndeterminate = false;
             }
         }
         public async Task Cancel()
         {
-            if (activeDownloads.Any())
+            if (_activeDownloads.Any())
             {
                 if (await QuranApp.NativeProvider.ShowQuestionMessageBox(Resources.download_cancel_confirmation))
                 {
@@ -302,33 +310,36 @@ namespace Quran.Core.ViewModels
 
         public void Reset()
         {
-            cts.Cancel();
-            cts.Dispose();
-            cts = new CancellationTokenSource();
+            _cts.Cancel();
+            _cts.Dispose();
+            _cts = new CancellationTokenSource();
             IsDownloading = false;
             IsIndeterminate = true;
             Description = null;
             InstallationStep = null;
-            activeDownloads.Clear();
+            _activeDownloads.Clear();
         }
         #endregion Public methods
-        private async Task HandleDownloadAsync(DownloadOperation download, bool start)
+        private async Task HandleDownloadsAsync(List<DownloadOperation> downloads, bool start)
         {
             try
             {
                 // Store the download so we can pause/resume.
-                activeDownloads.Add(download);
+                foreach (var download in downloads)
+                {
+                    _activeDownloads.Add(download);
 
-                Progress<DownloadOperation> progressCallback = new Progress<DownloadOperation>(DownloadProgress);
-                if (start)
-                {
-                    // Start the download and attach a progress handler.
-                    await download.StartAsync().AsTask(cts.Token, progressCallback);
-                }
-                else
-                {
-                    // The download was already running when the application started, re-attach the progress handler.
-                    await download.AttachAsync().AsTask(cts.Token, progressCallback);
+                    Progress<DownloadOperation> progressCallback = new Progress<DownloadOperation>(DownloadProgress);
+                    if (start)
+                    {
+                        // Start the download and attach a progress handler.
+                        await download.StartAsync().AsTask(_cts.Token, progressCallback);
+                    }
+                    else
+                    {
+                        // The download was already running when the application started, re-attach the progress handler.
+                        await download.AttachAsync().AsTask(_cts.Token, progressCallback);
+                    }
                 }
 
                 await FinishActiveDownloads();
@@ -344,7 +355,10 @@ namespace Quran.Core.ViewModels
             }
             finally
             {
-                activeDownloads.Remove(download);
+                foreach (var download in downloads)
+                {
+                    _activeDownloads.Remove(download);
+                }
             }
         }
 
@@ -358,9 +372,9 @@ namespace Quran.Core.ViewModels
 
         private void UpdateStatus()
         {
-            var activeDownload = activeDownloads.FirstOrDefault();
-            var downloadsSnapshot = new List<DownloadOperation>(activeDownloads);
-            if (activeDownloads.Count > 0)
+            var activeDownload = _activeDownloads.FirstOrDefault();
+            var downloadsSnapshot = new List<DownloadOperation>(_activeDownloads);
+            if (_activeDownloads.Count > 0)
             {
                 if (downloadsSnapshot.Any(o => o.Progress.Status == BackgroundTransferStatus.Running))
                 {
@@ -440,10 +454,10 @@ namespace Quran.Core.ViewModels
 
         public override void Dispose()
         {
-            if (cts != null)
+            if (_cts != null)
             {
-                cts.Dispose();
-                cts = null;
+                _cts.Dispose();
+                _cts = null;
             }
             base.Dispose();
             GC.SuppressFinalize(this);

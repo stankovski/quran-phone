@@ -127,7 +127,7 @@ namespace Quran.Core.ViewModels
             {
                 try
                 {
-                    await FileUtils.DeleteFile(LocalPath);
+                    await FileUtils.SafeFileDelete(LocalPath);
                 }
                 catch
                 {

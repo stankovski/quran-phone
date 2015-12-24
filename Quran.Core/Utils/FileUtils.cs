@@ -9,6 +9,7 @@ using System.Threading;
 using Windows.Storage;
 using System.Collections.Generic;
 using Windows.Storage.Search;
+using Quran.Core.ViewModels;
 
 namespace Quran.Core.Utils
 {
@@ -67,13 +68,13 @@ namespace Quran.Core.Utils
             var folder = await StorageFolder.GetFolderFromPathAsync(path);
             foreach (var file in await folder.GetFilesAsync())
             {
-                await DeleteFile(file.Path);
+                await SafeFileDelete(file.Path);
             }
             await folder.DeleteAsync();
             return true;
         }
 
-        public async static Task<bool> DeleteFile(string path)
+        public async static Task<bool> SafeFileDelete(string path)
         {
             if (string.IsNullOrWhiteSpace(path))
             {
@@ -83,6 +84,24 @@ namespace Quran.Core.Utils
             try
             {
                 var file = await StorageFile.GetFileFromPathAsync(path);
+                return await SafeFileDelete(file);
+            }
+            catch (FileNotFoundException)
+            {
+                // Ignore
+                return false;
+            }            
+        }
+
+        public async static Task<bool> SafeFileDelete(StorageFile file)
+        {
+            if (file == null)
+            {
+                return false;
+            }
+
+            try
+            {
                 await file.DeleteAsync();
             }
             catch (FileNotFoundException)
@@ -90,9 +109,9 @@ namespace Quran.Core.Utils
                 // Ignore
             }
             catch (Exception)
-            { 
+            {
                 var tempPath = GetUndeletedFilesDirectory();
-                await WriteFile(Path.Combine(tempPath, string.Format("{0}.txt", Guid.NewGuid())), path);
+                await WriteFile(Path.Combine(tempPath, string.Format("{0}.txt", Guid.NewGuid())), file.Path);
                 return false;
             }
             return true;
@@ -100,17 +119,40 @@ namespace Quran.Core.Utils
 
         public static async Task DeleteStuckFiles()
         {
-            var path = GetUndeletedFilesDirectory();
+            var undeletedDir = GetUndeletedFilesDirectory();
+            var baseDir = GetQuranBaseDirectory();
+            var audioDir = GetQuranAudioDirectory();
             try
             {
-                var folder = await StorageFolder.GetFolderFromPathAsync(path);
-                foreach (var fileName in await folder.GetFilesAsync())
+                // Remove undeleted files
+                var undeletedFolder = await StorageFolder.GetFolderFromPathAsync(undeletedDir);
+                foreach (var storageFile in await undeletedFolder.GetFilesAsync())
                 {
                     try
                     {
-                        var badFilePath = await ReadFile(fileName.Path);
-                        await DeleteFile(badFilePath);
-                        await DeleteFile(fileName.Path);
+                        var badFilePath = await FileIO.ReadTextAsync(storageFile);
+                        await SafeFileDelete(badFilePath);
+                        await SafeFileDelete(storageFile);
+                    }
+                    catch
+                    {
+                        // Continue
+                    }
+                }
+
+                // Remove failed downloads
+                var queryOptions = new QueryOptions(CommonFileQuery.DefaultQuery, new[] { DownloadableViewModelBase.DownloadExtension });
+                queryOptions.FolderDepth = FolderDepth.Deep;
+
+                var baseFolder = await StorageFolder.GetFolderFromPathAsync(baseDir);
+                var audioFolder = await StorageFolder.GetFolderFromPathAsync(audioDir);
+                var storageFiles = (await baseFolder.CreateFileQueryWithOptions(queryOptions).GetFilesAsync())
+                                    .Concat(await audioFolder.CreateFileQueryWithOptions(queryOptions).GetFilesAsync());
+                foreach (var storageFile in storageFiles)
+                {
+                    try
+                    {
+                        await SafeFileDelete(storageFile);
                     }
                     catch
                     {
@@ -266,7 +308,7 @@ namespace Quran.Core.Utils
 
         public static async Task DeleteNoMediaFile()
         {
-            await DeleteFile(Path.Combine(GetQuranDirectory(), "/.nomedia"));
+            await SafeFileDelete(Path.Combine(GetQuranDirectory(), "/.nomedia"));
         }
 
         /// <summary>
@@ -486,7 +528,7 @@ namespace Quran.Core.Utils
         public static async Task RemoveTranslation(string fileName)
         {
             string baseDir = GetQuranDatabaseDirectory();
-            await DeleteFile(Path.Combine(baseDir, fileName));
+            await SafeFileDelete(Path.Combine(baseDir, fileName));
         }
 
         public static string GetArabicSearchUrl()

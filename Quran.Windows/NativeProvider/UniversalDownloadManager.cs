@@ -84,7 +84,7 @@ namespace Quran.Windows.NativeProvider
             var requestUri = request.RequestedUri;
             var requestUriHash = CryptoUtils.GetHash(requestUri.ToString());
             var trackerDir = FileUtils.GetDowloadTrackerDirectory();
-            await FileUtils.DeleteFile(string.Format("{0}\\{1}", trackerDir, requestUriHash));
+            await FileUtils.SafeFileDelete(string.Format("{0}\\{1}", trackerDir, requestUriHash));
         }
 
         public async Task<ITransferRequest> GetRequest(string serverUri)

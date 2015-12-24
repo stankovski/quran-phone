@@ -44,7 +44,7 @@ namespace Quran.Windows.NativeProvider
                 if (await FileUtils.FileExists(localFilePath))
                 {
                     if (await FileUtils.IsFileEmpty(localFilePath))
-                        await FileUtils.DeleteFile(localFilePath);
+                        await FileUtils.SafeFileDelete(localFilePath);
                     else
                         continue;
                 }

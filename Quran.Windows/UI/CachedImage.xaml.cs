@@ -206,7 +206,7 @@ namespace Quran.Windows.UI
                 catch
                 {
                     await QuranApp.NativeProvider.ShowErrorMessageBox("Error loading quran page.");
-                    await FileUtils.DeleteFile(localPath);
+                    await FileUtils.SafeFileDelete(localPath);
                 }
                 finally
                 {
