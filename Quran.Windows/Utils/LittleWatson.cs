@@ -71,7 +71,7 @@ namespace Quran.Windows.Utils
                     var result = await dialog.ShowAsync();
                     if ((int)result.Id == 0)
                     {
-                        await QuranApp.NativeProvider.ComposeEmail("quran.phone@gmail.com", "QuranPhone auto-generated problem report");
+                        await QuranApp.NativeProvider.ComposeEmail("quran.phone@gmail.com", "QuranPhone auto-generated problem report", contents);
                         SafeDeleteFile(IsolatedStorageFile.GetUserStoreForApplication());
                     }
                 }
