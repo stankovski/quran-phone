@@ -100,13 +100,14 @@ namespace Quran.Windows.NativeProvider
             _playlist = new List<AudioTrackModel>();
             var currentAyah = request.CurrentAyah;
 
-            if (QuranUtils.HasBismillah(currentAyah.Surah))
+            if (currentAyah.Ayah == 1 && QuranUtils.HasBismillah(currentAyah.Surah))
             {
                 _playlist.Add(new AudioTrackModel
                 {
                     Ayah = new KeyValuePair<int, int>(1, 1),
                     Title = "Bismillah",
-                    Path = AudioUtils.GetLocalPathForAyah(new QuranAyah(1, 1), request.Reciter)
+                    LocalPath = request.IsStreaming ? null : AudioUtils.GetLocalPathForAyah(new QuranAyah(1, 1), request.Reciter),
+                    ServerUri = AudioUtils.GetServerPathForAyah(new QuranAyah(1, 1), request.Reciter)
                 });
             }
 
@@ -115,8 +116,9 @@ namespace Quran.Windows.NativeProvider
                 _playlist.Add(new AudioTrackModel
                 {
                     Ayah = new KeyValuePair<int, int>(currentAyah.Surah, i),
-                    Title = QuranUtils.GetSurahAyahString(currentAyah.Surah, 1),
-                    Path = AudioUtils.GetLocalPathForAyah(new QuranAyah(currentAyah.Surah, i), request.Reciter)
+                    Title = QuranUtils.GetSurahAyahString(currentAyah.Surah, i),
+                    LocalPath = request.IsStreaming ? null : AudioUtils.GetLocalPathForAyah(new QuranAyah(currentAyah.Surah, i), request.Reciter),
+                    ServerUri = AudioUtils.GetServerPathForAyah(new QuranAyah(currentAyah.Surah, i), request.Reciter)
                 });                
             }
 
@@ -156,7 +158,7 @@ namespace Quran.Windows.NativeProvider
                 {
                     Ayah = new KeyValuePair<int, int>(ayah.Surah, ayah.Ayah),
                     Title = title,
-                    Path = path
+                    LocalPath = path
                 };
             }
         }

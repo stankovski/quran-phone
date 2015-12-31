@@ -175,14 +175,30 @@ namespace Quran.Core.Utils
 
             try
             {
-                var dirName = Path.GetDirectoryName(path);
-                var folder = await StorageFolder.GetFolderFromPathAsync(dirName);
-                var file = await folder.TryGetItemAsync(Path.GetFileName(path));
-                return file != null;
+                return await GetFile(path) != null;
             }
             catch (Exception)
             {
                 return false;
+            }
+        }
+
+        public static async Task<IStorageFile> GetFile(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                return null;
+            }
+
+            try
+            {
+                var dirName = Path.GetDirectoryName(path);
+                var folder = await StorageFolder.GetFolderFromPathAsync(dirName);
+                return await folder.TryGetItemAsync(Path.GetFileName(path)) as IStorageFile;
+            }
+            catch (Exception)
+            {
+                return null;
             }
         }
 

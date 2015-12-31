@@ -170,37 +170,6 @@ namespace Quran.Windows.Views
             }
         }
         
-        private async void ReciteClick()
-        {
-            var reciter = SettingsUtils.Get<string>(Constants.PREF_ACTIVE_QARI);
-            if (string.IsNullOrEmpty(reciter))
-            {
-                //Frame.Navigate(new Uri("/Views/RecitersListView.xaml", UriKind.Relative));
-            }
-            else
-            {
-                var selectedAyah = ViewModel.SelectedAyah;
-                if (selectedAyah == null)
-                {
-                    var bounds = QuranUtils.GetPageBounds(ViewModel.CurrentPageNumber);
-                    selectedAyah = new QuranAyah
-                    {
-                        Surah = bounds[0],
-                        Ayah = bounds[1]
-                    };
-                    if (selectedAyah.Ayah == 1 && selectedAyah.Surah != Constants.SURA_TAWBA &&
-                        selectedAyah.Surah != Constants.SURA_FIRST)
-                    {
-                        selectedAyah.Ayah = 0;
-                    }
-                }
-                if (QuranUtils.IsValid(selectedAyah))
-                {
-                    await ViewModel.PlayFromAyah(selectedAyah.Surah, selectedAyah.Ayah);
-                }
-            }
-        }
-
         private void ImageTapped(object sender, TappedRoutedEventArgs e)
         {
             ViewModel.SelectedAyah = null;
@@ -238,7 +207,10 @@ namespace Quran.Windows.Views
             }
             else if (menuItem == Core.Properties.Resources.recite_ayah)
             {
-                await ViewModel.PlayFromAyah(selectedAyah.Surah, selectedAyah.Ayah);
+                if (await ViewModel.PlayFromAyah(selectedAyah.Surah, selectedAyah.Ayah))
+                {
+                    UpdateAudioControls(AudioState.Playing);
+                }
             }
 
             ViewModel.SelectedAyah = null;
@@ -444,6 +416,8 @@ namespace Quran.Windows.Views
                 AudioPlayButton.Visibility = Visibility.Collapsed;
                 AudioStopButton.Visibility = Visibility.Visible;
                 AudioPauseButton.Visibility = Visibility.Visible;
+                AudioSkipForwardButton.Visibility = Visibility.Visible;
+                AudioSkipBackwardButton.Visibility = Visibility.Visible;
             }
             else if (state == AudioState.Paused)
             {
@@ -451,6 +425,8 @@ namespace Quran.Windows.Views
                 AudioPlayButton.Visibility = Visibility.Visible;
                 AudioStopButton.Visibility = Visibility.Visible;
                 AudioPauseButton.Visibility = Visibility.Collapsed;
+                AudioSkipForwardButton.Visibility = Visibility.Visible;
+                AudioSkipBackwardButton.Visibility = Visibility.Visible;
             }
             else
             {
@@ -458,6 +434,8 @@ namespace Quran.Windows.Views
                 AudioPlayButton.Visibility = Visibility.Visible;
                 AudioStopButton.Visibility = Visibility.Collapsed;
                 AudioPauseButton.Visibility = Visibility.Collapsed;
+                AudioSkipForwardButton.Visibility = Visibility.Collapsed;
+                AudioSkipBackwardButton.Visibility = Visibility.Collapsed;
             }
         }
 
@@ -468,8 +446,10 @@ namespace Quran.Windows.Views
 
         private async void AudioPlay(object sender, RoutedEventArgs e)
         {
-            await ViewModel.Play();
-            UpdateAudioControls(AudioState.Playing);
+            if (await ViewModel.Play())
+            {
+                UpdateAudioControls(AudioState.Playing);
+            }
         }
 
         private void AudioPause(object sender, RoutedEventArgs e)

@@ -65,7 +65,7 @@ namespace Quran.Core.Data
         public const string PREF_OVERLAY_PAGE_INFO = "overlayPageInfo";
         public const string PREF_DISPLAY_MARKER_POPUP = "displayMarkerPopup";
         public const string PREF_AYAH_BEFORE_TRANSLATION = "ayahBeforeTranslation";
-        [DefaultValue(false)]
+        [DefaultValue(true)]
         public const string PREF_PREFER_STREAMING = "preferStreaming";
         [DefaultValue(false)]
         public const string PREF_ALT_DOWNLOAD = "altDownloadMethod";

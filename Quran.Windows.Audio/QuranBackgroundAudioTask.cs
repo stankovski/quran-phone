@@ -49,6 +49,8 @@ namespace Quran.Windows.Audio
             smtc.IsEnabled = true;
             smtc.IsPauseEnabled = true;
             smtc.IsPlayEnabled = true;
+            smtc.IsNextEnabled = true;
+            smtc.IsPreviousEnabled = true;
 
             // Add handlers for MediaPlayer
             BackgroundMediaPlayer.Current.CurrentStateChanged += MediaPlayerStateChanged;
@@ -272,8 +274,27 @@ namespace Quran.Windows.Audio
             // Add playback items to the list
             foreach (var track in tracks)
             {
-                var source = MediaSource.CreateFromStorageFile(await StorageFile.GetFileFromPathAsync(track.Path));
-                source.CustomProperties[TrackIdKey] = track.Path;
+                MediaSource source = null;
+
+                if (track.LocalPath != null)
+                {
+                    var trackFile = await FileUtils.GetFile(track.LocalPath);
+                    if (trackFile != null)
+                    {
+                        source = MediaSource.CreateFromStorageFile(trackFile);
+                    }
+                    else
+                    {
+                        source = MediaSource.CreateFromUri(new Uri(track.ServerUri));
+                    }
+                } 
+
+                if (source == null)
+                {
+                    source = MediaSource.CreateFromUri(new Uri(track.ServerUri));
+                }
+
+                source.CustomProperties[TrackIdKey] = track.LocalPath;
                 source.CustomProperties[AyahKey] = string.Format(CultureInfo.InvariantCulture, "{0}:{1}", track.Ayah.Key, track.Ayah.Value);
                 source.CustomProperties[TitleKey] = track.Title;
                 playbackList.Items.Add(new MediaPlaybackItem(source));

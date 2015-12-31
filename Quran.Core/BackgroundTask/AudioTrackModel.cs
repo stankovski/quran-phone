@@ -26,7 +26,10 @@ namespace Quran.Core
         public string Title { get; set; }
 
         [DataMember]
-        public string Path { get; set; }
+        public string LocalPath { get; set; }
+
+        [DataMember]
+        public string ServerUri { get; set; }
 
         [DataMember]
         public string Details { get; set; }

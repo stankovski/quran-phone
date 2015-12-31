@@ -189,8 +189,7 @@ namespace Quran.Core.ViewModels
 
             var download = await GetDownloadOperation(serverUrl, destinationFile);
             // Attach progress and completion handlers.
-            await HandleDownloadsAsync(new[] { download }.ToList(), true);
-            return true;
+            return await HandleDownloadsAsync(new[] { download }.ToList(), true);
         }
 
         
@@ -216,8 +215,7 @@ namespace Quran.Core.ViewModels
                 downloads.Add(await GetDownloadOperation(serverUrl, Path.Combine(destinationFolder, fileName)));
             }
             // Attach progress and completion handlers.
-            await HandleDownloadsAsync(downloads, true);
-            return true;
+            return await HandleDownloadsAsync(downloads, true);
         }
         
         private async Task<DownloadOperation> GetDownloadOperation(string serverUrl, string destinationFilePath)
@@ -262,6 +260,11 @@ namespace Quran.Core.ViewModels
                 {
                     DownloadProgress(download);
                     await FinishDownload(download.ResultFile.Path);
+                }
+                else if (download.Progress.Status == BackgroundTransferStatus.Error)
+                {
+                    DownloadProgress(download);
+                    await FileUtils.SafeFileDelete(download.ResultFile.Path);
                 }
             }
         }
@@ -320,15 +323,18 @@ namespace Quran.Core.ViewModels
             _activeDownloads.Clear();
         }
         #endregion Public methods
-        private async Task HandleDownloadsAsync(List<DownloadOperation> downloads, bool start)
+        private async Task<bool> HandleDownloadsAsync(List<DownloadOperation> downloads, bool start)
         {
             try
             {
-                // Store the download so we can pause/resume.
                 foreach (var download in downloads)
                 {
                     _activeDownloads.Add(download);
+                }
 
+                // Store the download so we can pause/resume.
+                foreach (var download in downloads)
+                {
                     Progress<DownloadOperation> progressCallback = new Progress<DownloadOperation>(DownloadProgress);
                     if (start)
                     {
@@ -342,22 +348,31 @@ namespace Quran.Core.ViewModels
                     }
                 }
 
-                await FinishActiveDownloads();
+                return true;
             }
             catch (TaskCanceledException)
             {
                 InstallationStep = "Cancelled";
+                return false;
             }
             catch (Exception ex)
             {
                 WebErrorStatus error = BackgroundTransferError.GetStatus(ex.HResult);
                 await QuranApp.NativeProvider.ShowErrorMessageBox("Error getting active downloads: " + error.ToString());
+                return false;
             }
             finally
             {
-                foreach (var download in downloads)
+                try
                 {
-                    _activeDownloads.Remove(download);
+                    await FinishActiveDownloads();
+                }
+                finally
+                {
+                    foreach (var download in downloads)
+                    {
+                        _activeDownloads.Remove(download);
+                    }
                 }
             }
         }
@@ -379,6 +394,10 @@ namespace Quran.Core.ViewModels
                 if (downloadsSnapshot.Any(o => o.Progress.Status == BackgroundTransferStatus.Running))
                 {
                     UpdateInstallationStep(BackgroundTransferStatus.Running);
+                }
+                else if (downloadsSnapshot.Any(o => o.Progress.Status == BackgroundTransferStatus.Error))
+                {
+                    UpdateInstallationStep(BackgroundTransferStatus.Error);
                 }
                 else if (downloadsSnapshot.All(o => o.Progress.Status == BackgroundTransferStatus.Completed))
                 {
@@ -440,6 +459,7 @@ namespace Quran.Core.ViewModels
                         DownloadComplete(this, null);
                     }
                     break;
+                case BackgroundTransferStatus.Error:
                 case BackgroundTransferStatus.Canceled:
                     InstallationStep = null;
                     IsDownloading = false;
