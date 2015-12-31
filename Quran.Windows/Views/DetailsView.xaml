@@ -17,9 +17,8 @@
         </MenuFlyout>
     </Page.Resources>
     <Grid Name="MainContainer" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <ProgressBar Value="{x:Bind ViewModel.AudioDownloadProgress, Mode=OneWay}"
-                     IsIndeterminate="False" SmallChange="1" VerticalAlignment="Top" 
-                     Visibility="{x:Bind ViewModel.IsDownloadingAudio, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        <ProgressBar IsIndeterminate="True" VerticalAlignment="Top" 
+                     Visibility="{x:Bind ViewModel.IsLoadingAudio, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>

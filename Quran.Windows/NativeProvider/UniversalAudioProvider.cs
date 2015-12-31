@@ -100,7 +100,8 @@ namespace Quran.Windows.NativeProvider
             _playlist = new List<AudioTrackModel>();
             var currentAyah = request.CurrentAyah;
 
-            if (currentAyah.Ayah == 1 && QuranUtils.HasBismillah(currentAyah.Surah))
+            // Add bismillah unless Fatihah (as it already has it) or Tawba
+            if (currentAyah.Ayah == 1 && QuranUtils.HasBismillah(currentAyah.Surah) && currentAyah.Surah != 1)
             {
                 _playlist.Add(new AudioTrackModel
                 {
@@ -109,6 +110,8 @@ namespace Quran.Windows.NativeProvider
                     LocalPath = request.IsStreaming ? null : AudioUtils.GetLocalPathForAyah(new QuranAyah(1, 1), request.Reciter),
                     ServerUri = AudioUtils.GetServerPathForAyah(new QuranAyah(1, 1), request.Reciter)
                 });
+
+                _currentTrack = _playlist.Last();
             }
 
             for (int i = 1; i <= QuranUtils.GetSurahNumberOfAyah(currentAyah.Surah); i++)
@@ -122,7 +125,11 @@ namespace Quran.Windows.NativeProvider
                 });                
             }
 
-            _currentTrack = _playlist.FirstOrDefault(t => t.Ayah.Key == currentAyah.Surah && t.Ayah.Value == currentAyah.Ayah);
+            // If not bismillah get the current track
+            if (_currentTrack == null)
+            {
+                _currentTrack = _playlist.FirstOrDefault(t => t.Ayah.Key == currentAyah.Surah && t.Ayah.Value == currentAyah.Ayah);
+            }
 
             if (MediaPlayerState.Closed == CurrentPlayer.CurrentState)
             {
@@ -258,9 +265,22 @@ namespace Quran.Windows.NativeProvider
                 {
                     var currentAyah = trackChangedMessage.Ayah;
                     _currentTrack = _playlist?.FirstOrDefault(t => t.Ayah.Key == currentAyah.Key && t.Ayah.Value == currentAyah.Value);
+
                     if (TrackChanged != null)
                     {
-                        TrackChanged(this, _currentTrack);
+                        // Handle bismillah specially
+                        if (_playlist != null && _currentTrack != null
+                            && _currentTrack.Ayah.Key == 1
+                            && _currentTrack.Ayah.Value == 1
+                            && _playlist.Count > 1
+                            && _playlist[1].Ayah.Key != 1)
+                        {
+                            TrackChanged(this, _playlist[1]);
+                        }
+                        else
+                        {
+                            TrackChanged(this, _currentTrack);
+                        }
                     }
                 });
                 return;

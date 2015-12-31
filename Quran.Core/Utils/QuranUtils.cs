@@ -232,7 +232,7 @@ namespace Quran.Core.Utils
             if (surah == Constants.SURA_TAWBA)
                 return false;
             else
-                return false;
+                return true;
         }
 
         public static string GetNotificationTitle(QuranAyah minVerse, QuranAyah maxVerse)
