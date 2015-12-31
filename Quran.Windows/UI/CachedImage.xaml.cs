@@ -79,29 +79,30 @@ namespace Quran.Windows.UI
             {
                 try
                 {
-                    string basePath = FileUtils.GetQuranDatabaseDirectory();
-                    if (basePath == null) return;
-                    string path = System.IO.Path.Combine(basePath, FileUtils.GetAyaPositionFileName());
-                    if (await FileUtils.FileExists(path))
+                    if (PageNumber != QuranUtils.GetPageFromAyah(ayahInfo))
+                    {
+                        return;
+                    }
+
+                    var ayahDb = await QuranApp.GetAyahInfoDatabase();
+                    if (ayahDb != null)
                     {
                         int offsetToScrollTo = 0;
-                        using (var dbh = new AyahInfoDatabaseHandler(FileUtils.GetAyaPositionFileName()))
+                        var bounds = ayahDb.GetVerseBoundsCombined(ayahInfo.Surah, ayahInfo.Ayah);
+                        if (bounds == null)
+                            return;
+
+                        // Reset any overlays
+                        canvas.Children.Clear();
+                        canvas.Opacity = 1.0;
+
+                        foreach (var bound in bounds)
                         {
-                            var bounds = dbh.GetVerseBoundsCombined(ayahInfo.Surah, ayahInfo.Ayah);
-                            if (bounds == null)
-                                return;
-
-                            // Reset any overlays
-                            canvas.Children.Clear();
-                            canvas.Opacity = 1.0;
-
-                            foreach (var bound in bounds)
-                            {
-                                drawAyahBound(bound);
-                                if (offsetToScrollTo == 0)
-                                    offsetToScrollTo = bound.MinY;
-                            }
+                            drawAyahBound(bound);
+                            if (offsetToScrollTo == 0)
+                                offsetToScrollTo = bound.MinY;
                         }
+                        
                         var adjustedScrollPoint = adjustPointRevert(new Point(1, offsetToScrollTo), LayoutRoot.ActualWidth);
                         LayoutRoot.ScrollToVerticalOffset(adjustedScrollPoint.Y); //Adjusting for ViewBox offset
                         if (QuranApp.DetailsViewModel.AudioPlayerState == AudioState.Playing)
@@ -352,16 +353,10 @@ namespace Quran.Windows.UI
             try
             {
                 var position = adjustPoint(p, width);
-                string basePath = FileUtils.GetQuranDatabaseDirectory();
-                if (basePath == null) 
-                    return null;
-                string path = System.IO.Path.Combine(basePath, FileUtils.GetAyaPositionFileName());
-                if (await FileUtils.FileExists(path))
+                var ayahDb = await QuranApp.GetAyahInfoDatabase();
+                if (ayahDb != null)
                 {
-                    using (var dbh = new AyahInfoDatabaseHandler(FileUtils.GetAyaPositionFileName()))
-                    {
-                        return dbh.GetVerseAtPoint(pageNumber, position.X, position.Y);
-                    }
+                    return ayahDb.GetVerseAtPoint(pageNumber, position.X, position.Y);
                 }
             }
             catch

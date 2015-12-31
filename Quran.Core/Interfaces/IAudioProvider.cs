@@ -49,7 +49,7 @@ namespace Quran.Core.Interfaces
         /// <summary>
         /// Gets the current track for this application, whether the application is currently playing or not.
         /// </summary>
-        AudioTrackModel GetTrack();
+        AudioTrackModel CurrentTrack { get; }
 
         /// <summary>
         /// Sets the current track for this application, whether the application is currently playing or not.

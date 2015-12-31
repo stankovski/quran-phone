@@ -25,6 +25,7 @@ namespace Quran.Windows.NativeProvider
         private readonly CoreDispatcher _dispatcher;
         private List<AudioTrackModel> _playlist;
         private AudioTrackModel _currentTrack;
+        private AudioRequest _lastRequest;
 
         public UniversalAudioProvider()
         {
@@ -61,7 +62,6 @@ namespace Quran.Windows.NativeProvider
             {
                 _playlist = null;
                 _currentTrack = null;
-                MessageService.SendMessageToBackground(new UpdatePlaylistMessage(new List<AudioTrackModel>()));
                 State = AudioPlayerPlayState.Stopped;
                 if (StateChanged != null)
                 {
@@ -85,9 +85,24 @@ namespace Quran.Windows.NativeProvider
             get; set;
         }
 
-        public AudioTrackModel GetTrack()
+        public AudioTrackModel CurrentTrack
         {
-            return _currentTrack;
+            get
+            {
+                // Handle bismillah specially
+                if (_playlist != null && _currentTrack != null
+                        && _currentTrack.Ayah.Key == 1
+                        && _currentTrack.Ayah.Value == 1
+                        && _playlist.Count > 1
+                        && _playlist[1].Ayah.Key != 1)
+                {
+                    return _playlist[1];
+                }
+                else
+                {
+                    return _currentTrack;
+                }
+            }
         }
 
         public void SetTrack(AudioRequest request)
@@ -97,6 +112,7 @@ namespace Quran.Windows.NativeProvider
                 throw new ArgumentNullException(nameof(request));
             }
 
+            _lastRequest = request;
             _playlist = new List<AudioTrackModel>();
             var currentAyah = request.CurrentAyah;
 
@@ -265,22 +281,10 @@ namespace Quran.Windows.NativeProvider
                 {
                     var currentAyah = trackChangedMessage.Ayah;
                     _currentTrack = _playlist?.FirstOrDefault(t => t.Ayah.Key == currentAyah.Key && t.Ayah.Value == currentAyah.Value);
-
+                    
                     if (TrackChanged != null)
                     {
-                        // Handle bismillah specially
-                        if (_playlist != null && _currentTrack != null
-                            && _currentTrack.Ayah.Key == 1
-                            && _currentTrack.Ayah.Value == 1
-                            && _playlist.Count > 1
-                            && _playlist[1].Ayah.Key != 1)
-                        {
-                            TrackChanged(this, _playlist[1]);
-                        }
-                        else
-                        {
-                            TrackChanged(this, _currentTrack);
-                        }
+                        TrackChanged(this, CurrentTrack);
                     }
                 });
                 return;
@@ -292,6 +296,19 @@ namespace Quran.Windows.NativeProvider
                 // StartBackgroundAudioTask is waiting for this signal to know when the task is up and running
                 // and ready to receive messages
                 backgroundAudioTaskStarted.Set();
+                return;
+            }
+
+            TrackEndedMessage trackEndedMessage;
+            if (MessageService.TryParseMessage(e.Data, out trackEndedMessage))
+            {
+                // Set next track
+                if (_currentTrack != null && _lastRequest != null)
+                {
+                    var newAyah = QuranUtils.GetNextAyah(new QuranAyah(_currentTrack.Ayah.Key, _currentTrack.Ayah.Value), true);
+                    _lastRequest.CurrentAyah = newAyah;
+                    SetTrack(_lastRequest);
+                }
                 return;
             }
         }

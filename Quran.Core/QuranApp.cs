@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Quran.Core.Data;
 using Quran.Core.Interfaces;
 using Quran.Core.Utils;
 using Quran.Core.ViewModels;
 
 namespace Quran.Core
 {
-    public class QuranApp
+    public class QuranApp : IDisposable
     {
         private QuranApp()
         { }
@@ -20,6 +22,7 @@ namespace Quran.Core
         private static TranslationsListViewModel translationsListViewModel = null;
         private static RecitersListViewModel recitersListViewModel = null;
         private static SettingsViewModel settingsViewModel = null;
+        private static AyahInfoDatabaseHandler ayahInfoDatabaseHandler = null;
 
         #region View Models
         public static INativeProvider NativeProvider { get; set; }
@@ -27,6 +30,22 @@ namespace Quran.Core
         public static async Task Initialize()
         {
             await FileUtils.Initialize(false);
+        }
+
+        public static async Task<AyahInfoDatabaseHandler> GetAyahInfoDatabase()
+        {
+            if (ayahInfoDatabaseHandler != null)
+            {
+                return ayahInfoDatabaseHandler;
+            }
+
+            if (await FileUtils.FileExists(Path.Combine(FileUtils.GetQuranDatabaseDirectory(), 
+                FileUtils.GetAyaPositionFileName())))
+            {
+                ayahInfoDatabaseHandler = new AyahInfoDatabaseHandler(FileUtils.GetAyaPositionFileName());
+            }
+
+            return ayahInfoDatabaseHandler;
         }
 
         /// <summary>
@@ -57,6 +76,14 @@ namespace Quran.Core
             if (detailsViewModel != null)
             {
                 await detailsViewModel.Refresh();
+            }
+        }
+
+        public void Dispose()
+        {
+            if (ayahInfoDatabaseHandler != null)
+            {
+                ayahInfoDatabaseHandler.Dispose();
             }
         }
 

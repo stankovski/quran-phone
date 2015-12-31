@@ -109,6 +109,7 @@
   <ItemGroup>
     <Compile Include="BackgroundTask\BackgroundAudioTaskStartedMessage.cs" />
     <Compile Include="BackgroundTask\MessageService.cs" />
+    <Compile Include="BackgroundTask\TrackEndedMessage.cs" />
     <Compile Include="BackgroundTask\SkipNextMessage.cs" />
     <Compile Include="BackgroundTask\SkipPreviousMessage.cs" />
     <Compile Include="BackgroundTask\AudioTrackModel.cs" />

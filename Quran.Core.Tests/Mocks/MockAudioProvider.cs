@@ -46,15 +46,7 @@ namespace Quran.Core.Tests
             get; set;
         }
 
-        public AudioTrackModel GetTrack()
-        {
-            //var audioTrack = BackgroundAudioPlayer.Instance.Track;
-            //if (WindowsTrack == null || WindowsTrack.OriginalTrack != audioTrack)
-            //    WindowsTrack = new WindowsAudioTrack(audioTrack);
-
-            //return WindowsTrack;
-            throw new NotImplementedException();
-        }
+        public AudioTrackModel CurrentTrack { get; set; }
 
         public void SetTrack(AudioRequest request)
         {
