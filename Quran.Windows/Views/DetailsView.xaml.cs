@@ -207,9 +207,17 @@ namespace Quran.Windows.Views
             }
             else if (menuItem == Core.Properties.Resources.recite_ayah)
             {
-                if (await ViewModel.PlayFromAyah(selectedAyah.Surah, selectedAyah.Ayah))
+                int currentQari = AudioUtils.GetReciterIdByName(SettingsUtils.Get<string>(Constants.PREF_ACTIVE_QARI));
+                if (currentQari == -1)
                 {
-                    UpdateAudioControls(AudioState.Playing);
+                    Frame.Navigate(typeof(RecitersListView), null, new DrillInNavigationTransitionInfo());
+                }
+                else
+                {
+                    if (await ViewModel.PlayFromAyah(selectedAyah.Surah, selectedAyah.Ayah))
+                    {
+                        UpdateAudioControls(AudioState.Playing);
+                    }
                 }
             }
 
@@ -445,9 +453,17 @@ namespace Quran.Windows.Views
 
         private async void AudioPlay(object sender, RoutedEventArgs e)
         {
-            if (await ViewModel.Play())
+            int currentQari = AudioUtils.GetReciterIdByName(SettingsUtils.Get<string>(Constants.PREF_ACTIVE_QARI));
+            if (currentQari == -1)
             {
-                UpdateAudioControls(AudioState.Playing);
+                Frame.Navigate(typeof(RecitersListView), null, new DrillInNavigationTransitionInfo());
+            }
+            else
+            {
+                if (await ViewModel.Play())
+                {
+                    UpdateAudioControls(AudioState.Playing);
+                }
             }
         }
 
