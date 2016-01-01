@@ -35,20 +35,48 @@
             <RowDefinition Height="48"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="Wide">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="900" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="MainSplitView.DisplayMode" Value="Inline" />
+                        <Setter Target="MainSplitView.IsPaneOpen" Value="True" />
+                        <Setter Target="HamburgerButton.Visibility" Value="Collapsed" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="Medium">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="600" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="MainSplitView.DisplayMode" Value="CompactInline" />
+                        <Setter Target="MainSplitView.IsPaneOpen" Value="False" />
+                        <Setter Target="HamburgerButton.Visibility" Value="Visible" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
         <Grid x:Name="Header" Grid.Row="0" VerticalAlignment="Center">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="48"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="48"/>
                 <ColumnDefinition Width="48"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" x:Name="HamburgerButton" Style="{StaticResource HamburgerButtonStyle}" Click="HamburgerButtonClick"/>
-            <TextBlock Grid.Column="1" Text="{Binding Path=LocalizedResources.app_name, Source={StaticResource LocalizedStrings}}" Margin="10,0,0,0" FontWeight="SemiBold" FontSize="20" VerticalAlignment="Center"/>
-            <Button Grid.Column="3" Style="{StaticResource MenuButtonStyle}" Content="&#xE82D;"
+            <StackPanel Orientation="Horizontal" Grid.Column="0" >
+                <Button x:Name="HamburgerButton" Style="{StaticResource HamburgerButtonStyle}" 
+                        Click="HamburgerButtonClick" HorizontalAlignment="Left"/>
+                <TextBlock Text="{Binding Path=LocalizedResources.app_name, Source={StaticResource LocalizedStrings}}" 
+                           Margin="10,0,0,0" FontWeight="SemiBold" FontSize="20"  HorizontalAlignment="Left" 
+                           VerticalAlignment="Center"/>
+            </StackPanel>
+            <Button Grid.Column="2" Style="{StaticResource MenuButtonStyle}" Content="&#xE82D;"
                     VerticalAlignment="Center" Click="NavigateToLastPage"/>
         </Grid>
         <SplitView Grid.Row="1" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" 
-                   x:Name="MainSplitView" DisplayMode="Overlay" IsPaneOpen="False" OpenPaneLength="300">
+                   x:Name="MainSplitView" IsPaneOpen="False" DisplayMode="Overlay" OpenPaneLength="200">
             <SplitView.Pane>
                 <Grid>
                     <ListView x:Name="NavLinksList" Margin="0" SelectionMode="None" 
