@@ -462,5 +462,10 @@ namespace Quran.Core.Properties
         {
             get { return resourceLoader.GetString("previous"); }
         }
+
+        public static string go_to 
+        {
+            get { return resourceLoader.GetString("go_to"); }
+        }
     }
 }

@@ -82,7 +82,7 @@
                     <ListView x:Name="NavLinksList" Margin="0" SelectionMode="None" 
                             VerticalAlignment="Stretch" Foreground="White"
                             ItemClick="NavLinkItemClick" IsItemClickEnabled="True"
-                            Background="{StaticResource BlueText}"
+                            Background="{ThemeResource SettingsFlyoutHeaderBackgroundThemeBrush}"
                             ItemsSource="{x:Bind NavigationLinks}">
                         <ListView.ItemTemplate>
                             <DataTemplate x:DataType="vm:NavigationLink">
@@ -94,7 +94,8 @@
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
-                    <ListViewItem VerticalAlignment="Bottom" Tapped="GoToSettings">
+                    <ListViewItem VerticalAlignment="Bottom" Tapped="GoToSettings"
+                                  BorderBrush="#FF727272" BorderThickness="0,1,0,0">
                         <StackPanel Orientation="Horizontal" Margin="2,0,0,0">
                             <SymbolIcon Symbol="Setting" Foreground="White"/>
                             <TextBlock Text="{Binding Path=LocalizedResources.settings, Source={StaticResource LocalizedStrings}}" 

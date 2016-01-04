@@ -769,4 +769,7 @@
   <data name="previous" xml:space="preserve">
     <value>Previous</value>
   </data>
+  <data name="go_to" xml:space="preserve">
+    <value>Go to page</value>
+  </data>
 </root>

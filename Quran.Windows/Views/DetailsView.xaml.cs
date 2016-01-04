@@ -1,23 +1,22 @@
-﻿using Windows.UI.Xaml.Controls;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using Quran.Core;
 using Quran.Core.Common;
 using Quran.Core.Data;
 using Quran.Core.Utils;
 using Quran.Core.ViewModels;
-using Windows.UI.Xaml.Navigation;
-using Windows.UI.Xaml;
-using System.Collections.ObjectModel;
-using Windows.UI.Xaml.Input;
 using Quran.Windows.UI;
-using Windows.UI.Xaml.Media.Animation;
+using Windows.ApplicationModel.DataTransfer;
+using Windows.Foundation;
+using Windows.Foundation.Metadata;
 using Windows.Graphics.Display;
 using Windows.UI.ViewManagement;
-using System.Threading.Tasks;
-using Windows.UI.Input;
-using Windows.Foundation;
-using Windows.UI.Xaml.Media;
-using System;
-using Windows.ApplicationModel.DataTransfer;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media.Animation;
+using Windows.UI.Xaml.Navigation;
 
 namespace Quran.Windows.Views
 {
@@ -40,6 +39,13 @@ namespace Quran.Windows.Views
             BuildLocalizedMenu();
             BuildContextMenu();
             UpdateAudioControls(ViewModel.AudioPlayerState);
+
+            // Hide status bar
+            if (ApiInformation.IsApiContractPresent("Windows.Phone.PhoneContract", 1, 0))
+            {
+                var statusBar = StatusBar.GetForCurrentView();
+                await statusBar.HideAsync();
+            }
 
             NavigationData parameters = e.Parameter as NavigationData;
             if (parameters == null)

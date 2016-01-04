@@ -1,0 +1,29 @@
+﻿<ContentDialog
+    x:Class="Quran.Windows.UI.JumpContentDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Quran.Windows.UI"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="{Binding Path=LocalizedResources.go_to, Source={StaticResource LocalizedStrings}}"
+    PrimaryButtonText="Navigate"
+    SecondaryButtonText="Cancel"
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
+    SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
+
+    <Grid>
+        <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <TextBox Name="tbPageNumber" Header="Page number" InputScope="Digits"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <ComboBox Grid.Column="0" Name="cbSurahs" Header="Surah" Margin="0,0,20,0"  
+                          HorizontalAlignment="Stretch" SelectionChanged="SyrahSelectionChanged"/>
+                <ComboBox Grid.Column="1" Name="cbAyah" Header="Ayah" Width="100"/>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</ContentDialog>

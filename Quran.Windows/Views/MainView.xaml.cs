@@ -167,6 +167,36 @@ Quran Phone Team";
                 Symbol = Symbol.Find,
                 Action = () => { MainPivot.SelectedItem = SearchPivotItem; }
             });
+            NavigationLinks.Add(new NavigationLink
+            {
+                Label = Quran.Core.Properties.Resources.go_to,
+                Symbol = Symbol.NewWindow,
+                Action = async () => 
+                {
+                    JumpContentDialog dialog = new JumpContentDialog();
+                    await dialog.ShowAsync();
+                    if (dialog.Page != null)
+                    {
+                        SettingsUtils.Set<int>(Constants.PREF_LAST_PAGE, dialog.Page.Value);
+                        NavigationData navData = null;
+                        if (dialog.Ayah != null)
+                        {
+                            navData = new NavigationData
+                            {
+                                Surah = dialog.Ayah.Surah,
+                                Ayah = dialog.Ayah.Ayah
+                            };
+                        }
+                        Frame.Navigate(typeof(DetailsView), navData);
+                    }
+                }
+            });
+            NavigationLinks.Add(new NavigationLink
+            {
+                Label = Quran.Core.Properties.Resources.contact_us,
+                Symbol = Symbol.MailForward,
+                Action = () => { QuranApp.NativeProvider.ComposeEmail("quran.phone@gmail.com", "Email from QuranPhone"); }
+            });
         }
 
         private void SearchQuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)

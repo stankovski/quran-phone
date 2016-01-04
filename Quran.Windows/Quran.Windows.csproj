@@ -125,6 +125,9 @@
       <DependentUpon>DownloadControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\EdgeTappedListView.cs" />
+    <Compile Include="UI\JumpContentDialog.xaml.cs">
+      <DependentUpon>JumpContentDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\ListHeader.xaml.cs">
       <DependentUpon>ListHeader.xaml</DependentUpon>
     </Compile>
@@ -261,6 +264,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="UI\JumpContentDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\ListHeader.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -303,6 +310,11 @@
       <Project>{8a827bb8-5251-429c-a7bd-fa88d7fc6ac2}</Project>
       <Name>Quran.Windows.Audio</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="WindowsMobile, Version=10.0.10240.0">
+      <Name>Windows Mobile Extensions for the UWP</Name>
+    </SDKReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

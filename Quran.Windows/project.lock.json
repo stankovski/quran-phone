@@ -12093,8 +12093,8 @@
         "lib/portable-win8+net45+wp8+wpa81+MonoAndroid1+MonoTouch1/SQLite.Net.dll",
         "lib/portable-win81+wpa81/SQLite.Net.Platform.WinRT.dll",
         "lib/Windows8/SQLite.Net.Platform.WinRT.dll",
-        "lib/Windows8/ARM/SQLite.Net.Platform.Windows8.dll",
-        "lib/Windows8/x86/SQLite.Net.Platform.Windows8.dll",
+        "lib/windowsphone8/ARM/SQLite.Net.Platform.WindowsPhone8.dll",
+        "lib/windowsphone8/x86/SQLite.Net.Platform.WindowsPhone8.dll",
         "lib/Xamarin.iOS10/SQLite.Net.Platform.XamarinIOS.Unified.dll",
         "package/services/metadata/core-properties/42617fe08935462ea38a3073a9954c4b.psmdcp",
         "SQLite.Net-PCL.nuspec"

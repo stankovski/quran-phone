@@ -26,10 +26,10 @@
             <TextBlock Grid.Column="1" Text="{Binding Path=LocalizedResources.settings, Source={StaticResource LocalizedStrings}}" Margin="10,0,0,0" FontWeight="SemiBold" FontSize="20" VerticalAlignment="Center"/>
         </Grid>
         <SplitView Grid.Row="1" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" 
-                   x:Name="MainSplitView" DisplayMode="Overlay" IsPaneOpen="False" OpenPaneLength="300">
+                   x:Name="MainSplitView" DisplayMode="Overlay" IsPaneOpen="False" OpenPaneLength="200">
             <SplitView.Pane>
                 <ListView x:Name="NavLinksList" Margin="0" SelectionMode="None" 
-                    Background="{StaticResource BlueText}"
+                    Background="{ThemeResource SettingsFlyoutHeaderBackgroundThemeBrush}"
                     VerticalAlignment="Stretch" Foreground="White"
                     ItemClick="NavLinkItemClick" IsItemClickEnabled="True"
                     ItemsSource="{x:Bind NavigationLinks}">
@@ -46,7 +46,14 @@
             </SplitView.Pane>
             <SplitView.Content>
                 <Pivot x:Name="MainPivot">
-                    <PivotItem x:Name="General" Header="{Binding Path=LocalizedResources.settings, Source={StaticResource LocalizedStrings}}">
+                    <PivotItem x:Name="General">
+                        <PivotItem.Header>
+                            <StackPanel>
+                                <SymbolIcon Symbol="Setting"/>
+                                <TextBlock Text="{Binding Path=LocalizedResources.settings, Source={StaticResource LocalizedStrings}}"
+                                               Style="{StaticResource BaseTextBlockStyle}" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </PivotItem.Header>
                         <ScrollViewer Background="Transparent">
                             <StackPanel Margin="12,17,0,28">
                                 <TextBlock Text="{Binding Path=LocalizedResources.translations, Source={StaticResource LocalizedStrings}}"/>
@@ -75,7 +82,14 @@
                             </StackPanel>
                         </ScrollViewer>
                     </PivotItem>
-                    <PivotItem x:Name="Audio" Header="{Binding Path=LocalizedResources.audio, Source={StaticResource LocalizedStrings}}">
+                    <PivotItem x:Name="Audio">
+                        <PivotItem.Header>
+                            <StackPanel>
+                                <SymbolIcon Symbol="Play"/>
+                                <TextBlock Text="{Binding Path=LocalizedResources.audio, Source={StaticResource LocalizedStrings}}"
+                                               Style="{StaticResource BaseTextBlockStyle}" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </PivotItem.Header>
                         <ScrollViewer Background="Transparent">
                             <StackPanel Margin="12,17,0,28">
                                 <TextBlock Text="{Binding Path=LocalizedResources.reciters, Source={StaticResource LocalizedStrings}}"/>
@@ -92,7 +106,14 @@
                             </StackPanel>
                         </ScrollViewer>
                     </PivotItem>
-                    <PivotItem x:Name="About" Header="{Binding Path=LocalizedResources.about_us, Source={StaticResource LocalizedStrings}}">
+                    <PivotItem x:Name="About">
+                        <PivotItem.Header>
+                            <StackPanel>
+                                <SymbolIcon Symbol="Help"/>
+                                <TextBlock Text="{Binding Path=LocalizedResources.about_us, Source={StaticResource LocalizedStrings}}"
+                                               Style="{StaticResource BaseTextBlockStyle}" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </PivotItem.Header>
                         <ScrollViewer Background="Transparent">
                             <StackPanel Orientation="Vertical">
                                 <StackPanel.Resources>

@@ -524,4 +524,7 @@ the data used in the translations and Arabic comes from
   <data name="previous" xml:space="preserve">
     <value>Назад</value>
   </data>
+  <data name="go_to" xml:space="preserve">
+    <value>Перейти к странице</value>
+  </data>
 </root>

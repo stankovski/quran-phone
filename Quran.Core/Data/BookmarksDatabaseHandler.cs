@@ -104,11 +104,11 @@ namespace Quran.Core.Data
             var bookmarks = dbConnection.Table<Bookmarks>().Where(b => b.Page == page);
             if (surah != null)
             {
-                bookmarks = bookmarks.Where(b => b.Surah == (int)surah);
+                bookmarks = bookmarks.Where(b => b.Surah == surah.Value);
             }
             if (ayah != null)
             {
-                bookmarks = bookmarks.Where(b => b.Ayah == (int)ayah);
+                bookmarks = bookmarks.Where(b => b.Ayah == ayah.Value);
             }
             var results = bookmarks.ToList();
             if (results.Count > 0)
@@ -132,7 +132,9 @@ namespace Quran.Core.Data
         {
             int bookmarkId = GetBookmarkId(surah, ayah, page);
             if (bookmarkId < 0)
+            {
                 bookmarkId = AddBookmark(surah, ayah, page);
+            }
             return bookmarkId;
         }
 
