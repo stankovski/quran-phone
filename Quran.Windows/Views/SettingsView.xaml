@@ -7,9 +7,15 @@
     xmlns:ui="using:Quran.Windows.UI"
     xmlns:vm="using:Quran.Core.ViewModels"
     xmlns:wuxdata="using:Windows.UI.Xaml.Data"
-    d:DataContext="{d:DesignData ../SampleData/SettingsViewModelSampleData.xaml}"
     RequestedTheme="Dark"
     mc:Ignorable="d">
+
+    <Page.Resources>
+        <SolidColorBrush x:Key="PivotPaneColor" Color="#FF151515"/>
+        <Style TargetType="PivotHeaderItem">
+            <Setter Property="MinWidth" Value="80"/>
+        </Style>
+    </Page.Resources>
 
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -46,7 +52,7 @@
             </SplitView.Pane>
             <SplitView.Content>
                 <Pivot x:Name="MainPivot">
-                    <PivotItem x:Name="General">
+                    <PivotItem x:Name="General" Margin="0">
                         <PivotItem.Header>
                             <StackPanel>
                                 <SymbolIcon Symbol="Setting"/>
@@ -54,7 +60,7 @@
                                                Style="{StaticResource BaseTextBlockStyle}" HorizontalAlignment="Center"/>
                             </StackPanel>
                         </PivotItem.Header>
-                        <ScrollViewer Background="Transparent">
+                        <ScrollViewer Background="{StaticResource PivotPaneColor}">
                             <StackPanel Margin="12,17,0,28">
                                 <TextBlock Text="{Binding Path=LocalizedResources.translations, Source={StaticResource LocalizedStrings}}"/>
                                 <Button Content="{x:Bind ViewModel.ActiveTranslation}" Click="ShowTranslations"/>
@@ -82,7 +88,7 @@
                             </StackPanel>
                         </ScrollViewer>
                     </PivotItem>
-                    <PivotItem x:Name="Audio">
+                    <PivotItem x:Name="Audio"  Margin="0">
                         <PivotItem.Header>
                             <StackPanel>
                                 <SymbolIcon Symbol="Play"/>
@@ -90,14 +96,14 @@
                                                Style="{StaticResource BaseTextBlockStyle}" HorizontalAlignment="Center"/>
                             </StackPanel>
                         </PivotItem.Header>
-                        <ScrollViewer Background="Transparent">
+                        <ScrollViewer Background="{StaticResource PivotPaneColor}">
                             <StackPanel Margin="12,17,0,28">
                                 <TextBlock Text="{Binding Path=LocalizedResources.reciters, Source={StaticResource LocalizedStrings}}"/>
                                 <Button Content="{x:Bind ViewModel.ActiveReciter}" Click="ShowReciters"/>
-                                <TextBlock Text="{Binding Path=LocalizedResources.audio_download_blocks, Source={StaticResource LocalizedStrings}}"/>
+                                <!--<TextBlock Text="{Binding Path=LocalizedResources.audio_download_blocks, Source={StaticResource LocalizedStrings}}"/>
                                 <ComboBox ItemsSource="{x:Bind ViewModel.SupportedAudioBlocks}" DisplayMemberPath="Value" 
                                           SelectedValue="{x:Bind ViewModel.SelectedAudioBlock, Mode=TwoWay}" SelectedValuePath="Key"/>
-                                <!--<TextBlock Text="{Binding Path=LocalizedResources.repeat_ayah, Source={StaticResource LocalizedStrings}}"/>
+                                <TextBlock Text="{Binding Path=LocalizedResources.repeat_ayah, Source={StaticResource LocalizedStrings}}"/>
                                 <ToggleSwitch IsOn="{Binding RepeatAudio, Mode=TwoWay}" />
                                 <TextBlock Text="{Binding Path=LocalizedResources.number_of_ayah_to_repeat, Source={StaticResource LocalizedStrings}}"/>
                                 <ComboBox ItemsSource="{Binding SupportedRepeatAmount}" DisplayMemberPath="Value" SelectedItem="{Binding SelectedRepeatAmount, Mode=TwoWay}"/>
@@ -106,7 +112,7 @@
                             </StackPanel>
                         </ScrollViewer>
                     </PivotItem>
-                    <PivotItem x:Name="About">
+                    <PivotItem x:Name="About"  Margin="0">
                         <PivotItem.Header>
                             <StackPanel>
                                 <SymbolIcon Symbol="Help"/>
@@ -114,7 +120,7 @@
                                                Style="{StaticResource BaseTextBlockStyle}" HorizontalAlignment="Center"/>
                             </StackPanel>
                         </PivotItem.Header>
-                        <ScrollViewer Background="Transparent">
+                        <ScrollViewer Background="{StaticResource PivotPaneColor}" Padding="10">
                             <StackPanel Orientation="Vertical">
                                 <StackPanel.Resources>
                                     <Style TargetType="Hyperlink">

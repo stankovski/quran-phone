@@ -110,6 +110,11 @@ namespace Quran.Windows.Views
             _dataTransferManager.DataRequested += DataShareRequested;
         }
 
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            _dataTransferManager.DataRequested -= DataShareRequested;
+        }
+
         private void ImageTap(object sender, RoutedEventArgs e)
         {
             ViewModel.SelectedAyah = null;
@@ -209,6 +214,7 @@ namespace Quran.Windows.Views
             else if (menuItem == Core.Properties.Resources.share_ayah)
             {
                 _ayahToShare = selectedAyah;
+                _ayahToShare.Text = await ViewModel.GetAyahString(_ayahToShare);
                 DataTransferManager.ShowShareUI();
             }
             else if (menuItem == Core.Properties.Resources.recite_ayah)
@@ -232,17 +238,22 @@ namespace Quran.Windows.Views
         }
 
         private QuranAyah _ayahToShare;
-        private async void DataShareRequested(DataTransferManager sender, DataRequestedEventArgs args)
+        private void DataShareRequested(DataTransferManager sender, DataRequestedEventArgs args)
         {
             if (_ayahToShare != null)
             {
-                string ayah = await ViewModel.GetAyahString(_ayahToShare);
                 args.Request.Data.Properties.Title = Core.Properties.Resources.share_ayah;
-                args.Request.Data.SetText(ayah);
+                if (_ayahToShare.Translation != null)
+                {
+                    args.Request.Data.SetText(_ayahToShare.Translation);
+                }
+                else
+                {
+                    args.Request.Data.SetText(_ayahToShare.Text);
+                }
                 _ayahToShare = null;
             }
         }
-
         #endregion Menu Events
 
         private void BuildContextMenu()

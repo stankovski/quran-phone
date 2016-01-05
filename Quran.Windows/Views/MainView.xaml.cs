@@ -91,9 +91,12 @@ namespace Quran.Windows.Views
                 var message =
                     @"Assalamu Aleikum,
 
-Thank you for downloading Quran Phone. Please note that this is a BETA release and is still work in progress. 
-New in Version 0.4.2:
-* Bug fixes
+Thank you for downloading Quran Windows. Please note that this is a BETA release and is still work in progress. 
+New in Version 1.1.0:
+* Re-implemented app as Windows Universal
+* Support for Phone and Desktop mode
+* Support for gapless audio playback
+* Misc new features and bug fixes
 
 If you find any issues with the app or would like to provide suggestions, please use Contact Us option available via the menu. 
 
