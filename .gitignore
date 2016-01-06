@@ -113,4 +113,10 @@ UpgradeLog*.XML
 packages
 packages/repositories.config
 /.vs/config
+
+# Build artifacts
 /Quran.Windows/Package.StoreAssociation.xml
+/Quran.Windows/AppPackages
+/Quran.Windows/BundleArtifacts
+/Quran.Windows/_*.appx
+/Quran.Windows/_pkginfo.txt

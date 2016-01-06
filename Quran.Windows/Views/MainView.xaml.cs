@@ -194,12 +194,6 @@ Quran Phone Team";
                     }
                 }
             });
-            NavigationLinks.Add(new NavigationLink
-            {
-                Label = Quran.Core.Properties.Resources.contact_us,
-                Symbol = Symbol.MailForward,
-                Action = () => { QuranApp.NativeProvider.ComposeEmail("quran.phone@gmail.com", "Email from QuranPhone"); }
-            });
         }
 
         private void SearchQuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)

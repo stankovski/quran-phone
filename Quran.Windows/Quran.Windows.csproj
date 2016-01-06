@@ -97,6 +97,9 @@
     <EmbeddedResource Include="..\OfflineAssets\images_800.zip">
       <Link>Assets\Offline\images_800.zip</Link>
     </EmbeddedResource>
+    <Content Include="Assets\SplashScreen.scale-125.png" />
+    <Content Include="Assets\SplashScreen.scale-150.png" />
+    <Content Include="Assets\SplashScreen.scale-200.png" />
     <Content Include="Assets\Square44.scale-100.png" />
     <Content Include="Assets\Square44.scale-200.png" />
     <Content Include="Assets\SquareTile150x150.scale-100.png" />
@@ -232,6 +235,9 @@
     <Content Include="Assets\Square310.scale-80.png" />
     <None Include="Package.StoreAssociation.xml" />
     <Content Include="Assets\WideLogo.scale-100.png" />
+    <Content Include="Assets\WideLogo.scale-125.png" />
+    <Content Include="Assets\WideLogo.scale-150.png" />
+    <Content Include="Assets\WideLogo.scale-200.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\StoreLogo.scale-100.png" />
   </ItemGroup>
