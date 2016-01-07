@@ -110,6 +110,18 @@
     <Content Include="Assets\StoreLogo.scale-200.png" />
     <Content Include="Assets\StoreLogo.scale-400.png" />
     <Content Include="Assets\UthmanicHafs.otf" />
+    <PRIResource Include="..\Quran.Core\Strings\en-US\Resources.resw">
+      <Link>Strings\en-US\Resources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\Quran.Core\Strings\ar\Resources.resw">
+      <Link>Strings\ar\Resources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\Quran.Core\Strings\id\Resources.resw">
+      <Link>Strings\id\Resources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\Quran.Core\Strings\ru\Resources.resw">
+      <Link>Strings\ru\Resources.resw</Link>
+    </PRIResource>
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
