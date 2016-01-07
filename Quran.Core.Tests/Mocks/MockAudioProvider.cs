@@ -14,7 +14,7 @@ namespace Quran.Core.Tests
         }
 
         public event TypedEventHandler<IAudioProvider, AudioPlayerPlayState> StateChanged;
-        public event TypedEventHandler<IAudioProvider, AudioTrackModel> TrackChanged;
+        public event TypedEventHandler<IAudioProvider, QuranAudioTrack> TrackChanged;
 
         public void Play()
         {
@@ -46,9 +46,9 @@ namespace Quran.Core.Tests
             get; set;
         }
 
-        public AudioTrackModel CurrentTrack { get; set; }
+        public QuranAudioTrack CurrentTrack { get; set; }
 
-        public void SetTrack(AudioRequest request)
+        public void SetTrack(QuranAudioTrack request)
         {
             //BackgroundAudioPlayer.Instance.Track = new AudioTrack(source, title, artist, album, albumArt, tag,
             //    EnabledPlayerControls.All);

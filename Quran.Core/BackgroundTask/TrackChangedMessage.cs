@@ -27,25 +27,12 @@ namespace Quran.Core
         {
         }
 
-        public TrackChangedMessage(KeyValuePair<int, int> ayah)
+        public TrackChangedMessage(QuranAudioTrack audioRequest)
         {
-            this.Ayah = ayah;
-        }
-
-        public TrackChangedMessage(string ayah)
-        {
-            if (string.IsNullOrEmpty(ayah))
-            {
-                throw new ArgumentNullException(nameof(ayah));
-            }
-
-            var splitString = ayah.Split(':');
-            this.Ayah = new KeyValuePair<int, int>(
-                int.Parse(splitString[0], CultureInfo.InvariantCulture), 
-                int.Parse(splitString[1], CultureInfo.InvariantCulture));
+            this.AudioTrack = audioRequest;
         }
 
         [DataMember]
-        public KeyValuePair<int, int> Ayah;
+        public QuranAudioTrack AudioTrack;
     }
 }

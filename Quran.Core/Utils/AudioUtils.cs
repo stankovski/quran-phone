@@ -53,13 +53,13 @@ namespace Quran.Core.Utils
             return databaseHandler.GetReciter(position);
         }
 
-        public static async Task<bool> ShouldDownloadGaplessDatabase(AudioRequest request)
+        public static async Task<bool> ShouldDownloadGaplessDatabase(QuranAudioTrack request)
         {
-            if (!request.Reciter.IsGapless)
+            if (!request.GetReciter().IsGapless)
             {
                 return false;
             }
-            string dbPath = request.Reciter.GaplessDatabasePath;
+            string dbPath = request.GetReciter().GaplessDatabasePath;
             if (string.IsNullOrEmpty(dbPath))
             {
                 return false;
@@ -174,76 +174,86 @@ namespace Quran.Core.Utils
             return false;
         }
 
-        public static async Task<bool> HaveAllFiles(AudioRequest request)
+        public static async Task<bool> HaveAllFiles(QuranAudioTrack request)
         {
-            string baseDirectory = request.Reciter.LocalPath;
+            string baseDirectory = request.GetReciter().LocalPath;
             if (string.IsNullOrEmpty(baseDirectory))
                 return false;
 
             if (!await FileUtils.DirectoryExists(baseDirectory))
                 return false;
 
-            foreach (var verse in QuranUtils.GetAllAyah(request.FromAyah, request.ToAyah))
+            var track = request.GetFirstAyah();
+            while (track != null)
             {
-                var filename = GetLocalPathForAyah(verse, request.Reciter);
+                var filename = GetLocalPathForAyah(track.GetQuranAyah(), request.GetReciter());
                 if (!await FileUtils.FileExists(filename.ToString()))
                 {
                     return false;
                 }
+                track = track.GetNextInSurah();
             }
-
+            
             return true;
         }
 
         public static string GetLocalPathForAyah(QuranAyah ayah, ReciterItem reciter)
         {
-            string fileName;
-            if (reciter.IsGapless)
-                fileName = string.Format(reciter.GetFilePattern(), ayah.Surah);
-            else
-                fileName = string.Format(reciter.GetFilePattern(), ayah.Surah, ayah.Ayah);
-
-            return Path.Combine(reciter.LocalPath, fileName);
+            return Path.Combine(reciter.LocalPath, GetFilePath(ayah, reciter));
         }
 
         public static string GetServerPathForAyah(QuranAyah ayah, ReciterItem reciter)
         {
-            string fileName;
-            if (reciter.IsGapless)
-                fileName = string.Format(reciter.GetFilePattern(), ayah.Surah);
-            else
-                fileName = string.Format(reciter.GetFilePattern(), ayah.Surah, ayah.Ayah);
-
-            return Path.Combine(reciter.ServerUrl, fileName);
+            return Path.Combine(reciter.ServerUrl, GetFilePath(ayah, reciter));
         }
 
-        public static async Task<bool> DownloadRange(AudioRequest request)
+        private static string GetFilePath(QuranAyah ayah, ReciterItem reciter)
         {
-            var ayahToDownload = QuranUtils.GetAllAyah(request.FromAyah, request.ToAyah);
-            var filesToDownload = new List<string>();
-            bool result = true;
-
-            foreach (var ayah in ayahToDownload)
+            string fileName;
+            if (reciter.IsGapless)
             {
-                filesToDownload.Add(GetServerPathForAyah(ayah, request.Reciter));
+                fileName = string.Format(reciter.GetFilePattern(), ayah.Surah);
             }
-
-            result = await QuranApp.DetailsViewModel.ActiveDownload.DownloadMultiple(filesToDownload.ToArray(),
-                        request.Reciter.LocalPath, Resources.loading_audio);
-
-            if (result)
+            else
             {
-                // attempt to download bismillah if it doesn't exist
-                var bismillaFile = GetLocalPathForAyah(new QuranAyah(1, 1), request.Reciter);
-                if (!await FileUtils.FileExists(bismillaFile))
+                if (ayah.Ayah == 0)
                 {
-                    QuranApp.NativeProvider.Log("bismillah doesn't exist, downloading...");
-                    result = await FileUtils.DownloadFileFromWebAsync(GetServerPathForAyah(new QuranAyah(1, 1), request.Reciter), 
-                        request.Reciter.LocalPath);
+                    fileName = string.Format(reciter.GetFilePattern(), 1, 1);
                 }
+                fileName = string.Format(reciter.GetFilePattern(), ayah.Surah, ayah.Ayah);
             }
 
-            return result;
+            return fileName;
+        }
+
+        public static async Task<bool> DownloadRange(QuranAudioTrack request)
+        {
+            //var ayahToDownload = QuranUtils.GetAllAyah(request.FromAyah, request.ToAyah);
+            //var filesToDownload = new List<string>();
+            //bool result = true;
+
+            //foreach (var ayah in ayahToDownload)
+            //{
+            //    filesToDownload.Add(GetServerPathForAyah(ayah, request.Reciter));
+            //}
+
+            //result = await QuranApp.DetailsViewModel.ActiveDownload.DownloadMultiple(filesToDownload.ToArray(),
+            //            request.Reciter.LocalPath, Resources.loading_audio);
+
+            //if (result)
+            //{
+            //    // attempt to download bismillah if it doesn't exist
+            //    var bismillaFile = GetLocalPathForAyah(new QuranAyah(1, 1), request.Reciter);
+            //    if (!await FileUtils.FileExists(bismillaFile))
+            //    {
+            //        QuranApp.NativeProvider.Log("bismillah doesn't exist, downloading...");
+            //        result = await FileUtils.DownloadFileFromWebAsync(GetServerPathForAyah(new QuranAyah(1, 1), request.Reciter), 
+            //            request.Reciter.LocalPath);
+            //    }
+            //}
+
+            //return result;
+            return true;
         }
 
         public static async Task<bool> DownloadGaplessRange(string urlString, string destination, QuranAyah fromAyah, QuranAyah toAyah)

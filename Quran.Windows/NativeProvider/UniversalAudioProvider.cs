@@ -23,9 +23,6 @@ namespace Quran.Windows.NativeProvider
         const int RPC_S_SERVER_UNAVAILABLE = -2147023174; // 0x800706BA
         private AutoResetEvent backgroundAudioTaskStarted;
         private readonly CoreDispatcher _dispatcher;
-        private List<AudioTrackModel> _playlist;
-        private AudioTrackModel _currentTrack;
-        private AudioRequest _lastRequest;
 
         public UniversalAudioProvider()
         {
@@ -34,7 +31,7 @@ namespace Quran.Windows.NativeProvider
             backgroundAudioTaskStarted = new AutoResetEvent(false);
         }
 
-        public event TypedEventHandler<IAudioProvider, AudioTrackModel> TrackChanged;
+        public event TypedEventHandler<IAudioProvider, QuranAudioTrack> TrackChanged;
         public event TypedEventHandler<IAudioProvider, AudioPlayerPlayState> StateChanged;
 
         public void Play()
@@ -60,8 +57,7 @@ namespace Quran.Windows.NativeProvider
 
             if (CurrentPlayer.CurrentState != MediaPlayerState.Stopped)
             {
-                _playlist = null;
-                _currentTrack = null;
+                CurrentTrack = null;
                 State = AudioPlayerPlayState.Stopped;
                 if (StateChanged != null)
                 {
@@ -85,66 +81,13 @@ namespace Quran.Windows.NativeProvider
             get; set;
         }
 
-        public AudioTrackModel CurrentTrack
-        {
-            get
-            {
-                // Handle bismillah specially
-                if (_playlist != null && _currentTrack != null
-                        && _currentTrack.Ayah.Key == 1
-                        && _currentTrack.Ayah.Value == 1
-                        && _playlist.Count > 1
-                        && _playlist[1].Ayah.Key != 1)
-                {
-                    return _playlist[1];
-                }
-                else
-                {
-                    return _currentTrack;
-                }
-            }
-        }
+        public QuranAudioTrack CurrentTrack { get; private set; }
 
-        public void SetTrack(AudioRequest request)
+        public void SetTrack(QuranAudioTrack request)
         {
             if (request == null)
             {
                 throw new ArgumentNullException(nameof(request));
-            }
-
-            _lastRequest = request;
-            _playlist = new List<AudioTrackModel>();
-            var currentAyah = request.CurrentAyah;
-
-            // Add bismillah unless Fatihah (as it already has it) or Tawba
-            if (currentAyah.Ayah == 1 && QuranUtils.HasBismillah(currentAyah.Surah) && currentAyah.Surah != 1)
-            {
-                _playlist.Add(new AudioTrackModel
-                {
-                    Ayah = new KeyValuePair<int, int>(1, 1),
-                    Title = "Bismillah",
-                    LocalPath = request.IsStreaming ? null : AudioUtils.GetLocalPathForAyah(new QuranAyah(1, 1), request.Reciter),
-                    ServerUri = AudioUtils.GetServerPathForAyah(new QuranAyah(1, 1), request.Reciter)
-                });
-
-                _currentTrack = _playlist.Last();
-            }
-
-            for (int i = 1; i <= QuranUtils.GetSurahNumberOfAyah(currentAyah.Surah); i++)
-            {
-                _playlist.Add(new AudioTrackModel
-                {
-                    Ayah = new KeyValuePair<int, int>(currentAyah.Surah, i),
-                    Title = QuranUtils.GetSurahAyahString(currentAyah.Surah, i),
-                    LocalPath = request.IsStreaming ? null : AudioUtils.GetLocalPathForAyah(new QuranAyah(currentAyah.Surah, i), request.Reciter),
-                    ServerUri = AudioUtils.GetServerPathForAyah(new QuranAyah(currentAyah.Surah, i), request.Reciter)
-                });                
-            }
-
-            // If not bismillah get the current track
-            if (_currentTrack == null)
-            {
-                _currentTrack = _playlist.FirstOrDefault(t => t.Ayah.Key == currentAyah.Surah && t.Ayah.Value == currentAyah.Ayah);
             }
 
             if (MediaPlayerState.Closed == CurrentPlayer.CurrentState)
@@ -153,39 +96,9 @@ namespace Quran.Windows.NativeProvider
                 StartBackgroundAudioTask();                
             }
 
-            if (_currentTrack != null)
-            {
-                MessageService.SendMessageToBackground(new UpdatePlaylistMessage(_playlist, _currentTrack));
-            }
-            else
-            {
-                MessageService.SendMessageToBackground(new UpdatePlaylistMessage(_playlist));
-            }
-
-            Play();
+            MessageService.SendMessageToBackground(new TrackChangedMessage(request));
         }
-
-        private AudioTrackModel GetTrackFromRequest(AudioRequest request)
-        {
-            var ayah = request.CurrentAyah;
-            var title = ayah.Ayah == 0 ? "Bismillah" : QuranUtils.GetSurahAyahString(ayah.Surah, ayah.Ayah);
-            var path = AudioUtils.GetLocalPathForAyah(ayah.Ayah == 0 ? new QuranAyah(1, 1) : ayah, request.Reciter);
-
-            if (!File.Exists(path))
-            {
-                return null;
-            }
-            else
-            {
-                return new AudioTrackModel
-                {
-                    Ayah = new KeyValuePair<int, int>(ayah.Surah, ayah.Ayah),
-                    Title = title,
-                    LocalPath = path
-                };
-            }
-        }
-
+        
         public TimeSpan Position
         {
             get; set;
@@ -279,9 +192,8 @@ namespace Quran.Windows.NativeProvider
                 // When foreground app is active change track based on background message
                 await _dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
-                    var currentAyah = trackChangedMessage.Ayah;
-                    _currentTrack = _playlist?.FirstOrDefault(t => t.Ayah.Key == currentAyah.Key && t.Ayah.Value == currentAyah.Value);
-                    
+                    CurrentTrack = trackChangedMessage.AudioTrack;
+
                     if (TrackChanged != null)
                     {
                         TrackChanged(this, CurrentTrack);
@@ -302,14 +214,7 @@ namespace Quran.Windows.NativeProvider
             TrackEndedMessage trackEndedMessage;
             if (MessageService.TryParseMessage(e.Data, out trackEndedMessage))
             {
-                // Set next track
-                if (_currentTrack != null && _lastRequest != null)
-                {
-                    var newAyah = QuranUtils.GetNextAyah(new QuranAyah(_currentTrack.Ayah.Key, _currentTrack.Ayah.Value), true);
-                    _lastRequest.CurrentAyah = newAyah;
-                    SetTrack(_lastRequest);
-                }
-                return;
+                // Do nothing for now
             }
         }
 

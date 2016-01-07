@@ -23,6 +23,9 @@ namespace Quran.Windows.Audio
     {
         private const string TrackIdKey = "trackid";
         private const string TitleKey = "title";
+        private const string QuranTrackKey = "quranTrack";
+        private const string ReciterKey = "reciter";
+        private const string SurahKey = "surah";
         private const string AyahKey = "ayah";
         private const string AlbumArtKey = "albumart";
         const int RETRY_COUNT = 5;
@@ -31,9 +34,10 @@ namespace Quran.Windows.Audio
         const uint E_INVALID_STATE = 0xC00D36B2;
 
         private SystemMediaTransportControls smtc;
-        private MediaPlaybackList playbackList = new MediaPlaybackList();
-        private ManualResetEvent backgroundTaskStarted = new ManualResetEvent(false);
-        private BackgroundTaskDeferral deferral; // Used to keep task alive
+        private MediaPlaybackList _playbackList;
+        private QuranAudioTrack _originalTrackRequest;
+        private ManualResetEvent _backgroundTaskStarted = new ManualResetEvent(false);
+        private BackgroundTaskDeferral _deferral; // Used to keep task alive
 
 
         public void Run(IBackgroundTaskInstance taskInstance)
@@ -64,10 +68,10 @@ namespace Quran.Windows.Audio
             // Send information to foreground that background task has been started if app is active
             MessageService.SendMessageToForeground(new BackgroundAudioTaskStartedMessage());
 
-            deferral = taskInstance.GetDeferral(); // This must be retrieved prior to subscribing to events below which use it
+            _deferral = taskInstance.GetDeferral(); // This must be retrieved prior to subscribing to events below which use it
 
             // Mark the background task as started to unblock SMTC Play operation (see related WaitOne on this signal)
-            backgroundTaskStarted.Set();
+            _backgroundTaskStarted.Set();
 
             // Associate a cancellation and completed handlers with the background task.
             taskInstance.Task.Completed += TaskCompleted;
@@ -104,7 +108,7 @@ namespace Quran.Windows.Audio
                     // Wait for task to start. 
                     // Once started, this stays signaled until shutdown so it won't wait
                     // again unless it needs to.
-                    bool result = backgroundTaskStarted.WaitOne(5000);
+                    bool result = _backgroundTaskStarted.WaitOne(5000);
                     if (!result)
                     {
                         throw new Exception("Background Task didnt initialize in time");
@@ -164,8 +168,12 @@ namespace Quran.Windows.Audio
             }
         }
 
-        private void MediaPlayerMediaEnded(MediaPlayer sender, object args)
+        async void MediaPlayerMediaEnded(MediaPlayer sender, object args)
         {
+            if (_originalTrackRequest != null)
+            {
+                await ChangeTrack(_originalTrackRequest.GetLastAyah().GetNext());
+            }
             MessageService.SendMessageToForeground(new TrackEndedMessage());
         }
 
@@ -206,35 +214,42 @@ namespace Quran.Windows.Audio
             TrackChangedMessage trackChangedMessage;
             if (MessageService.TryParseMessage(e.Data, out trackChangedMessage))
             {
-                await ChangeTrack(trackChangedMessage.Ayah.Key, trackChangedMessage.Ayah.Value);
-                return;
-            }
-
-            UpdatePlaylistMessage updatePlaylistMessage;
-            if (MessageService.TryParseMessage(e.Data, out updatePlaylistMessage))
-            {
-                await CreatePlaybackList(updatePlaylistMessage.Tracks);
-
-                if (updatePlaylistMessage.CurrentTrack != null)
+                if (trackChangedMessage.AudioTrack != null)
                 {
-                    await ChangeTrack(updatePlaylistMessage.CurrentTrack.Ayah.Key, updatePlaylistMessage.CurrentTrack.Ayah.Value);
+                    await ChangeTrack(trackChangedMessage.AudioTrack);
+                    return;
                 }
-                return;
             }
         }
 
-        private async Task ChangeTrack(int surahIndex, int ayahIndex)
+        private async Task ChangeTrack(QuranAudioTrack newTrack)
         {
-            var ayahString = string.Format(CultureInfo.InvariantCulture, "{0}:{1}", surahIndex, ayahIndex);
-            var index = playbackList.Items.ToList().FindIndex(i => (string)i.Source.CustomProperties[AyahKey] == ayahString);
-            smtc.PlaybackStatus = MediaPlaybackStatus.Changing;
-            if (playbackList.CurrentItemIndex != (uint)index)
+            _originalTrackRequest = newTrack;
+            int index = FindTrack(newTrack);
+
+            // If playlist contains track - change track
+            if (index >= 0)
             {
+                await ChangeTrack((uint)index);
+            }
+            // Otherwise load new playlist and then change track
+            else
+            {
+                await CreatePlaybackList(newTrack);
+                await ChangeTrack(newTrack);
+            }
+        }
+
+        private async Task ChangeTrack(uint index)
+        {
+            if (_playbackList.CurrentItemIndex != index)
+            {
+                smtc.PlaybackStatus = MediaPlaybackStatus.Changing;
                 for (int i = 0; i < RETRY_COUNT; i++)
                 {
                     try
                     {
-                        playbackList.MoveTo((uint)index);
+                        _playbackList.MoveTo(index);
                         break;
                     }
                     catch (Exception e)
@@ -245,10 +260,76 @@ namespace Quran.Windows.Audio
                         }
                     }
                 }
+                //TODO: Work around playlist bug that doesn't continue playing after a switch; remove later
+                BackgroundMediaPlayer.Current.Play();
+            }
+        }
+
+        /// <summary>
+        /// Gets track index from playbackList if found. Otherwise -1.
+        /// </summary>
+        /// <param name="newTrack"></param>
+        /// <returns></returns>
+        private int FindTrack(QuranAudioTrack newTrack)
+        {
+            if (_playbackList != null)
+            {
+                return _playbackList.Items.ToList().FindIndex(i =>
+                    (int)i.Source.CustomProperties[AyahKey] == newTrack.Ayah &&
+                    (int)i.Source.CustomProperties[SurahKey] == newTrack.Surah &&
+                    (int)i.Source.CustomProperties[ReciterKey] == newTrack.ReciterId);
             }
 
-            //TODO: Work around playlist bug that doesn't continue playing after a switch; remove later
-            BackgroundMediaPlayer.Current.Play();
+            return -1;
+        }
+
+        /// <summary>
+        /// Create a playback list from the list of songs received from the foreground app.
+        /// </summary>
+        /// <param name="songs"></param>
+        private async Task CreatePlaybackList(QuranAudioTrack newTrack)
+        {
+            BackgroundMediaPlayer.Current.Pause();
+
+            // Make a new list
+            if (_playbackList != null)
+            {
+                _playbackList.CurrentItemChanged -= PlaybackListCurrentItemChanged;
+                _playbackList.Items.Clear();
+            }
+            else
+            {
+                _playbackList = new MediaPlaybackList();
+            }
+
+            // Initialize FileUtils
+            await FileUtils.Initialize(true);
+
+            // Add playback items to the list
+            QuranAudioTrack nextTrack = newTrack.GetFirstAyah();
+            while (nextTrack != null)
+            {
+                var reciter = nextTrack.GetReciter();
+                string serverUrl = AudioUtils.GetServerPathForAyah(nextTrack.GetQuranAyah(), reciter);
+                MediaSource source = MediaSource.CreateFromUri(new Uri(serverUrl));
+                source.CustomProperties[TrackIdKey] = serverUrl;
+                source.CustomProperties[SurahKey] = nextTrack.Surah;
+                source.CustomProperties[AyahKey] = nextTrack.Ayah;
+                source.CustomProperties[ReciterKey] = nextTrack.ReciterId;
+                source.CustomProperties[QuranTrackKey] = nextTrack.ToString();
+                source.CustomProperties[TitleKey] = QuranUtils.GetSurahAyahString(nextTrack.Surah, nextTrack.Ayah);
+                _playbackList.Items.Add(new MediaPlaybackItem(source));
+                nextTrack = nextTrack.GetNextInSurah();
+            }
+
+            // Don't auto start
+            BackgroundMediaPlayer.Current.AutoPlay = false;
+
+            // Assign the list to the player
+            BackgroundMediaPlayer.Current.Source = _playbackList;
+
+            // Add handler for future playlist item changes
+            _playbackList.CurrentItemChanged += PlaybackListCurrentItemChanged;
         }
 
         /// <summary>
@@ -272,7 +353,7 @@ namespace Quran.Windows.Audio
         private void SkipToPrevious()
         {
             smtc.PlaybackStatus = MediaPlaybackStatus.Changing;
-            playbackList.MovePrevious();
+            _playbackList.MovePrevious();
         }
 
         /// <summary>
@@ -281,68 +362,9 @@ namespace Quran.Windows.Audio
         private void SkipToNext()
         {
             smtc.PlaybackStatus = MediaPlaybackStatus.Changing;
-            playbackList.MoveNext();
+            _playbackList.MoveNext();
         }
 
-        private const int PLAYLIST_SIZE = 100;
-        /// <summary>
-        /// Create a playback list from the list of songs received from the foreground app.
-        /// </summary>
-        /// <param name="songs"></param>
-        async Task CreatePlaybackList(List<AudioTrackModel> tracks)
-        {
-            BackgroundMediaPlayer.Current.Pause();
-
-            // Make a new list
-            if (playbackList != null)
-            {
-                playbackList.CurrentItemChanged -= PlaybackListCurrentItemChanged;
-                playbackList.Items.Clear();
-            }
-            else
-            {
-                playbackList = new MediaPlaybackList();
-            }
-
-            // Add playback items to the list
-            foreach (var track in tracks)
-            {
-                MediaSource source = null;
-
-                if (track.LocalPath != null)
-                {
-                    var trackFile = await FileUtils.GetFile(track.LocalPath);
-                    if (trackFile != null)
-                    {
-                        source = MediaSource.CreateFromStorageFile(trackFile);
-                    }
-                    else
-                    {
-                        source = MediaSource.CreateFromUri(new Uri(track.ServerUri));
-                    }
-                } 
-
-                if (source == null)
-                {
-                    source = MediaSource.CreateFromUri(new Uri(track.ServerUri));
-                }
-
-                source.CustomProperties[TrackIdKey] = track.LocalPath;
-                source.CustomProperties[AyahKey] = string.Format(CultureInfo.InvariantCulture, "{0}:{1}", track.Ayah.Key, track.Ayah.Value);
-                source.CustomProperties[TitleKey] = track.Title;
-                playbackList.Items.Add(new MediaPlaybackItem(source));
-            }
-
-            // Don't auto start
-            BackgroundMediaPlayer.Current.AutoPlay = false;
-
-            // Assign the list to the player
-            BackgroundMediaPlayer.Current.Source = playbackList;
-
-            // Add handler for future playlist item changes
-            playbackList.CurrentItemChanged += PlaybackListCurrentItemChanged;
-        }
-        
         /// <summary>
         /// Raised when playlist changes to a new track
         /// </summary>
@@ -357,19 +379,11 @@ namespace Quran.Windows.Audio
             UpdateUVCOnNewTrack(item);
 
             // Get the current track
-            if (item != null && item.Source.CustomProperties.ContainsKey(AyahKey))
+            if (item != null && item.Source.CustomProperties.ContainsKey(QuranTrackKey))
             {
-                var request = item.Source.CustomProperties[AyahKey] as string;
-                MessageService.SendMessageToForeground(new TrackChangedMessage(request));
+                var json = item.Source.CustomProperties[QuranTrackKey] as string;
+                MessageService.SendMessageToForeground(new TrackChangedMessage(QuranAudioTrack.FromString(json)));
             }      
-        }
-
-        private Uri GetTrackId(MediaPlaybackItem item)
-        {
-            if (item == null)
-                return null; // no track playing
-
-            return item.Source.CustomProperties[TrackIdKey] as Uri;
         }
 
         /// <summary>
@@ -402,10 +416,10 @@ namespace Quran.Windows.Audio
         /// <summary>
         /// Indicate that the background task is completed.
         /// </summary>       
-        void TaskCompleted(BackgroundTaskRegistration sender, BackgroundTaskCompletedEventArgs args)
+        async void TaskCompleted(BackgroundTaskRegistration sender, BackgroundTaskCompletedEventArgs args)
         {
             Debug.WriteLine("MyBackgroundAudioTask " + sender.TaskId + " Completed...");
-            deferral.Complete();
+            _deferral.Complete();            
         }
 
         /// <summary>
@@ -421,13 +435,13 @@ namespace Quran.Windows.Audio
             try
             {
                 // immediately set not running
-                backgroundTaskStarted.Reset();
+                _backgroundTaskStarted.Reset();
 
                 // unsubscribe from list changes
-                if (playbackList != null)
+                if (_playbackList != null)
                 {
-                    playbackList.CurrentItemChanged -= PlaybackListCurrentItemChanged;
-                    playbackList = null;
+                    _playbackList.CurrentItemChanged -= PlaybackListCurrentItemChanged;
+                    _playbackList = null;
                 }
 
                 // remove handlers for MediaPlayer
@@ -445,7 +459,7 @@ namespace Quran.Windows.Audio
             {
                 Debug.WriteLine(ex.ToString());
             }
-            deferral.Complete(); // signals task completion. 
+            _deferral.Complete(); // signals task completion. 
             Debug.WriteLine("MyBackgroundAudioTask Cancel complete...");
         }
     }

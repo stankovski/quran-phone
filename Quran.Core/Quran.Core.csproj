@@ -115,8 +115,8 @@
     <Compile Include="BackgroundTask\AudioTrackModel.cs" />
     <Compile Include="BackgroundTask\StartPlaybackMessage.cs" />
     <Compile Include="BackgroundTask\TrackChangedMessage.cs" />
-    <Compile Include="BackgroundTask\UpdatePlaylistMessage.cs" />
     <Compile Include="Common\AudioPlayerPlayState.cs" />
+    <Compile Include="Common\QuranAudioTrack.cs" />
     <Compile Include="Common\AudioRequest.cs" />
     <Compile Include="Common\AudioState.cs" />
     <Compile Include="Common\AudioTransferEventArgs.cs" />
