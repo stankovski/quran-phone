@@ -380,9 +380,9 @@ namespace Quran.Windows.Views
             });
             NavigationLinks.Add(new NavigationLink
             {
-                Label = Quran.Core.Properties.Resources.contact_us,
-                Symbol = Symbol.MailForward,
-                Action = () => { QuranApp.NativeProvider.ComposeEmail("quran.phone@gmail.com", "Email from QuranPhone"); }
+                Label = Quran.Core.Properties.Resources.recite,
+                Symbol = Symbol.Volume,
+                Action = () => { AudioPlay(this, null); }
             });
             var keepOrientationLink = new NavigationLink
             {
@@ -436,6 +436,7 @@ namespace Quran.Windows.Views
         {
             if (state == AudioState.Playing)
             {
+                BottomAppBar.Visibility = Visibility.Visible;
                 BottomAppBar.ClosedDisplayMode = AppBarClosedDisplayMode.Compact;
                 AudioPlayButton.Visibility = Visibility.Collapsed;
                 AudioStopButton.Visibility = Visibility.Visible;
@@ -445,6 +446,7 @@ namespace Quran.Windows.Views
             }
             else if (state == AudioState.Paused)
             {
+                BottomAppBar.Visibility = Visibility.Visible;
                 BottomAppBar.ClosedDisplayMode = AppBarClosedDisplayMode.Minimal;
                 AudioPlayButton.Visibility = Visibility.Visible;
                 AudioStopButton.Visibility = Visibility.Visible;
@@ -454,7 +456,7 @@ namespace Quran.Windows.Views
             }
             else
             {
-                BottomAppBar.ClosedDisplayMode = AppBarClosedDisplayMode.Minimal;
+                BottomAppBar.Visibility = Visibility.Collapsed;
                 AudioPlayButton.Visibility = Visibility.Visible;
                 AudioStopButton.Visibility = Visibility.Collapsed;
                 AudioPauseButton.Visibility = Visibility.Collapsed;
