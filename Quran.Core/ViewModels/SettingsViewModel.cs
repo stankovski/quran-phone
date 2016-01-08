@@ -352,7 +352,7 @@ namespace Quran.Core.ViewModels
 
         public void ContactUs()
         {
-            QuranApp.NativeProvider.ComposeEmail("quran.phone@gmail.com", "Email from QuranPhone");
+            QuranApp.NativeProvider.LaunchWebBrowser("https://github.com/stankovski/quran-phone/issues");
         }
 
         private void Navigate(string link)

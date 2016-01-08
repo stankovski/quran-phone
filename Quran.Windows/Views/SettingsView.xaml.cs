@@ -48,16 +48,6 @@ namespace Quran.Windows.Views
             ViewModel.SaveSettings();
             base.OnNavigatedFrom(e);
         }
-        
-        private void LinkTap(object sender, RoutedEventArgs e)
-        {
-            //var link = e.OriginalSource as Hyperlink;
-            //if (link != null)
-            //{
-            //    var task = new WebBrowserTask() {Uri = link.NavigateUri};
-            //    task.Show();
-            //}
-        }
 
         private void HamburgerButton_Click(object sender, RoutedEventArgs e)
         {

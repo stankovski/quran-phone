@@ -198,7 +198,7 @@ Quran Phone Team";
             {
                 Label = Quran.Core.Properties.Resources.contact_us,
                 Symbol = Symbol.MailForward,
-                Action = () => { QuranApp.NativeProvider.ComposeEmail("quran.phone@gmail.com", "Email from QuranPhone"); }
+                Action = () => { QuranApp.NativeProvider.LaunchWebBrowser("https://github.com/stankovski/quran-phone/issues"); }
             });
         }
 
