@@ -168,15 +168,6 @@ namespace Quran.Windows.Audio
             }
         }
 
-        async void MediaPlayerMediaEnded(MediaPlayer sender, object args)
-        {
-            if (_originalTrackRequest != null)
-            {
-                await ChangeTrack(_originalTrackRequest.GetLastAyah().GetNext());
-            }
-            MessageService.SendMessageToForeground(new TrackEndedMessage());
-        }
-
         /// <summary>
         /// Raised when a message is recieved from the foreground app
         /// </summary>
@@ -348,21 +339,54 @@ namespace Quran.Windows.Audio
         }
 
         /// <summary>
-        /// Skip track and update UVC via SMTC
+        /// Event fired when track is ended
         /// </summary>
-        private void SkipToPrevious()
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        async void MediaPlayerMediaEnded(MediaPlayer sender, object args)
         {
-            smtc.PlaybackStatus = MediaPlaybackStatus.Changing;
-            _playbackList.MovePrevious();
+            if (_originalTrackRequest != null)
+            {
+                await ChangeTrack(_originalTrackRequest.GetLastAyah().GetNext());
+            }
+            MessageService.SendMessageToForeground(new TrackEndedMessage());
         }
 
         /// <summary>
         /// Skip track and update UVC via SMTC
         /// </summary>
-        private void SkipToNext()
+        async void SkipToPrevious()
         {
             smtc.PlaybackStatus = MediaPlaybackStatus.Changing;
-            _playbackList.MoveNext();
+
+            if (_playbackList.CurrentItemIndex == 0)
+            {
+                if (_originalTrackRequest != null)
+                {
+                    await ChangeTrack(_originalTrackRequest.GetFirstAyah().GetPrevious());
+                }
+            }
+            else
+            {
+                _playbackList.MovePrevious();
+            }
+        }
+
+        /// <summary>
+        /// Skip track and update UVC via SMTC
+        /// </summary>
+        void SkipToNext()
+        {
+            smtc.PlaybackStatus = MediaPlaybackStatus.Changing;
+
+            if (_playbackList.CurrentItemIndex == _playbackList.Items.Count - 1)
+            {
+                MediaPlayerMediaEnded(BackgroundMediaPlayer.Current, null);
+            }
+            else
+            {
+                _playbackList.MoveNext();
+            }
         }
 
         /// <summary>
