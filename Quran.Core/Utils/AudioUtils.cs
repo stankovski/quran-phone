@@ -220,7 +220,10 @@ namespace Quran.Core.Utils
                 {
                     fileName = string.Format(reciter.GetFilePattern(), 1, 1);
                 }
-                fileName = string.Format(reciter.GetFilePattern(), ayah.Surah, ayah.Ayah);
+                else
+                {
+                    fileName = string.Format(reciter.GetFilePattern(), ayah.Surah, ayah.Ayah);
+                }
             }
 
             return fileName;

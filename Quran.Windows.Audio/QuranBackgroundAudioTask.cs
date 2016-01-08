@@ -261,8 +261,8 @@ namespace Quran.Windows.Audio
                     }
                 }
                 //TODO: Work around playlist bug that doesn't continue playing after a switch; remove later
-                BackgroundMediaPlayer.Current.Play();
             }
+            BackgroundMediaPlayer.Current.Play();
         }
 
         /// <summary>
