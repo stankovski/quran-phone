@@ -18,6 +18,7 @@ namespace Quran.Core.Data
     public class BookmarksDatabaseHandler : BaseDatabaseHandler
     {
         public static string DB_NAME = "bookmarks.db";
+        private static HashSet<int> _pageCache;
 
         public BookmarksDatabaseHandler()
             : base(ApplicationData.Current.RoamingFolder.Path, DB_NAME)
@@ -30,6 +31,31 @@ namespace Quran.Core.Data
             newDb.CreateTable<Tags>();
             newDb.CreateTable<BookmarkTags>();
             return newDb;
+        }
+
+        public static HashSet<int> PageCache
+        {
+            get
+            {
+                if (_pageCache == null)
+                {
+                    _pageCache = new HashSet<int>();
+                    using (var adapter = new BookmarksDatabaseHandler())
+                    {
+                        var bookmarkedPages = adapter.GetBookmarks(false, BoomarkSortOrder.Location).GroupBy(b => b.Page);
+                        foreach (var page in bookmarkedPages)
+                        {
+                            _pageCache.Add(page.Key);
+                        }
+                    }
+                }
+                return _pageCache;
+            }
+        }
+
+        public static bool IsPageBookmarked(int page)
+        {
+            return PageCache.Contains(page);
         }
 
         public List<Bookmarks> GetBookmarks(bool loadTags, BoomarkSortOrder sortOrder)
@@ -94,11 +120,6 @@ namespace Quran.Core.Data
             }
         }
 
-        public bool IsPageBookmarked(int page)
-        {
-            return GetBookmarkId(null, null, page) >= 0;
-        }
-
         public int GetBookmarkId(int? surah, int? ayah, int page)
         {
             var bookmarks = dbConnection.Table<Bookmarks>().Where(b => b.Page == page);
@@ -142,11 +163,17 @@ namespace Quran.Core.Data
         {
             var bookmark = new Bookmarks { Ayah = ayah, Surah = surah, Page = page };
             dbConnection.Insert(bookmark);
+            PageCache.Add(page);
             return bookmark.Id;
         }
 
         public bool RemoveBookmark(int bookmarkId)
         {
+            var bookmark = dbConnection.Table<Bookmarks>().Where(b => b.Id == bookmarkId).FirstOrDefault();
+            if (bookmark != null)
+            {
+                PageCache.Remove(bookmark.Page);
+            }
             ClearBookmarkTags(bookmarkId);
             return dbConnection.Delete(new Bookmarks { Id = bookmarkId }) == 1;
         }
