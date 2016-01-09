@@ -25,6 +25,7 @@ namespace Quran.Windows.Views
         public DetailsViewModel ViewModel { get; set; }
         public ObservableCollection<NavigationLink> NavigationLinks = new ObservableCollection<NavigationLink>();
         private DataTransferManager _dataTransferManager;
+        private NavigationLink _bookmarkNavigationLink;
 
         public DetailsView()
         {
@@ -63,6 +64,7 @@ namespace Quran.Windows.Views
                     if (ViewModel.CurrentPageIndex != -1)
                     {
                         radSlideView.SelectedItem = ViewModel.Pages[ViewModel.CurrentPageIndex];
+                        SetBookmarkNavigationLink();
                     }
                 }
                 if (args.PropertyName == "AudioPlayerState")
@@ -372,12 +374,16 @@ namespace Quran.Windows.Views
                 Symbol = Symbol.Globe,
                 Action = TranslationClick
             });
-            NavigationLinks.Add(new NavigationLink
+            _bookmarkNavigationLink = new NavigationLink
             {
-                Label = Quran.Core.Properties.Resources.bookmark,
-                Symbol = Symbol.SolidStar,
-                Action = () => { ViewModel.AddPageBookmark(); }
-            });
+                Action = () => 
+                {
+                    ViewModel.TogglePageBookmark();
+                    SetBookmarkNavigationLink();
+                }
+            };
+            SetBookmarkNavigationLink();
+            NavigationLinks.Add(_bookmarkNavigationLink);
             NavigationLinks.Add(new NavigationLink
             {
                 Label = Quran.Core.Properties.Resources.recite,
@@ -391,6 +397,20 @@ namespace Quran.Windows.Views
             };
             keepOrientationLink.Action = () => { KeepOrientationClick(keepOrientationLink); };
             NavigationLinks.Add(keepOrientationLink);
+        }
+
+        private void SetBookmarkNavigationLink()
+        {
+            if (BookmarksDatabaseHandler.IsPageBookmarked(ViewModel.CurrentPageNumber))
+            {
+                _bookmarkNavigationLink.Label = Quran.Core.Properties.Resources.delete_bookmark;
+                _bookmarkNavigationLink.Symbol = Symbol.SolidStar;
+            }
+            else
+            {
+                _bookmarkNavigationLink.Label = Quran.Core.Properties.Resources.bookmark;
+                _bookmarkNavigationLink.Symbol = Symbol.OutlineStar;
+            }
         }
 
         private void TranslationClick()

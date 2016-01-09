@@ -6,7 +6,20 @@ namespace Quran.Core.ViewModels
 {
     public class NavigationLink : BaseViewModel
     {
-        public Symbol Symbol { get; set; }
+        public Symbol symbol { get; set; }
+        public Symbol Symbol
+        {
+            get { return symbol; }
+            set
+            {
+                if (value == symbol)
+                    return;
+
+                symbol = value;
+
+                base.OnPropertyChanged(() => Symbol);
+            }
+        }
 
         private string label;
         public string Label

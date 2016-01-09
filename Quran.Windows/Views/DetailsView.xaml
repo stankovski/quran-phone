@@ -79,7 +79,7 @@
                             <ListView.ItemTemplate>
                                 <DataTemplate x:DataType="vm:NavigationLink">
                                     <StackPanel Orientation="Horizontal"  Margin="2,0,0,0">
-                                        <SymbolIcon Symbol="{x:Bind Symbol}" Foreground="White"/>
+                                        <SymbolIcon Symbol="{x:Bind Symbol, Mode=OneWay}" Foreground="White"/>
                                         <TextBlock Text="{x:Bind Label, Mode=OneWay}" Margin="24,0,0,0" Foreground="White"
                                                     VerticalAlignment="Center"/>
                                     </StackPanel>
