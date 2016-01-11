@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.ApplicationInsights;
 using Quran.Core;
 using Quran.Core.Common;
 using Quran.Core.Utils;
@@ -38,7 +39,7 @@ namespace Quran.Windows.Audio
         private QuranAudioTrack _originalTrackRequest;
         private ManualResetEvent _backgroundTaskStarted = new ManualResetEvent(false);
         private BackgroundTaskDeferral _deferral; // Used to keep task alive
-
+        private TelemetryClient telemetry = new TelemetryClient();
 
         public void Run(IBackgroundTaskInstance taskInstance)
         {
@@ -124,7 +125,7 @@ namespace Quran.Windows.Audio
                     }
                     catch (Exception ex)
                     {
-                        Debug.WriteLine(ex.ToString());
+                        telemetry.TrackException(ex, new Dictionary<string, string> { { "Scenario", "BackgroundAudioButtonPressed" } });
                     }
                     break;
                 case SystemMediaTransportControlsButton.Next:
@@ -159,7 +160,7 @@ namespace Quran.Windows.Audio
             {
                 if ((uint)ex.HResult == E_ABORT)
                 {
-                    // do nothing
+                    telemetry.TrackException(ex, new Dictionary<string, string> { { "Scenario", "BackgroundAudioStateChanged" } });
                 }
                 else
                 {
@@ -334,6 +335,7 @@ namespace Quran.Windows.Audio
             }
             catch (Exception ex)
             {
+                telemetry.TrackException(ex, new Dictionary<string, string> { { "Scenario", "BackgroundAudioPlay" } });
                 Debug.WriteLine(ex.ToString());
             }
         }
@@ -345,7 +347,8 @@ namespace Quran.Windows.Audio
         /// <param name="args"></param>
         async void MediaPlayerMediaEnded(MediaPlayer sender, object args)
         {
-            if (_originalTrackRequest != null)
+            if (_originalTrackRequest != null && 
+                _playbackList.CurrentItemIndex == _playbackList.Items.Count - 1)
             {
                 await ChangeTrack(_originalTrackRequest.GetLastAyah().GetNext());
             }
@@ -481,7 +484,7 @@ namespace Quran.Windows.Audio
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex.ToString());
+                telemetry.TrackException(ex, new Dictionary<string, string> { { "Scenario", "BackgroundAudioCancel" } });
             }
             _deferral.Complete(); // signals task completion. 
             Debug.WriteLine("MyBackgroundAudioTask Cancel complete...");

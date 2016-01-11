@@ -11,6 +11,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.ApplicationInsights;
 using Quran.Core.Common;
 using Quran.Core.Data;
 using Quran.Core.Properties;
@@ -27,6 +28,7 @@ namespace Quran.Core.ViewModels
     {
         private string _zipFileServerUrl;
         private string _zipFileLocalPath;
+        
         public MainViewModel()
         {
             this.Surahs = new ObservableCollection<ItemViewModel>();
@@ -341,6 +343,7 @@ namespace Quran.Core.ViewModels
                 }
                 catch (Exception ex)
                 {
+                    telemetry.TrackException(ex, new Dictionary<string, string> { { "Scenario", "LoadingBookmarks" } });
                     QuranApp.NativeProvider.Log("failed to load bookmarks: " + ex.Message);
                 }
             }
@@ -371,9 +374,9 @@ namespace Quran.Core.ViewModels
                             title = ayahSurah.Text;
                         }
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        //Not able to get Arabic text - skipping
+                        telemetry.TrackException(ex, new Dictionary<string, string> { { "Scenario", "OpenArabicDatabase" } });
                     }
 
                     details = string.Format(CultureInfo.InvariantCulture, "{0} {1} {2}, {3} {4}",

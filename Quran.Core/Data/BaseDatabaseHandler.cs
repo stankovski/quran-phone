@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Microsoft.ApplicationInsights;
 using Quran.Core.Utils;
 using SQLite.Net;
 using SQLite.Net.Platform.WinRT;
@@ -9,6 +10,7 @@ namespace Quran.Core.Data
     public abstract class BaseDatabaseHandler : IDisposable
     {
         protected SQLiteConnection dbConnection = null;
+        protected TelemetryClient telemetry = new TelemetryClient();
 
         protected BaseDatabaseHandler(string databaseName) : 
             this(FileUtils.GetQuranDatabaseDirectory(), databaseName)

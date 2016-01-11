@@ -107,13 +107,13 @@ namespace Quran.Core.Utils
             return QuranUtils.GetJuzLastAyah(juz);
         }
 
-        public static async Task<bool> ShouldDownloadBismillah(AudioRequest request)
+        public static async Task<bool> ShouldDownloadBismillah(QuranAudioTrack request)
         {
-            if (request.Reciter.IsGapless)
+            if (request.GetReciter().IsGapless)
             {
                 return false;
             }
-            string baseDirectory = request.Reciter.LocalPath;
+            string baseDirectory = request.GetReciter().LocalPath;
             if (!string.IsNullOrEmpty(baseDirectory))
             {
                 if (await FileUtils.DirectoryExists(baseDirectory))
@@ -139,39 +139,9 @@ namespace Quran.Core.Utils
             return await FileUtils.FileExists(filename);
         }
 
-        public static bool DoesRequireBismillah(AudioRequest request)
+        public static bool DoesRequireBismillah(QuranAudioTrack request)
         {
-            QuranAyah minAyah = request.FromAyah;
-            int startSura = minAyah.Surah;
-            int startAyah = minAyah.Ayah;
-
-            QuranAyah maxAyah = request.ToAyah;
-            int endSura = maxAyah.Surah;
-            int endAyah = maxAyah.Ayah;
-
-            for (int i = startSura; i <= endSura; i++)
-            {
-                int lastAyah = QuranUtils.GetSurahNumberOfAyah(i);
-                if (i == endSura)
-                {
-                    lastAyah = endAyah;
-                }
-                int firstAyah = 1;
-                if (i == startSura)
-                {
-                    firstAyah = startAyah;
-                }
-
-                for (int j = firstAyah; j <= lastAyah; j++)
-                {
-                    if (j == 1 && i != Constants.SURA_FIRST && i != Constants.SURA_TAWBA)
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
+            return QuranUtils.HasBismillah(request.Surah);
         }
 
         public static async Task<bool> HaveAllFiles(QuranAudioTrack request)

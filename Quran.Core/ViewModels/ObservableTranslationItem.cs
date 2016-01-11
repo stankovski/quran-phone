@@ -6,6 +6,7 @@ using Quran.Core.Data;
 using System.IO;
 using System.Threading.Tasks;
 using Quran.Core.Properties;
+using System.Collections.Generic;
 
 namespace Quran.Core.ViewModels
 {
@@ -129,9 +130,10 @@ namespace Quran.Core.ViewModels
                 {
                     await FileUtils.SafeFileDelete(LocalPath);
                 }
-                catch
+                catch (Exception ex)
                 {
                     QuranApp.NativeProvider.Log("error deleting file " + LocalPath);
+                    telemetry.TrackException(ex, new Dictionary<string, string> { { "Scenario", "DeletingTranslationFile" } });
                 }
             }
             else
@@ -143,17 +145,10 @@ namespace Quran.Core.ViewModels
             if (DeleteComplete != null)
                 DeleteComplete(this, null);
 
-            try
+            if (SettingsUtils.Get<string>(Constants.PREF_ACTIVE_TRANSLATION).StartsWith(Path.GetFileName(LocalPath), 
+                StringComparison.Ordinal))
             {
-                if (SettingsUtils.Get<string>(Constants.PREF_ACTIVE_TRANSLATION).StartsWith(Path.GetFileName(LocalPath), 
-                    StringComparison.Ordinal))
-                {
-                    SettingsUtils.Set<string>(Constants.PREF_ACTIVE_TRANSLATION, string.Empty);
-                }
-            }
-            catch
-            {
-                // Ignore
+                SettingsUtils.Set<string>(Constants.PREF_ACTIVE_TRANSLATION, string.Empty);
             }
         }
 

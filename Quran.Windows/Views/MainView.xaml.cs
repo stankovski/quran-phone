@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.ApplicationInsights;
 using Quran.Core;
 using Quran.Core.Data;
 using Quran.Core.Properties;
@@ -25,6 +26,8 @@ namespace Quran.Windows.Views
 {
     public partial class MainView
     {
+        private TelemetryClient telemetry = new TelemetryClient();
+
         public MainViewModel ViewModel { get; set; }
         public SearchViewModel SearchViewModel { get; set; }
         public ObservableCollection<NavigationLink> NavigationLinks = new ObservableCollection<NavigationLink>();
@@ -47,7 +50,6 @@ namespace Quran.Windows.Views
             JuzViewSource.Source = ViewModel.GetGrouppedJuzItems();
             BookmarksViewSource.Source = ViewModel.GetGrouppedBookmarks();
             BuildLocalizedMenu();
-            await LittleWatson.CheckForPreviousException();
 
             // We set the state of the commands on the appbar
             SetCommandsVisibility(BookmarksListView);
@@ -137,8 +139,9 @@ Quran Phone Team";
                         });
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                telemetry.TrackException(ex, new Dictionary<string, string> { { "Scenario", "NavigateFromMainView" } });
                 // Navigation exception - ignore
             }
 

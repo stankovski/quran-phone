@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.ApplicationInsights;
 using Quran.Core;
 using Quran.Core.Common;
 using Quran.Core.Interfaces;
@@ -23,6 +24,7 @@ namespace Quran.Windows.NativeProvider
         const int RPC_S_SERVER_UNAVAILABLE = -2147023174; // 0x800706BA
         private AutoResetEvent backgroundAudioTaskStarted;
         private readonly CoreDispatcher _dispatcher;
+        private TelemetryClient telemetry = new TelemetryClient();
 
         public UniversalAudioProvider()
         {
@@ -127,6 +129,7 @@ namespace Quran.Windows.NativeProvider
                     {
                         if (ex.HResult == RPC_S_SERVER_UNAVAILABLE)
                         {
+                            telemetry.TrackException(ex, new Dictionary<string, string> { { "Scenario", "GetCurrentPlayerServerUnavailable" } });
                             // The foreground app uses RPC to communicate with the background process.
                             // If the background process crashes or is killed for any reason RPC_S_SERVER_UNAVAILABLE
                             // is returned when calling Current. We must restart the task, the while loop will retry to set mp.
@@ -172,6 +175,7 @@ namespace Quran.Windows.NativeProvider
             {
                 if (ex.HResult == RPC_S_SERVER_UNAVAILABLE)
                 {
+                    telemetry.TrackException(ex, new Dictionary<string, string> { { "Scenario", "ResetPlayerServerUnavailable" } });
                     throw new Exception("Failed to get a MediaPlayer instance.");
                 }
                 else
@@ -247,7 +251,7 @@ namespace Quran.Windows.NativeProvider
             {
                 if (ex.HResult == RPC_S_SERVER_UNAVAILABLE)
                 {
-                    // do nothing
+                    telemetry.TrackException(ex, new Dictionary<string, string> { { "Scenario", "RemovePlayerServerUnavailable" } });
                 }
                 else
                 {
@@ -299,6 +303,7 @@ namespace Quran.Windows.NativeProvider
                 if ((uint)ex.HResult == E_ABORT || ex.HResult == RPC_S_SERVER_UNAVAILABLE)
                 {
                     // do nothing
+                    telemetry.TrackException(ex, new Dictionary<string, string> { { "Scenario", "CurrentPlayerStateChangedGetState" } });
                 }
                 else
                 {

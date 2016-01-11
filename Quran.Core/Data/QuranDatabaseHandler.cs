@@ -13,38 +13,6 @@ namespace Quran.Core.Data
             : base(databaseName)
         { }
 
-        public int GetSchemaVersion()
-        {
-            int version = 1;
-            try
-            {
-                var result = dbConnection.Table<DatabaseProperties>().Where(p => p.Property == "schema_version").FirstOrDefault();
-                if (result != null)
-                    version = int.Parse(result.Value, CultureInfo.InvariantCulture);
-                return version;
-            }
-            catch (Exception)
-            {
-                return version;
-            }
-        }
-
-        public int GetTextVersion()
-        {
-            int version = 1;
-            try
-            {
-                var result = dbConnection.Table<DatabaseProperties>().Where(p => p.Property == "text_version").FirstOrDefault();
-                if (result != null)
-                    version = int.Parse(result.Value, CultureInfo.InvariantCulture);
-                return version;
-            }
-            catch (Exception)
-            {
-                return version;
-            }
-        }
-
         public List<T> GetVerses(int surah, int minAyah, int maxAyah)
         {
             return GetVerses(surah, minAyah, surah, maxAyah);

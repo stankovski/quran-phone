@@ -26,42 +26,5 @@ namespace Quran.Core.Data
         {
             return dbConnection.Table<TranslationItem>().OrderBy(ti => ti.Id).ToList();
         }
-
-        public bool WriteTranslationUpdates(List<TranslationItem> updates)
-        {
-            bool result = true;
-            dbConnection.BeginTransaction();
-            try
-            {
-                foreach (var item in updates)
-                {
-                    var translation = dbConnection.Table<TranslationItem>().FirstOrDefault(ti => ti.Id == item.Id);
-                    if (item.Exists)
-                    {
-                        if (translation != null)
-                        {
-                            dbConnection.Update(item);
-                        }
-                        else
-                        {
-                            dbConnection.Insert(item);
-                        }
-                    }
-                    else
-                    {
-                        dbConnection.Delete(item);
-                    }
-                }
-                dbConnection.Commit();
-            }
-            catch (Exception e)
-            {
-                result = false;
-                dbConnection.Rollback();
-                Debug.WriteLine("error writing translation updates: " + e.Message);
-            }
-
-            return result;
-        }
     }
 }

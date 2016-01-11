@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using SQLite.Net;
 using Windows.Storage;
+using Microsoft.ApplicationInsights.DataContracts;
 
 namespace Quran.Core.Data
 {
@@ -278,6 +279,7 @@ namespace Quran.Core.Data
             }
             catch (Exception e)
             {
+                telemetry.TrackException(e, new Dictionary<string, string> {{ "Scenario", "TagBookmarks" } });
                 Debug.WriteLine("exception in tagBookmark: " + e.Message);
                 dbConnection.Rollback();
             }

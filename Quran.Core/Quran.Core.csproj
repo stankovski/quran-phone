@@ -117,7 +117,6 @@
     <Compile Include="BackgroundTask\TrackChangedMessage.cs" />
     <Compile Include="Common\AudioPlayerPlayState.cs" />
     <Compile Include="Common\QuranAudioTrack.cs" />
-    <Compile Include="Common\AudioRequest.cs" />
     <Compile Include="Common\AudioState.cs" />
     <Compile Include="Common\AudioTransferEventArgs.cs" />
     <Compile Include="Common\AyahBounds.cs" />
@@ -130,8 +129,6 @@
     <Compile Include="Common\ReciterItem.cs" />
     <Compile Include="Common\Rectangle.cs" />
     <Compile Include="Common\RelayCommand.cs" />
-    <Compile Include="Common\RepeatInfo.cs" />
-    <Compile Include="Common\RepeatManager.cs" />
     <Compile Include="Common\Tags.cs" />
     <Compile Include="Common\Timings.cs" />
     <Compile Include="Common\TransferEventArgs.cs" />

@@ -144,8 +144,9 @@ namespace Quran.Core.ViewModels
                     }
                     return;
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    telemetry.TrackException(ex, new Dictionary<string, string> { { "Scenario", "LoadingTranslations" } });
                     this.SearchResults.Add(new ItemViewModel
                     {
                         Id = "Error",

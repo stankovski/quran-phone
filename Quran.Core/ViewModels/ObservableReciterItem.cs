@@ -4,6 +4,7 @@ using Quran.Core.Common;
 using Quran.Core.Data;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Collections.Generic;
 
 namespace Quran.Core.ViewModels
 {
@@ -191,9 +192,10 @@ namespace Quran.Core.ViewModels
                 {
                     await FileUtils.DeleteFolder(this.LocalUrl);
                 }
-                catch
+                catch (Exception ex)
                 {
                     QuranApp.NativeProvider.Log("error deleting file " + this.LocalUrl);
+                    telemetry.TrackException(ex, new Dictionary<string, string> { { "Scenario", "DeletingReciterFile" } });
                 }
             }
             else
@@ -206,15 +208,9 @@ namespace Quran.Core.ViewModels
             if (DeleteComplete != null)
                 DeleteComplete(this, null);
 
-            try
+            if (SettingsUtils.Get<string>(Constants.PREF_ACTIVE_QARI) == this.Name)
             {
-                if (SettingsUtils.Get<string>(Constants.PREF_ACTIVE_QARI) == this.Name)
-                {
-                    SettingsUtils.Set<string>(Constants.PREF_ACTIVE_QARI, string.Empty);
-                }
-            }
-            catch (Exception)
-            {
+                SettingsUtils.Set<string>(Constants.PREF_ACTIVE_QARI, string.Empty);
             }
         }
 

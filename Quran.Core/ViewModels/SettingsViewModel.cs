@@ -10,6 +10,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.ApplicationInsights;
 using Quran.Core.Data;
 using Quran.Core.Properties;
 using Quran.Core.Utils;
@@ -23,6 +24,8 @@ namespace Quran.Core.ViewModels
     /// </summary>
     public class SettingsViewModel : BaseViewModel
     {
+        private TelemetryClient telemetry = new TelemetryClient();
+
         public SettingsViewModel()
         { }
 
@@ -347,6 +350,7 @@ namespace Quran.Core.ViewModels
 
         public void GenerateDua()
         {
+            telemetry.TrackEvent("GenerateDua");
             DuaGenerator.Generate();
         }
 

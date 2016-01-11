@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using Microsoft.ApplicationInsights;
 using Quran.Core;
 using Quran.Core.Data;
 using Quran.Core.Utils;
@@ -20,12 +22,17 @@ namespace Quran.Windows
     /// </summary>
     sealed partial class App : Application
     {
+        private TelemetryClient telemetry = new TelemetryClient();
+
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
         /// </summary>
         public App()
         {
+            // Add this initilization line. 
+            WindowsAppInitializer.InitializeAsync();
+
             this.InitializeComponent();
             this.Suspending += OnSuspending;
             this.UnhandledException += App_UnhandledException;
@@ -49,7 +56,10 @@ namespace Quran.Windows
             Frame rootFrame = Window.Current.Content as Frame;
 
             // Create NativeProvider
-            QuranApp.NativeProvider = new UniversalNativeProvider();
+            if (QuranApp.NativeProvider == null)
+            {
+                QuranApp.NativeProvider = new UniversalNativeProvider();
+            }
             await QuranApp.Initialize();
 
             // Restore settings
@@ -129,7 +139,7 @@ namespace Quran.Windows
         void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
         {
             QuranApp.NativeProvider.ShowErrorMessageBox("Failed to load Page " + e.SourcePageType.FullName);
-            LittleWatson.ReportException(e.Exception, "Navigation Failed");
+            telemetry.TrackException(e.Exception, new Dictionary<string, string> { { "Scenario", "AppNavigationFailed" } });
             if (System.Diagnostics.Debugger.IsAttached)
             {
                 // A navigation has failed; break into the debugger
@@ -139,7 +149,7 @@ namespace Quran.Windows
 
         private void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            LittleWatson.ReportException(e.Exception, "Unhandled Exception");
+            telemetry.TrackException(e.Exception, new Dictionary<string, string> { { "Scenario", "AppUnhandledException" } });
             if (System.Diagnostics.Debugger.IsAttached)
             {
                 // An unhandled exception has occurred; break into the debugger

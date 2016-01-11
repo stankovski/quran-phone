@@ -17,6 +17,7 @@ using Windows.Networking.BackgroundTransfer;
 using System.Linq;
 using Windows.UI.Core;
 using Windows.Storage;
+using Microsoft.ApplicationInsights;
 
 namespace Quran.Core.ViewModels
 {
@@ -29,6 +30,7 @@ namespace Quran.Core.ViewModels
         private CancellationTokenSource _cts;
         private readonly CoreDispatcher _dispatcher;
         public const string DownloadExtension = ".download";
+        private TelemetryClient telemetry = new TelemetryClient();
 
         public DownloadableViewModelBase()
         {
@@ -164,6 +166,7 @@ namespace Quran.Core.ViewModels
             }
             catch (Exception ex)
             {
+                telemetry.TrackException(ex, new Dictionary<string, string> { { "Scenario", "InitializeDownloads" } });
                 WebErrorStatus error = BackgroundTransferError.GetStatus(ex.HResult);
                 await QuranApp.NativeProvider.ShowErrorMessageBox("Error getting active downloads: " + error.ToString());
                 return;
@@ -241,6 +244,7 @@ namespace Quran.Core.ViewModels
             }
             catch (FileNotFoundException ex)
             {
+                telemetry.TrackException(ex, new Dictionary<string, string> { { "Scenario", "CreatingFileToWriteDownload" } });
                 await QuranApp.NativeProvider.
                     ShowErrorMessageBox("Error while creating file: " + ex.Message);
                 return null;
@@ -358,6 +362,7 @@ namespace Quran.Core.ViewModels
             catch (Exception ex)
             {
                 WebErrorStatus error = BackgroundTransferError.GetStatus(ex.HResult);
+                telemetry.TrackException(ex, new Dictionary<string, string> { { "Scenario", "GettingActiveDownloads" } });
                 await QuranApp.NativeProvider.ShowErrorMessageBox("Error getting active downloads: " + error.ToString());
                 return false;
             }

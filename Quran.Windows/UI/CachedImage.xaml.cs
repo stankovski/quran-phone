@@ -17,6 +17,8 @@ using Windows.UI.Xaml.Input;
 using System.Threading.Tasks;
 using Windows.Storage;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Collections.Generic;
+using Microsoft.ApplicationInsights;
 
 namespace Quran.Windows.UI
 {
@@ -26,6 +28,7 @@ namespace Quran.Windows.UI
 
         private WriteableBitmap imageSourceBitmap;
         private Uri imageSourceUri;
+        private static TelemetryClient telemetry = new TelemetryClient();
 
         public CachedImage()
         {
@@ -116,9 +119,9 @@ namespace Quran.Windows.UI
                         }
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
-                    //Ignore
+                    telemetry.TrackException(ex, new Dictionary<string, string> { { "Scenario", "UpdateSelectedAyahInImage" } });
                 }
             }
         }
@@ -188,6 +191,7 @@ namespace Quran.Windows.UI
                     catch (Exception ex)
                     {
                         await QuranApp.NativeProvider.ShowErrorMessageBox("Error loading quran page:" + ex.ToString());
+                        telemetry.TrackException(ex, new Dictionary<string, string> { { "Scenario", "ErrorLoadingPageImageFromUri" } });
                         downloadSuccessful = false;
                     }
 
@@ -204,9 +208,10 @@ namespace Quran.Windows.UI
                     else
                         throw new Exception();
                 }
-                catch
+                catch (Exception ex)
                 {
                     await QuranApp.NativeProvider.ShowErrorMessageBox("Error loading quran page.");
+                    telemetry.TrackException(ex, new Dictionary<string, string> { { "Scenario", "ErrorLoadingPageImageFromFile" } });
                     await FileUtils.SafeFileDelete(localPath);
                 }
                 finally
@@ -359,8 +364,9 @@ namespace Quran.Windows.UI
                     return ayahDb.GetVerseAtPoint(pageNumber, position.X, position.Y);
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                telemetry.TrackException(ex, new Dictionary<string, string> { { "Scenario", "OpeningAyahInfoDatabase" } });
                 // Ignore
             }
             return null;

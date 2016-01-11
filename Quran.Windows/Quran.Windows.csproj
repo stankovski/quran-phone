@@ -119,6 +119,9 @@
     <PRIResource Include="..\Quran.Core\Strings\ru\Resources.resw">
       <Link>Strings\ru\Resources.resw</Link>
     </PRIResource>
+    <Content Include="ApplicationInsights.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
@@ -170,7 +173,6 @@
       <DependentUpon>TranslationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\UiExtensions.cs" />
-    <Compile Include="Utils\LittleWatson.cs" />
     <Compile Include="Utils\PhoneUtils.cs" />
     <Compile Include="Utils\SystemInfo.cs" />
     <Compile Include="Views\DetailsView.xaml.cs">

@@ -105,7 +105,6 @@
       <DependentUpon>UnitTestApp.xaml</DependentUpon>
     </Compile>
     <Compile Include="TestNativeProvider.cs" />
-    <Compile Include="Utils\AudioTests.cs" />
     <Compile Include="Utils\QuranInfoTests.cs" />
     <Compile Include="Utils\QuranUtilsTests.cs" />
     <Compile Include="ViewModels\TestDetailsViewModel.cs" />
