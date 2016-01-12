@@ -222,8 +222,7 @@ namespace Quran.Core.Utils
 
             try
             {
-                await StorageFolder.GetFolderFromPathAsync(path);
-                return true;
+                return Directory.Exists(path);
             }
             catch (FileNotFoundException)
             {

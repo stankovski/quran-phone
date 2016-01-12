@@ -204,9 +204,9 @@ namespace Quran.Windows.UI
                 try
                 {
                     if (downloadSuccessful)
+                    {
                         await loadImageFromLocalPath(localPath);
-                    else
-                        throw new Exception();
+                    }
                 }
                 catch (Exception ex)
                 {
