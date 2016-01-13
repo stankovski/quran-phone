@@ -100,10 +100,12 @@
                             <StackPanel Margin="12,17,0,28">
                                 <TextBlock Text="{Binding Path=LocalizedResources.reciters, Source={StaticResource LocalizedStrings}}"/>
                                 <Button Content="{x:Bind ViewModel.ActiveReciter}" Click="ShowReciters"/>
-                                <!--<TextBlock Text="{Binding Path=LocalizedResources.audio_download_blocks, Source={StaticResource LocalizedStrings}}"/>
-                                <ComboBox ItemsSource="{x:Bind ViewModel.SupportedAudioBlocks}" DisplayMemberPath="Value" 
+                                <ToggleSwitch Header="{Binding Path=LocalizedResources.offline_audio, Source={StaticResource LocalizedStrings}}"
+                                              IsOn="{x:Bind ViewModel.EnableOfflineAudio, Mode=TwoWay}" />
+                                <ComboBox Header="{Binding Path=LocalizedResources.audio_download_blocks, Source={StaticResource LocalizedStrings}}"
+                                          ItemsSource="{x:Bind ViewModel.SupportedAudioBlocks}" DisplayMemberPath="Value" 
                                           SelectedValue="{x:Bind ViewModel.SelectedAudioBlock, Mode=TwoWay}" SelectedValuePath="Key"/>
-                                <TextBlock Text="{Binding Path=LocalizedResources.repeat_ayah, Source={StaticResource LocalizedStrings}}"/>
+                                <!--<TextBlock Text="{Binding Path=LocalizedResources.repeat_ayah, Source={StaticResource LocalizedStrings}}"/>
                                 <ToggleSwitch IsOn="{Binding RepeatAudio, Mode=TwoWay}" />
                                 <TextBlock Text="{Binding Path=LocalizedResources.number_of_ayah_to_repeat, Source={StaticResource LocalizedStrings}}"/>
                                 <ComboBox ItemsSource="{Binding SupportedRepeatAmount}" DisplayMemberPath="Value" SelectedItem="{Binding SelectedRepeatAmount, Mode=TwoWay}"/>

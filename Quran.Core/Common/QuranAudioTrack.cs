@@ -11,7 +11,7 @@ namespace Quran.Core.Common
     {
         public QuranAudioTrack() { }
 
-        public QuranAudioTrack(int reciterId, QuranAyah verse, bool isStreaming)
+        public QuranAudioTrack(int reciterId, QuranAyah verse, bool isStreaming, AudioDownloadAmount downloadAmount)
         {
             if (verse == null)
             {
@@ -27,6 +27,7 @@ namespace Quran.Core.Common
             this.Surah = verse.Surah;
             this.Ayah = verse.Ayah;
             this.IsStreaming = isStreaming;
+            this.DownloadAmount = downloadAmount;
         }
         
         [DataMember]
@@ -40,6 +41,9 @@ namespace Quran.Core.Common
 
         [DataMember]
         public bool IsStreaming { get; set; }
+
+        [DataMember]
+        public AudioDownloadAmount DownloadAmount { get; set; }
 
         public QuranAudioTrack GetNextInSurah()
         {
@@ -55,7 +59,7 @@ namespace Quran.Core.Common
         {
             return new QuranAudioTrack(ReciterId, 
                 QuranUtils.GetNextAyah(GetQuranAyah(), true), 
-                IsStreaming);
+                IsStreaming, DownloadAmount);
         }
 
         public QuranAudioTrack GetPreviousInSurah()
@@ -72,7 +76,7 @@ namespace Quran.Core.Common
         {
             return new QuranAudioTrack(ReciterId, 
                 QuranUtils.GetPreviousAyah(GetQuranAyah(), true), 
-                IsStreaming);
+                IsStreaming, DownloadAmount);
         }
 
         public QuranAudioTrack GetFirstAyah()
@@ -80,14 +84,14 @@ namespace Quran.Core.Common
             int firstAyah = Surah == Constants.SURA_FIRST || Surah == Constants.SURA_TAWBA ? 1 : 0;
             return new QuranAudioTrack(ReciterId,
                 new QuranAyah(Surah, firstAyah),
-                IsStreaming);
+                IsStreaming, DownloadAmount);
         }
 
         public QuranAudioTrack GetLastAyah()
         {
             return new QuranAudioTrack(ReciterId,
                 new QuranAyah(Surah, QuranUtils.GetSurahNumberOfAyah(Surah)),
-                IsStreaming);
+                IsStreaming, DownloadAmount);
         }
 
         public ReciterItem GetReciter()

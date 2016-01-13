@@ -524,17 +524,8 @@
     &lt;/string-array&gt;
 &lt;/resources&gt;</value>
   </data>
-  <data name="quran_bookmarks_lower" xml:space="preserve">
+  <data name="quran_bookmarks" xml:space="preserve">
     <value>العلامات</value>
-  </data>
-  <data name="quran_juz2_lower" xml:space="preserve">
-    <value>الجزء</value>
-  </data>
-  <data name="quran_sura_lower" xml:space="preserve">
-    <value>السورة</value>
-  </data>
-  <data name="quran_tags_lower" xml:space="preserve">
-    <value>التصنيفات</value>
   </data>
   <data name="translations" xml:space="preserve">
     <value>التفاسير</value>
@@ -771,5 +762,8 @@
   </data>
   <data name="go_to" xml:space="preserve">
     <value>Go to page</value>
+  </data>
+  <data name="offline_audio" xml:space="preserve">
+    <value>Enable offline audio</value>
   </data>
 </root>

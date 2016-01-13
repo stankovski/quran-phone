@@ -17,8 +17,8 @@
     <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <PackageCertificateKeyFile>Quran.Windows_StoreKey.pfx</PackageCertificateKeyFile>
-    <PackageCertificateThumbprint>39247963B9750CE69E383EE430396657D82A1890</PackageCertificateThumbprint>
+    <PackageCertificateKeyFile>Quran.Windows_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateThumbprint>6B02D47CC5100EC9A16C7F51DC03A14C38EAB3C6</PackageCertificateThumbprint>
     <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
     <AppxBundle>Always</AppxBundle>
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
@@ -107,6 +107,8 @@
     <Content Include="Assets\StoreLogo.scale-200.png" />
     <Content Include="Assets\StoreLogo.scale-400.png" />
     <Content Include="Assets\UthmanicHafs.otf" />
+    <None Include="Quran.Windows_StoreKey.pfx" />
+    <None Include="Quran.Windows_TemporaryKey.pfx" />
     <PRIResource Include="..\Quran.Core\Strings\en-US\Resources.resw">
       <Link>Strings\en-US\Resources.resw</Link>
     </PRIResource>
@@ -195,7 +197,6 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <None Include="Quran.Windows_StoreKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\ApplicationIcon.png" />
@@ -244,11 +245,11 @@
     <Content Include="Assets\Square310.scale-140.png" />
     <Content Include="Assets\Square310.scale-180.png" />
     <Content Include="Assets\Square310.scale-80.png" />
-    <None Include="Package.StoreAssociation.xml" />
     <Content Include="Assets\WideLogo.scale-100.png" />
     <Content Include="Assets\WideLogo.scale-125.png" />
     <Content Include="Assets\WideLogo.scale-150.png" />
     <Content Include="Assets\WideLogo.scale-200.png" />
+    <None Include="Package.StoreAssociation.xml" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\StoreLogo.scale-100.png" />
   </ItemGroup>
@@ -323,6 +324,9 @@
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

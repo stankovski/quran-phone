@@ -228,7 +228,7 @@ namespace Quran.Windows.Views
                 }
                 else
                 {
-                    if (await ViewModel.PlayFromAyah(selectedAyah.Surah, selectedAyah.Ayah))
+                    if (await ViewModel.PlayFromAyah(selectedAyah))
                     {
                         UpdateAudioControls(AudioState.Playing);
                     }

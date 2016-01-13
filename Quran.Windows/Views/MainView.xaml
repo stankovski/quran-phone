@@ -111,7 +111,7 @@
                             <PivotItem.Header>
                                 <StackPanel>
                                     <SymbolIcon Symbol="List"/>
-                                    <TextBlock Text="{Binding Path=LocalizedResources.quran_sura_lower, Source={StaticResource LocalizedStrings}}"
+                                    <TextBlock Text="{Binding Path=LocalizedResources.quran_sura, Source={StaticResource LocalizedStrings}}"
                                                Style="{StaticResource BaseTextBlockStyle}" HorizontalAlignment="Center"/>
                                 </StackPanel>
                             </PivotItem.Header>
@@ -168,7 +168,7 @@
                             <PivotItem.Header>
                                 <StackPanel>
                                     <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE82D;" />
-                                    <TextBlock Text="{Binding Path=LocalizedResources.quran_juz2_lower, Source={StaticResource LocalizedStrings}}"
+                                    <TextBlock Text="{Binding Path=LocalizedResources.quran_juz2, Source={StaticResource LocalizedStrings}}"
                                                Style="{StaticResource BaseTextBlockStyle}" HorizontalAlignment="Center"/>
                                 </StackPanel>
                             </PivotItem.Header>
@@ -224,7 +224,7 @@
                             <PivotItem.Header>
                                 <StackPanel>
                                     <SymbolIcon Symbol="Favorite"/>
-                                    <TextBlock Text="{Binding Path=LocalizedResources.quran_bookmarks_lower, Source={StaticResource LocalizedStrings}}"
+                                    <TextBlock Text="{Binding Path=LocalizedResources.quran_bookmarks, Source={StaticResource LocalizedStrings}}"
                                                Style="{StaticResource BaseTextBlockStyle}" HorizontalAlignment="Center"/>
                                 </StackPanel>
                             </PivotItem.Header>

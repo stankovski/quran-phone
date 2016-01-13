@@ -127,7 +127,7 @@
     <value>Мakki</value>
   </data>
   <data name="page_description" xml:space="preserve">
-    <value>page {0}, Juz' {1}</value>
+    <value>Page {0}, Juz' {1}</value>
   </data>
   <data name="quran_ayah" xml:space="preserve">
     <value>Ayah</value>
@@ -272,10 +272,10 @@
     <value>QURAN</value>
   </data>
   <data name="verse" xml:space="preserve">
-    <value>verse</value>
+    <value>Verse</value>
   </data>
   <data name="verses" xml:space="preserve">
-    <value>verses</value>
+    <value>Verses</value>
   </data>
   <data name="quarters" xml:space="preserve">
     <value>&lt;?xml version="1.0" encoding="utf-8"?&gt;
@@ -524,20 +524,8 @@
     &lt;/string-array&gt;
 &lt;/resources&gt;</value>
   </data>
-  <data name="quran_bookmarks_lower" xml:space="preserve">
-    <value>bookmarks</value>
-  </data>
-  <data name="quran_juz2_lower" xml:space="preserve">
-    <value>juz'</value>
-  </data>
-  <data name="quran_sura_lower" xml:space="preserve">
-    <value>surah</value>
-  </data>
-  <data name="quran_tags_lower" xml:space="preserve">
-    <value>tags</value>
-  </data>
   <data name="translations" xml:space="preserve">
-    <value>translations</value>
+    <value>Translations</value>
   </data>
   <data name="available_translations" xml:space="preserve">
     <value>Available translations</value>
@@ -546,7 +534,7 @@
     <value>Downloaded translations</value>
   </data>
   <data name="settings" xml:space="preserve">
-    <value>settings</value>
+    <value>Settings</value>
   </data>
   <data name="loading_message" xml:space="preserve">
     <value>Loading Quran</value>
@@ -561,7 +549,7 @@
     <value>Extracting Downloaded File...</value>
   </data>
   <data name="quran_page" xml:space="preserve">
-    <value>page</value>
+    <value>Page</value>
   </data>
   <data name="bookmarks" xml:space="preserve">
     <value>Bookmarks</value>
@@ -582,10 +570,10 @@
     <value>Delete Bookmark</value>
   </data>
   <data name="text_size" xml:space="preserve">
-    <value>translation text size</value>
+    <value>Translation text size</value>
   </data>
   <data name="about_us" xml:space="preserve">
-    <value>about us</value>
+    <value>About us</value>
   </data>
   <data name="about_us_text" xml:space="preserve">
     <value>Quran Phone is a free, open source Quran
@@ -622,7 +610,7 @@ the data used in the translations and Arabic comes from
 &amp;lt;br/&gt;Batoul Apps (&amp;lt;a href="http://twitter.com/batoulapps"&gt;@batoulapps&amp;lt;/a&gt;)</value>
   </data>
   <data name="prefs_ayah_before_translation_summary" xml:space="preserve">
-    <value>show ayah in Arabic above the translation</value>
+    <value>Show ayah in Arabic above the translation</value>
   </data>
   <data name="no_network_to_load" xml:space="preserve">
     <value>Sorry, but we were unable to load the data due to absence of network connection. Please try again later.</value>
@@ -631,22 +619,22 @@ the data used in the translations and Arabic comes from
     <value>Are you sure you would like to cancel download?</value>
   </data>
   <data name="disable_sleep" xml:space="preserve">
-    <value>prevent phone from turning screen off</value>
+    <value>Prevent phone from turning screen off</value>
   </data>
   <data name="please_restart" xml:space="preserve">
     <value>Please relaunch an app for the change to take effect</value>
   </data>
   <data name="search" xml:space="preserve">
-    <value>search</value>
+    <value>Search</value>
   </data>
   <data name="search_results" xml:space="preserve">
-    <value>search results</value>
+    <value>Search results</value>
   </data>
   <data name="no_translation_to_search" xml:space="preserve">
     <value>No translation to search. Please go to settings page to select active translation.</value>
   </data>
   <data name="keep_info_overlay" xml:space="preserve">
-    <value>show page info in landscape</value>
+    <value>Show page info in landscape</value>
   </data>
   <data name="bookmark_ayah" xml:space="preserve">
     <value>Bookmark ayah</value>
@@ -655,7 +643,7 @@ the data used in the translations and Arabic comes from
     <value>Rub'</value>
   </data>
   <data name="generate" xml:space="preserve">
-    <value>generate</value>
+    <value>Generate</value>
   </data>
   <data name="generate_bookmarks_for_dua" xml:space="preserve">
     <value>Generate bookmarks for Quranic dua</value>
@@ -664,13 +652,13 @@ the data used in the translations and Arabic comes from
     <value>Dua</value>
   </data>
   <data name="night_mode" xml:space="preserve">
-    <value>night mode</value>
+    <value>Night mode</value>
   </data>
   <data name="loading" xml:space="preserve">
-    <value>loading...</value>
+    <value>Loading...</value>
   </data>
   <data name="change_language" xml:space="preserve">
-    <value>language</value>
+    <value>Language</value>
   </data>
   <data name="waiting" xml:space="preserve">
     <value>Waiting...</value>
@@ -682,25 +670,25 @@ the data used in the translations and Arabic comes from
     <value>Waiting for WIFI...</value>
   </data>
   <data name="bookmark" xml:space="preserve">
-    <value>bookmark</value>
+    <value>Bookmark</value>
   </data>
   <data name="translation" xml:space="preserve">
-    <value>translation</value>
+    <value>Translation</value>
   </data>
   <data name="contact_us" xml:space="preserve">
-    <value>contact us</value>
+    <value>Contact us</value>
   </data>
   <data name="keep_orientation" xml:space="preserve">
-    <value>keep orientation</value>
+    <value>Keep orientation</value>
   </data>
   <data name="auto_orientation" xml:space="preserve">
-    <value>automatic orientation</value>
+    <value>Automatic orientation</value>
   </data>
   <data name="copy" xml:space="preserve">
     <value>Copy</value>
   </data>
   <data name="reciters" xml:space="preserve">
-    <value>reciters</value>
+    <value>Reciters</value>
   </data>
   <data name="recite" xml:space="preserve">
     <value>Recite</value>
@@ -721,10 +709,10 @@ the data used in the translations and Arabic comes from
     <value>Downloaded reciters</value>
   </data>
   <data name="audio_download_blocks" xml:space="preserve">
-    <value>audio download amount</value>
+    <value>Audio download amount</value>
   </data>
   <data name="audio" xml:space="preserve">
-    <value>audio</value>
+    <value>Audio</value>
   </data>
   <data name="recite_ayah" xml:space="preserve">
     <value>Recite ayah</value>
@@ -733,22 +721,22 @@ the data used in the translations and Arabic comes from
     <value>Pin to start</value>
   </data>
   <data name="alternate_download_method" xml:space="preserve">
-    <value>alternative download method (use only if WiFi is not available)</value>
+    <value>Alternative download method (use only if WiFi is not available)</value>
   </data>
   <data name="none" xml:space="preserve">
-    <value>none</value>
+    <value>None</value>
   </data>
   <data name="unlimited" xml:space="preserve">
-    <value>unlimited</value>
+    <value>Unlimited</value>
   </data>
   <data name="number_of_ayah_to_repeat" xml:space="preserve">
-    <value>number of ayah to repeat</value>
+    <value>Number of ayah to repeat</value>
   </data>
   <data name="repeat_ayah" xml:space="preserve">
     <value>Repeat ayah</value>
   </data>
   <data name="times_to_repeat" xml:space="preserve">
-    <value>times to repeat</value>
+    <value>Times to repeat</value>
   </data>
   <data name="share_ayah" xml:space="preserve">
     <value>Share Ayah</value>
@@ -773,5 +761,11 @@ the data used in the translations and Arabic comes from
   </data>
   <data name="go_to" xml:space="preserve">
     <value>Go to page</value>
+  </data>
+  <data name="offline_audio" xml:space="preserve">
+    <value>Enable offline audio</value>
+  </data>
+  <data name="quran_bookmarks" xml:space="preserve">
+    <value>Bookmarks</value>
   </data>
 </root>

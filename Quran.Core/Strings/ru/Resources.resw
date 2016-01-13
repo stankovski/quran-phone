@@ -163,34 +163,22 @@
     <value>Мекка</value>
   </data>
   <data name="page_description" xml:space="preserve">
-    <value>стр. {0}, джуз {1}</value>
+    <value>Стр. {0}, джуз {1}</value>
   </data>
   <data name="quran_ayah" xml:space="preserve">
     <value>Аят</value>
   </data>
-  <data name="quran_bookmarks_lower" xml:space="preserve">
-    <value>закладки</value>
-  </data>
   <data name="quran_juz2" xml:space="preserve">
     <value>Джуз</value>
   </data>
-  <data name="quran_juz2_lower" xml:space="preserve">
-    <value>джуз</value>
-  </data>
   <data name="quran_page" xml:space="preserve">
-    <value>страница</value>
+    <value>Страница</value>
   </data>
   <data name="quran_sura" xml:space="preserve">
     <value>Сура</value>
   </data>
-  <data name="quran_sura_lower" xml:space="preserve">
-    <value>сура</value>
-  </data>
   <data name="quran_sura_title" xml:space="preserve">
     <value>Сура</value>
-  </data>
-  <data name="quran_tags_lower" xml:space="preserve">
-    <value>тэги</value>
   </data>
   <data name="ResourceFlowDirection" xml:space="preserve">
     <value>LeftToRight</value>
@@ -199,7 +187,7 @@
     <value>ru-RU</value>
   </data>
   <data name="settings" xml:space="preserve">
-    <value>настройки</value>
+    <value>Настройки</value>
   </data>
   <data name="sura_ayah_notification_str" xml:space="preserve">
     <value>Сура {0}, Аят {1}</value>
@@ -326,19 +314,19 @@
     <value>Тэги</value>
   </data>
   <data name="text_size" xml:space="preserve">
-    <value>размер шрифта перевода</value>
+    <value>Размер шрифта перевода</value>
   </data>
   <data name="translations" xml:space="preserve">
-    <value>переводы</value>
+    <value>Переводы</value>
   </data>
   <data name="verse" xml:space="preserve">
-    <value>стих</value>
+    <value>Стих</value>
   </data>
   <data name="verses" xml:space="preserve">
-    <value>стиха</value>
+    <value>Стиха</value>
   </data>
   <data name="about_us" xml:space="preserve">
-    <value>о проекте</value>
+    <value>О проекте</value>
   </data>
   <data name="about_us_text" xml:space="preserve">
     <value>Quran Phone is a free, open source Quran
@@ -375,7 +363,7 @@ the data used in the translations and Arabic comes from
 &amp;lt;br/&gt;Batoul Apps (&amp;lt;a href="http://twitter.com/batoulapps"&gt;@batoulapps&amp;lt;/a&gt;)</value>
   </data>
   <data name="prefs_ayah_before_translation_summary" xml:space="preserve">
-    <value>показывать аят на Арабском вместе с переводом</value>
+    <value>Показывать аят на Арабском вместе с переводом</value>
   </data>
   <data name="no_network_to_load" xml:space="preserve">
     <value>Извините, но мы не смогли загрузить данные в связи с отсутствием подключения к сети. Пожалуйста, повторите попытку позже.</value>
@@ -384,16 +372,16 @@ the data used in the translations and Arabic comes from
     <value>Вы уверены, что хотите отменить загрузку?</value>
   </data>
   <data name="disable_sleep" xml:space="preserve">
-    <value>предотвратить телефон от выключения экрана</value>
+    <value>Предотвратить телефон от выключения экрана</value>
   </data>
   <data name="please_restart" xml:space="preserve">
     <value>Пожалуйста перезапустите приложение, чтобы изменения вступили в силу</value>
   </data>
   <data name="search" xml:space="preserve">
-    <value>поиск</value>
+    <value>Поиск</value>
   </data>
   <data name="search_results" xml:space="preserve">
-    <value>результаты поиска</value>
+    <value>Результаты поиска</value>
   </data>
   <data name="no_translation_to_search" xml:space="preserve">
     <value>Отсутствует перевод для поиска. Пожалуйста, перейдите на страницу настроек для выбора активного перевода.</value>
@@ -408,7 +396,7 @@ the data used in the translations and Arabic comes from
     <value>Руб</value>
   </data>
   <data name="generate" xml:space="preserve">
-    <value>создать</value>
+    <value>Создать</value>
   </data>
   <data name="generate_bookmarks_for_dua" xml:space="preserve">
     <value>Создать закладки на дуа</value>
@@ -417,13 +405,13 @@ the data used in the translations and Arabic comes from
     <value>Дуа</value>
   </data>
   <data name="night_mode" xml:space="preserve">
-    <value>ночной вид</value>
+    <value>Ночной вид</value>
   </data>
   <data name="loading" xml:space="preserve">
-    <value>загрузка...</value>
+    <value>Загрузка...</value>
   </data>
   <data name="change_language" xml:space="preserve">
-    <value>язык</value>
+    <value>Язык</value>
   </data>
   <data name="waiting" xml:space="preserve">
     <value>Ждем...</value>
@@ -435,28 +423,28 @@ the data used in the translations and Arabic comes from
     <value>Ждем сети WIFI...</value>
   </data>
   <data name="bookmark" xml:space="preserve">
-    <value>закладка</value>
+    <value>Закладка</value>
   </data>
   <data name="translation" xml:space="preserve">
-    <value>перевод</value>
+    <value>Перевод</value>
   </data>
   <data name="contact_us" xml:space="preserve">
-    <value>обратная связь</value>
+    <value>Обратная связь</value>
   </data>
   <data name="keep_orientation" xml:space="preserve">
-    <value>держать ориентацию</value>
+    <value>Держать ориентацию</value>
   </data>
   <data name="auto_orientation" xml:space="preserve">
-    <value>авто. ориентация</value>
+    <value>Авто. ориентация</value>
   </data>
   <data name="copy" xml:space="preserve">
     <value>Скопировать</value>
   </data>
   <data name="reciters" xml:space="preserve">
-    <value>кари</value>
+    <value>Кари</value>
   </data>
   <data name="recite" xml:space="preserve">
-    <value>читать</value>
+    <value>Читать</value>
   </data>
   <data name="loading_audio" xml:space="preserve">
     <value>Загрузка аудио...</value>
@@ -474,10 +462,10 @@ the data used in the translations and Arabic comes from
     <value>Загруженные чтения</value>
   </data>
   <data name="audio_download_blocks" xml:space="preserve">
-    <value>размер скачанного аудио</value>
+    <value>Размер скачанного аудио</value>
   </data>
   <data name="audio" xml:space="preserve">
-    <value>аудио</value>
+    <value>Аудио</value>
   </data>
   <data name="recite_ayah" xml:space="preserve">
     <value>Читать аят</value>
@@ -486,22 +474,22 @@ the data used in the translations and Arabic comes from
     <value>Добавить на рабочий стол</value>
   </data>
   <data name="alternate_download_method" xml:space="preserve">
-    <value>альтернативный способ скачивания (в случае отсутствия WiFi)</value>
+    <value>Альтернативный способ скачивания (в случае отсутствия WiFi)</value>
   </data>
   <data name="none" xml:space="preserve">
-    <value>нет</value>
+    <value>Нет</value>
   </data>
   <data name="unlimited" xml:space="preserve">
-    <value>постоянное</value>
+    <value>Постоянное</value>
   </data>
   <data name="number_of_ayah_to_repeat" xml:space="preserve">
-    <value>размер повторяемых аятов</value>
+    <value>Размер повторяемых аятов</value>
   </data>
   <data name="repeat_ayah" xml:space="preserve">
     <value>Повторить аяты</value>
   </data>
   <data name="times_to_repeat" xml:space="preserve">
-    <value>количество раз повторять</value>
+    <value>Количество раз повторять</value>
   </data>
   <data name="share_ayah" xml:space="preserve">
     <value>Поделиться</value>
@@ -526,5 +514,11 @@ the data used in the translations and Arabic comes from
   </data>
   <data name="go_to" xml:space="preserve">
     <value>Перейти к странице</value>
+  </data>
+  <data name="offline_audio" xml:space="preserve">
+    <value>Проигрывать аудио без интернета</value>
+  </data>
+  <data name="quran_bookmarks" xml:space="preserve">
+    <value>Закладки</value>
   </data>
 </root>

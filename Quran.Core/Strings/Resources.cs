@@ -103,26 +103,6 @@ namespace Quran.Core.Properties
             get { return resourceLoader.GetString("quarters"); }
         }
 
-        public static string quran_bookmarks_lower 
-        {
-            get { return resourceLoader.GetString("quran_bookmarks_lower"); }
-        }
-
-        public static string quran_juz2_lower 
-        {
-            get { return resourceLoader.GetString("quran_juz2_lower"); }
-        }
-
-        public static string quran_sura_lower 
-        {
-            get { return resourceLoader.GetString("quran_sura_lower"); }
-        }
-
-        public static string quran_tags_lower 
-        {
-            get { return resourceLoader.GetString("quran_tags_lower"); }
-        }
-
         public static string translations 
         {
             get { return resourceLoader.GetString("translations"); }
@@ -466,6 +446,16 @@ namespace Quran.Core.Properties
         public static string go_to 
         {
             get { return resourceLoader.GetString("go_to"); }
+        }
+
+        public static string offline_audio 
+        {
+            get { return resourceLoader.GetString("offline_audio"); }
+        }
+
+        public static string quran_bookmarks 
+        {
+            get { return resourceLoader.GetString("quran_bookmarks"); }
         }
     }
 }
