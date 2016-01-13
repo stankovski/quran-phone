@@ -295,7 +295,7 @@ namespace Quran.Windows.Audio
             }
 
             // Initialize FileUtils
-            await FileUtils.Initialize(true);
+            await FileUtils.Initialize(newTrack.ScreenInfo);
 
             // Add playback items to the list
             QuranAudioTrack nextTrack = newTrack.GetFirstAyah();

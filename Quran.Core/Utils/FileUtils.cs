@@ -19,7 +19,6 @@ namespace Quran.Core.Utils
         public static string IMG_HOST = "http://android.quran.com/data/";
         public static string QURAN_BASE = "QuranWindows";
         private static string DATABASE_DIRECTORY = "databases";
-        private static string AUDIO_DIRECTORY = null;
         private static string DOWNLOADS_DIRECTORY = "downloads";
         private static string UNDELETED_FILES_DIRECTORY = "to-delete";
         public static string PACKAGE_NAME = "com.quran.labs.androidquran";
@@ -27,45 +26,45 @@ namespace Quran.Core.Utils
 
         private static bool initialized = false;
 
-        public async static Task Initialize(bool noTouch)
+        public static StorageFolder BaseFolder { get; private set; }
+        
+        public static StorageFolder DatabaseFolder { get; private set; }
+
+        public static StorageFolder AudioFolder { get; private set; }
+      
+        public async static Task Initialize(ScreenInfo screenInfo)
         {
             if (initialized)
                 return;
 
             initialized = true;
 
-            if (noTouch)
-            {
-                var baseFolder = KnownFolders.MusicLibrary;
-                var quranAudioFolder = await baseFolder.TryGetItemAsync(QURAN_BASE);
-                if (quranAudioFolder != null)
-                {
-                    AUDIO_DIRECTORY = quranAudioFolder.Path;
-                }
-            }
-            else
-            {
-                // Initialize directory
-                MakeQuranDirectory();
-                MakeQuranDatabaseDirectory();
-                await MakeQuranAudioDirectory();
-                // Delete stuck files
-                await DeleteStuckFiles();
-            }
+            // Initialize directory
+            await MakeQuranDirectory(screenInfo);
+            await MakeQuranDatabaseDirectory();
+            await MakeQuranAudioDirectory();
+            // Delete stuck files
+            await DeleteStuckFiles();
+            
         }
         
         /// <summary>
         /// Deletes folder even if it contains read only files
         /// </summary>
         /// <param name="path"></param>
-        public async static Task<bool> DeleteFolder(string path)
+        public async static Task<bool> DeleteFolder(StorageFolder baseDir, string path)
         {
             if (string.IsNullOrWhiteSpace(path))
             {
                 return false;
             }
 
-            var folder = await StorageFolder.GetFolderFromPathAsync(path);
+            var folder = await baseDir.TryGetItemAsync(path) as StorageFolder;
+            if (folder == null)
+            {
+                return false;
+            }
+
             foreach (var file in await folder.GetFilesAsync())
             {
                 await SafeFileDelete(file.Path);
@@ -183,6 +182,23 @@ namespace Quran.Core.Utils
             }
         }
 
+        public static async Task<bool> FileExists(StorageFolder baseFolder, string path)
+        {
+            if (baseFolder == null || string.IsNullOrWhiteSpace(path))
+            {
+                return false;
+            }
+
+            try
+            {
+                return (await baseFolder.TryGetItemAsync(path)) != null;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         public static async Task<IStorageFile> GetFile(string path)
         {
             if (string.IsNullOrWhiteSpace(path))
@@ -213,16 +229,11 @@ namespace Quran.Core.Utils
             }
         }
 
-        public static async Task<bool> DirectoryExists(string path)
+        public static async Task<bool> DirectoryExists(StorageFolder baseDir, string path)
         {
-            if (string.IsNullOrWhiteSpace(path))
-            {
-                return false;
-            }
-
             try
             {
-                return Directory.Exists(path);
+                return (await baseDir.TryGetItemAsync(path)) != null;
             }
             catch (FileNotFoundException)
             {
@@ -257,29 +268,88 @@ namespace Quran.Core.Utils
         }
 
         /// <summary>
-        /// Creates Quran root directory and writes no-media file in it
+        /// Creates Quran root directory.
         /// </summary>
         /// <returns></returns>
-        public static void MakeQuranDirectory()
+        public async static Task MakeQuranDirectory(ScreenInfo qsi)
         {
-            GetQuranDirectory();
+            if (qsi == null)
+            {
+                throw new ArgumentNullException(nameof(qsi));
+            }
+
+            if (BaseFolder == null)
+            {
+                BaseFolder = ApplicationData.Current.LocalFolder;
+                var quranBaseFolder = await BaseFolder.TryGetItemAsync(QURAN_BASE);
+                if (quranBaseFolder == null)
+                {
+                    quranBaseFolder = await BaseFolder.CreateFolderAsync(QURAN_BASE);
+                }
+                BaseFolder = quranBaseFolder as StorageFolder;
+                var imageFolderName = "width" + qsi.GetWidthParam();
+
+                quranBaseFolder = await BaseFolder.TryGetItemAsync(imageFolderName);
+                if (quranBaseFolder == null)
+                {
+                    quranBaseFolder = await BaseFolder.CreateFolderAsync(imageFolderName);
+                }
+                BaseFolder = quranBaseFolder as StorageFolder;
+            }
+
+            if (BaseFolder == null)
+            {
+                throw new InvalidOperationException("Unable to create a base folder.");
+            }
         }
 
         /// <summary>
-        /// Creates Quran root audio directory and writes no-media file in it
+        /// Creates Quran DB directory.
+        /// </summary>
+        /// <returns></returns>
+        public static async Task MakeQuranDatabaseDirectory()
+        {
+            if (BaseFolder == null)
+            {
+                throw new ArgumentNullException("BaseFolder");
+            }
+
+            if (DatabaseFolder == null)
+            {
+                var databaseFolder = await BaseFolder.TryGetItemAsync(DATABASE_DIRECTORY);
+                if (databaseFolder == null)
+                {
+                    databaseFolder = await BaseFolder.CreateFolderAsync(DATABASE_DIRECTORY);
+                }
+                DatabaseFolder = databaseFolder as StorageFolder;
+            }
+
+            if (DatabaseFolder == null)
+            {
+                throw new InvalidOperationException("Unable to create a database folder.");
+            }
+        }
+
+        /// <summary>
+        /// Creates Quran root audio directory.
         /// </summary>
         /// <returns></returns>
         public async static Task MakeQuranAudioDirectory()
         {
-            var baseFolder = KnownFolders.MusicLibrary;
-            var quranAudioFolder = await baseFolder.TryGetItemAsync(QURAN_BASE);
-            if (quranAudioFolder == null)
+            if (AudioFolder == null)
             {
-                AUDIO_DIRECTORY = (await baseFolder.CreateFolderAsync(QURAN_BASE)).Path;
+                var baseFolder = KnownFolders.MusicLibrary;
+                var quranAudioFolder = await baseFolder.TryGetItemAsync(QURAN_BASE);
+                if (quranAudioFolder == null)
+                {
+                    quranAudioFolder = await baseFolder.CreateFolderAsync(QURAN_BASE);
+                }
+                AudioFolder = quranAudioFolder as StorageFolder;
             }
-            else
+
+            if (AudioFolder == null)
             {
-                AUDIO_DIRECTORY = quranAudioFolder.Path;
+                throw new InvalidOperationException("Unable to create a audio folder.");
             }
         }
 
@@ -313,31 +383,22 @@ namespace Quran.Core.Utils
 
         public static async Task WriteNoMediaFile()
         {
-            await WriteFile(Path.Combine(GetQuranDirectory(), "/.nomedia"), " ");
+            await WriteFile(Path.Combine(GetBaseDirectory(), "/.nomedia"), " ");
         }
 
         public static async Task<bool> MediaFileExists()
         {
-            return await FileExists(Path.Combine(GetQuranDirectory(), "/.nomedia"));
+            return await FileExists(Path.Combine(GetBaseDirectory(), "/.nomedia"));
         }
 
         public static async Task DeleteNoMediaFile()
         {
-            await SafeFileDelete(Path.Combine(GetQuranDirectory(), "/.nomedia"));
-        }
-
-        /// <summary>
-        /// Creates Quran DB directory and writes no-media file in it
-        /// </summary>
-        /// <returns></returns>
-        public static void MakeQuranDatabaseDirectory()
-        {
-            GetQuranDatabaseDirectory();
+            await SafeFileDelete(Path.Combine(GetBaseDirectory(), "/.nomedia"));
         }
 
         public static async Task<bool> HaveAllImages()
         {
-            var quranFolderPath = GetQuranDirectory();
+            var quranFolderPath = GetBaseDirectory();
             var quranFolder = await StorageFolder.GetFolderFromPathAsync(quranFolderPath);
             var imageFiles = quranFolder.CreateFileQuery();
             // Should have at least 95% of pages; of more than that it's not efficient to download the ZIP
@@ -363,7 +424,7 @@ namespace Quran.Core.Utils
 
         public static async Task<Uri> GetImageFromStorage(string filename)
         {
-            string location = GetQuranDirectory();
+            string location = GetBaseDirectory();
             var quranFolder = await StorageFolder.GetFolderFromPathAsync(location);
             var image = await quranFolder.TryGetItemAsync(filename);
             if (image == null)
@@ -385,7 +446,7 @@ namespace Quran.Core.Utils
             }
             else
             {
-                ScreenUtils instance = ScreenUtils.Instance;
+                ScreenInfo instance = ScreenInfo.Instance;
                 if (instance == null) return null;
 
                 string urlString = Path.Combine(IMG_HOST + "width" + instance.GetWidthParam(),
@@ -421,7 +482,7 @@ namespace Quran.Core.Utils
 
         public static string GetQuranAudioDirectory()
         {
-            return AUDIO_DIRECTORY;
+            return AudioFolder.Path;
         }
         
         public static string GetQuranDatabaseDirectory()
@@ -439,9 +500,9 @@ namespace Quran.Core.Utils
             return GetSubdirectory(UNDELETED_FILES_DIRECTORY);
         }
 
-        public static string GetQuranDirectory()
+        public static string GetBaseDirectory()
         {
-            ScreenUtils qsi = ScreenUtils.Instance;
+            ScreenInfo qsi = ScreenInfo.Instance;
             if (qsi == null)
             {
                 return null;
@@ -472,7 +533,7 @@ namespace Quran.Core.Utils
         public static string GetZipFileUrl()
         {
             string url = IMG_HOST;
-            ScreenUtils qsi = ScreenUtils.Instance;
+            ScreenInfo qsi = ScreenInfo.Instance;
             if (qsi == null)
                 return null;
             url += "images" + qsi.GetWidthParam() + ".zip";
@@ -494,14 +555,14 @@ namespace Quran.Core.Utils
 
         public static string GetAyaPositionFileName()
         {
-            ScreenUtils qsi = ScreenUtils.Instance;
+            ScreenInfo qsi = ScreenInfo.Instance;
             if (qsi == null) return null;
             return "ayahinfo" + qsi.GetWidthParam() + ".db";
         }
 
         public static string GetAyaPositionFileUrl()
         {
-            ScreenUtils qsi = ScreenUtils.Instance;
+            ScreenInfo qsi = ScreenInfo.Instance;
             if (qsi == null)
                 return null;
             string url = IMG_HOST + "width" + qsi.GetWidthParam();
@@ -511,7 +572,7 @@ namespace Quran.Core.Utils
 
         public static string GetGaplessDatabaseRootUrl()
         {
-            ScreenUtils qsi = ScreenUtils.Instance;
+            ScreenInfo qsi = ScreenInfo.Instance;
             if (qsi == null)
                 return null;
             return IMG_HOST + "databases/audio/";

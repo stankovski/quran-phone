@@ -1,4 +1,9 @@
-﻿using SQLite.Net.Attributes;
+﻿using System;
+using System.IO;
+using System.Threading.Tasks;
+using Quran.Core.Utils;
+using SQLite.Net.Attributes;
+using Windows.Storage;
 
 namespace Quran.Core.Common
 {
@@ -11,7 +16,21 @@ namespace Quran.Core.Common
         [Column("url")]
         public string ServerUrl { get; set; }
         [Column("local")]
-        public string LocalPath { get; set; }
+        public string LocalFolderName { get; set; }
+        public async Task<StorageFolder> GetStorageFolder()
+        {
+            StorageFolder localFolder = await FileUtils.AudioFolder.TryGetItemAsync(LocalFolderName) as StorageFolder;
+            if (localFolder == null)
+            {
+                localFolder = await FileUtils.AudioFolder.CreateFolderAsync(LocalFolderName);
+            }
+
+            if (localFolder == null)
+            {
+                throw new InvalidDataException("Reciter directory cannot be null.");
+            }
+            return localFolder;
+        }
         [Column("dbname")]
         public string GaplessDatabasePath { get; set; }
         [Column("gapless")]

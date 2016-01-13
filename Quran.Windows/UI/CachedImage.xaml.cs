@@ -34,8 +34,8 @@ namespace Quran.Windows.UI
         {
             imageSourceBitmap = new WriteableBitmap(1, 1);
             InitializeComponent();
-            canvas.Width = ScreenUtils.Instance.ImageWidth;
-            canvas.Height = ScreenUtils.Instance.ImageHeight;
+            canvas.Width = ScreenInfo.Instance.ImageWidth;
+            canvas.Height = ScreenInfo.Instance.ImageHeight;
         }
 
         public Image Image
@@ -175,7 +175,7 @@ namespace Quran.Windows.UI
                 }
 
                 var uriBuilder = new UriBuilder(source);
-                var localPath = System.IO.Path.Combine(FileUtils.GetQuranDirectory(), System.IO.Path.GetFileName(uriBuilder.Path));
+                var localPath = System.IO.Path.Combine(FileUtils.GetBaseDirectory(), System.IO.Path.GetFileName(uriBuilder.Path));
                 bool downloadSuccessful = true;
 
                 if (source.Scheme == "http")
@@ -384,7 +384,7 @@ namespace Quran.Windows.UI
 
         private static Point adjustPoint(Point p, double width)
         {
-            var imageWidth = ScreenUtils.Instance.ImageWidth;
+            var imageWidth = ScreenInfo.Instance.ImageWidth;
             var actualWidth = width;
             var scale = imageWidth/actualWidth;
             return new Point(p.X*scale, p.Y*scale);
@@ -392,7 +392,7 @@ namespace Quran.Windows.UI
 
         private static Point adjustPointRevert(Point p, double width)
         {
-            var imageWidth = ScreenUtils.Instance.ImageWidth;
+            var imageWidth = ScreenInfo.Instance.ImageWidth;
             var actualWidth = width;
             var scale = imageWidth / actualWidth;
             return new Point(p.X / scale, p.Y / scale);

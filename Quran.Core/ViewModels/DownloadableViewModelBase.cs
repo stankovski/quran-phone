@@ -190,13 +190,14 @@ namespace Quran.Core.ViewModels
             IsDownloading = true;
             InstallationStep = description ?? Resources.loading_message;
 
-            var download = await GetDownloadOperation(serverUrl, destinationFile);
+            var destinationFolder = await StorageFolder.GetFolderFromPathAsync(Path.GetDirectoryName(destinationFile));
+            var download = await GetDownloadOperation(serverUrl, destinationFolder, destinationFile);
             // Attach progress and completion handlers.
             return await HandleDownloadsAsync(new[] { download }.ToList(), true);
         }
 
         
-        public async Task<bool> DownloadMultiple(string[] serverUrls, string destinationFolder, string description = null)
+        public async Task<bool> DownloadMultiple(string[] serverUrls, StorageFolder destinationFolder, string description = null)
         {
             Reset();
             Description = description;
@@ -207,7 +208,7 @@ namespace Quran.Core.ViewModels
             {
                 throw new ArgumentNullException(nameof(serverUrls));
             }
-            if (string.IsNullOrWhiteSpace(destinationFolder))
+            if (destinationFolder == null)
             {
                 throw new ArgumentNullException(nameof(destinationFolder));
             }
@@ -215,13 +216,13 @@ namespace Quran.Core.ViewModels
             foreach (var serverUrl in serverUrls)
             {
                 var fileName = Path.GetFileName(serverUrl);
-                downloads.Add(await GetDownloadOperation(serverUrl, Path.Combine(destinationFolder, fileName)));
+                downloads.Add(await GetDownloadOperation(serverUrl, destinationFolder, fileName));
             }
             // Attach progress and completion handlers.
             return await HandleDownloadsAsync(downloads, true);
         }
         
-        private async Task<DownloadOperation> GetDownloadOperation(string serverUrl, string destinationFilePath)
+        private async Task<DownloadOperation> GetDownloadOperation(string serverUrl, StorageFolder destinationFolder, string destinationFilePath)
         {
             if (string.IsNullOrWhiteSpace(destinationFilePath))
             {
@@ -231,14 +232,16 @@ namespace Quran.Core.ViewModels
             {
                 throw new ArgumentNullException(nameof(serverUrl));
             }
+            if (destinationFolder == null)
+            {
+                throw new ArgumentNullException(nameof(destinationFolder));
+            }
 
             destinationFilePath = destinationFilePath + DownloadExtension;
 
             StorageFile destinationFile;
             try
             {
-                await FileUtils.EnsureDirectoryExists(Path.GetDirectoryName(destinationFilePath));
-                var destinationFolder = await StorageFolder.GetFolderFromPathAsync(Path.GetDirectoryName(destinationFilePath));
                 destinationFile = await destinationFolder.CreateFileAsync(Path.GetFileName(destinationFilePath), 
                     CreationCollisionOption.ReplaceExisting);
             }

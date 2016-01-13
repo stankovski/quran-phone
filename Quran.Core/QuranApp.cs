@@ -29,7 +29,7 @@ namespace Quran.Core
 
         public static async Task Initialize()
         {
-            await FileUtils.Initialize(false);
+            await FileUtils.Initialize(ScreenInfo.Instance);
         }
 
         public static async Task<AyahInfoDatabaseHandler> GetAyahInfoDatabase()
