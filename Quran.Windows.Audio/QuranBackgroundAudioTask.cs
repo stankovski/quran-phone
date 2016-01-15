@@ -22,7 +22,6 @@ namespace Quran.Windows.Audio
 {
     public sealed class QuranBackgroundAudioTask : IBackgroundTask
     {
-        private const string TrackIdKey = "trackid";
         private const string TitleKey = "title";
         private const string QuranTrackKey = "quranTrack";
         private const string ReciterKey = "reciter";
@@ -297,14 +296,31 @@ namespace Quran.Windows.Audio
             // Initialize FileUtils
             await FileUtils.Initialize(newTrack.ScreenInfo);
 
+            var missingFiles = await AudioUtils.GetMissingFiles(newTrack);
+
             // Add playback items to the list
             QuranAudioTrack nextTrack = newTrack.GetFirstAyah();
+            var reciter = nextTrack.GetReciter();
             while (nextTrack != null)
             {
-                var reciter = nextTrack.GetReciter();
-                string serverUrl = AudioUtils.GetServerPathForAyah(nextTrack.GetQuranAyah(), reciter);
-                MediaSource source = MediaSource.CreateFromUri(new Uri(serverUrl));
-                source.CustomProperties[TrackIdKey] = serverUrl;
+                string fileName = AudioUtils.GetFileName(nextTrack.GetQuranAyah(), reciter);
+                MediaSource source;
+                if (missingFiles.Contains(fileName))
+                {
+                    source = MediaSource.CreateFromUri(new Uri(Path.Combine(reciter.ServerUrl, fileName)));
+                }
+                else
+                {
+                    var file = await FileUtils.GetFile(await reciter.GetStorageFolder(), fileName);
+                    if (file != null)
+                    {
+                        source = MediaSource.CreateFromStorageFile(file);
+                    }
+                    else
+                    {
+                        source = MediaSource.CreateFromUri(new Uri(Path.Combine(reciter.ServerUrl, fileName)));
+                    }
+                }
                 source.CustomProperties[SurahKey] = nextTrack.Surah;
                 source.CustomProperties[AyahKey] = nextTrack.Ayah;
                 source.CustomProperties[ReciterKey] = nextTrack.ReciterId;

@@ -27,7 +27,7 @@ namespace Quran.Core.ViewModels
     public class MainViewModel : ViewModelWithDownload
     {
         private string _zipFileServerUrl;
-        private string _zipFileLocalPath;
+        private string _zipFileName;
         
         public MainViewModel()
         {
@@ -86,8 +86,7 @@ namespace Quran.Core.ViewModels
         public override async Task Initialize()
         {
             _zipFileServerUrl = FileUtils.GetZipFileUrl();
-            _zipFileLocalPath = Path.Combine(FileUtils.GetQuranBaseDirectory(), 
-                Path.GetFileName(_zipFileServerUrl));
+            _zipFileName = Path.GetFileName(_zipFileServerUrl);
 
             if (!this.IsDataLoaded)
             {
@@ -131,19 +130,10 @@ namespace Quran.Core.ViewModels
         {
             if (!this.ActiveDownload.IsDownloading)
             {
-                //bool finalizeSucceded = true; // not used?
-
-                // kdimas: How if we include a zipped width_800 images for testing?
-                // will save cost for testing, cutting the need to always download it from server.
-#if DEBUG
-                // MAKE SURE TO EXCLUDE "Assets/Offline" folder and its content before packaging for
-                // production. (apply to WP 8 / WP 7.1).
-                prepareOfflineZip();
-#endif
                 // If downloaded offline and stuck in temp storage
-                if (await FileUtils.FileExists(_zipFileLocalPath))
+                if (await FileUtils.FileExists(FileUtils.BaseFolder, _zipFileName))
                 {
-                    await ActiveDownload.FinishDownload(_zipFileLocalPath);
+                    await ActiveDownload.FinishDownload(await FileUtils.GetFile(FileUtils.BaseFolder, _zipFileName));
                 }
 
                 if (!await FileUtils.HaveAllImages() && !this.HasAskedToDownload)
@@ -154,7 +144,7 @@ namespace Quran.Core.ViewModels
 
                     if (askingToDownloadResult)
                     {
-                        await ActiveDownload.DownloadSingleFile(_zipFileServerUrl, _zipFileLocalPath);
+                        await ActiveDownload.DownloadSingleFile(_zipFileServerUrl, Path.Combine(FileUtils.BaseFolder.Path, _zipFileName));
                     }
                 }
             }

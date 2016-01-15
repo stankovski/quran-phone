@@ -127,9 +127,9 @@ namespace Quran.Core.Utils
             return QuranUtils.HasBismillah(request.Surah);
         }
 
-        public static async Task<List<string>> GetMissingFiles(QuranAudioTrack request)
+        public static async Task<HashSet<string>> GetMissingFiles(QuranAudioTrack request)
         {
-            List<string> missingFiles = new List<string>();
+            HashSet<string> missingFiles = new HashSet<string>();
             var reciter = request.GetReciter();
             var baseDirectory = await request.GetReciter().GetStorageFolder();
             
@@ -150,10 +150,10 @@ namespace Quran.Core.Utils
                 var existingFiles = new HashSet<string>((await fileQuery.GetFilesAsync()).Select(f => f.Name));
                 for (int i = 1; i <= QuranUtils.GetSurahNumberOfAyah(request.Surah); i++)
                 {
-                    var filePath = GetFilePath(new QuranAyah(request.Surah, i), reciter);
-                    if (!existingFiles.Contains(filePath))
+                    var fileName = GetFileName(new QuranAyah(request.Surah, i), reciter);
+                    if (!existingFiles.Contains(fileName))
                     {
-                        missingFiles.Add(filePath);
+                        missingFiles.Add(fileName);
                     }
                 }
             }
@@ -161,12 +161,7 @@ namespace Quran.Core.Utils
             return missingFiles;
         }
 
-        public static string GetServerPathForAyah(QuranAyah ayah, ReciterItem reciter)
-        {
-            return Path.Combine(reciter.ServerUrl, GetFilePath(ayah, reciter));
-        }
-
-        private static string GetFilePath(QuranAyah ayah, ReciterItem reciter)
+        public static string GetFileName(QuranAyah ayah, ReciterItem reciter)
         {
             string fileName;
             if (reciter.IsGapless)

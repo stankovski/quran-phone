@@ -34,8 +34,8 @@ namespace Quran.Windows.UI
         {
             imageSourceBitmap = new WriteableBitmap(1, 1);
             InitializeComponent();
-            canvas.Width = ScreenInfo.Instance.ImageWidth;
-            canvas.Height = ScreenInfo.Instance.ImageHeight;
+            canvas.Width = FileUtils.ScreenInfo.ImageWidth;
+            canvas.Height = FileUtils.ScreenInfo.ImageHeight;
         }
 
         public Image Image
@@ -175,17 +175,19 @@ namespace Quran.Windows.UI
                 }
 
                 var uriBuilder = new UriBuilder(source);
-                var localPath = System.IO.Path.Combine(FileUtils.GetBaseDirectory(), System.IO.Path.GetFileName(uriBuilder.Path));
+                string fileName = System.IO.Path.GetFileName(uriBuilder.Path);
+                StorageFile localPath = null;
                 bool downloadSuccessful = true;
 
                 if (source.Scheme == "http")
                 {
                     try
                     {
-                        if (!await FileUtils.FileExists(localPath))
+                        if (!await FileUtils.FileExists(FileUtils.BaseFolder, fileName))
                         {
+                            localPath = await FileUtils.BaseFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
                             downloadSuccessful =
-                                await FileUtils.DownloadFileFromWebAsync(source.ToString(), localPath);
+                                await FileUtils.DownloadFileFromWebAsync(source.ToString(), localPath.Path);
                         }
                     }
                     catch (Exception ex)
@@ -198,7 +200,7 @@ namespace Quran.Windows.UI
                 }
                 else
                 {
-                    localPath = source.LocalPath;
+                    localPath = await FileUtils.GetFile(FileUtils.BaseFolder, fileName);
                 }
 
                 try
@@ -224,9 +226,8 @@ namespace Quran.Windows.UI
             }
         }
 
-        private async Task loadImageFromLocalPath(string localPath)
+        private async Task loadImageFromLocalPath(StorageFile imageFile)
         {
-            var imageFile = await StorageFile.GetFileFromPathAsync(localPath);
             using (var imageFileStream = await imageFile.OpenReadAsync())
             {
                 var bitmap = new WriteableBitmap(1, 1); // avoid creating intermediate BitmapImage
@@ -384,7 +385,7 @@ namespace Quran.Windows.UI
 
         private static Point adjustPoint(Point p, double width)
         {
-            var imageWidth = ScreenInfo.Instance.ImageWidth;
+            var imageWidth = FileUtils.ScreenInfo.ImageWidth;
             var actualWidth = width;
             var scale = imageWidth/actualWidth;
             return new Point(p.X*scale, p.Y*scale);
@@ -392,7 +393,7 @@ namespace Quran.Windows.UI
 
         private static Point adjustPointRevert(Point p, double width)
         {
-            var imageWidth = ScreenInfo.Instance.ImageWidth;
+            var imageWidth = FileUtils.ScreenInfo.ImageWidth;
             var actualWidth = width;
             var scale = imageWidth / actualWidth;
             return new Point(p.X / scale, p.Y / scale);

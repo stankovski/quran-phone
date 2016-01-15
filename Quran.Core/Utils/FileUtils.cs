@@ -10,6 +10,8 @@ using Windows.Storage;
 using System.Collections.Generic;
 using Windows.Storage.Search;
 using Quran.Core.ViewModels;
+using System.Net.Http;
+using Microsoft.ApplicationInsights;
 
 namespace Quran.Core.Utils
 {
@@ -23,6 +25,7 @@ namespace Quran.Core.Utils
         private static string UNDELETED_FILES_DIRECTORY = "to-delete";
         public static string PACKAGE_NAME = "com.quran.labs.androidquran";
         public static string QURAN_ARABIC_DATABASE = "quran.ar.db";
+        private static TelemetryClient telemetry = new TelemetryClient();
 
         private static bool initialized = false;
 
@@ -31,13 +34,16 @@ namespace Quran.Core.Utils
         public static StorageFolder DatabaseFolder { get; private set; }
 
         public static StorageFolder AudioFolder { get; private set; }
-      
+
+        public static ScreenInfo ScreenInfo { get; private set; }
+
         public async static Task Initialize(ScreenInfo screenInfo)
         {
             if (initialized)
                 return;
 
             initialized = true;
+            ScreenInfo = screenInfo;
 
             // Initialize directory
             await MakeQuranDirectory(screenInfo);
@@ -182,16 +188,16 @@ namespace Quran.Core.Utils
             }
         }
 
-        public static async Task<bool> FileExists(StorageFolder baseFolder, string path)
+        public static async Task<bool> FileExists(StorageFolder baseFolder, string fileName)
         {
-            if (baseFolder == null || string.IsNullOrWhiteSpace(path))
+            if (baseFolder == null || string.IsNullOrWhiteSpace(fileName))
             {
                 return false;
             }
 
             try
             {
-                return (await baseFolder.TryGetItemAsync(path)) != null;
+                return (await baseFolder.TryGetItemAsync(fileName)) != null;
             }
             catch (Exception)
             {
@@ -210,7 +216,7 @@ namespace Quran.Core.Utils
             {
                 var dirName = Path.GetDirectoryName(path);
                 var folder = await StorageFolder.GetFolderFromPathAsync(dirName);
-                return await folder.TryGetItemAsync(Path.GetFileName(path)) as IStorageFile;
+                return await GetFile(folder, Path.GetFileName(path));
             }
             catch (Exception)
             {
@@ -218,14 +224,28 @@ namespace Quran.Core.Utils
             }
         }
 
-        public static async Task MoveFile(string from, string to)
+        public static async Task<StorageFile> GetFile(StorageFolder folder, string path)
         {
-            if (!string.IsNullOrWhiteSpace(from) &&
-                !string.IsNullOrWhiteSpace(to))
+            if (string.IsNullOrWhiteSpace(path))
             {
-                var file = await StorageFile.GetFileFromPathAsync(from);
-                var destinationDirectory = await StorageFolder.GetFolderFromPathAsync(Path.GetDirectoryName(to));
-                await file.MoveAsync(destinationDirectory, Path.GetFileName(to), NameCollisionOption.ReplaceExisting);
+                return null;
+            }
+
+            try
+            {
+                return await folder.TryGetItemAsync(Path.GetFileName(path)) as StorageFile;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public static async Task MoveFile(IStorageFile file, IStorageFolder destinationDirectory, string newName)
+        {
+            if (file != null && destinationDirectory != null && !string.IsNullOrWhiteSpace(newName))
+            {
+                await file.MoveAsync(destinationDirectory, newName, NameCollisionOption.ReplaceExisting);
             }
         }
 
@@ -446,22 +466,52 @@ namespace Quran.Core.Utils
             }
             else
             {
-                ScreenInfo instance = ScreenInfo.Instance;
-                if (instance == null) return null;
+                if (ScreenInfo == null) return null;
 
-                string urlString = Path.Combine(IMG_HOST + "width" + instance.GetWidthParam(),
+                string urlString = Path.Combine(IMG_HOST + "width" + ScreenInfo.GetWidthParam(),
                                                 filename);
                 return new Uri(urlString, UriKind.Absolute);                
             }
         }
 
-        public static async Task<bool> DownloadFileFromWebAsync(string uri, string localPath, 
+
+        //public static Task<bool> DownloadFileFromWebAsync(string uri, StorageFile destination,
+        //    CancellationToken cancellationToken = default(CancellationToken))
+        //{
+        //    using (var httpClient = new HttpClient())
+        //    {
+        //        return DownloadFileFromWebAsync(httpClient, uri, destination, cancellationToken);
+        //    }
+        //}
+
+        //public static async Task<bool> DownloadFileFromWebAsync(HttpClient httpClient, 
+        //    string uri, StorageFile destination,
+        //    CancellationToken cancellationToken = default(CancellationToken))
+        //{
+        //    try
+        //    {
+        //        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, new Uri(uri));
+        //        var response = await httpClient.SendAsync(request);
+        //        using (var contentStream = await response.Content.ReadAsStreamAsync())
+        //        {
+        //            await contentStream.CopyToAsync(await destination.OpenStreamForWriteAsync());
+        //        }
+        //        return true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        telemetry.TrackException(ex);
+        //        return false;
+        //    }
+        //}
+
+        public static async Task<bool> DownloadFileFromWebAsync(string uri, string localPath,
             CancellationToken cancellationToken = default(CancellationToken))
         {
             try
             {
                 var request = (HttpWebRequest)WebRequest.Create(uri);
-                request.Method = HttpMethod.Get;
+                request.Method = "GET";
                 var response = await request.GetResponseAsync();
 
                 await EnsureDirectoryExists(Path.GetDirectoryName(localPath));
@@ -471,7 +521,7 @@ namespace Quran.Core.Utils
                 {
                     response.GetResponseStream().CopyTo(writeStream);
                 }
-                
+
                 return true;
             }
             catch
@@ -502,13 +552,12 @@ namespace Quran.Core.Utils
 
         public static string GetBaseDirectory()
         {
-            ScreenInfo qsi = ScreenInfo.Instance;
-            if (qsi == null)
+            if (ScreenInfo == null)
             {
                 return null;
             }
 
-            var imageFolder = Path.Combine(QURAN_BASE, "width" + qsi.GetWidthParam());
+            var imageFolder = Path.Combine(QURAN_BASE, "width" + ScreenInfo.GetWidthParam());
             return GetSubdirectory(imageFolder);
         }
 
@@ -533,51 +582,36 @@ namespace Quran.Core.Utils
         public static string GetZipFileUrl()
         {
             string url = IMG_HOST;
-            ScreenInfo qsi = ScreenInfo.Instance;
-            if (qsi == null)
+            if (ScreenInfo == null)
+            {
                 return null;
-            url += "images" + qsi.GetWidthParam() + ".zip";
-            return url;
-        }
+            }
 
-        public static async Task<bool> ExtractZipFile(string source, string baseFolder)
-        {
-            try
-            {
-                await QuranApp.NativeProvider.ExtractZip(source, baseFolder);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            url += "images" + ScreenInfo.GetWidthParam() + ".zip";
+            return url;
         }
 
         public static string GetAyaPositionFileName()
         {
-            ScreenInfo qsi = ScreenInfo.Instance;
-            if (qsi == null) return null;
-            return "ayahinfo" + qsi.GetWidthParam() + ".db";
+            if (ScreenInfo == null)
+            {
+                return null;
+            }
+            return "ayahinfo" + ScreenInfo.GetWidthParam() + ".db";
         }
 
         public static string GetAyaPositionFileUrl()
         {
-            ScreenInfo qsi = ScreenInfo.Instance;
-            if (qsi == null)
+            if (ScreenInfo == null)
+            {
                 return null;
-            string url = IMG_HOST + "width" + qsi.GetWidthParam();
-            url += "/ayahinfo" + qsi.GetWidthParam() + ".zip";
+            }
+
+            string url = IMG_HOST + "width" + ScreenInfo.GetWidthParam();
+            url += "/ayahinfo" + ScreenInfo.GetWidthParam() + ".zip";
             return url;
         }
-
-        public static string GetGaplessDatabaseRootUrl()
-        {
-            ScreenInfo qsi = ScreenInfo.Instance;
-            if (qsi == null)
-                return null;
-            return IMG_HOST + "databases/audio/";
-        }
-
+        
         public static async Task<bool> HaveAyaPositionFile()
         {
             string baseDir = GetQuranDatabaseDirectory();

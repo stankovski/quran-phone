@@ -10,6 +10,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.ApplicationInsights;
 using Newtonsoft.Json;
+using System.Net.Http;
 
 namespace Quran.Core.Utils
 {
@@ -61,13 +62,10 @@ namespace Quran.Core.Utils
             bool refreshed = false;
             if (string.IsNullOrEmpty(text))
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(WEB_SERVICE_URL);
-                request.Method = HttpMethod.Get;
-                var response = await request.GetResponseAsync();
-                using (var sr = new StreamReader(response.GetResponseStream()))
-                {
-                    text = sr.ReadToEnd();
-                }
+                HttpClient httpClient = new HttpClient();
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, WEB_SERVICE_URL);
+                var response = await httpClient.SendAsync(request);
+                text = await response.Content.ReadAsStringAsync();
 
                 if (string.IsNullOrEmpty(text))
                 {

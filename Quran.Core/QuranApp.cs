@@ -29,7 +29,11 @@ namespace Quran.Core
 
         public static async Task Initialize()
         {
-            await FileUtils.Initialize(ScreenInfo.Instance);
+            var instance = new ScreenInfo(QuranApp.NativeProvider.ActualWidth,
+                                          QuranApp.NativeProvider.ActualHeight, 
+                                          QuranApp.NativeProvider.ScaleFactor);
+
+            await FileUtils.Initialize(instance);
         }
 
         public static async Task<AyahInfoDatabaseHandler> GetAyahInfoDatabase()

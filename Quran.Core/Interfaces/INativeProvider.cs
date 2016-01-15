@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Quran.Core.Utils;
+using Windows.Storage;
 
 namespace Quran.Core.Interfaces
 {
@@ -9,10 +10,9 @@ namespace Quran.Core.Interfaces
         double ActualWidth { get; }
         double ActualHeight { get; }
         double ScaleFactor { get; }
-        IDownloadManager DownloadManager { get; }
         ISettingsProvider SettingsProvider { get; }
         IAudioProvider AudioProvider { get; }
-        Task ExtractZip(string source, string baseFolder);
+        Task ExtractZip(StorageFile source, string baseFolder);
         void CopyToClipboard(string text);
         Task ComposeEmail(string to, string subject, string body = null);
         Task LaunchWebBrowser(string url);

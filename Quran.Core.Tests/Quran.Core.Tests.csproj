@@ -96,7 +96,6 @@
   <ItemGroup>
     <Compile Include="BaseTest.cs" />
     <Compile Include="Database\ReciterTests.cs" />
-    <Compile Include="Mocks\MockDownloadManager.cs" />
     <Compile Include="Mocks\MockSettingsProvider.cs" />
     <Compile Include="Mocks\MockAudioProvider.cs" />
     <Compile Include="Mocks\MockTransferRequest.cs" />

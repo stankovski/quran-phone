@@ -6,28 +6,13 @@ namespace Quran.Core.Utils
     [DataContract]
     public class ScreenInfo
     {
-        private static ScreenInfo instance = null;
-
-        private ScreenInfo()
+        public ScreenInfo()
         {}
 
-        private ScreenInfo(double width, double height, double scale)
+        public ScreenInfo(double width, double height, double scale)
         {
             Width = width * scale;
             Height = height * scale;
-        }
-
-        public static ScreenInfo Instance
-        {
-            get
-            {
-                if (instance == null && QuranApp.NativeProvider != null)
-                {
-                    instance = new ScreenInfo(QuranApp.NativeProvider.ActualWidth, 
-                        QuranApp.NativeProvider.ActualHeight, QuranApp.NativeProvider.ScaleFactor);
-                }
-                return instance;
-            }
         }
 
         [DataMember]

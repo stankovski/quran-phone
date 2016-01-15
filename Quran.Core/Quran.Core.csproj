@@ -147,7 +147,6 @@
     <Compile Include="Data\SuraTimingDatabaseHandler.cs" />
     <Compile Include="Data\TranslationsDatabaseHandler.cs" />
     <Compile Include="Interfaces\IAudioProvider.cs" />
-    <Compile Include="Interfaces\IDownloadManager.cs" />
     <Compile Include="Interfaces\INativeProvider.cs" />
     <Compile Include="Interfaces\ISettingsProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
