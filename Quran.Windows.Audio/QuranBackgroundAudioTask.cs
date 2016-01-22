@@ -315,6 +315,7 @@ namespace Quran.Windows.Audio
                     if (file != null)
                     {
                         source = MediaSource.CreateFromStorageFile(file);
+                        //source = MediaSource.CreateFromUri(new Uri(file.Path));
                     }
                     else
                     {

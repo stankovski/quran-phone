@@ -768,4 +768,10 @@ the data used in the translations and Arabic comes from
   <data name="quran_bookmarks" xml:space="preserve">
     <value>Bookmarks</value>
   </data>
+  <data name="downloaded_audio" xml:space="preserve">
+    <value>Locally saved audio</value>
+  </data>
+  <data name="streaming_audio" xml:space="preserve">
+    <value>Online audio streaming</value>
+  </data>
 </root>

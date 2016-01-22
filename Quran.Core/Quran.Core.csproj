@@ -183,6 +183,7 @@
     <Compile Include="ViewModels\RecitersListViewModel.cs" />
     <Compile Include="ViewModels\SearchViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
+    <Compile Include="ViewModels\SurahDownloadViewModel.cs" />
     <Compile Include="ViewModels\TranslationsListViewModel.cs" />
     <Compile Include="ViewModels\VerseViewModel.cs" />
     <Compile Include="ViewModels\ViewModelWithDownload.cs" />

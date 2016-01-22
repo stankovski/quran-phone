@@ -36,8 +36,6 @@ namespace Quran.Windows.Views
             {
                 if (tab == "general")
                     this.MainPivot.SelectedItem = this.General;
-                if (tab == "audio")
-                    this.MainPivot.SelectedItem = this.Audio;
                 if (tab == "about")
                     this.MainPivot.SelectedItem = this.About;
             }

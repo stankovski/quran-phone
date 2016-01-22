@@ -11,7 +11,7 @@ namespace Quran.Core.Common
     {
         public QuranAudioTrack() { }
 
-        public QuranAudioTrack(int reciterId, QuranAyah verse, bool isStreaming, AudioDownloadAmount downloadAmount, ScreenInfo qsi)
+        public QuranAudioTrack(int reciterId, QuranAyah verse, ScreenInfo qsi)
         {
             if (verse == null)
             {
@@ -26,8 +26,6 @@ namespace Quran.Core.Common
             this.ReciterId = reciterId;
             this.Surah = verse.Surah;
             this.Ayah = verse.Ayah;
-            this.IsStreaming = isStreaming;
-            this.DownloadAmount = downloadAmount;
             this.ScreenInfo = qsi;
         }
         
@@ -39,12 +37,6 @@ namespace Quran.Core.Common
 
         [DataMember]
         public int Ayah { get; set; }
-
-        [DataMember]
-        public bool IsStreaming { get; set; }
-
-        [DataMember]
-        public AudioDownloadAmount DownloadAmount { get; set; }
 
         [DataMember]
         public ScreenInfo ScreenInfo { get; set; }
@@ -63,7 +55,7 @@ namespace Quran.Core.Common
         {
             return new QuranAudioTrack(ReciterId, 
                 QuranUtils.GetNextAyah(GetQuranAyah(), true), 
-                IsStreaming, DownloadAmount, ScreenInfo);
+                ScreenInfo);
         }
 
         public QuranAudioTrack GetPreviousInSurah()
@@ -80,7 +72,7 @@ namespace Quran.Core.Common
         {
             return new QuranAudioTrack(ReciterId, 
                 QuranUtils.GetPreviousAyah(GetQuranAyah(), true), 
-                IsStreaming, DownloadAmount, ScreenInfo);
+                ScreenInfo);
         }
 
         public QuranAudioTrack GetFirstAyah()
@@ -88,14 +80,14 @@ namespace Quran.Core.Common
             int firstAyah = Surah == Constants.SURA_FIRST || Surah == Constants.SURA_TAWBA ? 1 : 0;
             return new QuranAudioTrack(ReciterId,
                 new QuranAyah(Surah, firstAyah),
-                IsStreaming, DownloadAmount, ScreenInfo);
+                ScreenInfo);
         }
 
         public QuranAudioTrack GetLastAyah()
         {
             return new QuranAudioTrack(ReciterId,
                 new QuranAyah(Surah, QuranUtils.GetSurahNumberOfAyah(Surah)),
-                IsStreaming, DownloadAmount, ScreenInfo);
+                ScreenInfo);
         }
 
         public ReciterItem GetReciter()

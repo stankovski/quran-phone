@@ -521,4 +521,10 @@ the data used in the translations and Arabic comes from
   <data name="quran_bookmarks" xml:space="preserve">
     <value>Закладки</value>
   </data>
+  <data name="downloaded_audio" xml:space="preserve">
+    <value>Локальное аудио</value>
+  </data>
+  <data name="streaming_audio" xml:space="preserve">
+    <value>Аудио из интернета</value>
+  </data>
 </root>

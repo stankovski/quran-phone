@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using Microsoft.ApplicationInsights;
 using Quran.Core;
 using Quran.Core.Common;
 using Quran.Core.Data;
@@ -26,6 +27,7 @@ namespace Quran.Windows.Views
         public ObservableCollection<NavigationLink> NavigationLinks = new ObservableCollection<NavigationLink>();
         private DataTransferManager _dataTransferManager;
         private NavigationLink _bookmarkNavigationLink;
+        private TelemetryClient telemetry = new TelemetryClient();
 
         public DetailsView()
         {
@@ -228,9 +230,14 @@ namespace Quran.Windows.Views
                 }
                 else
                 {
-                    if (await ViewModel.PlayFromAyah(selectedAyah))
+                    try
                     {
+                        await ViewModel.PlayFromAyah(selectedAyah);
                         UpdateAudioControls(AudioState.Playing);
+                    }
+                    catch (Exception ex)
+                    {
+                        telemetry.TrackException(ex);
                     }
                 }
             }
@@ -499,9 +506,14 @@ namespace Quran.Windows.Views
             }
             else
             {
-                if (await ViewModel.Play())
+                try
                 {
+                    await ViewModel.Play();
                     UpdateAudioControls(AudioState.Playing);
+                } 
+                catch (Exception ex)
+                {
+                    telemetry.TrackException(ex);
                 }
             }
         }

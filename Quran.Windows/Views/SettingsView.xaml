@@ -62,6 +62,8 @@
                         </PivotItem.Header>
                         <ScrollViewer Background="{StaticResource PivotPaneColor}">
                             <StackPanel Margin="12,17,0,28">
+                                <TextBlock Text="{Binding Path=LocalizedResources.reciters, Source={StaticResource LocalizedStrings}}"/>
+                                <Button Content="{x:Bind ViewModel.ActiveReciter}" Click="ShowReciters"/>
                                 <TextBlock Text="{Binding Path=LocalizedResources.translations, Source={StaticResource LocalizedStrings}}"/>
                                 <Button Content="{x:Bind ViewModel.ActiveTranslation}" Click="ShowTranslations"/>
                                 <StackPanel Margin="0, 15, 0, 0" Orientation="Horizontal">
@@ -85,32 +87,6 @@
                                 <ToggleSwitch IsOn="{x:Bind ViewModel.AltDownloadMethod, Mode=TwoWay}"/>
                                 <TextBlock Text="{Binding Path=LocalizedResources.generate_bookmarks_for_dua, Source={StaticResource LocalizedStrings}}"/>
                                 <Button Content="{Binding Path=LocalizedResources.generate, Source={StaticResource LocalizedStrings}}" Click="{x:Bind ViewModel.GenerateDua}"></Button>
-                            </StackPanel>
-                        </ScrollViewer>
-                    </PivotItem>
-                    <PivotItem x:Name="Audio"  Margin="0">
-                        <PivotItem.Header>
-                            <StackPanel>
-                                <SymbolIcon Symbol="Play"/>
-                                <TextBlock Text="{Binding Path=LocalizedResources.audio, Source={StaticResource LocalizedStrings}}"
-                                               Style="{StaticResource BaseTextBlockStyle}" HorizontalAlignment="Center"/>
-                            </StackPanel>
-                        </PivotItem.Header>
-                        <ScrollViewer Background="{StaticResource PivotPaneColor}">
-                            <StackPanel Margin="12,17,0,28">
-                                <TextBlock Text="{Binding Path=LocalizedResources.reciters, Source={StaticResource LocalizedStrings}}"/>
-                                <Button Content="{x:Bind ViewModel.ActiveReciter}" Click="ShowReciters"/>
-                                <ToggleSwitch Header="{Binding Path=LocalizedResources.offline_audio, Source={StaticResource LocalizedStrings}}"
-                                              IsOn="{x:Bind ViewModel.EnableOfflineAudio, Mode=TwoWay}" />
-                                <ComboBox Header="{Binding Path=LocalizedResources.audio_download_blocks, Source={StaticResource LocalizedStrings}}"
-                                          ItemsSource="{x:Bind ViewModel.SupportedAudioBlocks}" DisplayMemberPath="Value" 
-                                          SelectedValue="{x:Bind ViewModel.SelectedAudioBlock, Mode=TwoWay}" SelectedValuePath="Key"/>
-                                <!--<TextBlock Text="{Binding Path=LocalizedResources.repeat_ayah, Source={StaticResource LocalizedStrings}}"/>
-                                <ToggleSwitch IsOn="{Binding RepeatAudio, Mode=TwoWay}" />
-                                <TextBlock Text="{Binding Path=LocalizedResources.number_of_ayah_to_repeat, Source={StaticResource LocalizedStrings}}"/>
-                                <ComboBox ItemsSource="{Binding SupportedRepeatAmount}" DisplayMemberPath="Value" SelectedItem="{Binding SelectedRepeatAmount, Mode=TwoWay}"/>
-                                <TextBlock Text="{Binding Path=LocalizedResources.times_to_repeat, Source={StaticResource LocalizedStrings}}"/>
-                                <ComboBox ItemsSource="{Binding SupportedRepeatTimes}" DisplayMemberPath="Value" SelectedItem="{Binding SelectedRepeatTimes, Mode=TwoWay}"/>-->
                             </StackPanel>
                         </ScrollViewer>
                     </PivotItem>

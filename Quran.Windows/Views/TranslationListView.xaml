@@ -16,7 +16,7 @@
 
             <DataTemplate x:Key="ZoomedInTemplate">
                 <StackPanel>
-                    <Grid Visibility="{Binding Exists, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Grid Visibility="{Binding Exists, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="0, 10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="70"/>
                             <ColumnDefinition Width="*"/>
@@ -32,7 +32,7 @@
                                 Content="&#xE107;"
                                 Command="{Binding DeleteCommand}"/>
                     </Grid>
-                    <Grid Visibility="{Binding Exists, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
+                    <Grid Visibility="{Binding Exists, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}" Margin="0, 10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="70"/>
                             <ColumnDefinition Width="*"/>

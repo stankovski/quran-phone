@@ -16,31 +16,35 @@
 
             <DataTemplate x:Key="ZoomedInTemplate">
                 <StackPanel>
-                    <Grid Visibility="{Binding Exists, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Grid Visibility="{Binding Exists, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="0, 10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="70"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="60"/>
                         </Grid.ColumnDefinitions>
-                        <FontIcon Grid.Column="0" Glyph="&#xE128;" FontSize="35" Tapped="NavigationRequested" FontFamily="{ThemeResource SymbolThemeFontFamily}"/>
-                        <StackPanel Grid.Column="1" Padding="0" Margin="0" VerticalAlignment="Center" Tapped="NavigationRequested">
+                        <FontIcon Grid.Column="0" Glyph="&#xE128;" FontSize="35" Tapped="NavigationBackRequested" FontFamily="{ThemeResource SymbolThemeFontFamily}"/>
+                        <StackPanel Grid.Column="1" Padding="0" Margin="0" VerticalAlignment="Center" Tapped="NavigationBackRequested">
                             <TextBlock Text="{Binding Name}" TextWrapping="NoWrap" Style="{StaticResource BaseTextBlockStyle}"/>
                         </StackPanel>
                         <Button Grid.Column="2" VerticalAlignment="Center"
                                 Style="{StaticResource MenuButtonStyle}"
-                                Content="&#xE107;"
-                                Command="{Binding DeleteCommand}"/>
+                                Content="&#xE8B7;"
+                                Click="ManageRequested"/>
                     </Grid>
-                    <Grid Visibility="{Binding Exists, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
+                    <Grid Visibility="{Binding Exists, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}" Margin="0, 10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="70"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="60"/>
                         </Grid.ColumnDefinitions>
-                        <FontIcon Grid.Column="0" Glyph="&#xE128;" FontSize="35" Tapped="NavigationRequested" FontFamily="{ThemeResource SymbolThemeFontFamily}"/>
-                        <StackPanel Grid.Column="1" Padding="0" Margin="0" VerticalAlignment="Center" Tapped="NavigationRequested">
+                        <FontIcon Grid.Column="0" Glyph="&#xE128;" FontSize="35" Tapped="NavigationBackRequested" FontFamily="{ThemeResource SymbolThemeFontFamily}"/>
+                        <StackPanel Grid.Column="1" Padding="0" Margin="0" VerticalAlignment="Center" Tapped="NavigationBackRequested">
                             <TextBlock Text="{Binding Name}" TextWrapping="NoWrap" Style="{StaticResource BaseTextBlockStyle}"/>
                         </StackPanel>
+                        <Button Grid.Column="2" VerticalAlignment="Center"
+                                Style="{StaticResource MenuButtonStyle}"
+                                Content="&#xE8B7;"
+                                Click="ManageRequested"/>
                     </Grid>
                 </StackPanel>
             </DataTemplate>

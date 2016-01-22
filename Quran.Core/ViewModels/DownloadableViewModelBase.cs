@@ -373,12 +373,9 @@ namespace Quran.Core.ViewModels
         }
         public async Task Cancel()
         {
-            if (!_activeDownloads.IsEmpty)
+            if (await QuranApp.NativeProvider.ShowQuestionMessageBox(Resources.download_cancel_confirmation))
             {
-                if (await QuranApp.NativeProvider.ShowQuestionMessageBox(Resources.download_cancel_confirmation))
-                {
-                    Reset();
-                }
+                _cts.Cancel();
             }
         }
 

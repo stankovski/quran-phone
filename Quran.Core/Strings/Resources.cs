@@ -457,5 +457,15 @@ namespace Quran.Core.Properties
         {
             get { return resourceLoader.GetString("quran_bookmarks"); }
         }
+
+        public static string downloaded_audio 
+        {
+            get { return resourceLoader.GetString("downloaded_audio"); }
+        }
+
+        public static string streaming_audio 
+        {
+            get { return resourceLoader.GetString("streaming_audio"); }
+        }
     }
 }

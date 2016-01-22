@@ -8,6 +8,7 @@ using Windows.Graphics.Display;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media.Animation;
 
 namespace Quran.Windows.Views
 {
@@ -28,8 +29,24 @@ namespace Quran.Windows.Views
             await ViewModel.Initialize();
             ReciterViewSource.Source = ViewModel.Groups;
         }
-        
-        private void NavigationRequested(object sender, TappedRoutedEventArgs e)
+
+        private void ManageRequested(object sender, RoutedEventArgs e)
+        {
+            var list = sender as FrameworkElement;
+            if (list == null || list.DataContext == null)
+                return;
+
+            var qari = (ObservableReciterItem)list.DataContext;
+            if (qari == null)
+            {
+                return;
+            }
+
+            Frame.Navigate(typeof(SurahDownloadView), qari.Id, new SlideNavigationTransitionInfo());
+        }
+
+
+        private void NavigationBackRequested(object sender, TappedRoutedEventArgs e)
         {
             var list = sender as FrameworkElement;
             if (list == null || list.DataContext == null)
