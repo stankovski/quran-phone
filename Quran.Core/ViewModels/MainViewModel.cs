@@ -166,48 +166,6 @@ namespace Quran.Core.ViewModels
         #endregion Public methods
 
         #region Private methods
-        /// <summary>
-        /// Prepare offline zip for debugging purpose, this function will only be called
-        /// on debug configuration.
-        /// 
-        /// Reference: http://msdn.microsoft.com/en-us/library/Windows/develop/hh286411%28v=vs.105%29.aspx
-        /// </summary>
-        private void prepareOfflineZip()
-        {
-            //// TODO: still ERROR in device
-
-            // Move images_800.zip from Assets/Offline to temporary storage
-            Uri offlineZipUri = new Uri("Assets/Offline/images_800.zip", UriKind.Relative);
-
-            // Obtain the virtual store for the application.
-            //IsolatedStorageFile iso = IsolatedStorageFile.GetUserStoreForApplication();
-
-            // Create a stream for the file in the installation folder.
-            //var streamInfo = string.Join(",", Application.Current.Resources.Keys);
-            //if (streamInfo != null)
-            //{
-            //    using (Stream input = streamInfo.Stream)
-            //    {
-            //        // Create a stream for the new file in the local folder.
-            //        using (IsolatedStorageFileStream output = iso.CreateFile(this.QuranData.LocalUrl))
-            //        {
-            //            // Initialize the buffer.
-            //            byte[] readBuffer = new byte[4096];
-            //            int bytesRead = -1;
-
-            //            // Copy the file from the installation folder to the local folder. 
-            //            while ((bytesRead = input.Read(readBuffer, 0, readBuffer.Length)) > 0)
-            //            {
-            //                output.Write(readBuffer, 0, bytesRead);
-            //            }
-            //        }
-
-            //        this.HasAskedToDownload = true;
-            //    }
-            //}
-        }
-
-        
         private void LoadSuraList()
         {
             for (int surah = 1; surah <= Constants.SURAS_COUNT; surah++)
@@ -223,34 +181,6 @@ namespace Quran.Core.ViewModels
                     Group = QuranUtils.GetJuzTitle() + " " + QuranUtils.GetJuzFromAyah(surah, 1)
                 });
             }
-
-            //int surah = 1;
-            //int next = 1;
-            //for (int juz = 1; juz <= Constants.JUZ2_COUNT; juz++)
-            //{
-            //    Surahs.Add(new ItemViewModel
-            //    {
-            //        Id = QuranUtils.GetJuzTitle() + " " + juz,
-            //        Title = QuranUtils.GetJuzTitle() + " " + juz,
-            //        PageNumber = QuranUtils.JUZ_PAGE_START[juz - 1],
-            //        ItemType = ItemViewModelType.Header
-            //    });
-            //    next = (juz == Constants.JUZ2_COUNT) ? Constants.PAGES_LAST + 1 : QuranUtils.JUZ_PAGE_START[juz];
-
-            //    while ((surah <= Constants.SURAS_COUNT) && (QuranUtils.SURA_PAGE_START[surah - 1] < next))
-            //    {
-            //        string title = QuranUtils.GetSurahName(surah, true);
-            //        Surahs.Add(new ItemViewModel
-            //        {
-            //            Id = surah.ToString(CultureInfo.InvariantCulture),
-            //            Title = title,
-            //            Details = QuranUtils.GetSuraListMetaString(surah),
-            //            PageNumber = QuranUtils.SURA_PAGE_START[surah - 1],
-            //            ItemType = ItemViewModelType.Surah
-            //        });
-            //        surah++;
-            //    }
-            //}
         }
 
         private void LoadJuz2List()

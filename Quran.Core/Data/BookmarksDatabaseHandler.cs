@@ -108,16 +108,16 @@ namespace Quran.Core.Data
 
         public bool TogglePageBookmark(int page)
         {
-            int bookmarkId = GetBookmarkId(null, null, page);
-            if (bookmarkId < 0)
+            var bookmarks = dbConnection.Table<Bookmarks>().Where(bt => bt.Page == page).Select(b => b.Id).ToList();
+            if (bookmarks.Any())
             {
-                AddBookmark(page);
-                return true;
+                bookmarks.ForEach(b => RemoveBookmark(b));
+                return false;
             }
             else
             {
-                RemoveBookmark(bookmarkId);
-                return false;
+                AddBookmark(page);
+                return true;
             }
         }
 
@@ -171,12 +171,16 @@ namespace Quran.Core.Data
         public bool RemoveBookmark(int bookmarkId)
         {
             var bookmark = dbConnection.Table<Bookmarks>().Where(b => b.Id == bookmarkId).FirstOrDefault();
-            if (bookmark != null)
-            {
-                PageCache.Remove(bookmark.Page);
-            }
             ClearBookmarkTags(bookmarkId);
-            return dbConnection.Delete(new Bookmarks { Id = bookmarkId }) == 1;
+            var success = dbConnection.Delete(new Bookmarks { Id = bookmarkId }) == 1;
+            if (success)
+            {
+                if (GetBookmarkId(null, null, bookmark.Page) < 0)
+                {
+                    PageCache.Remove(bookmark.Page);
+                }
+            }
+            return success;
         }
 
         public List<Tags> GetTags()

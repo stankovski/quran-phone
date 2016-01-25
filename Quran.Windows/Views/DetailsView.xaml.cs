@@ -65,13 +65,16 @@ namespace Quran.Windows.Views
                 {
                     if (ViewModel.CurrentPageIndex != -1)
                     {
-                        radSlideView.SelectedItem = ViewModel.Pages[ViewModel.CurrentPageIndex];
-                        SetBookmarkNavigationLink();
+                        radSlideView.SelectedItem = ViewModel.Pages[ViewModel.CurrentPageIndex];                        
                     }
                 }
                 if (args.PropertyName == "AudioPlayerState")
                 {
                     UpdateAudioControls(ViewModel.AudioPlayerState);
+                }
+                if (args.PropertyName == "CurrentPageBookmarked")
+                {
+                    SetBookmarkNavigationLink();
                 }
             };
 
@@ -386,7 +389,6 @@ namespace Quran.Windows.Views
                 Action = () => 
                 {
                     ViewModel.TogglePageBookmark();
-                    SetBookmarkNavigationLink();
                 }
             };
             SetBookmarkNavigationLink();
@@ -408,7 +410,7 @@ namespace Quran.Windows.Views
 
         private void SetBookmarkNavigationLink()
         {
-            if (BookmarksDatabaseHandler.IsPageBookmarked(ViewModel.CurrentPageNumber))
+            if (ViewModel.CurrentPageBookmarked)
             {
                 _bookmarkNavigationLink.Label = Quran.Core.Properties.Resources.delete_bookmark;
                 _bookmarkNavigationLink.Symbol = Symbol.SolidStar;
