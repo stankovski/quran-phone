@@ -287,6 +287,11 @@ namespace Quran.WindowsPhone.Views
             email.Show();
         }
 
+        private void TryQuranWindows_Click(object sender, EventArgs e)
+        {
+            QuranApp.NativeProvider.LaunchWebBrowser("https://www.microsoft.com/en-us/store/apps/quran-windows/9nblggh5kqhl");
+        }
+
         private void KeepOrientation_Click(object sender, EventArgs e)
         {
             var button = sender as ApplicationBarMenuItem;
@@ -346,6 +351,9 @@ namespace Quran.WindowsPhone.Views
             var orientationButton = new ApplicationBarMenuItem(AppResources.keep_orientation);
             orientationButton.Click += KeepOrientation_Click;
             ApplicationBar.MenuItems.Add(orientationButton);
+            var tryQuranWindows = new ApplicationBarMenuItem("Try Quran for Windows 10...");
+            tryQuranWindows.Click += TryQuranWindows_Click;
+            ApplicationBar.MenuItems.Add(tryQuranWindows);
 
             // Set style
             ApplicationBar.Opacity = 0.9;
