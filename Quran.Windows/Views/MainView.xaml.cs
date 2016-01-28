@@ -93,7 +93,7 @@ namespace Quran.Windows.Views
                 var message =
                     @"Assalamu Aleikum,
 
-Thank you for downloading Quran Windows. Please note that this is a BETA release and is still work in progress. 
+Thank you for downloading Quran Windows. Please note that this is a BETA release and is still work in progress (especially audio support). 
 New in Version 1.2.0:
 * Added offline audio support
 * Misc. bug fixes
@@ -101,7 +101,7 @@ New in Version 1.2.0:
 If you find any issues with the app or would like to provide suggestions, please use Contact Us option available via the menu. 
 
 Jazzakum Allahu Kheiran,
-Quran Phone Team";
+Quran Windows Team";
                 await QuranApp.NativeProvider.ShowInfoMessageBox(message, "Welcome");
                 SettingsUtils.Set(Constants.PREF_CURRENT_VERSION, versionFromAssembly.ToString());
             }

@@ -19,8 +19,6 @@ The following features are *not* yet available but planned for the future inshaA
 Because Quran Windows is an open source project, it makes it easy for anyone to contribute and help improve the project. We are also open to hearing your suggestions to make Quran Windows the best Quran application on the market.
 
 Change Log:
-Release 1.1.0:
-* Re-implemented app as Windows Universal
-* Support for Phone and Desktop mode
-* Support for gapless audio playback
-* Misc new features and bug fixes
+Release 1.2.0:
+* Added offline audio support
+* Misc. bug fixes

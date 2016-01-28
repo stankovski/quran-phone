@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="46051stankovski.QuranWindows" Publisher="CN=675A1B8C-7D1E-4AAC-8DE2-5BD7D61BFEA3" Version="1.1.1.0" />
+  <Identity Name="46051stankovski.QuranWindows" Publisher="CN=675A1B8C-7D1E-4AAC-8DE2-5BD7D61BFEA3" Version="1.2.0.0" />
   <mp:PhoneIdentity PhoneProductId="5ec223b9-5fd5-4028-85ed-f233a8af0943" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>Quran Windows</DisplayName>
