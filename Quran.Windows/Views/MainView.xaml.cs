@@ -117,6 +117,10 @@ Quran Windows Team";
             }
 
             var selectedItem = ((FrameworkElement)e.OriginalSource).DataContext as ItemViewModel;
+            if (selectedItem == null)
+            {
+                return;
+            }
 
             try
             {
