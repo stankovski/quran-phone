@@ -1,24 +1,27 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq.Expressions;
+using System.Net;
+using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
+using Microsoft.ApplicationInsights;
 using Quran.Core;
 using Quran.Core.Common;
-using Quran.Core.Utils;
-using Quran.Windows.Utils;
 using Quran.Core.Data;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.UI.Xaml;
+using Quran.Core.Utils;
+using Quran.Core.ViewModels;
+using Quran.Windows.Utils;
 using Windows.Foundation;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Shapes;
-using Windows.UI;
-using Windows.UI.Xaml.Input;
-using System.Threading.Tasks;
 using Windows.Storage;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Collections.Generic;
-using Microsoft.ApplicationInsights;
+using Windows.UI;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
+using Windows.UI.Xaml.Shapes;
 
 namespace Quran.Windows.UI
 {
@@ -174,47 +177,51 @@ namespace Quran.Windows.UI
                     return;
                 }
 
-                var uriBuilder = new UriBuilder(source);
-                string fileName = System.IO.Path.GetFileName(uriBuilder.Path);
-                StorageFile localPath = null;
-                bool downloadSuccessful = true;
-
-                if (source.Scheme == "http")
-                {
-                    try
-                    {
-                        if (!await FileUtils.FileExists(FileUtils.BaseFolder, fileName))
-                        {
-                            localPath = await FileUtils.BaseFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
-                            downloadSuccessful =
-                                await FileUtils.DownloadFileFromWebAsync(source.ToString(), localPath.Path);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        await QuranApp.NativeProvider.ShowErrorMessageBox("Error loading quran page:" + ex.ToString());
-                        telemetry.TrackException(ex, new Dictionary<string, string> { { "Scenario", "ErrorLoadingPageImageFromUri" } });
-                        downloadSuccessful = false;
-                    }
-
-                }
-                else
-                {
-                    localPath = await FileUtils.GetFile(FileUtils.BaseFolder, fileName);
-                }
+                string fileName = System.IO.Path.GetFileName(source.AbsoluteUri);
+                string tempFileName = $"{fileName}{DownloadableViewModelBase.DownloadExtension}";
+                StorageFile localFile = await FileUtils.GetFile(FileUtils.BaseFolder, fileName);
 
                 try
                 {
-                    if (downloadSuccessful)
+                    if (localFile == null)
                     {
-                        await loadImageFromLocalPath(localPath);
+                        StorageFile localTempFile = await FileUtils.GetFile(FileUtils.BaseFolder, tempFileName);
+                        if (!await FileUtils.FileExists(FileUtils.BaseFolder, tempFileName))
+                        {
+                            // Download file and copy
+                            localTempFile = await FileUtils.BaseFolder.CreateFileAsync(tempFileName, CreationCollisionOption.ReplaceExisting);
+                            if (await FileUtils.DownloadFileFromWebAsync(source.AbsoluteUri, localTempFile.Path))
+                            {
+                                await FileUtils.MoveFile(localTempFile, FileUtils.BaseFolder, fileName);
+                                localFile = await FileUtils.GetFile(FileUtils.BaseFolder, fileName);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    await QuranApp.NativeProvider.ShowErrorMessageBox("Error downloading quran page:" + ex.ToString());
+                    telemetry.TrackException(ex, new Dictionary<string, string> { { "Scenario", "ErrorDownloadingPageImageFromUri" } });
+                    localFile = null;
+                }
+
+
+                try
+                {
+                    if (localFile != null)
+                    {
+                        await LoadImageFromLocalPath(localFile);
+                    }
+                    else
+                    {
+                        await LoadImageFromUrl(source);
                     }
                 }
                 catch (Exception ex)
                 {
                     await QuranApp.NativeProvider.ShowErrorMessageBox("Error loading quran page.");
                     telemetry.TrackException(ex, new Dictionary<string, string> { { "Scenario", "ErrorLoadingPageImageFromFile" } });
-                    await FileUtils.SafeFileDelete(localPath);
+                    await FileUtils.SafeFileDelete(localFile);
                 }
                 finally
                 {
@@ -226,7 +233,7 @@ namespace Quran.Windows.UI
             }
         }
 
-        private async Task loadImageFromLocalPath(StorageFile imageFile)
+        private async Task LoadImageFromLocalPath(StorageFile imageFile)
         {
             using (var imageFileStream = await imageFile.OpenReadAsync())
             {
@@ -246,6 +253,16 @@ namespace Quran.Windows.UI
                 imageSourceBitmap = bitmap;
                 progress.Visibility = Visibility.Collapsed;
             }
+        }
+
+        private async Task LoadImageFromUrl(Uri url)
+        {
+            var request = (HttpWebRequest)WebRequest.Create(url);
+            request.Method = "GET";
+            var response = await request.GetResponseAsync();
+            var bitmap = new WriteableBitmap(1, 1); // avoid creating intermediate BitmapImage
+            await bitmap.SetSourceAsync(response.GetResponseStream().AsRandomAccessStream());
+            imageSourceBitmap = bitmap;
         }
 
         private async Task InvertColors(WriteableBitmap bitmap)

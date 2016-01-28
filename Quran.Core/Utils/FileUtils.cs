@@ -442,36 +442,12 @@ namespace Quran.Core.Utils
             return "page" + p.ToString("000", CultureInfo.InvariantCulture) + ".png";
         }
 
-        public static async Task<Uri> GetImageFromStorage(string filename)
+        public static Uri GetImageOnlineUri(string filename)
         {
-            string location = GetBaseDirectory();
-            var quranFolder = await StorageFolder.GetFolderFromPathAsync(location);
-            var image = await quranFolder.TryGetItemAsync(filename);
-            if (image == null)
-            {
-                return null;
-            }
-            else
-            {
-                return new Uri(image.Path);
-            }
-        }
-
-        public static async Task<Uri> GetImageFromWeb(string filename)
-        {
-            var localUri = await GetImageFromStorage(filename);
-            if (localUri != null)
-            {
-                return localUri;
-            }
-            else
-            {
-                if (ScreenInfo == null) return null;
-
-                string urlString = Path.Combine(IMG_HOST + "width" + ScreenInfo.GetWidthParam(),
-                                                filename);
-                return new Uri(urlString, UriKind.Absolute);                
-            }
+            if (ScreenInfo == null) return null;
+            string urlString = Path.Combine(IMG_HOST + "width" + ScreenInfo.GetWidthParam(),
+                                            filename);
+            return new Uri(urlString, UriKind.Absolute);
         }
 
 
