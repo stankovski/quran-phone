@@ -72,19 +72,39 @@ namespace Quran.WindowsPhone.Views
             var versionFromAssembly = nameHelper.Version;
             if (versionFromAssembly > versionFromConfig)
             {
-                var message =
-                    @"Assalamu Aleikum,
+                string message = null;
+                if (Environment.OSVersion.Version.Major == 10)
+                {
+                    message = @"Assalamu Aleikum, 
+
+Would you like to check out a new version of the app optimized for Windows 10 Mobile and PC? 
+If no, you can do it later by searching the app store for ""Quran Windows"". InshaAllah you will like it.
+                        
+Jazzakum Allahu Kheiran, 
+Quran Windows Team";
+                    var result = MessageBox.Show(message, "New version of the app for Windows 10", MessageBoxButton.OKCancel);
+                    SettingsUtils.Set(Constants.PREF_CURRENT_VERSION, versionFromAssembly.ToString());
+                    if (result == MessageBoxResult.OK)
+                    {
+                        QuranApp.NativeProvider.LaunchWebBrowser("https://www.microsoft.com/en-us/store/apps/quran-windows/9nblggh5kqhl");
+                    }
+                }
+                else
+                {
+                    message =
+                        @"Assalamu Aleikum,
 
 Thank you for downloading Quran Phone. Please note that this is a BETA release and is still work in progress. 
-New in Version 0.4.5:
+New in Version 0.4.6:
 * Bug fixes
 
 If you find any issues with the app or would like to provide suggestions, please use Contact Us option available via the menu. 
 
 Jazzakum Allahu Kheiran,
 Quran Phone Team";
-                MessageBox.Show(message, "Welcome", MessageBoxButton.OK);
-                SettingsUtils.Set(Constants.PREF_CURRENT_VERSION, versionFromAssembly.ToString());
+                    SettingsUtils.Set(Constants.PREF_CURRENT_VERSION, versionFromAssembly.ToString());
+                    MessageBox.Show(message, "Welcome", MessageBoxButton.OK);
+                }                
             }
         }
 
