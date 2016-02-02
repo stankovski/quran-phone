@@ -89,7 +89,14 @@ namespace Quran.Windows.Views
                     ViewModel.Pages.Clear();
                 }
                 ViewModel.TranslationFile = translation.Split('|')[0];
-                ViewModel.ShowTranslation = SettingsUtils.Get<bool>(Constants.PREF_SHOW_TRANSLATION);
+                if (await ViewModel.HasTranslationFile())
+                {
+                    ViewModel.ShowTranslation = SettingsUtils.Get<bool>(Constants.PREF_SHOW_TRANSLATION);
+                }
+                else
+                {
+                    ViewModel.ShowTranslation = false;
+                }
                 ViewModel.ShowArabicInTranslation = SettingsUtils.Get<bool>(Constants.PREF_SHOW_ARABIC_IN_TRANSLATION);
             }
             else
@@ -147,8 +154,11 @@ namespace Quran.Windows.Views
                 if (currentPage != null)
                 {
                     ViewModel.SelectedAyah = ayah;
-                    ViewModel.ShowTranslation = !ViewModel.ShowTranslation;
-                    SettingsUtils.Set(Constants.PREF_SHOW_TRANSLATION, ViewModel.ShowTranslation);
+                    if (await ViewModel.HasTranslationFile())
+                    {
+                        ViewModel.ShowTranslation = !ViewModel.ShowTranslation;
+                        SettingsUtils.Set(Constants.PREF_SHOW_TRANSLATION, ViewModel.ShowTranslation);
+                    }
                 }
             }
         }
@@ -167,8 +177,12 @@ namespace Quran.Windows.Views
                 {
                     ViewModel.SelectedAyah = new QuranAyah(selectedVerse.Surah, selectedVerse.Ayah);
                 }
-                ViewModel.ShowTranslation = !ViewModel.ShowTranslation;
-                SettingsUtils.Set(Constants.PREF_SHOW_TRANSLATION, ViewModel.ShowTranslation);
+
+                if (await ViewModel.HasTranslationFile())
+                {
+                    ViewModel.ShowTranslation = !ViewModel.ShowTranslation;
+                    SettingsUtils.Set(Constants.PREF_SHOW_TRANSLATION, ViewModel.ShowTranslation);
+                }
             }
         }
 
@@ -422,10 +436,10 @@ namespace Quran.Windows.Views
             }
         }
 
-        private void TranslationClick()
+        private async void TranslationClick()
         {
             int pageNumber = ViewModel.CurrentPageNumber;
-            if (!string.IsNullOrEmpty(ViewModel.TranslationFile))
+            if (await ViewModel.HasTranslationFile())
             {
                 ViewModel.ShowTranslation = !ViewModel.ShowTranslation;
                 SettingsUtils.Set(Constants.PREF_SHOW_TRANSLATION, ViewModel.ShowTranslation);

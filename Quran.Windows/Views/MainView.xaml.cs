@@ -94,8 +94,7 @@ namespace Quran.Windows.Views
                     @"Assalamu Aleikum,
 
 Thank you for downloading Quran Windows. Please note that this is a BETA release and is still work in progress (especially audio support). 
-New in Version 1.2.0:
-* Added offline audio support
+New in Version 1.2.1:
 * Misc. bug fixes
 
 If you find any issues with the app or would like to provide suggestions, please use Contact Us option available via the menu. 

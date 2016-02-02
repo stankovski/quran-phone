@@ -199,7 +199,8 @@ namespace Quran.Core.Utils
 
             try
             {
-                return (await baseFolder.TryGetItemAsync(fileName)) != null;
+                var storageItem = await baseFolder.TryGetItemAsync(fileName);
+                return storageItem != null && storageItem.IsOfType(StorageItemTypes.File);
             }
             catch (Exception)
             {
@@ -507,12 +508,7 @@ namespace Quran.Core.Utils
         
         public static string GetQuranDatabaseDirectory()
         {
-            return GetSubdirectory(DATABASE_DIRECTORY);
-        }
-
-        public static string GetDowloadTrackerDirectory()
-        {
-            return GetSubdirectory(DOWNLOADS_DIRECTORY);
+            return DatabaseFolder.Path;
         }
 
         public static string GetUndeletedFilesDirectory()
@@ -573,31 +569,16 @@ namespace Quran.Core.Utils
         
         public static async Task<bool> HaveAyaPositionFile()
         {
-            string baseDir = GetQuranDatabaseDirectory();
             string ayaPositionDb = GetAyaPositionFileName();
             
-            return await FileExists(Path.Combine(baseDir, ayaPositionDb));
+            return await FileExists(DatabaseFolder, ayaPositionDb);
         }
 
         public static async Task<bool> HaveArabicSearchFile()
         {
-            string baseDir = GetQuranDatabaseDirectory();
             string arabicSearchDb = QURAN_ARABIC_DATABASE;
 
-            return await FileExists(Path.Combine(baseDir, arabicSearchDb));
-        }
-
-        public static async Task<bool> HasTranslation(string fileName)
-        {
-            string baseDir = GetQuranDatabaseDirectory();
-
-            return await FileExists(Path.Combine(baseDir, fileName));
-        }
-
-        public static async Task RemoveTranslation(string fileName)
-        {
-            string baseDir = GetQuranDatabaseDirectory();
-            await SafeFileDelete(Path.Combine(baseDir, fileName));
+            return await FileExists(DatabaseFolder, arabicSearchDb);
         }
 
         public static string GetArabicSearchUrl()

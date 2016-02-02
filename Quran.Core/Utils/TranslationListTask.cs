@@ -110,8 +110,7 @@ namespace Quran.Core.Utils
                         item.Name = item.Name.Substring(0, firstParen - 1);
                     }
 
-                    string databaseDir = FileUtils.GetQuranDatabaseDirectory();
-                    item.Exists = await FileUtils.FileExists(Path.Combine(databaseDir, item.Filename));
+                    item.Exists = await FileUtils.FileExists(FileUtils.DatabaseFolder, item.Filename);
 
                     items.Add(item);
                 }

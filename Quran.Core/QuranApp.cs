@@ -43,8 +43,8 @@ namespace Quran.Core
                 return ayahInfoDatabaseHandler;
             }
 
-            if (await FileUtils.FileExists(Path.Combine(FileUtils.GetQuranDatabaseDirectory(), 
-                FileUtils.GetAyaPositionFileName())))
+            if (await FileUtils.FileExists(FileUtils.DatabaseFolder, 
+                FileUtils.GetAyaPositionFileName()))
             {
                 ayahInfoDatabaseHandler = new AyahInfoDatabaseHandler(FileUtils.GetAyaPositionFileName());
             }
