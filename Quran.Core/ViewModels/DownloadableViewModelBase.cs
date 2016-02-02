@@ -366,8 +366,16 @@ namespace Quran.Core.ViewModels
                     IsIndeterminate = true;
                     InstallationStep = Resources.extracting_message;
 
-                    await QuranApp.NativeProvider.ExtractZip(destinationFile, parentFolder.Path);
-                    await FileUtils.SafeFileDelete(destinationFile);
+                    try
+                    {
+                        await QuranApp.NativeProvider.ExtractZip(destinationFile, parentFolder);
+                    }
+                    finally
+                    {
+                        await FileUtils.SafeFileDelete(destinationFile);
+                        IsDownloading = false;
+                        IsIndeterminate = false;
+                    }
                 }
             }
         }

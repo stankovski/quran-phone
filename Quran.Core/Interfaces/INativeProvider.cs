@@ -12,7 +12,7 @@ namespace Quran.Core.Interfaces
         double ScaleFactor { get; }
         ISettingsProvider SettingsProvider { get; }
         IAudioProvider AudioProvider { get; }
-        Task ExtractZip(StorageFile source, string baseFolder);
+        Task ExtractZip(StorageFile source, StorageFolder baseFolder);
         void CopyToClipboard(string text);
         Task ComposeEmail(string to, string subject, string body = null);
         Task LaunchWebBrowser(string url);

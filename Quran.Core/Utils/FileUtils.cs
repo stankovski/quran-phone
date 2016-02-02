@@ -30,6 +30,8 @@ namespace Quran.Core.Utils
         private static bool initialized = false;
 
         public static StorageFolder BaseFolder { get; private set; }
+
+        public static StorageFolder ImageFolder { get; private set; }
         
         public static StorageFolder DatabaseFolder { get; private set; }
 
@@ -307,19 +309,27 @@ namespace Quran.Core.Utils
                     quranBaseFolder = await BaseFolder.CreateFolderAsync(QURAN_BASE);
                 }
                 BaseFolder = quranBaseFolder as StorageFolder;
-                var imageFolderName = "width" + qsi.GetWidthParam();
-
-                quranBaseFolder = await BaseFolder.TryGetItemAsync(imageFolderName);
-                if (quranBaseFolder == null)
-                {
-                    quranBaseFolder = await BaseFolder.CreateFolderAsync(imageFolderName);
-                }
-                BaseFolder = quranBaseFolder as StorageFolder;
             }
 
             if (BaseFolder == null)
             {
                 throw new InvalidOperationException("Unable to create a base folder.");
+            }
+
+            if (ImageFolder == null)
+            {
+                var imageFolderName = "width" + qsi.GetWidthParam();
+                var quranBaseFolder = await BaseFolder.TryGetItemAsync(imageFolderName);
+                if (quranBaseFolder == null)
+                {
+                    quranBaseFolder = await BaseFolder.CreateFolderAsync(imageFolderName);
+                }
+                ImageFolder = quranBaseFolder as StorageFolder;
+            }
+
+            if (ImageFolder == null)
+            {
+                throw new InvalidOperationException("Unable to create a base image folder.");
             }
         }
 
@@ -329,17 +339,17 @@ namespace Quran.Core.Utils
         /// <returns></returns>
         public static async Task MakeQuranDatabaseDirectory()
         {
-            if (BaseFolder == null)
+            if (ImageFolder == null)
             {
                 throw new ArgumentNullException("BaseFolder");
             }
 
             if (DatabaseFolder == null)
             {
-                var databaseFolder = await BaseFolder.TryGetItemAsync(DATABASE_DIRECTORY);
+                var databaseFolder = await ImageFolder.TryGetItemAsync(DATABASE_DIRECTORY);
                 if (databaseFolder == null)
                 {
-                    databaseFolder = await BaseFolder.CreateFolderAsync(DATABASE_DIRECTORY);
+                    databaseFolder = await ImageFolder.CreateFolderAsync(DATABASE_DIRECTORY);
                 }
                 DatabaseFolder = databaseFolder as StorageFolder;
             }
@@ -401,28 +411,12 @@ namespace Quran.Core.Utils
             }
         }
 
-        public static async Task WriteNoMediaFile()
-        {
-            await WriteFile(Path.Combine(GetBaseDirectory(), "/.nomedia"), " ");
-        }
-
-        public static async Task<bool> MediaFileExists()
-        {
-            return await FileExists(Path.Combine(GetBaseDirectory(), "/.nomedia"));
-        }
-
-        public static async Task DeleteNoMediaFile()
-        {
-            await SafeFileDelete(Path.Combine(GetBaseDirectory(), "/.nomedia"));
-        }
-
         public static async Task<bool> HaveAllImages()
         {
-            var quranFolderPath = GetBaseDirectory();
-            var quranFolder = await StorageFolder.GetFolderFromPathAsync(quranFolderPath);
-            var imageFiles = quranFolder.CreateFileQuery();
+            var imageFiles = ImageFolder.CreateFileQuery();
             // Should have at least 95% of pages; of more than that it's not efficient to download the ZIP
-            if (await imageFiles.GetItemCountAsync() >= 600)
+            var pageCount = await imageFiles.GetItemCountAsync(); 
+            if (pageCount >= 600)
             {
                 // ideally, we should loop for each page and ensure
                 // all pages are there, but this will do for now.
@@ -524,17 +518,6 @@ namespace Quran.Core.Utils
         public static string GetUndeletedFilesDirectory()
         {
             return GetSubdirectory(UNDELETED_FILES_DIRECTORY);
-        }
-
-        public static string GetBaseDirectory()
-        {
-            if (ScreenInfo == null)
-            {
-                return null;
-            }
-
-            var imageFolder = Path.Combine(QURAN_BASE, "width" + ScreenInfo.GetWidthParam());
-            return GetSubdirectory(imageFolder);
         }
 
         public static string GetQuranBaseDirectory()

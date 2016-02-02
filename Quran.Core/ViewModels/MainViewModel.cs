@@ -136,7 +136,7 @@ namespace Quran.Core.ViewModels
                     await ActiveDownload.FinishDownload(await FileUtils.GetFile(FileUtils.BaseFolder, _zipFileName));
                 }
 
-                if (!await FileUtils.HaveAllImages() && !this.HasAskedToDownload)
+                if (!this.HasAskedToDownload)
                 {
                     this.HasAskedToDownload = true;
                     var askingToDownloadResult = await QuranApp.NativeProvider.ShowQuestionMessageBox(Resources.downloadPrompt,

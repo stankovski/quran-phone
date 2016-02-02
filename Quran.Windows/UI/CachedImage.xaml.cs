@@ -179,21 +179,21 @@ namespace Quran.Windows.UI
 
                 string fileName = System.IO.Path.GetFileName(source.AbsoluteUri);
                 string tempFileName = $"{fileName}{DownloadableViewModelBase.DownloadExtension}";
-                StorageFile localFile = await FileUtils.GetFile(FileUtils.BaseFolder, fileName);
+                StorageFile localFile = await FileUtils.GetFile(FileUtils.ImageFolder, fileName);
 
                 try
                 {
                     if (localFile == null)
                     {
-                        StorageFile localTempFile = await FileUtils.GetFile(FileUtils.BaseFolder, tempFileName);
-                        if (!await FileUtils.FileExists(FileUtils.BaseFolder, tempFileName))
+                        StorageFile localTempFile = await FileUtils.GetFile(FileUtils.ImageFolder, tempFileName);
+                        if (!await FileUtils.FileExists(FileUtils.ImageFolder, tempFileName))
                         {
                             // Download file and copy
-                            localTempFile = await FileUtils.BaseFolder.CreateFileAsync(tempFileName, CreationCollisionOption.ReplaceExisting);
+                            localTempFile = await FileUtils.ImageFolder.CreateFileAsync(tempFileName, CreationCollisionOption.ReplaceExisting);
                             if (await FileUtils.DownloadFileFromWebAsync(source.AbsoluteUri, localTempFile.Path))
                             {
-                                await FileUtils.MoveFile(localTempFile, FileUtils.BaseFolder, fileName);
-                                localFile = await FileUtils.GetFile(FileUtils.BaseFolder, fileName);
+                                await FileUtils.MoveFile(localTempFile, FileUtils.ImageFolder, fileName);
+                                localFile = await FileUtils.GetFile(FileUtils.ImageFolder, fileName);
                             }
                         }
                     }

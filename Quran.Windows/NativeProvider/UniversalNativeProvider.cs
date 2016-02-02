@@ -15,12 +15,14 @@ using Windows.Graphics.Display;
 using Windows.Storage.Streams;
 using System.IO;
 using Quran.Core.Utils;
+using Microsoft.ApplicationInsights;
 
 namespace Quran.Windows.NativeProvider
 {
     public class UniversalNativeProvider : INativeProvider
     {
         DisplayRequest _keepScreenOnRequest = null;
+        private static TelemetryClient telemetry = new TelemetryClient();
 
         public double ActualWidth
         {
@@ -68,14 +70,14 @@ namespace Quran.Windows.NativeProvider
             }
         }
 
-        public async Task ExtractZip(StorageFile source, string baseFolder)
+		public async Task ExtractZip(StorageFile source, StorageFolder baseFolder)
         {
             using (var fileStream = await source.OpenStreamForReadAsync())
             {
                 ZipArchive archive = new ZipArchive(fileStream);
                 foreach (ZipArchiveEntry file in archive.Entries)
                 {
-                    string completeFileName = Path.Combine(baseFolder, file.FullName);
+                    string completeFileName = Path.Combine(baseFolder.Path, file.FullName);
 
                     if (file.Name == "")
                     {
@@ -88,6 +90,19 @@ namespace Quran.Windows.NativeProvider
                 }
             }
         }
+
+        public async Task ExtractZip2(StorageFile source, StorageFolder baseFolder)
+        {
+            try
+            {
+                await CompressionUtils.UnZipFileAync(source, baseFolder);
+            }
+            catch (Exception ex)
+            {
+                telemetry.TrackException(ex, new Dictionary<string, string> { { "Scenario", "ExtractingArchive" } });
+            }
+        }
+
 
         public void CopyToClipboard(string text)
         {

@@ -67,26 +67,9 @@ namespace Quran.Core.Tests
             }
         }
 
-        public async Task ExtractZip(StorageFile source, string baseFolder)
+        public Task ExtractZip(StorageFile source, StorageFolder baseFolder)
         {
-            //ZipFile.ExtractToDirectory(source, baseFolder);
-            using (var fileStream = await source.OpenStreamForReadAsync())
-            {
-                ZipArchive archive = new ZipArchive(fileStream);
-                foreach (ZipArchiveEntry file in archive.Entries)
-                {
-                    string completeFileName = Path.Combine(baseFolder, file.FullName);
-
-                    if (file.Name == "")
-                    {
-                        // Assuming Empty for Directory
-                        Directory.CreateDirectory(Path.GetDirectoryName(completeFileName));
-                        continue;
-                    }
-
-                    file.ExtractToFile(completeFileName, true);
-                }
-            }
+            return Task.FromResult(0);
         }
 
         public void CopyToClipboard(string text)
