@@ -65,10 +65,11 @@ namespace Quran.Core.ViewModels
         #region Public methods
         public override async Task Initialize()
         {
-            if (_downloadedGroup.Translations.Count == 0 && _availableGroup.Translations.Count == 0)
-            {
-                await Refresh();
-            }
+            //if (_downloadedGroup.Translations.Count == 0 && _availableGroup.Translations.Count == 0)
+            //{
+            //    await Refresh();
+            //}
+            await Refresh();
         }
 
         public override async Task Refresh()

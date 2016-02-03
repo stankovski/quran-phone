@@ -277,6 +277,10 @@ namespace Quran.Core.ViewModels
                     }
                 }
             }
+            if (DownloadComplete != null)
+            {
+                DownloadComplete(this, null);
+            }
             Reset();
             return true;
         }
@@ -318,28 +322,28 @@ namespace Quran.Core.ViewModels
             return download;
         }
 
-        public async Task FinishActiveDownloads()
+        private async Task FinishActiveDownloads()
         {
-            foreach (var key in _activeDownloads.Keys)
+            foreach (var downloadUrl in _activeDownloads.Keys)
             {
-                await FinishDownload(key);
-            }
-        }
-
-        public async Task FinishDownload(string downloadUrl)
-        {
-            DownloadOperation download;
-            if (_activeDownloads.TryRemove(downloadUrl, out download))
-            {
-                if (download.Progress.Status == BackgroundTransferStatus.Completed)
+                DownloadOperation download;
+                if (_activeDownloads.TryRemove(downloadUrl, out download))
                 {
-                    await FinishDownload(download.ResultFile as StorageFile);
-                }
-                else
-                {
-                    await FileUtils.SafeFileDelete(download.ResultFile.Path);
+                    if (download.Progress.Status == BackgroundTransferStatus.Completed)
+                    {
+                        await FinishDownload(download.ResultFile as StorageFile);
+                    }
+                    else
+                    {
+                        await FileUtils.SafeFileDelete(download.ResultFile.Path);
+                    }
                 }
             }
+            if (DownloadComplete != null)
+            {
+                DownloadComplete(this, null);
+            }
+            Reset();
         }
 
         public async Task FinishDownload(StorageFile destinationFile)
@@ -373,8 +377,6 @@ namespace Quran.Core.ViewModels
                     finally
                     {
                         await FileUtils.SafeFileDelete(destinationFile);
-                        IsDownloading = false;
-                        IsIndeterminate = false;
                     }
                 }
             }

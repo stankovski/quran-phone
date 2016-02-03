@@ -134,6 +134,11 @@ namespace Quran.Core.ViewModels
                 if (await FileUtils.FileExists(FileUtils.BaseFolder, _zipFileName))
                 {
                     await ActiveDownload.FinishDownload(await FileUtils.GetFile(FileUtils.BaseFolder, _zipFileName));
+                    ActiveDownload.Reset();
+                    if (await FileUtils.HaveAllImages())
+                    {
+                        return;
+                    }
                 }
 
                 if (!this.HasAskedToDownload)
