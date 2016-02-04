@@ -9,6 +9,8 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.Graphics.Display;
+using Windows.Foundation.Metadata;
+using Windows.Phone.UI.Input;
 
 namespace Quran.Windows.Views
 {
