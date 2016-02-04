@@ -6,6 +6,7 @@
 using System.Threading.Tasks;
 using Quran.Core.Data;
 using Quran.Core.Utils;
+using Windows.UI.Xaml;
 
 namespace Quran.Core.ViewModels
 {
@@ -111,6 +112,21 @@ namespace Quran.Core.ViewModels
                 isHeader = value;
 
                 base.OnPropertyChanged(() => IsHeader);
+            }
+        }
+
+        private FlowDirection flowDirection;
+        public FlowDirection FlowDirection
+        {
+            get { return flowDirection; }
+            set
+            {
+                if (value == flowDirection)
+                    return;
+
+                flowDirection = value;
+
+                base.OnPropertyChanged(() => FlowDirection);
             }
         }
         #endregion Properties

@@ -33,7 +33,7 @@
             <TextBlock TextWrapping="Wrap" Text="{Binding ArabicText}" Style="{StaticResource ArabicText}" 
                        FontSize="{Binding ArabicFontSize}"
                        Visibility="{Binding ContainsArabicText, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-            <TextBlock TextWrapping="Wrap" Text="{Binding Text}" FontSize="{Binding FontSize}"/>
+            <TextBlock TextWrapping="Wrap" Text="{Binding Text}" FontSize="{Binding FontSize}" FlowDirection="{Binding FlowDirection}"/>
         </StackPanel>
     </Grid>
 </UserControl>
