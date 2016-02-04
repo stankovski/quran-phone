@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using Quran.Core.Common;
 using Quran.Core.Data;
+using Quran.Core.Properties;
 using Quran.Core.Utils;
 using Windows.UI.Xaml.Controls;
 
@@ -12,6 +13,9 @@ namespace Quran.Windows.UI
     {
         public QuranAyah Ayah { get; set; }
         public int? Page { get; set; }
+
+        LocalizedResources _resources = new LocalizedResources();
+        public LocalizedResources LocalizedResources { get { return _resources; } }
 
         public JumpContentDialog()
         {

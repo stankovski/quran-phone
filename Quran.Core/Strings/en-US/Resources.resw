@@ -774,4 +774,10 @@ the data used in the translations and Arabic comes from
   <data name="streaming_audio" xml:space="preserve">
     <value>Online audio streaming</value>
   </data>
+  <data name="navigate" xml:space="preserve">
+    <value>Navigate</value>
+  </data>
+  <data name="page_number" xml:space="preserve">
+    <value>Page number</value>
+  </data>
 </root>

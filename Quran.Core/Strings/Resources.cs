@@ -467,5 +467,474 @@ namespace Quran.Core.Properties
         {
             get { return resourceLoader.GetString("streaming_audio"); }
         }
+
+        public static string navigate 
+        {
+            get { return resourceLoader.GetString("navigate"); }
+        }
+
+        public static string page_number 
+        {
+            get { return resourceLoader.GetString("page_number"); }
+        }
+    }
+
+	public class LocalizedResources
+    {
+
+        public string juz2_description
+        {
+            get { return Resources.juz2_description; }
+        }
+
+        public string madani
+        {
+            get { return Resources.madani; }
+        }
+
+        public string makki
+        {
+            get { return Resources.makki; }
+        }
+
+        public string page_description
+        {
+            get { return Resources.page_description; }
+        }
+
+        public string quran_ayah
+        {
+            get { return Resources.quran_ayah; }
+        }
+
+        public string quran_juz2
+        {
+            get { return Resources.quran_juz2; }
+        }
+
+        public string quran_sura
+        {
+            get { return Resources.quran_sura; }
+        }
+
+        public string quran_sura_title
+        {
+            get { return Resources.quran_sura_title; }
+        }
+
+        public string ResourceFlowDirection
+        {
+            get { return Resources.ResourceFlowDirection; }
+        }
+
+        public string ResourceLanguage
+        {
+            get { return Resources.ResourceLanguage; }
+        }
+
+        public string sura_ayah_notification_str
+        {
+            get { return Resources.sura_ayah_notification_str; }
+        }
+
+        public string sura_names
+        {
+            get { return Resources.sura_names; }
+        }
+
+        public string app_name
+        {
+            get { return Resources.app_name; }
+        }
+
+        public string verse
+        {
+            get { return Resources.verse; }
+        }
+
+        public string verses
+        {
+            get { return Resources.verses; }
+        }
+
+        public string quarters
+        {
+            get { return Resources.quarters; }
+        }
+
+        public string translations
+        {
+            get { return Resources.translations; }
+        }
+
+        public string available_translations
+        {
+            get { return Resources.available_translations; }
+        }
+
+        public string downloaded_translations
+        {
+            get { return Resources.downloaded_translations; }
+        }
+
+        public string settings
+        {
+            get { return Resources.settings; }
+        }
+
+        public string loading_message
+        {
+            get { return Resources.loading_message; }
+        }
+
+        public string downloadPrompt
+        {
+            get { return Resources.downloadPrompt; }
+        }
+
+        public string downloadPrompt_title
+        {
+            get { return Resources.downloadPrompt_title; }
+        }
+
+        public string extracting_message
+        {
+            get { return Resources.extracting_message; }
+        }
+
+        public string quran_page
+        {
+            get { return Resources.quran_page; }
+        }
+
+        public string bookmarks
+        {
+            get { return Resources.bookmarks; }
+        }
+
+        public string bookmarks_ayah
+        {
+            get { return Resources.bookmarks_ayah; }
+        }
+
+        public string bookmarks_current_page
+        {
+            get { return Resources.bookmarks_current_page; }
+        }
+
+        public string bookmarks_page
+        {
+            get { return Resources.bookmarks_page; }
+        }
+
+        public string tags
+        {
+            get { return Resources.tags; }
+        }
+
+        public string delete_bookmark
+        {
+            get { return Resources.delete_bookmark; }
+        }
+
+        public string text_size
+        {
+            get { return Resources.text_size; }
+        }
+
+        public string about_us
+        {
+            get { return Resources.about_us; }
+        }
+
+        public string about_us_text
+        {
+            get { return Resources.about_us_text; }
+        }
+
+        public string prefs_ayah_before_translation_summary
+        {
+            get { return Resources.prefs_ayah_before_translation_summary; }
+        }
+
+        public string no_network_to_load
+        {
+            get { return Resources.no_network_to_load; }
+        }
+
+        public string download_cancel_confirmation
+        {
+            get { return Resources.download_cancel_confirmation; }
+        }
+
+        public string disable_sleep
+        {
+            get { return Resources.disable_sleep; }
+        }
+
+        public string please_restart
+        {
+            get { return Resources.please_restart; }
+        }
+
+        public string search
+        {
+            get { return Resources.search; }
+        }
+
+        public string search_results
+        {
+            get { return Resources.search_results; }
+        }
+
+        public string no_translation_to_search
+        {
+            get { return Resources.no_translation_to_search; }
+        }
+
+        public string keep_info_overlay
+        {
+            get { return Resources.keep_info_overlay; }
+        }
+
+        public string bookmark_ayah
+        {
+            get { return Resources.bookmark_ayah; }
+        }
+
+        public string quran_rub3
+        {
+            get { return Resources.quran_rub3; }
+        }
+
+        public string generate
+        {
+            get { return Resources.generate; }
+        }
+
+        public string generate_bookmarks_for_dua
+        {
+            get { return Resources.generate_bookmarks_for_dua; }
+        }
+
+        public string dua
+        {
+            get { return Resources.dua; }
+        }
+
+        public string night_mode
+        {
+            get { return Resources.night_mode; }
+        }
+
+        public string loading
+        {
+            get { return Resources.loading; }
+        }
+
+        public string change_language
+        {
+            get { return Resources.change_language; }
+        }
+
+        public string waiting
+        {
+            get { return Resources.waiting; }
+        }
+
+        public string waiting_for_power
+        {
+            get { return Resources.waiting_for_power; }
+        }
+
+        public string waiting_for_wifi
+        {
+            get { return Resources.waiting_for_wifi; }
+        }
+
+        public string bookmark
+        {
+            get { return Resources.bookmark; }
+        }
+
+        public string translation
+        {
+            get { return Resources.translation; }
+        }
+
+        public string contact_us
+        {
+            get { return Resources.contact_us; }
+        }
+
+        public string keep_orientation
+        {
+            get { return Resources.keep_orientation; }
+        }
+
+        public string auto_orientation
+        {
+            get { return Resources.auto_orientation; }
+        }
+
+        public string copy
+        {
+            get { return Resources.copy; }
+        }
+
+        public string reciters
+        {
+            get { return Resources.reciters; }
+        }
+
+        public string recite
+        {
+            get { return Resources.recite; }
+        }
+
+        public string loading_audio
+        {
+            get { return Resources.loading_audio; }
+        }
+
+        public string loading_data
+        {
+            get { return Resources.loading_data; }
+        }
+
+        public string loading_images
+        {
+            get { return Resources.loading_images; }
+        }
+
+        public string available_reciters
+        {
+            get { return Resources.available_reciters; }
+        }
+
+        public string downloaded_reciters
+        {
+            get { return Resources.downloaded_reciters; }
+        }
+
+        public string audio_download_blocks
+        {
+            get { return Resources.audio_download_blocks; }
+        }
+
+        public string audio
+        {
+            get { return Resources.audio; }
+        }
+
+        public string recite_ayah
+        {
+            get { return Resources.recite_ayah; }
+        }
+
+        public string pin_to_start
+        {
+            get { return Resources.pin_to_start; }
+        }
+
+        public string alternate_download_method
+        {
+            get { return Resources.alternate_download_method; }
+        }
+
+        public string none
+        {
+            get { return Resources.none; }
+        }
+
+        public string unlimited
+        {
+            get { return Resources.unlimited; }
+        }
+
+        public string number_of_ayah_to_repeat
+        {
+            get { return Resources.number_of_ayah_to_repeat; }
+        }
+
+        public string repeat_ayah
+        {
+            get { return Resources.repeat_ayah; }
+        }
+
+        public string times_to_repeat
+        {
+            get { return Resources.times_to_repeat; }
+        }
+
+        public string share_ayah
+        {
+            get { return Resources.share_ayah; }
+        }
+
+        public string home
+        {
+            get { return Resources.home; }
+        }
+
+        public string cancel
+        {
+            get { return Resources.cancel; }
+        }
+
+        public string select
+        {
+            get { return Resources.select; }
+        }
+
+        public string next
+        {
+            get { return Resources.next; }
+        }
+
+        public string pause
+        {
+            get { return Resources.pause; }
+        }
+
+        public string previous
+        {
+            get { return Resources.previous; }
+        }
+
+        public string go_to
+        {
+            get { return Resources.go_to; }
+        }
+
+        public string offline_audio
+        {
+            get { return Resources.offline_audio; }
+        }
+
+        public string quran_bookmarks
+        {
+            get { return Resources.quran_bookmarks; }
+        }
+
+        public string downloaded_audio
+        {
+            get { return Resources.downloaded_audio; }
+        }
+
+        public string streaming_audio
+        {
+            get { return Resources.streaming_audio; }
+        }
+
+        public string navigate
+        {
+            get { return Resources.navigate; }
+        }
+
+        public string page_number
+        {
+            get { return Resources.page_number; }
+        }
     }
 }

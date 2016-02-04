@@ -27,6 +27,9 @@ namespace Quran.Core.ViewModels
 
         public abstract Task Refresh();
 
+        LocalizedResources _resources = new LocalizedResources();
+        public LocalizedResources Strings { get { return _resources; } }
+
         private bool isLoading;
         public bool IsLoading
         {

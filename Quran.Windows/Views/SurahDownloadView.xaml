@@ -65,7 +65,7 @@
         </Grid.Resources>
 
         <!--ContentPanel - place additional content here-->
-        <TextBlock Grid.Row="0" Text="{Binding Path=LocalizedResources.quran_sura, Source={StaticResource LocalizedStrings}}" 
+        <TextBlock Grid.Row="0" Text="{x:Bind ViewModel.Strings.quran_sura}" 
                    Style="{StaticResource TitleTextBlockStyle}" Padding="10"/>
         <ListView x:Name="jmpReciter" Grid.Row="1"
                   SelectionMode="None"

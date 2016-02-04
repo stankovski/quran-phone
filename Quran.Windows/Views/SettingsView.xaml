@@ -29,7 +29,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Button Grid.Column="0" x:Name="HamburgerButton" Style="{StaticResource HamburgerButtonStyle}" Click="HamburgerButton_Click"/>
-            <TextBlock Grid.Column="1" Text="{Binding Path=LocalizedResources.settings, Source={StaticResource LocalizedStrings}}" Margin="10,0,0,0" FontWeight="SemiBold" FontSize="20" VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="1" Text="{x:Bind ViewModel.Strings.settings}" Margin="10,0,0,0" FontWeight="SemiBold" FontSize="20" VerticalAlignment="Center"/>
         </Grid>
         <SplitView Grid.Row="1" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" 
                    x:Name="MainSplitView" DisplayMode="Overlay" IsPaneOpen="False" OpenPaneLength="200">
@@ -56,37 +56,37 @@
                         <PivotItem.Header>
                             <StackPanel>
                                 <SymbolIcon Symbol="Setting"/>
-                                <TextBlock Text="{Binding Path=LocalizedResources.settings, Source={StaticResource LocalizedStrings}}"
+                                <TextBlock Text="{x:Bind ViewModel.Strings.settings}"
                                                Style="{StaticResource BaseTextBlockStyle}" HorizontalAlignment="Center"/>
                             </StackPanel>
                         </PivotItem.Header>
                         <ScrollViewer Background="{StaticResource PivotPaneColor}">
                             <StackPanel Margin="12,17,0,28">
-                                <TextBlock Text="{Binding Path=LocalizedResources.reciters, Source={StaticResource LocalizedStrings}}"/>
+                                <TextBlock Text="{x:Bind ViewModel.Strings.reciters}"/>
                                 <Button Content="{x:Bind ViewModel.ActiveReciter}" Click="ShowReciters"/>
-                                <TextBlock Text="{Binding Path=LocalizedResources.translations, Source={StaticResource LocalizedStrings}}"/>
+                                <TextBlock Text="{x:Bind ViewModel.Strings.translations}"/>
                                 <Button Content="{x:Bind ViewModel.ActiveTranslation}" Click="ShowTranslations"/>
                                 <StackPanel Margin="0, 15, 0, 0" Orientation="Horizontal">
-                                    <TextBlock Text="{Binding Path=LocalizedResources.text_size, Source={StaticResource LocalizedStrings}}" Margin="0,0,5,0"/>
+                                    <TextBlock Text="{x:Bind ViewModel.Strings.text_size}" Margin="0,0,5,0"/>
                                     <TextBlock Text="{x:Bind ViewModel.TextSize, Mode=OneWay}"/>
                                 </StackPanel>
                                 <Slider Minimum="10" Maximum="30" Margin="0" SmallChange="1" Value="{x:Bind ViewModel.TextSize, Mode=TwoWay}"/>
-                                <TextBlock Text="{Binding Path=LocalizedResources.change_language, Source={StaticResource LocalizedStrings}}"/>
+                                <TextBlock Text="{x:Bind ViewModel.Strings.change_language}"/>
                                 <ComboBox ItemsSource="{x:Bind ViewModel.SupportedLanguages}" DisplayMemberPath="Value" 
                                           SelectedValue="{x:Bind ViewModel.SelectedLanguage, Mode=TwoWay}" SelectedValuePath="Key"/>
-                                <TextBlock Text="{Binding Path=LocalizedResources.prefs_ayah_before_translation_summary, Source={StaticResource LocalizedStrings}}"/>
+                                <TextBlock Text="{x:Bind ViewModel.Strings.prefs_ayah_before_translation_summary}"/>
                                 <ToggleSwitch IsOn="{x:Bind ViewModel.ShowArabicInTranslation, Mode=TwoWay}" 
                                               IsEnabled="{x:Bind ViewModel.EnableShowArabicInTranslation, Mode=OneWay}" />
-                                <TextBlock Text="{Binding Path=LocalizedResources.disable_sleep, Source={StaticResource LocalizedStrings}}"/>
+                                <TextBlock Text="{x:Bind ViewModel.Strings.disable_sleep}"/>
                                 <ToggleSwitch IsOn="{x:Bind ViewModel.PreventPhoneFromSleeping, Mode=TwoWay}"/>
-                                <TextBlock Text="{Binding Path=LocalizedResources.keep_info_overlay, Source={StaticResource LocalizedStrings}}"/>
+                                <TextBlock Text="{x:Bind ViewModel.Strings.keep_info_overlay}"/>
                                 <ToggleSwitch IsOn="{x:Bind ViewModel.KeepInfoOverlay, Mode=TwoWay}"/>
-                                <TextBlock Text="{Binding Path=LocalizedResources.night_mode, Source={StaticResource LocalizedStrings}}"/>
+                                <TextBlock Text="{x:Bind ViewModel.Strings.night_mode}"/>
                                 <ToggleSwitch IsOn="{x:Bind ViewModel.NightMode, Mode=TwoWay}"/>
-                                <TextBlock TextWrapping="Wrap" Text="{Binding Path=LocalizedResources.alternate_download_method, Source={StaticResource LocalizedStrings}}"/>
+                                <TextBlock TextWrapping="Wrap" Text="{x:Bind ViewModel.Strings.alternate_download_method}"/>
                                 <ToggleSwitch IsOn="{x:Bind ViewModel.AltDownloadMethod, Mode=TwoWay}"/>
-                                <TextBlock Text="{Binding Path=LocalizedResources.generate_bookmarks_for_dua, Source={StaticResource LocalizedStrings}}"/>
-                                <Button Content="{Binding Path=LocalizedResources.generate, Source={StaticResource LocalizedStrings}}" Click="{x:Bind ViewModel.GenerateDua}"></Button>
+                                <TextBlock Text="{x:Bind ViewModel.Strings.generate_bookmarks_for_dua}"/>
+                                <Button Content="{x:Bind ViewModel.Strings.generate}" Click="{x:Bind ViewModel.GenerateDua}"></Button>
                             </StackPanel>
                         </ScrollViewer>
                     </PivotItem>
@@ -94,7 +94,7 @@
                         <PivotItem.Header>
                             <StackPanel>
                                 <SymbolIcon Symbol="Help"/>
-                                <TextBlock Text="{Binding Path=LocalizedResources.about_us, Source={StaticResource LocalizedStrings}}"
+                                <TextBlock Text="{x:Bind ViewModel.Strings.about_us}"
                                                Style="{StaticResource BaseTextBlockStyle}" HorizontalAlignment="Center"/>
                             </StackPanel>
                         </PivotItem.Header>
@@ -105,7 +105,7 @@
                                         <Setter Property="Foreground" Value="White"/>
                                     </Style>
                                 </StackPanel.Resources>
-                                <Button Click="{x:Bind ViewModel.ContactUs}" Content="{Binding Path=LocalizedResources.contact_us, Source={StaticResource LocalizedStrings}}" />
+                                <Button Click="{x:Bind ViewModel.ContactUs}" Content="{x:Bind ViewModel.Strings.contact_us}" />
                                 <RichTextBlock>
                                     <Paragraph>Quran Phone is a free, open source Quran application for Windows Phone based on Quran Android project. 
                                     The images used are from the

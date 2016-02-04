@@ -90,7 +90,7 @@
                                       BorderBrush="#FF727272" BorderThickness="0,1,0,0">
                             <StackPanel Orientation="Horizontal" Margin="2,0,0,0">
                                 <SymbolIcon Symbol="Setting" Foreground="White"/>
-                                <TextBlock Text="{Binding Path=LocalizedResources.settings, Source={StaticResource LocalizedStrings}}" 
+                                <TextBlock Text="{x:Bind ViewModel.Strings.settings}" 
                                                 Margin="24,0,0,0" Foreground="White" VerticalAlignment="Center"/>
                             </StackPanel>
                         </ListViewItem>
@@ -150,12 +150,12 @@
     </Grid>
     <Page.BottomAppBar>
         <CommandBar IsOpen="False" ClosedDisplayMode="Minimal">
-            <!--<AppBarButton Icon="RepeatAll" Click="AudioSetRepeat" x:Name="AudioSetRepeatButton" Label="{Binding Path=LocalizedResources.repeat_ayah, Source={StaticResource LocalizedStrings}}"/>-->
-            <AppBarButton Icon="Cancel" Click="AudioStop" x:Name="AudioStopButton" Label="{Binding Path=LocalizedResources.cancel, Source={StaticResource LocalizedStrings}}"/>
-            <AppBarButton Icon="Previous" Click="AudioSkipBackward" x:Name="AudioSkipBackwardButton" Label="{Binding Path=LocalizedResources.previous, Source={StaticResource LocalizedStrings}}"/>
-            <AppBarButton Icon="Play" Click="AudioPlay" x:Name="AudioPlayButton" Label="{Binding Path=LocalizedResources.recite, Source={StaticResource LocalizedStrings}}"/>
-            <AppBarButton Icon="Pause" Click="AudioPause" x:Name="AudioPauseButton" Label="{Binding Path=LocalizedResources.pause, Source={StaticResource LocalizedStrings}}"/>
-            <AppBarButton Icon="Next" Click="AudioSkipForward" x:Name="AudioSkipForwardButton"  Label="{Binding Path=LocalizedResources.next, Source={StaticResource LocalizedStrings}}"/>
+            <!--<AppBarButton Icon="RepeatAll" Click="AudioSetRepeat" x:Name="AudioSetRepeatButton" Label="{x:Bind ViewModel.Strings.repeat_ayah}"/>-->
+            <AppBarButton Icon="Cancel" Click="AudioStop" x:Name="AudioStopButton" Label="{x:Bind ViewModel.Strings.cancel}"/>
+            <AppBarButton Icon="Previous" Click="AudioSkipBackward" x:Name="AudioSkipBackwardButton" Label="{x:Bind ViewModel.Strings.previous}"/>
+            <AppBarButton Icon="Play" Click="AudioPlay" x:Name="AudioPlayButton" Label="{x:Bind ViewModel.Strings.recite}"/>
+            <AppBarButton Icon="Pause" Click="AudioPause" x:Name="AudioPauseButton" Label="{x:Bind ViewModel.Strings.pause}"/>
+            <AppBarButton Icon="Next" Click="AudioSkipForward" x:Name="AudioSkipForwardButton"  Label="{x:Bind ViewModel.Strings.next}"/>
         </CommandBar>
     </Page.BottomAppBar>
 </Page>

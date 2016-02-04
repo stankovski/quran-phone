@@ -527,4 +527,10 @@ the data used in the translations and Arabic comes from
   <data name="streaming_audio" xml:space="preserve">
     <value>Аудио из интернета</value>
   </data>
+  <data name="navigate" xml:space="preserve">
+    <value>Перейти</value>
+  </data>
+  <data name="page_number" xml:space="preserve">
+    <value>Страница</value>
+  </data>
 </root>

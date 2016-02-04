@@ -6,23 +6,23 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Title="{Binding Path=LocalizedResources.go_to, Source={StaticResource LocalizedStrings}}"
-    PrimaryButtonText="Navigate"
-    SecondaryButtonText="Cancel"
+    Title="{x:Bind LocalizedResources.go_to}"
+    PrimaryButtonText="{x:Bind LocalizedResources.navigate}"
+    SecondaryButtonText="{x:Bind LocalizedResources.cancel}"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
     SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
 
     <Grid>
         <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            <TextBox Name="tbPageNumber" Header="Page number" InputScope="Digits"/>
+            <TextBox Name="tbPageNumber" Header="{x:Bind LocalizedResources.page_number}" InputScope="Digits"/>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <ComboBox Grid.Column="0" Name="cbSurahs" Header="Surah" Margin="0,0,20,0"  
+                <ComboBox Grid.Column="0" Name="cbSurahs" Header="{x:Bind LocalizedResources.quran_sura}" Margin="0,0,20,0"  
                           HorizontalAlignment="Stretch" SelectionChanged="SyrahSelectionChanged"/>
-                <ComboBox Grid.Column="1" Name="cbAyah" Header="Ayah" Width="100"/>
+                <ComboBox Grid.Column="1" Name="cbAyah" Header="{x:Bind LocalizedResources.quran_ayah}" Width="100"/>
             </Grid>
         </StackPanel>
     </Grid>

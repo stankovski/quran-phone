@@ -56,6 +56,22 @@ namespace Quran.Core.Properties
         }
 #>
     }
+
+	public class Localized<#= className #>
+    {
+<#
+        foreach (string name in GetResourceKeys(reswPath).Where(n => !n.Contains(".")))
+        {
+#>
+
+        public string <#= provider.CreateEscapedIdentifier(name) #>
+        {
+            get { return <#= className #>.<#= provider.CreateEscapedIdentifier(name) #>; }
+        }
+<#
+        }
+#>
+    }
 }
 <#
     }
