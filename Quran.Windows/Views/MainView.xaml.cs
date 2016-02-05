@@ -39,6 +39,7 @@ namespace Quran.Windows.Views
             SearchViewModel = QuranApp.SearchViewModel;
             InitializeComponent();
             SystemNavigationManager.GetForCurrentView().BackRequested += OnBackRequested;
+            Loaded += MainViewLoaded;
         }
 
         // Load data for the ViewModel Items
@@ -46,11 +47,8 @@ namespace Quran.Windows.Views
         {
             await ViewModel.Initialize();
             await SearchViewModel.Initialize();
-            SurahViewSource.Source = ViewModel.GetGrouppedSurahItems();
-            JuzViewSource.Source = ViewModel.GetGrouppedJuzItems();
-            BookmarksViewSource.Source = ViewModel.GetGrouppedBookmarks();
             BuildLocalizedMenu();
-
+            
             // We set the state of the commands on the appbar
             SetCommandsVisibility(BookmarksListView);
 
@@ -62,7 +60,7 @@ namespace Quran.Windows.Views
 
             // Show welcome message
             await ShowWelcomeMessage();
-            
+
             // Show prompt to download content if not all images exist
             if (!await FileUtils.HaveAllImages())
             {
@@ -76,6 +74,99 @@ namespace Quran.Windows.Views
                 }
             }
         }
+
+        private void MainViewLoaded(object sender, RoutedEventArgs e)
+        {
+            SurahViewSource.Source = ViewModel.GetGrouppedSurahItems();
+            JuzViewSource.Source = ViewModel.GetGrouppedJuzItems();
+            BookmarksViewSource.Source = ViewModel.GetGrouppedBookmarks();
+            RestoreControlsState();
+        }
+
+        private async void RestoreControlsState()
+        {
+            try
+            {
+                var pivotState = TempSettingsUtils.Get<int>(Constants.TEMP_PIVOT_STATE);
+                if (pivotState >= 0)
+                {
+                    MainPivot.SelectedIndex = pivotState;
+                }
+                var surahListViewState = TempSettingsUtils.Get<string>(Constants.TEMP_SURAH_LIST_STATE);
+                if (surahListViewState != null)
+                {
+                    await ListViewPersistenceHelper.SetRelativeScrollPositionAsync(this.SurahListView, surahListViewState, key =>
+                    {
+                        return Task.Run(() =>
+                        {
+                            return (object)ViewModel.Surahs.FirstOrDefault(s => s.Id == key);
+                        }).AsAsyncOperation();
+                    });
+                }
+                var juzListViewState = TempSettingsUtils.Get<string>(Constants.TEMP_JUZ_LIST_STATE);
+                if (juzListViewState != null)
+                {
+                    await ListViewPersistenceHelper.SetRelativeScrollPositionAsync(this.JuzListView, juzListViewState, key =>
+                    {
+                        return Task.Run(() =>
+                        {
+                            return (object)ViewModel.Juz.FirstOrDefault(s => s.Id == key);
+                        }).AsAsyncOperation();
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                telemetry.TrackException(ex, new Dictionary<string, string> { { "Scenario", "RestoreControlsState" } });
+            }
+        }
+
+        protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
+        {
+            PersistControlsState();
+            base.OnNavigatingFrom(e);
+        }
+
+        private void PersistControlsState()
+        {
+            try
+            {
+                TempSettingsUtils.Set(Constants.TEMP_PIVOT_STATE, MainPivot.SelectedIndex);
+                if (this.SurahListView.ItemsPanelRoot != null)
+                {
+                    TempSettingsUtils.Set(Constants.TEMP_SURAH_LIST_STATE, ListViewPersistenceHelper.GetRelativeScrollPosition(this.SurahListView, this.GetKeyFromListView));
+                }
+                if (this.JuzListView.ItemsPanelRoot != null)
+                {
+                    TempSettingsUtils.Set(Constants.TEMP_JUZ_LIST_STATE, ListViewPersistenceHelper.GetRelativeScrollPosition(this.JuzListView, this.GetKeyFromListView));
+                }
+            }
+            catch (Exception ex)
+            {
+                telemetry.TrackException(ex, new Dictionary<string, string> { { "Scenario", "PersistControlsState" } });
+            }
+        }
+
+        private string GetKeyFromListView(object item)
+        {
+            // This function takes in the item at the top of the viewport at the moment of navigating away from the page, and returns
+            // a key corresponding to that item. 
+            var itemGroup = item as IGrouping<KeyValuePair<string, string>, ItemViewModel>;
+            var singleItem = item as ItemViewModel;
+            if (itemGroup != null)
+            {
+                return itemGroup.FirstOrDefault().Id;
+            }
+            if (singleItem != null)
+            {
+                return singleItem.Id;
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
+
 
         private void NavigateToLastPage(object sender, RoutedEventArgs e)
         {
@@ -178,7 +269,7 @@ Quran Windows Team";
             {
                 Label = Quran.Core.Properties.Resources.go_to,
                 Symbol = Symbol.NewWindow,
-                Action = async () => 
+                Action = async () =>
                 {
                     JumpContentDialog dialog = new JumpContentDialog();
                     await dialog.ShowAsync();

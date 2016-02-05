@@ -122,7 +122,7 @@
                                 <SemanticZoom>
                                     <SemanticZoom.ZoomedInView>
                                         <ListView ItemsSource="{Binding Source={StaticResource SurahViewSource}}" 
-                                                  SelectionMode="None" Tapped="NavigateLink">
+                                                  SelectionMode="None" Tapped="NavigateLink" x:Name="SurahListView">
                                             <ListView.ItemTemplate>
                                                 <DataTemplate>
                                                     <Grid Height="55" VerticalAlignment="Center">
@@ -179,7 +179,7 @@
                                 <SemanticZoom>
                                     <SemanticZoom.ZoomedInView>
                                         <ListView ItemsSource="{Binding Source={StaticResource JuzViewSource}}" 
-                                                  SelectionMode="None" Tapped="NavigateLink">
+                                                  SelectionMode="None" Tapped="NavigateLink" x:Name="JuzListView">
                                             <ListView.ItemTemplate>
                                                 <DataTemplate>
                                                     <Grid Height="55" VerticalAlignment="Center">

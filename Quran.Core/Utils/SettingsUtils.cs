@@ -34,7 +34,7 @@ namespace Quran.Core.Utils
                 }
                 catch
                 {
-                    return getDefaultValue<T>(key);
+                    return GetDefaultValue<T>(key);
                 }
             }
 
@@ -53,7 +53,7 @@ namespace Quran.Core.Utils
 
             if (value == null)
             {
-                value = getDefaultValue<T>(key);
+                value = GetDefaultValue<T>(key);
             }
             
             try
@@ -63,13 +63,13 @@ namespace Quran.Core.Utils
             }
             catch
             {
-                cache[key] = getDefaultValue<T>(key);
-                return getDefaultValue<T>(key);
+                cache[key] = GetDefaultValue<T>(key);
+                return GetDefaultValue<T>(key);
             }
         }
 
         private static List<FieldInfo> constantKeys;
-        private static T getDefaultValue<T>(string key)
+        internal static T GetDefaultValue<T>(string key)
         {
             if (constantKeys == null)
             {

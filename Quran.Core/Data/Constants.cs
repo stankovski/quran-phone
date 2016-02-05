@@ -35,16 +35,12 @@ namespace Quran.Core.Data
         // Settings Key
         [DefaultValue("")]
         public const string PREF_CULTURE_OVERRIDE = "cultureOverride";
-        public const string PREF_USE_ARABIC_RESHAPER = "useArabicReshaper";
         public const string PREF_LAST_PAGE = "lastPage";
-        public const string PREF_LOCK_ORIENTATION = "lockOrientation";
-        public const string PREF_LANDSCAPE_ORIENTATION = "landscapeOrientation";
         [DefaultValue(18.0)]
         public const string PREF_TRANSLATION_TEXT_SIZE = "translationTextSize";
         public const string PREF_ACTIVE_TRANSLATION = "activeTranslation";
         [DefaultValue(false)]
         public const string PREF_SHOW_TRANSLATION = "showTranslation";
-        public const string PREF_RESHAPE_ARABIC = "reshapeArabic";
         [DefaultValue(false)]
         public const string PREF_SHOW_ARABIC_IN_TRANSLATION = "showArabicInTranslation";
         [DefaultValue(false)]
@@ -53,31 +49,19 @@ namespace Quran.Core.Data
         public const string PREF_KEEP_INFO_OVERLAY = "keepInfoOverlay";
         [DefaultValue(false)]
         public const string PREF_NIGHT_MODE = "nightMode";
-        [DefaultValue(false)]
-        public const string PREF_AUDIO_REPEAT = "audioRepeat";
-        [DefaultValue(RepeatAmount.OneAyah)]
-        public const string PREF_REPEAT_AMOUNT = "preferredRepeatAmount";
-        [DefaultValue(0)]
-        public const string PREF_REPEAT_TIMES = "preferredRepeatTimes";
         [DefaultValue("")]
         public const string PREF_ACTIVE_QARI = "activeQari";
-        public const string PREF_SHOULD_FETCH_PAGES = "shouldFetchPages";
-        public const string PREF_OVERLAY_PAGE_INFO = "overlayPageInfo";
-        public const string PREF_DISPLAY_MARKER_POPUP = "displayMarkerPopup";
-        public const string PREF_AYAH_BEFORE_TRANSLATION = "ayahBeforeTranslation";
-        [DefaultValue(true)]
-        public const string PREF_PREFER_STREAMING = "preferStreaming";
         [DefaultValue(false)]
         public const string PREF_ALT_DOWNLOAD = "altDownloadMethod";
-        [DefaultValue(AudioDownloadAmount.Page)]
-        public const string PREF_DOWNLOAD_AMOUNT = "preferredDownloadAmount";
         public const string PREF_LAST_UPDATED_TRANSLATIONS = "lastTranslationsUpdate";
-        public const string PREF_HAVE_UPDATED_TRANSLATIONS = "haveUpdatedTranslations";
-        public const string PREF_USE_NEW_BACKGROUND = "useNewBackground";
-        public const string PREF_USE_VOLUME_KEY_NAV = "volumeKeyNavigation";
         [DefaultValue("0.0.0.0")]
         public const string PREF_CURRENT_VERSION = "currentVersion";
-        [DefaultValue(false)]
-        public const string SESSION_START_AUDIO = "_StartAudio";
+
+        // Temp settings
+        [DefaultValue(-1)]
+        public const string TEMP_PIVOT_STATE = "mainPivotState";
+        public const string TEMP_SURAH_LIST_STATE = "mainSurahListState";
+        public const string TEMP_JUZ_LIST_STATE = "mainJuzListState";
+        public const string TEMP_BOOKMARKS_LIST_STATE = "mainBookmarksListState";
     }
 }

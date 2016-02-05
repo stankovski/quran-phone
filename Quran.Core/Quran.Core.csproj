@@ -166,6 +166,7 @@
     <Compile Include="Utils\MD5.cs" />
     <Compile Include="Utils\QuranUtils.cs" />
     <Compile Include="Utils\ScreenInfo.cs" />
+    <Compile Include="Utils\TempSettingsUtils.cs" />
     <Compile Include="Utils\SettingsUtils.cs" />
     <Compile Include="Utils\TranslationListTask.cs" />
     <Compile Include="Utils\TranslationUtils.cs" />
