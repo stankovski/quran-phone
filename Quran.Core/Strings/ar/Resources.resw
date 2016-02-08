@@ -133,10 +133,10 @@
     <value>الآية</value>
   </data>
   <data name="quran_juz2" xml:space="preserve">
-    <value>الجزء</value>
+    <value>الأجزاء</value>
   </data>
   <data name="quran_sura" xml:space="preserve">
-    <value>السورة</value>
+    <value>السور</value>
   </data>
   <data name="quran_sura_title" xml:space="preserve">
     <value>سورة</value>
@@ -579,7 +579,7 @@
     <value>عن البرنامج</value>
   </data>
   <data name="about_us_text" xml:space="preserve">
-    <value>قرآن فون برنامج قرآن مجامي ومفتوح المصدر
+    <value>قرآن فون برنامج قرآن مجاني ومفتوح المصدر
 مبني على مشروع قرآن أندرويد.
 الصور مأخوذة من مشروع &amp;lt;a href="http://quran.com"&gt;quran.com&amp;lt;/a&gt;،
 الصوت مأخوذ من &amp;lt;a href="http://everyayah.com"&gt;everyayah.com&amp;lt;/a&gt;,
@@ -617,7 +617,7 @@
     <value>نأسف بأن البرنامج لا يستطيع تحميل الملفات بسبب اتصال البيانات، بإمكانك المحاولة في وقت لاحق.</value>
   </data>
   <data name="download_cancel_confirmation" xml:space="preserve">
-    <value>هل أنت واثق أنك تريد إلغاء التحميل؟?</value>
+    <value>هل أنت واثق أنك تريد إلغاء التحميل؟</value>
   </data>
   <data name="disable_sleep" xml:space="preserve">
     <value>منع الهاتف من إغلاق الشاشة</value>
@@ -626,13 +626,13 @@
     <value>يرجى إعادة تشغيل البرنامج حتى يتم تفعيل الإعداد</value>
   </data>
   <data name="search" xml:space="preserve">
-    <value>البحث</value>
+    <value>بحث</value>
   </data>
   <data name="search_results" xml:space="preserve">
     <value>نتائج البحث</value>
   </data>
   <data name="no_translation_to_search" xml:space="preserve">
-    <value>لا يوجد تفسير للبحث في، افتح الإعدادات لتحديد التفسير الحالي.</value>
+    <value>لا يوجد تفسير للبحث فيه، افتح الإعدادات لتحديد التفسير الحالي.</value>
   </data>
   <data name="keep_info_overlay" xml:space="preserve">
     <value>إظهار بيانات الصفحة في الوضع الأفقي</value>
@@ -653,7 +653,7 @@
     <value>الدعاء</value>
   </data>
   <data name="night_mode" xml:space="preserve">
-    <value>وضعية الليل</value>
+    <value>الوضع الليلي</value>
   </data>
   <data name="loading" xml:space="preserve">
     <value>تحميل...</value>
@@ -671,10 +671,10 @@
     <value>انتظار الشبكة اللاسلكية...</value>
   </data>
   <data name="bookmark" xml:space="preserve">
-    <value>يوم</value>
+    <value>علامة</value>
   </data>
   <data name="translation" xml:space="preserve">
-    <value>ترجمة</value>
+    <value>تفسير</value>
   </data>
   <data name="contact_us" xml:space="preserve">
     <value>الاتصال بنا</value>
@@ -686,28 +686,28 @@
     <value>التوجيه التلقائي</value>
   </data>
   <data name="copy" xml:space="preserve">
-    <value>نسخة</value>
+    <value>نسخ</value>
   </data>
   <data name="reciters" xml:space="preserve">
-    <value>qari</value>
+    <value>القارئ</value>
   </data>
   <data name="recite" xml:space="preserve">
-    <value>يقرأ</value>
+    <value>تلاوة</value>
   </data>
   <data name="loading_audio" xml:space="preserve">
-    <value>Loading Quran audio...</value>
+    <value>تحميل التلاوة الصوتية...</value>
   </data>
   <data name="loading_data" xml:space="preserve">
-    <value>Loading Quran data...</value>
+    <value>تحميل بيانات القرآن...</value>
   </data>
   <data name="loading_images" xml:space="preserve">
-    <value>Loading Quran images...</value>
+    <value>تحميل صفحات القرآن...</value>
   </data>
   <data name="available_reciters" xml:space="preserve">
-    <value>Available reciters</value>
+    <value>القراء المتاحون</value>
   </data>
   <data name="downloaded_reciters" xml:space="preserve">
-    <value>Downloaded reciters</value>
+    <value>القراء المحملون</value>
   </data>
   <data name="audio_download_blocks" xml:space="preserve">
     <value>مقدار تحميل الصوت</value>
@@ -716,66 +716,66 @@
     <value>الصوت</value>
   </data>
   <data name="recite_ayah" xml:space="preserve">
-    <value>يقرأ</value>
+    <value>تلاوة</value>
   </data>
   <data name="pin_to_start" xml:space="preserve">
-    <value>Pin to start</value>
+    <value>إضافة إلى شاشة البدء</value>
   </data>
   <data name="alternate_download_method" xml:space="preserve">
-    <value>alternative download method (use only if WiFi is not available)</value>
+    <value>وسيلة تحميل بديلة (تستعمل في حال عدم توفر واي فاي)</value>
   </data>
   <data name="none" xml:space="preserve">
-    <value>none</value>
+    <value>لا يوجد</value>
   </data>
   <data name="unlimited" xml:space="preserve">
-    <value>unlimited</value>
+    <value>غير محدود</value>
   </data>
   <data name="number_of_ayah_to_repeat" xml:space="preserve">
-    <value>number of ayah to repeat</value>
+    <value>مقدار المقطع للتكرار</value>
   </data>
   <data name="repeat_ayah" xml:space="preserve">
-    <value>Repeat ayah</value>
+    <value>تكرار الآية</value>
   </data>
   <data name="times_to_repeat" xml:space="preserve">
-    <value>times to repeat</value>
+    <value>عدد مرات التكرار</value>
   </data>
   <data name="share_ayah" xml:space="preserve">
-    <value>مشاركة الاية</value>
+    <value>مشاركة الآية</value>
   </data>
   <data name="home" xml:space="preserve">
     <value>الصفحة الرئيسية</value>
   </data>
   <data name="cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>إلغاء</value>
   </data>
   <data name="select" xml:space="preserve">
-    <value>Select</value>
+    <value>تحديد</value>
   </data>
   <data name="next" xml:space="preserve">
-    <value>Next</value>
+    <value>التالي</value>
   </data>
   <data name="pause" xml:space="preserve">
-    <value>Pause</value>
+    <value>توقف</value>
   </data>
   <data name="previous" xml:space="preserve">
-    <value>Previous</value>
+    <value>السابق</value>
   </data>
   <data name="go_to" xml:space="preserve">
-    <value>Go to page</value>
+    <value>انتقل إلى الصفحة</value>
   </data>
   <data name="offline_audio" xml:space="preserve">
-    <value>Enable offline audio</value>
+    <value>تمكين التلاوة عند عدم الاتصال</value>
   </data>
   <data name="downloaded_audio" xml:space="preserve">
-    <value>Locally saved audio</value>
+    <value>التلاوات المحملة</value>
   </data>
   <data name="streaming_audio" xml:space="preserve">
-    <value>Online audio streaming</value>
+    <value>تدفق صوتي عند الاتصال</value>
   </data>
   <data name="navigate" xml:space="preserve">
-    <value>Navigate</value>
+    <value>تصفح</value>
   </data>
   <data name="page_number" xml:space="preserve">
-    <value>Page number</value>
+    <value>رقم الصفحة</value>
   </data>
 </root>
