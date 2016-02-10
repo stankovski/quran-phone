@@ -12,7 +12,7 @@ namespace Quran.Core.Data
     {
         // Numerics
         public const int DEFAULT_TEXT_SIZE = 15;
-        public const double ARABIC_FONT_SCALE_RELATIVE_TO_TRANSLATION = 1.5;
+        public const double ARABIC_FONT_SCALE_RELATIVE_TO_TRANSLATION = 1.8;
 
         // 10 days in ms
         public const int TRANSLATION_REFRESH_TIME = 60 * 60 * 24 * 10 * 1000;

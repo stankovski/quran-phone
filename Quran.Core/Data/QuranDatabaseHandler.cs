@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Quran.Core.Utils;
+using Windows.Storage;
 
 namespace Quran.Core.Data
 {
@@ -11,6 +12,10 @@ namespace Quran.Core.Data
     {
         public QuranDatabaseHandler(string databaseName)
             : base(databaseName)
+        { }
+
+        public QuranDatabaseHandler(StorageFile databaseFile)
+            : base(databaseFile)
         { }
 
         public List<T> GetVerses(int surah, int minAyah, int maxAyah)

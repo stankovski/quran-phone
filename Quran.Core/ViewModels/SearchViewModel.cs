@@ -65,7 +65,6 @@ namespace Quran.Core.ViewModels
             }
 
             this.IsLoading = true;
-            await DownloadArabicSearchFile();
             var translation = SettingsUtils.Get<string>(Constants.PREF_ACTIVE_TRANSLATION);
             if (!string.IsNullOrEmpty(translation))
             {
@@ -84,12 +83,9 @@ namespace Quran.Core.ViewModels
                             translationVerses = await taskFactory.StartNew(() => db.Search(query));
                         }
                     }
-                    if (await FileUtils.HaveArabicSearchFile())
+                    using (var dbArabic = new QuranDatabaseHandler<ArabicAyah>(FileUtils.ArabicDatabase))
                     {
-                        using (var dbArabic = new QuranDatabaseHandler<ArabicAyah>(Path.Combine(FileUtils.GetQuranDatabaseDirectory(), FileUtils.QURAN_ARABIC_DATABASE)))
-                        {
-                            arabicVerses = await taskFactory.StartNew(() => dbArabic.Search(query));
-                        }
+                        arabicVerses = await taskFactory.StartNew(() => dbArabic.Search(query));
                     }
                     this.SearchResults.Clear();
 
@@ -161,22 +157,6 @@ namespace Quran.Core.ViewModels
                 }
             }
             await QuranApp.NativeProvider.ShowInfoMessageBox(Resources.no_translation_to_search);
-        }
-
-        public async Task<bool> DownloadArabicSearchFile()
-        {
-            if (!await FileUtils.HaveArabicSearchFile())
-            {
-                string url = FileUtils.GetArabicSearchUrl();
-                string destination = FileUtils.GetQuranDatabaseDirectory();
-                destination = Path.Combine(destination, Path.GetFileName(url));
-                // start the download
-                return await this.ActiveDownload.DownloadSingleFile(url, destination, Resources.loading_data);
-            }
-            else
-            {
-                return true;
-            }
         }
 
         private string TrimText(string text, int maxPreviewCharacter)

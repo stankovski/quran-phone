@@ -11,8 +11,10 @@ using Quran.Core.Utils;
 using Quran.Core.ViewModels;
 using Quran.Windows.UI;
 using Quran.Windows.Utils;
+using Windows.ApplicationModel;
 using Windows.Foundation;
 using Windows.Graphics.Display;
+using Windows.Storage;
 using Windows.UI.Core;
 using Windows.UI.Input;
 using Windows.UI.Xaml;
@@ -40,15 +42,19 @@ namespace Quran.Windows.Views
             InitializeComponent();
             SystemNavigationManager.GetForCurrentView().BackRequested += OnBackRequested;
             Loaded += MainViewLoaded;
-        }
+        }        
 
-        // Load data for the ViewModel Items
-        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        private async void MainViewLoaded(object sender, RoutedEventArgs e)
         {
             await ViewModel.Initialize();
             await SearchViewModel.Initialize();
+            SurahViewSource.Source = ViewModel.GetGrouppedSurahItems();
+            JuzViewSource.Source = ViewModel.GetGrouppedJuzItems();
+            BookmarksViewSource.Source = ViewModel.GetGrouppedBookmarks();
+            RestoreControlsState();
+
             BuildLocalizedMenu();
-            
+
             // We set the state of the commands on the appbar
             SetCommandsVisibility(BookmarksListView);
 
@@ -73,14 +79,6 @@ namespace Quran.Windows.Views
                     await QuranApp.NativeProvider.ShowErrorMessageBox("Failed to download Quran Data: " + ex.Message);
                 }
             }
-        }
-
-        private void MainViewLoaded(object sender, RoutedEventArgs e)
-        {
-            SurahViewSource.Source = ViewModel.GetGrouppedSurahItems();
-            JuzViewSource.Source = ViewModel.GetGrouppedJuzItems();
-            BookmarksViewSource.Source = ViewModel.GetGrouppedBookmarks();
-            RestoreControlsState();
         }
 
         private async void RestoreControlsState()
@@ -179,6 +177,7 @@ namespace Quran.Windows.Views
             var versionFromConfig = new Version(SettingsUtils.Get<string>(Constants.PREF_CURRENT_VERSION));
             var nameHelper = SystemInfo.ApplicationName;
             var versionFromAssembly = new Version(SystemInfo.ApplicationVersion);
+
             if (versionFromAssembly > versionFromConfig)
             {
                 var message =
@@ -193,7 +192,7 @@ If you find any issues with the app or would like to provide suggestions, please
 Jazzakum Allahu Kheiran,
 Quran Windows Team";
                 await QuranApp.NativeProvider.ShowInfoMessageBox(message, "Welcome");
-                SettingsUtils.Set(Constants.PREF_CURRENT_VERSION, versionFromAssembly.ToString());
+                SettingsUtils.Set(Constants.PREF_CURRENT_VERSION, versionFromAssembly.ToString());                
             }
         }
 

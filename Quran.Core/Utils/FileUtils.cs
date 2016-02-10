@@ -12,19 +12,18 @@ using Windows.Storage.Search;
 using Quran.Core.ViewModels;
 using System.Net.Http;
 using Microsoft.ApplicationInsights;
+using Windows.ApplicationModel;
 
 namespace Quran.Core.Utils
 {
     public static class FileUtils
     {
-        public static bool failedToWrite = false;
-        public static string IMG_HOST = "http://android.quran.com/data/";
-        public static string QURAN_BASE = "QuranWindows";
-        private static string DATABASE_DIRECTORY = "databases";
-        private static string DOWNLOADS_DIRECTORY = "downloads";
-        private static string UNDELETED_FILES_DIRECTORY = "to-delete";
-        public static string PACKAGE_NAME = "com.quran.labs.androidquran";
-        public static string QURAN_ARABIC_DATABASE = "quran.ar.db";
+        private static bool failedToWrite = false;
+        private static string QuranImagesUrl = "http://android.quran.com/data/";
+        private static string QuranBase = "QuranWindows";
+        private static string DatabaseDirectory = "databases";
+        private static string UndeletedFilesDirectory = "to-delete";
+        private const string QuranDatabaseName = "quran.ar.db";
         private static TelemetryClient telemetry = new TelemetryClient();
 
         private static bool initialized = false;
@@ -34,6 +33,8 @@ namespace Quran.Core.Utils
         public static StorageFolder ImageFolder { get; private set; }
         
         public static StorageFolder DatabaseFolder { get; private set; }
+
+        public static StorageFile ArabicDatabase { get; private set; }
 
         public static StorageFolder AudioFolder { get; private set; }
 
@@ -284,10 +285,10 @@ namespace Quran.Core.Utils
             if (BaseFolder == null)
             {
                 BaseFolder = ApplicationData.Current.LocalFolder;
-                var quranBaseFolder = await BaseFolder.TryGetItemAsync(QURAN_BASE);
+                var quranBaseFolder = await BaseFolder.TryGetItemAsync(QuranBase);
                 if (quranBaseFolder == null)
                 {
-                    quranBaseFolder = await BaseFolder.CreateFolderAsync(QURAN_BASE);
+                    quranBaseFolder = await BaseFolder.CreateFolderAsync(QuranBase);
                 }
                 BaseFolder = quranBaseFolder as StorageFolder;
             }
@@ -327,10 +328,10 @@ namespace Quran.Core.Utils
 
             if (DatabaseFolder == null)
             {
-                var databaseFolder = await BaseFolder.TryGetItemAsync(DATABASE_DIRECTORY);
+                var databaseFolder = await BaseFolder.TryGetItemAsync(DatabaseDirectory);
                 if (databaseFolder == null)
                 {
-                    databaseFolder = await BaseFolder.CreateFolderAsync(DATABASE_DIRECTORY);
+                    databaseFolder = await BaseFolder.CreateFolderAsync(DatabaseDirectory);
                 }
                 DatabaseFolder = databaseFolder as StorageFolder;
             }
@@ -339,6 +340,12 @@ namespace Quran.Core.Utils
             {
                 throw new InvalidOperationException("Unable to create a database folder.");
             }
+
+            StorageFolder installationFolder = Package.Current.InstalledLocation;
+            StorageFolder assetsFolder = await installationFolder.GetFolderAsync("Assets");
+            StorageFile arabicDatabase = await assetsFolder.GetFileAsync(QuranDatabaseName);
+            await arabicDatabase.CopyAsync(DatabaseFolder, QuranDatabaseName, NameCollisionOption.ReplaceExisting);
+            ArabicDatabase = await DatabaseFolder.GetFileAsync(QuranDatabaseName);
         }
 
         /// <summary>
@@ -350,10 +357,10 @@ namespace Quran.Core.Utils
             if (AudioFolder == null)
             {
                 var baseFolder = KnownFolders.MusicLibrary;
-                var quranAudioFolder = await baseFolder.TryGetItemAsync(QURAN_BASE);
+                var quranAudioFolder = await baseFolder.TryGetItemAsync(QuranBase);
                 if (quranAudioFolder == null)
                 {
-                    quranAudioFolder = await baseFolder.CreateFolderAsync(QURAN_BASE);
+                    quranAudioFolder = await baseFolder.CreateFolderAsync(QuranBase);
                 }
                 AudioFolder = quranAudioFolder as StorageFolder;
             }
@@ -420,7 +427,7 @@ namespace Quran.Core.Utils
         public static Uri GetImageOnlineUri(string filename)
         {
             if (ScreenInfo == null) return null;
-            string urlString = Path.Combine(IMG_HOST + "width" + ScreenInfo.GetWidthParam(),
+            string urlString = Path.Combine(QuranImagesUrl + "width" + ScreenInfo.GetWidthParam(),
                                             filename);
             return new Uri(urlString, UriKind.Absolute);
         }
@@ -488,7 +495,7 @@ namespace Quran.Core.Utils
 
         public static string GetUndeletedFilesDirectory()
         {
-            return GetSubdirectory(UNDELETED_FILES_DIRECTORY);
+            return GetSubdirectory(UndeletedFilesDirectory);
         }
 
         public static string GetSubdirectory(string subdirectoryName)
@@ -501,7 +508,7 @@ namespace Quran.Core.Utils
 
         public static string GetZipFileUrl()
         {
-            string url = IMG_HOST;
+            string url = QuranImagesUrl;
             if (ScreenInfo == null)
             {
                 return null;
@@ -527,7 +534,7 @@ namespace Quran.Core.Utils
                 return null;
             }
 
-            string url = IMG_HOST + "width" + ScreenInfo.GetWidthParam();
+            string url = QuranImagesUrl + "width" + ScreenInfo.GetWidthParam();
             url += "/ayahinfo" + ScreenInfo.GetWidthParam() + ".zip";
             return url;
         }
@@ -537,154 +544,6 @@ namespace Quran.Core.Utils
             string ayaPositionDb = GetAyaPositionFileName();
             
             return await FileExists(DatabaseFolder, ayaPositionDb);
-        }
-
-        public static async Task<bool> HaveArabicSearchFile()
-        {
-            string arabicSearchDb = QURAN_ARABIC_DATABASE;
-
-            return await FileExists(DatabaseFolder, arabicSearchDb);
-        }
-
-        public static string GetArabicSearchUrl()
-        {
-            return IMG_HOST + DATABASE_DIRECTORY + "/" + QURAN_ARABIC_DATABASE;
-        }
-
-        public static async Task<bool> IsFileEmpty(string localFilePath)
-        {
-            try
-            {
-                var content = await ReadFile(localFilePath);
-                return string.IsNullOrWhiteSpace(content);
-            }
-            catch
-            {
-                return true;
-            }
-        }
-
-        ///// <summary>
-        ///// Execute's an async Task<T> method which has a void return value synchronously
-        ///// </summary>
-        ///// <param name="task">Task<T> method to execute</param>
-        //public static void RunSync(Func<Task> task)
-        //{
-        //    var oldContext = SynchronizationContext.Current;
-        //    var synch = new ExclusiveSynchronizationContext();
-        //    SynchronizationContext.SetSynchronizationContext(synch);
-        //    synch.Post(async _ =>
-        //    {
-        //        try
-        //        {
-        //            await task();
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            synch.InnerException = e;
-        //            throw;
-        //        }
-        //        finally
-        //        {
-        //            synch.EndMessageLoop();
-        //        }
-        //    }, null);
-        //    synch.BeginMessageLoop();
-
-        //    SynchronizationContext.SetSynchronizationContext(oldContext);
-        //}
-
-        ///// <summary>
-        ///// Execute's an async Task<T> method which has a T return type synchronously
-        ///// </summary>
-        ///// <typeparam name="T">Return Type</typeparam>
-        ///// <param name="task">Task<T> method to execute</param>
-        ///// <returns></returns>
-        //public static T RunSync<T>(Func<Task<T>> task)
-        //{
-        //    var oldContext = SynchronizationContext.Current;
-        //    var synch = new ExclusiveSynchronizationContext();
-        //    SynchronizationContext.SetSynchronizationContext(synch);
-        //    T ret = default(T);
-        //    synch.Post(async _ =>
-        //    {
-        //        try
-        //        {
-        //            ret = await task();
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            synch.InnerException = e;
-        //            throw;
-        //        }
-        //        finally
-        //        {
-        //            synch.EndMessageLoop();
-        //        }
-        //    }, null);
-        //    synch.BeginMessageLoop();
-        //    SynchronizationContext.SetSynchronizationContext(oldContext);
-        //    return ret;
-        //}
-
-        private class ExclusiveSynchronizationContext : SynchronizationContext
-        {
-            private bool done;
-            public Exception InnerException { get; set; }
-            readonly AutoResetEvent workItemsWaiting = new AutoResetEvent(false);
-            readonly Queue<Tuple<SendOrPostCallback, object>> items =
-                new Queue<Tuple<SendOrPostCallback, object>>();
-
-            public override void Send(SendOrPostCallback d, object state)
-            {
-                throw new NotSupportedException("We cannot send to our same thread");
-            }
-
-            public override void Post(SendOrPostCallback d, object state)
-            {
-                lock (items)
-                {
-                    items.Enqueue(Tuple.Create(d, state));
-                }
-                workItemsWaiting.Set();
-            }
-
-            public void EndMessageLoop()
-            {
-                Post(_ => done = true, null);
-            }
-
-            public void BeginMessageLoop()
-            {
-                while (!done)
-                {
-                    Tuple<SendOrPostCallback, object> task = null;
-                    lock (items)
-                    {
-                        if (items.Count > 0)
-                        {
-                            task = items.Dequeue();
-                        }
-                    }
-                    if (task != null)
-                    {
-                        task.Item1(task.Item2);
-                        if (InnerException != null) // the method threw an exeption
-                        {
-                            throw new AggregateException("AsyncHelpers.Run method threw an exception.", InnerException);
-                        }
-                    }
-                    else
-                    {
-                        workItemsWaiting.WaitOne();
-                    }
-                }
-            }
-
-            public override SynchronizationContext CreateCopy()
-            {
-                return this;
-            }
         }
     }
 }

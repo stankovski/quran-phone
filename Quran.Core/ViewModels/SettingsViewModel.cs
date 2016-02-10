@@ -84,9 +84,9 @@ namespace Quran.Core.ViewModels
                 if (value == showArabicInTranslation)
                     return;
 
-                SettingsUtils.Set(Constants.PREF_SHOW_ARABIC_IN_TRANSLATION, ShowArabicInTranslation);
-                
                 showArabicInTranslation = value;
+
+                SettingsUtils.Set(Constants.PREF_SHOW_ARABIC_IN_TRANSLATION, value);
                 base.OnPropertyChanged(() => ShowArabicInTranslation);
             }
         }
@@ -100,25 +100,10 @@ namespace Quran.Core.ViewModels
                 if (value == altDownloadMethod)
                     return;
 
-                SettingsUtils.Set(Constants.PREF_ALT_DOWNLOAD, AltDownloadMethod);
-                
                 altDownloadMethod = value;
+                
+                SettingsUtils.Set(Constants.PREF_ALT_DOWNLOAD, value);
                 base.OnPropertyChanged(() => AltDownloadMethod);
-            }
-        }
-        
-        private bool enableShowArabicInTranslation;
-        public bool EnableShowArabicInTranslation
-        {
-            get { return enableShowArabicInTranslation; }
-            set
-            {
-                if (value == enableShowArabicInTranslation)
-                    return;
-
-                enableShowArabicInTranslation = value;
-
-                base.OnPropertyChanged(() => EnableShowArabicInTranslation);
             }
         }
 
@@ -136,7 +121,7 @@ namespace Quran.Core.ViewModels
                 if (oldValue != value)
                 {
                     QuranApp.NativeProvider.ToggleDeviceSleep(!value);
-                    SettingsUtils.Set(Constants.PREF_PREVENT_SLEEP, PreventPhoneFromSleeping);
+                    SettingsUtils.Set(Constants.PREF_PREVENT_SLEEP, value);
                 }
 
                 base.OnPropertyChanged(() => PreventPhoneFromSleeping);
@@ -154,7 +139,7 @@ namespace Quran.Core.ViewModels
 
                 nightMode = value;
 
-                SettingsUtils.Set(Constants.PREF_NIGHT_MODE, NightMode);
+                SettingsUtils.Set(Constants.PREF_NIGHT_MODE, value);
 
                 base.OnPropertyChanged(() => NightMode);
             }
@@ -171,7 +156,7 @@ namespace Quran.Core.ViewModels
 
                 keepInfoOverlay = value;
 
-                SettingsUtils.Set(Constants.PREF_KEEP_INFO_OVERLAY, KeepInfoOverlay);
+                SettingsUtils.Set(Constants.PREF_KEEP_INFO_OVERLAY, value);
 
                 base.OnPropertyChanged(() => KeepInfoOverlay);
             }
@@ -191,7 +176,7 @@ namespace Quran.Core.ViewModels
                 if (SettingsUtils.Get<string>(Constants.PREF_CULTURE_OVERRIDE) != value)
                 {
                     QuranApp.NativeProvider.ShowInfoMessageBox(Resources.please_restart);
-                    SettingsUtils.Set(Constants.PREF_CULTURE_OVERRIDE, SelectedLanguage);
+                    SettingsUtils.Set(Constants.PREF_CULTURE_OVERRIDE, value);
                 }
 
                 base.OnPropertyChanged(() => SelectedLanguage);
@@ -240,15 +225,6 @@ namespace Quran.Core.ViewModels
             PreventPhoneFromSleeping = SettingsUtils.Get<bool>(Constants.PREF_PREVENT_SLEEP);
             KeepInfoOverlay = SettingsUtils.Get<bool>(Constants.PREF_KEEP_INFO_OVERLAY);
             NightMode = SettingsUtils.Get<bool>(Constants.PREF_NIGHT_MODE);
-
-            if (await FileUtils.HaveArabicSearchFile())
-            {
-                EnableShowArabicInTranslation = true;
-            }
-            else
-            {
-                EnableShowArabicInTranslation = false;
-            }
         }
 
         public void SaveSettings()

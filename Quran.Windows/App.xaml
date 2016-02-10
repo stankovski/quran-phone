@@ -137,7 +137,8 @@
             <Setter Property="FontWeight" Value="Bold"/>
         </Style>
         <Style TargetType="TextBlock" x:Key="ArabicText">
-            <Setter Property="FontFamily" Value="/Assets/UthmanicHafs.otf#KFGQPC Uthmanic Script HAFS"/>
+            <Setter Property="FontFamily" Value="/Assets/me_quran.ttf#me_quran"/>
+            <!--<Setter Property="FontFamily" Value="/Assets/UthmanicHafs.otf#KFGQPC Uthmanic Script HAFS"/>-->
             <Setter Property="FlowDirection" Value="RightToLeft"/>
         </Style>
         <!-- End styles of DetailsPage -->

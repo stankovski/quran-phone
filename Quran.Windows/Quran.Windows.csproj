@@ -108,6 +108,10 @@
     <Content Include="Assets\StoreLogo.scale-200.png" />
     <Content Include="Assets\StoreLogo.scale-400.png" />
     <Content Include="Assets\UthmanicHafs.otf" />
+    <Content Include="Assets\quran.ar.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\me_quran.ttf" />
     <None Include="Quran.Windows_StoreKey.pfx" />
     <None Include="Quran.Windows_TemporaryKey.pfx" />
     <PRIResource Include="..\Quran.Core\Strings\en-US\Resources.resw">
@@ -236,7 +240,6 @@
     <Content Include="Assets\Images\sura_icon.png" />
     <Content Include="Assets\logo-large.png" />
     <Content Include="Assets\Logo.png" />
-    <Content Include="Assets\quran_readers_urls.xml" />
     <Content Include="Assets\SplashScreen.scale-100.png" />
     <Content Include="Assets\Square150.scale-100.png" />
     <Content Include="Assets\Square150.scale-140.png" />

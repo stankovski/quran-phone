@@ -75,8 +75,7 @@
                                 <ComboBox ItemsSource="{x:Bind ViewModel.SupportedLanguages}" DisplayMemberPath="Value" 
                                           SelectedValue="{x:Bind ViewModel.SelectedLanguage, Mode=TwoWay}" SelectedValuePath="Key"/>
                                 <TextBlock Text="{x:Bind ViewModel.Strings.prefs_ayah_before_translation_summary}"/>
-                                <ToggleSwitch IsOn="{x:Bind ViewModel.ShowArabicInTranslation, Mode=TwoWay}" 
-                                              IsEnabled="{x:Bind ViewModel.EnableShowArabicInTranslation, Mode=OneWay}" />
+                                <ToggleSwitch IsOn="{x:Bind ViewModel.ShowArabicInTranslation, Mode=TwoWay}"/>
                                 <TextBlock Text="{x:Bind ViewModel.Strings.disable_sleep}"/>
                                 <ToggleSwitch IsOn="{x:Bind ViewModel.PreventPhoneFromSleeping, Mode=TwoWay}"/>
                                 <TextBlock Text="{x:Bind ViewModel.Strings.keep_info_overlay}"/>

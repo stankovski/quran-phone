@@ -4,6 +4,7 @@ using Microsoft.ApplicationInsights;
 using Quran.Core.Utils;
 using SQLite.Net;
 using SQLite.Net.Platform.WinRT;
+using Windows.Storage;
 
 namespace Quran.Core.Data
 {
@@ -29,6 +30,11 @@ namespace Quran.Core.Data
             string path = Path.Combine(basePath, databaseName);
 
             dbConnection = CreateDatabase(path);
+        }
+
+        protected BaseDatabaseHandler(StorageFile file)
+        {
+            dbConnection = CreateDatabase(file.Path);
         }
 
         protected virtual SQLiteConnection CreateDatabase(string path)

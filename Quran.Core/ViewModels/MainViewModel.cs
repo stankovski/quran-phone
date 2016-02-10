@@ -286,40 +286,26 @@ namespace Quran.Core.ViewModels
                 string title = QuranUtils.GetSurahNameFromPage(bookmark.Page, true);
                 string details = "";
 
-                if (await FileUtils.HaveArabicSearchFile())
+                try
                 {
-                    try
+                    using (var dbArabic = new QuranDatabaseHandler<ArabicAyah>(FileUtils.ArabicDatabase))
                     {
-                        using (var dbArabic = new QuranDatabaseHandler<ArabicAyah>(FileUtils.QURAN_ARABIC_DATABASE))
-                        {
-                            var ayahSurah =
-                                await
-                                new TaskFactory().StartNew(
-                                    () => dbArabic.GetVerse(bookmark.Surah.Value, bookmark.Ayah.Value));
-                            title = ayahSurah.Text;
-                        }
+                        var ayahSurah = await
+                            new TaskFactory().StartNew(() => dbArabic.GetVerse(bookmark.Surah.Value, bookmark.Ayah.Value));
+                        title = ayahSurah.Text;
                     }
-                    catch (Exception ex)
-                    {
-                        telemetry.TrackException(ex, new Dictionary<string, string> { { "Scenario", "OpenArabicDatabase" } });
-                    }
+                }
+                catch (Exception ex)
+                {
+                    telemetry.TrackException(ex, new Dictionary<string, string> { { "Scenario", "OpenArabicDatabase" } });
+                }
 
-                    details = string.Format(CultureInfo.InvariantCulture, "{0} {1} {2}, {3} {4}",
-                                               QuranUtils.GetSurahName(bookmark.Surah.Value, true),
-                                               Resources.verse,
-                                               bookmark.Ayah.Value,
-                                               QuranUtils.GetJuzTitle(),
-                                               QuranUtils.GetJuzFromPage(bookmark.Page));
-                }
-                else
-                {
-                    details = string.Format(CultureInfo.InvariantCulture, "{0} {1}, {2} {3}, {4} {5}",
-                                               Resources.quran_page, bookmark.Page,
-                                               Resources.verse,
-                                               bookmark.Ayah.Value,
-                                               QuranUtils.GetJuzTitle(),
-                                               QuranUtils.GetJuzFromPage(bookmark.Page));
-                }
+                details = string.Format(CultureInfo.InvariantCulture, "{0} {1} {2}, {3} {4}",
+                    QuranUtils.GetSurahName(bookmark.Surah.Value, true),
+                    Resources.verse,
+                    bookmark.Ayah.Value,
+                    QuranUtils.GetJuzTitle(),
+                    QuranUtils.GetJuzFromPage(bookmark.Page));
 
                 if (title.Length > maxBookmarkTitle)
                 {
