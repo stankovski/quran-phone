@@ -375,7 +375,7 @@ the data used in the translations and Arabic comes from
     <value>Предотвратить телефон от выключения экрана</value>
   </data>
   <data name="please_restart" xml:space="preserve">
-    <value>Пожалуйста перезапустите приложение, чтобы изменения вступили в силу</value>
+    <value>Пожалуйста перезапустите приложение, чтобы изменения вступили в силу. Перезапустить сейчас?</value>
   </data>
   <data name="search" xml:space="preserve">
     <value>Поиск</value>

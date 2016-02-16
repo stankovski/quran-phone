@@ -622,7 +622,7 @@ the data used in the translations and Arabic comes from
     <value>Prevent phone from turning screen off</value>
   </data>
   <data name="please_restart" xml:space="preserve">
-    <value>Please relaunch an app for the change to take effect</value>
+    <value>Please relaunch an app for the change to take effect. Would you like to do it now?</value>
   </data>
   <data name="search" xml:space="preserve">
     <value>Search</value>

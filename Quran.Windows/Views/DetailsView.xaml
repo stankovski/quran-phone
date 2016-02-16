@@ -135,6 +135,12 @@
                                                     </ListBoxItem>
                                                 </DataTemplate>
                                             </ListView.ItemTemplate>
+                                            <ListView.ItemContainerStyle>
+                                                <Style TargetType="ListViewItem">
+                                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                                                </Style>
+                                            </ListView.ItemContainerStyle>
                                         </ListView>
                                     </Grid>
                                 </DataTemplate>

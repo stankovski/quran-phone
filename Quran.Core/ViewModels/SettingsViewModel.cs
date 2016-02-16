@@ -14,6 +14,7 @@ using Microsoft.ApplicationInsights;
 using Quran.Core.Data;
 using Quran.Core.Properties;
 using Quran.Core.Utils;
+using Windows.ApplicationModel.Core;
 
 namespace Quran.Core.ViewModels
 {
@@ -175,11 +176,19 @@ namespace Quran.Core.ViewModels
 
                 if (SettingsUtils.Get<string>(Constants.PREF_CULTURE_OVERRIDE) != value)
                 {
-                    QuranApp.NativeProvider.ShowInfoMessageBox(Resources.please_restart);
                     SettingsUtils.Set(Constants.PREF_CULTURE_OVERRIDE, value);
+                    PromptForShutdown();
                 }
 
                 base.OnPropertyChanged(() => SelectedLanguage);
+            }
+        }
+
+        public async Task PromptForShutdown()
+        {
+            if (await QuranApp.NativeProvider.ShowQuestionMessageBox(Resources.please_restart))
+            {
+                CoreApplication.Exit();
             }
         }
 
