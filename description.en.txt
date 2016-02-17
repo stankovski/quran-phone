@@ -19,6 +19,9 @@ The following features are *not* yet available but planned for the future inshaA
 Because Quran Windows is an open source project, it makes it easy for anyone to contribute and help improve the project. We are also open to hearing your suggestions to make Quran Windows the best Quran application on the market.
 
 Change Log:
-Release 1.2.0:
-* Added offline audio support
-* Misc. bug fixes
+Version 1.3.0:
+* Added persistence of state to the main view
+* Improved Arabic text above translation
+* Updated Arabic localization by Saeed Hubaishan
+* Added 'bismillah' to translations
+* Misc. fixes and improvements
