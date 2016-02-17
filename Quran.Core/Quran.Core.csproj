@@ -170,6 +170,7 @@
     <Compile Include="Utils\SettingsUtils.cs" />
     <Compile Include="Utils\TranslationListTask.cs" />
     <Compile Include="Utils\TranslationUtils.cs" />
+    <Compile Include="Utils\AsyncManualResetEvent.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\DetailsViewModel.Audio.cs">
       <DependentUpon>DetailsViewModel.cs</DependentUpon>

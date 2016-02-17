@@ -10,7 +10,7 @@
     <ScrollViewer HorizontalAlignment="Stretch" x:Name="LayoutRoot">
         <Grid VerticalAlignment="Top">
             <StackPanel Orientation="Vertical">
-                <Image Name="image" Margin="0,0,0,20" Tapped="ImageTap"/>
+                <Image Name="PageImage" Margin="0,0,0,20" Tapped="ImageTap"/>
                 <Grid Grid.Row="1" x:Name="ExpanderGrid" Height="50"></Grid>
             </StackPanel>
             <ProgressBar Name="progress" IsIndeterminate="True" VerticalAlignment="Top"

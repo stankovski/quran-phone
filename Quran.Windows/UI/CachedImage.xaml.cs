@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq.Expressions;
 using System.Net;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.ApplicationInsights;
 using Quran.Core;
@@ -31,6 +32,7 @@ namespace Quran.Windows.UI
 
         private WriteableBitmap imageSourceBitmap;
         private Uri imageSourceUri;
+        private AsyncManualResetEvent _imageLoaded = new AsyncManualResetEvent();
         private static TelemetryClient telemetry = new TelemetryClient();
 
         public CachedImage()
@@ -39,11 +41,20 @@ namespace Quran.Windows.UI
             InitializeComponent();
             canvas.Width = FileUtils.ScreenInfo.ImageWidth;
             canvas.Height = FileUtils.ScreenInfo.ImageHeight;
+            PageImage.LayoutUpdated += Image_LayoutUpdated;
+        }
+
+        private void Image_LayoutUpdated(object sender, object e)
+        {
+            if (this.Visibility == Visibility.Visible && !_imageLoaded.IsComplete)
+            {
+                _imageLoaded.Set();
+            }
         }
 
         public Image Image
         {
-            get { return image; }
+            get { return PageImage; }
         }
 
         public Visibility FooterVisibility
@@ -96,7 +107,12 @@ namespace Quran.Windows.UI
                         int offsetToScrollTo = 0;
                         var bounds = ayahDb.GetVerseBoundsCombined(ayahInfo.Surah, ayahInfo.Ayah);
                         if (bounds == null)
+                        {
                             return;
+                        }
+
+                        // Wait for image to load
+                        await _imageLoaded.WaitAsync();
 
                         // Reset any overlays
                         canvas.Children.Clear();
@@ -161,7 +177,8 @@ namespace Quran.Windows.UI
             LayoutRoot.ScrollToVerticalOffset(0);
 
             progress.Visibility = Visibility.Visible;
-            image.Source = null;
+            _imageLoaded.Reset();
+            PageImage.Source = null;
             if (source == null)
             {
                 progress.Visibility = Visibility.Collapsed;
@@ -229,7 +246,7 @@ namespace Quran.Windows.UI
                     progress.IsIndeterminate = false;
                 }
 
-                image.Source = imageSourceBitmap;
+                PageImage.Source = imageSourceBitmap;
             }
         }
 
@@ -394,7 +411,7 @@ namespace Quran.Windows.UI
         {
             if (AyahTapped != null)
             {
-                var ayah = await GetAyahFromGesture(e.GetPosition(image), PageNumber, image.ActualWidth);
+                var ayah = await GetAyahFromGesture(e.GetPosition(PageImage), PageNumber, PageImage.ActualWidth);
                 if (ayah != null)
                     AyahTapped(this, new QuranAyahEventArgs(ayah));
             }
@@ -432,8 +449,11 @@ namespace Quran.Windows.UI
 
         public void Dispose()
         {
-            if (image != null)
-                image.Source = null;
+            if (PageImage != null)
+            {
+                PageImage.Source = null;
+                PageImage.LayoutUpdated -= Image_LayoutUpdated;
+            }
             imageSourceBitmap = null;
             ImageSource = null;
             #if DEBUG

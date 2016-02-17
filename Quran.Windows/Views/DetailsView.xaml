@@ -122,26 +122,14 @@
                                             Holding="ImageHolding"
                                             Visibility="{x:Bind Parent.ShowTranslation, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
                                         </ui:CachedImage>
-                                        <ListView x:Name="TranslationListBox" 
+                                        <ui:TranslationListView x:Name="TranslationListBox" 
+                                            SelectedAyah="{x:Bind Parent.SelectedAyah, Mode=OneWay}"
                                             DoubleTapped="ListViewDoubleTap"
                                             Holding="TranslationItemHolding"
                                             RightTapped="TranslationItemRightTapped"
                                             Visibility="{x:Bind Parent.ShowTranslation, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                            ItemsSource="{x:Bind Translations}" SelectionMode="None">
-                                            <ListView.ItemTemplate>
-                                                <DataTemplate x:DataType="vm:VerseViewModel">
-                                                    <ListBoxItem HorizontalContentAlignment="Stretch">
-                                                        <ui:TranslationView DataContext="{x:Bind}" SelectedAyah="{x:Bind Parent.SelectedAyah, Mode=OneWay}"/>
-                                                    </ListBoxItem>
-                                                </DataTemplate>
-                                            </ListView.ItemTemplate>
-                                            <ListView.ItemContainerStyle>
-                                                <Style TargetType="ListViewItem">
-                                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                                    <Setter Property="VerticalContentAlignment" Value="Center" />
-                                                </Style>
-                                            </ListView.ItemContainerStyle>
-                                        </ListView>
+                                            Translations="{x:Bind Translations, Mode=OneWay}">
+                                        </ui:TranslationListView>
                                     </Grid>
                                 </DataTemplate>
                             </FlipView.ItemTemplate>
