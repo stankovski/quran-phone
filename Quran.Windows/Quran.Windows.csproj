@@ -173,6 +173,9 @@
     <Compile Include="UI\StyleConverter.cs" />
     <Compile Include="UI\TextFormatConverter.cs" />
     <Compile Include="UI\TranslationItemTemplateSelector.cs" />
+    <Compile Include="UI\TranslationListView.xaml.cs">
+      <DependentUpon>TranslationListView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\TranslationView.xaml.cs">
       <DependentUpon>TranslationView.xaml</DependentUpon>
     </Compile>
@@ -285,6 +288,10 @@
     <Page Include="UI\PageLink.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\TranslationListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\TranslationView.xaml">
       <Generator>MSBuild:Compile</Generator>
