@@ -45,7 +45,9 @@ namespace Quran.Windows.UI
             {
                 var currentModel = this.DataContext as VerseViewModel;
                 if (currentModel != null && currentModel.Surah == ayahInfo.Surah &&
-                    currentModel.Ayah == ayahInfo.Ayah)
+                    currentModel.Ayah == ayahInfo.Ayah &&
+                    currentModel.Ayah != 0 && 
+                    currentModel.Surah != 0)
                 {
                     canvas.Opacity = 1.0;
                     if (QuranApp.DetailsViewModel.AudioPlayerState == AudioState.Playing)

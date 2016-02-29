@@ -7,16 +7,18 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:Quran.Core.ViewModels"
     xmlns:ui="using:Quran.Windows.UI"
+    x:Name="TranslationListControl"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
     <Grid>
         <ListView x:Name="TranslationListBox" 
-                  ItemsSource="{x:Bind Translations, Mode=OneWay}" SelectionMode="None">
+                  ItemsSource="{Binding Translations}" SelectionMode="None">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="vm:VerseViewModel">
                     <ListBoxItem HorizontalContentAlignment="Stretch">
-                        <ui:TranslationView DataContext="{x:Bind}" SelectedAyah="{x:Bind Parent.SelectedAyah, Mode=OneWay}"/>
+                        <ui:TranslationView DataContext="{Binding}" 
+                                            SelectedAyah="{Binding ElementName=TranslationListControl, Path=SelectedAyahDelayed, Mode=OneWay}"/>
                     </ListBoxItem>
                 </DataTemplate>
             </ListView.ItemTemplate>

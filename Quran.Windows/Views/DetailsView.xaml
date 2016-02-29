@@ -128,7 +128,7 @@
                                             Holding="TranslationItemHolding"
                                             RightTapped="TranslationItemRightTapped"
                                             Visibility="{x:Bind Parent.ShowTranslation, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                            Translations="{x:Bind Translations, Mode=OneWay}">
+                                            DataContext="{Binding}">
                                         </ui:TranslationListView>
                                     </Grid>
                                 </DataTemplate>
