@@ -21,11 +21,12 @@ namespace Quran.Core.ViewModels
             FontSize = SettingsUtils.Get<double>(Constants.PREF_TRANSLATION_TEXT_SIZE);
             ArabicFontSize = FontSize * Constants.ARABIC_FONT_SCALE_RELATIVE_TO_TRANSLATION;
         }
-        
+
         #region Properties
         public DetailsViewModel Parent { get; set; }
 
-        public bool ContainsArabicText {
+        public bool ContainsArabicText
+        {
             get
             {
                 return ArabicText != null;
