@@ -184,11 +184,7 @@ namespace Quran.Windows.Views
                     @"Assalamu Aleikum,
 
 Thank you for downloading Quran Windows. Please note that this is a BETA release and is still work in progress (especially audio support). 
-New in Version 1.3.0:
-* Added persistence of state to the main view
-* Improved Arabic text above translation
-* Updated Arabic localization by Saeed Hubaishan
-* Added 'bismillah' to translations
+New in Version 1.3.1:
 * Misc. fixes and improvements
 
 If you find any issues with the app or would like to provide suggestions, please use Contact Us option available via the menu. 
