@@ -533,4 +533,7 @@ the data used in the translations and Arabic comes from
   <data name="page_number" xml:space="preserve">
     <value>Страница</value>
   </data>
+  <data name="arabic_text_size" xml:space="preserve">
+    <value>Размер арабского шрифта</value>
+  </data>
 </root>

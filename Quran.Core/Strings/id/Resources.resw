@@ -530,4 +530,7 @@ the data used in the translations and Arabic comes from
   <data name="page_number" xml:space="preserve">
     <value>Page number</value>
   </data>
+  <data name="arabic_text_size" xml:space="preserve">
+    <value>ukuran huruf arab</value>
+  </data>
 </root>

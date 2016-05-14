@@ -66,11 +66,29 @@
                                 <Button Content="{x:Bind ViewModel.ActiveReciter}" Click="ShowReciters"/>
                                 <TextBlock Text="{x:Bind ViewModel.Strings.translations}"/>
                                 <Button Content="{x:Bind ViewModel.ActiveTranslation}" Click="ShowTranslations"/>
+                                <StackPanel Orientation="Vertical" Background="White" Margin="0 10 10 0" Padding="10">
+                                    <TextBlock Text="1.1" Style="{StaticResource BoldText}" 
+                                               FontSize="{x:Bind Mode=OneWay, Path=TranslationTextSizeSlider.Value}" 
+                                               Foreground="Black"/>
+                                    <TextBlock TextWrapping="Wrap" Text="بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم" Style="{StaticResource ArabicText}" 
+                                               FontSize="{x:Bind Mode=OneWay, Path=ArabicTextSizeSlider.Value}" 
+                                               Foreground="Black"/>
+                                    <TextBlock TextWrapping="Wrap" Text="In the name of Allah, the Entirely Merciful, the Especially Merciful." 
+                                               FontSize="{x:Bind Mode=OneWay, Path=TranslationTextSizeSlider.Value}" 
+                                               Foreground="Black"/>
+                                </StackPanel>
+                                <StackPanel Margin="0, 15, 0, 0" Orientation="Horizontal">
+                                    <TextBlock Text="{x:Bind ViewModel.Strings.arabic_text_size}" Margin="0,0,5,0"/>
+                                    <TextBlock Text="{x:Bind ViewModel.ArabicTextSize, Mode=OneWay}"/>
+                                </StackPanel>
+                                <Slider x:Name="ArabicTextSizeSlider" Minimum="10" Maximum="40" Margin="0" SmallChange="1" 
+                                        Value="{x:Bind ViewModel.ArabicTextSize, Mode=TwoWay}"/>
                                 <StackPanel Margin="0, 15, 0, 0" Orientation="Horizontal">
                                     <TextBlock Text="{x:Bind ViewModel.Strings.text_size}" Margin="0,0,5,0"/>
                                     <TextBlock Text="{x:Bind ViewModel.TextSize, Mode=OneWay}"/>
                                 </StackPanel>
-                                <Slider Minimum="10" Maximum="30" Margin="0" SmallChange="1" Value="{x:Bind ViewModel.TextSize, Mode=TwoWay}"/>
+                                <Slider x:Name="TranslationTextSizeSlider" Minimum="10" Maximum="30" Margin="0" SmallChange="1" 
+                                        Value="{x:Bind ViewModel.TextSize, Mode=TwoWay}"/>
                                 <TextBlock Text="{x:Bind ViewModel.Strings.change_language}"/>
                                 <ComboBox ItemsSource="{x:Bind ViewModel.SupportedLanguages}" DisplayMemberPath="Value" 
                                           SelectedValue="{x:Bind ViewModel.SelectedLanguage, Mode=TwoWay}" SelectedValuePath="Key"/>

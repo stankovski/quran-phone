@@ -778,4 +778,7 @@
   <data name="page_number" xml:space="preserve">
     <value>رقم الصفحة</value>
   </data>
+  <data name="arabic_text_size" xml:space="preserve">
+    <value>حجم النص العربي</value>
+  </data>
 </root>

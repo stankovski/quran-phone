@@ -477,6 +477,11 @@ namespace Quran.Core.Properties
         {
             get { return resourceLoader.GetString("page_number"); }
         }
+
+        public static string arabic_text_size 
+        {
+            get { return resourceLoader.GetString("arabic_text_size"); }
+        }
     }
 
 	public class LocalizedResources
@@ -935,6 +940,11 @@ namespace Quran.Core.Properties
         public string page_number
         {
             get { return Resources.page_number; }
+        }
+
+        public string arabic_text_size
+        {
+            get { return Resources.arabic_text_size; }
         }
     }
 }

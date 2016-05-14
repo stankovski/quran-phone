@@ -36,8 +36,10 @@ namespace Quran.Core.Data
         [DefaultValue("")]
         public const string PREF_CULTURE_OVERRIDE = "cultureOverride";
         public const string PREF_LAST_PAGE = "lastPage";
-        [DefaultValue(18.0)]
+        [DefaultValue(16.0)]
         public const string PREF_TRANSLATION_TEXT_SIZE = "translationTextSize";
+        [DefaultValue(18.0)]
+        public const string PREF_ARABIC_TEXT_SIZE = "arabicTextSize";
         public const string PREF_ACTIVE_TRANSLATION = "activeTranslation";
         [DefaultValue(false)]
         public const string PREF_SHOW_TRANSLATION = "showTranslation";

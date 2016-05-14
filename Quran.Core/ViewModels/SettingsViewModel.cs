@@ -75,7 +75,22 @@ namespace Quran.Core.ViewModels
                 base.OnPropertyChanged(() => TextSize);
             }
         }
-        
+
+        private double arabicTextSize;
+        public double ArabicTextSize
+        {
+            get { return arabicTextSize; }
+            set
+            {
+                if (value == arabicTextSize)
+                    return;
+
+                arabicTextSize = value;
+
+                base.OnPropertyChanged(() => ArabicTextSize);
+            }
+        }
+
         private bool showArabicInTranslation;
         public bool ShowArabicInTranslation
         {
@@ -229,6 +244,7 @@ namespace Quran.Core.ViewModels
 
             SelectedLanguage = SettingsUtils.Get<string>(Constants.PREF_CULTURE_OVERRIDE);
             TextSize = SettingsUtils.Get<double>(Constants.PREF_TRANSLATION_TEXT_SIZE);
+            ArabicTextSize = SettingsUtils.Get<double>(Constants.PREF_ARABIC_TEXT_SIZE);
             ShowArabicInTranslation = SettingsUtils.Get<bool>(Constants.PREF_SHOW_ARABIC_IN_TRANSLATION);
             AltDownloadMethod = SettingsUtils.Get<bool>(Constants.PREF_ALT_DOWNLOAD);
             PreventPhoneFromSleeping = SettingsUtils.Get<bool>(Constants.PREF_PREVENT_SLEEP);
@@ -239,6 +255,7 @@ namespace Quran.Core.ViewModels
         public void SaveSettings()
         {
             SettingsUtils.Set(Constants.PREF_TRANSLATION_TEXT_SIZE, TextSize);
+            SettingsUtils.Set(Constants.PREF_ARABIC_TEXT_SIZE, ArabicTextSize);
         }
 
 

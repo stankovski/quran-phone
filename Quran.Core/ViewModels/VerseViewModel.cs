@@ -19,7 +19,7 @@ namespace Quran.Core.ViewModels
         {
             Parent = parent;
             FontSize = SettingsUtils.Get<double>(Constants.PREF_TRANSLATION_TEXT_SIZE);
-            ArabicFontSize = FontSize * Constants.ARABIC_FONT_SCALE_RELATIVE_TO_TRANSLATION;
+            ArabicFontSize = SettingsUtils.Get<double>(Constants.PREF_ARABIC_TEXT_SIZE);
         }
 
         #region Properties
