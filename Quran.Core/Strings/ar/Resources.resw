@@ -781,4 +781,10 @@
   <data name="arabic_text_size" xml:space="preserve">
     <value>حجم النص العربي</value>
   </data>
+  <data name="single_page" xml:space="preserve">
+    <value>Single page</value>
+  </data>
+  <data name="two_pages" xml:space="preserve">
+    <value>Two pages</value>
+  </data>
 </root>

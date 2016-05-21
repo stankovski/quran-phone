@@ -78,7 +78,7 @@
                             ItemsSource="{x:Bind NavigationLinks}">
                             <ListView.ItemTemplate>
                                 <DataTemplate x:DataType="vm:NavigationLink">
-                                    <StackPanel Orientation="Horizontal"  Margin="2,0,0,0">
+                                    <StackPanel Orientation="Horizontal"  Margin="2,0,0,0" Visibility="{x:Bind Visibility, Mode=OneWay}">
                                         <SymbolIcon Symbol="{x:Bind Symbol, Mode=OneWay}" Foreground="White"/>
                                         <TextBlock Text="{x:Bind Label, Mode=OneWay}" Margin="24,0,0,0" Foreground="White"
                                                     VerticalAlignment="Center"/>
@@ -112,24 +112,50 @@
                             <FlipView.ItemTemplate>
                                 <DataTemplate x:DataType="vm:PageViewModel">
                                     <Grid>
-                                        <ui:CachedImage ImageSource="{x:Bind ImageSource, Mode=OneWay}" 
-                                            PageNumber="{x:Bind PageNumber, Mode=OneWay}" 
-                                            SelectedAyah="{x:Bind Parent.SelectedAyah, Mode=OneWay}"
-                                            Padding="0,0,0,10"
-                                            DoubleTapped="ImageDoubleTapped"
-                                            RightTapped="ImageRightTapped"
-                                            Tapped="ImageTapped"
-                                            Holding="ImageHolding"
-                                            Visibility="{x:Bind Parent.ShowTranslation, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
-                                        </ui:CachedImage>
-                                        <ui:TranslationListView x:Name="TranslationListBox" 
-                                            SelectedAyah="{x:Bind Parent.SelectedAyah, Mode=OneWay}"
-                                            DoubleTapped="ListViewDoubleTap"
-                                            Holding="TranslationItemHolding"
-                                            RightTapped="TranslationItemRightTapped"
-                                            Visibility="{x:Bind Parent.ShowTranslation, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                            DataContext="{Binding}">
-                                        </ui:TranslationListView>
+                                        <Grid Visibility="{x:Bind Parent.TwoPageView, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="1*"/>
+                                                <ColumnDefinition Width="1*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <ui:CachedImage ImageSource="{x:Bind ImageSource, Mode=OneWay}" 
+                                                Grid.Column="1" Margin="5"
+                                                PageNumber="{x:Bind PageNumber, Mode=OneWay}" 
+                                                SelectedAyah="{x:Bind Parent.SelectedAyah, Mode=OneWay}"
+                                                Padding="0,0,0,10"
+                                                DoubleTapped="ImageDoubleTapped"
+                                                RightTapped="ImageRightTapped"
+                                                Tapped="ImageTapped"
+                                                Holding="ImageHolding">
+                                            </ui:CachedImage>
+                                            <ui:TranslationListView 
+                                                Grid.Column="0" Margin="5"
+                                                SelectedAyah="{x:Bind Parent.SelectedAyah, Mode=OneWay}"
+                                                DoubleTapped="ListViewDoubleTap"
+                                                Holding="TranslationItemHolding"
+                                                RightTapped="TranslationItemRightTapped"
+                                                DataContext="{Binding}">
+                                            </ui:TranslationListView>
+                                        </Grid>
+                                        <Grid Visibility="{x:Bind Parent.TwoPageView, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
+                                            <ui:CachedImage ImageSource="{x:Bind ImageSource, Mode=OneWay}" 
+                                                PageNumber="{x:Bind PageNumber, Mode=OneWay}" 
+                                                SelectedAyah="{x:Bind Parent.SelectedAyah, Mode=OneWay}"
+                                                Padding="0,0,0,10"
+                                                DoubleTapped="ImageDoubleTapped"
+                                                RightTapped="ImageRightTapped"
+                                                Tapped="ImageTapped"
+                                                Holding="ImageHolding"
+                                                Visibility="{x:Bind Parent.ShowTranslation, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
+                                            </ui:CachedImage>
+                                            <ui:TranslationListView
+                                                SelectedAyah="{x:Bind Parent.SelectedAyah, Mode=OneWay}"
+                                                DoubleTapped="ListViewDoubleTap"
+                                                Holding="TranslationItemHolding"
+                                                RightTapped="TranslationItemRightTapped"
+                                                Visibility="{x:Bind Parent.ShowTranslation, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                DataContext="{Binding}">
+                                            </ui:TranslationListView>
+                                        </Grid>
                                     </Grid>
                                 </DataTemplate>
                             </FlipView.ItemTemplate>
