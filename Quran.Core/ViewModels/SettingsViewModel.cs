@@ -25,8 +25,6 @@ namespace Quran.Core.ViewModels
     /// </summary>
     public class SettingsViewModel : BaseViewModel
     {
-        private TelemetryClient telemetry = new TelemetryClient();
-
         public SettingsViewModel()
         { }
 
