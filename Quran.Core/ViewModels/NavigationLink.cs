@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 namespace Quran.Core.ViewModels
@@ -36,22 +35,6 @@ namespace Quran.Core.ViewModels
                 base.OnPropertyChanged(() => Label);
             }
         }
-
-        private Visibility visibility;
-        public Visibility Visibility
-        {
-            get { return visibility; }
-            set
-            {
-                if (value == visibility)
-                    return;
-
-                visibility = value;
-
-                base.OnPropertyChanged(() => Visibility);
-            }
-        }
-
         public Action Action { get; set; }
 
         public override Task Initialize()

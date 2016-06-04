@@ -27,7 +27,6 @@ namespace Quran.Windows.Views
         public ObservableCollection<NavigationLink> NavigationLinks = new ObservableCollection<NavigationLink>();
         private DataTransferManager _dataTransferManager;
         private NavigationLink _bookmarkNavigationLink;
-        private NavigationLink _pageFormatNavigationLink;
         private TelemetryClient telemetry = new TelemetryClient();
 
         public DetailsView()
@@ -40,7 +39,7 @@ namespace Quran.Windows.Views
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             await ViewModel.Initialize();
-            await BuildLocalizedMenu();
+            BuildLocalizedMenu();
             BuildContextMenu();
             UpdateAudioControls(ViewModel.AudioPlayerState);
 
@@ -60,7 +59,7 @@ namespace Quran.Windows.Views
             ViewModel.CurrentPageNumber = SettingsUtils.Get<int>(Constants.PREF_LAST_PAGE);
 
             //Monitor property changes
-            ViewModel.PropertyChanged += async (sender, args) =>
+            ViewModel.PropertyChanged += (sender, args) =>
             {
                 if (args.PropertyName == "CurrentPageIndex")
                 {
@@ -76,10 +75,6 @@ namespace Quran.Windows.Views
                 if (args.PropertyName == "CurrentPageBookmarked")
                 {
                     SetBookmarkNavigationLink();
-                }
-                if (args.PropertyName == "TwoPageView")
-                {
-                    await SetPageFormatNavigationLink();
                 }
             };
 
@@ -154,7 +149,7 @@ namespace Quran.Windows.Views
 
                 var ayah = await CachedImage.GetAyahFromGesture(e.GetPosition(cachedImage.Image),
                                                           ViewModel.CurrentPageNumber,
-                                                          cachedImage.ActualWidth);
+                                                          radSlideView.ActualWidth);
                 var currentPage = ViewModel.CurrentPage;
                 if (currentPage != null)
                 {
@@ -389,7 +384,7 @@ namespace Quran.Windows.Views
 
 
         // Build a localized Menu
-        private async Task BuildLocalizedMenu()
+        private void BuildLocalizedMenu()
         {
             NavigationLinks.Add(new NavigationLink
             {
@@ -425,38 +420,6 @@ namespace Quran.Windows.Views
             };
             keepOrientationLink.Action = () => { KeepOrientationClick(keepOrientationLink); };
             NavigationLinks.Add(keepOrientationLink);
-            _pageFormatNavigationLink = new NavigationLink
-            {
-                Action = () =>
-                {
-                    ViewModel.TwoPageView = !ViewModel.TwoPageView;
-                }
-            };
-            await SetPageFormatNavigationLink();
-            NavigationLinks.Add(_pageFormatNavigationLink);
-        }
-
-        private async Task SetPageFormatNavigationLink()
-        {
-            if (!await ViewModel.HasTranslationFile())
-            {
-                _pageFormatNavigationLink.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                _pageFormatNavigationLink.Visibility = Visibility.Visible;
-            }
-
-            if (ViewModel.TwoPageView)
-            {
-                _pageFormatNavigationLink.Label = Quran.Core.Properties.Resources.two_pages;
-                _pageFormatNavigationLink.Symbol = Symbol.TwoPage;
-            }
-            else
-            {
-                _pageFormatNavigationLink.Label = Quran.Core.Properties.Resources.single_page;
-                _pageFormatNavigationLink.Symbol = Symbol.Page2;
-            }
         }
 
         private void SetBookmarkNavigationLink()
