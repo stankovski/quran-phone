@@ -239,48 +239,58 @@ namespace Quran.Core.ViewModels
             }
 
             int successfulDownloads = 0;
-            foreach (var serverPath in serverUrls)
+
+            await Task.Run(async () =>
             {
-                successfulDownloads++;
-
-                if (_cts.Token.IsCancellationRequested)
+                foreach (var serverPath in serverUrls)
                 {
-                    break;
-                }
+                    successfulDownloads++;
 
-                var fileName = Path.GetFileName(serverPath);
-                if (await FileUtils.FileExists(destinationFolder, fileName))
-                {
-                    continue;
-                }
-
-                var destinationFile = await destinationFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
-
-                // Retry loop
-                for (int i = 0; i < 5; i++)
-                {
-                    var result = await FileUtils.DownloadFileFromWebAsync(serverPath, destinationFile.Path, _cts.Token);
-                    if (result)
+                    if (_cts.Token.IsCancellationRequested)
                     {
-                        InstallationStep = Description ?? Resources.loading_message;
-                        IsDownloading = true;
-                        IsIndeterminate = false;
-                        double percent = 100;
-                        var totalFilesToReceive = serverUrls.Length;
-                        var totalFilesReceived = successfulDownloads;
-                        if (totalFilesToReceive > 0)
-                        {
-                            percent = totalFilesReceived * 100 / totalFilesToReceive;
-                        }
-                        Progress = (int)percent;
                         break;
                     }
+
+                    var fileName = Path.GetFileName(serverPath);
+                    if (await FileUtils.FileExists(destinationFolder, fileName))
+                    {
+                        continue;
+                    }
+
+                    var destinationFile = await destinationFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
+
+                    // Retry loop
+                    for (int i = 0; i < 5; i++)
+                    {
+                        var result = await FileUtils.DownloadFileFromWebAsync(serverPath, destinationFile.Path, _cts.Token);
+                        if (result)
+                        {
+                            InstallationStep = Description ?? Resources.loading_message;
+                            IsDownloading = true;
+                            IsIndeterminate = false;
+                            double percent = 100;
+                            var totalFilesToReceive = serverUrls.Length;
+                            var totalFilesReceived = successfulDownloads;
+                            if (totalFilesToReceive > 0)
+                            {
+                                percent = totalFilesReceived * 100 / totalFilesToReceive;
+                            }
+                            await _dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                            {
+                                Progress = (int)percent;
+                            });
+                            
+                            break;
+                        }
+                    }
                 }
-            }
+            });
+            
             if (DownloadComplete != null)
             {
                 DownloadComplete(this, null);
             }
+
             Reset();
             return true;
         }
