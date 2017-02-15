@@ -153,6 +153,8 @@ namespace Quran.Core.ViewModels
             {
                 return;
             }
+            if (IsDownloading && this is AudioSurahViewModel)
+                return;
 
             IsDownloading = false;
             IsIndeterminate = false;
@@ -239,6 +241,7 @@ namespace Quran.Core.ViewModels
             }
 
             int successfulDownloads = 0;
+            AudioDownloadCacheUtils.AddToCache(this as AudioSurahViewModel);
 
             await Task.Run(async () =>
             {
@@ -291,6 +294,7 @@ namespace Quran.Core.ViewModels
                 DownloadComplete(this, null);
             }
 
+            AudioDownloadCacheUtils.RemoveFromCache(this as AudioSurahViewModel);
             Reset();
             return true;
         }

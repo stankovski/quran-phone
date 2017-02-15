@@ -139,10 +139,19 @@ namespace Quran.Core.ViewModels
         {
             for (int i = 1; i < Constants.SURAS_COUNT; i++)
             {
-                Surahs.Add(new AudioSurahViewModel(Reciter, i)
+                AudioSurahViewModel surah;
+
+                surah = AudioDownloadCacheUtils.GetSurahViewModel(Reciter, i);
+
+                if (surah == null)
                 {
-                    SurahName = QuranUtils.GetSurahName(i, true)
-                });
+                    surah = new AudioSurahViewModel(Reciter, i)
+                    {
+                        SurahName = QuranUtils.GetSurahName(i, true)
+                    };
+                }
+
+                Surahs.Add(surah);
             }
             return Refresh();
         }
