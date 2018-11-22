@@ -18,6 +18,8 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI;
+using Windows.UI.Xaml.Media;
 
 namespace Quran.Windows.Views
 {
@@ -294,9 +296,14 @@ namespace Quran.Windows.Views
             ayahContextMenu.Items.Add(new MenuFlyoutItem() { Text = Core.Properties.Resources.copy });
             ayahContextMenu.Items.Add(new MenuFlyoutItem() { Text = Core.Properties.Resources.recite_ayah });
             ayahContextMenu.Items.Add(new MenuFlyoutItem() { Text = Core.Properties.Resources.share_ayah });
+
+            var foregroundColor = (Color)App.Current.Resources["SystemBaseHighColor"];
+            var foregroundBrush = new SolidColorBrush(foregroundColor);
+
             foreach (MenuFlyoutItem item in ayahContextMenu.Items)
             {
                 item.Click += AyahContextMenuClick;
+                item.Foreground = foregroundBrush;
             }
             ayahContextMenu.Closed += (obj, ev) =>
             {
