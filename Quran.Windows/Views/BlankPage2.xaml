@@ -1,0 +1,330 @@
+﻿<Page
+    x:Class="Quran.Windows.Views.BlankPage2"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:ui="using:Quran.Windows.UI"
+    xmlns:vm="using:Quran.Core.ViewModels"
+    xmlns:wuxdata="using:Windows.UI.Xaml.Data"
+    xmlns:res="using:Quran.Core.Properties"
+    RequestedTheme="Dark">
+    
+    <Grid>
+        
+    </Grid>
+</Page>
+    
+<!--
+<Page
+    x:Class="Quran.Windows.Views.MainView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:ui="using:Quran.Windows.UI"
+    xmlns:vm="using:Quran.Core.ViewModels"
+    xmlns:wuxdata="using:Windows.UI.Xaml.Data"
+    xmlns:res="using:Quran.Core.Properties"
+    RequestedTheme="Dark">
+    
+    <Page.Resources>
+        <DataTemplate x:Key="ZoomedInGroupHeaderTemplate">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Key.Value}" Style="{StaticResource SubtitleTextBlockStyle}"/>
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="ZoomedOutTemplate">
+            <Grid MinHeight="64" MinWidth="64">
+                <TextBlock Text="{Binding Group.Key.Key}" TextWrapping="NoWrap"
+                       Style="{StaticResource TitleTextBlockStyle}"
+                       VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </Grid>
+        </DataTemplate>
+        <SolidColorBrush x:Key="PivotPaneColor" Color="#FF151515"/>
+        <Style TargetType="PivotHeaderItem">
+            <Setter Property="MinWidth" Value="80"/>
+        </Style>
+    </Page.Resources>
+
+    <Grid x:Name="LayoutRoot" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="48"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid x:Name="Header" Grid.Row="0" VerticalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="48"/>
+                <ColumnDefinition Width="48"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal" Grid.Column="0" >
+                <Button x:Name="HamburgerButton" Style="{StaticResource HamburgerButtonStyle}" 
+                        Click="HamburgerButtonClick" HorizontalAlignment="Left"/>
+                <TextBlock Text="{x:Bind ViewModel.Strings.app_name}" 
+                           Margin="10,0,0,0" FontWeight="SemiBold" FontSize="20"  HorizontalAlignment="Left" 
+                           VerticalAlignment="Center"/>
+            </StackPanel>
+            <Button Grid.Column="2" Style="{StaticResource MenuButtonStyle}" Content="&#xE82D;"
+                    VerticalAlignment="Center" Click="NavigateToLastPage"/>
+        </Grid>
+        <SplitView Grid.Row="1" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" 
+                   x:Name="MainSplitView" IsPaneOpen="False" DisplayMode="Overlay" OpenPaneLength="200">
+            <SplitView.Pane>
+                <Grid>
+                    <ListView x:Name="NavLinksList" Margin="0" SelectionMode="None" 
+                            VerticalAlignment="Stretch" Foreground="White"
+                            ItemClick="NavLinkItemClick" IsItemClickEnabled="True"
+                            Background="{ThemeResource SettingsFlyoutHeaderBackgroundThemeBrush}"
+                            ItemsSource="{x:Bind NavigationLinks}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="vm:NavigationLink">
+                                <StackPanel Orientation="Horizontal"  Margin="2,0,0,0">
+                                    <SymbolIcon Symbol="{x:Bind Symbol}" Foreground="White"/>
+                                    <TextBlock Text="{x:Bind Label}" Margin="24,0,0,0" Foreground="White"
+                                                   VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <ListViewItem VerticalAlignment="Bottom" Tapped="GoToSettings"
+                                  BorderBrush="#FF727272" BorderThickness="0,1,0,0">
+                        <StackPanel Orientation="Horizontal" Margin="2,0,0,0">
+                            <SymbolIcon Symbol="Setting" Foreground="White"/>
+                            <TextBlock Text="{x:Bind ViewModel.Strings.settings}" 
+                                       Margin="24,0,0,0" Foreground="White" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </ListViewItem>
+                </Grid>
+            </SplitView.Pane>
+            <SplitView.Content>
+                <Grid x:Name="MainPanel">
+                    <Pivot x:Name="MainPivot" SelectionChanged="PivotItemChanged">
+                        <PivotItem Margin="0">
+                            <PivotItem.Header>
+                                <StackPanel>
+                                    <SymbolIcon Symbol="List"/>
+                                    <TextBlock Text="{x:Bind ViewModel.Strings.quran_sura}"
+                                               Style="{StaticResource BaseTextBlockStyle}" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </PivotItem.Header>
+                            <Grid x:Name="ContentPanel" Background="{StaticResource PivotPaneColor}">
+                                <Grid.Resources>
+                                    <CollectionViewSource x:Name="SurahViewSource" IsSourceGrouped="True"/>
+                                </Grid.Resources>
+                                <SemanticZoom>
+                                    <SemanticZoom.ZoomedInView>
+                                        <ListView ItemsSource="{Binding Source={StaticResource SurahViewSource}}" 
+                                                  SelectionMode="None" Tapped="NavigateLink" x:Name="SurahListView">
+                                            <ListView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid Height="55" VerticalAlignment="Center">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="80"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="60"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <TextBlock Grid.Column="0" Text="{Binding Id}" FontSize="23" 
+                                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        <StackPanel Grid.Column="1" Orientation="Vertical">
+                                                            <TextBlock Text="{Binding Title}" FontSize="18" VerticalAlignment="Center"/>
+                                                            <TextBlock Text="{Binding Details}" Style="{StaticResource BaseTextBlockStyle}" 
+                                                        VerticalAlignment="Center"/>
+                                                        </StackPanel>
+                                                        <TextBlock Grid.Column="2" Text="{Binding PageNumber}" HorizontalAlignment="Center" 
+                                                        Style="{StaticResource BaseTextBlockStyle}"
+                                                        VerticalAlignment="Center"/>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ListView.ItemTemplate>
+                                            <ListView.GroupStyle>
+                                                <GroupStyle HeaderTemplate="{StaticResource ZoomedInGroupHeaderTemplate}" />
+                                            </ListView.GroupStyle>
+                                            <ListView.ItemContainerStyle>
+                                                <Style TargetType="ListViewItem">
+                                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                                                </Style>
+                                            </ListView.ItemContainerStyle>
+                                        </ListView>
+                                    </SemanticZoom.ZoomedInView>
+                                    <SemanticZoom.ZoomedOutView>
+                                        <GridView ItemsSource="{Binding Source={StaticResource SurahViewSource}, Path=CollectionGroups}"
+                                                  SelectionMode="None" Margin="30"
+                                                  ItemTemplate="{StaticResource ZoomedOutTemplate}">
+                                        </GridView>
+                                    </SemanticZoom.ZoomedOutView>
+                                </SemanticZoom>
+                            </Grid>
+                        </PivotItem>
+                        <PivotItem Margin="0">
+                            <PivotItem.Header>
+                                <StackPanel>
+                                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE82D;" />
+                                    <TextBlock Text="{x:Bind ViewModel.Strings.quran_juz2}"
+                                               Style="{StaticResource BaseTextBlockStyle}" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </PivotItem.Header>
+                            <Grid Background="{StaticResource PivotPaneColor}">
+                                <Grid.Resources>
+                                    <CollectionViewSource x:Name="JuzViewSource" IsSourceGrouped="True"/>
+                                </Grid.Resources>
+                                <SemanticZoom>
+                                    <SemanticZoom.ZoomedInView>
+                                        <ListView ItemsSource="{Binding Source={StaticResource JuzViewSource}}" 
+                                                  SelectionMode="None" Tapped="NavigateLink" x:Name="JuzListView">
+                                            <ListView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid Height="55" VerticalAlignment="Center">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="80"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="60"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <Image Grid.Column="0" Source="{Binding Image}" Height="30"/>
+                                                        <StackPanel Grid.Column="1" Orientation="Vertical">
+                                                            <TextBlock Text="{Binding Title}" FontSize="18" VerticalAlignment="Center"/>
+                                                            <TextBlock Text="{Binding Details}" Style="{StaticResource BaseTextBlockStyle}" 
+                                                        VerticalAlignment="Center"/>
+                                                        </StackPanel>
+                                                        <TextBlock Grid.Column="2" Text="{Binding PageNumber}" HorizontalAlignment="Center" 
+                                                        Style="{StaticResource BaseTextBlockStyle}"
+                                                        VerticalAlignment="Center"/>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ListView.ItemTemplate>
+                                            <ListView.GroupStyle>
+                                                <GroupStyle HeaderTemplate="{StaticResource ZoomedInGroupHeaderTemplate}" />
+                                            </ListView.GroupStyle>
+                                            <ListView.ItemContainerStyle>
+                                                <Style TargetType="ListViewItem">
+                                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                                                </Style>
+                                            </ListView.ItemContainerStyle>
+                                        </ListView>
+                                    </SemanticZoom.ZoomedInView>
+                                    <SemanticZoom.ZoomedOutView>
+                                        <GridView ItemsSource="{Binding Source={StaticResource JuzViewSource}, Path=CollectionGroups}"
+                                                  SelectionMode="None" Margin="30"
+                                                  ItemTemplate="{StaticResource ZoomedOutTemplate}">
+                                        </GridView>
+                                    </SemanticZoom.ZoomedOutView>
+                                </SemanticZoom>
+                            </Grid>
+                        </PivotItem>
+                        <PivotItem Margin="0" x:Name="BookmarksPivotItem">
+                            <PivotItem.Header>
+                                <StackPanel>
+                                    <SymbolIcon Symbol="Favorite"/>
+                                    <TextBlock Text="{x:Bind ViewModel.Strings.quran_bookmarks}"
+                                               Style="{StaticResource BaseTextBlockStyle}" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </PivotItem.Header>
+                            <Grid Background="{StaticResource PivotPaneColor}">
+                                <Grid.Resources>
+                                    <CollectionViewSource x:Name="BookmarksViewSource" IsSourceGrouped="True"/>
+                                </Grid.Resources>
+                                <SemanticZoom>
+                                    <SemanticZoom.ZoomedInView>
+                                        <ui:EdgeTappedListView  x:Name="BookmarksListView"
+                                                   ItemsSource="{Binding Source={StaticResource BookmarksViewSource}}" 
+                                                   LeftEdgeBrush="{StaticResource BlueText}"
+                                                   ItemLeftEdgeTapped="OnBookmarkListEdgeTapped" 
+                                                   SelectionChanged="OnBookmarkListSelectionChanged"
+                                                   Tapped="NavigateBookmarkLink"
+                                                   IsItemLeftEdgeTapEnabled="True"
+                                                   SelectionMode="None">
+                                            <ui:EdgeTappedListView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid Height="55" VerticalAlignment="Center">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="80"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="60"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <FontIcon Grid.Column="0" FontFamily="Segoe MDL2 Assets" 
+                                                                  Glyph="&#xE1CF;" FontSize="20"/>
+                                                        <StackPanel Grid.Column="1" Orientation="Vertical">
+                                                            <TextBlock Text="{Binding Title}" FontSize="18" VerticalAlignment="Center"/>
+                                                            <TextBlock Text="{Binding Details}" Style="{StaticResource BaseTextBlockStyle}" 
+                                                        VerticalAlignment="Center"/>
+                                                        </StackPanel>
+                                                        <TextBlock Grid.Column="2" Text="{Binding PageNumber}" HorizontalAlignment="Center" 
+                                                        Style="{StaticResource BaseTextBlockStyle}"
+                                                        VerticalAlignment="Center"/>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ui:EdgeTappedListView.ItemTemplate>
+                                            <ui:EdgeTappedListView.GroupStyle>
+                                                <GroupStyle HeaderTemplate="{StaticResource ZoomedInGroupHeaderTemplate}" />
+                                            </ui:EdgeTappedListView.GroupStyle>
+                                            <ui:EdgeTappedListView.ItemContainerStyle>
+                                                <Style TargetType="ListViewItem">
+                                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                                                </Style>
+                                            </ui:EdgeTappedListView.ItemContainerStyle>
+                                        </ui:EdgeTappedListView>
+                                    </SemanticZoom.ZoomedInView>
+                                    <SemanticZoom.ZoomedOutView>
+                                        <ListView ItemsSource="{Binding Source={StaticResource BookmarksViewSource}, Path=CollectionGroups}"
+                                                  SelectionMode="None" Margin="30"
+                                                  ItemTemplate="{StaticResource ZoomedOutTemplate}">
+                                        </ListView>
+                                    </SemanticZoom.ZoomedOutView>
+                                </SemanticZoom>
+                            </Grid>
+                        </PivotItem>
+                        <PivotItem Margin="0" x:Name="SearchPivotItem">
+                            <PivotItem.Header>
+                                <StackPanel>
+                                    <SymbolIcon Symbol="Find"/>
+                                    <TextBlock Text="{x:Bind ViewModel.Strings.search}"
+                                               Style="{StaticResource BaseTextBlockStyle}" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </PivotItem.Header>
+                            <Grid Background="{StaticResource PivotPaneColor}">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <AutoSuggestBox x:Name="QuranSearchBox"
+                                    Margin="5" Grid.Row="0"
+                                    PlaceholderText="{x:Bind ViewModel.Strings.search}"
+                                    QueryIcon="Find"
+                                    QuerySubmitted="SearchQuerySubmitted"/>
+                                <ListView ItemsSource="{x:Bind SearchViewModel.SearchResults}" 
+                                          Grid.Row="1"
+                                          Tapped="NavigateLink">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate x:DataType="vm:ItemViewModel">
+                                            <StackPanel>
+                                                <TextBlock Text="{x:Bind Id}" Style="{StaticResource BoldText}"/>
+                                                <TextBlock TextWrapping="Wrap" Text="{x:Bind Details}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </Grid>
+                        </PivotItem>
+                    </Pivot>
+                    <ui:DownloadControl ViewModel="{x:Bind ViewModel.ActiveDownload, Mode=OneWay}" Height="60" VerticalAlignment="Bottom"/>
+                </Grid>
+            </SplitView.Content>
+        </SplitView>
+    </Grid>
+    <Page.BottomAppBar>
+        <CommandBar IsOpen="False">
+            <AppBarButton Label="{x:Bind ViewModel.Strings.select}" 
+                          Icon="List" Click="SelectBookmarkItems" x:Name="SelectAppBarBtn"/>
+            <AppBarButton Label="{x:Bind ViewModel.Strings.delete_bookmark}" 
+                          Icon="Delete" Click="RemoveBookmarkItem" x:Name="RemoveItemAppBarBtn"/>
+            <AppBarButton Label="{x:Bind ViewModel.Strings.cancel}" 
+                          Icon="Cancel" Click="CancelBookmarkSelection" x:Name="CancelSelectionAppBarBtn"/>
+        </CommandBar>
+    </Page.BottomAppBar>
+</Page>
+    -->

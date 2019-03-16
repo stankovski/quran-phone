@@ -159,6 +159,7 @@
     </Compile>
     <Compile Include="Utils\ArabicResharper.cs" />
     <Compile Include="Utils\AudioUtils.cs" />
+    <Compile Include="Utils\CacheUtils.cs" />
     <Compile Include="Utils\CompressionUtils.cs" />
     <Compile Include="Utils\CryptoUtils.cs" />
     <Compile Include="Utils\FileUtils.cs" />
@@ -210,8 +211,8 @@
     <SDKReference Include="Microsoft.VCLibs, Version=14.0">
       <Name>Visual C++ 2015 Runtime for Universal Windows Platform Apps</Name>
     </SDKReference>
-    <SDKReference Include="SQLite.UWP.2015, Version=3.16.2">
-      <Name>SQLite for Universal Windows Platform %28SQLite.UWP.2015, Version=3.16.2%29</Name>
+    <SDKReference Include="SQLite.UWP.2015, Version=3.27.2">
+      <Name>SQLite for Universal Windows Platform %28SQLite.UWP.2015, Version=3.27.2%29</Name>
     </SDKReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
