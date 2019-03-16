@@ -241,11 +241,31 @@ Quran Windows Team";
             list.SelectedItem = null;
         }
 
+        /*
         private void HamburgerButtonClick(object sender, RoutedEventArgs e)
         {
             MainSplitView.IsPaneOpen = !MainSplitView.IsPaneOpen;
         }
+        */
 
+        private void MainNavViewSelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+        {
+            if (args.IsSettingsSelected)
+            {
+                Frame.Navigate(typeof(SettingsView), "general");
+            }
+            else
+            {
+                var item = args.SelectedItem as NavigationLink;
+                if (item != null)
+                {
+                    item.Action();
+                }
+            }
+            MainNavView.IsPaneOpen = false;
+        }
+
+        /*
         private void NavLinkItemClick(object sender, ItemClickEventArgs e)
         {
             MainSplitView.IsPaneOpen = false;
@@ -255,6 +275,7 @@ Quran Windows Team";
                 item.Action();
             }
         }
+        */
 
         // Build a localized ApplicationBar
         private void BuildLocalizedMenu()
@@ -302,10 +323,12 @@ Quran Windows Team";
             SearchViewModel.Load(QuranSearchBox.Text);
         }
 
+        /*
         private void GoToSettings(object sender, TappedRoutedEventArgs e)
         {
             Frame.Navigate(typeof(SettingsView), "general");
         }
+        */
 
         #region Context menu
         private bool _isEnablingMultiselect = false;

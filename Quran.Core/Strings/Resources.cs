@@ -559,7 +559,11 @@ namespace Quran.Core.Properties
 
         public string app_name
         {
-            get { return Resources.app_name; }
+            get
+            {
+                return Resources.app_name.Substring(0,1)
+                    + Resources.app_name.Substring(1).ToLower();
+            }
         }
 
         public string verse

@@ -120,3 +120,5 @@ packages/repositories.config
 /Quran.Windows/BundleArtifacts
 /Quran.Windows/_*.appx
 /Quran.Windows/_pkginfo.txt
+
+/.vs
